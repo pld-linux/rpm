@@ -12,13 +12,13 @@
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
-%include        /usr/lib/rpm/macros.python
-%define snap	20040107
+%include	/usr/lib/rpm/macros.python
+%define	snap	20040107
 # versions of required libraries
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.9
 %define	beecrypt_ver	3.0.0-0.20030610.1
-%define rpm_macros_rev	1.153
+%define	rpm_macros_rev	1.153
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -640,8 +640,8 @@ cd ..
 
 # config.guess doesn't handle athlon, so we have to change it by hand.
 # rpm checks for CPU type at runtime, but it looks better
-sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|'  \
-	-e 's|@host_cpu@|%{_target_cpu}|'  macros.in  > macros.tmp
+sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' \
+	-e 's|@host_cpu@|%{_target_cpu}|' macros.in > macros.tmp
 mv -f macros.tmp macros.in
 
 # pass CC and CXX too in case of building with some older configure macro
