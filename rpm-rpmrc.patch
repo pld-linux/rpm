@@ -10,10 +10,10 @@
  # Values for RPM_OPT_FLAGS for various platforms
  
 -optflags: i386 -O2 -m486 -fno-strength-reduce
-+optflags: i386 -O2 -m386 -mcpu=i386 -march=i386
-+optflags: i486 -O2 -m486
-+optflags: i586 -O2 -mpentium
-+optflags: i686 -O2 -mpentiumpro
++optflags: i386 -O2 -march=i386
++optflags: i486 -O2 -march=i386
++optflags: i586 -O2 -march=pentium
++optflags: i686 -O2 -march=pentiumpro
  optflags: alpha -O2
  optflags: sparc -O2
  optflags: sparc64 -O2
