@@ -157,7 +157,7 @@
        next;
      }
  
-@@ -108,8 +120,20 @@
+@@ -108,8 +120,24 @@
        # will be included with the name sys/systeminfo.ph so only use the
        # basename of *.ph files
  
@@ -174,8 +174,12 @@
 +      ($module =~ m/Mac|OS2|MSDOS|Win32|VMS|vmsish/) && next;
 +
 +      # if the module ends with .pm strip it to leave only basename
++
++      ($module =~ m/\.pm$/) && ($module =~ s/\.pm//g);
++
++      # strip () from module name ( ex. Carp() )
 
-+      ($module =~ m/\.pm$/) && ($module =~ s!\.pm$!!g );
++      ($module =~m/\(\)$/) && ($module =~ s/\(\)//g);
  
        $require{$module}=$version;
        $line{$module}=$_;
