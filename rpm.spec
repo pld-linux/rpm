@@ -458,11 +458,6 @@ EOF
 
 %find_lang %{name}
 
-# DON'T BREAK BUILD TREE!!!
-# rm -f doc/manual/Makefile*
-
-gzip -9nf RPM-PGP-KEY CHANGES doc/manual/*
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -471,7 +466,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc RPM-PGP-KEY.gz CHANGES.gz doc/manual/*
+%doc RPM-PGP-KEY CHANGES doc/manual/[a-z]*
 
 %attr(755,root,root) /bin/rpm
 %attr(755,root,root) %{_bindir}/rpmdb
