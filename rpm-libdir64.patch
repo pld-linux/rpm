@@ -11,24 +11,3 @@ diff -x '*~' -durN rpm-4.3.orig/configure.ac rpm-4.3/configure.ac
  AC_SUBST(MARK64)
  
  dnl Determine the canonical arch-vendor-os for the build machine
-@@ -1234,7 +1231,7 @@
- AC_SUBST(LOCALEDIR)
- LIBDIR="`echo $libdir | sed 's-/lib$-/%{_lib}-'`"
- AC_SUBST(LIBDIR)
--RPMCONFIGDIR="`echo ${usrprefix}/lib/rpm`"
-+RPMCONFIGDIR="`echo ${libdir}/rpm`"
- AC_DEFINE_UNQUOTED(RPMCONFIGDIR, "$RPMCONFIGDIR",
- 	[Full path to rpm global configuration directory (usually /usr/lib/rpm)])
- AC_SUBST(RPMCONFIGDIR)
-diff -x '*~' -durN rpm-4.3.orig/scripts/Makefile.am rpm-4.3/scripts/Makefile.am
---- rpm-4.3.orig/scripts/Makefile.am	2003-03-25 13:49:47.000000000 +0100
-+++ rpm-4.3/scripts/Makefile.am	2004-12-19 09:24:37.808321672 +0100
-@@ -21,7 +21,7 @@
- 
- all:
- 
--configdir = ${prefix}/lib/rpm
-+configdir = @RPMCONFIGDIR@
- config_SCRIPTS = \
- 	brp-compress brp-redhat brp-strip brp-strip-comment-note \
- 	brp-strip-shared brp-strip-static-archive brp-sparc64-linux \
