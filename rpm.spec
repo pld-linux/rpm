@@ -110,6 +110,7 @@ BuildRequires:	python-devel >= 2.2
 BuildRequires:	python-modules >= 2.2
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpm-pythonprov
+BuildRequires:	sed
 BuildRequires:	zlib-devel
 %if %{!?_without_static:1}0
 # Require static library only for static build
@@ -708,6 +709,9 @@ for a in librpm-%{ver}.so librpmdb-%{ver}.so librpmio-%{ver}.so ; do
 	ln -s /lib/$a $RPM_BUILD_ROOT%{_libdir}/$a
 done
 
+for f in po/{en_RN,eu_ES,gl,hu,ro,wa,zh,zh_CN.GB2312}.po ; do
+	[ "`file $f | sed -e 's/.*,//' -e 's/message.*//'`" -le 1 ] && rm -f $f
+done
 %find_lang %{name}
 
 rm -rf manual
