@@ -157,7 +157,7 @@
        next;
      }
  
-@@ -108,8 +120,17 @@
+@@ -108,8 +120,20 @@
        # will be included with the name sys/systeminfo.ph so only use the
        # basename of *.ph files
  
@@ -169,10 +169,13 @@
 +
 +      ($module =~ m/\.(ph|pl)$/) && next;
 +
-+      # we don't provide platform specific modules for platforms other 
-+      # than unix so we also shouldn't require them
- 
-+      ($module =~ m/Mac|OS2|MSDOS|Win32/) && next;
++      # skip all modules for oparating systems other than linux
++
++      ($module =~ m/Mac|OS2|MSDOS|Win32|VMS|vmsish/) && next;
++
++      # if the module ends with .pm strip it to leave only basename
+
++      ($module =~ m/\.pm$/) && ($module =~ s!\.pm$!!g );
  
        $require{$module}=$version;
        $line{$module}=$_;
