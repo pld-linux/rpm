@@ -1,42 +1,5 @@
-diff -Nru rpm-4.0.1/configure.in rpm-4.0.1.new/configure.in
---- rpm-4.0.1/configure.in	Wed Jan 31 13:37:21 2001
-+++ rpm-4.0.1.new/configure.in	Wed Jan 31 13:49:25 2001
-@@ -185,6 +185,7 @@
-     AC_PATH_PROG(__MKDIR, mkdir, /bin/mkdir, $MYPATH)
-     AC_PATH_PROG(__MV, mv, /bin/mv, $MYPATH)
-     AC_PATH_PROG(__PATCH, patch, /usr/bin/patch, $MYPATH)
-+    AC_PATH_PROG(PERL, perl, /usr/bin/perl, $MYPATH)
-     AC_MSG_CHECKING(old version of patch)
-     PATCHVERSION=`patch --version 2>&1`
- 
-@@ -1043,6 +1044,7 @@
- 
- AC_CONFIG_SUBDIRS(popt)
- AC_OUTPUT([Doxyfile Makefile rpmrc macros macros.pld platform rpmpopt rpm.spec scripts/brp-redhat
-+	macros.perl scripts/perl.req scripts/perl.prov
- 	rpmio/Makefile lib/Makefile build/Makefile tools/Makefile
- 	scripts/Makefile
- 	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
-diff -Nru rpm-4.0.1/macros.in rpm-4.0.1.new/macros.in
---- rpm-4.0.1/macros.in	Wed Jan 31 13:37:21 2001
-+++ rpm-4.0.1.new/macros.in	Wed Jan 31 13:38:04 2001
-@@ -629,9 +629,11 @@
- #	%{perl_sitearch}/Image
- #	%dir %{perl_sitearch}/auto/Image
- #
-+#
-+# NOTE: %{perl_sitearch}, %{perl_archlib} and %{perl_sitelib} macros 
-+#	has been moved to macros.perl (see info in this file for details).
-+#
- %requires_eq()	%(LC_ALL="C" rpm -q --queryformat 'Requires:%%{NAME} = %%{VERSION}' %1| grep -v "is not")
--%perl_sitearch	%(eval "`perl -V:installsitearch`"; echo $installsitearch)
--%perl_archlib	%(eval "`perl -V:installarchlib`"; echo $installarchlib)
- 
- #------------------------------------------------------------------------------
- # arch macro for all Intel i?86 compatibile processors
-diff -Nru rpm-4.0.1/scripts/Makefile.am rpm-4.0.1.new/scripts/Makefile.am
---- rpm-4.0.1/scripts/Makefile.am	Wed Jan 31 13:37:21 2001
-+++ rpm-4.0.1.new/scripts/Makefile.am	Wed Jan 31 14:27:28 2001
+--- rpm-4.0.2/scripts/Makefile.am.wiget	Tue Dec 12 17:47:59 2000
++++ rpm-4.0.2/scripts/Makefile.am	Fri Aug 10 12:44:47 2001
 @@ -9,7 +9,8 @@
  	find-prov.pl find-req.pl cpanflute find-provides.perl \
  	find-requires.perl get_magic.pl getpo.sh http.req \
@@ -54,9 +17,8 @@ diff -Nru rpm-4.0.1/scripts/Makefile.am rpm-4.0.1.new/scripts/Makefile.am
 -	vpkg-provides.sh vpkg-provides2.sh
 +	vpkg-provides.sh vpkg-provides2.sh \
 +	find-perl-requires find-perl-provides
-diff -Nru rpm-4.0.1/scripts/perl.prov rpm-4.0.1.new/scripts/perl.prov
---- rpm-4.0.1/scripts/perl.prov	Wed Jan 31 13:37:21 2001
-+++ rpm-4.0.1.new/scripts/perl.prov	Wed Jan 31 13:38:04 2001
+--- rpm-4.0.2/scripts/perl.prov.wiget	Mon Jan 17 19:58:36 2000
++++ rpm-4.0.2/scripts/perl.prov	Fri Aug 10 12:44:47 2001
 @@ -47,7 +47,9 @@
  
  if ("@ARGV") {
@@ -79,9 +41,8 @@ diff -Nru rpm-4.0.1/scripts/perl.prov rpm-4.0.1.new/scripts/perl.prov
    }
  }
  
-diff -Nru rpm-4.0.1/scripts/perl.req rpm-4.0.1.new/scripts/perl.req
---- rpm-4.0.1/scripts/perl.req	Wed Jan 31 13:37:21 2001
-+++ rpm-4.0.1.new/scripts/perl.req	Wed Jan 31 13:38:04 2001
+--- rpm-4.0.2/scripts/perl.req.wiget	Mon Jan 17 19:58:36 2000
++++ rpm-4.0.2/scripts/perl.req	Fri Aug 10 12:44:47 2001
 @@ -1,4 +1,4 @@
 -#!/usr/bin/perl
 +#!@PERL@
@@ -159,3 +120,37 @@ diff -Nru rpm-4.0.1/scripts/perl.req rpm-4.0.1.new/scripts/perl.req
  
  
        $require{$module}=$version;
+--- rpm-4.0.2/configure.in.wiget	Sun Feb 25 18:13:26 2001
++++ rpm-4.0.2/configure.in	Fri Aug 10 12:48:21 2001
+@@ -186,6 +186,7 @@
+     AC_PATH_PROG(__MKDIR, mkdir, /bin/mkdir, $MYPATH)
+     AC_PATH_PROG(__MV, mv, /bin/mv, $MYPATH)
+     AC_PATH_PROG(__PATCH, patch, /usr/bin/patch, $MYPATH)
++    AC_PATH_PROG(PERL, perl, /usr/bin/perl, $MYPATH)
+     AC_MSG_CHECKING(old version of patch)
+     PATCHVERSION=`patch --version 2>&1`
+ 
+@@ -1086,6 +1087,7 @@
+ 
+ AC_CONFIG_SUBDIRS(popt)
+ AC_OUTPUT([Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec scripts/brp-redhat
++ 	macros.perl scripts/perl.req scripts/perl.prov
+ 	rpmio/Makefile lib/Makefile build/Makefile tools/Makefile
+ 	scripts/Makefile
+ 	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
+--- rpm-4.0.2/macros.in.wiget	Fri Aug 10 12:44:47 2001
++++ rpm-4.0.2/macros.in	Fri Aug 10 12:44:47 2001
+@@ -626,9 +626,11 @@
+ #	%{perl_sitearch}/Image
+ #	%dir %{perl_sitearch}/auto/Image
+ #
++#
++# NOTE: %{perl_sitearch}, %{perl_archlib} and %{perl_sitelib} macros 
++#	has been moved to macros.perl (see info in this file for details).
++#
+ %requires_eq()	%(LC_ALL="C" rpm -q --queryformat 'Requires:%%{NAME} = %%{VERSION}' %1| grep -v "is not")
+-%perl_sitearch	%(eval "`perl -V:installsitearch`"; echo $installsitearch)
+-%perl_archlib	%(eval "`perl -V:installarchlib`"; echo $installarchlib)
+ 
+ #------------------------------------------------------------------------------
+ # arch macro for all Intel i?86 compatibile processors
