@@ -468,6 +468,8 @@ EOF
 
 gzip -9nf RPM-PGP-KEY CHANGES doc/manual/*
 
+%post   -n beecrypt -p /sbin/ldconfig
+%postun -n beecrypt -p /sbin/ldconfig
 %clean
 rm -rf $RPM_BUILD_ROOT
 
