@@ -5,7 +5,7 @@ if [ $# -lt 1 ]; then
 fi
 
 for i in `echo $@`; do
-	i=`echo $i | grep "\.php"`
+	i=`echo $i | grep "\.php$"`
 	if [ -n "$i" ]; then
 		j=`cat $i | grep -i ^require_once | egrep -v "^ \*" | sed -e "s/['|\"]//" | sed -e "s/(/ /" | cut -f 2 -d " " | sed -e "s/\//_/g" | cut -f 1 -d "."`
 		if [ -n "$j" ]; then
