@@ -434,7 +434,7 @@ echo "Compress kernel modules if any."; \
 %py_ocomp       python -O -c "import compileall; import sys; compileall.compile_dir(sys.argv[1], ddir=sys.argv[1][len('$RPM_BUILD_ROOT'):])"
 
 # Software written in Python language require Python with main version
-%pyrequires_eq() Requires:	python(abi) = %py_ver %1
+%pyrequires_eq() Requires:	%1
 
 
 # Hardlink binary identical .pyc and .pyo files
