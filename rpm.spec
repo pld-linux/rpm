@@ -137,6 +137,7 @@ BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
 %endif
 Requires:	beecrypt >= %{beecrypt_ver}
+Requires:	gcc-c++ >= 3.4
 Requires:	popt >= %{reqpopt_ver}
 Requires:	%{name}-lib = %{version}-%{release}
 %{!?with_static:Obsoletes:	rpm-utils-static}
