@@ -1,0 +1,9 @@
+- added using CVS keywords in %changelog (for automating them).
+
+* Thu May 20 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
+  [3.0.1-6.19990519]
+- spec based on version from dist tar ball (partially rewrited by me),
+- pl translation by Wojtek ¦lusarczyk <wojtek@shadow.eu.org>,
+- rewrited by Artur Frysiak <wiget@pld.org.pl>,
+- patches with fixes maked by Artur Frysiak and Marcin Dalecki
+  <dalecki@cs.net.pl>.
