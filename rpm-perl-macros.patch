@@ -200,7 +200,7 @@
  if ("@ARGV") {
    foreach (@ARGV) {
 -    process_file($_);
-+    if (! m=\.(so|gz|ph|pod)$=) {
++     if (! m=(/(doc|usr/src)/|\.(so|gz|ph|pod)$)=) {
 +      process_file($_);
 +    }
    }
@@ -211,7 +211,7 @@
  
    foreach (<>) {
 -    process_file($_);
-+    if (! m=\.(so|gz|ph|pod)$=) {
++     if (! m=(/(doc|usr/src)/|\.(so|gz|ph|pod)$)=) {
 +      process_file($_);
 +    }
    }
