@@ -493,7 +493,7 @@ Requires:	sh-utils
 Requires:	tar
 Requires:	textutils
 Provides:	rpmbuild(macros) = %{rpm_macros_rev}
-Provides:	rpmbuild(noauto) = 2
+Provides:	rpmbuild(noauto) = 3
 %ifarch amd64
 Conflicts:	automake < 1:1.7.9-2
 Conflicts:	libtool < 2:1.5-13
@@ -812,7 +812,10 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep <<EOF
 ^libXxf86misc.so
 ^libXxf86rush.so
 ^libXxf86vm.so
+^libdps.so
+^libdpstk.so
 ^libfontenc.so
+^libpsres.so
 ^libxkbfile.so
 ^libxkbui.so
 EOF
