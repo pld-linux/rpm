@@ -386,8 +386,8 @@ chmod +x %{SOURCE4}
 awk -f %{SOURCE14} %{SOURCE1}
 
 cd popt
-autoconf
-automake -a -c -f
+rm -f missing
+libtoolize --force --copy
 aclocal
 autoheader
 automake -a -c -f
@@ -396,12 +396,12 @@ cd ..
 
 rm -f missing
 libtoolize --force --copy
-autoconf
+gettextize --copy --force
 aclocal
 autoupdate
 autoheader || :
 %{__autoconf}
-automake -a -c -f
+# ugly workaround for automake
 sed -e 's#cpio.c $(DBLIBOBJS) depends.c#cpio.c depends.c#g' \
 	lib/Makefile.am > lib/Makefile.am.new
 mv -f lib/Makefile.am.new lib/Makefile.am
