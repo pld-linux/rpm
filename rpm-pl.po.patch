@@ -1,6 +1,6 @@
 --- rpm-4.3/po/pl.po.wiget	2003-06-11 00:41:30.000000000 +0200
 +++ rpm-4.3/po/pl.po	2003-06-11 01:32:59.000000000 +0200
-@@ -1,61 +1,62 @@
+@@ -1,61 +1,61 @@
 -# Polskie komunikaty dla RPM (1999)
 +# Polskie komunikaty dla RPM
  # Copyright (C) 1999 Free Software Foundation, Inc.
@@ -29,7 +29,7 @@
  #: build.c:40
 -#, fuzzy
  msgid "Failed build dependencies:\n"
- msgstr "niespe³nione zale¿no¶ci:\n"
+-msgstr "niespe³nione zale¿no¶ci:\n"
 +msgstr "Niespe³nione zale¿no¶ci budowania:\n"
  
  #: build.c:71
