@@ -219,10 +219,9 @@ Libraries
 	[es]:		Bibliotecas
 	[fr]:		Librairies
 	[pl]:		Biblioteki
-	[uk]:		Б╕бл╕отеки
-	[ru]:		Библиотеки
 	[pt_BR]:	Bibliotecas
-	[es]:		Bibliotecas
+	[ru]:		Библиотеки
+	[uk]:		Б╕бл╕отеки
 
 Networking
 	[de]:		Netzwerkwesen
@@ -319,10 +318,13 @@ X11/Amusements
 	[pl]:	X11/Rozrywka
 
 X11/Libraries
-	[de]:	X11/Libraries
-	[es]:	X11/Bibliotecas
-	[fr]:	X11/Librairies
-	[pl]:	X11/Biblioteki
+	[de]:		X11/Libraries
+	[es]:		X11/Bibliotecas
+	[fr]:		X11/Librairies
+	[pl]:		X11/Biblioteki
+	[pt_BR]:	X11/Bibliotecas
+	[ru]:		X11/Библиотеки
+	[uk]:		X11/Б╕бл╕отеки
 
 X11/Window Managers
 	[de]:	X11/Fenstermanager
