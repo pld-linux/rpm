@@ -5,11 +5,11 @@ Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
 Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
-Summary(ru):	íÅÎÅÄÖÅÒ ĞÁËÅÔÏ× ÏÔ Red Hat
-Summary(uk):	íÅÎÅÄÖÅÒ ĞÁËÅÔ¦× ×¦Ä Red Hat
+Summary(ru):	íÅÎÅÄÖÅÒ ĞÁËÅÔÏ× ÏÔ RPM
+Summary(uk):	íÅÎÅÄÖÅÒ ĞÁËÅÔ¦× ×¦Ä RPM
 Name:		rpm
 Version:	4.0.2
-Release:	103
+Release:	104
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -37,6 +37,7 @@ Source21:	%{name}-macros.php
 Source30:	builder
 Source31:	adapter.awk
 Source32:	pldnotify.awk
+Source33:	perl.prov
 Patch0:		%{name}-rpmrc.patch
 Patch1:		%{name}-macros.patch
 Patch2:		%{name}-arch.patch
@@ -54,7 +55,6 @@ Patch13:	%{name}-glob.patch
 Patch14:	%{name}-header_h.patch
 Patch15:	%{name}-fast-alAddPackage.patch
 Patch16:	%{name}-byKey.patch
-Patch17:	%{name}-perlprov.patch
 Patch18:	%{name}-noperldir.patch
 Patch19:	%{name}-popt-cvs20010530.patch
 Patch20:	%{name}-noexpand.patch
@@ -70,7 +70,6 @@ Patch29:	%{name}-cxx.patch
 Patch30:	%{name}-athlon.patch
 Patch31:	%{name}-athlon-identify.patch
 Patch32:	%{name}-gettext-in-header.patch
-Patch33:	%{name}-perlprov-perl5.6.patch
 Patch34:	%{name}-ac25x.patch
 Patch35:	%{name}-signverify-fix.patch
 Patch36:	%{name}-compress-doc.patch
@@ -137,10 +136,10 @@ almacenaje de archivos, y información sobre el paquete, incluyendo
 nombre, versión y descripción.
 
 %description -l pl
-RPM jest doskona³ym mened¿erem pakietów. Dziêki niemu bêdziesz móg³
-przebudowaæ, zainstalowaæ czy zweryfikowaæ dowolny pakiet. Informacje
-dotycz±ce ka¿dego pakietu, takie jak jego opis, lista plików
-wchodz±cych w sk³ad pakietu, zale¿no¶ci od innych pakietów, s±
+RPM jest doskona³ym programem zarz±dzaj±cym pakietami. Umo¿liwia on
+przebudowanie, instalacjê czy weryfikacjê dowolnego pakietu.
+Informacje dotycz±ce ka¿dego pakietu, takie jak jego opis, lista
+plików wchodz±cych w sk³ad pakietu, zale¿no¶ci od innych pakietów, s±
 przechowywane w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
 odpytywania programu rpm.
 
@@ -171,7 +170,7 @@ Summary(de):	Header-Dateien uns Libraries
 Summary(es):	Archivos de inclusión y bibliotecas para programas de manipulación de paquetes rpm
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne
 Summary(pt_BR):	Arquivos de inclusão e bibliotecas para programas de manipulação de pacotes RPM
-Summary(ru):	èÅÄÅÒÙ É ÂÉÂÌÉÏÔÅËÉ ÄÌÑ ĞÒÏÇÒÁÍÍ, ÒÁÂÏÔÁÀİÉÈ Ó rpm-ĞÁËÅÔÁÍÉ.
+Summary(ru):	èÅÄÅÒÙ É ÂÉÂÌÉÏÔÅËÉ ÄÌÑ ĞÒÏÇÒÁÍÍ, ÒÁÂÏÔÁÀİÉÈ Ó rpm-ĞÁËÅÔÁÍÉ
 Summary(uk):	èÅÄÅÒÉ ÔÁ Â¦ÂÌ¦ÏÔÅËÉ ÄÌÑ ĞÒÏÇÒÁÍ, İÏ ĞÒÁÃÀÀÔØ Ú ĞÁËÅÔÁÍÉ rpm
 Group:		Development/Libraries
 Requires:	%{name} = %{version}
@@ -198,8 +197,8 @@ herramientas que necesiten un conocimiento profundo de paquetes RPM.
 %description devel -l pl
 System RPM zawiera bibliotekê C, która u³atwia manipulowanie pakietami
 RPM oraz bazami danych. W zamiarze ma to upro¶ciæ tworzenie
-graficznych mened¿erów pakietów oraz innych narzêdzi, które wymagaj±
-szczegó³owej wiedzy na temat pakietów RPM.
+graficznych programów zarz±dzaj±cych pakietami oraz innych narzêdzi,
+które wymagaj± szczegó³owej wiedzy na temat pakietów RPM.
 
 %description devel -l pt_BR
 O sistema de empacotamento RPM inclui uma biblioteca C que torna fácil
@@ -225,7 +224,7 @@ Summary:	RPM static libraries
 Summary(de):	RPMs statische Libraries
 Summary(pl):	Biblioteki statyczne RPM-a
 Summary(pt_BR):	Bibliotecas estáticas para o desenvolvimento de aplicações RPM
-Summary(ru):	óÔÁÔÉŞÅÓËÁÑ ÂÉÂÌÉÏÔÅËÁ ÄÌÑ ĞÒÏÇÒÁÍÍ, ÒÁÂÏÔÁÀİÉÈ Ó rpm-ĞÁËÅÔÁÍÉ.
+Summary(ru):	óÔÁÔÉŞÅÓËÁÑ ÂÉÂÌÉÏÔÅËÁ ÄÌÑ ĞÒÏÇÒÁÍÍ, ÒÁÂÏÔÁÀİÉÈ Ó rpm-ĞÁËÅÔÁÍÉ
 Summary(uk):	óÔÁÔÉŞÎÁ Â¦ÂÌ¦ÏÔÅËÁ ÄÌÑ ĞÒÏÇÒÁÍ, İÏ ĞÒÁÃÀÀÔØ Ú ĞÁËÅÔÁÍÉ rpm
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
@@ -305,7 +304,7 @@ Pythonie.
 
 %package php-pearprov
 Summary:	Additional utilities for managing rpm packages and database
-Summary(pl):	Dodatkowe narzêdzia do sprawdzania zale¿no¶ci skryptów php w rpm.
+Summary(pl):	Dodatkowe narzêdzia do sprawdzania zale¿no¶ci skryptów php w rpm
 Group:		Applications/File
 Requires:	%{name} = %{version}
 
@@ -456,7 +455,6 @@ construir pacotes usando o RPM.
 %patch14 -p1
 %patch15 -p0
 %patch16 -p0
-%patch17 -p1
 %patch18 -p1
 %patch19 -p1
 %patch20 -p1
@@ -476,7 +474,6 @@ construir pacotes usando o RPM.
 %endif
 
 %patch32 -p1
-%patch33 -p1
 %patch34 -p1
 %patch35 -p1
 %patch36 -p1
@@ -499,11 +496,12 @@ install %{SOURCE17} scripts/php.prov.in
 install %{SOURCE18} scripts/php.req.in
 install %{SOURCE19} scripts/find-php-provides
 install %{SOURCE20} scripts/find-php-requires
+install %{SOURCE33} scripts/perl.prov
 
-
-(cd scripts;
+cd scripts;
 mv -f perl.req perl.req.in
-mv -f perl.prov perl.prov.in)
+mv -f perl.prov perl.prov.in
+cd ..
 
 chmod +x %{SOURCE4}
 
