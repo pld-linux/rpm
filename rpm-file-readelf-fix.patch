@@ -1,0 +1,40 @@
+--- rpm-4.3/file/src/readelf.c.orig	2004-03-19 21:12:58.000000000 +0100
++++ rpm-4.3/file/src/readelf.c	2004-03-19 22:31:34.199417626 +0100
+@@ -136,6 +136,9 @@
+ 			    getu32(fm, ph32.p_align) : 4) \
+ 			 : (off_t) (ph64.p_align ?	\
+ 			    getu64(fm, ph64.p_align) : 4)))
++#define ph_filesz	(fm->cls == ELFCLASS32		\
++			 ? getu32(fm, ph32.p_filesz)	\
++			 : getu64(fm, ph64.p_filesz))
+ #define nh_size		(fm->cls == ELFCLASS32		\
+ 			 ? sizeof nh32			\
+ 			 : sizeof nh64)
+@@ -244,7 +247,7 @@
+ 			error(EXIT_FAILURE, 0, "lseek failed (%s).\n", strerror(errno));
+ 			/*@notreached@*/
+ 		}
+-		bufsize = read(fm->fd, nbuf, BUFSIZ);
++		bufsize = read(fm->fd, nbuf, ((ph_filesz < BUFSIZ) ? ph_filesz : BUFSIZ));
+ 		if (bufsize == -1) {
+ 			error(EXIT_FAILURE, 0, ": " "read failed (%s).\n", strerror(errno));
+ 			/*@notreached@*/
+@@ -601,7 +604,8 @@
+ 				error(EXIT_FAILURE, 0, "lseek failed (%s).\n", strerror(errno));
+ 				/*@notreached@*/
+ 			}
+-			bufsize = read(fm->fd, nbuf, sizeof(nbuf));
++			bufsize = read(fm->fd, nbuf, 
++				((ph_filesz < sizeof(nbuf)) ? ph_filesz : sizeof(nbuf)));
+ 			if (bufsize == -1) {
+ 				error(EXIT_FAILURE, 0, ": " "read failed (%s).\n",
+ 				    strerror(errno));
+@@ -614,7 +618,7 @@
+ 				offset = donote(fm, nbuf, offset,
+ 				    (size_t)bufsize, ph_align);
+ 			}
+-			if ((lseek(fm->fd, savedoffset + offset, SEEK_SET)) == (off_t)-1) {
++			if ((lseek(fm->fd, savedoffset, SEEK_SET)) == (off_t)-1) {
+ 			    error(EXIT_FAILURE, 0, "lseek failed (%s).\n", strerror(errno));
+ 			    /*@notreached@*/
+ 			}
