@@ -1,0 +1,73 @@
+- first test release of 4.3 snap 20031227 
+  (color support on biarch, selinux support with auto labeling support).
+  It goes to NEST (for bigger testing) for now.
+
+Detailed changes against our OLD 200306 snap:
++       - only internal Berkeley db from now on.
++       - revive "make dist".
++       - fix: added index size wrong iff _transaction_color != 0/3 (#103865).
++       - fix: escape '+' in regex patterns through RPMMIRE_DEFAULT (#103851).
++       - RPMMIRE_DEFAULT is overkill, use RPMMIRE_STRCMP instead (#103851).
++       - don't use mktemp if mkstemp is available (#103850).
++
++4.2.1 -> 4.2.2:
++       - unify signal handling in librpmio, use condvar to deliver signal.
++       - make peace with libtool-1.5, autoconf-2.59, automake-1.8.
++       - build with db-4.2.52 internal.
++       - refresh bsddb.
++       - detect (and remove) dbenv files while upgrading to db-4.2.52.
++       - ensure that librpmdb links against just built, not system, librpmio.
++       - fix: dangling pointer brain fart (#107835).
++       - fix: ds.Single() method needs malloc'd elements (#109919).
++       - convert ja and ko man pages to utf8 (#106050).
++       - man page corrections (#106415).
++       - perl.req typo (#106672).
++       - fix: wrong package count for trigger scriptlet 1st arg (#100509).
++       - fix: don't break header SHA1 if non-existent user/group (#97727).
++       - remove fuids/fgids from rpmfi, easier to lookup fuser/fgroup instead.
++       - merge sensible parts of openpkg rpm.patch.bugfix (#104780).
++       - mark _javadocdir as documentation (#102898).
++       - flush pipe before exit 1 in check-files (#103867).
++
++4.2 -> 4.2.1:
+        - fix: nested %if handling, optind initialization posix vs. glibc.
+        - add version check for package with provides and obsoletes.
++       - hack out O_DIRECT support in db4 for now.
++       - build with external beecrypt-3.0.0.
+        - x86_64 -> athlon, ppc64[ip]series -> ppc64 arch compatibility.
+        - treat missing epoch's exactly the same as Epoch: 0.
++       - pass structure pointer, not args, through headerSprintf call chain.
++       - add ":xml" header format modifier.
++       - --queryformat '[%%{*:xml}\n]' to dump header content in XML.
++       - add ".arch" suffix to erase colored packages with identical NEVR.
+        - update ja man pages (#92261).
++       - backport rpmsw stopwatch, insturment rpmts operations.
++       ? toy method to enable --stats through bindings.
++       - fdCLose typo (#97257).
++       - brp-python-bytecompile to automagically bytecode compile python.
++       ? update for fr.po (#97829).
++       - don't attempt to remove dbenv on --rebuilddb.
++       - autorelocate ix86 package file paths on ia64.
++       - resurrect manifests, RPMRC_NOTFOUND returned by readLead().
++       - python: missed tuple refcount in IDTXload/IDTXglob.
++       - fix: IDTXglob should return REMOVETID sorted headers (#89857).
++       - resolve elf32/elf64 file conflicts to prefer elf64.
++       - apply debugedit patch necessary to produce kernel -debuginfo files.
++       ? ia64: autorelocate only colored, not every, file when installing.
++       ? repair find-debuginfo.sh to avoid recursing in /usr/lib/debug.
++       ? fix: ia64: don't attempt autorelocate on .src.rpm's.
++       ? fix: debuginfo: -not -path /usr/lib/debug needed -prune too.
++       ? fix: packages w/o file colors segfault.
++       ? add amd64 as alias for x86_64 (#99553).
++       ? fix: add -n to brp-compress to avoid needless file conflicts.
++       ? fix: ia32 on ia64 segfaults because of automagic file relocations.
++       ? speed up convertdb1 (#103206).
++       ? revert i18n table change to preserve help array size.
++       ? add config directories for ppc64pseries/ppc64iseries.
++       ? filter GLIBC_PRIVATE dependencies.
++       - fix: check added provides against installed conflicts (#110317).
++       - changes for python 2.3
++       - changes for libtool-1.5
++       - changes for automake-1.7.8
++       - changes for db-4.2.42.
++       - splint fiddles.
