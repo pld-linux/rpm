@@ -29,7 +29,6 @@ Patch13:	%{name}-rpmlibprov.patch
 Patch14:	%{name}-getrpmlibprov.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
-Requires:	glibc >= 2.1
 BuildRequires:	bzip2-static >= 1.0.1
 BuildRequires:	gdbm-static
 BuildRequires:	zlib-static
