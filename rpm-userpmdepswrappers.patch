@@ -21,8 +21,8 @@
 +#%__find_provides	@RPMCONFIGDIR@/find-provides
 +#%__find_requires	@RPMCONFIGDIR@/find-requires
 +# rpmdeps wrappers
-+%__find_provides	@RPMCONFIGDIR@/find-provides-wrapper
-+%__find_requires	@RPMCONFIGDIR@/find-requires-wrapper
++%__find_provides	@RPMCONFIGDIR@/find-provides-wrapper%{?_perl_deps: --with-perl}%{?_php_deps: --with-php}%{?_noautoprovfiles:%{?buildroot: --buildroot='%{buildroot}'} --noautoprovfiles='%{_noautoprovfiles}'}%{?_noautoprov: --noautoprov='%{_noautoprov}'}
++%__find_requires	@RPMCONFIGDIR@/find-requires-wrapper%{?_perl_deps: --with-perl}%{?_php_deps: --with-php}%{?buildroot: --buildroot='%{buildroot}'}%{?_noautoprovfiles: --noautoprovfiles='%{_noautoprovfiles}'}%{?_noautoprov: --noautoprov='%{_noautoprov}'}%{?_noautoreqfiles: --noautoreqfiles='%{_noautoreqfiles}'}%{?_noautoreq: --noautoreq='%{_noautoreq}'}%{?_noautoreqdep: --noautoreqdep='%{_noautoreqdep}'}
  #%__find_conflicts	???
  #%__find_obsoletes	???
  

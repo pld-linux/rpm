@@ -29,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-%define	rel	0.%{snap}.20
+%define	rel	0.%{snap}.20.1
 Release:	%{rel}
 License:	GPL
 Group:		Base
@@ -76,7 +76,7 @@ Patch16:	%{name}-etc_dir.patch
 Patch17:	%{name}-system_libs-more.patch
 Patch18:	%{name}-php-deps.patch
 Patch19:	%{name}-python-fix.patch
-Patch20:	%{name}-spec-prep-pre.patch
+#Patch20:	%{name}-spec-prep-pre.patch
 Patch21:	%{name}-perl_req.patch
 Patch22:	%{name}-system_libs_more.patch
 Patch23:	%{name}-python_2_3.patch
@@ -555,15 +555,15 @@ construir pacotes usando o RPM.
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
-echo '# obsoleted file' > macros.perl
+echo '%define	_perl_deps	1' > macros.perl
 echo '# obsoleted file' > macros.python
-echo '# obsoleted file' > macros.php
+echo '%define	_php_deps	1' > macros.php
 install %{SOURCE6} scripts/find-lang.sh
 install %{SOURCE12} scripts/php.prov.in
 install %{SOURCE13} scripts/php.req.in
 install %{SOURCE33} scripts/perl.prov
 cat %{SOURCE14} >> macros.in
-%patch20 -p1
+# %patch20 -p1 -- merged into macros
 %patch25 -p1
 %patch26 -p1
 %patch27 -p1
@@ -782,7 +782,6 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_libdir}/rpm/cpanflute2
 #%attr(755,root,root) %{_libdir}/rpm/Specfile.pm
 %attr(755,root,root) %{_libdir}/rpm/http.req
-#%attr(755,root,root) %{_libdir}/rpm/magic*
 %attr(755,root,root) %{_libdir}/rpm/magic.prov
 %attr(755,root,root) %{_libdir}/rpm/magic.req
 %attr(755,root,root) %{_libdir}/rpm/u_pkg.sh
@@ -804,6 +803,9 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %ifarch ppc
 %{_libdir}/rpm/ppc*
 %endif
+# must be here for "Requires: rpm-*prov" to work
+%{_libdir}/rpm/macros.perl
+%{_libdir}/rpm/macros.php
 # not used yet ...
 %{_libdir}/rpm/sql.prov
 %{_libdir}/rpm/sql.req
@@ -883,8 +885,6 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_libdir}/rpm/find-req.pl
 %attr(755,root,root) %{_libdir}/rpm/get_magic.pl
 
-%{_libdir}/rpm/macros.perl
-
 %files pythonprov
 %defattr(644,root,root,755)
 %{_libdir}/rpm/macros.python
@@ -893,7 +893,6 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/rpm/php*
 %attr(755,root,root) %{_libdir}/rpm/find-php*
-%{_libdir}/rpm/macros.php
 
 %files -n python-rpm
 %defattr(644,root,root,755)

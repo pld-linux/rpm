@@ -329,11 +329,6 @@ echo "Compress kernel modules if any."; \
 # exceptions system by Jacek Konieczny <jajcus@pld.org.pl>
 %__spec_prep_pre \
 _autoreqprov=n \
-%{?_noautoreqfiles:_autoreqprov=y}\
-%{?_noautoreq:_autoreqprov=y}\
-%{?_noautoreqdep:_autoreqprov=y}\
-%{?_noautoprovfiles:_autoreqprov=y}\
-%{?_noautoprov:_autoreqprov=y}\
 %{?_noautocompressdoc:_autoreqprov=y}\
 if [ "$_autoreqprov" = "y" ] ; then \
     if [ -f %{_builddir}/__rpm_lock ] ; then \
@@ -346,17 +341,12 @@ if [ "$_autoreqprov" = "y" ] ; then \
     fi \
 fi \
 %{?_noautocompressdoc:echo '%{_noautocompressdoc}' > %{_builddir}/__rpm_noautocompressdoc}\
+%{___build_pre}\
 %{nil}
 
 
 %__spec_clean_pre	%{___build_pre}\
 _autoreqprov=n \
-%{?_noautoreqfiles:_autoreqprov=y}\
-%{?_noautoreq:_autoreqprov=y}\
-%{?_noautoreqdep:_autoreqprov=y}\
-%{?_noautoprovfiles:_autoreqprov=y}\
-%{?_noautoprov:_autoreqprov=y}\
-%{?_noautoreqfiles:_autoreqprov=y}\
 %{?_noautocompressdoc:_autoreqprov=y}\
 if [ "$_autoreqprov" = "y" ] ; then \
 	rm -f %{_builddir}/__rpm_* \

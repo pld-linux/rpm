@@ -1,5 +1,4 @@
 #!/bin/sh
-cd `rpm --eval %{_builddir}`
 
 # _noauto* wrapper for builtin rpm Requires generator
 # requires:		/bin/sh, /usr/bin/rpmdeps, rpm, coreutils, findutils. mktemp
@@ -10,36 +9,64 @@ cd `rpm --eval %{_builddir}`
 
 ulimit -c 0
 
+PERLOPT="--define=__perl_requires /bin/true"
+PHPOPT="--define=__php_requires /bin/true"
+PROVARG=""
+NOPROVFILES=""
+NOPROV=""
 noreqfiles=''
-if [ -r __rpm_noautoreqfiles ]; then
-	for i in `cat __rpm_noautoreqfiles`; do
-		noreqfiles="${noreqfiles}\|${i}"
-	done
-fi
+noreq=''
+noreqdep=''
+while [ $# -gt 0 ]; do
+	case "$1" in
+	  --with-perl)
+		PERLOPT=""
+		PROVARG="$PROVARG --with-perl"
+		;;
+	  --with-php)
+		PHPOPT=""
+		PROVARG="$PROVARG --with-php"
+		;;
+	  --buildroot=*)
+		buildroot="${1#--buildroot=}"
+		PROVARG="$PROVARG $1"
+		;;
+	  --noautoprovfiles=*)
+		NOPROVFILES="$1"
+		;;
+	  --noautoprov=*)
+		NOPROV="$1"
+		;;
+	  --noautoreqfiles=*)
+		for i in ${1#--noautoreqfiles=} ; do
+		        noreqfiles="${noreqfiles}\|${buildroot}${i}"
+		done
+		;;
+	  --noautoreq=*)
+		for i in ${1#--noautoreq=} ; do
+			noreq="${noreq}\|${i}"
+		done
+		;;
+	  --noautoreqdep=*)
+		for i in ${1#--noautoreqdep=} ; do
+			noreqdep="${noreqdep}\|${i}"
+		done
+	esac
+	shift
+done
+
 if [ -r /etc/rpm/noautoreqfiles ]; then
 	for i in `cat /etc/rpm/noautoreqfiles | grep -v '^#'`; do
-		noreqfiles="${noreqfiles}\|${i}"
+		noreqfiles="${noreqfiles}\|${buildroot}${i}"
 	done
 fi
 
-noreq=''
-if [ -r __rpm_noautoreq ]; then
-	for i in `cat __rpm_noautoreq`; do
-		noreq="${noreq}\|${i}"
-	done
-fi
 if [ -r /etc/rpm/noautoreq ]; then
 	for i in `cat /etc/rpm/noautoreq | grep -v '^#'`; do
 		noreq="${noreq}\|${i}"
 	done
 fi
 
-noreqdep=''
-if [ -r __rpm_noautoreqdep ]; then
-	for i in `cat __rpm_noautoreqdep`; do
-		noreqdep="${noreqdep}\|${i}"
-	done
-fi
 if [ -r /etc/rpm/noautoreqdep ]; then
 	for i in `cat /etc/rpm/noautoreqdep | grep -v '^#'`; do
 		noreqdep="${noreqdep}\|${i}"
@@ -51,12 +78,14 @@ PROVS=`mktemp ${TMPDIR:-/tmp}/.rpmprovsXXXXXX`
 REQS=`mktemp ${TMPDIR:-/tmp}/.rpmreqsXXXXXX`
 
 # we must duplicate file list here (to remove Provides list from Requires)
-tee ${FILES} | /usr/lib/rpm/find-provides-wrapper > ${PROVS}
+tee ${FILES} | \
+	/usr/lib/rpm/find-provides-wrapper ${PROVARG} "${NOPROVFILES}" "${NOPROV}" \
+	> ${PROVS}
 
 # rpmdeps output seems sorted, but resort it in case of long list split
 grep -v -e "^\(${noreqfiles}\)\$" ${FILES} | tr '\n' '\0' | \
-	xargs -r -0 /usr/bin/rpmdeps --requires | LC_ALL=C sort -u | \
-	grep -v -e "^\(${noreq}\)\$" | \
+	xargs -r -0 /usr/bin/rpmdeps "${PERLOPT}" "${PHPOPT}" --requires | \
+	LC_ALL=C sort -u | grep -v -e "^\(${noreq}\)\$" | \
 	LC_ALL=C comm -2 -3 - ${PROVS} | tee ${REQS}
 
 # package names only for SONAMES, perl(module) and pear(module)
