@@ -99,6 +99,7 @@ Patch44:	%{name}-debuginfo.patch
 Patch45:	%{name}-no_version_check_in_obsoletes.patch
 Patch46:	%{name}-python24.patch
 Patch47:	%{name}-distver.patch
+Patch48:	%{name}-python24-dictiter.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -616,6 +617,9 @@ cat %{SOURCE11} >> macros.in
 %patch45 -p1
 %patch46 -p1
 %{?with_distver:%patch47 -p1}
+%if "%{py_ver}" == "2.4"
+%patch48 -p1
+%endif
 
 cd scripts;
 mv -f perl.req perl.req.in
