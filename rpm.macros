@@ -50,8 +50,8 @@
  CXXFLAGS="${CXXFLAGS:-%rpmcflags}" ; export CXXFLAGS ; \
  FFLAGS="${FFLAGS:-%rpmcflags}" ; export FFLAGS ; \
  CPPFLAGS="${CPPFLAGS:-}" ; export CPPFLAGS ; \
- %{?__cc:CC=%{__cc} ; export CC ; } \
- %{?__cxx:CXX=%{__cxx} ; export CXX ; } \
+ %{?__cc:CC="%{__cc}" ; export CC ; } \
+ %{?__cxx:CXX="%{__cxx}" ; export CXX ; } \
  %{?configuredir:%{configuredir}}%{!?configuredir:.}/configure \
 	--host=%{_target_platform} \
  	--prefix=%{_prefix} \
@@ -77,8 +77,8 @@
 	CXXFLAGS="${CXXFLAGS:-%rpmcflags}" \
 	FFLAGS="${FFLAGS:-%rpmcflags}" \
 	CPPFLAGS="${CPPFLAGS:-}" \
-	%{?__cc:CC=%{__cc}} \
-	%{?__cxx:CXX=%{__cxx}} \
+	%{?__cc:CC="%{__cc}"} \
+	%{?__cxx:CXX="%{__cxx}"} \
 	--build=%{_target_platform} \
  	--prefix=%{_prefix} \
 	--exec-prefix=%{_exec_prefix} \
