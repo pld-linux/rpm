@@ -33,7 +33,20 @@
 # Build system path macros.
 #
 %__libtoolize           libtoolize --copy --force
-%__gettextize           gettextize --copy --force
+%__gettextize { \
+    if ! gettextize --version | grep -q '0\.10\.' ; then \
+	if grep -qs 'AM_GNU_GETTEXT.*external' configure.{ac,in} ; then \
+	    gettextize --copy --force --no-changelog; \
+	else \
+	    gettextize --copy --force --no-changelog --intl; \
+	fi; \
+	if [ ! -f po/Makevars ]; then \
+	    cp -f po/Makevars{.template,}; \
+	fi; \
+    else \
+	gettextize --copy --force; \
+    fi; \
+}
 %__automake             automake -a -c -f --foreign
 %__autoconf             autoconf %{?debug:-Wall}
 
