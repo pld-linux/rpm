@@ -25,7 +25,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.2
 Version:	%{ver}
-%define	rel	0.1
+%define	rel	0.3
 Release:	%{rel}
 %define	beecrypt_rel	%{ver}_%{rel}
 License:	GPL
