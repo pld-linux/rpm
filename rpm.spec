@@ -20,7 +20,7 @@
 %define	snap	20041121
 # versions of required libraries
 %define	reqdb_ver	4.2.50-1
-%define	reqpopt_ver	1.9
+%define	reqpopt_ver	1.10.1
 %define	beecrypt_ver	2:4.1.0
 %define	rpm_macros_rev	1.188
 Summary:	RPM Package Manager
@@ -580,7 +580,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane
 ze ¼rode³ RPM-a przez doxygen.
 
 %prep
-%setup -q -n %{name}
+%setup -q
 %patch1 -p1
 %patch2 -p1
 # temporarily moved after patch0 - messes too much in pl.po
