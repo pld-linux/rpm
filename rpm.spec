@@ -55,6 +55,7 @@ Patch13:	%{name}-glob.patch
 Patch14:	%{name}-header_h.patch
 Patch15:	%{name}-fast-alAddPackage.patch
 Patch16:	%{name}-byKey.patch
+Patch17:	%{name}-po.patch
 Patch18:	%{name}-noperldir.patch
 Patch19:	%{name}-popt-cvs20010530.patch
 Patch20:	%{name}-noexpand.patch
@@ -460,6 +461,7 @@ construir pacotes usando o RPM.
 %patch14 -p1
 %patch15 -p0
 %patch16 -p0
+%patch17 -p1
 %patch18 -p1
 %patch19 -p1
 %patch20 -p1
