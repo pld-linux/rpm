@@ -1,3 +1,4 @@
+%include        /usr/lib/rpm/macros.python
 %define	beecrypt_ver	2.2.0
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
@@ -6,7 +7,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.4
-Release:	0.80
+Release:	0.81
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -74,6 +75,7 @@ BuildRequires:	libtool
 BuildRequires:	patch >= 2.2
 BuildRequires:	python-devel >= 2.2
 BuildRequires:	python-modules >= 2.2
+BuildRequires:	rpm-pythonprov
 BuildRequires:	zlib-devel
 %if %{!?_without_static:1}%{?_without_static:0}
 # Require static library only for static build
@@ -87,12 +89,6 @@ Conflicts:	glibc < 2.2
 
 %define		__find_provides	%{SOURCE4}
 %define		_binary_payload	w9.gzdio
-
-%define		py_ver		%(echo `python -c "import sys; print sys.version[:3]"`)
-%define		py_prefix	%(echo `python -c "import sys; print sys.prefix"`)
-%define		py_libdir	%{py_prefix}/lib/python%{py_ver}
-%define		py_sitedir	%{py_libdir}/site-packages
-%define		py_dyndir	%{py_libdir}/lib-dynload
 
 %description
 RPM is a powerful package manager, which can be used to build,
@@ -244,7 +240,7 @@ Pythonie.
 
 %package php-pearprov
 Summary:	Additional utilities for managing rpm packages and database
-Summary(pl):	Dodatkowe narzêdzia do sprawdzania zale¿no¶ci skryptów php w rpm.
+Summary(pl):	Dodatkowe narzêdzia do sprawdzania zale¿no¶ci skryptów php w rpm
 Group:		Applications/File
 Requires:	%{name} = %{version}
 
@@ -262,7 +258,7 @@ Summary(pl):	Pythonowy interfejs do biblioteki RPM-a
 Summary(pt_BR):	Módulo Python para aplicativos que manipulam pacotes RPM
 Group:		Development/Languages/Python
 Requires:	%{name} = %{version}
-%requires_eq	python
+%pyrequires_eq	python
 Obsoletes:	rpm-python
 
 %description -n python-rpm
@@ -351,14 +347,14 @@ Epoch:		1
 Group:		Libraries
 
 %description -n beecrypt
-Crypto library
+Crypto library (modified for rpm needs).
 
 %description -n beecrypt -l pl
-Biblioteka kryptograficzna.
+Biblioteka kryptograficzna (zmodyfikowana na potrzeby rpma).
 
 %package -n beecrypt-devel
 Summary:	Crypto library - development files
-Summary(pl):	Biblioteka kryptograficzna - pliki developerskie.
+Summary(pl):	Biblioteka kryptograficzna - pliki developerskie
 Version:	%{beecrypt_ver}
 Group:		Development/Libraries
 Requires:	beecrypt = %{beecrypt_ver}
@@ -484,7 +480,7 @@ mv -f macros.tmp macros.in
 	--enable-shared \
 	--enable-static \
 	--with-apidocs \
-	--with-python \
+	--with-python=auto \
 	--without-db
 
 %{__make} \
@@ -673,10 +669,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/find-php*
 %{_libdir}/rpm/macros.php
 
-# this subpackage need fix
-#%files -n python-rpm
-#%defattr(644,root,root,755)
-#%{py_sitedir}/*.so
+%files -n python-rpm
+%defattr(644,root,root,755)
+%{py_sitedir}/*.so
 
 %files -n beecrypt
 %defattr(644,root,root,755)
