@@ -78,7 +78,11 @@ Obsoletes:	rpm-libs
 %define __find_provides %{SOURCE4}
 %define _binary_payload w9.gzdio
 %define		__find_provides	%{SOURCE4}
-%include /usr/lib/rpm/macros.python
+%define py_ver         %(echo `python -c "import sys; print sys.version[:3]"`)
+%define py_prefix      %(echo `python -c "import sys; print sys.prefix"`)
+%define py_libdir      %{py_prefix}/lib/python%{py_ver}
+%define py_sitedir     %{py_libdir}/site-packages
+%define py_dyndir      %{py_libdir}/lib-dynload
 %define		py_dyndir	%{py_libdir}/lib-dynload
 %define		pyrequires_eq() Requires:	%1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
 
