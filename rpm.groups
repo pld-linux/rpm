@@ -1392,21 +1392,21 @@ X11/Development/Tools
 	[sv]:		X11/Utveckling/Verktyg
 	[uk]:		X11/òÏÚÒÏÂËÁ/¶ÎÓÔÒÕÍÅÎÔÉ
 
-X11/Fonts
-	[cs]:		X11/Fonty
-	[da]:		X11/Skrifttyper
-	[de]:		X11/Zeichensätze
-	[es]:		X11/Fuentes
-	[fr]:		X11/Polices
-	[is]:		X11/Leturgerğir
-	[it]:		X11/Font
-	[no]:		X11/Skrifttyper
-	[pl]:		X11/Fonty
-	[pt]:		X11/Tipos de Letra
-	[ru]:		X11/ûÒÉÆÔÙ
-	[sl]:		X11/Pisave
-	[sv]:		X11/Typsnitt
-	[uk]:		X11/ûÒÉÆÔÉ
+Fonts
+	[cs]:		Fonty
+	[da]:		Skrifttyper
+	[de]:		Zeichensätze
+	[es]:		Fuentes
+	[fr]:		Polices
+	[is]:		Leturgerğir
+	[it]:		Font
+	[no]:		Skrifttyper
+	[pl]:		Fonty
+	[pt]:		Tipos de Letra
+	[ru]:		ûÒÉÆÔÙ
+	[sl]:		Pisave
+	[sv]:		Typsnitt
+	[uk]:		ûÒÉÆÔÉ
 
 X11/Libraries
 	[cs]:		X11/Knihovny
