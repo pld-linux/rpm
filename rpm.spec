@@ -26,7 +26,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-%define	rel	0.%{snap}.5
+%define	rel	0.%{snap}.6
 Release:	%{rel}
 License:	GPL
 Group:		Base
@@ -76,6 +76,7 @@ Patch34:	%{name}-spec-prep-pre.patch
 Patch35:	%{name}-perl_req.patch
 Patch36:	%{name}-system_libs_more.patch
 Patch37:	%{name}-python_2_3.patch
+Patch38:	%{name}-no-bin-env.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -500,6 +501,7 @@ construir pacotes usando o RPM.
 %patch35 -p1
 %patch36 -p1
 %patch37 -p1
+%patch38 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
