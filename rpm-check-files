@@ -18,7 +18,7 @@ find $RPM_BUILD_ROOT -type f | LC_ALL=C sort > $FILES_DISK
 LC_ALL=C sort > $FILES_RPM
 
 for f in `diff "$FILES_DISK" "$FILES_RPM" | grep "^< " | cut -c3-`; do
-	echo $f
+	echo $f | sed -e "s#^$RPM_BUILD_ROOT#   #g"
 done
 
 rm -f $FILES_DISK
