@@ -93,7 +93,7 @@ Applications/Databases/Interfaces
 	[is]:		Forrit/Gagnagrunnar/Viğmót
 	[it]:		Applicazioni/Database/Interfacce
 	[no]:		Applikasjoner/Databaser/Grensesnitt
-	[pl]:		Aplikacje/Bazy danych/Interfejsy
+	[pl]:		Aplikacje/Bazy Danych/Interfejsy
 	[pt]:		Aplicações/Bases de Dados/Interfaces
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/âÁÚÙ ÄÁÎÎÙÈ/éÎÔÅÒÆÅÊÓÙ
 	[sl]:		Programi/Zbirke podatkov/Vmesniki
@@ -316,6 +316,23 @@ Applications/Math
 	[sl]:		Programi/Matematièni
 	[sv]:		Tillämpningar/Matemataisk
 	[uk]:		ğÒÉËÌÁÄÎ¦ ğÒÏÇÒÁÍÉ/íÁÔÅÍÁÔÉËÁ
+
+Applications/Multimedia
+	[cs]:		Aplikace/Multimédia
+	[da]:		Programmer/Multimedie
+	[de]:		Applikationen/Multimedien
+	[es]:		Aplicaciones/Multimedia
+	[fr]:		Applications/Multimédia
+	[is]:		Forrit/Margmiğlun
+	[it]:		Applicazioni/Multimedia
+	[ja]:		¥ê¥±¡¼¥·¥ç¥ó/¥Ş¥ë¥Á¥á¥Ç¥£¥¢
+	[no]:		Programmer/Multimedia
+	[pl]:		Aplikacje/Multimedia
+	[pt]:		Aplicações/Multimédia
+	[ru]:		ğÒÉÌÏÖÅÎÉÑ/íÕÌØÔÉÍÅÄÉÁ
+	[sl]:		Programi/Veèpredstavnost
+	[sv]:		Tillämpningar/Multimedia
+	[uk]:		ğÒÉËÌÁÄÎ¦ ğÒÏÇÒÁÍÉ/íÕÌØÔÉÍÅÄ¦Á
 
 Applications/News
 	[cs]:		Aplikace/News
@@ -541,6 +558,19 @@ Applications/Text
 	[sl]:		Programi/Besedilo
 	[sv]:		Tillämpningar/Text
 	[uk]:		ğÒÉËÌÁÄÎ¦ ğÒÏÇÒÁÍÉ/ôÅËÓÔÏ×¦ ÕÔÉÌ¦ÔÉ
+
+Applications/WWW
+	[cs]:		Aplikace/WWW
+	[da]:		Programmer/WWW
+	[de]:		Applikationen/WWW
+	[es]:		Aplicaciones/WWW
+	[fr]:		Applications/WWW
+	[is]:		Forrit/WWW
+	[no]:		Applikasjoner/WWW
+	[pl]:		Aplikacje/WWW
+	[pt]:		Aplicações/WWW
+	[sl]:		Programi/WWW
+	[sv]:		Tillämpningar/WWW
 
 Base
 	[cs]:		Základ
@@ -1268,6 +1298,24 @@ X11/Applications/Networking
 	[sv]:		X11/Tillämpningar/Nätverk
 	[uk]:		X11/ğÒÉËÌÁÄÎ¦ ğÒÏÇÒÁÍÉ/íÅÒÅÖÁ
 
+X11/Applications/Publishing
+	[cs]:		X11/Aplikace/Publikování
+	[da]:		X11/Programmer/Udgivelse
+	[de]:		X11/Applikationen/Publizieren
+	[es]:		X11/Aplicaciones/Edición
+	[fr]:		X11/Applications/Edition
+	[is]:		X11/Forrit/Umbrot
+	[it]:		X11/Applicazioni/Publishing
+	[ja]:		X11/¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Ñ¥Ö¥ê¥Ã¥·¥ó¥°
+	[no]:		X11/Applikasjoner/Publisering
+	[pl]:		X11/Aplikacje/Publikowanie
+	[pt]:		X11/Aplicações/Publicação
+	[pt_BR]:	X11/Aplicações/Editoração
+	[ru]:		X11/ğÒÉÌÏÖÅÎÉÑ/ôÉĞÏÇÒÁÆÉÑ
+	[sl]:		X11/Programi/Zalo¾ni¹tvo
+	[sv]:		X11/Tillämpningar/Publicering
+	[uk]:		X11/ğÒÉËÌÁÄÎ¦ ğÒÏÇÒÁÍÉ/ôÉĞÏÇÒÁÆ¦Ñ
+
 X11/Applications/Science
 	[cs]:		X11/Aplikace/Vìdecké
 	[de]:		X11/Applikationen/Wissenschaft
@@ -1279,6 +1327,23 @@ X11/Applications/Science
 	[ru]:		X11/ğÒÉÌÏÖÅÎÉÑ/îÁÕËÁ
 	[sv]:		X11/Tillämpningar/Vetenskaplig
 	[uk]:		X11/ğÒÉËÌÁÄÎ¦ ğÒÏÇÒÁÍÉ/îÁÕËÁ
+
+X11/Applications/Sound
+	[cs]:		X11/Aplikace/Zvuk
+	[da]:		X11/Programmer/Lyd
+	[de]:		X11/Applikationen/Laut
+	[es]:		X11/Aplicaciones/Sonido
+	[fr]:		X11/Aplicações/Son
+	[is]:		X11/Forrit/Hljóğ
+	[it]:		X11/Applicazioni/Audio
+	[no]:		X11/Applikasjoner/Lyd
+	[pl]:		X11/Aplikacje/D¼wiêk
+	[pt]:		X11/Aplicações/Som
+	[pt_BR]:	X11/Aplicações/Som
+	[ru]:		X11/ğÒÉÌÏÖÅÎÉÑ/ú×ÕË
+	[sl]:		X11/Programi/Zvok
+	[sv]:		X11/Tillämpningar/Ljud
+	[uk]:		X11/ğÒÉËÌÁÄÎ¦ ğÒÏÇÒÁÍÉ/ú×ÕË
 
 X11/Development/Libraries
 	[cs]:		X11/Vıvojové prostøedky/Knihovny
