@@ -1,0 +1,24 @@
+diff -urN rpm-4.0.2.org/acconfig.h rpm-4.0.2/acconfig.h
+--- rpm-4.0.2.org/acconfig.h	Fri Oct 12 18:23:02 2001
++++ rpm-4.0.2/acconfig.h	Fri Oct 12 18:24:46 2001
+@@ -159,6 +159,9 @@
+ /* Build with dmalloc support? */
+ #undef DMALLOC
+ 
++#undef HAVE_GETMNTENT
++#undef fnmatch
++
+ ^L
+ /* Leave that blank line there!!  Autoheader needs it.
+    If you're adding to this file, keep in mind:
+diff -urN rpm-4.0.2.org/configure.in rpm-4.0.2/configure.in
+--- rpm-4.0.2.org/configure.in	Fri Oct 12 18:23:08 2001
++++ rpm-4.0.2/configure.in	Fri Oct 12 18:25:18 2001
+@@ -20,7 +20,6 @@
+ LIBOBJS=
+ 
+ dnl Checks for programs.
+-AC_ARG_PROGRAM
+ AC_PROG_CC
+ if test "$ac_cv_prog_gcc" = yes; then
+     CFLAGS="$CFLAGS -D_GNU_SOURCE -Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes -Wno-char-subscripts"
