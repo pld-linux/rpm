@@ -422,7 +422,7 @@ Scripts for managing .spec files and building RPM packages.
 Scripts fürs Bauen RPM-Pakete.
 
 %description build-tools -l pl
-Skrypty pomocnicze do zarz±dznia plikami .spec i do budowania RPM-ów.
+Skrypty pomocnicze do zarz±dzania plikami .spec i do budowania RPM-ów.
 
 %description build-tools -l pt_BR
 Este pacote contém scripts e programas executáveis que são usados para
@@ -455,9 +455,9 @@ Summary:	Crypto library - development files
 Summary(pl):	Biblioteka kryptograficzna - pliki developerskie
 Version:	%{beecrypt_ver}
 Release:	%{beecrypt_rel}
+Epoch:		1
 Group:		Development/Libraries
 Requires:	beecrypt = %{beecrypt_ver}
-Epoch:		1
 
 %description -n beecrypt-devel
 Crypto library - development files.
@@ -470,9 +470,9 @@ Summary:	Crypto library - static version
 Summary(pl):	Statyczna biblioteka kryptograficzna
 Version:	%{beecrypt_ver}
 Release:	%{beecrypt_rel}
+Epoch:		1
 Group:		Development/Libraries
 Requires:	beecrypt-devel = %{beecrypt_ver}
-Epoch:		1
 
 %description -n beecrypt-static
 Static version of crypto library.
