@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.4
-Release:	1
+Release:	2
 Group:		Base
 Group(pl):	Podstawowe
 Copyright:	GPL
@@ -250,7 +250,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rpmbuild
 %attr(755,root,root) %{_bindir}/rpmu
-%attr(755,root,root) %{_libdir}/rpm/freshen.sh
 %attr(755,root,root) %{_libdir}/rpm/find-requires
 %attr(755,root,root) %{_libdir}/rpm/find-provides
 %attr(755,root,root) %{_libdir}/rpm/find-rpm-provides
@@ -273,6 +272,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files static
 %attr(755,root,root) %{_bindir}/*
+%attr(755,root,root) %{_libdir}/rpm/freshen.sh
 %files utils
 %defattr(644,root,root,755)
 %{_mandir}/man8/rpm2cpio.8*
