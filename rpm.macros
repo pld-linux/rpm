@@ -21,6 +21,9 @@
 %kgcc		gcc
 %kgcc_package	gcc
 
+# other macros
+%_enable_debug_packages 1
+
 # Build system path macros.
 #
 %__libtoolize           libtoolize --copy --force
@@ -95,6 +98,28 @@
 	--infodir=%{_infodir} \
 	--x-libraries=/usr/X11R6/%{_lib} \
 }
+
+# ------------------------------------------------------------------------
+# Overloading of some basic macros
+%prep \
+%%prep\
+LANG=C\
+export LANG\
+unset DISPLAY\
+%{nil}
+
+%build %%build\
+LANG=C\
+export LANG\
+unset DISPLAY\
+%{nil}
+
+%install %{?_enable_debug_packages:%{?buildsubdir:%{debug_package}}}\
+%%install\
+LANG=C\
+export LANG\
+unset DISPLAY\
+%{nil}
 
 # ------------------------------------------------------------------------
 # Conditional build stuff.
