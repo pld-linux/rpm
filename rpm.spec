@@ -2,6 +2,7 @@
 # TODO:
 # - learn find-perl-provides to use the __perl macro instead
 #   of /usr/bin/perl
+#   NOTE: there is no find-perl* now, only perl.{prov,req}
 # - use system libmagic not internal libfmagic
 #
 # Conditional build:
@@ -26,7 +27,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-%define	rel	0.%{snap}.11
+%define	rel	0.%{snap}.12
 Release:	%{rel}
 License:	GPL
 Group:		Base
@@ -85,6 +86,7 @@ Patch28:	%{name}-python-beecrypt.patch
 Patch29:	%{name}-man-typos.patch
 Patch30:	%{name}-man-pl.patch
 Patch31:	%{name}-fdClose-typo.patch
+Patch32:	%{name}-userpmdepswrappers.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -543,6 +545,7 @@ cat %{SOURCE14} >> macros.in
 %patch29 -p1
 %patch30 -p1
 %patch31 -p1
+%patch32 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
