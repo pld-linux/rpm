@@ -163,7 +163,6 @@ Summary(ru):	Хедеры и библиотеки для программ, работающих с rpm-пакетами
 Summary(uk):	Хедери та б╕бл╕отеки для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name} = %{version}
-Requires:	beecrypt-devel
 Requires:	bzip2-devel
 Requires:	db-devel
 Requires:	libelf-devel
