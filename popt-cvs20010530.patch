@@ -2085,8 +2085,8 @@
  run test1 "test1 - 23" "--echo-args -a" --echo-args -e -a
  run test1 "test1 - 24" "arg1: 0 arg2: (none) short: 1" -shortoption
  run test1 "test1 - 25" "arg1: 0 arg2: (none) short: 1" --shortoption
---- rpm/popt-1.6.2/acconfig.h.wiget	Wed May 30 15:31:40 2001
-+++ rpm/popt-1.6.2/acconfig.h	Wed May 30 15:32:19 2001
+--- rpm/popt/acconfig.h.wiget	Wed May 30 15:31:40 2001
++++ rpm/popt/acconfig.h	Wed May 30 15:32:19 2001
 @@ -16,7 +16,6 @@
     a given entry is in the file.
  
