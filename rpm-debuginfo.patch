@@ -1,13 +1,14 @@
 diff -urN rpm-4.3.org/macros.in rpm-4.3/macros.in
 --- rpm-4.3.org/macros.in	2004-05-13 00:35:16.239893312 +0200
 +++ rpm-4.3/macros.in	2004-05-13 00:41:19.778627024 +0200
-@@ -118,15 +118,15 @@
+@@ -118,15 +118,20 @@
  %debug_package \
  %ifnarch noarch\
  %global __debug_package 1\
 -%package debug\
 +%package debuginfo\
  Summary: Debug information for package %{name}\
++Summary(pl): Informacje dla debuggera dla pakietu %{name}\
  Group: Development/Debug\
  AutoReqProv: 0\
 -%description debug\
@@ -15,12 +16,16 @@ diff -urN rpm-4.3.org/macros.in rpm-4.3/macros.in
  This package provides debug information for package %{name}.\
  Debug information is useful when developing applications that use this\
  package or when debugging this package.\
++%description debuginfo -l pl\
++Ten pakiet dostarcza informacje dla debuggera dla pakietu %{name}.\
++Informacje te s± przydatne przy rozwijaniu aplikacji u¿ywaj±cych tego\
++pakietu oraz przy odpluskwianiu samego pakietu.\
 -%files debug -f debugfiles.list\
 +%files debuginfo -f debugfiles.list\
  %defattr(-,root,root)\
  %endif\
  %{nil}
-@@ -844,7 +844,11 @@
+@@ -844,7 +849,11 @@
  %__spec_install_pre	%{___build_pre}
  %__spec_install_body	%{___build_body}
  %__spec_install_post\
