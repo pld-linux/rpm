@@ -126,8 +126,10 @@ Applications/Sound
 	[pl]:	Aplikacje/D¼wiêk
 
 Base
-	[de]:	Gründsätzlich
-	[pl]:	Podstawowe
+	[de]:		Gründsätzlich
+	[pl]:		Podstawowe
+	[pt_BR]:	Base
+	[es]:		Base
 
 Base/Kernel
 	[de]:	Grundsätzlich/Kern
