@@ -467,3 +467,9 @@ fi; \
 #
 %usertestrm	/usr/lib/rpm/user_group.sh user testrm
 %grouptestrm	/usr/lib/rpm/user_group.sh group testrm
+# user group membership management macros
+#
+# Usage:
+#	%addusertogroup myuser agroup
+#
+%addusertogroup	/usr/lib/rpm/user_group.sh user addtogroup
