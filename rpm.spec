@@ -36,7 +36,7 @@ Source0:	http://recesja.icm.edu.pl/~psk/%{name}-%{version}.%{snap}.tar.gz
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
-Source4:	%{name}-find-%{name}-provides
+Source4:	%{name}-find-rpm-provides
 Source5:	%{name}-macros.perl
 Source8:	%{name}-find-spec-bcond
 Source9:	%{name}-find-lang
@@ -53,9 +53,9 @@ Source31:	adapter.awk
 Source32:	pldnotify.awk
 Source33:	perl.prov
 Patch0:		%{name}-pl.po.patch
-Patch1:		%{name}-%{name}rc.patch
+Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
-Patch3:		%{name}-%{name}popt.patch
+Patch3:		%{name}-rpmpopt.patch
 Patch4:		%{name}-perl-macros.patch
 Patch5:		%{name}-perl-req-perlfile.patch
 Patch7:		%{name}-glob.patch
@@ -79,6 +79,7 @@ Patch35:	%{name}-perl_req.patch
 Patch36:	%{name}-system_libs_more.patch
 Patch37:	%{name}-python_2_3.patch
 Patch38:	%{name}-no-bin-env.patch
+Patch39:	%{name}-specflags.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -516,6 +517,7 @@ install %{SOURCE18} scripts/php.req.in
 install %{SOURCE33} scripts/perl.prov
 cat %{SOURCE20} >> macros.in
 %patch34 -p1
+%patch39 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
