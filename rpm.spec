@@ -89,6 +89,7 @@ Patch36:	%{name}-pld-autodep.patch
 Patch37:	%{name}-rpmsq.patch
 Patch38:	%{name}-file-readelf.patch
 Patch39:	%{name}-pentium3.patch
+Patch40:	%{name}-epoch0.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -589,6 +590,7 @@ cat %{SOURCE11} >> macros.in
 %patch37 -p1
 %patch38 -p1
 %patch39 -p1
+%patch40 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
