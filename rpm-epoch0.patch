@@ -1,40 +1,14 @@
---- rpm-4.3/build/parsePreamble.c.orig	2004-02-26 22:31:15.020274848 +0100
-+++ rpm-4.3/build/parsePreamble.c	2004-02-26 22:33:33.616205064 +0100
-@@ -455,6 +455,8 @@
- extern int noLang;
- /*@=redecl@*/
+--- rpm-4.3.orig/build/parsePreamble.c	2003-11-16 13:47:23.000000000 +0100
++++ rpm-4.3/build/parsePreamble.c	2004-02-29 15:40:58.466804704 +0100
+@@ -942,6 +943,11 @@
+ 	headerCopyTags(spec->packages->header, pkg->header,
+ 			(int_32 *)copyTagsDuringParse);
  
-+static int noEpoch;
-+
- /**
-  */
- /*@-boundswrite@*/
-@@ -626,6 +628,7 @@
- 		     spec->lineNum, spec->line);
- 	    return RPMERR_BADSPEC;
- 	}
-+	noEpoch = 0;
- 	xx = headerAddEntry(pkg->header, tag, RPM_INT32_TYPE, &num, 1);
- 	break;
-     case RPMTAG_AUTOREQPROV:
-@@ -865,6 +868,8 @@
-     strcpy(NVR, "(main package)");
- 
-     pkg = newPackage(spec);
-+    
-+    noEpoch = 1;
- 	
-     if (! initialPackage) {
- 	/* There is one option to %package: <pkg> or -n <pkg> */
-@@ -932,6 +937,11 @@
-     if (!spec->anyarch && checkForValidArchitectures(spec))
- 	return RPMERR_BADSPEC;
- 
-+    if (noEpoch) {
++    if (headerGetEntry(pkg->header, RPMTAG_EPOCH, NULL, NULL, NULL) == 0) {
 +    	int num = 0;
 +	headerAddEntry(pkg->header, RPMTAG_EPOCH, RPM_INT32_TYPE, &num, 1);
 +    }
-+
-     if (pkg == spec->packages)
- 	fillOutMainPackage(pkg->header);
++    
+     if (checkForRequired(pkg->header, NVR))
+ 	return RPMERR_BADSPEC;
  
