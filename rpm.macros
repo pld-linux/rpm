@@ -118,7 +118,7 @@
 %_pkgconfigdir	/usr/lib/pkgconfig
 
 # Location of top applink dir
-%_applnkdir      %{_prefix}/share/applnk
+%_applnkdir	/usr/X11R6/share/applnk
 
 # Location pixmaps for applnk/desktop files
 %_pixmapsdir	%{_prefix}/share/pixmaps
