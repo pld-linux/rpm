@@ -482,17 +482,6 @@ fi; \
 #	%addusertogroup myuser agroup
 #
 %addusertogroup	/usr/lib/rpm/user_group.sh user addtogroup
-Index: rpm.macros
-===================================================================
-RCS file: /cvsroot/SOURCES/rpm.macros,v
-retrieving revision 1.158.4.8
-diff -u -r1.158.4.8 rpm.macros
---- rpm.macros	29 Oct 2004 11:38:09 -0000	1.158.4.8
-+++ rpm.macros	23 Nov 2004 13:47:51 -0000
-@@ -471,3 +471,19 @@
- #	%addusertogroup myuser agroup
- #
- %addusertogroup	/usr/lib/rpm/user_group.sh user addtogroup
 
 # banner support (useful in {pre,post}{,un} and triggers)
 #
