@@ -105,20 +105,20 @@
 %%prep\
 LANG=C\
 export LANG\
-unset DISPLAY\
+unset DISPLAY ||:\
 %{nil}
 
 %build %%build\
 LANG=C\
 export LANG\
-unset DISPLAY\
+unset DISPLAY ||:\
 %{nil}
 
 %install %{?_enable_debug_packages:%{?buildsubdir:%{debug_package}}}\
 %%install\
 LANG=C\
 export LANG\
-unset DISPLAY\
+unset DISPLAY ||:\
 %{nil}
 
 # ------------------------------------------------------------------------
