@@ -138,7 +138,7 @@
  	    /* Add to package requires. */
  	    ds = rpmdsSingle(RPMTAG_REQUIRENAME, s, "", RPMSENSE_FIND_REQUIRES);
  	    xx = rpmdsMerge(&fc->requires, ds);
-@@ -718,19 +799,22 @@
+@@ -718,21 +799,22 @@
      (void) fclose(fp);
  
      if (fc->fcolor->vals[fc->ix] & RPMFC_PERL) {
@@ -153,7 +153,9 @@
      }
      if (fc->fcolor->vals[fc->ix] & RPMFC_PYTHON) {
 -	xx = rpmfcHelper(fc, 'P', "python");
+-#ifdef	NOTYET
 -	if (is_executable)
+-#endif
 -	    xx = rpmfcHelper(fc, 'R', "python");
 +	if (findprov)
 +	    xx = rpmfcHelper(fc, 'P', "python", noautoprov, noautoprov_c);
