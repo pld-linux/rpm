@@ -355,15 +355,13 @@ echo "Compress kernel modules if any."; \
 %_binary_payload        w9.bzdio
 
 #-----------------------------------------------------------------
-# Update all GConf2 schemas
+# Update GConf2 schemas
 #
 # Requires: GConf2
 #
-%gconf_schema_install { umask 022; \
-    GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" \
-    /usr/bin/gconftool-2 --makefile-install-rule \
-    /etc/gconf/schemas/*.schemas > /dev/null \
-}
+%gconf_schema_install /usr/lib/rpm/gconf-schema-install
+
+%gconf_schema_uninstall /usr/lib/rpm/gconf-schema-uninstall
 
 #-----------------------------------------------------------------
 # post %install sequence:
