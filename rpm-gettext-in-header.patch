@@ -1,0 +1,13 @@
+--- ./lib/header.c.org	Sun Feb 17 01:50:51 2002
++++ ./lib/header.c	Sun Feb 17 01:52:01 2002
+@@ -1282,8 +1282,8 @@
+ 
+ 	}
+     }
+-
+-    return entry->data;
++/* when everything fail, try gettext */
++    return _(entry->data);
+ }
+ 
+ /**
