@@ -207,10 +207,12 @@ Summary(pl):	Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w 
 Requires:	python
 Requires:	%{name} = %{version}
 Requires:	python-modules
-Python macros, which simplifies creation of rpm packages with Python software.
+
+%description pythonprov
 Python macros, which simplifies creation of rpm packages with Python
 software.
-Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w Pythonie.
+Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi
+w Pythonie.
 Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w
 %package python
 
@@ -227,6 +229,13 @@ written in the Python programming language to use the interface
 supplied by RPM (RPM Package Manager) libraries.
 
 This package should be installed if you want to develop Python
+%description python -l pl
+Pakiet rpm-python zawiera modu³, który pozwala aplikacjom napisanym
+w Pythonie na u¿ywanie interfejsu dostarczanego przez biblioteki rpma.
+Pakiet rpm-python zawiera modu³, który pozwala aplikacjom napisanym w
+Pakiet ten powinien zostaæ zainstalowany, je¶li chcesz pisaæ
+w Pythonie programy manipuluj±ce pakietami i bazami danych rpm.
+Esse pacote deve ser instalado se você quiser desenvolver programas em
 Python para manipular pacotes e bancos de dados RPM.
 
 %package build
