@@ -12,12 +12,12 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
 %include        /usr/lib/rpm/macros.python
-%define snap	20040329
+%define snap	20040408
 # versions of required libraries
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.9
 %define	beecrypt_ver	3.0.0-0.20030610.1
-%define rpm_macros_rev	1.143
+%define rpm_macros_rev	1.145
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -26,14 +26,15 @@ Summary(pt_BR):	Gerenciador de pacotes RPM
 Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
-%define	ver	4.3
+%define	ver	4.4
+%define so_ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.0.2
+Release:	0.%{snap}.0.1
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
 Source0:	ftp://distfiles.pld-linux.org/src/%{name}-%{version}.%{snap}.tar.bz2
-# Source0-md5:	56d2bba2b39e2fe7d67a96e33cdfc272
+# Source0-md5:	0ebf84ea6aedd8b9a61e7d849ef3a970
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -55,7 +56,6 @@ Patch2:		%{name}-arch.patch
 Patch3:		%{name}-rpmpopt.patch
 Patch4:		%{name}-perl-macros.patch
 Patch5:		%{name}-perl-req-perlfile.patch
-Patch6:		%{name}-glob.patch
 Patch7:		%{name}-noexpand.patch
 Patch8:		%{name}-scripts-closefds.patch
 Patch9:		%{name}-python-macros.patch
@@ -546,7 +546,6 @@ construir pacotes usando o RPM.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
@@ -578,7 +577,7 @@ cat %{SOURCE11} >> macros.in
 %patch23 -p1
 %patch24 -p1
 %patch25 -p1
-%patch26 -p1
+%patch26 -p1 -b .wiget
 %patch27 -p1
 %patch28 -p1
 %patch29 -p1
@@ -746,7 +745,7 @@ EOF
 install -d $RPM_BUILD_ROOT/var/spool/repackage
 
 # move libs to /lib
-for a in librpm-%{ver}.so librpmdb-%{ver}.so librpmio-%{ver}.so ; do
+for a in librpm-%{so_ver}.so librpmdb-%{so_ver}.so librpmio-%{so_ver}.so ; do
 	mv -f $RPM_BUILD_ROOT%{_libdir}/$a $RPM_BUILD_ROOT/%{_lib}
 	ln -s /%{_lib}/$a $RPM_BUILD_ROOT%{_libdir}/$a
 done
