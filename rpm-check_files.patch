@@ -48,7 +48,7 @@
 +    
 +    if (readBuf) {
 +        buf = getStringBuf(readBuf);
-+        if ((*buf != '\0') & (*buf != '\n'))
++        if ((*buf != '\0') && (*buf != '\n'))
 +            rpmMessage(RPMMESS_WARNING, \
 +	                _("found installed files not placed in any package:\n---\n%s---\n"),
 +                       buf);
