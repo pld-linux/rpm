@@ -72,7 +72,7 @@
      Package pkg;
      int res = 0;
 +    StringBuf fileList;
-+    int fileListLen;
++    int fileListLen = 0;
 +    
 +    fileList = newStringBuf();
      
