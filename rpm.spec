@@ -265,6 +265,7 @@ Summary(de):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
 Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w pakietach rpm
 Group:		Applications/File
 Requires:	%{name} = %{version}
+Requires:	perl-devel
 Requires:	perl-modules
 
 %description perlprov
