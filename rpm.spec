@@ -22,7 +22,7 @@ Patch7:		rpm-find-lang-all-name.patch
 Patch8:		rpm-file3.31.patch
 Patch9:		rpm-find-lang-name-matching.patch
 Patch10:	rpm-exclude-examples-doc.patch
-Patch11:	rpm-db2.patch
+Patch11:	rpm-db3.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	bzip2-static >= 1.0.1
