@@ -54,23 +54,23 @@ Patch26:	%{name}-python-macros.patch
 Patch27:	%{name}-hardlink-fixes.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
-BuildRequires:	gettext-devel >= 0.10.38-3
+URL:		http://www.rpm.org/
+Icon:		rpm.gif
+BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
 BuildRequires:	db3-devel >= 3.1.17-9
-BuildRequires:	bzip2-devel >= 1.0.1
-BuildRequires:	zlib-devel
+BuildRequires:	db1-devel >= 1.85
+BuildRequires:	db3-devel >= 3.1.17-9
 BuildRequires:	gettext-devel >= 0.10.38-3
-BuildRequires:	libtool
-BuildRequires:	automake
-BuildRequires:	autoconf >= 2.50
 BuildRequires:	python-devel
+BuildRequires:	zlib-devel
 BuildRequires:	python-modules >= 2.2.1
 BuildRequires:	zlib-devel >= 1.1.4
+%if %{!?_without_static:1}%{?_without_static:0}
 # Require static library only for static build
 BuildRequires:	db3-static >= 3.1.17-9
-BuildRequires:	bzip2-static >= 1.0.1
+BuildRequires:	db1-static >= 1.85
 BuildRequires:	zlib-static
-BuildRequires:	glibc-static >= 2.2.0
 %endif
 BuildRequires:	zlib-static >= 1.1.4
 Obsoletes:	rpm-libs
@@ -183,7 +183,7 @@ Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
 Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami.
 
 %package perlprov
-Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci dla skryptów perl w pakietach rpm
+Summary:	Additional utilities for checking perl provides/requires in rpm packages
 Summary(de):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
 Group(de):	Applikationen/Datei
 Group(pl):	Aplikacje/Pliki
@@ -198,7 +198,7 @@ packages.
 
 %description perlprov -l de
 Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen.
-Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci dla skryptów perl w
+
 %description perlprov -l pl
 Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w
 pakietach rpm.
@@ -220,6 +220,7 @@ w Pythonie.
 Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w
 %package python
 
+%package -n python-rpm
 Group:		Development/Languages/Python
 Group(de):	Entwicklung/Sprachen/Python
 Group(pl):	Programowanie/Jêzyki/Python
@@ -235,7 +236,7 @@ supplied by RPM (RPM Package Manager) libraries.
 This package should be installed if you want to develop Python
 %description python -l pl
 Pakiet rpm-python zawiera modu³, który pozwala aplikacjom napisanym
-w Pythonie na u¿ywanie interfejsu dostarczanego przez biblioteki rpma.
+w Pythonie na u¿ywanie interfejsu dostarczanego przez biblioteki RPM-a.
 Pakiet rpm-python zawiera modu³, który pozwala aplikacjom napisanym w
 Pakiet ten powinien zostaæ zainstalowany, je¶li chcesz pisaæ
 w Pythonie programy manipuluj±ce pakietami i bazami danych rpm.
@@ -249,19 +250,19 @@ Group(de):	Applikationen/Datei
 Group(pl):	Aplikacje/Pliki
 Summary(pt_BR):	Scripts e programas executáveis usados para construir pacotes
 Group:		Applications/File
-Requires:	sh-utils
+Requires:	/bin/id
+Requires:	awk
 Requires:	binutils
-Requires:	patch
 Requires:	file >= 3.31
-Requires:	binutils
-Requires:	make
 Requires:	gcc >= 3.0.3
 Requires:	gcc
-Requires:	diffutils
 Requires:	glibc-devel
-Requires:	sed
-Requires:	sed
+Requires:	grep
+Requires:	gzip
+Requires:	make
+Requires:	patch
 Requires:	popt >= 1.6.2-2
+Requires:	sed
 Requires:	tar
 Requires:	textutils
 
@@ -356,7 +357,7 @@ sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' macros.in | \
 
 %{__make} %{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
 
-	DESTDIR="$RPM_BUILD_ROOT" \
+%install
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
