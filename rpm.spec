@@ -66,29 +66,29 @@ Patch8:		%{name}-scripts-closefds.patch
 Patch9:		%{name}-python-macros.patch
 Patch10:	%{name}-gettext-in-header.patch
 Patch11:	%{name}-compress-doc.patch
-Patch13:	%{name}-build.patch
-Patch14:	%{name}-system_libs.patch
-Patch15:	%{name}-bb-and-short-circuit.patch
-Patch16:	%{name}-etc_dir.patch
-Patch17:	%{name}-system_libs-more.patch
-Patch18:	%{name}-php-deps.patch
-Patch19:	%{name}-python-fix.patch
-Patch20:	%{name}-ldconfig-always.patch
-Patch21:	%{name}-perl_req.patch
-Patch24:	%{name}-no-bin-env.patch
-Patch26:	%{name}-magic-usesystem.patch
-Patch27:	%{name}-dontneedutils.patch
-Patch33:	%{name}-provides-dont-obsolete.patch
-Patch34:	%{name}-examplesaredoc.patch
-Patch35:	%{name}-po.patch
-Patch36:	%{name}-amd64.patch
-Patch37:	%{name}-notsc.patch
-Patch38:	%{name}-hack-norpmlibdep.patch
-Patch39:	%{name}-makefile-no_myLDADD_deps.patch
-Patch40:	%{name}-libdir64.patch
-Patch41:	%{name}-libdir-links.patch
-Patch42:	%{name}-find_required_pkgs_on_build.patch
-Patch43:	%{name}-noautoreqprovfiles.patch
+Patch12:	%{name}-build.patch
+Patch13:	%{name}-system_libs.patch
+Patch14:	%{name}-bb-and-short-circuit.patch
+Patch15:	%{name}-etc_dir.patch
+Patch16:	%{name}-system_libs-more.patch
+Patch17:	%{name}-php-deps.patch
+Patch18:	%{name}-python-fix.patch
+Patch19:	%{name}-ldconfig-always.patch
+Patch20:	%{name}-perl_req.patch
+Patch21:	%{name}-no-bin-env.patch
+Patch22:	%{name}-magic-usesystem.patch
+Patch23:	%{name}-dontneedutils.patch
+Patch24:	%{name}-provides-dont-obsolete.patch
+Patch25:	%{name}-examplesaredoc.patch
+Patch26:	%{name}-po.patch
+Patch27:	%{name}-amd64.patch
+Patch28:	%{name}-notsc.patch
+Patch29:	%{name}-hack-norpmlibdep.patch
+Patch30:	%{name}-makefile-no_myLDADD_deps.patch
+Patch31:	%{name}-libdir64.patch
+Patch32:	%{name}-libdir-links.patch
+Patch33:	%{name}-find_required_pkgs_on_build.patch
+Patch34:	%{name}-noautoreqprovfiles.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -548,6 +548,7 @@ construir pacotes usando o RPM.
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 %patch13 -p1
 %patch14 -p1
 %patch15 -p1
@@ -557,7 +558,6 @@ construir pacotes usando o RPM.
 %patch19 -p1
 %patch20 -p1
 %patch21 -p1
-%patch24 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
 echo '%%define	_perl_deps	1' > macros.perl
@@ -568,19 +568,19 @@ install %{SOURCE12} scripts/php.prov.in
 install %{SOURCE13} scripts/php.req.in
 install %{SOURCE33} scripts/perl.prov
 cat %{SOURCE14} >> macros.in
+%patch22 -p1
+%patch23 -p1
+%patch24 -p1
+%patch25 -p1
 %patch26 -p1
 %patch27 -p1
+%patch38 -p1
+%patch29 -p1
+%patch30 -p1
+%patch31 -p1
+%patch32 -p1
 %patch33 -p1
 %patch34 -p1
-%patch35 -p1
-%patch36 -p1
-%patch37 -p1
-%patch38 -p1
-%patch39 -p1
-%patch40 -p1
-%patch41 -p1
-%patch42 -p1
-%patch43 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
