@@ -16,6 +16,13 @@ if [ -f __rpm_noautoreqfiles ] ; then
 		filelist=`echo $filelist | sed "s![[:space:]]*$i[[:space:]]*!!g"`
 	done
 fi
+
+# --- Alpha does not mark 64bit dependencies
+case `uname -m` in
+    alpha*)       mark64="" ;;
+    *)            mark64="()(64bit)" ;;
+esac
+    
 exelist=`echo $filelist | xargs -r file | grep ":.*executable" |grep -v ":.*script"| cut -d: -f1 `
 elfexelist=`echo $exelist | xargs -r file | egrep  ":.* ELF" | cut -d: -f1 `
 aoutexelist=`echo $exelist | xargs -r file | egrep  -v ":.* ELF" | cut -d: -f1 `
@@ -30,7 +37,9 @@ done | sort -u | sed "s/['\"]/\\\&/g" | xargs -r -n 1 basename | grep -v 'libNoV
 `
 
 elfexerequires=`for f in $elfexelist; do 
-	objdump -p $f|awk '/NEEDED/ {print $2}'
+	lib64=`if file -L $f 2>/dev/null | \
+		grep "ELF 64-bit" >/dev/null; then echo "$mark64"; fi`
+	objdump -p $f | awk -v lib64="$lib64" '/NEEDED/ {print $2 lib64}'
 done | sed "s/['\"]/\\\&/g" | grep -v 'libNoVersion.so' | sort -u
 `
 		
@@ -40,7 +49,9 @@ done | sort -u | sed "s/['\"]/\\\&/g" | xargs -r -n 1 basename | grep -v 'libNoV
 `
 
 elflibrequires=`for f in $elfliblist; do
-	objdump -p $f|awk '/NEEDED/ {print $2}'
+	lib64=`if file -L $f 2>/dev/null | \
+		grep "ELF 64-bit" >/dev/null; then echo "$mark64"; fi`
+	objdump -p $f | awk -v lib64="$lib64" '/NEEDED/ {print $2 lib64}'
 done | sed "s/['\"]/\\\&/g" | grep -v 'libNoVersion.so' | sort -u
 `
 
