@@ -15,7 +15,7 @@
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
-%define	snap	20041118
+%define	snap	20041121
 # versions of required libraries
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.9
@@ -30,14 +30,15 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.4
-%define	sover	4.3
+%define	sover	4.4
 Version:	%{ver}
 Release:	0.%{snap}.0.1
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
+# Snap tarball is generated from rpm-4_4 branch
 Source0:	ftp://distfiles.pld-linux.org/src/%{name}-%{version}.%{snap}.tar.bz2
-# Source0-md5:	5033d2c69d8db97ab0886e48743e96c7
+# Source0-md5:	9960ab3e3023b49b42c1e85acef33de5
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -112,7 +113,7 @@ BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
 BuildRequires:	libxml2-devel
-BuildRequires:	neon-devel >= 0.24.7-2
+BuildRequires:	neon-devel >= 0.24.7-3
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
 %{?with_python:BuildRequires:	python-devel >= 2.2}
