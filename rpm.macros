@@ -120,6 +120,9 @@
 # Location of top applink dir
 %_applnkdir	/usr/X11R6/share/applnk
 
+# Location of desktop files
+%_desktopdir	/usr/share/applications
+
 # Location pixmaps for applnk/desktop files
 %_pixmapsdir	/usr/share/pixmaps
 
