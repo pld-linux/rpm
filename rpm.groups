@@ -15,12 +15,15 @@ Applications/Communications
 	[pl]:	Aplikacje/Komunikacja
 
 Applications/Databases
+	[de]:	Applikationen/Dateibanken
 	[pl]:	Aplikacje/Bazy danych
 
 Applications/Databases/Interfaces
+	[de]:	Applikationen/Dateibanken/Schnittstellen
 	[pl]:	Aplikacje/Bazy danych/Interfejsy
 
 Applications/Dictionaries
+	[de]:	Applikationen/Wörterbücher
 	[pl]:	Aplikacje/S³owniki
 
 Applications/Editors
@@ -51,14 +54,6 @@ Applications/Engineering
 Applications/File
 	[de]:	Applikationen/Datei
 	[pl]:	Aplikacje/Pliki
-
-Applications/Databases
-	[de]:	Applikationen/Dateibanken
-	[pl]:	Aplikacje/Bazy danych
-
-Applications/Databases/Interfaces
-	[de]:	Applikationen/Dateibanken/Interfaces
-	[pl]:	Aplikacje/Bazy danych/Interfejsy
 
 Applications/Graphics
 	[de]:	Applikationen/Grafik
@@ -271,6 +266,7 @@ X11/Applications/Networking
 	[pl]:	X11/Aplikacje/Sieciowe
 
 X11/Applications/Science
+	[de]:	X11/Applikationen/Wissenschaft
 	[pl]:	X11/Aplikacje/Nauka
 
 X11/Applications/Editors
@@ -342,4 +338,3 @@ X11/XFree86
 X11/XFree86/Servers
 	[de]:	X11/XFree86/Server
 	[pl]:	X11/XFree86/Serwery
-
