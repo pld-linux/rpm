@@ -66,73 +66,6 @@
    }
  }
  
---- rpm-3.0.3/scripts/perl.req.wiget	Sat Jun  5 22:52:31 1999
-+++ rpm-3.0.3/scripts/perl.req	Sat Oct 30 12:34:07 1999
-@@ -1,4 +1,4 @@
--#!/usr/bin/perl
-+#!@PERL@
- 
- # a simple makedepends like script for perl.
- 
-@@ -12,7 +12,11 @@
- 
- if ("@ARGV") {
-   foreach (@ARGV) {
--    process_file($_);
-+    if (m=/usr/(bin|lib|share|X11R6/(lib|bin))/=) {
-+      if (! m=(/((doc|man|info)|/usr/src)/)\.so$)=) {
-+        process_file($_);
-+      }
-+    }
-   }
- } else {
-   
-@@ -20,22 +24,32 @@
-   # contents of the file.
-   
-   foreach (<>) {
--    process_file($_);
-+    if (m=/usr/(bin|lib|share|X11R6/(lib|bin))/=) {
-+      if (! m=(/((doc|man|info)|/usr/src)/)\.(so|pl|ph)$)=) {
-+        process_file($_);
-+      }
-+    }
-   }
- }
- 
- 
- foreach $module (sort keys %require) {
-   if (length($require{$module}) == 0) {
--    print "perl($module)\n";
-+    if ($module =~ /^[0-9._]+$/) {
-+      print "perl >= $module\n";
-+    } else {
-+      if ($module !~ /\.ph$/ && $module !~ /\.pl/) {
-+        print "perl($module)\n";
-+      }
-+    }
-   } else {
- 
--    print "perl($module)>=$require{$module}\n";
-+    print "perl($module) >= $require{$module}\n";
- 
-     # we need to print it without the version number until the
-     # requires syntax accepts version numbers correctly.
- 
--    print "perl($module)\n";
-+#    print "perl($module)\n";
-   }
- }
- 
-@@ -54,7 +68,7 @@
-   while (<FILE>) {
-     
-     # skip the documentation
--    if ( (m/^=(head1|head2|pod)/) .. (m/^=(cut)/) ) {
-+    if ( (m/^=(head1|head2|pod|item)/) .. (m/^=(cut)/) ) {
-       next;
-     }
- 
 --- rpm-3.0.3/macros.in.wiget	Sat Oct 30 12:28:50 1999
 +++ rpm-3.0.3/macros.in	Sat Oct 30 12:28:50 1999
 @@ -248,6 +248,8 @@
@@ -182,3 +115,87 @@
  	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
  	misc/Makefile po/Makefile.in intl/Makefile
  	doc/Makefile doc/manual/Makefile doc/pl/Makefile doc/ru/Makefile
+--- rpm-3.0.3/scripts/perl.req.pld	Sat Oct 30 17:00:59 1999
++++ rpm-3.0.3/scripts/perl.req	Sat Oct 30 17:01:08 1999
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl
++#!@PERL@
+ 
+ # a simple makedepends like script for perl.
+ 
+@@ -12,7 +12,11 @@
+ 
+ if ("@ARGV") {
+   foreach (@ARGV) {
+-    process_file($_);
++    if (m=/usr/(bin|lib|share|X11R6/(lib|bin))/=) {
++      if (! m=(/(doc|man|info|usr/src)/|\.so$)=) {
++        process_file($_);
++      }
++    }
+   }
+ } else {
+   
+@@ -20,22 +24,30 @@
+   # contents of the file.
+   
+   foreach (<>) {
+-    process_file($_);
++    if (m=/usr/(bin|lib|share|X11R6/(lib|bin))/=) {
++      if (! m=(/(doc|man|info|usr/src)/|\.(so|pl|ph)$)=) {
++        process_file($_);
++      }
++    }
+   }
+ }
+ 
+ 
+ foreach $module (sort keys %require) {
+   if (length($require{$module}) == 0) {
+-    print "perl($module)\n";
++    if ($module =~ /^[0-9._]+$/) {
++      print "perl >= $module\n";
++    } else {
++        print "perl($module)\n";
++    }
+   } else {
+ 
+-    print "perl($module)>=$require{$module}\n";
++    print "perl($module) >= $require{$module}\n";
+ 
+     # we need to print it without the version number until the
+     # requires syntax accepts version numbers correctly.
+ 
+-    print "perl($module)\n";
++#    print "perl($module)\n";
+   }
+ }
+ 
+@@ -54,7 +66,7 @@
+   while (<FILE>) {
+     
+     # skip the documentation
+-    if ( (m/^=(head1|head2|pod)/) .. (m/^=(cut)/) ) {
++    if ( (m/^=(head1|head2|pod|item)/) .. (m/^=(cut)/) ) {
+       next;
+     }
+ 
+@@ -108,8 +120,17 @@
+       # will be included with the name sys/systeminfo.ph so only use the
+       # basename of *.ph files
+ 
+-      ($module  =~ m/\.ph$/) && ($module =~ s!.*/!!g );
++      # ($module  =~ m/\.ph$/) && ($module =~ s!.*/!!g );
++
++      # there is no need to generate dependencies for ph and pl files
++      # so let's just skip them
++
++      ($module =~ m/\.(ph|pl)$/) && next;
++
++      # we don't provide platform specific modules for platforms other 
++      # than unix so we also shouldn't require them
+ 
++      ($module =~ m/(Mac|OS2|MSDOS)::/) && next;
+ 
+       $require{$module}=$version;
+       $line{$module}=$_;
