@@ -15,11 +15,11 @@
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
-%define	snap	20040614
+%define	snap	20041118
 # versions of required libraries
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.9
-%define	beecrypt_ver	2:4.0.0
+%define	beecrypt_ver	2:4.1.0
 %define	rpm_macros_rev	1.167
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
@@ -32,12 +32,12 @@ Name:		rpm
 %define	ver	4.4
 %define	sover	4.3
 Version:	%{ver}
-Release:	0.%{snap}.0.8
+Release:	0.%{snap}.0.1
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
 Source0:	ftp://distfiles.pld-linux.org/src/%{name}-%{version}.%{snap}.tar.bz2
-# Source0-md5:	a91b8e17f6e69208b188d2876e80aef9
+# Source0-md5:	5033d2c69d8db97ab0886e48743e96c7
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -71,7 +71,6 @@ Patch14:	%{name}-bb-and-short-circuit.patch
 Patch15:	%{name}-etc_dir.patch
 Patch16:	%{name}-system_libs-more.patch
 Patch17:	%{name}-php-deps.patch
-Patch18:	%{name}-python-fix.patch
 Patch19:	%{name}-ldconfig-always.patch
 Patch20:	%{name}-perl_req.patch
 Patch21:	%{name}-no-bin-env.patch
@@ -86,14 +85,10 @@ Patch29:	%{name}-hack-norpmlibdep.patch
 Patch30:	%{name}-makefile-no_myLDADD_deps.patch
 Patch31:	%{name}-libdir64.patch
 Patch32:	%{name}-libdir-links.patch
-Patch33:	%{name}-context.patch
 Patch35:	%{name}-missing-prototypes.patch
 Patch36:	%{name}-pld-autodep.patch
 Patch37:	%{name}-rpmsq.patch
-Patch38:	%{name}-file-readelf.patch
-Patch39:	%{name}-no_version_check_in_obsoletes.patch
 Patch40:	%{name}-epoch0.patch
-Patch41:	%{name}-file-readelf-fix.patch
 Patch43:	%{name}-perl_req-INC_dirs.patch
 Patch44:	%{name}-debuginfo.patch
 Patch45:	%{name}-beecrypt4.patch
@@ -117,6 +112,7 @@ BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
 BuildRequires:	libxml2-devel
+BuildRequires:	neon-devel
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
 %{?with_python:BuildRequires:	python-devel >= 2.2}
@@ -592,7 +588,6 @@ ze ¼rode³ rpm przez doxygen.
 #%patch15 -p1
 %patch16 -p1
 %patch17 -p1
-%patch18 -p1
 %patch19 -p1
 %patch20 -p1
 %patch21 -p1
@@ -619,20 +614,19 @@ cat %{SOURCE11} >> macros.in
 %patch30 -p1
 %patch31 -p1
 %patch32 -p1
-%patch33 -p1
 %patch35 -p1
 %patch36 -p1
 %patch37 -p1
-%patch38 -p1
-%patch39 -p1
 %patch40 -p1
-%patch41 -p1
 %patch43 -p0
 %patch44 -p1
-%patch45 -p1
-%patch46 -p1
+# OBSOLETE
+#%patch45 -p1
+# NEEDS UPDATE
+# %patch46 -p1
 %{?with_distver:%patch47 -p1}
-%patch100 -p1
+# NEEDS UPDATE
+#%patch100 -p1
 %patch3 -p1
 
 cd scripts;
@@ -643,7 +637,7 @@ cd ..
 mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
 
-rm -rf zlib libelf db db3 popt rpmdb/db.h
+rm -rf neon zlib libelf db db3 popt rpmdb/db.h
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
