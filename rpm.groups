@@ -86,24 +86,34 @@ Applications/Printing
 	[pl]:	Aplikacje/Drukowanie
 
 Applications/Publishing
-	[de]:	Applikationen/Publizieren
-	[pl]:	Aplikacje/Publikowanie
+	[de]:		Applikationen/Publizieren
+	[pl]:		Aplikacje/Publikowanie
+	[pt_BR]:	Aplicações/Editoração
+	[es]:		Aplicaciones/Editoración
 
 Applications/Publishing/TeX
-	[de]:	Applikationen/Publizieren/TeX
-	[pl]:	Aplikacje/Publikowanie/TeX
+	[de]:		Applikationen/Publizieren/TeX
+	[pl]:		Aplikacje/Publikowanie/TeX
+	[pt_BR]:	Aplicações/Editoração/TeX
+	[es]:		Aplicaciones/Editoración/TeX
 
 Applications/Publishing/SGML
-	[de]:	Applikationen/Publizieren/SGML
-	[pl]:	Aplikacje/Publikowanie/SGML
+	[de]:		Applikationen/Publizieren/SGML
+	[pl]:		Aplikacje/Publikowanie/SGML
+	[pt_BR]:	Aplicações/Editoração/SGML
+	[es]:		Aplicaciones/Editoración/SGML
 
 Applications/Publishing/XML
-	[de]:	Applikationen/Publizieren/XML
-	[pl]:	Aplikacje/Publikowanie/XML
+	[de]:		Applikationen/Publizieren/XML
+	[pl]:		Aplikacje/Publikowanie/XML
+	[pt_BR]:	Aplicações/Editoração/XML
+	[es]:		Aplicaciones/Editoración/XML
 
 Applications/Publishing/XML/Java
-	[de]:	Applikationen/Publizieren/XML/Java
-	[pl]:	Aplikacje/Publikowanie/XML/Java
+	[de]:		Applikationen/Publizieren/XML/Java
+	[pl]:		Aplikacje/Publikowanie/XML/Java
+	[pt_BR]:	Aplicações/Editoração/XML/Java
+	[es]:		Aplicaciones/Editoración/XML/Java
 
 Applications/Shells
 	[de]:	Applikationen/Shells
