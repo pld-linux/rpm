@@ -16,9 +16,10 @@
 +
  foreach ( @ARGV ? @ARGV : <> ) {
 -	chomp;
+-    if (m=/usr/(sbin|bin|lib|share|X11R6/(lib|bin))/=) {
 +    chomp;
 +    $inc{$1}++ if m#($inc)/#;  # can't anchor on ^
-     if (m=/usr/(sbin|bin|lib|share|X11R6/(lib|bin))/=) {
++    if (m=/usr/(sbin|bin|lib|lib64|share|X11R6/(lib|lib64|bin))/=) {
        if (! m=(/(doc|man|info|usr/src)/|\.(so|ph|h|html|pod)$)=) {
          process_file($_) if -f;
 @@ -53,8 +64,9 @@
