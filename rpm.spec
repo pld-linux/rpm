@@ -2,7 +2,7 @@ Summary:	Red Hat (and now also PLD) Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0.1
-Release:	1
+Release:	0.1
 Group:		Base
 Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
@@ -27,10 +27,10 @@ Patch7:		%{name}-file3.31.patch
 Patch8:		%{name}-exclude-examples-doc.patch
 Patch9:		%{name}-db3.patch
 Patch10:	%{name}-rpm-v1.patch
-Patch11:	%{name}-rpmlibprov.patch
-Patch12:	%{name}-getrpmlibprov.patch
-Patch13:        %{name}-rpmlibprov-order.patch
-Patch14:	%{name}-bash2.patch
+#Patch11:	%{name}-rpmlibprov.patch
+#Patch12:	%{name}-getrpmlibprov.patch
+#Patch13:        %{name}-rpmlibprov-order.patch
+Patch14:	%{name}-am_fix.patch
 Patch15:	%{name}-perl-req-perlfile.patch
 Patch16:	%{name}-installplatform.patch
 Patch17:	%{name}-find-lang.patch
@@ -188,9 +188,9 @@ construir pacotes usando o RPM.
 %patch8 -p1
 %patch7 -p1
 #%patch10 -p1
-%patch11 -p1
-%patch12 -p1
-%patch13 -p1
+#%patch11 -p1
+#%patch12 -p1
+#%patch13 -p1
 %patch14 -p1
 %patch15 -p1
 %patch16 -p1
