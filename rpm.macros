@@ -105,6 +105,8 @@
 # If non-empty "debug" macro defined, add "dbg" suffix to release number
 %_rpmfilename		%%{NAME}-%%{VERSION}-%%{RELEASE}%{?debug:dbg}.%%{ARCH}.rpm
 
+%requires_eq()  %(LC_ALL="C" rpm -q --queryformat 'Requires:%%{NAME} = %%{VERSION}-%%{RELEASE}' %1| grep -v "is not")
+
 #-----------------------------------------------------------------
 # find and gzip all files in %{_mandir} and %{infodir}
 #
