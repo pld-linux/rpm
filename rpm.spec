@@ -171,62 +171,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/librpm*.la
 %files utils
 %files -n python-rpm
-* Fri Apr 30 1999 Artur Frysiak <wiget@pld.org.pl>
-  [3.0.1-4]
-- added 4 macros:
--- %GNUconfigure and %GNUconfigureS to complete remake autoconf/automake stuff
--- %configure and %configureS to corect run ./configure
--- *S add "-s" to LDFLAGS
-- added user skelet dirs (for adduser)
-
-* Mon Apr 19 1999 Artur Frysiak <wiget@pld.org.pl>
-  [3.0-7]
-- upgraded to 3.0
-- added polish man page
-- added macros for PLD
-
-* Wed Mar 10 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
-  [2.5.6-5]
-- added rpm-find-requires.patch with beter finding list packages containing
-  required shared libraries (Artur Frysiak <wiget@usa.net>),
-- added ru man pages,
-- added "Requires: glibc >= 2.1" (rpm is linked statically but it use by
-  dlopen() some shared glibc libraries),
-- removed man group from man pages.
-
-* Fri Feb 19 1999 Marcin Dalecki <dalecki@cs.net.pl>
-  [2.5.6-4d]
-- fixed ignorance about international character sets.
-
-* Fri Jan 15 1999 Wojtek ¦lusarczyk <wojtek@shadow.eu.org>
-  [2.5.6-1d]
-- updated to latest stable version,
-- added URL,
-- added Group(pl) && changed gropup to Base,
-- added small patch against GNU libc-2.1.
-
-* Sun Nov 08 1998 Wojtek ¦lusarczyk <wojtek@shadow.eu.org>
-  [2.5.5-1d]
-- updated to 2.5.5. 
-
-* Tue Sep 01 1998 Wojtek ¦lusarczyk <wojtek@shadow.eu.org>
-  [2.5.2-2d]
-- translation modified for pl,
-- compressed man pages && documentation,
-- changed Buildroot to /tmp/%%{name}-%%{version}-root,
-- moved /usr/src/redhat to /usr/src/rpm.
-
-* Sun Aug 30 1998 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
-  [2.5.2-2]
-- fixed tr.po,
-- added -q %setup parameter,
-- changed Buildroot to /tmp/%%{name}-%%{version}-root,
-- added using %%{name} and %%{version} in Source,
-- added %lang macros for %{_datadir}/locale/*/LC_MESSAGES/rpm.mo files,
-- added %attr and %defattr macros in %files (allow build package from
-  non-root account),
-- build against GNU libc-2.1.
-
+* Thu May 20 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
+  [3.0.1-6.19990519]
+- spec based on version from dist tar ball (partially rewrited by me),
+- pl translation by Wojtek ¦lusarczyk <wojtek@shadow.eu.org>,
+- rewrited by Artur Frysiak <wiget@pld.org.pl>,
+- patches with fixes maked by Artur Frysiak and Marcin Dalecki
+  <dalecki@cs.net.pl>.
 Revision 1.79  2000/02/17 03:42:17  kloczek
 - release 25,
 - added "Conflicts: /usr/bin/id" and rebuilded in enviroment with id in
