@@ -12,8 +12,8 @@
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
-#
-%include        /usr/lib/rpm/macros.python
+
+%include        /usr/%{_lib}/rpm/macros.python
 %define snap	20030610
 # versions of required libraries
 %define	reqdb_ver	4.2.50-1
@@ -587,11 +587,11 @@ cat %{SOURCE14} >> macros.in
 %patch34 -p1
 %patch35 -p1
 %patch36 -p1
-%patch37 -p1
-%patch38 -p1
-%patch39 -p1
-%patch40 -p1
-%patch41 -p1
+#%patch37 -p1
+#%patch38 -p1
+#%patch39 -p1
+#%patch40 -p1
+#%patch41 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
