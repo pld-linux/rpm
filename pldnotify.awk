@@ -288,13 +288,14 @@ function process_source(number,lurl,name,version) {
 		for (nr=1; nr<=c; nr++) {
 			addr=linki[nr]
 			if (DEBUG) print "Znaleziony link: " addr
-			if ((addr ~ filenameexp) && !(addr ~ "[-_.0-9A-Za-z]" filenameexp)) {
+			if ((addr ~ filenameexp) && !(addr ~ "[-_.0-9A-Za-z~]" filenameexp)) {
 				match(addr,filenameexp)
 				newfilename=substr(addr,RSTART,RLENGTH)
 				if (DEBUG) print "Hipotetyczny nowy: " newfilename
 				newfilename=fixedsub(prever,"",newfilename)
 				newfilename=fixedsub(postver,"",newfilename)
 				if (DEBUG) print "Wersja: " newfilename
+				if (newfilename ~ /\.(pkg|bin|binary)$/) continue
 				if (NUMERIC) {
 					if ( compare_ver_dec(version, newfilename)==1 ) {
 						if (DEBUG) print "Tak, jest nowa"

@@ -2,7 +2,7 @@
 #
 # This is adapter v0.27. Adapter adapts .spec files for PLD.
 #
-# Copyright (C) 1999-2001 PLD-Team <feedback@pld.org.pl>
+# Copyright (C) 1999-2003 PLD-Team <feedback@pld-linux.org>
 # Authors:
 # 	Micha³ Kuratczyk <kura@pld.org.pl>
 # 	Sebastian Zagrodzki <s.zagrodzki@mimuw.edu.pl>
@@ -555,10 +555,10 @@ function use_macros()
 	if(prefix"/sbin" == sbindir)
 		gsub("%{_prefix}/sbin", "%{_sbindir}")
 
-	gsub(libdir, "%{_libdir}")
-	gsub("%{prefix}/lib", "%{_libdir}")
-	if(prefix"/lib" == libdir)
-		gsub("%{_prefix}/lib", "%{_libdir}")
+#	gsub(libdir, "%{_libdir}")
+#	gsub("%{prefix}/lib", "%{_libdir}")
+#	if(prefix"/lib" == libdir)
+#		gsub("%{_prefix}/lib", "%{_libdir}")
 
 	for (c = 1; c <= NF; c++) {
 		if ($c ~ sysconfdir "/{?cron.")
