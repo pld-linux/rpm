@@ -6,7 +6,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.4
-Release:	0.74
+Release:	0.75
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -25,6 +25,7 @@ Source12:	%{name}-non-english-man-pages.tar.bz2
 Source13:	%{name}-macros.python
 Source14:	%{name}-groups-po.awk
 Source15:	%{name}-compress-doc
+Source16:	%{name}-check-files
 Source17:	%{name}-php-provides
 Source18:	%{name}-php-requires
 Source19:	%{name}-find-php-provides
@@ -57,6 +58,7 @@ Patch24:	%{name}-ac25x.patch
 Patch25:	%{name}-gettext-in-header.patch
 Patch26:	%{name}-compress-doc.patch
 Patch27:	%{name}-lt14d.patch
+Patch28:	%{name}-check_files.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -409,6 +411,7 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch25 -p1
 %patch26 -p1
 %patch27 -p1
+%patch28 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
@@ -435,28 +438,28 @@ awk -f %{SOURCE14} %{SOURCE1}
 
 cd popt
 rm -f missing
-libtoolize --force --copy
+%{__libtoolize}
 aclocal
 autoheader
-autoconf
-automake -a -c -f
+%{__autoconf}
+%{__automake}
 cd ../beecrypt
 rm -f missing
-libtoolize --force --copy
+%{__libtoolize}
 aclocal
 autoheader
-autoconf
-automake -a -c -f
+%{__autoconf}
+%{__automake}
 cd ..
 
 rm -f missing
-libtoolize --force --copy
-gettextize --copy --force
+%{__libtoolize}
+%{__gettextize}
 aclocal
 autoupdate
 autoheader || :
-autoconf
-automake -a -c -f
+%{__autoconf}
+%{__automake}
 
 # config.guess doesn't handle athlon, so we have to change it by hand.
 # rpm checks for CPU type at runtime, but it looks better
@@ -493,7 +496,7 @@ install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 install %{SOURCE10} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides
 install %{SOURCE11} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
 install %{SOURCE15} $RPM_BUILD_ROOT%{_libdir}/rpm/compress-doc
-
+install %{SOURCE16} $RPM_BUILD_ROOT%{_libdir}/rpm/check-files
 install scripts/find-php*	$RPM_BUILD_ROOT%{_libdir}/rpm/
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_libdir}/rpm/
 
@@ -579,6 +582,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/getpo.sh
 %attr(755,root,root) %{_libdir}/rpm/install-build-tree
 %attr(755,root,root) %{_libdir}/rpm/brp-*
+%attr(755,root,root) %{_libdir}/rpm/check-files
 %attr(755,root,root) %{_libdir}/rpm/check-prereqs
 %attr(755,root,root) %{_libdir}/rpm/cpanflute
 %attr(755,root,root) %{_libdir}/rpm/http.req

@@ -25,16 +25,12 @@ elfliblist=`echo $liblist | xargs -r file | egrep  ":.* ELF" | cut -d: -f1 `
 aoutliblist=`echo $liblist | xargs -r file | egrep  -v ":.* ELF" | cut -d: -f1 `
 
 aoutexerequires=`for f in $aoutexelist; do
-    if [ -x $f ]; then
 	ldd $f | awk '/=>/ { print $1 }'
-    fi
 done | sort -u | sed "s/['\"]/\\\&/g" | xargs -r -n 1 basename | grep -v 'libNoVersion.so' | sort -u
 `
 
 elfexerequires=`for f in $elfexelist; do 
-    if [ -x $f ]; then
 	objdump -p $f|awk '/NEEDED/ {print $2}'
-    fi
 done | sed "s/['\"]/\\\&/g" | grep -v 'libNoVersion.so' | sort -u
 `
 		
