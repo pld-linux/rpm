@@ -21,7 +21,7 @@ Patch6:		rpm-perl-macros.patch
 Patch7:		rpm-find-lang-all-name.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
-BuildRequires:	bzip2-static
+BuildRequires:	bzip2-static >= 1.0.0
 BuildRequires:	gdbm-static
 BuildRequires:	zlib-static
 BuildRequires:	gettext-devel >= 0.10.38-3
