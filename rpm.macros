@@ -194,6 +194,25 @@ echo "Compress man and info pages."; \
 	fi; } \
 } }
 #-----------------------------------------------------------------
+# remove all RPATH from executable binaries and shared object files
+#
+# Requires: find, awk, strip, cut, xargs
+#
+#%no_install_post_chrpath	1
+%__spec_install_post_chrpath {%{!?debug: \
+%{!?no_install_post_chrpath: \
+	%{?verbose:set -x;} \
+	echo "Remove RPATH from executable binaries and shared object files."; \
+	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*"`; \
+	elfexelist=`echo $filelist | xargs -r file | \
+		awk '/ELF.*executable/ {print $1}' | cut -d: -f1`; \
+	elfsharedlist=`echo $filelist | xargs -r file | \
+		awk '/LF.*shared object/ {print $1}' | cut -d: -f1`; \
+	if [ -n "$elfexelist$elfsharedlist" ]; then \
+		chrpath -d $elfexelist $elfsharedlist; \
+	fi; \
+} }
+#-----------------------------------------------------------------
 # Find and gzip all kernel modules
 #
 # Requires: find
@@ -249,6 +268,7 @@ fi \
 %{?_noautoprovfiles:for f in %{_noautoprovfiles} ; do echo %{?buildroot:%{buildroot}}$f >> %{_builddir}/__rpm_noautoprovfiles ; done }\
 %{?_noautoprov:for f in %{_noautoprov} ; do echo "$f" >> %{_builddir}/__rpm_noautoprov ; done }\
 %{__spec_install_post_strip}\
+%{__spec_install_post_chrpath}\
 %{__spec_install_post_compress_docs}\
 %{__spec_install_post_compress_modules}\
 %{__arch_install_post}\
