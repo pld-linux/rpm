@@ -122,7 +122,7 @@ echo "Compress man and info pages."; \
 }
 
 #-----------------------------------------------------------------
-# find and gzip all files in %{_mandir} and %{infodir}
+# Strip executable binaries and shared object files
 #
 # Requires: find, awk, strip, cut, xargs
 #
