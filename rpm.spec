@@ -1,3 +1,4 @@
+%define	beecrypt_ver	2.2.0
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -5,7 +6,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.4
-Release:	0.61
+Release:	0.70
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -274,6 +275,8 @@ Biblioteki RPMa.
 %package -n beecrypt
 Summary:	Crypto library
 Summary(pl):	Biblioteka kryptograficzna
+Version:	%{beecrypt_ver}
+Epoch:		1
 Group:		Libraries
 
 %description -n beecrypt
@@ -286,7 +289,8 @@ Biblioteka kryptograficzna.
 Summary:	Crypto library - development files
 Summary(pl):	Biblioteka kryptograficzna - pliki developerskie.
 Group:		Development/Libraries
-Requires:	beecrypt = %{version}
+Requires:	beecrypt = %{beecrypt_ver}
+Epoch:		1
 
 %description -n beecrypt-devel
 Crypto library - development files.
@@ -298,7 +302,8 @@ Biblioteka kryptograficzna - pliki developerskie.
 Summary:	Crypto library - static version
 Summary(pl):	Statyczna biblioteka kryptograficzna
 Group:		Development/Libraries
-Requires:	beecrypt-devel = %{version}
+Requires:	beecrypt-devel = %{beecrypt_ver}
+Epoch:		1
 
 %description -n beecrypt-static
 Static version of crypto library.
