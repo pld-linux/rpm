@@ -21,10 +21,12 @@ if [ ! -f $SPEC ]; then
     exit 1
 fi
 
-bconds=`awk -F"\n" '/bcond_[_a-z0-9]+/ {
-               match($0, /bcond_[_a-z0-9]+/);
-	       print substr($0, RSTART, RLENGTH)                       
-	    }' $SPEC | sort -u`
+bconds=`awk -F"\n" 'BEGIN { chlog=0 }
+		/^%changelog/ { chlog=1 }
+		/bcond_[_a-z0-9]+/ && chlog == 0 {
+			match($0, /bcond_[_a-z0-9]+/);
+	       		print substr($0, RSTART, RLENGTH)                       
+	    	}' $SPEC | sort -u`
 
 for c in $bconds; do
     echo -n "$c"
@@ -45,7 +47,7 @@ for bcond in $bconds; do
                      } else if (match(\\$0, /$bcond[\t ]+1[\t ]*$/)) {
                         val = 1
                      } else {
-                        print \"could determine $bcond value from \", \\$0
+                        print \"couldn't determine $bcond value from \", \\$0
                      }
                   } END { print val }" $SPEC`;
 
