@@ -86,10 +86,11 @@ BuildRequires:	zlib-devel
 # Require static library only for static build
 BuildRequires:	bzip2-static >= 1.0.2-5
 BuildRequires:	db4-static >= 4.0.14-2
-BuildRequires:	glibc-static >= 2.2.0
+BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	libelf-static
 BuildRequires:	zlib-static
 %endif
+Requires:	glibc >= 2.2.94
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Conflicts:	glibc < 2.2
 
