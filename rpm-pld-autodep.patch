@@ -159,7 +159,7 @@
 -	    xx = rpmfcHelper(fc, 'R', "python");
 +	if (findprov)
 +	    xx = rpmfcHelper(fc, 'P', "python", noautoprov, noautoprov_c);
-+	if (findreq && is_executable)
++	if (findreq)
 +	    xx = rpmfcHelper(fc, 'R', "python", noautoreq, noautoreq_c);
      }
      if (fc->fcolor->vals[fc->ix] & RPMFC_PHP) {
