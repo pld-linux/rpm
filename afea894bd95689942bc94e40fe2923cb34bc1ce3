@@ -1,0 +1,1 @@
+- added conditional non-static build (define _without_static for it)
