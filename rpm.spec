@@ -3,7 +3,7 @@ Summary(de):	Red Hat (und jetzt auch PLD) Packet-Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0.2
-Release:	33
+Release:	34
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -41,6 +41,8 @@ Patch17:	%{name}-perlprov.patch
 Patch18:	%{name}-noperldir.patch
 Patch19:	popt-cvs20010530.patch
 Patch20:	%{name}-noexpand.patch
+Patch21:	%{name}-scripts-closefds.patch
+Patch22:	%{name}-python-amfix.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	gettext-devel >= 0.10.38-3
@@ -249,6 +251,8 @@ construir pacotes usando o RPM.
 %patch16 -p0
 %patch17 -p1
 %patch18 -p1
+%patch19 -p1
+%patch22 -p1
 %patch31 -p1
 %patch36 -p1
 cp platform.in macros.pld.in

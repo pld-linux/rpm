@@ -1,0 +1,30 @@
+diff -Nur rpm-4.0.2.orig/lib/rpminstall.c rpm-4.0.2/lib/rpminstall.c
+--- rpm-4.0.2.orig/lib/rpminstall.c	Sat Feb 10 15:07:16 2001
++++ rpm-4.0.2/lib/rpminstall.c	Sun Sep  9 00:33:52 2001
+@@ -87,6 +87,13 @@
+       case RPMCALLBACK_INST_OPEN_FILE:
+ 	fd = Fopen(filename, "r.ufdio");
+ 	fd = fdLink(fd, "persist (showProgress)");
++	{
++	    int oldfl=Fcntl(fd, F_GETFD, 0);
++	    if(oldfl >= 0) {
++		oldfl |= FD_CLOEXEC; /* scripts shouldn't inherit rpm file descriptor */
++		Fcntl(fd, F_SETFD, oldfl);
++	    }
++	}
+ 	return fd;
+ 
+       case RPMCALLBACK_INST_CLOSE_FILE:
+diff -Nur rpm-4.0.2.orig/lib/uninstall.c rpm-4.0.2/lib/uninstall.c
+--- rpm-4.0.2.orig/lib/uninstall.c	Mon Jan 22 16:59:13 2001
++++ rpm-4.0.2/lib/uninstall.c	Sat Sep  8 23:58:22 2001
+@@ -388,6 +388,9 @@
+ 	    if (Fileno(ts->scriptFd) > STDERR_FILENO) {
+ 		Fclose (ts->scriptFd);
+ 	    }
++	} else {
++	    if (Fileno(out) > STDERR_FILENO)
++		Fclose (out);
+ 	}
+ 
+ 	{   const char *ipath = rpmExpand("PATH=%{_install_script_path}", NULL);
