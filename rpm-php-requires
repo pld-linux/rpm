@@ -48,6 +48,7 @@ foreach (@ARGV ? $ARGV : <> ) {
 			}
 
 			next if ($x =~ m|^\./| or $x =~ /\$/);
+			next unless ($x =~ /\.php$/);
 			$req{$x} = 1;
 		}
 
@@ -66,6 +67,7 @@ foreach (@ARGV ? $ARGV : <> ) {
 			}
 
 			next if ($x =~ /\$/);
+			next unless ($x =~ /\.php$/);
 
 			$x = "$file_dir/$x";
 			$x =~ s|/+|/|g;
