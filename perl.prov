@@ -22,7 +22,7 @@ foreach ( @ARGV ? @ARGV : <> ) {
 	chomp;
 	next if !-f || -l;                # skip non-files and symlinks
 	next if m#^/usr/(?:doc|src)/#;    # lot of false alarms
-	next if !m#\.p[ml]$#;             # we only care about *.pm and *.pl files
+	next if !m#\.(?:p[ml]|cgi$#;      # we only care about *.pm and *.pl files and CGI scripts
 	process_file($_) if -f;
 }
 
