@@ -1,3 +1,5 @@
+# to build for athlon you need release at least 49
+
 Summary:	Red Hat (and now also PLD) Package Manager
 Summary(de):	Red Hat (und jetzt auch PLD) Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -5,7 +7,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.2
-Release:	48
+Release:	49
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -56,6 +58,8 @@ Patch26:	%{name}-python-macros.patch
 Patch27:	%{name}-hardlink-fixes.patch
 Patch28:	%{name}-perlprov-regonly.patch
 Patch29:	%{name}-cxx.patch
+Patch30:	%{name}-athlon.patch
+Patch31:	%{name}-athlon-identify.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 URL:		http://www.rpm.org/
@@ -75,6 +79,7 @@ BuildRequires:	zlib-devel >= 1.1.4
 BuildRequires:	db3-static >= 3.1.17-9
 BuildRequires:	db1-static >= 1.85
 BuildRequires:	zlib-static
+BuildRequires:	glibc-static >= 2.2.0
 BuildRequires:	zlib-static >= 1.1.4
 Obsoletes:	rpm-libs
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -300,7 +305,11 @@ Requires:	awk
 Requires:	binutils
 Requires:	diffutils
 Requires:	file >= 3.31
+Requires:	fileutils
+Requires:	findutils
+%ifarch athlon
 Requires:	gcc >= 3.0.3
+%else
 Requires:	gcc
 Requires:	glibc-devel
 Requires:	grep
@@ -353,8 +362,13 @@ construir pacotes usando o RPM.
 %patch25 -p1
 %patch26 -p0
 %patch27 -p1
-%patch28 -p1
+#%patch28 -p1
 %patch29 -p1
+%patch30 -p1
+
+%ifarch athlon
+%patch31 -p1
+%endif
 %patch31 -p1
 %patch36 -p1
 %patch37 -p1
@@ -486,8 +500,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/rpm/macros.python
 %{_libdir}/rpm/noarch-linux
 %{_libdir}/rpm/noarch-pld-linux
-%ifarch i386 i486 i586 i686
+%{_libdir}/rpm/rpmrc
 %{_libdir}/rpm/rpmpopt*
+%{_libdir}/rpm/macros
 %{_libdir}/rpm/noarch-linux
 %{_libdir}/rpm/noarch-pld-linux
 %ifarch i386 i486 i586 i686 athlon
