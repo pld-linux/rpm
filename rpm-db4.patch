@@ -1,6 +1,7 @@
---- rpm-4.1/configure.ac.wiget	Thu Sep 19 00:14:53 2002
-+++ rpm-4.1/configure.ac	Thu Sep 19 00:17:45 2002
-@@ -437,10 +437,11 @@
+diff -Nur rpm-4.1.orig/configure.ac rpm-4.1/configure.ac
+--- rpm-4.1.orig/configure.ac	Sun Oct 20 16:34:30 2002
++++ rpm-4.1/configure.ac	Sun Oct 20 16:37:39 2002
+@@ -437,10 +437,12 @@
  if test $withval = no ; then
  dnl ------------------ without internal db
  
@@ -10,64 +11,22 @@
  dnl Check for Berkeley db3 API.
  AC_CHECK_FUNC(db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"],
 +  AC_CHECK_LIB(db-4.1, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-4.1"],
--  AC_CHECK_LIB(db-3.2, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.2"],
 +  AC_CHECK_LIB(db-4.0, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-4.0"],
+   AC_CHECK_LIB(db-3.2, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.2"],
      AC_CHECK_LIB(db-3.1, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.1"],
        AC_CHECK_LIB(db-3.0, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.0"],
-@@ -449,6 +450,7 @@
+@@ -449,6 +451,8 @@
        )
      )
    )
 +  )
++  )
  )
  
  if test X"$DBLIBSRCS" = X; then
---- rpm-4.1/rpmdb/db3.c.orig	Tue Aug 13 20:42:39 2002
-+++ rpm-4.1/rpmdb/db3.c	Mon Aug 26 18:56:12 2002
-@@ -366,7 +396,7 @@
-     if (db != NULL)
- 	rc = db->sync(db, flags);
-     /* XXX DB_INCOMPLETE is returned occaisionally with multiple access. */
-+    _printit = _debug;
--    _printit = (rc == DB_INCOMPLETE ? 0 : _debug);
-     rc = cvtdberr(dbi, "db->sync", rc, _printit);
-     return rc;
- }
-@@ -599,10 +633,11 @@
- {
-     DB * db = dbi->dbi_db;
-     DB * secondary = dbisecondary->dbi_db;
-+    DB_TXN * txnid = NULL;
-     int rc;
- 
- /*@-moduncon@*/ /* FIX: annotate db3 methods */
-+    rc = db->associate(db, txnid, secondary, callback, flags);
--    rc = db->associate(db, secondary, callback, flags);
- /*@=moduncon@*/
-     rc = cvtdberr(dbi, "db->associate", rc, _debug);
-     return rc;
-@@ -789,6 +830,7 @@
- 
-     DB * db = NULL;
-     DB_ENV * dbenv = NULL;
-+    DB_TXN * txnid = NULL;
-     u_int32_t oflags;
-     int _printit;
- 
-@@ -1124,8 +1180,8 @@
- 			? dbfullpath : dbfile;
- #endif
- 
-+		rc = db->open(db, txnid, dbpath, dbsubfile,
-+		    dbi->dbi_type, oflags, dbi->dbi_perms);
--		rc = db->open(db, dbpath, dbsubfile,
--		    dbi->dbi_type, oflags, dbi->dbi_perms);
- 
- 		if (rc == 0 && dbi->dbi_type == DB_UNKNOWN) {
- #if (DB_VERSION_MAJOR == 3 && DB_VERSION_MINOR == 3 && DB_VERSION_PATCH == 11) \
-
---- /python/_rpmdb.c.orig	Thu Oct 17 20:19:03 2002
-+++ /python/_rpmdb.c	Thu Oct 17 20:24:07 2002
+diff -Nur rpm-4.1.orig/python/_rpmdb.c rpm-4.1/python/_rpmdb.c
+--- rpm-4.1.orig/python/_rpmdb.c	Fri Jun  7 15:12:34 2002
++++ rpm-4.1/python/_rpmdb.c	Sun Oct 20 16:36:39 2002
 @@ -410,25 +410,6 @@
      switch (err) {
          case 0:                     /* successful, no error */      break;
@@ -152,3 +111,45 @@
      ADD_INT(d, DB_KEYEMPTY);
      ADD_INT(d, DB_KEYEXIST);
      ADD_INT(d, DB_LOCK_DEADLOCK);
+diff -Nur rpm-4.1.orig/rpmdb/db3.c rpm-4.1/rpmdb/db3.c
+--- rpm-4.1.orig/rpmdb/db3.c	Tue Aug 13 22:42:39 2002
++++ rpm-4.1/rpmdb/db3.c	Sun Oct 20 16:36:39 2002
+@@ -366,7 +366,7 @@
+     if (db != NULL)
+ 	rc = db->sync(db, flags);
+     /* XXX DB_INCOMPLETE is returned occaisionally with multiple access. */
+-    _printit = (rc == DB_INCOMPLETE ? 0 : _debug);
++    _printit = _debug;
+     rc = cvtdberr(dbi, "db->sync", rc, _printit);
+     return rc;
+ }
+@@ -599,10 +599,11 @@
+ {
+     DB * db = dbi->dbi_db;
+     DB * secondary = dbisecondary->dbi_db;
++    DB_TXN * txnid = NULL;
+     int rc;
+ 
+ /*@-moduncon@*/ /* FIX: annotate db3 methods */
+-    rc = db->associate(db, secondary, callback, flags);
++    rc = db->associate(db, txnid, secondary, callback, flags);
+ /*@=moduncon@*/
+     rc = cvtdberr(dbi, "db->associate", rc, _debug);
+     return rc;
+@@ -789,6 +790,7 @@
+ 
+     DB * db = NULL;
+     DB_ENV * dbenv = NULL;
++    DB_TXN * txnid = NULL;
+     u_int32_t oflags;
+     int _printit;
+ 
+@@ -1124,7 +1126,7 @@
+ 			? dbfullpath : dbfile;
+ #endif
+ 
+-		rc = db->open(db, dbpath, dbsubfile,
++		rc = db->open(db, txnid, dbpath, dbsubfile,
+ 		    dbi->dbi_type, oflags, dbi->dbi_perms);
+ 
+ 		if (rc == 0 && dbi->dbi_type == DB_UNKNOWN) {
