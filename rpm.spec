@@ -708,7 +708,7 @@ for a in librpm-%{ver}.so librpmdb-%{ver}.so librpmio-%{ver}.so ; do
 	ln -s /lib/$a $RPM_BUILD_ROOT%{_libdir}/$a
 done
 
-for f in $RPM_BUILD_ROOT/%{_datadir}/locale/{en_RN,eu_ES,gl,hu,ro,wa,zh,zh_CN.GB2312}/LC_MESSAGES/rpm.mo ; do
+for f in $RPM_BUILD_ROOT%{_datadir}/locale/{en_RN,eu_ES,gl,hu,ro,wa,zh,zh_CN.GB2312}/LC_MESSAGES/rpm.mo ; do
 	[ "`file $f | sed -e 's/.*,//' -e 's/message.*//'`" -le 1 ] && rm -f $f
 done
 %find_lang %{name}
