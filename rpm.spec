@@ -13,6 +13,7 @@ Release:	107
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
+# Source0-md5:	7b247d7fb7a0042fc81df935a7d21aac
 Source1:	%{name}.groups
 Source2:	%{name}.macros
 Source3:	%{name}-install-tree
