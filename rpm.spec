@@ -98,6 +98,7 @@ Patch38:	%{name}-hack-norpmlibdep.patch
 Patch39:	%{name}-db42.patch
 Patch40:	%{name}-makefile-no_myLDADD_deps.patch
 Patch41:	%{name}-libdir64.patch
+Patch42:	%{name}-no-gnu.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -587,11 +588,12 @@ cat %{SOURCE14} >> macros.in
 %patch34 -p1
 %patch35 -p1
 %patch36 -p1
-#%patch37 -p1
-#%patch38 -p1
-#%patch39 -p1
-#%patch40 -p1
-#%patch41 -p1
+%patch37 -p1
+%patch38 -p1
+%patch39 -p1
+%patch40 -p1
+%patch41 -p1
+%patch42 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
@@ -744,7 +746,7 @@ rm -rf $RPM_BUILD_ROOT
 %postun lib -p /sbin/ldconfig
 
 %pre build
-find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
+find %{_libdir}/rpm -name '*-linux' -type l | xargs rm -f
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
