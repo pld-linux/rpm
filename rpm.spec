@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.3
-Release:	26
+Release:	27
 Group:		Base
 Group(pl):	Podstawowe
 Copyright:	GPL
@@ -92,6 +92,7 @@ Bibliotecas estáticas para desenvolvimento.
 Summary(pl):	Dodatkowe narzêdzia do zarz±dzanai baz± rpm-a i pakietami
 Group:		Utilities/File
 Group(pl):	Narzêdzia/Pliki
+Summary(pl):	Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{version}
 
@@ -104,6 +105,7 @@ Summary:	Additional utilities for check perl provides/requires in rpm packages
 Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci dla skryptów perl w pakietach rpm
 Group:		Utilities/File
 Group(pl):	Narzêdzia/Pliki
+Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w pakietach rpm
 Requires:	perl-modules
 Requires:	findutils
 Additional utilities for check perl provides/requires in rpm packages.
