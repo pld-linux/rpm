@@ -20,6 +20,7 @@ Applications/Console
 	[fr]:		Applications/Console
 	[pl]:		Aplikacje/Konsola
 	[pt]:		AplicaГУes/Console
+	[ru]:		Приложения/Консоль
 
 Applications/Communications
 	[de]:		Applikationen/Kommunikation
@@ -43,6 +44,7 @@ Applications/Databases/Interfaces
 	[fr]:		Applications/Bases de DonnИes/Interfaces
 	[pl]:		Aplikacje/Bazy danych/Interfejsy
 	[pt]:		AplicaГУes/Bases de Dados/Interfaces
+	[ru]:		Приложения/Базы данных/Интерфейсы
 
 Applications/Dictionaries
 	[de]:		Applikationen/WЖrterbЭcher
@@ -50,6 +52,7 @@ Applications/Dictionaries
 	[fr]:		Applications/Dictionaires
 	[pl]:		Aplikacje/SЁowniki
 	[pt]:		AplicaГУes/DicionАrios
+	[ru]:		Приложения/Словари
 
 Applications/Editors
 	[de]:		Applikationen/Editors
@@ -139,6 +142,7 @@ Applications/Mail
 	[fr]:		Applications/Courrier
 	[pl]:		Aplikacje/Poczta
 	[pt]:		AplicaГУes/Correio EletrТnico
+	[ru]:		Приложения/Электронная почта
 
 Applications/Math
 	[de]:		Applikationen/Mathematik
@@ -146,6 +150,7 @@ Applications/Math
 	[fr]:		Applications/MathИmatiques
 	[pl]:		Aplikacje/Matematyczne
 	[pt]:		AplicaГУes/MatemАtica
+	[ru]:		Приложения/Математические
 
 Applications/News
 	[de]:		Applikationen/News
@@ -153,7 +158,7 @@ Applications/News
 	[fr]:		Applications/News
 	[pl]:		Aplikacje/News
 	[pt]:		AplicaГУes/News
-	[ru]:		Приложения/News
+	[ru]:		Приложения/Новости
 
 Applications/Printing
 	[de]:		Applikationen/Drucken
@@ -161,6 +166,7 @@ Applications/Printing
 	[fr]:		Applications/Impression
 	[pl]:		Aplikacje/Drukowanie
 	[pt]:		AplicaГУes/ImpressЦo
+	[ru]:		Приложения/Печать
 
 Applications/Publishing
 	[de]:		Applikationen/Publizieren
@@ -215,6 +221,7 @@ Applications/Spreadsheets
 	[de]:		Applikationen/ArbeitsblДtter
 	[pl]:		Aplikacje/Arkusze kalkulacyjne
 	[ru]:		Приложения/электронныя таблицы
+
 Applications/System
 	[de]:		Applikationen/System
 	[es]:		Aplicaciones/Sistema
@@ -230,6 +237,7 @@ Applications/Terminal
 	[fr]:		Aplicaciones/Terminal
 	[pl]:		Aplikacje/Terminal
 	[pt]:		AplicaГУes/Terminal
+	[ru]:		Приложения/Терминал
 
 Applications/Text
 	[de]:		Applikationen/Text
@@ -246,6 +254,7 @@ Applications/Sound
 	[pl]:		Aplikacje/D╪wiЙk
 	[pt]:		AplicaГУes/Som
 	[pt_BR]:	AplicaГУes/Som
+	[ru]:		Приложения/Звук
 
 Base
 	[de]:		GrЭndsДtzlich
@@ -270,6 +279,7 @@ Base/Authentication and Authorization
 	[fr]:		Base/Authentification et Autorisation
 	[pl]:		Podstawowe/Autentykacja i autoryzacja
 	[pt]:		Base/Authentication e AutorizaГЦoa
+	[ru]:		Базовый набор/Аутентификация и авторизация
 
 Base/Utilities
 	[de]:		GrЭndsДtzlich/Werkzeuge
@@ -400,10 +410,12 @@ Development/Languages/Tcl
 Development/Building
 	[de]:		Entwicklung/Bauen
 	[pl]:		Programowanie/Budowanie
+	[ru]:		Разработка/Сборка
 
 Development/Version Control
 	[de]:		Entwicklung/Versionkontrolle
 	[pl]:		Programowanie/Zarz╠dzanie wersjami
+	[ru]:		Разработка/Контроль версий
 
 Development/Tools
 	[de]:		Entwicklung/Werkzeuge
@@ -456,6 +468,7 @@ Networking/Admin
 	[fr]:		RИseau/Administration
 	[pl]:		Sieciowe/Administracyjne
 	[pt]:		Rede/AdministraГЦo
+	[ru]:		Сетевые/Управление
 
 Networking/Daemons
 	[de]:		Netzwerkwesen/Server
@@ -491,7 +504,7 @@ Networking/News
 	[pl]:		Sieciowe/News
 	[pt]:		Rede/News
 	[pt_BR]:	Rede/News
-	[ru]:		Сетевые/News
+	[ru]:		Сетевые/Новости
 
 Networking/Utilities
 	[de]:		Netzwerkwesen/Werkzeuge
@@ -552,6 +565,7 @@ X11/Applications/Games/Strategy
 	[fr]:		X11/Applications/Jeux/StratИgique
 	[pl]:		X11/Aplikacje/Gry/Strategiczne
 	[pt]:		X11/AplicaГУes/Jogos/EstratИgico
+	[ru]:		X11/Приложения/Игры/Стратегические
 
 X11/Applications/Graphics
 	[de]:		X11/Applikationen/Grafik
@@ -584,6 +598,7 @@ X11/Applications/Science
 	[fr]:		X11/Applications/Science
 	[pl]:		X11/Aplikacje/Nauka
 	[pt]:		X11/AplicaГУes/CiЙncia
+	[ru]:		X11/Приложения/Наука
 
 X11/Applications/Editors
 	[de]:		X11/Applikationen/Editors
@@ -640,12 +655,14 @@ X11/Window Managers
 	[es]:		X11/Administraadores de Ventanas
 	[fr]:		X11/Gestionnaires de FenЙtres
 	[pl]:		X11/Zarz╠dcy okien
+	[ru]:		X11/Оконные менеджеры
 
 X11/Window Managers/Tools
 	[de]:		X11/Fenstermanager/Werkzeuge
 	[es]:		X11/Administraadores de Ventanas/Herramientas
 	[fr]:		X11/Gestionnaires de FenЙtres/Outils
 	[pl]:		X11/Zarz╠dcy okien/NarzЙdzia
+	[ru]:		X11/Оконные менеджеры/Инструменты
 
 X11/XFree86
 	[de]:		X11/XFree86
