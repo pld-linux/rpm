@@ -39,11 +39,13 @@
 #
 %__libtoolize           libtoolize --copy --force
 %__gettextize { \
-    if [ -f po/Makevars ]; then \
-        gettextize --copy --force; \
-    elif gettextize --version | grep -q '0\.11\.' ; then \
-        gettextize --copy --force  --intl; \
-	    cp -f po/Makevars{.template,}; \
+    if gettextize --version | grep -q '0\.11\.' ; then \
+       if [ -f po/Makevars ]; then \
+           gettextize --copy --force --no-changelog; \
+       else \
+           gettextize --copy --force --no-changelog --intl; \
+	       cp -f po/Makevars{.template,}; \
+	   fi; \
 	else \
 		gettextize --copy --force; \
     fi; \
