@@ -7,7 +7,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.2
-Release:	77
+Release:	77.1
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -27,6 +27,11 @@ Source13:	%{name}-macros.python
 Source14:	%{name}-groups-po.awk
 Source15:	%{name}-compress-doc
 Source16:	%{name}-check-files
+Source17:	%{name}-php-provides
+Source18:	%{name}-php-requires
+Source19:	%{name}-find-php-provides
+Source20:	%{name}-find-php-requires
+Source21:	%{name}-macros.php
 Patch0:		%{name}-rpmrc.patch
 Patch1:		%{name}-macros.patch
 Patch2:		%{name}-arch.patch
@@ -250,6 +255,20 @@ software.
 Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w
 Pythonie.
 
+%package php-pearprov
+Summary:	Additional utilities for managing rpm packages and database
+Summary(pl):	Dodatkowe narzêdzia do sprawdzania zale¿no¶ci skryptów php w rpm.
+Group:		Applications/File
+Requires:	%{name} = %{version}
+
+%description php-pearprov
+Additional utilities for checking php pear provides/requires in rpm
+packages.
+
+%description php-pearprov -l pl
+Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów php pear w
+pakietach rpm.
+
 %package -n python-rpm
 Summary:	Python interface to RPM library
 Summary(pl):	Pythonowy interfejs do biblioteki RPM-a
@@ -377,9 +396,15 @@ sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
 install %{SOURCE5} macros.perl.in
 install %{SOURCE13} macros.python.in
+install %{SOURCE21} macros.php.in
 install %{SOURCE6} scripts/find-perl-provides
 install %{SOURCE7} scripts/find-perl-requires
 install %{SOURCE9} scripts/find-lang.sh
+install %{SOURCE17} scripts/php.req.in
+install %{SOURCE18} scripts/php.prov.in
+install %{SOURCE19} scripts/find-php-provides
+install %{SOURCE20} scripts/find-php-requires
+
 
 (cd scripts;
 mv -f perl.req perl.req.in
@@ -441,8 +466,9 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT \
 	pkgbindir="%{_bindir}"
 
-install macros.perl $RPM_BUILD_ROOT%{_libdir}/rpm/macros.perl
-install macros.python $RPM_BUILD_ROOT%{_libdir}/rpm/macros.python
+install macros.perl	$RPM_BUILD_ROOT%{_libdir}/rpm/macros.perl
+install macros.python	$RPM_BUILD_ROOT%{_libdir}/rpm/macros.python
+install macros.php	$RPM_BUILD_ROOT%{_libdir}/rpm/macros.php
 
 install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
@@ -452,6 +478,8 @@ install %{SOURCE10} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides
 install %{SOURCE11} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
 install %{SOURCE15} $RPM_BUILD_ROOT%{_libdir}/rpm/compress-doc
 #install %{SOURCE16} $RPM_BUILD_ROOT%{_libdir}/rpm/check-files
+install scripts/find-php*	$RPM_BUILD_ROOT%{_libdir}/rpm/
+install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_libdir}/rpm/
 
 install rpmio/ugid.h $RPM_BUILD_ROOT%{_includedir}/rpm
 
@@ -591,6 +619,12 @@ rm -rf $RPM_BUILD_ROOT
 %files pythonprov
 %defattr(644,root,root,755)
 %{_libdir}/rpm/macros.python
+
+%files php-pearprov
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/rpm/php*
+%attr(755,root,root) %{_libdir}/rpm/find-php*
+%{_libdir}/rpm/macros.php
 
 %files -n python-rpm
 %defattr(755,root,root,755)
