@@ -46,6 +46,19 @@ zainstalowaæ czy zweryfikowaæ dowolny pakiet. Informacje dotycz±ce ka¿dego
 pakietu s± przechowywane w bazie danych i dostêpne tylko dla administratora 
 systemu.
 przechowywane w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
+%package libs
+Summary:	RPM shared libraries
+Summary(pl):	Bibliteki wspó³dzielone rpm-a
+Group:		Libraries
+Group(pl):	Biblioteki
+Requires:	%{name} = %{version}
+
+%description libs
+RPM shared libraries.
+
+%description -l pl libs
+Bibliteki wspó³dzielone rpm-a.
+
 do pacote, permissões dos arquivos, etc.
 Summary:	Header files and libraries 
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne	
@@ -62,6 +75,31 @@ creation of graphical package managers and other tools that need
 %description -l pl devel
 Pliki nag³ówkowe i biblioteki statyczne.
 graficznych mened¿erów pakietów oraz innych narzêdzi, które wymagaj±
+ferramentas que precisem de conhecimento profundo de pacotes RPM.
+
+Summary(pl):	Bibliteki statyczne rpm-a
+Group:		Libraries/Development
+Group(pl):	Biblioteki/Programowanie
+Requires:	%{name} = %{version}
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}
+
+%description static
+%description -l pl static
+Bibliteki statyczne rpm-a.
+%description static -l pl
+Bibliotecas estáticas para desenvolvimento.
+
+Summary(pl):	Dodatkowe narzêdzia do zarz±dzanai baz± rpm-a i pakietami
+Group:		Utilities/File
+Group(pl):	Narzêdzia/Pliki
+Group:		Applications/File
+Requires:	%{name} = %{version}
+
+%description utils
+%description -l pl utils
+Dodatkowe narzêdzia do zarz±dzanai baz± rpm-a i pakietami.
+%description utils -l pl
 construir pacotes usando o RPM.
 %setup  -q
 %patch0 -p0
@@ -80,10 +118,20 @@ install %{SOURCE13} macros.python.in
 mv -f perl.prov perl.prov.in)
 LDFLAGS="-s"; export LDFLAGS
 
-( cd popt; 
-%GNUconfigure
-)
-%GNUconfigure
+(cd popt;
+ libtoolize --force --copy
+ aclocal
+ autoheader
+ automake --add-missing --gnu
+ autoconf)
+autoheader
+%{__automake}
+
+autoheader
+automake --add-missing --gnu
+autoconf
+%configure \
+	--enable-shared
 %configure \
 make
 	--with-python
@@ -104,7 +152,7 @@ install %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/pl/man8/rpm.8
 
 install %{SOURCE1} docs/groups
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
-strip  $RPM_BUILD_ROOT/{bin/rpm,%{_bindir}/*} || :
+strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*
 
 #%%_install_langs pl_PL:en_US
 %%distribution PLD
@@ -112,20 +160,35 @@ gzip -9fn $RPM_BUILD_ROOT%{_mandir}/{{ru,pl}/man8/*,man8/*} \
 	RPM-PGP-KEY CHANGES docs/*
 
 %pre
-if [ -e /var/lib/rpm ] && [ ! -L /var/lib/rpm ]; then
-	mkdir -p /var/db/rpm /var/db/rpm.old
-	cp -ap /var/lib/rpm/* /var/db/rpm
-	cp -ap /var/lib/rpm/* /var/db/rpm.old
-	echo "Yours old rpm database backuped in /var/db/rpm.old" >&2
-	echo "Run 'rpm --rebuilddb' to update rpm database" >&2
+if [ ! -L /var/lib/rpm ]; then
+	mkdir -p /var/state/rpm
+	cp -ap /var/lib/rpm/* /var/state/rpm
+	rm -rf /var/lib/rpm
+	ln -sf /var/state/rpm /var/lib/rpm
+	echo "RPM Database moved from /var/lib/rpm to /var/state/rpm" >&2
+	echo "Run second time upgradeing rpm package for complete operation"
+	exit 1
+fi
+if [ ! -L /var/db/rpm ]; then
+	mkdir -p /var/state/rpm
+	cp -ap /var/db/rpm/* /var/state/rpm
+	rm -rf /var/db/rpm
+	ln -sf /var/state/rpm /var/db/rpm
+	echo "RPM Database moved from /var/db/rpm to /var/state/rpm" >&2
+	echo "Run second time upgradeing rpm package for complete operation"
+	exit 1
+fi
+
+%postin
+if [ -L /var/lib/rpm ]; then
+	rm -rf /var/lib/rpm
+fi
+if [ -L /var/db/rpm ]; then
+	rm -rf /var/db/rpm
 fi
 
 %post
 /bin/rpm --initdb
-if [ -e /var/lib/rpm ] && [ ! -L /var/lib/rpm ]; then
-	rm -rf /var/lib/rpm/
-	ln -s ../db/rpm /var/lib/rpm
-fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -135,7 +198,6 @@ rm -rf $RPM_BUILD_ROOT
 %doc RPM-PGP-KEY.gz CHANGES.gz docs/*
 %postun -p /sbin/ldconfig
 
-%attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/rpm/rpmdb
 %{_mandir}/man8/*
 %lang(ru) %{_mandir}/ru/man8/*
@@ -157,8 +219,17 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmt
 %attr(755,root,root) %{_libdir}/rpm/rpme
-%{_libdir}/librpm*.a
-%{_libdir}/librpm*.la
+%attr(755,root,root) %{_libdir}/librpm*.la
+%attr(755,root,root) %{_libdir}/librpm*.so
+%files devel
+%files libs
+%attr(755,root,root) %{_libdir}/librpm*.so.*.*
+
+%defattr(644,root,root,755)
+%attr(644,root,root) %{_libdir}/librpm*.a
+%attr(755,root,root) %{_libdir}/librpm*.so
+
+%attr(755,root,root) %{_bindir}/*
 %files utils
 
 %files -n python-rpm
