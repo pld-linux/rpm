@@ -84,22 +84,22 @@ make
 
 %{__make} %{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
 install -d $RPM_BUILD_ROOT/var/db/rpm \
-	$RPM_BUILD_ROOT/usr/share/man/{ru,pl}/man8 \
+	$RPM_BUILD_ROOT%{_mandir}/{ru,pl}/man8 \
 	$RPM_BUILD_ROOT/etc/skel/C/rpm/{SRPMS,RPMS,SOURCES,SPECS,BUILD}
 
 make DESTDIR="$RPM_BUILD_ROOT" pkgbindir="/usr/bin" install
 
 install %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/rpm/macros.pld
 	pkgbindir="%{_bindir}"
-install rpm.8ru $RPM_BUILD_ROOT/usr/share/man/ru/man8/rpm.8
-install rpm2cpio.8ru $RPM_BUILD_ROOT/usr/share/man/ru/man8/rpm2cpio.8
-install %{SOURCE2} $RPM_BUILD_ROOT/usr/share/man/pl/man8/rpm.8
+install rpm.8ru $RPM_BUILD_ROOT%{_mandir}/ru/man8/rpm.8
+install rpm2cpio.8ru $RPM_BUILD_ROOT%{_mandir}/ru/man8/rpm2cpio.8
+install %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/pl/man8/rpm.8
 
 install %{SOURCE1} docs/groups
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 strip  $RPM_BUILD_ROOT/{bin/rpm,usr/bin/*} || :
 
-gzip -9fn $RPM_BUILD_ROOT/usr/share/man/{{ru,pl}/man8/*,man8/*} \
+gzip -9fn $RPM_BUILD_ROOT%{_mandir}/{{ru,pl}/man8/*,man8/*} \
 	RPM-PGP-KEY CHANGES docs/*
 
 %pre
@@ -128,9 +128,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %attr(755,root,root) /usr/bin/*
 %attr(755,root,root) %{_libdir}/rpm/rpmdb
-/usr/share/man/man8/*
-%lang(ru) /usr/share/man/ru/man8/*
-%lang(pl) /usr/share/man/pl/man8/*
+%{_mandir}/man8/*
+%lang(ru) %{_mandir}/ru/man8/*
+%lang(pl) %{_mandir}/pl/man8/*
 
 %lang(cs)    /usr/share/locale/cs/LC_MESSAGES/rpm.mo
 %lang(de)    /usr/share/locale/de/LC_MESSAGES/rpm.mo
