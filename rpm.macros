@@ -84,8 +84,7 @@
 }
 
 #----------------------------------------------------------------
-%configure { \
-	%{?configuredir:%{configuredir}}%{!?configuredir:.}/configure \
+%configure {./configure \
  	LDFLAGS="${LDFLAGS:-%rpmldflags}" \
 	CFLAGS="${CFLAGS:-%rpmcflags}" \
 	CXXFLAGS="${CXXFLAGS:-%rpmcflags}" \
