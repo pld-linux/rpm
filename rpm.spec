@@ -1,6 +1,8 @@
 Summary:	Red Hat (and now also PLD) Package Manager
 Summary(de):	Red Hat (und jetzt auch PLD) Packet-Manager
+Summary(es):	Gestor de paquetes RPM
 Summary(pl):	Aplikacja do zarz±dzania pakietami
+Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.2
 Release:	48
@@ -14,7 +16,7 @@ Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
 Source1:	%{name}.groups
 Source2:	%{name}.macros
 Source3:	%{name}-install-tree
-Source4:	%{name}-find-rpm-provides
+Source4:	%{name}-find-%{name}-provides
 Source5:	%{name}-macros.perl
 Source6:	%{name}-find-perl-provides
 Source7:	%{name}-find-perl-requires
@@ -99,6 +101,13 @@ RPM ist ein kräftiger Packet-Manager, der verwendet sein kann zur
 Installation, Anfrage, Verifizierung, Aktualisierung und
 Uninstallation individueller Softwarepakete. Ein Paket besteht aus
 einem Archiv Dateien und Paketinformation, inklusive Name, Version und
+Beschreibung.
+
+%description -l es
+RPM es un poderoso administrador de paquetes, que puede ser usado para
+construir, instalar, pesquisar, verificar, actualizar y desinstalar
+paquetes individuales de software. Un paquete consiste en un
+almacenaje de archivos, y información sobre el paquete, incluyendo
 nombre, versión y descripción.
 
 %description -l pl
@@ -107,10 +116,19 @@ przebudowaæ, zainstalowaæ czy zweryfikowaæ dowolny pakiet. Informacje
 dotycz±ce ka¿dego pakietu, takie jak jego opis, lista plików
 wchodz±cych w sk³ad pakietu, zale¿no¶ci od innych pakietów, s±
 przechowywane w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
+odpytywania programu rpm.
+
+%description -l pt_BR
+RPM é um poderoso gerenciador de pacotes, que pode ser usado para
+construir, instalar, pesquisar, verificar, atualizar e desinstalar
+pacotes individuais de software. Um pacote consiste de um conjunto de
+arquivos e informações adicionais, incluindo nome, versão e descrição
 do pacote, permissões dos arquivos, etc.
 
 %package devel
+Summary:	Header files and libraries
 Summary(de):	Header-Dateien uns Libraries
+Summary(es):	Archivos de inclusión y bibliotecas para programas de manipulación de paquetes rpm
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne
 Group(de):	Entwicklung/Libraries
 Group(es):	Desarrollo/Bibliotecas
@@ -134,16 +152,29 @@ intimate knowledge of RPM packages.
 Der RPM-Packensystem enthält eine C-Library, die macht es einfach
 RPM-Pakete und Dateibanken zu manipulieren. Er eignet sich für
 Vereinfachung des Schaffens grafischer Paket-Manager und anderer
+Werkzeuge, die intime Kenntnis von RPM-Paketen brauchen.
+
+%description devel -l es
+El sistema de empaquetado RPM incluye una biblioteca C que vuelve
+fácil la manipulación de paquetes y bases de datos RPM. Su objetivo es
+facilitar la creación de administradores gráficos de paquetes y otras
 herramientas que necesiten un conocimiento profundo de paquetes RPM.
 
 %description devel -l pl
 System RPM zawiera bibliotekê C, która u³atwia manipulowanie pakietami
 RPM oraz bazami danych. W zamiarze ma to upro¶ciæ tworzenie
 graficznych mened¿erów pakietów oraz innych narzêdzi, które wymagaj±
+szczegó³owej wiedzy na temat pakietów RPM.
+
+%description devel -l pt_BR
+O sistema de empacotamento RPM inclui uma biblioteca C que torna fácil
+a manipulação de pacotes e bases de dados RPM. Seu objetivo é
+facilitar a criação de gerenciadores gráficos de pacotes e outras
 ferramentas que precisem de conhecimento profundo de pacotes RPM.
 
 %package static
 Summary:	RPM static libraries
+Summary(de):	RPMs statische Libraries
 Summary(pl):	Biblioteki statyczne RPM-a
 Group(de):	Entwicklung/Libraries
 Group(es):	Desarrollo/Bibliotecas
@@ -163,6 +194,9 @@ RPM static libraries.
 RPMs statische Libraries.
 
 %description static -l pl
+%description static l pt_BR
+
+%description static -l pt_BR
 Bibliotecas estáticas para desenvolvimento.
 
 %package utils
@@ -216,12 +250,13 @@ Requires:	python-modules
 %description pythonprov
 Python macros, which simplifies creation of rpm packages with Python
 software.
-Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi
-w Pythonie.
+
+%description pythonprov -l pl
 Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w
 %package python
 
 %package -n python-rpm
+Summary:	Python interface to RPM library
 Group:		Development/Languages/Python
 Group(de):	Entwicklung/Sprachen/Python
 Group(pl):	Programowanie/Jêzyki/Python
@@ -236,16 +271,25 @@ supplied by RPM (RPM Package Manager) libraries.
 
 This package should be installed if you want to develop Python
 %description python -l pl
-Pakiet rpm-python zawiera modu³, który pozwala aplikacjom napisanym
-w Pythonie na u¿ywanie interfejsu dostarczanego przez biblioteki RPM-a.
+
+%description -n python-rpm -l pl
 Pakiet rpm-python zawiera modu³, który pozwala aplikacjom napisanym w
-Pakiet ten powinien zostaæ zainstalowany, je¶li chcesz pisaæ
-w Pythonie programy manipuluj±ce pakietami i bazami danych rpm.
+Pythonie na u¿ywanie interfejsu dostarczanego przez biblioteki RPM-a.
+
+Pakiet ten powinien zostaæ zainstalowany, je¶li chcesz pisaæ w
+%description python -l pt_BR -n
+
+%description -n python-rpm -l pt_BR
+O pacote rpm-python contém um módulo que permite que aplicações
+escritas em Python utilizem a interface fornecida pelas bibliotecas
+RPM (RPM Package Manager).
+
 Esse pacote deve ser instalado se você quiser desenvolver programas em
 Python para manipular pacotes e bancos de dados RPM.
 
 %package build
 Summary:	Scripts for building binary RPM packages
+Summary(de):	Scripts fürs Bauen binärer RPM-Pakete
 Summary(pl):	Skrypty pomocnicze do budowania binarnych RPM-ów
 Group(de):	Applikationen/Datei
 Group(pl):	Aplikacje/Pliki
@@ -275,6 +319,10 @@ Scripts for building binary RPM packages.
 Scripts fürs Bauen binärer RPM-Pakete.
 
 %description build -l pl
+Skrypty pomocnicze do budowania binarnych RPM-ów.
+
+%description build -l pt_BR
+Este pacote contém scripts e programas executáveis que são usados para
 construir pacotes usando o RPM.
 
 %prep
