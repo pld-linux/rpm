@@ -1,35 +1,5 @@
-diff -ruN rpm-3.0.3/macros.in rpm-3.0.3.new/macros.in
---- rpm-3.0.3/macros.in	Sat Oct 30 11:59:36 1999
-+++ rpm-3.0.3.new/macros.in	Sat Oct 30 11:24:39 1999
-@@ -248,6 +248,8 @@
- #	%{perl_sitearch}/Image
- #	%dir %{perl_sitearch}/auto/Image
- #
-+#
-+# NOTE: %{perl_sitearch}, %{perl_archlib} and %{perl_sitelib} macros 
-+#	has been moved to macros.perl (see info in this file for details).
-+#
- %requires_eq()	%(LC_ALL="C" rpm -q --queryformat 'Requires:%%{NAME} = %%{VERSION}' %1| grep -v "is not")
--%perl_sitearch	%(eval "`perl -V:installsitearch`"; echo $installsitearch)
--%perl_archlib	%(eval "`perl -V:installarchlib`"; echo $installarchlib)
-diff -ruN rpm-3.0.3/macros.perl.in rpm-3.0.3.new/macros.perl.in
---- rpm-3.0.3/macros.perl.in	Thu Jan  1 01:00:00 1970
-+++ rpm-3.0.3.new/macros.perl.in	Sat Oct 30 11:24:39 1999
-@@ -0,0 +1,11 @@
-+# Perl specific macro definitions.
-+# To make use of these macros insert the following line into your spec file:
-+# %include @RPMCONFIGDIR@/macros.perl
-+
-+%define		__find_requires	@RPMCONFIGDIR@/find-perl-requires
-+%define		__find_provides	@RPMCONFIGDIR@/find-perl-provides
-+
-+%define		perl_sitelib	%(eval "`perl -V:installsitelib`"; echo $installsitelib)
-+%define		perl_sitearch	%(eval "`perl -V:installsitearch`"; echo $installsitearch)
-+%define		perl_archlib	%(eval "`perl -V:installarchlib`"; echo $installarchlib)
-+
-diff -ruN rpm-3.0.3/scripts/Makefile.am rpm-3.0.3.new/scripts/Makefile.am
---- rpm-3.0.3/scripts/Makefile.am	Sat Jun  5 22:52:30 1999
-+++ rpm-3.0.3.new/scripts/Makefile.am	Sat Oct 30 11:24:39 1999
+--- rpm-3.0.3/scripts/Makefile.am.wiget	Sat Jun  5 22:52:30 1999
++++ rpm-3.0.3/scripts/Makefile.am	Sat Oct 30 12:28:50 1999
 @@ -4,7 +4,8 @@
  
  EXTRA_DIST = \
@@ -48,9 +18,8 @@ diff -ruN rpm-3.0.3/scripts/Makefile.am rpm-3.0.3.new/scripts/Makefile.am
 +	perl.prov perl.req find-perl-requires find-perl-provides \
 +	vpkg-provides.sh
  
-diff -ruN rpm-3.0.3/scripts/find-perl-provides rpm-3.0.3.new/scripts/find-perl-provides
---- rpm-3.0.3/scripts/find-perl-provides	Thu Jan  1 01:00:00 1970
-+++ rpm-3.0.3.new/scripts/find-perl-provides	Sat Oct 30 11:24:39 1999
+--- rpm-3.0.3/scripts/find-perl-provides.wiget	Sat Oct 30 12:28:50 1999
++++ rpm-3.0.3/scripts/find-perl-provides	Sat Oct 30 12:28:50 1999
 @@ -0,0 +1,8 @@
 +#!/bin/sh
 +ulimit -c 0
@@ -60,9 +29,8 @@ diff -ruN rpm-3.0.3/scripts/find-perl-provides rpm-3.0.3.new/scripts/find-perl-p
 +echo $filelist|/usr/lib/rpm/find-provides
 +/usr/lib/rpm/perl.prov $filelist
 +
-diff -ruN rpm-3.0.3/scripts/find-perl-requires rpm-3.0.3.new/scripts/find-perl-requires
---- rpm-3.0.3/scripts/find-perl-requires	Thu Jan  1 01:00:00 1970
-+++ rpm-3.0.3.new/scripts/find-perl-requires	Sat Oct 30 11:24:39 1999
+--- rpm-3.0.3/scripts/find-perl-requires.wiget	Sat Oct 30 12:28:50 1999
++++ rpm-3.0.3/scripts/find-perl-requires	Sat Oct 30 12:28:50 1999
 @@ -0,0 +1,11 @@
 +#!/bin/sh
 +ulimit -c 0
@@ -75,9 +43,8 @@ diff -ruN rpm-3.0.3/scripts/find-perl-requires rpm-3.0.3.new/scripts/find-perl-r
 +echo "$requires
 +$requires_perl
 +$requires_mod"|  sort -u
-diff -ruN rpm-3.0.3/scripts/perl.prov rpm-3.0.3.new/scripts/perl.prov
---- rpm-3.0.3/scripts/perl.prov	Sat Jun  5 22:52:31 1999
-+++ rpm-3.0.3.new/scripts/perl.prov	Sat Oct 30 11:24:39 1999
+--- rpm-3.0.3/scripts/perl.prov.wiget	Sat Jun  5 22:52:31 1999
++++ rpm-3.0.3/scripts/perl.prov	Sat Oct 30 12:28:50 1999
 @@ -1,4 +1,4 @@
 -#!/usr/bin/perl
 +#!@PERL@
@@ -99,9 +66,8 @@ diff -ruN rpm-3.0.3/scripts/perl.prov rpm-3.0.3.new/scripts/perl.prov
    }
  }
  
-diff -ruN rpm-3.0.3/scripts/perl.req rpm-3.0.3.new/scripts/perl.req
---- rpm-3.0.3/scripts/perl.req	Sat Jun  5 22:52:31 1999
-+++ rpm-3.0.3.new/scripts/perl.req	Sat Oct 30 11:50:03 1999
+--- rpm-3.0.3/scripts/perl.req.wiget	Sat Jun  5 22:52:31 1999
++++ rpm-3.0.3/scripts/perl.req	Sat Oct 30 12:34:07 1999
 @@ -1,4 +1,4 @@
 -#!/usr/bin/perl
 +#!@PERL@
@@ -121,13 +87,13 @@ diff -ruN rpm-3.0.3/scripts/perl.req rpm-3.0.3.new/scripts/perl.req
    }
  } else {
    
-@@ -20,22 +24,30 @@
+@@ -20,22 +24,32 @@
    # contents of the file.
    
    foreach (<>) {
 -    process_file($_);
 +    if (m=/usr/(bin|lib|share|X11R6/(lib|bin))/=) {
-+      if (! m=(/((doc|man|info)|/usr/src)/)\.so$)=) {
++      if (! m=(/((doc|man|info)|/usr/src)/)\.(so|pl|ph)$)=) {
 +        process_file($_);
 +      }
 +    }
@@ -141,7 +107,9 @@ diff -ruN rpm-3.0.3/scripts/perl.req rpm-3.0.3.new/scripts/perl.req
 +    if ($module =~ /^[0-9._]+$/) {
 +      print "perl >= $module\n";
 +    } else {
-+      print "perl($module)\n";
++      if ($module !~ /\.ph$/ && $module !~ /\.pl/) {
++        print "perl($module)\n";
++      }
 +    }
    } else {
  
@@ -156,7 +124,7 @@ diff -ruN rpm-3.0.3/scripts/perl.req rpm-3.0.3.new/scripts/perl.req
    }
  }
  
-@@ -54,7 +66,7 @@
+@@ -54,7 +68,7 @@
    while (<FILE>) {
      
      # skip the documentation
@@ -165,3 +133,50 @@ diff -ruN rpm-3.0.3/scripts/perl.req rpm-3.0.3.new/scripts/perl.req
        next;
      }
  
+--- rpm-3.0.3/macros.in.wiget	Sat Oct 30 12:28:50 1999
++++ rpm-3.0.3/macros.in	Sat Oct 30 12:28:50 1999
+@@ -248,6 +248,8 @@
+ #	%{perl_sitearch}/Image
+ #	%dir %{perl_sitearch}/auto/Image
+ #
++#
++# NOTE: %{perl_sitearch}, %{perl_archlib} and %{perl_sitelib} macros 
++#	has been moved to macros.perl (see info in this file for details).
++#
+ %requires_eq()	%(LC_ALL="C" rpm -q --queryformat 'Requires:%%{NAME} = %%{VERSION}' %1| grep -v "is not")
+-%perl_sitearch	%(eval "`perl -V:installsitearch`"; echo $installsitearch)
+-%perl_archlib	%(eval "`perl -V:installarchlib`"; echo $installarchlib)
+--- rpm-3.0.3/macros.perl.in.wiget	Sat Oct 30 12:28:50 1999
++++ rpm-3.0.3/macros.perl.in	Sat Oct 30 12:28:50 1999
+@@ -0,0 +1,11 @@
++# Perl specific macro definitions.
++# To make use of these macros insert the following line into your spec file:
++# %include @RPMCONFIGDIR@/macros.perl
++
++%define		__find_requires	@RPMCONFIGDIR@/find-perl-requires
++%define		__find_provides	@RPMCONFIGDIR@/find-perl-provides
++
++%define		perl_sitelib	%(eval "`perl -V:installsitelib`"; echo $installsitelib)
++%define		perl_sitearch	%(eval "`perl -V:installsitearch`"; echo $installsitearch)
++%define		perl_archlib	%(eval "`perl -V:installarchlib`"; echo $installarchlib)
++
+--- rpm-3.0.3/configure.in.wiget	Sat Oct 30 12:28:50 1999
++++ rpm-3.0.3/configure.in	Sat Oct 30 12:28:50 1999
+@@ -181,6 +181,7 @@
+ 	AC_MSG_RESULT(patch later then 2.2 found)
+     fi
+ 
++    AC_PATH_PROG(PERL, perl, /usr/bin/perl, $MYPATH)
+     AC_PATH_PROG(PGPBIN, pgp, /usr/bin/pgp, $MYPATH)
+     AC_PATH_PROG(__RM, rm, /bin/rm, $MYPATH)
+     AC_PATH_PROG(__TAR, tar, /bin/tar, $MYPATH)
+@@ -907,7 +908,8 @@
+ 
+ AC_CONFIG_SUBDIRS(popt)
+ AC_OUTPUT([Makefile rpmrc macros macros.pld lib/Makefile
+-	build/Makefile tools/Makefile scripts/Makefile
++	build/Makefile tools/Makefile 
++        scripts/Makefile scripts/perl.req scripts/perl.prov
+ 	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
+ 	misc/Makefile po/Makefile.in intl/Makefile
+ 	doc/Makefile doc/manual/Makefile doc/pl/Makefile doc/ru/Makefile
