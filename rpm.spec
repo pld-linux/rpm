@@ -19,7 +19,7 @@
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.9
 %define	beecrypt_ver	3.0.0-0.20030610.1
-%define	rpm_macros_rev	1.167
+%define	rpm_macros_rev	1.170
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -30,7 +30,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.42%{?with_distver:+distver}
+Release:	0.%{snap}.42.1%{?with_distver:+distver}
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -53,6 +53,8 @@ Source14:	%{name}.sysconfig
 Source30:	builder
 Source31:	adapter.awk
 Source32:	pldnotify.awk
+# http://svn.pld-linux.org/banner.sh/
+Source33:	banner.sh
 Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
@@ -715,6 +717,8 @@ install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 install %{SOURCE30} $RPM_BUILD_ROOT%{_bindir}/builder
 install %{SOURCE31} $RPM_BUILD_ROOT%{_bindir}/adapter.awk
 install %{SOURCE32} $RPM_BUILD_ROOT%{_bindir}/pldnotify.awk
+
+install %{SOURCE33} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
 install rpmio/ugid.h $RPM_BUILD_ROOT%{_includedir}/rpm
 
