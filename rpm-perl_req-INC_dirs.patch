@@ -17,7 +17,7 @@
  foreach ( @ARGV ? @ARGV : <> ) {
 -	chomp;
 +    chomp;
-+    $inc{$1}++ if m#^($inc)/#;
++    $inc{$1}++ if m#($inc)/#;  # can't anchor on ^
      if (m=/usr/(sbin|bin|lib|share|X11R6/(lib|bin))/=) {
        if (! m=(/(doc|man|info|usr/src)/|\.(so|ph|h|html|pod)$)=) {
          process_file($_) if -f;
