@@ -127,7 +127,7 @@ fi
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files -f rpm.lang
+rm -rf $RPM_BUILD_ROOT
 
 %doc RPM-PGP-KEY.gz CHANGES.gz docs/*
 %postun -p /sbin/ldconfig
