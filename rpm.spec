@@ -3,7 +3,7 @@ Summary(de):	Red Hat (und jetzt auch PLD) Packet-Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0.2
-Release:	44
+Release:	45
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -78,11 +78,7 @@ Obsoletes:	rpm-libs
 %define __find_provides %{SOURCE4}
 %define _binary_payload w9.gzdio
 %define		__find_provides	%{SOURCE4}
-%define python_prefix      %(echo `python -c "import sys; print sys.prefix"`)
-%define python_version     %(echo `python -c "import sys; print sys.version[:3]"`)
-%define python_includedir  %{_includedir}/python%{python_version}
-%define python_libdir      %{python_prefix}/lib/python%{python_version}
-%define python_sitedir     %{python_libdir}/site-packages
+%include /usr/lib/rpm/macros.python
 %define		py_dyndir	%{py_libdir}/lib-dynload
 %define		pyrequires_eq() Requires:	%1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
 
@@ -327,7 +323,7 @@ sed -e 's#cpio.c depends.c#cpio.c $(DBLIBOBJS) depends.c#g' \
 	lib/Makefile.in > lib/Makefile.in.new
 mv -f lib/Makefile.in.new lib/Makefile.in
 
-sed -e 's#python1.5#python%{python_version}#g' \
+sed -e 's#python1.5#python%{py_ver}#g' \
 	python/Makefile.in > python/Makefile.in.new
 mv -f python/Makefile.in.new python/Makefile.in
 
@@ -484,7 +480,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/rpm/macros.perl
 %files python
 %defattr(644,root,root,755)
-%{python_sitedir}/*.so
+%{py_sitedir}/*.so
 %{_libdir}/rpm/macros.python
 
 %files -n python-rpm
