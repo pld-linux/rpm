@@ -13,8 +13,8 @@ diff -Nru rpm-4.0/rpmpopt.in rpm-4.0.new/rpmpopt.in
 +
 +# Conditional building 
 +rpm exec  --bcond   find-spec-bcond
-+rpm alias --with    --define "_with_!#:+       --with-!#:+"
-+rpm alias --without --define "_without_!#:+       --without-!#:+"
++rpm alias --with    --define "_with_!#:+       1"
++rpm alias --without --define "_without_!#:+       1"
 +
 +# Don't remove $BUILDROOT if --noclean
 +
