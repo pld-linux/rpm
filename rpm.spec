@@ -2,6 +2,7 @@
 # TODO:
 # - learn find-perl-provides to use the __perl macro instead
 #   of /usr/bin/perl
+# - use system libmagic not internal libfmagic
 #
 # Conditional build:
 # _without_static	- build shared /bin/rpm (doesn't work at the moment)
@@ -10,11 +11,11 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 #
 %include        /usr/lib/rpm/macros.python
-#%define snap	20030322
-%define	beecrypt_ver	2.2.0
+%define snap	20030515
 # versions of required libraries
 %define	reqdb_ver	4.1.25-1
-%define	reqpopt_ver	1.8
+%define	reqpopt_ver	1.9
+%define	beecrypt_ver	3.0.0
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -23,14 +24,13 @@ Summary(pt_BR):	Gerenciador de pacotes RPM
 Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
-%define	ver	4.2
+%define	ver	4.3
 Version:	%{ver}
 %define	rel	0.4
 Release:	%{rel}
-%define	beecrypt_rel	%{ver}_%{rel}
 License:	GPL
 Group:		Base
-Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -72,18 +72,19 @@ Patch21:	%{name}-gettext0.11.patch
 Patch22:	%{name}-build.patch
 Patch24:	%{name}-system_libs.patch
 Patch25:	%{name}-bb-and-short-circuit.patch
-Patch28:	%{name}-beecrypt-opt.patch
 Patch30:	%{name}-etc_dir.patch
 Patch31:	%{name}-system_libs-more.patch
 Patch32:	%{name}-php-deps.patch
 Patch33:	%{name}-python-fix.patch
 Patch34:	%{name}-spec-prep-pre.patch
 Patch35:	%{name}-perl_req.patch
-Patch36:	%{name}-python_2_3.patch
+Patch36:	%{name}-system_libs_more.patch
+Patch37:	%{name}-python_2_3.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
+BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.1
 BuildRequires:	db-devel >= %{reqdb_ver}
 BuildRequires:	doxygen
@@ -98,13 +99,14 @@ BuildRequires:	rpm-perlprov
 BuildRequires:	rpm-pythonprov
 BuildRequires:	zlib-devel
 BuildRequires:	popt-devel >= %{reqpopt_ver}
-%if %{!?_without_static:1}%{?_without_static:0}
+%if %{!?_without_static:1}0
 # Require static library only for static build
+BuildRequires:	beecrypt-static >= %{beecrypt_ver}
 BuildRequires:	bzip2-static >= 1.0.2-5
 BuildRequires:	db-static >= %{reqdb_ver}
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	elfutils-static
-#BuildRequires:	libmagic-devel
+#BuildRequires:	libmagic-static
 BuildRequires:	zlib-static
 BuildRequires:	popt-static >= %{reqpopt_ver}
 %endif
@@ -183,6 +185,7 @@ Summary(ru):	Хедеры и библиотеки для программ, работающих с rpm-пакетами
 Summary(uk):	Хедери та б╕бл╕отеки для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name}-lib = %{version}
+Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
 Requires:	db-devel
 Requires:	elfutils-devel
@@ -241,6 +244,7 @@ Summary(ru):	Статическая библиотека для программ, работающих с rpm-пакетами
 Summary(uk):	Статична б╕бл╕отека для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
+Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
 Requires:	db-static
 Requires:	elfutils-static
@@ -469,50 +473,6 @@ construir pacotes usando o RPM.
 Р╕зноман╕тн╕ допом╕жн╕ скрипти та утил╕ти, як╕ використовуються для
 побудови RPM'╕в.
 
-%package -n beecrypt
-Summary:	Crypto library
-Summary(pl):	Biblioteka kryptograficzna
-Version:	%{beecrypt_ver}
-Release:	%{beecrypt_rel}
-Epoch:		1
-Group:		Libraries
-
-%description -n beecrypt
-Crypto library (modified for rpm needs).
-
-%description -n beecrypt -l pl
-Biblioteka kryptograficzna (zmodyfikowana na potrzeby rpma).
-
-%package -n beecrypt-devel
-Summary:	Crypto library - development files
-Summary(pl):	Biblioteka kryptograficzna - pliki developerskie
-Version:	%{beecrypt_ver}
-Release:	%{beecrypt_rel}
-Epoch:		1
-Group:		Development/Libraries
-Requires:	beecrypt = %{beecrypt_ver}
-
-%description -n beecrypt-devel
-Crypto library - development files.
-
-%description -n beecrypt-devel -l pl
-Biblioteka kryptograficzna - pliki developerskie.
-
-%package -n beecrypt-static
-Summary:	Crypto library - static version
-Summary(pl):	Statyczna biblioteka kryptograficzna
-Version:	%{beecrypt_ver}
-Release:	%{beecrypt_rel}
-Epoch:		1
-Group:		Development/Libraries
-Requires:	beecrypt-devel = %{beecrypt_ver}
-
-%description -n beecrypt-static
-Static version of crypto library.
-
-%description -n beecrypt-static -l pl
-Statyczna wersja biblioteki kryptograficznej.
-
 %prep
 %setup -q
 # need update
@@ -542,13 +502,14 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch22 -p1
 %patch24 -p1
 %patch25 -p1
-%patch28 -p1
 %patch30 -p1
 %patch31 -p1
 %patch32 -p1
-%patch33 -p1
+%patch33 -p1 -b .wiget
+# patch34 -- look down
 %patch35 -p1
 %patch36 -p1
+%patch37 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
@@ -570,22 +531,10 @@ cd ..
 chmod +x %{SOURCE4}
 rm -rf zlib libelf db db3 popt rpmdb/db.h
 
-%build
 # generate Group translations to *.po
 awk -f %{SOURCE14} %{SOURCE1}
 
-%{__aclocal}
-%{__autoheader}
-%{__autoconf}
-%{__automake}
-cd beecrypt
-rm -f missing
-%{__libtoolize}
-%{__aclocal}
-%{__autoheader}
-%{__autoconf}
-%{__automake}
-cd ..
+%build
 cd file
 rm -f missing
 %{__libtoolize}
@@ -594,8 +543,14 @@ rm -f missing
 %{__autoconf}
 %{__automake}
 cd ..
-
-
+cd beecrypt
+rm -f missing
+%{__libtoolize}
+%{__aclocal}
+%{__autoheader}
+%{__autoconf}
+%{__automake}
+cd ..
 
 rm -f missing
 %{__libtoolize}
@@ -854,17 +809,3 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/builder
 %attr(755,root,root) %{_bindir}/adapter.awk
 %attr(755,root,root) %{_bindir}/pldnotify.awk
-
-%files -n beecrypt
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libbeecrypt.so.*.*
-
-%files -n beecrypt-devel
-%defattr(644,root,root,755)
-%{_libdir}/libbeecrypt.so
-%{_libdir}/libbeecrypt.la
-%{_includedir}/beecrypt
-
-%files -n beecrypt-static
-%defattr(644,root,root,755)
-%{_libdir}/libbeecrypt.a
