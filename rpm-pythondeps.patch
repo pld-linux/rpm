@@ -11,13 +11,13 @@
  -P|--provides)
      shift
 -    grep "/usr/bin/python\*\$" >& /dev/null && echo "python(abi) = ${PYVER}"
-+    grep -q "/usr/lib[^/]*/libpython2\..*\.so.*\$" && echo "python(abi) = ${PYVER}"
++    grep "/usr/lib[^/]*/libpython2\..*\.so.*\$" >/dev/null && echo "python(abi) = ${PYVER}"
      exit 0
      ;;
  -R|--requires)
      shift
 -    grep "/usr/lib[^/]*/python${PYVER}/" >& /dev/null && echo "python(abi) = ${PYVER}"
-+    grep -q "/usr/\(lib[^/]*\|share\)/python${PYVER}/" && echo "python(abi) = ${PYVER}"
++    grep "/usr/\(lib[^/]*\|share\)/python${PYVER}/" >/dev/null && echo "python(abi) = ${PYVER}"
      exit 0
      ;;
  esac
