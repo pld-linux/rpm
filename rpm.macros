@@ -121,7 +121,7 @@
 %_applnkdir	/usr/X11R6/share/applnk
 
 # Location pixmaps for applnk/desktop files
-%_pixmapsdir	%{_prefix}/share/pixmaps
+%_pixmapsdir	/usr/share/pixmaps
 
 # Location of fonts directories
 %_fontsdir	/usr/share/fonts
