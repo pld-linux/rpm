@@ -171,6 +171,7 @@ Requires:	file >= 3.31
 Requires:	binutils
 Requires:	gcc >= 3.0.3
 Requires:	gcc
+Requires:	diffutils
 Requires:	tar
 Requires:	textutils
 
