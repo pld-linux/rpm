@@ -1,0 +1,4 @@
+- release 26: fixed rpm-find-requires script
+  (_noautoreq and _noautoreqdep are not the same!
+  e.g. _noautoreqdep libGL.so.1 shouldn't remove libGL.so.1 dependency,
+  but only `rpm -q --whatprovides libGL.so.1` dependency)
