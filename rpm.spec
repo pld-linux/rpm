@@ -18,7 +18,7 @@
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.9
 %define	beecrypt_ver	4.0.0
-%define	rpm_macros_rev	1.161
+%define	rpm_macros_rev	1.162
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -30,7 +30,7 @@ Name:		rpm
 %define	ver	4.4
 %define	sover	4.3
 Version:	%{ver}
-Release:	0.%{snap}.0.4
+Release:	0.%{snap}.0.5
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -89,6 +89,7 @@ Patch35:	%{name}-missing-prototypes.patch
 Patch36:	%{name}-pld-autodep.patch
 Patch37:	%{name}-rpmsq.patch
 Patch38:	%{name}-file-readelf.patch
+Patch39:	%{name}-no_version_check_in_obsoletes.patch
 Patch40:	%{name}-epoch0.patch
 Patch41:	%{name}-file-readelf-fix.patch
 Patch43:	%{name}-perl_req-INC_dirs.patch
@@ -469,6 +470,7 @@ Requires:	binutils
 Requires:	chrpath >= 0.10-4
 Requires:	cpio
 Requires:	diffutils
+Requires:	elfutils
 Requires:	file >= 4.01
 Requires:	fileutils
 Requires:	findutils
@@ -476,10 +478,6 @@ Requires:	findutils
 Requires:	gcc >= 3.0.3
 %else
 Requires:	gcc
-%endif
-%ifarch amd64
-Conflicts:	automake < 1:1.7.9-2
-Conflicts:	libtool < 2:1.5-13
 %endif
 Requires:	glibc-devel
 Requires:	grep
@@ -492,6 +490,11 @@ Requires:	sh-utils
 Requires:	tar
 Requires:	textutils
 Provides:	rpmbuild(macros) = %{rpm_macros_rev}
+Provides:	rpmbuild(noauto) = 2
+%ifarch amd64
+Conflicts:	automake < 1:1.7.9-2
+Conflicts:	libtool < 2:1.5-13
+%endif
 
 %description build
 Scripts for building binary RPM packages.
@@ -552,7 +555,8 @@ construir pacotes usando o RPM.
 %setup -q -n %{name}
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
+# temporarily moved after patch100 - messes too much in pl.po
+#%patch3 -p1
 %patch4 -p1
 %patch5 -p1
 %patch7 -p1
@@ -599,12 +603,14 @@ cat %{SOURCE11} >> macros.in
 %patch36 -p1
 %patch37 -p1
 %patch38 -p1
+%patch39 -p1
 %patch40 -p1
 %patch41 -p1
 %patch43 -p0
 %patch44 -p1
 %patch45 -p1
 %patch100 -p1
+%patch3 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
@@ -735,8 +741,8 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov <<EOF
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles <<EOF
 # global list of files (regexps) which don't generate Requires
-/usr/src/examples/.*
-/usr/share/doc/.*
+^/usr/src/examples/
+^/usr/share/doc/
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq <<EOF
 # global list of script capabilities (regexps) not to be used in Requires
@@ -744,13 +750,50 @@ EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep <<EOF
 # global list of capabilities (SONAME, perl(module), php(module) regexps)
 # which don't generate dependencies on package NAMES
-libGL.so.1
-libGLU.so.1
-libOSMesa.so.4
-libglide3.so.3
-libgtkmozembed.so
-libgtksuperwin.so
-libxpcom.so
+# -- OpenGL implementation
+^libGL.so.1$
+^libGLU.so.1$
+^libOSMesa.so
+# -- Glide
+^libglide3.so.3$
+# -- mozilla
+^libgtkmozembed.so$
+^libgtksuperwin.so$
+^libxpcom.so$
+# -- X11 implementation
+^libFS.so
+^libI810XvMC.so
+^libICE.so
+^libSM.so
+^libX11.so
+^libXRes.so
+^libXTrap.so
+^libXaw.so
+^libXcursor.so
+^libXext.so
+^libXfont.so
+^libXfontcache.so
+^libXft.so
+^libXi.so
+^libXinerama.so
+^libXmu.so
+^libXmuu.so
+^libXp.so
+^libXpm.so
+^libXrandr.so
+^libXrender.so
+^libXss.so
+^libXt.so
+^libXtst.so
+^libXv.so
+^libXvMC.so
+^libXxf86dga.so
+^libXxf86misc.so
+^libXxf86rush.so
+^libXxf86vm.so
+^libfontenc.so
+^libxkbfile.so
+^libxkbui.so
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc <<EOF
 # global list of file masks not to be compressed in DOCDIR
