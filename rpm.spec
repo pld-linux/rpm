@@ -89,6 +89,7 @@ BuildRequires:	db3-static >= 3.1.17-9
 BuildRequires:	glibc-static >= 2.2.0
 BuildRequires:	zlib-static >= 1.1.4
 %endif
+Requires:	zlib >= 1.1.4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	rpm-libs
 Conflicts:	glibc < 2.2
