@@ -1,0 +1,12 @@
+diff -ur rpm-4.0.4-/rpmio/Makefile.am rpm-4.0.4/rpmio/Makefile.am
+--- rpm-4.0.4-/rpmio/Makefile.am	Tue Jul 23 10:23:46 2002
++++ rpm-4.0.4/rpmio/Makefile.am	Tue Jul 23 10:47:16 2002
+@@ -50,7 +50,7 @@
+ 	  [ ! -f $$lo -a -f $(top_builddir)/beecrypt/$$lo ] && $(LN_S) \
+ 		$(top_builddir)/beecrypt/$$lo $$lo ; \
+ 	  [ ! -f .libs/$$lo -a -f $(top_builddir)/beecrypt/.libs/$$lo ] && $(LN_S) \
+-		../$(top_builddir)/beecrypt/.libs/$$lo .libs/$$lo ; \
++		../$(top_builddir)/beecrypt/.libs/$$lo .libs/$$lo ; true ; \
+ 	done
+ 	touch $@
+ 
