@@ -1,0 +1,21 @@
+#!/usr/bin/perl
+#####################################################################
+#                                                                   #
+# Check system dependences between php-pear modules                 #
+#                                                                   #
+# Pawe³ Go³aszewski <blues@ds.pg.gda.pl>                            #
+# Micha³ Moskal <malekith@pld-linux.org>                            #
+# ------------------------------------------------------------------#
+# TODO:                                                             #
+#####################################################################
+
+die "You have to specify input files" if (@ARGV < 1);
+
+$pear = "/usr/share/pear";
+
+while (@ARGV > 0) {
+	$f = shift;
+	next unless ($f =~ /$pear.*\.php$/);
+	$f =~ s/.*$pear\///;
+	print "pear($f)\n";
+}
