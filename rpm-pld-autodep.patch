@@ -305,8 +305,8 @@
      /*@=branchstate =uniondef @*/
  
      /* For DSO's, provide the basename of the file if DT_SONAME not found. */
--    if (!fc->skipProv && isDSO && !gotSONAME) {
-+    if (findprov && !fc->skipProv && isDSO && !gotSONAME) {
+-    if (!fc->skipProv && isDSO && !gotDEBUG && !gotSONAME) {
++    if (findprov && !fc->skipProv && isDSO && !gotDEBUG && !gotSONAME) {
  	depsp = &fc->provides;
  	tagN = RPMTAG_PROVIDENAME;
  	dsContext = RPMSENSE_FIND_PROVIDES;

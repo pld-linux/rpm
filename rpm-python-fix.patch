@@ -1,17 +1,18 @@
-diff -urN rpm-4.3.org/python/Makefile.am rpm-4.3/python/Makefile.am
---- rpm-4.3.org/python/Makefile.am	2003-12-27 23:56:46.082303664 +0100
-+++ rpm-4.3/python/Makefile.am	2003-12-28 00:07:26.082008920 +0100
-@@ -29,46 +29,33 @@
- 	rpmfi-py.h rpmmi-py.h rpmrc-py.h rpmte-py.h rpmts-py.h
+--- rpm.org/python/Makefile.am	2004-06-14 12:02:25.891768016 +0200
++++ rpm/python/Makefile.am	2004-06-14 12:08:23.614385912 +0200
+@@ -27,48 +27,35 @@
+ 	rpmfi-py.h rpmmi-py.h rpmrc-py.h rpmte-py.h rpmts-py.h spec-py.h
  
  mylibs= \
 -	$(top_builddir)/lib/.libs/librpm.so \
 -	$(top_builddir)/rpmdb/.libs/librpmdb.so \
 -	$(top_builddir)/rpmio/.libs/librpmio.so \
 -	$(top_builddir)/popt/.libs/libpopt.so \
+-	$(top_builddir)/build/.libs/librpmbuild.so \
 +	$(top_builddir)/lib/librpm.la \
 +	$(top_builddir)/rpmdb/librpmdb.la \
 +	$(top_builddir)/rpmio/librpmio.la \
++	$(top_builddir)/build/librpmbuild.la \
 +	-lbeecrypt \
 +	-lpopt \
  	@WITH_LIBELF_LIB@
@@ -38,17 +39,14 @@ diff -urN rpm-4.3.org/python/Makefile.am rpm-4.3/python/Makefile.am
  
 -_rpmdb_so_SOURCES = _rpmdb.c
 -_rpmdb_so_LDFLAGS = $(mylibs) $(LIBS) -shared -Wl,-soname,_rpmdb.so
-+poptmodule_la_SOURCES = poptmodule.c
-+poptmodule_la_LDFLAGS = $(mylibs) $(LIBS) -module -avoid-version
- 
+-
 -poptmodule_so_SOURCES = poptmodule.c
 -poptmodule_so_LDFLAGS = $(mylibs) $(LIBS) -shared -Wl,-soname,poptmodule.so
 -
 -noinst_LTLIBRARIES = librpmmodule.la
 -librpmmodule_la_SOURCES = rpmmodule.c header-py.c \
-+rpmmodule_la_SOURCES = rpmmodule.c header-py.c \
- 	rpmal-py.c rpmds-py.c rpmdb-py.c rpmfd-py.c rpmfts-py.c \
- 	rpmfi-py.c rpmmi-py.c rpmrc-py.c rpmte-py.c rpmts-py.c
+-	rpmal-py.c rpmds-py.c rpmdb-py.c rpmfd-py.c rpmfts-py.c \
+-	rpmfi-py.c rpmmi-py.c rpmrc-py.c rpmte-py.c rpmts-py.c spec-py.c
 -librpmmodule_OBJECTS = $(subst .c,.o,$(librpmmodule_la_SOURCES))
 -
 -rpmmodule.so$(EXEEXT): librpmmodule.la
@@ -59,6 +57,13 @@ diff -urN rpm-4.3.org/python/Makefile.am rpm-4.3/python/Makefile.am
 -
 -poptmodule.so$(EXEEXT): poptmodule.o
 -	$(CC) -o $@ poptmodule.o $(poptmodule_so_LDFLAGS)
++poptmodule_la_SOURCES = poptmodule.c
++poptmodule_la_LDFLAGS = $(mylibs) $(LIBS) -module -avoid-version
  
++rpmmodule_la_SOURCES = rpmmodule.c header-py.c \
++	       	       rpmal-py.c rpmds-py.c rpmdb-py.c rpmfd-py.c rpmfts-py.c \
++       		       rpmfi-py.c rpmmi-py.c rpmrc-py.c rpmte-py.c rpmts-py.c
++		
  # rpmmodule.c header-py.c \
  # 	rpmal-py.c rpmds-py.c rpmdb-py.c rpmfd-py.c rpmfi-py.c rpmmi-py.c \
+ # 	rpmrc-py.c rpmte-py.c rpmts-py.c
