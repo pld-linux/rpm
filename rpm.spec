@@ -30,7 +30,9 @@ Version:	%{ver}
 Release:	%{rel}
 License:	GPL
 Group:		Base
-Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
+#Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
+# Source0-md5:	b7a16114143a0465aa65daf7a0234cf4
+Source0:	http://recesja.icm.edu.pl/~psk/%{name}-%{version}.%{snap}.tar.gz
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
