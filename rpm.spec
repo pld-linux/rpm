@@ -3,7 +3,7 @@ Summary(de):	Red Hat (und jetzt auch PLD) Packet-Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0.2
-Release:	28
+Release:	29
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -263,7 +263,7 @@ automake -a -c
 sed -e 's#cpio.c depends.c#cpio.c $(DBLIBOBJS) depends.c#g' \
 	lib/Makefile.in > lib/Makefile.in.new
 mv -f lib/Makefile.in.new lib/Makefile.in
-%configure \
+%configure2_13 \
 	sed 's|@host_cpu@|%{_target_cpu}|' > macros.tmp
 	--enable-v1-packages
 %configure \
