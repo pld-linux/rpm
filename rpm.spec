@@ -2,11 +2,11 @@ Summary:	Red Hat (and now also PLD) Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0.2
-Release:	3
+Release:	4
+License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
-License:	GPL
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
 Source1:	%{name}.groups
 Source2:	%{name}.macros
@@ -53,6 +53,7 @@ BuildRequires:	gdbm-static
 BuildRequires:	zlib-static
 %endif
 BuildRequires:	zlib-static >= 1.1.4
+Obsoletes:	rpm-libs
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	rpm-libs
 %define __find_provides %{SOURCE4}
@@ -72,22 +73,6 @@ wchodz±cych w sk³ad pakietu, zale¿no¶ci od innych pakietów s±
 przechowywane s± w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
 wchodz±cych w sk³ad pakietu, zale¿no¶ci od innych pakietów, s±
 przechowywane w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
-%package libs
-Summary:	RPM shared libraries
-Summary(pl):	Biblioteki wspó³dzielone rpm-a
-Group:		Libraries
-Group(de):	Libraries
-Group(es):	Bibliotecas
-Group(fr):	Librairies
-Group(pl):	Biblioteki
-Requires:	%{name} = %{version}
-
-%description libs
-RPM shared libraries.
-
-%description -l pl libs
-Biblioteki wspó³dzielone rpm-a.
-
 do pacote, permissões dos arquivos, etc.
 Summary:	Header files and libraries 
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne	
@@ -192,7 +177,7 @@ construir pacotes usando o RPM.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
-%patch11 -p1
+#%patch11 -p1
 %patch12 -p0
 %patch31 -p1
 install %{SOURCE2} macros.pld.in
@@ -261,8 +246,8 @@ EOF
 
 %find_lang %{name}
 
-%post   libs -p /sbin/ldconfig
-%postun libs -p /sbin/ldconfig
+%post   -p /sbin/ldconfig
+
 %clean
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -341,6 +326,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/u_pkg.sh
 %attr(755,root,root) %{_libdir}/rpm/rpme
 %attr(755,root,root) %{_libdir}/rpm/rpmu
+%attr(755,root,root) %{_libdir}/librpm*.so.*.*
 %attr(755,root,root) %{_libdir}/rpm/rpmb
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmt
@@ -348,10 +334,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/librpm*.la
 %attr(755,root,root) %{_libdir}/librpm*.so
 %files devel
-%files libs
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/librpm*.so.*.*
-
 %defattr(644,root,root,755)
 %{_includedir}/rpm
 %attr(755,root,root) %{_libdir}/librpm*.la
