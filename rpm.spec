@@ -1,6 +1,6 @@
 %include        /usr/lib/rpm/macros.python
 %define	beecrypt_ver	2.2.0
-%define	beecrypt_rel	0.90
+%define	beecrypt_rel	0.91
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -90,9 +90,8 @@ BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	libelf-static
 BuildRequires:	zlib-static
 %endif
-Requires:	glibc >= 2.2.94
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-Conflicts:	glibc < 2.2
+Conflicts:	glibc < 2.2.92
 
 %define		__find_provides	%{SOURCE4}
 %define		_binary_payload	w9.gzdio
