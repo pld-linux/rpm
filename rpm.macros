@@ -27,13 +27,19 @@
 #-----------------------------------------------------------------
 # CFLAGS and LDFLAGS used to build
 
-%debugcflags	-O0 -g
+%debugcflags	-O0 -g -Wall
 %rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}
-%rpmldflags	%{nil}
+%rpmldflags	-s
 
 # kernel compiler
 %kgcc		gcc2
 %kgcc_package	gcc2
+
+# Build system path macros.
+#
+%__libtoolize           libtoolize --copy --force
+%__automake             automake -a -c -f --foreing
+%__autoconf             autoconf
 
 #-----------------------------------------------------------------
 %configure2_13 { \
