@@ -1,11 +1,45 @@
---- rpm-4.0.2/lib/Makefile.am.wiget	Wed Feb 14 20:44:20 2001
-+++ rpm-4.0.2/lib/Makefile.am	Wed Feb 21 11:57:02 2001
-@@ -22,7 +22,7 @@
+--- rpm-4.0.4/rpmio/Makefile.am.wiget2	Wed Jan 23 02:03:42 2002
++++ rpm-4.0.4/rpmio/Makefile.am	Wed Feb 13 00:05:09 2002
+@@ -21,7 +21,7 @@
+ 	ugid.h
+ noinst_HEADERS = rpmio_internal.h rpmpgp.h
  
- lib_LTLIBRARIES = librpm.la
- librpm_la_SOURCES = \
--	cpio.c $(DBLIBSRCS) dbconfig.c depends.c \
-+	cpio.c dbconfig.c depends.c \
- 	formats.c fprint.c fs.c hash.c header.c install.c \
- 	md5.c md5sum.c misc.c package.c problems.c \
- 	poptBT.c poptQV.c query.c rpmchecksig.c rpmdb.c rpminstall.c \
+-LIBS +=	@WITH_ZLIB_LIB@ -lrt -lpthread
++LIBS =	@LIBS@ @WITH_ZLIB_LIB@ -lrt -lpthread
+ 
+ BEECRYPTLOBJS = $(shell cat $(top_builddir)/beecrypt/listobjs)
+ 
+@@ -51,18 +51,18 @@
+ 	rm -f $(BEECRYPTLOBJS) *.o .created
+ 
+ tdigest_SOURCES = tdigest.c
+-tdigest_LDADD += librpmio.la $(top_builddir)/popt/libpopt.la
++tdigest_LDADD = $(LDADD) librpmio.la $(top_builddir)/popt/libpopt.la
+ 
+ trpmio_SOURCES = trpmio.c
+-trpmio_LDADD += librpmio.la $(top_builddir)/popt/libpopt.la
++trpmio_LDADD = $(LDADD) librpmio.la $(top_builddir)/popt/libpopt.la
+ 
+ tkey_SOURCES = tkey.c
+ tkey_LDFLAGS = -all-static
+-tkey_LDADD += librpmio.la $(top_builddir)/popt/libpopt.la
++tkey_LDADD = $(LDADD) librpmio.la $(top_builddir)/popt/libpopt.la
+ 
+ tring_SOURCES = tring.c
+ tring_LDFLAGS = -all-static
+-tring_LDADD += librpmio.la $(top_builddir)/popt/libpopt.la
++tring_LDADD = $(LDADD) librpmio.la $(top_builddir)/popt/libpopt.la
+ 
+ dumpasn1_SOURCES = dumpasn1.c
+ 
+--- rpm-4.0.4/rpmdb/Makefile.am.wiget2	Wed Feb 13 00:11:45 2002
++++ rpm-4.0.4/rpmdb/Makefile.am	Wed Feb 13 00:11:23 2002
+@@ -28,7 +28,7 @@
+ DB3LOBJS = $(shell cat $(top_builddir)/$(WITH_DB_SUBDIR)/db3lobjs)
+ 
+ lib_LTLIBRARIES = librpmdb.la
+-librpmdb_la_SOURCES = $(DBLIBSRCS) \
++librpmdb_la_SOURCES = \
+ 	dbconfig.c fprint.c poptDB.c rpmhash.c rpmdb.c
+ librpmdb_la_LDFLAGS = -release @VERSION@ @libdb3@
+ librpmdb_la_LIBADD = $(DBLIBOBJS) $(DB3LOBJS)

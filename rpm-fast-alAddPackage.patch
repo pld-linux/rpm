@@ -1,5 +1,5 @@
---- ./lib/depends.c~org	Wed Aug  1 22:14:31 2001
-+++ ./lib/depends.c	Wed Aug  1 22:15:57 2001
+--- rpm-4.0.4/lib/depends.c~org	Wed Aug  1 22:14:31 2001
++++ rpm-4.0.4/lib/depends.c	Wed Aug  1 22:15:57 2001
 @@ -335,18 +335,24 @@
  	for (dirNum = 0; dirNum < numDirs; dirNum++) {
  	    dirNeedle.dirName = (char *) dirNames[dirNum];

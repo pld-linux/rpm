@@ -1,7 +1,6 @@
-diff -urN rpm-4.0.2/build/parseChangelog.c rpm-4.0.2.patched/build/parseChangelog.c
---- rpm-4.0.2/build/parseChangelog.c	Tue Jan 16 00:10:04 2001
-+++ rpm-4.0.2.patched/build/parseChangelog.c	Sat Sep  1 15:11:55 2001
-@@ -213,7 +213,7 @@
+--- rpm-4.0.4/build/parseChangelog.c.wiget	Sat Jan  5 19:40:22 2002
++++ rpm-4.0.4/build/parseChangelog.c	Tue Feb 12 22:52:02 2002
+@@ -217,7 +217,7 @@
      
      while (! (nextPart = isPart(spec->line))) {
  	appendStringBuf(sb, spec->line);
@@ -10,202 +9,44 @@ diff -urN rpm-4.0.2/build/parseChangelog.c rpm-4.0.2.patched/build/parseChangelo
  	    nextPart = PART_NONE;
  	    break;
  	}
-diff -urN rpm-4.0.2/build/parseSpec.c rpm-4.0.2.patched/build/parseSpec.c
---- rpm-4.0.2/build/parseSpec.c	Tue Jan 16 14:08:55 2001
-+++ rpm-4.0.2.patched/build/parseSpec.c	Sat Sep  1 15:36:00 2001
-@@ -131,12 +131,16 @@
+--- rpm-4.0.4/build/parseSpec.c.wiget	Sun Jan 20 22:03:52 2002
++++ rpm-4.0.4/build/parseSpec.c	Tue Feb 12 23:02:16 2002
+@@ -143,12 +143,16 @@
  	ofi->readPtr = from;
  
  	/* Don't expand macros (eg. %define) in false branch of %if clause */
--	if (spec->readStack->reading &&
--	    expandMacros(spec, spec->macros, spec->lbuf, sizeof(spec->lbuf))) {
--		rpmError(RPMERR_BADSPEC, _("line %d: %s\n"),
--			spec->lineNum, spec->lbuf);
--		return RPMERR_BADSPEC;
--	}
 +	/* Also don't expand macros in %changelog where we set STRIP_NOEXPAND flag */
 +	/* (first line is ommited, so if there is e.g. %date macro, it will be expanded */
 +	if (!(strip & STRIP_NOEXPAND)) {
-+	    if (spec->readStack->reading &&
-+		    expandMacros(spec, spec->macros, spec->lbuf, sizeof(spec->lbuf))) {
-+			rpmError(RPMERR_BADSPEC, _("line %d: %s\n"),
-+				spec->lineNum, spec->lbuf);
-+			return RPMERR_BADSPEC;
-+		    }
+	if (spec->readStack->reading &&
+	    expandMacros(spec, spec->macros, spec->lbuf, sizeof(spec->lbuf))) {
+		rpmError(RPMERR_BADSPEC, _("line %d: %s\n"),
+			spec->lineNum, spec->lbuf);
+		return RPMERR_BADSPEC;
+	}
 +	}	
  	spec->nextline = spec->lbuf;
      }
  
-@@ -241,86 +245,88 @@
+@@ -258,6 +262,7 @@
      SKIPSPACE(s);
  
      match = -1;
--    if (! strncmp("%ifarch", s, sizeof("%ifarch")-1)) {
--	const char *arch = rpmExpand("%{_target_cpu}", NULL);
--	s += 7;
--	match = matchTok(arch, s);
--	free((void *)arch);
--    } else if (! strncmp("%ifnarch", s, sizeof("%ifnarch")-1)) {
--	const char *arch = rpmExpand("%{_target_cpu}", NULL);
--	s += 8;
--	match = !matchTok(arch, s);
--	free((void *)arch);
--    } else if (! strncmp("%ifos", s, sizeof("%ifos")-1)) {
--	const char *os = rpmExpand("%{_target_os}", NULL);
--	s += 5;
--	match = matchTok(os, s);
--	free((void *)os);
--    } else if (! strncmp("%ifnos", s, sizeof("%ifnos")-1)) {
--	const char *os = rpmExpand("%{_target_os}", NULL);
--	s += 6;
--	match = !matchTok(os, s);
--	free((void *)os);
--    } else if (! strncmp("%if", s, sizeof("%if")-1)) {
--	s += 3;
--        match = parseExpressionBoolean(spec, s);
--	if (match < 0) {
--	    rpmError(RPMERR_UNMATCHEDIF,
--			_("%s:%d: parseExpressionBoolean returns %d\n"),
--			ofi->fileName, ofi->lineNum, match);
--	    return RPMERR_BADSPEC;
--	}
--    } else if (! strncmp("%else", s, sizeof("%else")-1)) {
--	s += 5;
--	if (! spec->readStack->next) {
--	    /* Got an else with no %if ! */
--	    rpmError(RPMERR_UNMATCHEDIF,
--			_("%s:%d: Got a %%else with no %%if\n"),
--			ofi->fileName, ofi->lineNum);
--	    return RPMERR_UNMATCHEDIF;
--	}
--	spec->readStack->reading =
--	    spec->readStack->next->reading && ! spec->readStack->reading;
--	spec->line[0] = '\0';
--    } else if (! strncmp("%endif", s, sizeof("%endif")-1)) {
--	s += 6;
--	if (! spec->readStack->next) {
--	    /* Got an end with no %if ! */
--	    rpmError(RPMERR_UNMATCHEDIF,
--			_("%s:%d: Got a %%endif with no %%if\n"),
--			ofi->fileName, ofi->lineNum);
--	    return RPMERR_UNMATCHEDIF;
--	}
--	rl = spec->readStack;
--	spec->readStack = spec->readStack->next;
--	free(rl);
--	spec->line[0] = '\0';
--    } else if (! strncmp("%include", s, sizeof("%include")-1)) {
--	char *fileName, *endFileName, *p;
--
--	s += 8;
--	fileName = s;
--	if (! isspace(*fileName)) {
--	    rpmError(RPMERR_BADSPEC, _("malformed %%include statement\n"));
--	    return RPMERR_BADSPEC;
--	}
--	SKIPSPACE(fileName);
--	endFileName = fileName;
--	SKIPNONSPACE(endFileName);
--	p = endFileName;
--	SKIPSPACE(p);
--	if (*p != '\0') {
--	    rpmError(RPMERR_BADSPEC, _("malformed %%include statement\n"));
--	    return RPMERR_BADSPEC;
--	}
--	*endFileName = '\0';
 +    if (! (strip & STRIP_NOEXPAND)) {
-+        if (! strncmp("%ifarch", s, sizeof("%ifarch")-1)) {
-+    	    const char *arch = rpmExpand("%{_target_cpu}", NULL);
-+	    s += 7;
-+	    match = matchTok(arch, s);
-+	    free((void *)arch);
-+	} else if (! strncmp("%ifnarch", s, sizeof("%ifnarch")-1)) {
-+	    const char *arch = rpmExpand("%{_target_cpu}", NULL);
-+	    s += 8;
-+	    match = !matchTok(arch, s);
-+	    free((void *)arch);
-+	} else if (! strncmp("%ifos", s, sizeof("%ifos")-1)) {
-+	    const char *os = rpmExpand("%{_target_os}", NULL);
-+	    s += 5;
-+	    match = matchTok(os, s);
-+	    free((void *)os);
-+	} else if (! strncmp("%ifnos", s, sizeof("%ifnos")-1)) {
-+	    const char *os = rpmExpand("%{_target_os}", NULL);
-+	    s += 6;
-+	    match = !matchTok(os, s);
-+	    free((void *)os);
-+	} else if (! strncmp("%if", s, sizeof("%if")-1)) {
-+	    s += 3;
-+    	    match = parseExpressionBoolean(spec, s);
-+	    if (match < 0) {
-+		rpmError(RPMERR_UNMATCHEDIF,
-+			    _("%s:%d: parseExpressionBoolean returns %d\n"),
-+			    ofi->fileName, ofi->lineNum, match);
-+		return RPMERR_BADSPEC;
-+	    }
-+	} else if (! strncmp("%else", s, sizeof("%else")-1)) {
-+	    s += 5;
-+	    if (! spec->readStack->next) {
-+		/* Got an else with no %if ! */
-+		rpmError(RPMERR_UNMATCHEDIF,
-+			    _("%s:%d: Got a %%else with no %%if\n"),
-+			    ofi->fileName, ofi->lineNum);
-+		return RPMERR_UNMATCHEDIF;
-+	    }
-+	    spec->readStack->reading =
-+		spec->readStack->next->reading && ! spec->readStack->reading;
-+	    spec->line[0] = '\0';
-+	} else if (! strncmp("%endif", s, sizeof("%endif")-1)) {
-+	    s += 6;
-+	    if (! spec->readStack->next) {
-+		/* Got an end with no %if ! */
-+		rpmError(RPMERR_UNMATCHEDIF,
-+			    _("%s:%d: Got a %%endif with no %%if\n"),
-+			    ofi->fileName, ofi->lineNum);
-+		return RPMERR_UNMATCHEDIF;
-+	    }
-+	    rl = spec->readStack;
-+	    spec->readStack = spec->readStack->next;
-+	    free(rl);
-+	    spec->line[0] = '\0';
-+	} else if (! strncmp("%include", s, sizeof("%include")-1)) {
-+	    char *fileName, *endFileName, *p;
-+
-+	    s += 8;
-+	    fileName = s;
-+	    if (! isspace(*fileName)) {
-+		rpmError(RPMERR_BADSPEC, _("malformed %%include statement\n"));
-+		return RPMERR_BADSPEC;
-+	    }
-+	    SKIPSPACE(fileName);
-+	    endFileName = fileName;
-+	    SKIPNONSPACE(endFileName);
-+	    p = endFileName;
-+	    SKIPSPACE(p);
-+	    if (*p != '\0') {
-+		rpmError(RPMERR_BADSPEC, _("malformed %%include statement\n"));
-+		return RPMERR_BADSPEC;
-+	    }
-+	    *endFileName = '\0';
- 
--	forceIncludeFile(spec, fileName);
-+	    forceIncludeFile(spec, fileName);
- 
--	ofi = spec->fileStack;
--	goto retry;
-+	    ofi = spec->fileStack;
-+	    goto retry;
-+	}
+     if (! strncmp("%ifarch", s, sizeof("%ifarch")-1)) {
+ 	const char *arch = rpmExpand("%{_target_cpu}", NULL);
+ 	s += 7;
+@@ -337,6 +342,7 @@
+ 	ofi = spec->fileStack;
+ 	goto retry;
      }
--
-+    
++    }
+ 
      if (match != -1) {
- 	rl = xmalloc(sizeof(struct ReadLevelEntry));
- 	rl->reading = spec->readStack->reading && match;
-diff -urN rpm-4.0.2/build/rpmbuild.h rpm-4.0.2.patched/build/rpmbuild.h
---- rpm-4.0.2/build/rpmbuild.h	Thu Jan 11 15:15:15 2001
-+++ rpm-4.0.2.patched/build/rpmbuild.h	Sat Sep  1 15:11:55 2001
-@@ -69,6 +69,7 @@
+ 	rl = xmalloc(sizeof(*rl));
+--- rpm-4.0.4/build/rpmbuild.h.wiget	Sun Jan 20 22:17:36 2002
++++ rpm-4.0.4/build/rpmbuild.h	Tue Feb 12 22:52:02 2002
+@@ -73,6 +73,7 @@
  #define STRIP_NOTHING             0
  #define STRIP_TRAILINGSPACE (1 << 0)
  #define STRIP_COMMENTS      (1 << 1)

@@ -1,6 +1,6 @@
---- rpm-4.0.2/lib/misc.c.glob	Wed May 16 13:00:10 2001
-+++ rpm-4.0.2/lib/misc.c	Wed May 16 15:35:28 2001
-@@ -583,6 +583,11 @@
+--- rpm-4.0.4/lib/misc.c.wiget	Sun Jan 20 23:10:19 2002
++++ rpm-4.0.4/lib/misc.c	Tue Feb 12 22:41:39 2002
+@@ -514,6 +514,11 @@
      const char * path;
      const char * globURL;
      char * globRoot = NULL;
@@ -12,7 +12,7 @@
      size_t maxb, nb;
      glob_t gl;
      int ut;
-@@ -593,6 +598,17 @@
+@@ -524,6 +529,17 @@
      if (rc)
  	return rc;
  
@@ -30,21 +30,20 @@
      for (j = 0; j < ac; j++) {
  	if (!myGlobPatternP(av[j])) {
  	    if (argc == 0)
-@@ -667,6 +683,17 @@
+@@ -609,6 +625,16 @@
  
  
  exit:
 +#ifdef ENABLE_NLS
-+	if (old_collate) {
-+		setlocale(LC_COLLATE, old_collate);
-+		free(old_collate);
-+	}
-+	if (old_ctype) {
-+		setlocale(LC_CTYPE, old_ctype);
-+		free(old_ctype);
-+	}
++    if (old_collate) {
++	setlocale(LC_COLLATE, old_collate);
++	free(old_collate);
++    }
++    if (old_ctype) {
++	setlocale(LC_CTYPE, old_ctype);
++	free(old_ctype);
++    }
 +#endif
-+
-     if (av)
- 	free((void *)av);
-     if ((rc || argvPtr == NULL) && argv) {
+     av = _free(av);
+     if (rc || argvPtr == NULL) {
+ 	if (argv != NULL)
