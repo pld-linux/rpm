@@ -1,8 +1,8 @@
 Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
-Version:	2.91
-Release:	1
+Version:	2.92
+Release:	11
 Group:		Base
 Group(pl):	Bazowe
 Copyright:	GPL
@@ -50,7 +50,7 @@ construir pacotes usando o RPM.
 #%patch0 -p1
 %patch1 -p1
 #%patch2 -p1
-%patch1 -p1
+#%patch3 -p1
 %patch4 -p1
 #%patch5 -p1
 install %{SOURCE13} macros.python.in
@@ -58,7 +58,8 @@ mv -f perl.prov perl.prov.in)
 autoconf
 CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
 ./configure \
-	--prefix=/usr
+	--prefix=/usr \
+	--disable-shared
 make
 	--with-python
 
@@ -69,24 +70,24 @@ install -d $RPM_BUILD_ROOT/var/lib/rpm \
 	$RPM_BUILD_ROOT/usr/src/rpm/RPMS/{$RPM_ARCH,noarch} \
 	$RPM_BUILD_ROOT/usr/man/ru/man8
 
-make installprefix="$RPM_BUILD_ROOT" install
+make DESTDIR="$RPM_BUILD_ROOT" install
 	pkgbindir="%{_bindir}"
 install rpm.8ru $RPM_BUILD_ROOT/usr/man/ru/man8/rpm.8
 install rpm2cpio.8ru $RPM_BUILD_ROOT/usr/man/ru/man8/rpm2cpio.8
 
 gzip -9fn $RPM_BUILD_ROOT/usr/man/{ru/man8/*,man8/*}
 
-gzip -9nf RPM-PGP-KEY CHANGES groups docs/*
+gzip -9nf RPM-PGP-KEY CHANGES docs/*
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+#rm -rf $RPM_BUILD_ROOT
 
 %post
 /bin/rpm --initdb
 
 %files
 
-%doc {RPM-PGP-KEY,CHANGES,groups}.gz docs/*
+%doc {RPM-PGP-KEY,CHANGES}.gz docs/*
 %postun -p /sbin/ldconfig
 
 %attr(755,root,root) /usr/bin/gendiff
@@ -104,13 +105,15 @@ rm -rf $RPM_BUILD_ROOT
 
 /usr/lib/rpm/rpm*
 
-%dir /usr/src/rpm/RPMS
-%attr(755,root,root,755) /usr/src/rpm/RPMS/*
+/usr/src/rpm
 
-%dir /usr/src/rpm/SRPMS
-%dir /usr/src/rpm/SPECS
-%dir /usr/src/rpm/BUILD
-%dir /usr/src/rpm/SOURCES
+#%dir /usr/src/rpm/RPMS
+#%attr(755,root,root,755) /usr/src/rpm/RPMS/*
+
+#%dir /usr/src/rpm/SRPMS
+#%dir /usr/src/rpm/SPECS
+#%dir /usr/src/rpm/BUILD
+#%dir /usr/src/rpm/SOURCES
 
 %lang(cs)    /usr/share/locale/cs/LC_MESSAGES/rpm.mo
 %lang(de)    /usr/share/locale/de/LC_MESSAGES/rpm.mo
@@ -118,17 +121,14 @@ rm -rf $RPM_BUILD_ROOT
 %lang(fr)    /usr/share/locale/fr/LC_MESSAGES/rpm.mo
 %lang(pt_BR) /usr/share/locale/pt_BR/LC_MESSAGES/rpm.mo
 %lang(ru)    /usr/share/locale/ru/LC_MESSAGES/rpm.mo
-%lang(sk)    /usr/share/locale/sk/LC_MESSAGES/rpm.mo
+#%lang(sk)    /usr/share/locale/sk/LC_MESSAGES/rpm.mo
 %lang(sv)    /usr/share/locale/sv/LC_MESSAGES/rpm.mo
 %lang(sr)    /usr/share/locale/sr/LC_MESSAGES/rpm.mo
 %lang(tr)    /usr/share/locale/tr/LC_MESSAGES/rpm.mo
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmt
-
-%dir /usr/include/rpm
-/usr/include/rpm/*
-
+/usr/include/rpm
 /usr/lib/lib*.a
 %files utils
 %files -n python-rpm
