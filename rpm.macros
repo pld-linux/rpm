@@ -32,6 +32,8 @@
  CFLAGS="${CFLAGS:-%rpmcflags}" ; export CFLAGS ; \
  CXXFLAGS="${CXXFLAGS:-%rpmcflags}" ; export CXXFLAGS ; \
  FFLAGS="${FFLAGS:-%rpmcflags}" ; export FFLAGS ; \
+ %{?__cc:CC=%{__cc} ; export CC ; } \
+ %{?__cxx:CXX=%{__cxx} ; export CXX ; } \
  ./configure \
 	--host=%{_target_platform} \
  	--prefix=%{_prefix} \
