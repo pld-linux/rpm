@@ -1,0 +1,41 @@
+--- rpm-4.3/rpmpopt.in.orig	2003-06-08 21:14:18.000000000 +0200
++++ rpm-4.3/rpmpopt.in	2003-06-08 21:40:01.000000000 +0200
+@@ -185,22 +185,22 @@
+ #rpm	exec --target		rpmb --target
+ #rpm	exec --short-circuit	rpmb --short-circuit
+ 
+-rpm	exec --initdb		rpmd --initdb
+-rpm	exec --rebuilddb	rpmd --rebuilddb
+-rpm	exec --verifydb		rpmd --verifydb
+-
+-rpm	exec --addsign		rpmk --addsign
+-rpm	exec -K			rpmk -K
+-rpm	exec --checksig		rpmk --checksig
+-rpm	exec --import		rpmk --import
+-rpm	exec --resign		rpmk --resign
+-
+-rpm	exec -q			rpmq -q
+-rpm	exec --query		rpmq --query
+-rpm	exec --querytags	rpmq --querytags
+-rpm	exec -V			rpmv -V
+-rpm	exec -y			rpmv -y
+-rpm	exec --verify		rpmv --verify
++#rpm	exec --initdb		rpmd --initdb
++#rpm	exec --rebuilddb	rpmd --rebuilddb
++#rpm	exec --verifydb		rpmd --verifydb
++
++#rpm	exec --addsign		rpmk --addsign
++#rpm	exec -K			rpmk -K
++#rpm	exec --checksig		rpmk --checksig
++#rpm	exec --import		rpmk --import
++#rpm	exec --resign		rpmk --resign
++
++#rpm	exec -q			rpmq -q
++#rpm	exec --query		rpmq --query
++#rpm	exec --querytags	rpmq --querytags
++#rpm	exec -V			rpmv -V
++#rpm	exec -y			rpmv -y
++#rpm	exec --verify		rpmv --verify
+ 
+ #rpm	exec -i			rpmi -i
+ #rpm	exec --install		rpmi --install

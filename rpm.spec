@@ -37,7 +37,6 @@ Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
 Source4:	%{name}-find-rpm-provides
-Source5:	%{name}-macros.perl
 Source8:	%{name}-find-spec-bcond
 Source9:	%{name}-find-lang
 Source10:	%{name}-find-provides
@@ -80,6 +79,8 @@ Patch36:	%{name}-system_libs_more.patch
 Patch37:	%{name}-python_2_3.patch
 Patch38:	%{name}-no-bin-env.patch
 Patch39:	%{name}-specflags.patch
+Patch40:	%{name}-magic-usesystem.patch
+Patch41:	%{name}-dontneedutils.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -290,6 +291,25 @@ Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
 %description utils -l pl
 Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami.
 
+%package utils-static
+Summary:	Static rpm utilities
+Summary(pl):	Statyczne narzêdzia rpm
+Group:		Applications/System
+Requires:	%{name} = %{version}
+
+%description utils-static
+Static rpm utilities for repairing system in case something with
+shared libraries used by rpm become broken. Currently it contains rpmi
+binary, which can be used to install/upgrade/remove packages without
+using shared libraries (well, in fact with exception of NSS modules).
+
+%description utils-static -l pl
+Statyczne narzêdzia rpm do naprawy systemu w przypadku zepsucia czego¶
+zwi±zanego z bibliotekami wspó³dzielonymi u¿ywanymi przez rpm-a.
+Aktualnie pakiet zawiera binarkê rpmi, któr± mo¿na u¿yæ do instalacji,
+uaktualniania lub usuwania pakietów bez udzia³u bibliotek statycznych
+(z wyj±tkiem modu³ów NSS).
+
 %package perlprov
 Summary:	Additional utilities for checking perl provides/requires in rpm packages
 Summary(de):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
@@ -475,8 +495,7 @@ construir pacotes usando o RPM.
 
 %prep
 %setup -q
-# need update
-#%%patch0 -p1
+%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 # find-spec-bcond need update
@@ -518,6 +537,8 @@ install %{SOURCE33} scripts/perl.prov
 cat %{SOURCE20} >> macros.in
 %patch34 -p1
 %patch39 -p1
+%patch40 -p1
+%patch41 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
@@ -587,8 +608,8 @@ install %{SOURCE10} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides
 install %{SOURCE11} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
 install %{SOURCE15} $RPM_BUILD_ROOT%{_libdir}/rpm/compress-doc
 install %{SOURCE16} $RPM_BUILD_ROOT%{_libdir}/rpm/check-files
-install scripts/find-php*	$RPM_BUILD_ROOT%{_libdir}/rpm/
-install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_libdir}/rpm/
+install scripts/find-php*	$RPM_BUILD_ROOT%{_libdir}/rpm
+install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_libdir}/rpm
 
 install %{SOURCE30} $RPM_BUILD_ROOT%{_bindir}/builder
 install %{SOURCE31} $RPM_BUILD_ROOT%{_bindir}/adapter.awk
@@ -680,7 +701,9 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_libdir}/rpm/cpanflute2
 #%attr(755,root,root) %{_libdir}/rpm/Specfile.pm
 %attr(755,root,root) %{_libdir}/rpm/http.req
-%attr(755,root,root) %{_libdir}/rpm/magic.*
+#%attr(755,root,root) %{_libdir}/rpm/magic*
+%attr(755,root,root) %{_libdir}/rpm/magic.prov
+%attr(755,root,root) %{_libdir}/rpm/magic.req
 %attr(755,root,root) %{_libdir}/rpm/u_pkg.sh
 %attr(755,root,root) %{_libdir}/rpm/vpkg-provides.sh
 %attr(755,root,root) %{_libdir}/rpm/vpkg-provides2.sh
@@ -710,7 +733,7 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/gendiff
 %attr(755,root,root) %{_bindir}/rpmbuild
 
-%{_mandir}/man1/*
+%{_mandir}/man1/gendiff.1*
 %{_mandir}/man8/rpmbuild.8*
 
 %files devel
@@ -738,15 +761,13 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_bindir}/unstripfile
 %attr(755,root,root) %{_libdir}/rpm/find-debuginfo.sh
 %attr(755,root,root) %{_libdir}/rpm/rpm2cpio.sh
-%attr(755,root,root) %{_libdir}/rpm/rpmd
+#%attr(755,root,root) %{_libdir}/rpm/rpmd
 %attr(755,root,root) %{_libdir}/rpm/rpmdiff*
-%attr(755,root,root) %{_libdir}/rpm/rpmi
-%attr(755,root,root) %{_libdir}/rpm/rpmk
-%attr(755,root,root) %{_libdir}/rpm/rpmq
-%attr(755,root,root) %{_libdir}/rpm/rpmv
+#%attr(755,root,root) %{_libdir}/rpm/rpmk
+#%attr(755,root,root) %{_libdir}/rpm/rpmq
+#%attr(755,root,root) %{_libdir}/rpm/rpmv
 %attr(755,root,root) %{_libdir}/rpm/tgpg
 %attr(755,root,root) %{_libdir}/rpm/rpmdb_loadcvt
-%{_libdir}/rpm/magic
 
 # not here
 #%%{_libdir}/rpm/rpm.daily
@@ -761,6 +782,10 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %{_mandir}/man8/rpmdeps.8*
 %{_mandir}/man8/rpmcache.8*
 %{_mandir}/man8/rpmgraph.8*
+
+%files utils-static
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/rpm/rpmi
 
 %files perlprov
 %defattr(644,root,root,755)
