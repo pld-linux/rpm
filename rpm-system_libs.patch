@@ -5,7 +5,7 @@
  dnl export LIBS INCPATH CONFIG_SITE
  
 -AC_CONFIG_SUBDIRS(popt beecrypt zlib libelf db3)
-+AC_CONFIG_SUBDIRS(popt beecrypt db3)
++AC_CONFIG_SUBDIRS(beecrypt)
  
  AC_CONFIG_FILES([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec m4/Makefile 
  	macros.perl scripts/perl.req scripts/perl.prov
@@ -16,7 +16,101 @@
  	rpm.magic rpmpopt-$(VERSION) rpmqv.c rpm.c
  
 -SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ libelf @WITH_DB_SUBDIR@ popt beecrypt rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
-+SUBDIRS = intl po @WITH_DB_SUBDIR@ popt beecrypt rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
++SUBDIRS = intl po beecrypt rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
  
  INCLUDES = \
  	-I$(top_srcdir)/build \
+@@ -35,7 +35,7 @@
+ 	$(top_builddir)/lib/librpm.la \
+ 	$(top_builddir)/rpmdb/librpmdb.la \
+ 	$(top_builddir)/rpmio/librpmio.la \
+-	$(top_builddir)/popt/libpopt.la \
++	-lpopt \
+ 	@WITH_LIBELF_LIB@ \
+ 	@WITH_ZLIB_LIB@ \
+ 	@INTLLIBS@ \
+@@ -111,7 +111,6 @@
+ 	    -load lib/rpmlib.lcd \
+ 	    -load rpmdb/rpmdb.lcd \
+ 	    -load rpmio/rpmio.lcd \
+-	    -load popt/popt.lcd \
+ 		$(DEFS) $(INCLUDES) rpmqv.c $(rpmb_SOURCES)
+ 
+ .PHONY:	lclint
+@@ -121,8 +120,7 @@
+ 		`make -s sources -C lib` \
+ 		`make -s sources -C rpmdb` \
+ 		`make -s sources -C rpmio` \
+-		`make -s sources -C beecrypt` \
+-		`make -s sources -C popt`
++		`make -s sources -C beecrypt`
+ 
+ CVSTAG = r$(subst .,-,$(VERSION))
+ 
+--- rpm-4.1/python/Makefile.am~	Fri Oct 18 08:38:02 2002
++++ rpm-4.1/python/Makefile.am	Fri Oct 18 08:55:34 2002
+@@ -25,7 +23,7 @@
+ 	$(top_builddir)/lib/.libs/librpm.so \
+ 	$(top_builddir)/rpmdb/.libs/librpmdb.so \
+ 	$(top_builddir)/rpmio/.libs/librpmio.so \
+-	$(top_builddir)/popt/.libs/libpopt.so
++	-lpopt
+ 
+ LDADD =
+ 
+--- rpm-4.1/rpmio/Makefile.am~	Fri Oct 18 08:38:02 2002
++++ rpm-4.1/rpmio/Makefile.am	Fri Oct 18 10:43:29 2002
+@@ -67,34 +67,34 @@
+ 	lclint $(DEFS) $(INCLUDES) $(librpmio_la_SOURCES)
+ 
+ tdigest_SOURCES = tdigest.c
+-tdigest_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++tdigest_LDADD = librpmio.la -lpopt
+ 
+ tdir_SOURCES = tdir.c
+ tdir_LDFLAGS = -all-static
+-tdir_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++tdir_LDADD = librpmio.la -lpopt
+ 
+ tfts_SOURCES = tfts.c
+ tfts_LDFLAGS = -all-static
+-tfts_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++tfts_LDADD = librpmio.la -lpopt
+ 
+ tglob_SOURCES = tglob.c
+ tglob_LDFLAGS = -all-static
+-tglob_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++tglob_LDADD = librpmio.la -lpopt
+ 
+ tinv_SOURCES = tinv.c
+ tinv_LDFLAGS = -all-static
+-tinv_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++tinv_LDADD = librpmio.la -lpopt
+ 
+ tkey_SOURCES = tkey.c
+ tkey_LDFLAGS = -all-static
+-tkey_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++tkey_LDADD = librpmio.la -lpopt
+ 
+ tring_SOURCES = tring.c
+ tring_LDFLAGS = -all-static
+-tring_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++tring_LDADD = librpmio.la -lpopt
+ 
+ trpmio_SOURCES = trpmio.c
+-trpmio_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++trpmio_LDADD = librpmio.la -lpopt
+ 
+ dumpasn1_SOURCES = dumpasn1.c
+ 
+--- rpm-4.1/tools/Makefile.am~	Thu Aug 22 19:42:37 2002
++++ rpm-4.1/tools/Makefile.am	Fri Oct 18 11:12:37 2002
+@@ -23,7 +23,7 @@
+ 	$(top_builddir)/lib/librpm.la \
+ 	$(top_builddir)/rpmdb/librpmdb.la \
+ 	$(top_builddir)/rpmio/librpmio.la \
+-	$(top_builddir)/popt/libpopt.la \
++	-lpopt \
+ 	@WITH_LIBELF_LIB@ \
+ 	@INTLLIBS@
+ 
