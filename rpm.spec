@@ -18,7 +18,7 @@
 %define	reqdb_ver	4.1.25-1
 %define	reqpopt_ver	1.9
 %define	beecrypt_ver	3.0.0-0.20030610.1
-%define rpm_macros_rev	1.127
+%define rpm_macros_rev	1.129
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -29,8 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-%define	rel	0.%{snap}.23
-Release:	%{rel}
+Release:	0.%{snap}.24
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -196,7 +195,7 @@ Summary(pt_BR):	Arquivos de inclusЦo e bibliotecas para programas de manipulaГЦo
 Summary(ru):	Хедеры и библиотеки для программ, работающих с rpm-пакетами
 Summary(uk):	Хедери та б╕бл╕отеки для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
-Requires:	%{name}-lib = %{version}
+Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
 Requires:	db-devel
@@ -257,7 +256,7 @@ Summary(pt_BR):	Bibliotecas estАticas para o desenvolvimento de aplicaГУes RPM
 Summary(ru):	Статическая библиотека для программ, работающих с rpm-пакетами
 Summary(uk):	Статична б╕бл╕отека для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
 Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
 Requires:	db-static
@@ -292,7 +291,7 @@ Summary:	Additional utilities for managing rpm packages and database
 Summary(de):	Zusatzwerkzeuge fЭr Verwaltung RPM-Pakete und Datenbanken
 Summary(pl):	Dodatkowe narzЙdzia do zarz╠dzania baz╠ RPM-a i pakietami
 Group:		Applications/File
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
 
 %description utils
@@ -309,8 +308,7 @@ Summary:	Additional utilities for managing rpm packages and database
 Summary(de):	Zusatzwerkzeuge fЭr Verwaltung RPM-Pakete und Datenbanken
 Summary(pl):	Dodatkowe narzЙdzia do zarz╠dzania baz╠ RPM-a i pakietami
 Group:		Applications/File
-Requires:	%{name} = %{version}
-Requires:	%{name}-utils = %{version}
+Requires:	%{name}-utils = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
 
 %description utils-perl
@@ -326,7 +324,7 @@ Dodatkowe narzЙdzia do zarz╠dzania baz╠ RPM-a i pakietami.
 Summary:	Static rpm utilities
 Summary(pl):	Statyczne narzЙdzia rpm
 Group:		Applications/System
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description utils-static
 Static rpm utilities for repairing system in case something with
@@ -346,7 +344,7 @@ Summary:	Additional utilities for checking perl provides/requires in rpm package
 Summary(de):	Zusatzwerkzeuge fЭrs Nachsehen Perl-AbhДngigkeiten in RPM-Paketen
 Summary(pl):	Dodatkowe narzЙdzia do sprawdzenia zale©no╤ci skryptСw perla w pakietach rpm
 Group:		Applications/File
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Requires:	perl-devel
 Requires:	perl-modules
 
@@ -365,7 +363,7 @@ pakietach rpm.
 Summary:	Python macros, which simplifies creation of rpm packages with Python software
 Summary(pl):	Makra uЁatwiaj╠ce tworzenie pakietСw rpm z programami napisanymi w Pythonie
 Group:		Applications/File
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Requires:	python-modules
 
 %description pythonprov
@@ -380,7 +378,7 @@ Pythonie.
 Summary:	Additional utilities for managing rpm packages and database
 Summary(pl):	Dodatkowe narzЙdzia do sprawdzania zale©no╤ci skryptСw php w rpm
 Group:		Applications/File
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description php-pearprov
 Additional utilities for checking php pear provides/requires in rpm
@@ -395,7 +393,7 @@ Summary:	Python interface to RPM library
 Summary(pl):	Pythonowy interfejs do biblioteki RPM-a
 Summary(pt_BR):	MСdulo Python para aplicativos que manipulam pacotes RPM
 Group:		Development/Languages/Python
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 %pyrequires_eq	python
 Obsoletes:	rpm-python
 
@@ -444,8 +442,7 @@ Summary(ru):	Скрипты и утилиты, необходимые для сборки пакетов
 Summary(uk):	Скрипти та утил╕ти, необх╕дн╕ для побудови пакет╕в
 Group:		Applications/File
 Requires(pre):	findutils
-Requires:	%{name} = %{version}
-Requires:	%{name}-utils = %{version}
+Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
 Requires:	binutils
@@ -499,7 +496,7 @@ Summary(pt_BR):	Scripts e programas executАveis usados para construir pacotes
 Summary(ru):	Скрипты и утилиты, необходимые для сборки пакетов
 Summary(uk):	Скрипти та утил╕ти, необх╕дн╕ для побудови пакет╕в
 Group:		Applications/File
-Requires:	%{name}-build = %{version}
+Requires:	%{name}-build = %{version}-%{release}
 # these are optional
 #Requires:	cvs
 #Requires:	wget
