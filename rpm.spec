@@ -35,7 +35,7 @@ License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
 Source0:	ftp://distfiles.pld-linux.org/src/%{name}-%{version}.%{snap}.tar.bz2
-# Source0-md5:	c1bc4a2ae441fbd4da8dd90149bab2f2
+# Source0-md5:	a91b8e17f6e69208b188d2876e80aef9
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
