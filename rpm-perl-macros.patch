@@ -83,17 +83,12 @@
 +$requires_mod"|  sort -u
 --- rpm-3.0.3.perl/scripts/perl.prov	Sat Jun  5 22:52:31 1999
 +++ rpm-3.0.3/scripts/perl.prov	Fri Oct 22 14:34:50 1999
-@@ -27,15 +27,16 @@
- 
- 
- foreach $module (sort keys %require) {
-+  ($mod = $module) =~ s/::/-/g;
+@@ -30,12 +30,12 @@
    if (length($require{$module}) == 0) {
--    print "perl($module)\n";
-+    print "perl($mod)\n";
+    print "perl($module)\n";
    } else {
 -    print "perl($module)=$require{$module}\n";
-+    print "perl($mod) = $require{$module}\n";
++    print "perl($module) = $require{$module}\n";
  
      # we need to print it without the version number until the
      # requires syntax accepts version numbers correctly.
@@ -105,11 +100,10 @@
  
 --- rpm-3.0.3.perl/scripts/perl.req	Sat Jun  5 22:52:31 1999
 +++ rpm-3.0.3/scripts/perl.req	Fri Oct 22 12:21:33 1999
-@@ -26,16 +26,21 @@
+@@ -26,16 +26,20 @@
  
  
  foreach $module (sort keys %require) {
-+  $module =~ s/::/-/g;
    if (length($require{$module}) == 0) {
 -    print "perl($module)\n";
 +    if ($module =~ /^[0-9._]+$/) {
