@@ -72,6 +72,6 @@
 +msgid "find all --with/--without values"
 +msgstr "znajd¼ wszystkie warto¶ci --with/--without"
 +
- #: ../rpmpopt:186 ../rpmpopt:201 ../rpmpopt:216 ../rpmpopt:224 ../rpmpopt:232
- #: ../rpmpopt:240 ../rpmpopt:248 ../rpmpopt:256 ../rpmpopt:264 ../rpmpopt:337
- #: ../rpmpopt:409 ../rpmpopt:417
+ #: ../rpmpopt:216 ../rpmpopt:231 ../rpmpopt:246 ../rpmpopt:254
+ #: ../rpmpopt:262 ../rpmpopt:270 ../rpmpopt:278 ../rpmpopt:286
+ #: ../rpmpopt:294 ../rpmpopt:389 ../rpmpopt:483 ../rpmpopt:491
