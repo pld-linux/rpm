@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.1
-Release:	3
+Release:	4
 Group:		Base
 Group(pl):	Bazowe
 Copyright:	GPL
@@ -84,7 +84,8 @@ make
 
 %{__make} %{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
 install -d $RPM_BUILD_ROOT/var/lib/rpm \
-	$RPM_BUILD_ROOT/usr/man/{ru,pl}/man8
+	$RPM_BUILD_ROOT/usr/man/{ru,pl}/man8 \
+	$RPM_BUILD_ROOT/etc/skel/C/rpm/{SRPMS,RPMS,SOURCES,SPECS,BUILD}
 
 make DESTDIR="$RPM_BUILD_ROOT" install
 
@@ -143,6 +144,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/rpm/rpm*
 /usr/lib/rpm/macros*
 
+/etc/skel/C/rpm
 %attr(755,root,root) %{_libdir}/rpm/rpmb
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmt
@@ -150,6 +152,14 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/librpm*.a
 %files utils
 %files -n python-rpm
+* Fri Apr 30 1999 Artur Frysiak <wiget@pld.org.pl>
+  [3.0.1-4]
+- added 4 macros:
+-- %GNUconfigure and %GNUconfigureS to complete remake autoconf/automake stuff
+-- %configure and %configureS to corect run ./configure
+-- *S add "-s" to LDFLAGS
+- added user skelet dirs (for adduser)
+
 * Mon Apr 19 1999 Artur Frysiak <wiget@pld.org.pl>
   [3.0-7]
 - upgraded to 3.0
