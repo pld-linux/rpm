@@ -122,6 +122,9 @@ Group(pl):	Narzêdzia/Pliki
 Summary(pt_BR):	Scripts e programas executáveis usados para construir pacotes
 Group:		Applications/File
 Requires:	sh-utils
+%ifarch alpha
+Requires:	binutils
+%endif
 Requires:	tar
 Requires:	textutils
 
