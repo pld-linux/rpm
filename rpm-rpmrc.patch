@@ -1,5 +1,5 @@
---- rpmrc.in~	Sat Jul  3 16:52:06 1999
-+++ rpmrc.in	Sat Jul 10 00:08:09 1999
+--- rpm-3.0.4/rpmrc.in.wiget	Wed Mar  1 00:22:44 2000
++++ rpm-3.0.4/rpmrc.in	Wed Mar 22 16:53:54 2000
 @@ -4,10 +4,15 @@
  
  # Please send new entries to rpm-list@redhat.com
@@ -16,13 +16,11 @@
 +optflags: i686 -O2 -march=pentiumpro
  optflags: alpha -O2
  optflags: sparc -O2
- optflags: sparc64 -O2
-@@ -253,7 +258,7 @@
- #############################################################
- #macrofiles:	@RPMCONFIGDIR@/macros:@SYSCONFIGDIR@/macros:~/.rpmmacros
+ optflags: sparcv9 -O2 -mv8 -mtune=ultrasparc
+@@ -255,5 +260,5 @@
+ buildarch_compat: milan: m68kmint noarch
+ buildarch_compat: hades: m68kmint noarch
  
--macrofiles:	@RPMCONFIGDIR@/macros:@RPMCONFIGDIR@/%{_target}/macros:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/.rpmmacros
-+macrofiles:	@RPMCONFIGDIR@/macros:@RPMCONFIGDIR@/%{_target}/macros:@RPMCONFIGDIR@/macros.pld:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/.rpmmacros
- 
- #include: @RPMCONFIGDIR@/%{_target}/rpmrc
+-macrofiles:	@RPMCONFIGDIR@/macros:@RPMCONFIGDIR@/%{_target}/macros:@SYSCONFIGDIR@/macros.specspo:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/.rpmmacros
++macrofiles:	@RPMCONFIGDIR@/macros:@RPMCONFIGDIR@/macros.pld:@RPMCONFIGDIR@/%{_target}/macros:@SYSCONFIGDIR@/macros.specspo:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/.rpmmacros
  

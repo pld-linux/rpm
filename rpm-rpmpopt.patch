@@ -1,8 +1,10 @@
---- rpm-3.0.3/rpmpopt.wiget	Fri Sep 24 03:50:04 1999
-+++ rpm-3.0.3/rpmpopt	Tue Oct 19 16:56:16 1999
-@@ -72,3 +72,5 @@
+--- rpm-3.0.4/rpmpopt.in.wiget	Wed Feb 23 23:40:53 2000
++++ rpm-3.0.4/rpmpopt.in	Wed Mar 22 17:39:52 2000
+@@ -81,3 +81,6 @@
  
- rpm alias --redhatprovides -q --define '_dbpath /usr/lib/rpmdb/%{_arch}-%{_vendor}-%{_os}/redhat' --whatprovides
- rpm alias --redhatrequires -q --define '_dbpath /usr/lib/rpmdb/%{_arch}-%{_vendor}-%{_os}/redhat' --whatrequires
+ # Build policies enabled from command line. Last policy applies.
+ rpm alias --buildpolicy --define '__spec_install_post @RPMCONFIGDIR@/brp-!#:+'
 +
++# Make RPM build tree
 +rpm exec --install-build-tree install-build-tree
+\ No newline at end of file

@@ -75,13 +75,15 @@ done \
 	--sharedstatedir=%{_sharedstatedir} \
 	--mandir=%{_mandir} \
 	--infodir=%{_infodir} }
-#------------------------------------------------------------------------  
-# usage 
-# (in %install)
-# %find_lang %{name}
-#
-# %file -f %{name}.lang
-#
 
-%find_lang	@RPMCONFIGDIR@/find-lang.sh %{buildroot}
+# Location of autoconf macros
+%_aclocaldir	%(aclocal --print-ac-dir)
 
+# Fixed location of top applink dir
+%_applnkdir      /usr/X11R6/share/applnk
+
+# Current date
+%date 		%(LC_ALL="C" date +"%a %b %d %Y")
+
+# tmp directory
+%tmpdir		%(echo "${TMPDIR:-/tmp}")

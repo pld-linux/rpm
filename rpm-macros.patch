@@ -1,39 +1,40 @@
---- rpm-3.0.3/configure.in.wiget	Thu Sep 30 23:25:29 1999
-+++ rpm-3.0.3/configure.in	Fri Oct 29 11:43:58 1999
-@@ -903,7 +903,7 @@
- export LIBS INCPATH CONFIG_SITE
+--- rpm-3.0.4/configure.in.wiget	Wed Mar 15 13:29:09 2000
++++ rpm-3.0.4/configure.in	Wed Mar 22 17:30:33 2000
+@@ -932,7 +932,7 @@
+ dnl export LIBS INCPATH CONFIG_SITE
  
  AC_CONFIG_SUBDIRS(popt)
--AC_OUTPUT([Makefile rpmrc macros lib/Makefile
-+AC_OUTPUT([Makefile rpmrc macros macros.pld lib/Makefile
- 	build/Makefile tools/Makefile scripts/Makefile
+-AC_OUTPUT([Doxyfile Makefile rpmrc macros platform rpmpopt scripts/brp-redhat
++AC_OUTPUT([Doxyfile Makefile rpmrc macros macros.pld platform rpmpopt scripts/brp-redhat
+ 	lib/Makefile build/Makefile tools/Makefile scripts/Makefile
  	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
  	misc/Makefile po/Makefile.in intl/Makefile
---- rpm-3.0.3/macros.in.wiget	Thu Sep 30 01:29:57 1999
-+++ rpm-3.0.3/macros.in	Fri Oct 29 11:50:10 1999
-@@ -60,8 +60,8 @@
+--- rpm-3.0.4/macros.in.wiget	Thu Mar  9 19:13:03 2000
++++ rpm-3.0.4/macros.in	Wed Mar 22 17:33:43 2000
+@@ -80,9 +80,9 @@
  %_builddir		%{_topdir}/BUILD
  %_buildshell		/bin/sh
  %_bzip2bin		@BZIP2BIN@
 -%_dbpath		%{_var}/lib/rpm
--%_defaultdocdir		%{_usr}/doc
 +%_dbpath		%{_var}/state/rpm
+ %_rebuilddbpath		%{_dbpath}
+-%_defaultdocdir		%{_usr}/doc
 +%_defaultdocdir		%{_usr}/share/doc
  #
  %__find_provides	@FINDPROVIDES@
  %__find_requires	@FINDREQUIRES@
-@@ -70,8 +70,8 @@
- #%__find_obsoletes	???
- #
- # XXX fixowner, fixgroup, and fixperms are run at the end of hardcoded setup
--%_fixowner		[ `%{__id} -u` = '0' ] && %{__chown} -Rhf root
--%_fixgroup		[ `%{__id} -u` = '0' ] && %{__chgrp} -Rhf @ROOT_GROUP@
-+%_fixowner		[ `%{__id} -u` = '0' ] && %{__chown} -Rhf root.@ROOT_GROUP@
-+#%_fixgroup		[ `%{__id} -u` = '0' ] && %{__chgrp} -Rhf @ROOT_GROUP@
+@@ -94,8 +94,8 @@
+ %__id_u			@__ID_U@
+ %__chown_Rhf		@__CHOWN_RHF@
+ %__chgrp_Rhf		@__CHGRP_RHF@
+-%_fixowner		[ `%{__id_u}` = '0' ] && %{__chown_Rhf} root
+-%_fixgroup		[ `%{__id_u}` = '0' ] && %{__chgrp_Rhf} @ROOT_GROUP@
++%_fixowner		[ `%{__id_u}` = '0' ] && %{__chown_Rhf} root.@ROOT_GROUP@
++#%_fixgroup		[ `%{__id_u}` = '0' ] && %{__chgrp_Rhf} @ROOT_GROUP@
  %_fixperms		%{__chmod} -Rf @FIXPERMS@
  #
  %_gzipbin		@GZIPBIN@
-@@ -80,13 +80,13 @@
+@@ -104,13 +104,13 @@
  %_rpmdir		%{_topdir}/RPMS
  #
  # XXX Note escaped %% for use in headerSprintf
@@ -46,10 +47,10 @@
  %_tmppath		%{_var}/tmp
 -%_topdir		%{_usrsrc}/redhat
 +%_topdir		%(echo $HOME)/rpm
- #
+ 
  #==============================================================================
  # ---- Optional rpmrc macros.
-@@ -160,14 +160,14 @@
+@@ -384,14 +384,14 @@
  %_sbindir		%{_exec_prefix}/sbin
  %_libexecdir		%{_exec_prefix}/libexec
  %_datadir		%{_prefix}/share
