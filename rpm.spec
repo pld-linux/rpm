@@ -57,6 +57,7 @@ BuildRequires:	zlib-devel >= 1.1.4
 BuildRequires:	db3-static >= 3.1.17-9
 BuildRequires:	bzip2-static >= 1.0.1
 BuildRequires:	zlib-static
+BuildRequires:	glibc-static >= 2.2.0
 %endif
 BuildRequires:	zlib-static >= 1.1.4
 Obsoletes:	rpm-libs
