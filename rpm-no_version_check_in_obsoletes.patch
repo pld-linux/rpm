@@ -1,0 +1,12 @@
+--- rpm-4.3/lib/depends.c~	2004-08-14 04:35:39.000000000 +0200
++++ rpm-4.3/lib/depends.c	2004-08-14 04:35:39.000000000 +0200
+@@ -309,8 +309,7 @@
+ 	     */
+ 	    if (rpmdsEVR(obsoletes) == NULL
+ 	     || rpmdsAnyMatchesDep(oh, obsoletes, _rpmds_nopromote))
+-		if (rpmVersionCompare(h, oh))
+-		    xx = removePackage(ts, oh, rpmdbGetIteratorOffset(mi), pkgKey);
++		xx = removePackage(ts, oh, rpmdbGetIteratorOffset(mi), pkgKey);
+ 	}
+ 	mi = rpmdbFreeIterator(mi);
+     }
