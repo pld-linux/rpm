@@ -18,7 +18,7 @@
 %define	reqdb_ver	4.1.25-1
 %define	reqpopt_ver	1.9
 %define	beecrypt_ver	3.0.0-0.20030610.1
-%define rpm_macros_rev	1.125
+%define rpm_macros_rev	1.127
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -320,7 +320,6 @@ Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
 
 %description utils-perl -l pl
 Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami.
-
 
 %package utils-static
 Summary:	Static rpm utilities
