@@ -165,8 +165,8 @@ diff -uNr rpm-4.3.orig/rpmrc.in rpm-4.3/rpmrc.in
  buildarchtranslate: osfmach3_i386: i386
  
  buildarchtranslate: athlon: athlon
-+buildarchtranslate: pentium4: pentium4
-+buildarchtranslate: pentium3: pentium3
++buildarchtranslate: pentium4: i686
++buildarchtranslate: pentium3: i686
  buildarchtranslate: i686: i686
  buildarchtranslate: i586: i586
  buildarchtranslate: i486: i486
