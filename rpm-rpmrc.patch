@@ -1,0 +1,25 @@
+diff -Nur rpm-2.5.6/lib-rpmrc.in rpm-2.5.6.pld/lib-rpmrc.in
+--- rpm-2.5.6/lib-rpmrc.in	Fri Feb  5 09:59:38 1999
++++ rpm-2.5.6.pld/lib-rpmrc.in	Fri Feb  5 09:57:57 1999
+@@ -12,17 +12,20 @@
+ bzip2bin:	@BZIP2BIN@
+ defaultdocdir:  @prefix@/doc
+ fixperms:	@FIXPERMS@
++Vendor:		PLD
+ rpmfilename:    %{ARCH}/%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}.rpm
+ instchangelog:	5
+ 
+ #############################################################
+ 
+ # Please send new entries to rpm-list@redhat.com
++ 
++# Plesae send new entries to pld-list@mailbox.tuniv.szczecin.pl
+ 
+ #############################################################
+ # Values for RPM_OPT_FLAGS for various platforms
+ 
+-optflags: i386 -O2 -m486 -fno-strength-reduce
++optflags: i386 -O6 -mpentium -fomit-frame-pointer
+ optflags: alpha -O2
+ optflags: sparc -O2
+ optflags: sparc64 -O2
