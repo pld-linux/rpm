@@ -3,6 +3,8 @@
 # - use system libmagic not internal libfmagic
 # - when really needed: _noauto{req,prov} for non-helper-generated deps
 #
+# - fix lseek (readelf?) failures on amd64 ASAP!!!
+#
 # Conditional build:
 %bcond_with	static	# build static rpmi (not supported at the moment)
 %bcond_without	doc	# don't generate documentation with doxygen
@@ -691,6 +693,11 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 #
 #%%_install_langs pl_PL:en_US
 %%distribution PLD
+#
+# remove or replace with file_contexts path if you want to use custom
+# SELinux file contexts policy instead of one stored in packages payload
+%_install_file_context_path	%{nil}
+%_verify_file_context_path	%{nil}
 EOF
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF
