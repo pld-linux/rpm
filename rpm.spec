@@ -130,6 +130,7 @@ BuildRequires:	elfutils-static
 BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
 %endif
+Requires:	kernel-headers
 Requires:	popt >= %{reqpopt_ver}
 Requires:	%{name}-lib = %{version}-%{release}
 %{!?with_static:Obsoletes:	rpm-utils-static}
