@@ -2,9 +2,26 @@ Applications
 	[de]:	Applikationen
 	[pl]:	Aplikacje
 
+Applications/Archiving
+	[de]:	Applikationen/Archivierung
+	[pl]:	Aplikacje/Archiwizacja
+
+Aplikacje/Console
+	[de]:	Applikationen/Konsole
+	[pl]:	Aplikacje/Konsola
+
 Applications/Communications
 	[de]:	Applikationen/Kommunikation
 	[pl]:	Aplikacje/Komunikacja
+
+Applications/Databases
+	[pl]:	Aplikacje/Bazy danych
+
+Applications/Databases/Interfaces
+	[pl]:	Aplikacje/Bazy danych/Interfejsy
+
+Applications/Dictionaries
+	[pl]:	Aplikacje/S³owniki
 
 Applications/Editors
 	[de]:	Applikationen/Editors
@@ -31,9 +48,9 @@ Applications/Engineering
 	[de]:	Applikationen/Ingenieurwesen
 	[pl]:	Aplikacje/In¿ynierskie
 
-Applications/Spreadsheets
-	[de]:	Applikationen/Arbeitsblätter
-	[pl]:	Aplikacje/Arkusze kalkulacyjne
+Aplikacje/File
+	[de]:	Applikationen/Datei
+	[pl]:	Aplikacje/Pliki
 
 Applications/Databases
 	[de]:	Applikationen/Dateibanken
@@ -64,6 +81,10 @@ Applications/News
 	[de]:	Applikationen/News
 	[pl]:	Aplikacje/News
 
+Aplikacje/Printing
+	[de]:	Applikationen/Drucken
+	[pl]:	Aplikacje/Drukowanie
+
 Applications/Publishing
 	[de]:	Applikationen/Publizieren
 	[pl]:	Aplikacje/Publikowanie
@@ -79,6 +100,23 @@ Applications/Publishing/SGML
 Applications/Publishing/XML
 	[de]:	Applikationen/Publizieren/XML
 	[pl]:	Aplikacje/Publikowanie/XML
+
+Applications/Spreadsheets
+	[de]:	Applikationen/Arbeitsblätter
+	[pl]:	Aplikacje/Arkusze kalkulacyjne
+
+Aplikacje/System
+	[de]:	Applikationen/System
+	[pl]:	Aplikacje/System
+
+Aplikacje/Terminal
+	[de]:	Applikationen/Terminal
+	[pl]:	Aplikacje/Terminal
+
+Aplikacje/Text
+	[de]:	Applikationen/Text
+	[fr]:	Utilitaires/Texte
+	[pl]:	Aplikacje/Tekst
 
 Applications/Sound
 	[de]:	Applikationen/Laut
@@ -155,39 +193,6 @@ Libraries
 	[fr]:	Librairies
 	[pl]:	Biblioteki
 
-Utilities
-	[de]:	Werkzeuge
-	[pl]:	Narzêdzia
-
-Utilities/Archiving
-	[de]:	Werkzeuge/Archivierung
-	[pl]:	Narzêdzia/Archiwizacja
-
-Utilities/Console
-	[de]:	Werkzeuge/Konsole
-	[pl]:	Narzêdzia/Konsola
-
-Utilities/File
-	[de]:	Werkzeuge/Datei
-	[pl]:	Narzêdzia/Pliki
-
-Utilities/Printing
-	[de]:	Werkzeuge/Drucken
-	[pl]:	Narzêdzia/Drukowanie
-
-Utilities/System
-	[de]:	Werkzeuge/System
-	[pl]:	Narzêdzia/System
-
-Utilities/Terminal
-	[de]:	Werkzeuge/Terminal
-	[pl]:	Narzêdzia/Terminal
-
-Utilities/Text
-	[de]:	Werkzeuge/Text
-	[fr]:	Utilitaires/Texte
-	[pl]:	Narzêdzia/Tekst
-
 X11
 	[de]:	X11
 	[pl]:	X11
@@ -211,7 +216,7 @@ X11/Applications/Networking
 X11/Applications/Editors
 	[de]:	X11/Applikationen/Editors
 	[pl]:	X11/Aplikacje/Edytory
-	[pt]	X11/Aplicações/Editores
+	[pt]:	X11/Aplicações/Editores
 
 X11/Development/Libraries
 	[de]:	X11/Entwicklung/Libraries
@@ -228,7 +233,7 @@ X11/GNOME
 X11/GNOME/Applications
 	[de]:	X11/GNOME/Applikationen
 	[pl]:	X11/GNOME/Aplikacje
-	
+
 X11/GNOME/Libraries
 	[de]:	X11/GNOME/Libraries
 	[pl]:	X11/GNOME/Biblioteki
@@ -265,7 +270,7 @@ X11/KDE/Games
 	[de]:	X11/KDE/Spiele
 	[pl]:	X11/KDE/Gry
 
-X11/KDE/Utilities
+X11/KDE/utilities
 	[de]:	X11/KDE/Werkzeuge
 	[pl]:	X11/KDE/Narzêdzia
 
@@ -300,8 +305,6 @@ X11/Libraries
 X11/Window Managers
 	[de]:	X11/Fenstermanager
 	[pl]:	X11/Zarz±dcy Okien
-	[es]:	X11/Administraadores De Ventanas
-	[fr]:	X11/Gestionnaires De Fenêtres
 
 X11/Window Managers/Tools
 	[de]:	X11/Fenstermanager/Werkzeuge
@@ -314,6 +317,9 @@ X11/XFree86
 X11/XFree86/Servers
 	[de]:	X11/XFree86/Server
 	[pl]:	X11/XFree86/Serwery
+
+Libraries
+	[pl]:	Biblioteki
 
 Networking
 	[de]:	Netzwerkwesen
@@ -342,6 +348,36 @@ Development
 Development/Debuggers
 	[de]:	Entwicklung/Debugger
 	[pl]:	Programowanie/Odpluskwiacze
+
+Development/Libraries
+	[pl]:	Programowanie/Biblioteki
+
+Development/Libraries/Libc
+	[pl]:	Programowanie/Biblioteki/Libc
+
+Development/Languages
+	[pl]:	Programowanie/Jêzyki
+
+Development/Languages/Fortran
+	[pl]:	Programowanie/Jêzyki/Fortran
+
+Development/Languages/Tcl
+	[pl]:	Programowanie/Jêzyki/Tcl
+
+Development/Languages/Perl
+	[pl]:	Programowanie/Jêzyki/Perl
+
+Development/Languages/Python
+	[pl]:	Programowanie/Jêzyki/Python
+
+Development/Building
+	[pl]:	Programowanie/Budowanie
+
+Development/Version Control
+	[pl]:	Programowanie/Zarz±dzanie wersjami
+
+Development/Tools
+	[pl]:	Programowanie/Narzêdzia
 
 Shells
 	[de]:	Shells
