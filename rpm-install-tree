@@ -1,0 +1,16 @@
+DUMB_SPEC_FILE=`mktemp -q ${TMPDIR:-/tmp}/bilder.XXXXXX || ( echo "mktemp falied." ; exit 1)`
+echo "\
+Summary:        -
+Name:           dumb
+Version:        dumb
+Release:        dumb
+Copyright:      dumb
+Group:          -
+%description
+
+%prep
+install -d %{_rpmdir}  %{_specdir} %{_sourcedir} %{_srcrpmdir}  %{_builddir}
+" > $DUMB_SPEC_FILE
+rpm -bp $DUMB_SPEC_FILE >/dev/null 2>&1 
+rm -f $DUMB_SPEC_FILE
+			    
