@@ -107,6 +107,8 @@ BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	elfutils-devel
 #BuildRequires:	libmagic-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
+# needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
+BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
