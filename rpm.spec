@@ -1,19 +1,26 @@
 Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
-Version:	2.5.6
-Release:	5
+Version:	3.0
+Release:	7
 Group:		Base
 Group(pl):	Bazowe
 Copyright:	GPL
-Source:		ftp://ftp.rpm.org/pub/rpm/dist/rpm-2.5.x/%{name}-%{version}.tar.gz
-Patch0:		rpm-config.patch
-Patch1:		rpm-rpmrc.patch
-Patch2:		rpm-glibc.patch
-Patch3:		rpm-groups.patch
-Patch4:		rpm-i18n.patch
-Patch5:		rpm-find-requires.patch
+Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-3.0.x/%{name}-%{version}.tar.gz
+Source1:	rpm.groups
+Source2:	rpm.8pl
+Source3:	rpm.macros
+Patch0:		rpm-rpmrc.patch
+Patch1:		rpm-i18n.patch
+Patch2:		rpm-find-requires.patch
+Patch3:		rpm-macros.patch
+Patch4:		rpm-po.patch
 Patch37:        %{name}-short_circuit.patch
+Patch38:        %{name}-section_test.patch
+#BuildPrereq:	bzip2-static
+#BuildPrereq:	gdbm-static
+#BuildPrereq:	zlib-static
+#BuildPrereq:	patch >= 2.2
 Requires:	glibc >= 2.1
 BuildRoot:	/tmp/%{name}-%{version}-root
 Obsoletes:	rpm-libs
@@ -47,46 +54,50 @@ Pliki nag³ówkowe i biblioteki statyczne.
 graficznych mened¿erów pakietów oraz innych narzêdzi, które wymagaj±
 construir pacotes usando o RPM.
 %setup  -q
-%patch0 -p1
+%patch0 -p1 
 %patch1 -p1
 %patch2 -p1
 %patch1 -p1
-%patch4 -p1
-%patch5 -p1
+%patch4 -p1 
 install %{SOURCE13} macros.python.in
 mv -f perl.prov perl.prov.in)
+( cd popt; autoconf )
+
 autoconf
 CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
 ./configure \
-	--prefix=/usr
+	--prefix=/usr \
+	--disable-shared
 make
 	--with-python
 
 
 %{__make} %{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
 install -d $RPM_BUILD_ROOT/var/lib/rpm \
-	$RPM_BUILD_ROOT/usr/src/rpm/{SOURCES,SPECS,SRPMS,BUILD} \
-	$RPM_BUILD_ROOT/usr/src/rpm/RPMS/{$RPM_ARCH,noarch} \
-	$RPM_BUILD_ROOT/usr/man/ru/man8
+	$RPM_BUILD_ROOT/usr/man/{ru,pl}/man8
 
-make installprefix="$RPM_BUILD_ROOT" install
+make DESTDIR="$RPM_BUILD_ROOT" install
+
+install %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/rpm/macros.pld
 	pkgbindir="%{_bindir}"
 install rpm.8ru $RPM_BUILD_ROOT/usr/man/ru/man8/rpm.8
 install rpm2cpio.8ru $RPM_BUILD_ROOT/usr/man/ru/man8/rpm2cpio.8
+install %{SOURCE2} $RPM_BUILD_ROOT/usr/man/pl/man8/rpm.8
 
-gzip -9fn $RPM_BUILD_ROOT/usr/man/{ru/man8/*,man8/*}
+install %{SOURCE1} docs/groups
 
-gzip -9nf RPM-PGP-KEY CHANGES groups docs/*
-
-%clean
-rm -rf $RPM_BUILD_ROOT
+gzip -9fn $RPM_BUILD_ROOT/usr/man/{{ru,pl}/man8/*,man8/*} \
+	RPM-PGP-KEY CHANGES docs/*
 
 %post
 /bin/rpm --initdb
 
+%clean
+rm -rf $RPM_BUILD_ROOT
+
 %files
 
-%doc {RPM-PGP-KEY,CHANGES,groups}.gz docs/*
+%doc RPM-PGP-KEY.gz CHANGES.gz docs/*
 %postun -p /sbin/ldconfig
 
 %attr(755,root,root) /usr/bin/gendiff
@@ -94,42 +105,37 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/rpmdb
 /usr/man/man8/*
 %lang(ru) /usr/man/ru/man8/*
-
-%attr(750,root,root) %dir /var/lib/rpm
-
-%dir /usr/lib/rpm
-%attr(755,root,root) /usr/lib/rpm/find-*
-%attr(755,root,root) /usr/lib/rpm/freshen.sh
-%attr(755,root,root) /usr/lib/rpm/mkinstalldirs
-
-/usr/lib/rpm/rpm*
-
-%dir /usr/src/rpm/RPMS
-%attr(755,root,root,755) /usr/src/rpm/RPMS/*
-
-%dir /usr/src/rpm/SRPMS
-%dir /usr/src/rpm/SPECS
-%dir /usr/src/rpm/BUILD
-%dir /usr/src/rpm/SOURCES
+%lang(pl) /usr/man/pl/man8/*
 
 %lang(cs)    /usr/share/locale/cs/LC_MESSAGES/rpm.mo
 %lang(de)    /usr/share/locale/de/LC_MESSAGES/rpm.mo
 %lang(fi)    /usr/share/locale/fi/LC_MESSAGES/rpm.mo
 %lang(fr)    /usr/share/locale/fr/LC_MESSAGES/rpm.mo
+%lang(pl)    /usr/share/locale/pl/LC_MESSAGES/rpm.mo
 %lang(pt_BR) /usr/share/locale/pt_BR/LC_MESSAGES/rpm.mo
 %lang(ru)    /usr/share/locale/ru/LC_MESSAGES/rpm.mo
 %lang(sk)    /usr/share/locale/sk/LC_MESSAGES/rpm.mo
-%lang(sv)    /usr/share/locale/sv/LC_MESSAGES/rpm.mo
 %lang(sr)    /usr/share/locale/sr/LC_MESSAGES/rpm.mo
+%lang(sv)    /usr/share/locale/sv/LC_MESSAGES/rpm.mo
 %lang(tr)    /usr/share/locale/tr/LC_MESSAGES/rpm.mo
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
+%attr(755,root,root) %dir /var/lib/rpm
+
+%dir /usr/lib/rpm
+%attr(755,root,root) /usr/lib/rpm/find-*
+%attr(755,root,root) /usr/lib/rpm/freshen.sh
+%attr(755,root,root) /usr/lib/rpm/mkinstalldirs
+%attr(755,root,root) /usr/lib/rpm/config.*
+%attr(755,root,root) /usr/lib/rpm/getpo.sh
+
+/usr/lib/rpm/rpm*
+/usr/lib/rpm/macros*
+
+%attr(755,root,root) %{_libdir}/rpm/rpmb
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmt
-
-%dir /usr/include/rpm
-/usr/include/rpm/*
-
-/usr/lib/lib*.a
+/usr/include/rpm
+/usr/lib/librpm*.a
 %files utils
 %files -n python-rpm
 * Wed Mar 10 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
@@ -173,6 +179,7 @@ rm -rf $RPM_BUILD_ROOT
 - added %attr and %defattr macros in %files (allow build package from
   non-root account),
 - build against GNU libc-2.1.
+
 Revision 1.79  2000/02/17 03:42:17  kloczek
 - release 25,
 - added "Conflicts: /usr/bin/id" and rebuilded in enviroment with id in
