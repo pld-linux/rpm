@@ -28,7 +28,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.8
+Release:	0.%{snap}.9
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -204,7 +204,7 @@ Group:		Development/Libraries
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
-Requires:	db-devel
+Requires:	db-devel >= %{reqdb_ver}
 Requires:	elfutils-devel
 Requires:	libselinux-devel
 Requires:	popt-devel >= %{reqpopt_ver}
@@ -266,7 +266,7 @@ Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
-Requires:	db-static
+Requires:	db-static >= %{reqdb_ver}
 Requires:	elfutils-static
 Requires:	popt-static >= %{reqpopt_ver}
 Requires:	zlib-static
