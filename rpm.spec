@@ -65,25 +65,11 @@ construir pacotes usando o RPM.
 %patch4 -p1 
 install %{SOURCE13} macros.python.in
 mv -f perl.prov perl.prov.in)
-( cd popt; 
-libtoolize --copy --force
-aclocal
-autoheader
-automake
-autoconf
-LDFLAGS="-s" CFLAGS="$RPM_OPT_FLAGS" \
-./configure \
-	--prefix=/usr
-)
+LDFLAGS="-s"; export LDFLAGS
 
-libtoolize --copy --force
-aclocal
-autoheader
-automake
-autoconf
-LDFLAGS="-s" CFLAGS="$RPM_OPT_FLAGS" \
-./configure \
-        --prefix=/usr \
+( cd popt; %GNUconfigure )
+%configure \
+%GNUconfigure \
 	--disable-shared
 make
 	--with-python
