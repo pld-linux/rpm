@@ -183,15 +183,13 @@ if [ -e /var/db/rpm ] && [ ! -L /var/db/rpm ]; then
 	exit 1
 fi
 
-%postin
+%post
 if [ -e /var/lib/rpm ] && [ -L /var/lib/rpm ]; then
 	rm -rf /var/lib/rpm
 fi
 if [ -e /var/db/rpm ] &&[ -L /var/db/rpm ]; then
 	rm -rf /var/db/rpm
 fi
-
-%post
 /bin/rpm --initdb
 
 %clean
