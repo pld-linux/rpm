@@ -40,7 +40,7 @@ Patch16:	%{name}-byKey.patch
 Patch17:	%{name}-perlprov.patch
 Patch18:	%{name}-noperldir.patch
 Patch19:	popt-cvs20010530.patch
-#Patch20:	%{name}-noexpand.patch
+Patch20:	%{name}-noexpand.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	gettext-devel >= 0.10.38-3
@@ -227,9 +227,10 @@ construir pacotes usando o RPM.
 %patch15 -p0
 %patch16 -p0
 %patch17 -p1
-#%patch20 -p1
+%patch18 -p1
 %patch31 -p1
 %patch36 -p1
+cp platform.in macros.pld.in
 %patch38 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
