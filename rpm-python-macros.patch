@@ -4,7 +4,7 @@
  AC_CONFIG_SUBDIRS(popt)
  AC_OUTPUT([Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec scripts/brp-redhat
   	macros.perl scripts/perl.req scripts/perl.prov
-+    macros.python
++	macros.python macros.php scripts/php.req scripts/php.prov
  	rpmio/Makefile lib/Makefile build/Makefile tools/Makefile
  	scripts/Makefile
  	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
