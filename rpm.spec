@@ -47,6 +47,7 @@ Patch21:	%{name}-pl.po.patch
 Patch22:	%{name}-drop-legacy-CLI.patch
 Patch23:	%{name}-perlprov-perl5.6.patch
 Patch24:	%{name}-ac25x.patch
+Patch25:	%{name}-gettext-in-header.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	autoconf >= 2.52
@@ -374,6 +375,7 @@ construir pacotes usando o RPM.
 %patch22 -p1 -b .wiget
 %patch23 -p1
 %patch24 -p1
+%patch25 -p1
 %patch31 -p1
 %patch36 -p1
 %patch37 -p1
