@@ -1,8 +1,0 @@
---- rpm-4.3/python/rpmdb/dbshelve.py~	Tue May  6 17:44:14 2003
-+++ rpm-4.3/python/rpmdb/dbshelve.py	Tue May 20 23:28:08 2003
-@@ -1,4 +1,4 @@
--#!/bin/env python
-+#!/usr/bin/python
- #------------------------------------------------------------------------
- #           Copyright (c) 1997-2001 by Total Control Software
- #                         All Rights Reserved
