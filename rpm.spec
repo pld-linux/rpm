@@ -696,7 +696,7 @@ mv -f macros.tmp macros.in
 	debugedit_LDADD="\$(WITH_LIBELF_LIB) -lpopt"
 
 #	%{!?with_static:rpm_LDFLAGS="\$(myLDFLAGS)"} \
-%{?with_docs:%{__make} doxygen}
+%{?with_apidocs:%{__make} doxygen}
 
 %install
 rm -rf $RPM_BUILD_ROOT
