@@ -96,7 +96,7 @@ sub process_file {
 	}
 
 	unless ( defined $package ) {
-		warn "$0: weird, cannot determine the package name for `$file'\n";.*
+		warn "$0: weird, cannot determine the package name for `$file'\n";
 		return 0;
 	}
 
