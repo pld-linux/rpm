@@ -402,7 +402,7 @@ cd ..
 
 rm -f missing
 libtoolize --force --copy
-gettextize --copy --force
+%{__gettextize}
 aclocal
 autoupdate
 autoheader || :
