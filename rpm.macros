@@ -87,3 +87,15 @@ done \
 
 # tmp directory
 %tmpdir		%(echo "${TMPDIR:-/tmp}")
+
+# Example files, programs, scripts...
+%_examplesdir	/usr/src/examples
+
+# Find-requires and directories excluded from auto-req
+%_noautoreqdir		%{_defaultdocdir} %{_examplesdir}
+%_noautoreqdep		%{nil}
+%__find_requires_pre	/usr/lib/rpm/find-requires-pre %{_noautoreqdir}
+%__find_requires_core	/usr/lib/rpm/find-requires
+%__find_requires_post	/usr/lib/rpm/find-requires-post
+%__find_requires	%{__find_requires_pre} | %{__find_requires_core} | %{__find_requires_post}
+
