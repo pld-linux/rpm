@@ -166,7 +166,7 @@
        next;
      }
  
-@@ -108,13 +118,38 @@
+@@ -108,13 +118,40 @@
        # will be included with the name sys/systeminfo.ph so only use the
        # basename of *.ph files
  
@@ -189,6 +189,8 @@
 +      # if the module ends with .pm strip it to leave only basename.
 +
 +      $module =~ s/\.pm$//;
++
++      $module =~ s/\//::/;
 +
 +      # trim off trailing parenthesis if any.  Sometimes people pass
 +      # the module an empty list.
