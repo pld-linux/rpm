@@ -1,7 +1,5 @@
 #
 # TODO:
-# - update patches
-# - build popt from rpm.spec? (no separate popt-1.10.x tarballs available)
 # - consider using system libmagic not internal libfmagic
 #   (but internal has different method of passing output)
 # - after ac drop amd64 patch and make x86_64 generic arch + subarchs amd64 and ia32e
