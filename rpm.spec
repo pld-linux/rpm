@@ -574,7 +574,7 @@ cat %{SOURCE14} >> macros.in
 %patch25 -p1
 %patch26 -p1
 %patch27 -p1
-%patch38 -p1
+%patch28 -p1
 %patch29 -p1
 %patch30 -p1
 %patch31 -p1
