@@ -6,8 +6,9 @@ diff -Nru rpm-4.0.1/rpmrc.in rpm-4.0.1.new/rpmrc.in
  
  # XXX this is the i386 optflags that rpm has traditionally used in the past.
 -#optflags: i386 -O2 -m486 -fno-strength-reduce
-+#optflags: i386 -O2 -march=i386
- optflags: i386 -O2 -march=i386 -mcpu=i686
+-optflags: i386 -O2 -march=i386 -mcpu=i686
++optflags: i386 -O2 -march=i386
++#optflags: i386 -O2 -march=i386 -mcpu=i686
  optflags: i486 -O2 -march=i486
  optflags: i586 -O2 -march=i586
 @@ -289,5 +289,5 @@
