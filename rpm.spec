@@ -618,7 +618,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n beecrypt-devel
 %defattr(644,root,root,755)
 %{_prefix}/lib/libbeecrypt.so
-%{_prefix}/lib/libbeecrypt.la
+%attr(755,root,root) %{_prefix}/lib/libbeecrypt.la
 %{_includedir}/beecrypt
 %{_libdir}/rpm/macros.python
 %files -n beecrypt-static
