@@ -1,0 +1,326 @@
+diff -Nur rpm-4.0.2/lib/depends.c rpm-4.0.2-patched/lib/depends.c
+--- rpm-4.0.2/lib/depends.c	Sat Mar 17 23:18:31 2001
++++ rpm-4.0.2-patched/lib/depends.c	Sat Mar 17 23:20:15 2001
+@@ -894,27 +894,22 @@
+ 	free((void *)conflicts[i].byRelease);
+ 	free((void *)conflicts[i].needsName);
+ 	free((void *)conflicts[i].needsVersion);
++	/* TODO: suggestedPackage_s_ */
+     }
+ 
+     free(conflicts);
+ }
+ 
+-/**
+- * Check added package file lists for a file.
+- * @param al		available list
+- * @param keyType	type of dependency
+- * @param fileName	file name to search for
+- * @return		available package pointer
+- */
+-/*@dependent@*/ /*@null@*/ static struct availablePackage *
+-alFileSatisfiesDepend(struct availableList * al,
++/*@dependent@*/ /*@null@*/ static struct availablePackage **
++alAllFileSatisfiesDepend(struct availableList * al,
+ 	const char * keyType, const char * fileName)
+ {
+-    int i;
++    int i, found;
+     const char * dirName;
+     const char * baseName;
+     struct dirInfo dirNeedle;
+     struct dirInfo * dirMatch;
++    struct availablePackage **ret;
+ 
+     if (al->numDirs == 0)	/* Solaris 2.6 bsearch sucks down on this. */
+ 	return NULL;
+@@ -930,52 +925,80 @@
+     dirNeedle.dirNameLen = strlen(dirName);
+     dirMatch = bsearch(&dirNeedle, al->dirs, al->numDirs,
+ 		       sizeof(dirNeedle), dirInfoCompare);
++    if (!dirMatch){
++    	    free((void *)dirName);
++	    return NULL;
++    }
++   
++    /* rewind to the first match */
++    while(dirMatch > al->dirs && dirInfoCompare(dirMatch-1,&dirNeedle)==0)
++	    dirMatch--;
++    
+     free((void *)dirName);
+-    if (!dirMatch) return NULL;
+ 
+     baseName = strrchr(fileName, '/') + 1;
+ 
++    for(found=0, ret=NULL; dirMatch <= al->dirs + al->numDirs && 
++		    dirInfoCompare(dirMatch,&dirNeedle)==0;dirMatch++){
+     /* XXX FIXME: these file lists should be sorted and bsearched */
+-    for (i = 0; i < dirMatch->numFiles; i++) {
+-	if (!strcmp(dirMatch->files[i].baseName, baseName)) {
++    	for (i = 0; i < dirMatch->numFiles; i++) {
++	    if (!strcmp(dirMatch->files[i].baseName, baseName)) {
+ 
+-	    /* If a file dependency would be satisfied by a file
+-	       we are not going to install, skip it. */
+-	    if (al->list[dirMatch->files[i].pkgNum].multiLib &&
+-		!isFileMULTILIB(dirMatch->files[i].fileFlags))
+-		continue;
+-
+-	    if (keyType)
+-		rpmMessage(RPMMESS_DEBUG, _("%s: %-45s YES (added files)\n"),
+-			    keyType, fileName);
+-	    return al->list + dirMatch->files[i].pkgNum;
+-	}
++	     	/* If a file dependency would be satisfied by a file
++	     	   we are not going to install, skip it. */
++	    	if (al->list[dirMatch->files[i].pkgNum].multiLib &&
++			!isFileMULTILIB(dirMatch->files[i].fileFlags))
++		    continue;
++
++	    	if (keyType)
++		   rpmMessage(RPMMESS_DEBUG, _("%s: %-45s YES (added files)\n"),
++			keyType, fileName);
++		ret=realloc(ret,sizeof(struct aviablePackage* )*(found+2));
++		ret[found++] = al->list + dirMatch->files[i].pkgNum;
++		break ; /* next iteration of for(found=0....) loop */
++		
++	    }
++    	}
+     }
+-
+-    return NULL;
++    if(ret)
++	    ret[found]=NULL;
++    return ret;
+ }
+ 
+ /**
+- * Check added package file lists for a provide.
++ * Check added package file lists for a file.
+  * @param al		available list
+  * @param keyType	type of dependency
+- * @param keyDepend	dependency string representation
+- * @param keyName	dependency name string
+- * @param keyEVR	dependency [epoch:]version[-release] string
+- * @param keyFlags	dependency logical range qualifiers
++ * @param fileName	file name to search for
+  * @return		available package pointer
+  */
+-/*@dependent@*/ /*@null@*/ static struct availablePackage * alSatisfiesDepend(
++/*@dependent@*/ /*@null@*/ static struct availablePackage *
++alFileSatisfiesDepend(struct availableList * al,
++	const char * keyType, const char * fileName)
++{
++	struct availablePackage *ret, **tmp;
++
++	tmp = alAllFileSatisfiesDepend(al, keyType, fileName);
++	if(tmp){
++		ret = tmp[0];
++		free( tmp);
++		return ret;
++	}
++	return NULL;
++}
++
++static struct availablePackage ** alAllSatisfiesDepend(
+ 	struct availableList * al,
+ 	const char * keyType, const char * keyDepend,
+ 	const char * keyName, const char * keyEVR, int keyFlags)
+ {
++
+     struct availableIndexEntry needle, * match;
+-    struct availablePackage * p;
+-    int i, rc;
++    struct availablePackage * p, **ret=NULL;
++    int i, rc, found;
+ 
+     if (*keyName == '/')
+-	return alFileSatisfiesDepend(al, keyType, keyName);
++	return alAllFileSatisfiesDepend(al, keyType, keyName);
+ 
+     if (!al->index.size) return NULL;
+ 
+@@ -985,37 +1008,76 @@
+ 		    sizeof(*al->index.index), indexcmp);
+ 
+     if (match == NULL) return NULL;
+-
++    
++    /* rewind to the first match */
++    while( match > al->index.index && indexcmp(match-1,&needle) == 0 )
++	    match--;
++
++    for(ret=NULL, found=0; indexcmp(match,&needle) == 0 &&
++		    match <= al->index.index + al->index.size;
++		    match++){
+     p = match->package;
+     rc = 0;
+     switch (match->type) {
+-    case IET_PROVIDES:
+-	for (i = 0; i < p->providesCount; i++) {
+-	    const char *proEVR;
+-	    int proFlags;
+-
+-	    /* Filter out provides that came along for the ride. */
+-	    if (strcmp(p->provides[i], keyName))
+-		continue;
+-
+-	    proEVR = (p->providesEVR ? p->providesEVR[i] : NULL);
+-	    proFlags = (p->provideFlags ? p->provideFlags[i] : 0);
+-	    rc = rpmRangesOverlap(p->provides[i], proEVR, proFlags,
+-			keyName, keyEVR, keyFlags);
+-	    if (rc) break;
++	case IET_PROVIDES:
++	    for (i = 0; i < p->providesCount; i++) {
++	    	const char *proEVR;
++	    	int proFlags;
++
++	    	/* Filter out provides that came along for the ride. */
++	    	if (strcmp(p->provides[i], keyName))
++		    continue;
++
++	    	proEVR = (p->providesEVR ? p->providesEVR[i] : NULL);
++	    	proFlags = (p->provideFlags ? p->provideFlags[i] : 0);
++	    	rc = rpmRangesOverlap(p->provides[i], proEVR, proFlags,
++				keyName, keyEVR, keyFlags);
++	    	if (rc) break;
++		}
++		if (keyType && keyDepend && rc)
++	    	rpmMessage(RPMMESS_DEBUG, _("%s: %-45s YES (added provide)\n"),
++				keyType, keyDepend+2);
++    		break;
++    	}
++
++    	if (rc){
++    		ret=realloc(ret,sizeof(struct aviablePackage *)*(found+2));
++		ret[found++]=p;
+ 	}
+-	if (keyType && keyDepend && rc)
+-	    rpmMessage(RPMMESS_DEBUG, _("%s: %-45s YES (added provide)\n"),
+-			keyType, keyDepend+2);
+-    	break;
+     }
++    if(ret)
++	ret[found]=NULL;
+ 
+-    if (rc)
+-	return p;
++    return ret;
++}
+ 
+-    return NULL;
++/**
++ * Check added package file lists for a provide.
++ * @param al		available list
++ * @param keyType	type of dependency
++ * @param keyDepend	dependency string representation
++ * @param keyName	dependency name string
++ * @param keyEVR	dependency [epoch:]version[-release] string
++ * @param keyFlags	dependency logical range qualifiers
++ * @return		available package pointer
++ */
++/*@dependent@*/ /*@null@*/ static struct availablePackage * alSatisfiesDepend(
++	struct availableList * al,
++	const char * keyType, const char * keyDepend,
++	const char * keyName, const char * keyEVR, int keyFlags)
++{
++	struct availablePackage *ret, **tmp ;
++	tmp=alAllSatisfiesDepend(al, keyType, keyDepend, keyName, keyEVR,
++			keyFlags);
++	if(tmp){
++		ret=tmp[0];
++		free(tmp);
++		return ret;
++	}
++	return NULL;
+ }
+ 
++
+ /**
+  * Check key for an unsatisfied dependency.
+  * @param al		available list
+@@ -1024,13 +1086,13 @@
+  * @param keyName	dependency name string
+  * @param keyEVR	dependency [epoch:]version[-release] string
+  * @param keyFlags	dependency logical range qualifiers
+- * @retval suggestion	possible package to resolve dependency
++ * @retval suggestion	possible packages to resolve dependency
+  * @return		0 if satisfied, 1 if not satisfied, 2 if error
+  */
+ static int unsatisfiedDepend(rpmTransactionSet ts,
+ 	const char * keyType, const char * keyDepend,
+ 	const char * keyName, const char * keyEVR, int keyFlags,
+-	/*@out@*/ struct availablePackage ** suggestion)
++	/*@out@*/ struct availablePackage *** suggestion)
+ {
+     static int _cacheDependsRC = 1;
+     rpmdbMatchIterator mi;
+@@ -1156,7 +1218,7 @@
+     }
+ 
+     if (suggestion)
+-	*suggestion = alSatisfiesDepend(&ts->availablePackages, NULL, NULL,
++	*suggestion = alAllSatisfiesDepend(&ts->availablePackages, NULL, NULL,
+ 				keyName, keyEVR, keyFlags);
+ 
+ unsatisfied:
+@@ -1204,7 +1266,7 @@
+     int type;
+     int i, rc;
+     int ourrc = 0;
+-    struct availablePackage * suggestion;
++    struct availablePackage ** suggestion;
+ 
+     headerNVR(h, &name, &version, &release);
+ 
+@@ -1256,10 +1318,23 @@
+ 	    psp->problems[psp->num].needsFlags = requireFlags[i];
+ 	    psp->problems[psp->num].sense = RPMDEP_SENSE_REQUIRES;
+ 
+-	    if (suggestion)
+-		psp->problems[psp->num].suggestedPackage = suggestion->key;
+-	    else
+-		psp->problems[psp->num].suggestedPackage = NULL;
++	    if (suggestion){
++		int i;
++		for(i=0;suggestion[i];i++)
++			;
++		psp->problems[psp->num].suggestedPackages =
++			malloc( sizeof(void *) * (i+1));
++		for(i=0;suggestion[i];i++)
++		    psp->problems[psp->num].suggestedPackages[i]
++				    = suggestion[i]->key;
++		psp->problems[psp->num].suggestedPackages[i]=NULL;
++		    
++		psp->problems[psp->num].suggestedPackage  = suggestion[0]->key;
++	    }
++	    else{
++		psp->problems[psp->num].suggestedPackages = NULL;
++		psp->problems[psp->num].suggestedPackage  = NULL;
++	    }
+ 
+ 	    psp->num++;
+ 	    break;
+@@ -1322,7 +1397,9 @@
+ 	    psp->problems[psp->num].needsVersion = xstrdup(conflictsEVR[i]);
+ 	    psp->problems[psp->num].needsFlags = conflictFlags[i];
+ 	    psp->problems[psp->num].sense = RPMDEP_SENSE_CONFLICTS;
+-	    psp->problems[psp->num].suggestedPackage = NULL;
++	    psp->problems[psp->num].suggestedPackages = NULL;
++	    psp->problems[psp->num].suggestedPackage  = NULL;
++	    
+ 
+ 	    psp->num++;
+ 	    break;
+diff -Nur rpm-4.0.2/lib/rpmlib.h rpm-4.0.2-patched/lib/rpmlib.h
+--- rpm-4.0.2/lib/rpmlib.h	Tue Jan 16 00:10:04 2001
++++ rpm-4.0.2-patched/lib/rpmlib.h	Sat Mar 17 23:17:42 2001
+@@ -771,6 +771,8 @@
+     const char * needsVersion;
+     int needsFlags;
+ /*@observer@*/ /*@null@*/ const void * suggestedPackage; /* NULL if none */
++/*@observer@*/ /*@null@*/ const void ** suggestedPackages; /* terminated by
++								NULL */
+     enum {
+ 	RPMDEP_SENSE_REQUIRES,		/*!< requirement not satisfied. */
+ 	RPMDEP_SENSE_CONFLICTS		/*!< conflict was found. */
