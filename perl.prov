@@ -108,8 +108,8 @@ sub process_file {
 }
 
 
-# Returns true if the package name matches the patch,
-# so you can use() it.  False otherwise.
+# Returns C<true> if the package name matches the path,
+# so you can use() it.  C<false> otherwise.
 sub match_the_path {
 	my ( $file, $pack ) = @_;
 	$pack =~ s#::#/#g;
