@@ -1,5 +1,5 @@
 --- rpm-3.0.3/configure.in.wiget	Thu Sep 30 23:25:29 1999
-+++ rpm-3.0.3/configure.in	Tue Oct 19 16:33:48 1999
++++ rpm-3.0.3/configure.in	Fri Oct 29 11:43:58 1999
 @@ -903,7 +903,7 @@
  export LIBS INCPATH CONFIG_SITE
  
@@ -10,7 +10,7 @@
  	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
  	misc/Makefile po/Makefile.in intl/Makefile
 --- rpm-3.0.3/macros.in.wiget	Thu Sep 30 01:29:57 1999
-+++ rpm-3.0.3/macros.in	Tue Oct 19 16:38:08 1999
++++ rpm-3.0.3/macros.in	Fri Oct 29 11:50:10 1999
 @@ -60,8 +60,8 @@
  %_builddir		%{_topdir}/BUILD
  %_buildshell		/bin/sh
@@ -60,8 +60,9 @@
  %_libdir		%{_exec_prefix}/lib
  %_includedir		%{_prefix}/include
  %_oldincludedir		/usr/include
- %_infodir		%{_prefix}/info
+-%_infodir		%{_prefix}/info
 -%_mandir		%{_prefix}/man
++%_infodir		%{_prefix}/share/info
 +%_mandir		%{_prefix}/share/man
  
  #==============================================================================
