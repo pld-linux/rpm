@@ -9,12 +9,11 @@
 # TODO:                                                             #
 #####################################################################
 
-die "You have to specify input files" if (@ARGV < 1);
-
 $pear = "/usr/share/pear";
 
-while (@ARGV > 0) {
-	$f = shift;
+foreach (@ARGV ? @ARGV : <>) {
+	chomp;
+	$f = $_;
 	next unless ($f =~ /$pear.*\.php$/);
 	$f =~ s/.*$pear\///;
 	print "pear($f)\n";

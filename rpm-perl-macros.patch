@@ -1,11 +1,3 @@
---- rpm-4.1/scripts/Makefile.am.wiget	Thu Aug 22 19:31:42 2002
-+++ rpm-4.1/scripts/Makefile.am	Wed Sep 18 23:52:19 2002
-@@ -31,4 +31,5 @@
- 	magic.prov magic.req perl.prov perl.req rpmdiff rpmdiff.cgi \
- 	rpm.daily rpm.log rpm.xinetd rpm2cpio.sh \
- 	sql.prov sql.req tcl.req tgpg trpm u_pkg.sh \
-+  	find-perl-requires find-perl-provides \
- 	vpkg-provides.sh vpkg-provides2.sh
 --- rpm-4.1/scripts/perl.req.wiget	Mon Jun  3 22:56:33 2002
 +++ rpm-4.1/scripts/perl.req	Wed Sep 18 23:50:15 2002
 @@ -1,4 +1,4 @@
@@ -91,22 +83,7 @@
  AC_CONFIG_SUBDIRS(popt beecrypt zlib libelf db3)
  
  AC_OUTPUT([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
-+	macros.perl scripts/perl.req scripts/perl.prov
++	scripts/perl.req scripts/perl.prov
  	rpmio/Makefile rpmdb/Makefile lib/Makefile build/Makefile
  	scripts/Makefile scripts/brp-redhat
  	scripts/macros.perl scripts/macros.php scripts/macros.python
---- rpm-4.1/macros.in.wiget	Sun Sep  1 00:30:19 2002
-+++ rpm-4.1/macros.in	Wed Sep 18 23:50:46 2002
-@@ -1012,8 +1012,10 @@
- #	%dir %{perl_sitearch}/auto/Image
- #
- %requires_eq()	%(LC_ALL="C" echo '%*' | xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
--%perl_sitearch	%(eval "`perl -V:installsitearch`"; echo $installsitearch)
--%perl_archlib	%(eval "`perl -V:installarchlib`"; echo $installarchlib)
-+#
-+# NOTE: %{perl_sitearch}, %{perl_archlib} and %{perl_sitelib} macros 
-+#	has been moved to macros.perl (see info in this file for details).
-+#
- 
- #------------------------------------------------------------------------------
- # arch macro for all Intel i?86 compatibile processors
