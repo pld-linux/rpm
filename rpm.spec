@@ -208,6 +208,23 @@ RPM - ÃÅ ÐÏÔÕÖÎÉÊ ÍÅÎÅÄÖÅÒ ÐÁËÅÔ¦×, ÝÏ ÍÏÖÅ ÂÕÔÉ ×ÉËÏÒÉÓÔÁÎÉÊ ÄÌÑ
 ÓÌÕÖÂÏ×Ï§ ¦ÎÆÏÒÍÁÃ¦§, ÝÏ Í¦ÓÔÉÔØ ÎÁÚ×Õ, ×ÅÒÓ¦À, ÏÐÉÓ ÔÁ ¦ÎÛÕ
 ¦ÎÆÏÒÍÁÃ¦À ÐÒÏ ÐÁËÅÔ.
 
+%package lib
+Summary:	RPMs library
+Summary(pl):	Biblioteki RPM-a
+Group:		Libraries
+Requires:	db >= %{reqdb_ver}
+%{?with_selinux:BuildRequires:	libselinux >= 1.18}
+Requires:	popt >= %{reqpopt_ver}
+%{?with_distver:Provides:	rpm-lib(distver)}
+# avoid SEGV caused by mixed db versions
+Conflicts:	poldek < 0.18.1-16
+
+%description lib
+RPMs library.
+
+%description lib -l pl
+Biblioteki RPM-a.
+
 %package devel
 Summary:	Header files for rpm libraries
 Summary(de):	Header-Dateien für rpm Libraries
@@ -362,103 +379,6 @@ Aktualnie pakiet zawiera binarkê rpmi, któr± mo¿na u¿yæ do instalacji,
 uaktualniania lub usuwania pakietów bez udzia³u bibliotek statycznych
 (z wyj±tkiem modu³ów NSS).
 
-%package perlprov
-Summary:	Additional utilities for checking perl provides/requires in rpm packages
-Summary(de):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
-Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w pakietach rpm
-Group:		Applications/File
-Requires:	%{name} = %{version}-%{release}
-Requires:	perl-devel
-Requires:	perl-modules
-
-%description perlprov
-Additional utilities for checking perl provides/requires in rpm
-packages.
-
-%description perlprov -l de
-Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen.
-
-%description perlprov -l pl
-Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w
-pakietach rpm.
-
-%package pythonprov
-Summary:	Python macros, which simplifies creation of rpm packages with Python software
-Summary(pl):	Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w Pythonie
-Group:		Applications/File
-Requires:	%{name} = %{version}-%{release}
-Requires:	python-modules
-
-%description pythonprov
-Python macros, which simplifies creation of rpm packages with Python
-software.
-
-%description pythonprov -l pl
-Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w
-Pythonie.
-
-%package php-pearprov
-Summary:	Additional utilities for managing rpm packages and database
-Summary(pl):	Dodatkowe narzêdzia do sprawdzania zale¿no¶ci skryptów php w rpm
-Group:		Applications/File
-Requires:	%{name} = %{version}-%{release}
-
-%description php-pearprov
-Additional utilities for checking php pear provides/requires in rpm
-packages.
-
-%description php-pearprov -l pl
-Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów php pear w
-pakietach rpm.
-
-%package -n python-rpm
-Summary:	Python interface to RPM library
-Summary(pl):	Pythonowy interfejs do biblioteki RPM-a
-Summary(pt_BR):	Módulo Python para aplicativos que manipulam pacotes RPM
-Group:		Development/Languages/Python
-Requires:	%{name} = %{version}-%{release}
-%pyrequires_eq	python
-Obsoletes:	rpm-python
-
-%description -n python-rpm
-The rpm-python package contains a module which permits applications
-written in the Python programming language to use the interface
-supplied by RPM (RPM Package Manager) libraries.
-
-This package should be installed if you want to develop Python
-programs that will manipulate RPM packages and databases.
-
-%description -n python-rpm -l pl
-Pakiet rpm-python zawiera modu³, który pozwala aplikacjom napisanym w
-Pythonie na u¿ywanie interfejsu dostarczanego przez biblioteki RPM-a.
-
-Pakiet ten powinien zostaæ zainstalowany, je¶li chcesz pisaæ w
-Pythonie programy manipuluj±ce pakietami i bazami danych rpm.
-
-%description -n python-rpm -l pt_BR
-O pacote rpm-python contém um módulo que permite que aplicações
-escritas em Python utilizem a interface fornecida pelas bibliotecas
-RPM (RPM Package Manager).
-
-Esse pacote deve ser instalado se você quiser desenvolver programas em
-Python para manipular pacotes e bancos de dados RPM.
-
-%package lib
-Summary:	RPMs library
-Summary(pl):	Biblioteki RPM-a
-Group:		Libraries
-Requires:	db >= %{reqdb_ver}
-Requires:	popt >= %{reqpopt_ver}
-%{?with_distver:Provides:	rpm-lib(distver)}
-# avoid SEGV caused by mixed db versions
-Conflicts:	poldek < 0.18.1-16
-
-%description lib
-RPMs library.
-
-%description lib -l pl
-Biblioteki RPM-a.
-
 %package build
 Summary:	Scripts for building binary RPM packages
 Summary(de):	Scripts fürs Bauen binärer RPM-Pakete
@@ -563,6 +483,87 @@ construir pacotes usando o RPM.
 %description build-tools -l uk
 ò¦ÚÎÏÍÁÎ¦ÔÎ¦ ÄÏÐÏÍ¦ÖÎ¦ ÓËÒÉÐÔÉ ÔÁ ÕÔÉÌ¦ÔÉ, ÑË¦ ×ÉËÏÒÉÓÔÏ×ÕÀÔØÓÑ ÄÌÑ
 ÐÏÂÕÄÏ×É RPM'¦×.
+
+%package perlprov
+Summary:	Additional utilities for checking perl provides/requires in rpm packages
+Summary(de):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
+Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w pakietach rpm
+Group:		Applications/File
+Requires:	%{name} = %{version}-%{release}
+Requires:	perl-devel
+Requires:	perl-modules
+
+%description perlprov
+Additional utilities for checking perl provides/requires in rpm
+packages.
+
+%description perlprov -l de
+Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen.
+
+%description perlprov -l pl
+Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w
+pakietach rpm.
+
+%package pythonprov
+Summary:	Python macros, which simplifies creation of rpm packages with Python software
+Summary(pl):	Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w Pythonie
+Group:		Applications/File
+Requires:	%{name} = %{version}-%{release}
+Requires:	python-modules
+
+%description pythonprov
+Python macros, which simplifies creation of rpm packages with Python
+software.
+
+%description pythonprov -l pl
+Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w
+Pythonie.
+
+%package php-pearprov
+Summary:	Additional utilities for managing rpm packages and database
+Summary(pl):	Dodatkowe narzêdzia do sprawdzania zale¿no¶ci skryptów php w rpm
+Group:		Applications/File
+Requires:	%{name} = %{version}-%{release}
+
+%description php-pearprov
+Additional utilities for checking php pear provides/requires in rpm
+packages.
+
+%description php-pearprov -l pl
+Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów php pear w
+pakietach rpm.
+
+%package -n python-rpm
+Summary:	Python interface to RPM library
+Summary(pl):	Pythonowy interfejs do biblioteki RPM-a
+Summary(pt_BR):	Módulo Python para aplicativos que manipulam pacotes RPM
+Group:		Development/Languages/Python
+Requires:	%{name} = %{version}-%{release}
+%pyrequires_eq	python
+Obsoletes:	rpm-python
+
+%description -n python-rpm
+The rpm-python package contains a module which permits applications
+written in the Python programming language to use the interface
+supplied by RPM (RPM Package Manager) libraries.
+
+This package should be installed if you want to develop Python
+programs that will manipulate RPM packages and databases.
+
+%description -n python-rpm -l pl
+Pakiet rpm-python zawiera modu³, który pozwala aplikacjom napisanym w
+Pythonie na u¿ywanie interfejsu dostarczanego przez biblioteki RPM-a.
+
+Pakiet ten powinien zostaæ zainstalowany, je¶li chcesz pisaæ w
+Pythonie programy manipuluj±ce pakietami i bazami danych rpm.
+
+%description -n python-rpm -l pt_BR
+O pacote rpm-python contém um módulo que permite que aplicações
+escritas em Python utilizem a interface fornecida pelas bibliotecas
+RPM (RPM Package Manager).
+
+Esse pacote deve ser instalado se você quiser desenvolver programas em
+Python para manipular pacotes e bancos de dados RPM.
 
 %package apidocs
 Summary:	RPM API documentation and guides
@@ -911,6 +912,63 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) /%{_lib}/librpm*-*.so
 %attr(755,root,root) %{_libdir}/librpm*-*.so
 
+%files devel
+%defattr(644,root,root,755)
+%{_includedir}/rpm
+%{_libdir}/librpm*.la
+%attr(755,root,root) %{_libdir}/librpm.so
+%attr(755,root,root) %{_libdir}/librpm-%{sover}.so
+%attr(755,root,root) %{_libdir}/librpmio.so
+%attr(755,root,root) %{_libdir}/librpmio-%{sover}.so
+%attr(755,root,root) %{_libdir}/librpmdb.so
+%attr(755,root,root) %{_libdir}/librpmdb-%{sover}.so
+%attr(755,root,root) %{_libdir}/librpmbuild.so
+
+%files static
+%defattr(644,root,root,755)
+%{_libdir}/librpm*.a
+
+%files utils
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/debugedit
+%attr(755,root,root) %{_bindir}/rpm2cpio
+%attr(755,root,root) %{_bindir}/rpmcache
+%attr(755,root,root) %{_bindir}/rpmdeps
+%attr(755,root,root) %{_bindir}/rpmgraph
+%attr(755,root,root) %{_bindir}/rpmfile
+%attr(755,root,root) %{_rpmlibdir}/find-debuginfo.sh
+%attr(755,root,root) %{_rpmlibdir}/rpm2cpio.sh
+%attr(755,root,root) %{_rpmlibdir}/tgpg
+%attr(755,root,root) %{_rpmlibdir}/rpmdb_loadcvt
+%{_mandir}/man8/rpm2cpio.8*
+%{_mandir}/man8/rpmdeps.8*
+%{_mandir}/man8/rpmcache.8*
+%{_mandir}/man8/rpmgraph.8*
+%lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
+%lang(ja) %{_mandir}/ja/man8/rpmcache.8*
+%lang(ja) %{_mandir}/ja/man8/rpmgraph.8*
+%lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
+%lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
+%lang(pl) %{_mandir}/pl/man8/rpmdeps.8*
+%lang(pl) %{_mandir}/pl/man8/rpmcache.8*
+%lang(pl) %{_mandir}/pl/man8/rpmgraph.8*
+%lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
+
+%files utils-perl
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_rpmlibdir}/rpmdiff*
+# not here
+#%%{_rpmlibdir}/rpm.daily
+#%%{_rpmlibdir}/rpm.log
+#%%{_rpmlibdir}/rpm.xinetd
+
+%if %{with static}
+%files utils-static
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/rpm[ieu]
+%attr(755,root,root) %{_rpmlibdir}/rpm[ieu]
+%endif
+
 %files build
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpm/noauto*
@@ -984,63 +1042,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %lang(pl) %{_mandir}/pl/man1/gendiff.1*
 %lang(pl) %{_mandir}/pl/man8/rpmbuild.8*
 
-%files devel
+%files build-tools
 %defattr(644,root,root,755)
-%{_includedir}/rpm
-%{_libdir}/librpm*.la
-%attr(755,root,root) %{_libdir}/librpm.so
-%attr(755,root,root) %{_libdir}/librpm-%{sover}.so
-%attr(755,root,root) %{_libdir}/librpmio.so
-%attr(755,root,root) %{_libdir}/librpmio-%{sover}.so
-%attr(755,root,root) %{_libdir}/librpmdb.so
-%attr(755,root,root) %{_libdir}/librpmdb-%{sover}.so
-%attr(755,root,root) %{_libdir}/librpmbuild.so
-
-%files static
-%defattr(644,root,root,755)
-%{_libdir}/librpm*.a
-
-%files utils
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/debugedit
-%attr(755,root,root) %{_bindir}/rpm2cpio
-%attr(755,root,root) %{_bindir}/rpmcache
-%attr(755,root,root) %{_bindir}/rpmdeps
-%attr(755,root,root) %{_bindir}/rpmgraph
-%attr(755,root,root) %{_bindir}/rpmfile
-%attr(755,root,root) %{_rpmlibdir}/find-debuginfo.sh
-%attr(755,root,root) %{_rpmlibdir}/rpm2cpio.sh
-%attr(755,root,root) %{_rpmlibdir}/tgpg
-%attr(755,root,root) %{_rpmlibdir}/rpmdb_loadcvt
-%{_mandir}/man8/rpm2cpio.8*
-%{_mandir}/man8/rpmdeps.8*
-%{_mandir}/man8/rpmcache.8*
-%{_mandir}/man8/rpmgraph.8*
-%lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
-%lang(ja) %{_mandir}/ja/man8/rpmcache.8*
-%lang(ja) %{_mandir}/ja/man8/rpmgraph.8*
-%lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
-%lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
-%lang(pl) %{_mandir}/pl/man8/rpmdeps.8*
-%lang(pl) %{_mandir}/pl/man8/rpmcache.8*
-%lang(pl) %{_mandir}/pl/man8/rpmgraph.8*
-%lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
-
-%files utils-perl
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_rpmlibdir}/rpmdiff*
-# not here
-#%%{_rpmlibdir}/rpm.daily
-#%%{_rpmlibdir}/rpm.log
-#%%{_rpmlibdir}/rpm.xinetd
-
-
-%if %{with static}
-%files utils-static
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/rpm[ieu]
-%attr(755,root,root) %{_rpmlibdir}/rpm[ieu]
-%endif
+%attr(755,root,root) %{_bindir}/builder
+%attr(755,root,root) %{_bindir}/adapter.awk
+%attr(755,root,root) %{_bindir}/pldnotify.awk
 
 %files perlprov
 %defattr(644,root,root,755)
@@ -1070,12 +1076,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{py_sitedir}/rpmdb/*.so
 %{py_sitedir}/rpmdb/*.py*
 %endif
-
-%files build-tools
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/builder
-%attr(755,root,root) %{_bindir}/adapter.awk
-%attr(755,root,root) %{_bindir}/pldnotify.awk
 
 %if %{with apidocs}
 %files apidocs
