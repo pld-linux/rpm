@@ -1,65 +1,5 @@
---- rpm-4.1/configure.ac.nointernallib	Thu Sep 19 04:02:42 2002
-+++ rpm-4.1/configure.ac	Thu Sep 19 04:03:04 2002
-@@ -1194,7 +1194,7 @@
- dnl # XXX Propagate -lucb to popt ...
- dnl export LIBS INCPATH CONFIG_SITE
- 
--AC_CONFIG_SUBDIRS(popt beecrypt zlib libelf db3)
-+AC_CONFIG_SUBDIRS(beecrypt)
- 
- AC_CONFIG_FILES([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec m4/Makefile 
- 	macros.perl scripts/perl.req scripts/perl.prov
---- rpm-4.1/Makefile.am.nointernallib	Thu Sep 19 04:03:19 2002
-+++ rpm-4.1/Makefile.am	Thu Sep 19 04:04:00 2002
-@@ -12,7 +12,7 @@
- 	po/*.in po/*.po po/rpm.pot \
- 	rpm.magic rpmpopt-$(VERSION) rpmqv.c rpm.c
- 
--SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ libelf @WITH_DB_SUBDIR@ popt beecrypt rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
-+SUBDIRS = intl po beecrypt rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
- 
- INCLUDES = \
- 	-I$(top_srcdir)/build \
-@@ -35,7 +35,7 @@
- 	$(top_builddir)/lib/librpm.la \
- 	$(top_builddir)/rpmdb/librpmdb.la \
- 	$(top_builddir)/rpmio/librpmio.la \
--	$(top_builddir)/popt/libpopt.la \
-+	-lpopt \
- 	@WITH_LIBELF_LIB@ \
- 	@WITH_ZLIB_LIB@ \
- 	@INTLLIBS@ \
-@@ -111,7 +111,6 @@
- 	    -load lib/rpmlib.lcd \
- 	    -load rpmdb/rpmdb.lcd \
- 	    -load rpmio/rpmio.lcd \
--	    -load popt/popt.lcd \
- 		$(DEFS) $(INCLUDES) rpmqv.c $(rpmb_SOURCES)
- 
- .PHONY:	lclint
-@@ -121,8 +120,7 @@
- 		`make -s sources -C lib` \
- 		`make -s sources -C rpmdb` \
- 		`make -s sources -C rpmio` \
--		`make -s sources -C beecrypt` \
--		`make -s sources -C popt`
-+		`make -s sources -C beecrypt`
- 
- CVSTAG = r$(subst .,-,$(VERSION))
- 
---- rpm-4.1/python/Makefile.am~	Fri Oct 18 08:38:02 2002
-+++ rpm-4.1/python/Makefile.am	Fri Oct 18 08:55:34 2002
-@@ -25,7 +23,7 @@
- 	$(top_builddir)/lib/.libs/librpm.so \
- 	$(top_builddir)/rpmdb/.libs/librpmdb.so \
- 	$(top_builddir)/rpmio/.libs/librpmio.so \
--	$(top_builddir)/popt/.libs/libpopt.so
-+	-lpopt
- 
- LDADD =
- 
---- rpm-4.1/rpmio/Makefile.am~	Fri Oct 18 08:38:02 2002
-+++ rpm-4.1/rpmio/Makefile.am	Fri Oct 18 10:43:29 2002
+--- rpm-4.2/rpmio/Makefile.am.wiget	Wed Mar 12 15:10:27 2003
++++ rpm-4.2/rpmio/Makefile.am	Wed Mar 12 15:10:27 2003
 @@ -67,34 +67,34 @@
  	lclint $(DEFS) $(INCLUDES) $(librpmio_la_SOURCES)
  
@@ -103,9 +43,20 @@
  
  dumpasn1_SOURCES = dumpasn1.c
  
---- rpm-4.1/tools/Makefile.am~	Thu Aug 22 19:42:37 2002
-+++ rpm-4.1/tools/Makefile.am	Fri Oct 18 11:12:37 2002
-@@ -23,7 +23,7 @@
+--- rpm-4.2/python/Makefile.am.wiget	Wed Oct  9 21:09:43 2002
++++ rpm-4.2/python/Makefile.am	Wed Mar 12 15:10:27 2003
+@@ -25,7 +25,7 @@
+ 	$(top_builddir)/lib/.libs/librpm.so \
+ 	$(top_builddir)/rpmdb/.libs/librpmdb.so \
+ 	$(top_builddir)/rpmio/.libs/librpmio.so \
+-	$(top_builddir)/popt/.libs/libpopt.so
++	-lpopt
+ 
+ LDADD =
+ 
+--- rpm-4.2/tools/Makefile.am.wiget	Thu Oct 24 21:23:46 2002
++++ rpm-4.2/tools/Makefile.am	Wed Mar 12 15:10:27 2003
+@@ -24,7 +24,7 @@
  	$(top_builddir)/lib/librpm.la \
  	$(top_builddir)/rpmdb/librpmdb.la \
  	$(top_builddir)/rpmio/librpmio.la \
@@ -113,4 +64,53 @@
 +	-lpopt \
  	@WITH_LIBELF_LIB@ \
  	@INTLLIBS@
+ 
+--- rpm-4.2/configure.ac.wiget	Wed Mar 12 15:10:26 2003
++++ rpm-4.2/configure.ac	Wed Mar 12 15:10:27 2003
+@@ -1206,7 +1206,7 @@
+ dnl # XXX Propagate -lucb to popt ...
+ dnl export LIBS INCPATH CONFIG_SITE
+ 
+-AC_CONFIG_SUBDIRS(popt beecrypt zlib elfutils file db3)
++AC_CONFIG_SUBDIRS(beecrypt)
+ 
+ AC_OUTPUT([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
+ 	macros.perl scripts/perl.req scripts/perl.prov
+--- rpm-4.2/Makefile.am.wiget	Thu Oct 24 22:11:18 2002
++++ rpm-4.2/Makefile.am	Wed Mar 12 15:10:27 2003
+@@ -12,7 +12,7 @@
+ 	po/*.in po/*.po po/rpm.pot \
+ 	rpm.magic rpmpopt-$(VERSION) rpmqv.c rpm.c
+ 
+-SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ elfutils file @WITH_DB_SUBDIR@ popt beecrypt rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
++SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_DB_SUBDIR@ beecrypt rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
+ 
+ INCLUDES = \
+ 	-I$(top_srcdir)/build \
+@@ -35,7 +35,7 @@
+ 	$(top_builddir)/lib/librpm.la \
+ 	$(top_builddir)/rpmdb/librpmdb.la \
+ 	$(top_builddir)/rpmio/librpmio.la \
+-	$(top_builddir)/popt/libpopt.la \
++	-lpopt \
+ 	@WITH_LIBELF_LIB@ \
+ 	@WITH_ZLIB_LIB@ \
+ 	@INTLLIBS@ \
+@@ -111,7 +111,6 @@
+ 	    -load lib/rpmlib.lcd \
+ 	    -load rpmdb/rpmdb.lcd \
+ 	    -load rpmio/rpmio.lcd \
+-	    -load popt/popt.lcd \
+ 		$(DEFS) $(INCLUDES) rpmqv.c $(rpmb_SOURCES)
+ 
+ .PHONY:	lclint
+@@ -121,8 +120,7 @@
+ 		`make -s sources -C lib` \
+ 		`make -s sources -C rpmdb` \
+ 		`make -s sources -C rpmio` \
+-		`make -s sources -C beecrypt` \
+-		`make -s sources -C popt`
++		`make -s sources -C beecrypt`
+ 
+ CVSTAG = r$(subst .,-,$(VERSION))
  
