@@ -79,6 +79,7 @@ install %{SOURCE3} macros.pld.in
 install %{SOURCE13} macros.python.in
 mv -f perl.prov perl.prov.in)
 LDFLAGS="-s"; export LDFLAGS
+CFLAGS="-g $RPM_OPT_FLAGS"; export CFLAGS
 
 ( cd popt; 
 %GNUconfigure
