@@ -9,6 +9,7 @@ License:	GPL
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-3.0.x/%{name}-%{version}.tar.gz
 Source1:	rpm.groups
 Source2:	rpm.macros
+Source3:	rpm-remove-unneeded-elf-sections
 Source5:	rpm-install-tree
 Patch0:		rpm-rpmrc.patch
 Patch1:		rpm-find-requires.patch
@@ -195,6 +196,7 @@ install -d $RPM_BUILD_ROOT/var/lib/rpm \
 
 install macros.pld $RPM_BUILD_ROOT%{_libdir}/rpm/macros.pld
 %{__make} install \
+install %{SOURCE3} $RPM_BUILD_ROOT%{_libdir}/rpm/remove-unneeded-elf-sections
 install %{SOURCE5} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
 	pkgbindir="%{_bindir}"
 
@@ -278,6 +280,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/find-provides
 %attr(755,root,root) %{_libdir}/rpm/find-rpm-provides
 %attr(755,root,root) %{_libdir}/rpm/find-spec-bcond
+%attr(755,root,root) %{_libdir}/rpm/remove-unneeded-elf-sections
 %attr(755,root,root) %{_libdir}/rpm/rpmb
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmt
