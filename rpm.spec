@@ -538,7 +538,7 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch24 -p1
 %patch25 -p1
 %patch28 -p1
-%patch30 -p1
+#%patch30 -p1
 %patch31 -p1
 %patch32 -p1
 %patch33 -p1
