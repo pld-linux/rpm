@@ -10,7 +10,7 @@
 #set -x
 
 COMPRESS_CMD="gzip -9nf"
-EXCLUDE_SUFFIXES="htm html jpg jpeg png gif pdf"
+EXCLUDE_SUFFIXES="htm html jpg jpeg png gif pdf css"
 EXCLUDE_MASKS=
 RECOMPRESS_BZIP2=yes
 
