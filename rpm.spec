@@ -2,17 +2,19 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	2.5.6
-Release:	4d
+Release:	5
 Group:		Base
 Group(pl):	Bazowe
-URL:		ftp://ftp.rpm.org/pub/rpm/dist/rpm-2.5.x
-Source:		%{name}-%{version}.tar.gz
-Patch0:		%{name}-config.patch
-Patch1:		%{name}-rpmrc.patch
-Patch2:		%{name}-glibc.patch
-Patch3:		%{name}-groups.patch
-Patch4:		%{name}-%{version}-i18n.patch
 Copyright:	GPL
+Source:		ftp://ftp.rpm.org/pub/rpm/dist/rpm-2.5.x/%{name}-%{version}.tar.gz
+Patch0:		rpm-config.patch
+Patch1:		rpm-rpmrc.patch
+Patch2:		rpm-glibc.patch
+Patch3:		rpm-groups.patch
+Patch4:		rpm-i18n.patch
+Patch5:		rpm-find-requires.patch
+Patch37:        %{name}-short_circuit.patch
+Requires:	glibc >= 2.1
 BuildRoot:	/tmp/%{name}-%{version}-root
 Obsoletes:	rpm-libs
 %define		pyrequires_eq() Requires:	%1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
@@ -50,25 +52,31 @@ construir pacotes usando o RPM.
 %patch2 -p1
 %patch1 -p1
 %patch4 -p1
+%patch5 -p1
 install %{SOURCE13} macros.python.in
 mv -f perl.prov perl.prov.in)
 autoconf
-CFLAGS=$RPM_OPT_FLAGS LDFLAGS=-s \
-    ./configure \
+CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
+./configure \
 	--prefix=/usr
 make
 	--with-python
 
 
 %{__make} %{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
-install -d $RPM_BUILD_ROOT/var/lib/rpm
-install -d $RPM_BUILD_ROOT/usr/src/rpm/{SOURCES,SPECS,SRPMS,BUILD}
-install -d $RPM_BUILD_ROOT/usr/src/rpm/RPMS/{$RPM_ARCH,noarch}
+install -d $RPM_BUILD_ROOT/var/lib/rpm \
+	$RPM_BUILD_ROOT/usr/src/rpm/{SOURCES,SPECS,SRPMS,BUILD} \
+	$RPM_BUILD_ROOT/usr/src/rpm/RPMS/{$RPM_ARCH,noarch} \
+	$RPM_BUILD_ROOT/usr/man/ru/man8
 
 make installprefix="$RPM_BUILD_ROOT" install
 	pkgbindir="%{_bindir}"
-gzip -9fn  $RPM_BUILD_ROOT/usr/man/man8/*
-bzip2 -9 RPM-PGP-KEY CHANGES groups docs/*
+install rpm.8ru $RPM_BUILD_ROOT/usr/man/ru/man8/rpm.8
+install rpm2cpio.8ru $RPM_BUILD_ROOT/usr/man/ru/man8/rpm2cpio.8
+
+gzip -9fn $RPM_BUILD_ROOT/usr/man/{ru/man8/*,man8/*}
+
+gzip -9nf RPM-PGP-KEY CHANGES groups docs/*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -78,12 +86,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 
-%doc {RPM-PGP-KEY,CHANGES,groups}.bz2 docs/*
+%doc {RPM-PGP-KEY,CHANGES,groups}.gz docs/*
 %postun -p /sbin/ldconfig
 
 %attr(755,root,root) /usr/bin/gendiff
 %attr(755,root,root) /usr/bin/rpm2cpio
-%attr(644,root, man) /usr/man/man8/*
+%attr(755,root,root) %{_libdir}/rpm/rpmdb
+/usr/man/man8/*
+%lang(ru) /usr/man/ru/man8/*
 
 %attr(750,root,root) %dir /var/lib/rpm
 
@@ -102,16 +112,16 @@ rm -rf $RPM_BUILD_ROOT
 %dir /usr/src/rpm/BUILD
 %dir /usr/src/rpm/SOURCES
 
-%lang(cs) /usr/share/locale/cs/LC_MESSAGES/rpm.mo
-%lang(de) /usr/share/locale/de/LC_MESSAGES/rpm.mo
-%lang(fi) /usr/share/locale/fi/LC_MESSAGES/rpm.mo
-%lang(fr) /usr/share/locale/fr/LC_MESSAGES/rpm.mo
-%lang(pt) /usr/share/locale/pt*/LC_MESSAGES/rpm.mo
-%lang(ru) /usr/share/locale/ru/LC_MESSAGES/rpm.mo
-%lang(sk) /usr/share/locale/sk/LC_MESSAGES/rpm.mo
-%lang(sv) /usr/share/locale/sv/LC_MESSAGES/rpm.mo
-%lang(sr) /usr/share/locale/sr/LC_MESSAGES/rpm.mo
-%lang(tr) /usr/share/locale/tr/LC_MESSAGES/rpm.mo
+%lang(cs)    /usr/share/locale/cs/LC_MESSAGES/rpm.mo
+%lang(de)    /usr/share/locale/de/LC_MESSAGES/rpm.mo
+%lang(fi)    /usr/share/locale/fi/LC_MESSAGES/rpm.mo
+%lang(fr)    /usr/share/locale/fr/LC_MESSAGES/rpm.mo
+%lang(pt_BR) /usr/share/locale/pt_BR/LC_MESSAGES/rpm.mo
+%lang(ru)    /usr/share/locale/ru/LC_MESSAGES/rpm.mo
+%lang(sk)    /usr/share/locale/sk/LC_MESSAGES/rpm.mo
+%lang(sv)    /usr/share/locale/sv/LC_MESSAGES/rpm.mo
+%lang(sr)    /usr/share/locale/sr/LC_MESSAGES/rpm.mo
+%lang(tr)    /usr/share/locale/tr/LC_MESSAGES/rpm.mo
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmt
@@ -122,6 +132,15 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/lib*.a
 %files utils
 %files -n python-rpm
+* Wed Mar 10 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
+  [2.5.6-5]
+- added rpm-find-requires.patch with beter finding list packages containing
+  required shared libraries (Artur Frysiak <wiget@usa.net>),
+- added ru man pages,
+- added "Requires: glibc >= 2.1" (rpm is linked statically but it use by
+  dlopen() some shared glibc libraries),
+- removed man group from man pages.
+
 * Fri Feb 19 1999 Marcin Dalecki <dalecki@cs.net.pl>
   [2.5.6-4d]
 - fixed ignorance about international character sets.
@@ -153,9 +172,7 @@ rm -rf $RPM_BUILD_ROOT
 - added %lang macros for /usr/share/locale/*/LC_MESSAGES/rpm.mo files,
 - added %attr and %defattr macros in %files (allow build package from
   non-root account),
-- build against GNU libc-2.1.  
-    
-
+- build against GNU libc-2.1.
 Revision 1.79  2000/02/17 03:42:17  kloczek
 - release 25,
 - added "Conflicts: /usr/bin/id" and rebuilded in enviroment with id in
