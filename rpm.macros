@@ -131,6 +131,9 @@ done \
 # Example files, programs, scripts...
 %_examplesdir	/usr/src/examples
 
+# The directory holding Linux kernel sources
+%_kernelsrcdir	/usr/src/linux
+
 # If non-empty "debug" macro defined, add "dbg" suffix to release number
 %_rpmfilename		%%{NAME}-%%{VERSION}-%%{RELEASE}%{?debug:dbg}.%%{ARCH}.rpm
 
