@@ -419,7 +419,7 @@ Requires:	/bin/id
 Requires:	awk
 Requires:	binutils
 Requires:	diffutils
-Requires:	file >= 3.31
+Requires:	file >= 4.01
 Requires:	fileutils
 Requires:	findutils
 %ifarch athlon
