@@ -3,8 +3,6 @@
 # - use system libmagic not internal libfmagic
 # - when really needed: _noauto{req,prov} for non-helper-generated deps
 #
-# - fix lseek (readelf?) failures on amd64 ASAP!!!
-#
 # Conditional build:
 %bcond_with	static	# build static rpmi (not supported at the moment)
 %bcond_without	doc	# don't generate documentation with doxygen
@@ -30,7 +28,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.9
+Release:	0.%{snap}.10
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -92,6 +90,7 @@ Patch37:	%{name}-rpmsq.patch
 Patch38:	%{name}-file-readelf.patch
 Patch39:	%{name}-pentium3.patch
 Patch40:	%{name}-epoch0.patch
+Patch41:	%{name}-file-readelf-fix.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -593,6 +592,7 @@ cat %{SOURCE11} >> macros.in
 %patch38 -p1
 %patch39 -p1
 %patch40 -p1
+%patch41 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
