@@ -1,4 +1,5 @@
 Summary:	Red Hat (and now also PLD) Package Manager
+Summary(de):	Red Hat (und jetzt auch PLD) Packet-Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0.2
@@ -65,6 +66,13 @@ Obsoletes:	rpm-libs
 RPM is a powerful package manager, which can be used to build,
 install, query, verify, update, and uninstall individual software
 packages. A package consists of an archive of files, and package
+information, including name, version, and description.
+
+%description -l de
+RPM ist ein kräftiger Packet-Manager, der verwendet sein kann zur
+Installation, Anfrage, Verifizierung, Aktualisierung und
+Uninstallation individueller Softwarepakete. Ein Paket besteht aus
+einem Archiv Dateien und Paketinformation, inklusive Name, Version und
 nombre, versión y descripción.
 RPM jest doskona³ym menad¿erem pakietów. Dziêki niemu bêdziesz móg³
 %description -l pl
@@ -74,7 +82,8 @@ przechowywane s± w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
 wchodz±cych w sk³ad pakietu, zale¿no¶ci od innych pakietów, s±
 przechowywane w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
 do pacote, permissões dos arquivos, etc.
-Summary:	Header files and libraries 
+
+%package devel
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne	
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne
 Group(de):	Entwicklung/Libraries
@@ -89,11 +98,18 @@ Requires:	popt-devel
 The RPM packaging system includes a C library that makes it easy to
 manipulate RPM packages and databases. It is intended to ease the
 creation of graphical package managers and other tools that need
+%description -l de devel
+
+%description devel -l de
+Der RPM-Packensystem enthält eine C-Library, die macht es einfach
+RPM-Pakete und Dateibanken zu manipulieren. Er eignet sich für
+Vereinfachung des Schaffens grafischer Paket-Manager und anderer
 %description -l pl devel
 Pliki nag³ówkowe i biblioteki statyczne.
 graficznych mened¿erów pakietów oraz innych narzêdzi, które wymagaj±
 ferramentas que precisem de conhecimento profundo de pacotes RPM.
 
+%package static
 Summary(pl):	Biblioteki statyczne rpm-a
 Summary(pl):	Biblioteki statyczne RPM-a
 Group(de):	Entwicklung/Libraries
@@ -104,11 +120,15 @@ Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
 
 %description static
+%description -l de static
+
+%description static -l de
 %description -l pl static
 Biblioteki statyczne rpm-a.
 %description static -l pl
 Bibliotecas estáticas para desenvolvimento.
 
+%package utils
 Summary(pl):	Dodatkowe narzêdzia do zarz±dzania baz± rpm-a i pakietami
 Summary(de):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
 Group(de):	Applikationen/Datei
@@ -118,11 +138,15 @@ Group:		Applications/File
 Requires:	%{name} = %{version}
 
 %description utils
+%description -l de utils
+
+%description utils -l de
 %description -l pl utils
 Dodatkowe narzêdzia do zarz±dzania baz± rpm-a i pakietami.
 %description utils -l pl
 Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami.
-Summary:	Additional utilities for check perl provides/requires in rpm packages
+
+%package perlprov
 Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci dla skryptów perl w pakietach rpm
 Summary(de):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
 Group(de):	Applikationen/Datei
@@ -133,12 +157,16 @@ Requires:	findutils
 
 %description perlprov
 Additional utilities for checking perl provides/requires in rpm
+%description -l de perlprov
+
+%description perlprov -l de
 %description -l pl perlprov
 Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci dla skryptów perl w
 %description perlprov -l pl
 Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w
 Python para manipular pacotes e bancos de dados RPM.
 
+%package build
 Summary(pl):	Skrypty pomocnicze do budowania binarnych RPMów
 Summary(pl):	Skrypty pomocnicze do budowania binarnych RPM-ów
 Group(de):	Applikationen/Datei
@@ -161,6 +189,9 @@ Requires:	tar
 Requires:	textutils
 
 %description build
+%description -l de build
+
+%description build -l de
 %description -l pl build
 Skrypty pomocnicze do budowania binarnych RPMów.
 %description build -l pl
