@@ -160,17 +160,22 @@ echo "Compress man and info pages."; \
 %__spec_install_post_strip {%{!?debug: \
 %{!?no_install_post_strip: \
 	%{?verbose:set -x;} \
-	echo "Strip executable binaries and shared object files."; \
+	echo "Strip executable binaries, archives and shared object files."; \
 	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*"`; \
 	elfexelist=`echo $filelist | xargs -r file | \
 		awk '/ELF.*executable/ {print $1}' | cut -d: -f1`; \
 	elfsharedlist=`echo $filelist | xargs -r file | \
 		awk '/LF.*shared object/ {print $1}' | cut -d: -f1`; \
+	elfarchiveslist=`echo $filelist | xargs -r file | \
+		awk '/current ar archive/ {print $1}' | cut -d: -f1`; \
 	if [ -n "$elfexelist" ]; then \
 		strip --remove-section=.note  --remove-section=.comment $elfexelist; \
 	fi; \
 	if [ -n "$elfsharedlist" ]; then \
 		strip --strip-unneeded --remove-section=.note  --remove-section=.comment $elfsharedlist; \
+	fi; \
+	if [ -n "$elfarchiveslist" ]; then \
+		strip --strip-debug --remove-section=.note  --remove-section=.comment $elfarchiveslist; \
 	fi; } \
 } }
 
@@ -193,6 +198,7 @@ _autoreqprov=n \
 %{?_noautoreqdep:_autoreqprov=y}\
 %{?_noautoprovfiles:_autoreqprov=y}\
 %{?_noautoprov:_autoreqprov=y}\
+%{?_noautocompressdoc:_autoreqprov=y}\
 if [ "$_autoreqprov" = "y" ] ; then \
     if [ -f %{_builddir}/__rpm_lock ] ; then \
 	echo "Some package using \%_noauto*  macros is already being built" >&2 \
@@ -203,6 +209,7 @@ if [ "$_autoreqprov" = "y" ] ; then \
     	touch %{_builddir}/__rpm_lock \
     fi \
 fi \
+%{?_noautocompressdoc:echo '%{_noautocompressdoc}' > %{_builddir}/__rpm_noautocompressdoc}\
 %{nil}
 
 %__os_install_post \
@@ -224,6 +231,7 @@ _autoreqprov=n \
 %{?_noautoprovfiles:_autoreqprov=y}\
 %{?_noautoprov:_autoreqprov=y}\
 %{?_noautoreqfiles:_autoreqprov=y}\
+%{?_noautocompressdoc:_autoreqprov=y}\
 if [ "$_autoreqprov" = "y" ] ; then \
 	rm -f %{_builddir}/__rpm_* \
 fi \
