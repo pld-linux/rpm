@@ -1,25 +1,31 @@
-diff -Nur rpm-2.5.6/lib-rpmrc.in rpm-2.5.6.pld/lib-rpmrc.in
---- rpm-2.5.6/lib-rpmrc.in	Fri Feb  5 09:59:38 1999
-+++ rpm-2.5.6.pld/lib-rpmrc.in	Fri Feb  5 09:57:57 1999
-@@ -12,17 +12,20 @@
+--- rpm-2.91/rpmrc.in~	Mon Feb 15 19:47:35 1999
++++ rpm-2.91/rpmrc.in	Tue Mar 16 21:37:10 1999
+@@ -6,12 +6,13 @@
+ # whenever a new version of RPM is installed.
+ 
+ dbpath:		@varprefix@/lib/rpm
+-topdir:		@prefix@/src/redhat
++topdir:		@prefix@/src/rpm
+ tmppath:	@tmpdir@
+ gzipbin:	@GZIPBIN@
  bzip2bin:	@BZIP2BIN@
  defaultdocdir:  @prefix@/doc
  fixperms:	@FIXPERMS@
-+Vendor:		PLD
++Vendor:         PLD          
  rpmfilename:    %{ARCH}/%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}.rpm
  instchangelog:	5
  
- #############################################################
+@@ -19,10 +20,12 @@
  
  # Please send new entries to rpm-list@redhat.com
-+ 
-+# Plesae send new entries to pld-list@mailbox.tuniv.szczecin.pl
  
++# Plesae send new entries to pld-list@pld.org.pl 
++
  #############################################################
  # Values for RPM_OPT_FLAGS for various platforms
  
 -optflags: i386 -O2 -m486 -fno-strength-reduce
-+optflags: i386 -O2 -mpentium -fomit-frame-pointer
++optflags: i386 -O2 -mpentium
  optflags: alpha -O2
  optflags: sparc -O2
  optflags: sparc64 -O2
