@@ -16,7 +16,8 @@ CONFIG=/etc/sysconfig/banner
 BANNERDIR="/var/lib/banner/"
 # egrep regexp
 EXCLUDEFILES="(rpmnew$|rpmsave$|~$)"
-
+STDOUT="1"  # stdout by default
+#STDOUT="2" # stderr by default
 
 # config paramaeters
 ##########################
@@ -41,6 +42,11 @@ NEED_MTIME_CHECK=0
 NEW_APPEND=0
 NEW_BANNER=""
 NEW_SHOW=0
+
+case $STDOUT in
+	[1-9]) ;;
+	*) STDOUT="1" ;;
+esac
 
 #################################################### FUNCTIONS ########
 
@@ -72,6 +78,8 @@ Help()
 --older     - all choosen banners should be older than following para in seconds
 -s
 --show      - shows wanted banners
+--stderr    - send banner to stderr instead of stdout (or other)
+--stdout    - send banner to stdout instead of stderr (or other)
 -u
 --usage     - shows short help
 
@@ -149,7 +157,7 @@ make_banner()
 }
 show_banner()
 {
-	cat $BANNERDIR/$1
+	cat $BANNERDIR/$1 >&$STDOUT
 }
 show_banners()
 {
@@ -222,6 +230,12 @@ while [ ! -z $1 ]; do
 			NEED_BANNER_LIST=1
 			NEW_SHOW=1
 			ACTION="show"
+			;;
+		--stdout)
+			STDOUT="1"
+			;;
+		--stderr)
+			STDOUT="2"
 			;;
 		-u|--usage)
 			Usage
