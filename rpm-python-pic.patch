@@ -1,0 +1,10 @@
+--- rpm-4.1/python/Makefile.am.orig	Fri Dec  6 10:57:50 2002
++++ rpm-4.1/python/Makefile.am	Mon Dec  9 11:56:11 2002
+@@ -28,6 +28,7 @@
+ 	-lpopt
+ 
+ LDADD =
++CFLAGS = @CFLAGS@ -fPIC
+ 
+ pythondir = $(prefix)/lib/python${PYVER}/site-packages
+ python_PROGRAMS = rpmmodule.so
