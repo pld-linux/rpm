@@ -1,5 +1,8 @@
 # PLD rpm macros
 
+# other macros
+%_enable_debug_packages 1
+
 %__id		@__ID@
 %__id_u		%{__id} -u 
 %__chown_Rhf           @__CHOWN_RHF@
@@ -12,17 +15,17 @@
 #-----------------------------------------------------------------
 # CFLAGS and LDFLAGS used to build
 
+%if %{_enable_debug_packages}%{!?_enable_debug_packages:0}
+%debuginfocflags        -ggdb -Wall
+%endif
+
 %debugcflags	-O0 -g -Wall
-%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}
-# %rpmldflags	%{!?debug:-s}
+%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags:%debuginfocflags}
 %rpmldflags	%{nil}
 
 # kernel compiler
 %kgcc		gcc
 %kgcc_package	gcc
-
-# other macros
-%_enable_debug_packages 1
 
 # Build system path macros.
 #
