@@ -110,7 +110,7 @@ BuildRequires:	elfutils-devel
 BuildRequires:	findutils
 BuildRequires:	gettext-devel >= 0.11.4-2
 #BuildRequires:	libmagic-devel
-%{?with_selinux:BuildRequires:	libselinux-devel}
+%{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
@@ -132,7 +132,7 @@ BuildRequires:	db-static >= %{reqdb_ver}
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	elfutils-static
 #BuildRequires:	libmagic-static
-%{?with_selinux:BuildRequires:	libselinux-static}
+%{?with_selinux:BuildRequires:	libselinux-static >= 1.18}
 BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
 %endif
