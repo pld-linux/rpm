@@ -618,6 +618,9 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 %%distribution PLD
 EOF
 
+# for rpm -e|-U --repackage
+install -d $RPM_BUILD_ROOT/var/spool/repackage
+
 %find_lang %{name}
 
 rm -f doc/manual/Makefile*
@@ -651,6 +654,7 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %lang(sk) %{_mandir}/sk/man8/rpm.8*
 
 %dir /var/lib/rpm
+%dir %attr(700,root,root) /var/spool/repackage
 %dir %{_libdir}/rpm
 
 %doc %attr(755,root,root) %{_libdir}/rpm/convertrpmrc.sh
