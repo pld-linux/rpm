@@ -376,7 +376,7 @@ awk -f %{SOURCE14} %{SOURCE1}
 
 cd popt
 autoconf
-automake -a -c
+automake -a -c -f
 aclocal
 autoheader
 automake -a -c -f
@@ -390,7 +390,7 @@ aclocal
 autoupdate
 autoheader || :
 %{__autoconf}
-automake -a -c
+automake -a -c -f
 sed -e 's#cpio.c $(DBLIBOBJS) depends.c#cpio.c depends.c#g' \
 	lib/Makefile.am > lib/Makefile.am.new
 mv -f lib/Makefile.am.new lib/Makefile.am
