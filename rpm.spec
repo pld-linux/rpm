@@ -2,10 +2,10 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.4
-Release:	2
+Release:	3
 Group:		Base
 Group(pl):	Podstawowe
-Copyright:	GPL
+License:	GPL
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-3.0.x/%{name}-%{version}.tar.gz
 Source1:	rpm.groups
 Source3:	rpm.macros
@@ -112,15 +112,19 @@ Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci dla skryptów perl
 w pakietach rpm.
 Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w
 Python para manipular pacotes e bancos de dados RPM.
-Summary:	Scripts to build binary RPMs
+
 Summary(pl):	Skrypty pomocnicze do budowania binarnych RPMów
 Group:		Utilities/File
 Group(pl):	Narzêdzia/Pliki
 Summary(pt_BR):	Scripts e programas executáveis usados para construir pacotes
+Group:		Applications/File
+Requires:	sh-utils
 Requires:	tar
 Requires:	textutils
+
 %description build
 %description -l pl build
+Skrypty pomocnicze do budowania binarnych RPMów.
 %description build -l pl
 construir pacotes usando o RPM.
 %setup  -q
