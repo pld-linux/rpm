@@ -172,7 +172,7 @@
 +      # we don't provide platform specific modules for platforms other 
 +      # than unix so we also shouldn't require them
  
-+      ($module =~ m/(Mac|OS2|MSDOS)::/) && next;
++      ($module =~ m/(Mac|OS2|MSDOS|Win32)::/) && next;
  
        $require{$module}=$version;
        $line{$module}=$_;
