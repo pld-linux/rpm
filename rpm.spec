@@ -362,7 +362,7 @@ construir pacotes usando o RPM.
 %patch25 -p1
 %patch26 -p0
 %patch27 -p1
-#%patch28 -p1
+%patch28 -p1
 %patch29 -p1
 %patch30 -p1
 
