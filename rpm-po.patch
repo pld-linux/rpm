@@ -1,5 +1,5 @@
---- rpm-4.3/po/es.po.wiget	2003-11-27 13:43:33.000000000 +0100
-+++ rpm-4.3/po/es.po	2004-03-29 17:52:24.618203408 +0200
+--- rpm-4.4/po/es.po.wiget	2003-11-27 13:43:33.000000000 +0100
++++ rpm-4.4/po/es.po	2004-04-08 12:12:10.849600828 +0200
 @@ -2,17 +2,16 @@
  # Copyright (C) YEAR Free Software Foundation, Inc.
  # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -22,8 +22,8 @@
  
  #: build.c:40
  msgid "Failed build dependencies:\n"
---- rpm-4.3/po/fr.po.wiget	2004-03-29 13:28:32.000000000 +0200
-+++ rpm-4.3/po/fr.po	2004-03-29 17:52:24.623202627 +0200
+--- rpm-4.4/po/fr.po.wiget	2004-04-08 11:32:43.000000000 +0200
++++ rpm-4.4/po/fr.po	2004-04-08 12:12:10.896593622 +0200
 @@ -7,7 +7,6 @@
  # N'hésitez pas à m'envoyez un courriel si vous avez des
  # suggestions/corrections.
@@ -77,8 +77,8 @@
  
  #: rpmio/macro.c:1467
  #, c-format
---- rpm-4.3/po/id.po.wiget	2003-11-27 13:43:46.000000000 +0100
-+++ rpm-4.3/po/id.po	2004-03-29 17:52:24.626202158 +0200
+--- rpm-4.4/po/id.po.wiget	2003-11-27 13:43:46.000000000 +0100
++++ rpm-4.4/po/id.po	2004-04-08 12:12:10.916590556 +0200
 @@ -2,17 +2,16 @@
  # Copyright (C) YEAR Free Software Foundation, Inc.
  # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -101,8 +101,8 @@
  
  #: build.c:40
  msgid "Failed build dependencies:\n"
---- rpm-4.3/po/it.po.wiget	2003-11-27 13:43:47.000000000 +0100
-+++ rpm-4.3/po/it.po	2004-03-29 17:52:24.628201845 +0200
+--- rpm-4.4/po/it.po.wiget	2003-11-27 13:43:47.000000000 +0100
++++ rpm-4.4/po/it.po	2004-04-08 12:12:10.943586417 +0200
 @@ -2,17 +2,16 @@
  # Copyright (C) YEAR Free Software Foundation, Inc.
  # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -125,8 +125,8 @@
  
  #: build.c:40
  msgid "Failed build dependencies:\n"
---- rpm-4.3/po/ja.po.wiget	2004-03-29 13:28:34.000000000 +0200
-+++ rpm-4.3/po/ja.po	2004-03-29 17:52:24.632201220 +0200
+--- rpm-4.4/po/ja.po.wiget	2004-04-08 11:32:44.000000000 +0200
++++ rpm-4.4/po/ja.po	2004-04-08 12:12:10.964583197 +0200
 @@ -2,7 +2,6 @@
  # Kanda Mitsru <kanda@nn.iij4u.or.jp>
  # rpm message catalog
@@ -144,32 +144,32 @@
  
  #: build.c:40
  #, fuzzy
---- rpm-4.3/po/pt_BR.po.wiget	2004-03-29 13:28:41.000000000 +0200
-+++ rpm-4.3/po/pt_BR.po	2004-03-29 17:55:14.022722492 +0200
+--- rpm-4.4/po/pt_BR.po.wiget	2004-04-08 11:32:45.000000000 +0200
++++ rpm-4.4/po/pt_BR.po	2004-04-08 12:13:36.702434236 +0200
 @@ -6,6 +6,9 @@
  "Project-Id-Version: rpm 4.0.3\n"
  "Report-Msgid-Bugs-To: \n"
- "POT-Creation-Date: 2004-03-29 13:28+0200\n"
+ "POT-Creation-Date: 2004-04-08 11:32+0200\n"
 +"PO-Revision-Date: 2002-02-14 10:51+0000\n"
 +"Last-Translator: José Nuno Coelho Sanarra Pires <jncp@rnl.ist.utl.pt>\n"
 +"Language-Team: pt <morais@kde.org>\n"
  "MIME-Version: 1.0\n"
  "Content-Type: text/plain; charset=ISO-8859-1\n"
  "Content-Transfer-Encoding: 8-bit\n"
---- rpm-4.3/po/sr.po.wiget	2004-03-29 13:28:48.000000000 +0200
-+++ rpm-4.3/po/sr.po	2004-03-29 17:55:54.248434370 +0200
+--- rpm-4.4/po/sr.po.wiget	2004-04-08 11:32:47.000000000 +0200
++++ rpm-4.4/po/sr.po	2004-04-08 12:14:00.982709748 +0200
 @@ -3,6 +3,9 @@
  "Project-Id-Version: rpm 4.0.3\n"
  "Report-Msgid-Bugs-To: \n"
- "POT-Creation-Date: 2004-03-29 13:28+0200\n"
+ "POT-Creation-Date: 2004-04-08 11:32+0200\n"
 +"PO-Revision-Date: 2002-02-14 10:51+0000\n"
 +"Last-Translator: ?\n"
 +"Language-Team: ?\n"
  "MIME-Version: 1.0\n"
  "Content-Type: text/plain; charset=iso-8859-2\n"
  "Content-Transfer-Encoding: 8bit\n"
---- rpm-4.3/po/uk.po.wiget	2003-11-27 13:44:54.000000000 +0100
-+++ rpm-4.3/po/uk.po	2004-03-29 17:52:24.653197938 +0200
+--- rpm-4.4/po/uk.po.wiget	2003-11-27 13:44:54.000000000 +0100
++++ rpm-4.4/po/uk.po	2004-04-08 12:12:11.252539043 +0200
 @@ -2,17 +2,16 @@
  # Copyright (C) YEAR Free Software Foundation, Inc.
  # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -192,9 +192,9 @@
  
  #: build.c:40
  msgid "Failed build dependencies:\n"
---- rpm-4.3/configure.ac.wiget	2004-03-29 17:52:23.314407211 +0200
-+++ rpm-4.3/configure.ac	2004-03-29 17:52:24.654197782 +0200
-@@ -37,7 +37,7 @@
+--- rpm-4.4/configure.ac.wiget	2004-04-08 12:12:09.298838615 +0200
++++ rpm-4.4/configure.ac	2004-04-08 12:12:11.253538890 +0200
+@@ -40,7 +40,7 @@
  AM_INIT_AUTOMAKE([foreign])
  
  dnl Set of available languages.
