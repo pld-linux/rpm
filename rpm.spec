@@ -133,9 +133,12 @@ Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne
 Summary(pt_BR):	Arquivos de inclusão e bibliotecas para programas de manipulação de pacotes RPM
 Group:		Development/Libraries
 Requires:	%{name} = %{version}
-Requires:	popt-devel >= 1.7
 Requires:	beecrypt-devel
+Requires:	bzip2-devel
 Requires:	db-devel
+Requires:	libelf-devel
+Requires:	popt-devel >= 1.7
+Requires:	zlib-devel
 
 %description devel
 The RPM packaging system includes a C library that makes it easy to
