@@ -173,10 +173,10 @@
 -      ($module  =~ m/\.ph$/) && ($module =~ s!.*/!!g );
 +      # ($module  =~ m/\.ph$/) && ($module =~ s!.*/!!g );
 +
-+      # there is no need to generate dependencies for ph and pl files
++      # there is no need to generate dependencies for ph, pl or test files
 +      # so let's just skip them.
  
-+      ($module =~ m/\.(ph|pl)$/) && next;
++      ($module =~ m/\.(ph|pl|t)$/) && next;
 +
 +      # skip all modules for platforms other than linux.
 +
