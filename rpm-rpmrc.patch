@@ -1,6 +1,7 @@
---- rpm-2.93/rpmrc.in.rpmrc	Sun Apr  4 22:10:34 1999
-+++ rpm-2.93/rpmrc.in	Thu Apr  8 18:32:21 1999
-@@ -4,10 +4,15 @@
+diff -ur rpm-3.0.1.old/rpmrc.in rpm-3.0.1/rpmrc.in
+--- rpm-3.0.1.old/rpmrc.in	Fri Jun  4 20:34:49 1999
++++ rpm-3.0.1/rpmrc.in	Fri Jun  4 20:36:31 1999
+@@ -4,25 +4,30 @@
  
  # Please send new entries to rpm-list@redhat.com
  
@@ -10,14 +11,44 @@
  # Values for RPM_OPT_FLAGS for various platforms
  
 -optflags: i386 -O2 -m486 -fno-strength-reduce
-+optflags: i386 -O2
-+optflags: i486 -O2
-+optflags: i586 -O2 -mpentium
-+optflags: i686 -O2 -mpentiumpro
- optflags: alpha -O2
- optflags: sparc -O2
- optflags: sparc64 -O2
-@@ -187,6 +192,6 @@
+-optflags: alpha -O2
+-optflags: sparc -O2
+-optflags: sparc64 -O2
+-optflags: m68k -O2 -fomit-frame-pointer
+-optflags: ppc -O2 -fsigned-char
+-optflags: parisc -O2 -mpa-risc-1-0
+-optflags: hppa1.0 -O2 -mpa-risc-1-0
+-optflags: hppa1.1 -O2 -mpa-risc-1-0
+-optflags: hppa1.2 -O2 -mpa-risc-1-0
+-optflags: hppa2.0 -O2 -mpa-risc-1-0
+-optflags: mipseb -O2
+-optflags: mipsel -O2
+-optflags: armv4 -O2 -fsigned-char -fomit-frame-pointer
+-optflags: armv4b -O2 -fsigned-char -fomit-frame-pointer
+-optflags: armv4l -O2 -fsigned-char -fomit-frame-pointer
++optflags: i386 -O2 -g
++optflags: i486 -O2 -g
++optflags: i586 -O2 -mpentium -g
++optflags: i686 -O2 -mpentiumpro -g
++optflags: alpha -O2 -g
++optflags: sparc -O2 -g 
++optflags: sparc64 -O2 -g
++optflags: m68k -O2 -fomit-frame-pointer -g
++optflags: ppc -O2 -fsigned-char -g
++optflags: parisc -O2 -mpa-risc-1-0 -g
++optflags: hppa1.0 -O2 -mpa-risc-1-0 -g 
++optflags: hppa1.1 -O2 -mpa-risc-1-0 -g
++optflags: hppa1.2 -O2 -mpa-risc-1-0 -g 
++optflags: hppa2.0 -O2 -mpa-risc-1-0 -g
++optflags: mipseb -O2 -g
++optflags: mipsel -O2 -g
++optflags: armv4 -O2 -fsigned-char -fomit-frame-pointer -g
++optflags: armv4b -O2 -fsigned-char -fomit-frame-pointer -g
++optflags: armv4l -O2 -fsigned-char -fomit-frame-pointer -g
+ 
+ #############################################################
+ # Canonical arch names and numbers
+@@ -202,6 +207,6 @@
  #############################################################
  #macrofiles:	@RPMCONFIGDIR@/macros:@SYSCONFIGDIR@/macros:~/.rpmmacros
  
