@@ -1,6 +1,174 @@
---- rpm-4.3/rpmio/Makefile.am.wiget	2003-06-11 02:05:34.000000000 +0200
-+++ rpm-4.3/rpmio/Makefile.am	2003-06-11 02:05:34.000000000 +0200
-@@ -65,34 +65,34 @@
+diff -urN rpm-4.3.org/configure.ac rpm-4.3/configure.ac
+--- rpm-4.3.org/configure.ac	2003-12-28 02:08:42.969753832 +0100
++++ rpm-4.3/configure.ac	2003-12-28 02:09:04.576469112 +0100
+@@ -431,6 +431,18 @@
+ AC_SUBST(WITH_BEECRYPT_INCLUDE)
+ AC_SUBST(WITH_BEECRYPT_LIB)
+ 
++WITH_POPT_SUBDIR=
++WITH_POPT_LIB=
++AC_CHECK_HEADERS([popt.h])
++AC_CHECK_LIB(popt, poptGetContext, [
++       AC_DEFINE(HAVE_LIBPOPT, 1, [Define to 1 if you have libpopt.])
++       WITH_POPT_LIB="-lpopt"
++       ],[WITH_POPT_SUBDIR="popt"
++       WITH_POPT_LIB="\$(top_builddir)/popt/libpopt.la"])
++
++AC_SUBST(WITH_POPT_SUBDIR)
++AC_SUBST(WITH_POPT_LIB)
++
+ AC_CHECK_FUNC(setreuid, [], [
+     AC_CHECK_LIB(ucb, setreuid, [if echo $LIBS | grep -- -lucb >/dev/null ;then :; else LIBS="$LIBS -lc -lucb" USEUCB=y;fi])
+ ])
+@@ -1218,7 +1230,7 @@
+ dnl # XXX Propagate -lucb to popt ...
+ dnl export LIBS INCPATH CONFIG_SITE
+ 
+-AC_CONFIG_SUBDIRS(popt beecrypt zlib elfutils file db3)
++AC_CONFIG_SUBDIRS(file)
+ 
+ AC_OUTPUT([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
+ 	scripts/perl.req scripts/perl.prov
+@@ -1240,7 +1252,7 @@
+ 	python/Makefile
+ 	python/rpmdb/Makefile
+ 	python/rpmdb/test/Makefile
+-  ], [	echo timestamp > popt/stamp-h.in
++  ], [
+ 	echo timestamp > stamp-h.in
+   ]
+ )
+diff -urN rpm-4.3.org/configure.ac.orig rpm-4.3/configure.ac.orig
+--- rpm-4.3.org/configure.ac.orig	2003-12-28 02:08:50.057676304 +0100
++++ rpm-4.3/configure.ac.orig	2003-12-28 02:08:04.494602944 +0100
+@@ -1222,6 +1222,7 @@
+ 
+ AC_OUTPUT([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
+ 	scripts/perl.req scripts/perl.prov
++	scripts/php.req scripts/php.prov
+ 	rpmio/Makefile rpmdb/Makefile lib/Makefile build/Makefile
+ 	scripts/Makefile scripts/brp-redhat
+ 	scripts/macros.perl scripts/macros.php scripts/macros.python
+diff -urN rpm-4.3.org/lib/Makefile.am rpm-4.3/lib/Makefile.am
+--- rpm-4.3.org/lib/Makefile.am	2003-12-28 02:08:42.972753376 +0100
++++ rpm-4.3/lib/Makefile.am	2003-12-28 02:10:03.310540176 +0100
+@@ -10,7 +10,6 @@
+ 	-I$(top_srcdir)/rpmdb \
+ 	-I$(top_srcdir)/rpmio \
+ 	@WITH_BEECRYPT_INCLUDE@ \
+-	-I$(top_srcdir)/popt \
+ 	@INCPATH@
+ 
+ EXTRA_DIST = getdate.y
+@@ -40,7 +39,7 @@
+ librpm_la_LDFLAGS = -release 4.3 $(LDFLAGS) \
+ 	$(top_builddir)/rpmdb/librpmdb.la \
+ 	$(top_builddir)/rpmio/librpmio.la \
+-	$(top_builddir)/popt/libpopt.la \
++	@WITH_POPT_LIB@ \
+ 	-lselinux
+ 
+ getdate.c: getdate.y
+@@ -93,7 +92,7 @@
+ 	$(LINK) @LDFLAGS_STATIC@ $(CFLAGS) $(DEFS) $(INCLUDES) -o $@ $< \
+ 	-lselinux \
+ 	$(top_builddir)/rpmio/librpmio.la \
+-	$(top_builddir)/popt/libpopt.la
++	-lpopt
+ 	
+ #tds: tds.c librpm.la
+ #	$(CC) $(CFLAGS) $(DEFS) $(INCLUDES) -o $@ $< $(mylibs)
+@@ -104,8 +103,8 @@
+ tthread: tthread.o librpm.la
+ 	$(LINK) $(CFLAGS) $(DEFS) $(INCLUDES) -o $@ $< $(mylibs) @WITH_LIBELF_LIB@
+ 
+-tsystem: tsystem.o $(top_builddir)/popt/libpopt.la
+-	$(LINK) $(CFLAGS) $(DEFS) $(INCLUDES) -o $@ $< $(top_builddir)/rpmio/librpmio.la $(top_builddir)/popt/libpopt.la
++tsystem: tsystem.o
++	$(LINK) $(CFLAGS) $(DEFS) $(INCLUDES) -o $@ $< $(top_builddir)/rpmio/librpmio.la -lpopt
+ 
+ tre: tre.o librpm.la
+ 	$(LINK) $(CFLAGS) $(DEFS) $(INCLUDES) -o $@ $< \
+diff -urN rpm-4.3.org/Makefile.am rpm-4.3/Makefile.am
+--- rpm-4.3.org/Makefile.am	2003-12-28 02:08:42.937758696 +0100
++++ rpm-4.3/Makefile.am	2003-12-28 02:09:04.580468504 +0100
+@@ -14,7 +14,7 @@
+ 	po/*.in po/*.po po/rpm.pot \
+ 	rpm.magic rpmpopt-$(VERSION) rpmqv.c rpm.c
+ 
+-SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ popt @WITH_BEECRYPT_SUBDIR@  rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
++SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ @WITH_BEECRYPT_SUBDIR@  rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
+ 
+ INCLUDES = \
+ 	-I$(top_srcdir)/build \
+@@ -22,7 +22,6 @@
+ 	-I$(top_srcdir)/rpmdb \
+ 	-I$(top_srcdir)/rpmio \
+ 	@WITH_BEECRYPT_INCLUDE@ \
+-	-I$(top_srcdir)/popt \
+ 	@WITH_LIBELF_INCLUDE@ \
+ 	@INCPATH@
+ 
+@@ -34,7 +33,7 @@
+ 	$(top_builddir)/lib/librpm.la \
+ 	$(top_builddir)/rpmdb/librpmdb.la \
+ 	$(top_builddir)/rpmio/librpmio.la \
+-	$(top_builddir)/popt/libpopt.la \
++	-lpopt \
+ 	@WITH_ZLIB_LIB@ \
+ 	@INTLLIBS@ \
+ 	@LIBMISC@
+@@ -107,7 +106,6 @@
+ 	    -load lib/rpmlib.lcd \
+ 	    -load rpmdb/rpmdb.lcd \
+ 	    -load rpmio/rpmio.lcd \
+-	    -load popt/popt.lcd \
+ 		$(DEFS) $(INCLUDES) rpmqv.c $(rpmb_SOURCES)
+ 
+ .PHONY:	lint
+@@ -117,9 +115,7 @@
+ 		`make -s sources -C lib` \
+ 		`make -s sources -C rpmdb` \
+ 		`make -s sources -C rpmio` \
+-		`make -s sources -C beecrypt` \
+-		`make -s sources -C file/src` \
+-		`make -s sources -C popt`
++		`make -s sources -C file/src`
+ 
+ CVSTAG = r$(subst .,-,$(VERSION))
+ 
+diff -urN rpm-4.3.org/rpmdb/Makefile.am rpm-4.3/rpmdb/Makefile.am
+--- rpm-4.3.org/rpmdb/Makefile.am	2003-12-28 02:08:53.054220760 +0100
++++ rpm-4.3/rpmdb/Makefile.am	2003-12-28 02:09:04.581468352 +0100
+@@ -9,7 +9,6 @@
+ 	-I$(top_srcdir)/lib \
+ 	-I$(top_srcdir)/rpmio \
+ 	@WITH_BEECRYPT_INCLUDE@ \
+-	-I$(top_srcdir)/popt \
+ 	@WITH_LIBELF_INCLUDE@ \
+ 	@INCPATH@
+ 
+@@ -51,7 +50,7 @@
+ 	tagname.c tagtbl.c
+ librpmdb_la_LDFLAGS = -release 4.3 \
+ 	$(top_builddir)/rpmio/librpmio.la \
+-	$(top_builddir)/popt/libpopt.la \
++	@WITH_POPT_LIB@ \
+ 	@WITH_LIBELF_LIB@
+ librpmdb_la_LIBADD = $(DBLIBOBJS) $(libdb_la)
+ librpmdb_la_DEPENDENCIES = $(DBLIBOBJS) $(libdb_la)
+diff -urN rpm-4.3.org/rpmio/Makefile.am rpm-4.3/rpmio/Makefile.am
+--- rpm-4.3.org/rpmio/Makefile.am	2003-12-28 02:08:42.988750944 +0100
++++ rpm-4.3/rpmio/Makefile.am	2003-12-28 02:09:04.582468200 +0100
+@@ -11,7 +11,6 @@
+ INCLUDES = -I. \
+ 	-I$(top_srcdir) \
+ 	@WITH_BEECRYPT_INCLUDE@ \
+-	-I$(top_srcdir)/popt \
+ 	@INCPATH@
+ 
+ pkgincdir = $(pkgincludedir)
+@@ -65,34 +64,34 @@
  	$(LINT) $(DEFS) $(INCLUDES) $(librpmio_la_SOURCES)
  
  tdigest_SOURCES = tdigest.c
@@ -43,31 +211,18 @@
  
  tsw_SOURCES = tsw.c
  tsw_LDFLAGS = librpmio.la
---- rpm-4.3/rpmdb/Makefile.am.wiget	2003-05-23 17:00:19.000000000 +0200
-+++ rpm-4.3/rpmdb/Makefile.am	2003-06-11 02:05:34.000000000 +0200
-@@ -49,7 +49,7 @@
- 	tagname.c tagtbl.c
- librpmdb_la_LDFLAGS = -release @VERSION@ $(LDFLAGS) \
- 	$(top_builddir)/rpmio/librpmio.la \
--	$(top_builddir)/popt/libpopt.la \
-+	@WITH_POPT_LIB@ \
- 	@WITH_LIBELF_LIB@ \
- 	@libdb3@
- librpmdb_la_LIBADD = $(DBLIBOBJS) $(DB3LOBJS)
---- rpm-4.3/lib/Makefile.am.wiget	2003-05-23 16:59:36.000000000 +0200
-+++ rpm-4.3/lib/Makefile.am	2003-06-11 02:05:34.000000000 +0200
-@@ -40,7 +40,7 @@
- librpm_la_LDFLAGS = -release @VERSION@ $(LDFLAGS) \
- 	$(top_builddir)/rpmdb/librpmdb.la \
- 	$(top_builddir)/rpmio/librpmio.la \
--	$(top_builddir)/popt/libpopt.la
-+	@WITH_POPT_LIB@
- 
- getdate.c: getdate.y
- 	@echo expect 10 shift/reduce conflicts
---- rpm-4.3/tools/Makefile.am.wiget	2003-05-23 17:00:27.000000000 +0200
-+++ rpm-4.3/tools/Makefile.am	2003-06-11 02:05:34.000000000 +0200
-@@ -40,7 +40,7 @@
+diff -urN rpm-4.3.org/tools/Makefile.am rpm-4.3/tools/Makefile.am
+--- rpm-4.3.org/tools/Makefile.am	2003-12-28 02:08:42.852771616 +0100
++++ rpm-4.3/tools/Makefile.am	2003-12-28 02:09:26.913073432 +0100
+@@ -9,7 +9,6 @@
+ 	-I$(top_srcdir)/rpmdb \
+ 	-I$(top_srcdir)/rpmio \
+ 	@WITH_BEECRYPT_INCLUDE@ \
+-	-I$(top_srcdir)/popt \
+ 	@WITH_LIBELF_INCLUDE@ \
+ 	@WITH_LIBDWARF_INCLUDE@ \
+ 	-I$(top_srcdir)/file/src \
+@@ -38,7 +37,7 @@
  
  debugedit_SOURCES =	debugedit.c hashtab.c
  debugedit_LDADD =	@LDFLAGS_STATIC@ @WITH_LIBELF_LIB@ \
@@ -76,85 +231,3 @@
  
  javadeps_SOURCES =	javadeps.c
  
---- rpm-4.3/configure.ac.wiget	2003-06-11 02:05:34.000000000 +0200
-+++ rpm-4.3/configure.ac	2003-06-11 02:05:34.000000000 +0200
-@@ -431,6 +431,17 @@
- AC_SUBST(WITH_BEECRYPT_INCLUDE)
- AC_SUBST(WITH_BEECRYPT_LIB)
- 
-+WITH_POPT_SUBDIR=
-+WITH_POPT_LIB=
-+AC_CHECK_HEADERS([popt.h])
-+AC_CHECK_LIB(popt, poptGetContext, [
-+	AC_DEFINE(HAVE_LIBPOPT, 1, [Define to 1 if you have libpopt.])
-+	WITH_POPT_LIB="-lpopt"
-+	],[WITH_POPT_SUBDIR="popt"
-+	WITH_POPT_LIB="\$(top_builddir)/popt/libpopt.la"])
-+	
-+AC_SUBST(WITH_POPT_SUBDIR)
-+AC_SUBST(WITH_POPT_LIB)
- AC_CHECK_FUNC(setreuid, [], [
-     AC_CHECK_LIB(ucb, setreuid, [if echo $LIBS | grep -- -lucb >/dev/null ;then :; else LIBS="$LIBS -lc -lucb" USEUCB=y;fi])
- ])
-@@ -491,6 +502,7 @@
- 
- dnl Check for Berkeley db3 API.
- AC_CHECK_FUNC(db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"],
-+  AC_CHECK_LIB(db-4.1, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-4.1"],
-   AC_CHECK_LIB(db-3.2, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.2"],
-     AC_CHECK_LIB(db-3.1, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.1"],
-       AC_CHECK_LIB(db-3.0, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.0"],
-@@ -499,6 +511,7 @@
-       )
-     )
-   )
-+  )
- )
- 
- if test X"$DBLIBSRCS" = X; then
-@@ -1257,7 +1270,7 @@
- dnl # XXX Propagate -lucb to popt ...
- dnl export LIBS INCPATH CONFIG_SITE
- 
--AC_CONFIG_SUBDIRS(popt beecrypt zlib elfutils file db3)
-+AC_CONFIG_SUBDIRS(beecrypt file)
- 
- AC_OUTPUT([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
- 	scripts/perl.req scripts/perl.prov
-@@ -1281,7 +1294,7 @@
- 	python/rpmdb/test/Makefile
- 	python/mpw/Makefile
- 	python/mpw/test/Makefile
--  ], [	echo timestamp > popt/stamp-h.in
-+  ], [	
- 	echo timestamp > beecrypt/stamp-h.in
- 	echo timestamp > stamp-h.in
-   ]
---- rpm-4.3/Makefile.am.wiget	2003-05-23 16:57:23.000000000 +0200
-+++ rpm-4.3/Makefile.am	2003-06-11 02:08:38.000000000 +0200
-@@ -14,7 +14,7 @@
- 	po/*.in po/*.po po/rpm.pot \
- 	rpm.magic rpmpopt-$(VERSION) rpmqv.c rpm.c
- 
--SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ popt @WITH_BEECRYPT_SUBDIR@  rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
-+SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ @WITH_POPT_SUBDIR@ @WITH_BEECRYPT_SUBDIR@  rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
- 
- INCLUDES = \
- 	-I$(top_srcdir)/build \
-@@ -34,7 +34,7 @@
- 	$(top_builddir)/lib/librpm.la \
- 	$(top_builddir)/rpmdb/librpmdb.la \
- 	$(top_builddir)/rpmio/librpmio.la \
--	$(top_builddir)/popt/libpopt.la \
-+	-lpopt \
- 	@WITH_ZLIB_LIB@ \
- 	@INTLLIBS@ \
- 	@LIBMISC@
-@@ -105,7 +105,6 @@
- 	    -load lib/rpmlib.lcd \
- 	    -load rpmdb/rpmdb.lcd \
- 	    -load rpmio/rpmio.lcd \
--	    -load popt/popt.lcd \
- 		$(DEFS) $(INCLUDES) rpmqv.c $(rpmb_SOURCES)
- 
- .PHONY:	lint

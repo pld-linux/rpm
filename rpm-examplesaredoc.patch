@@ -1,6 +1,7 @@
---- rpm-4.3/build/files.c.orig	Thu Jul 10 12:05:14 2003
-+++ rpm-4.3/build/files.c	Thu Jul 10 12:07:25 2003
-@@ -1977,9 +1977,11 @@
+diff -urN rpm-4.3.org/build/files.c rpm-4.3/build/files.c
+--- rpm-4.3.org/build/files.c	2003-12-27 23:56:47.496088736 +0100
++++ rpm-4.3/build/files.c	2003-12-28 00:28:14.088283128 +0100
+@@ -1982,10 +1982,12 @@
      fl.docDirs[fl.docDirCount++] = xstrdup("/usr/share/doc");
      fl.docDirs[fl.docDirCount++] = xstrdup("/usr/share/man");
      fl.docDirs[fl.docDirCount++] = xstrdup("/usr/share/info");
@@ -8,6 +9,7 @@
      fl.docDirs[fl.docDirCount++] = rpmGetPath("%{_docdir}", NULL);
      fl.docDirs[fl.docDirCount++] = rpmGetPath("%{_mandir}", NULL);
      fl.docDirs[fl.docDirCount++] = rpmGetPath("%{_infodir}", NULL);
+     fl.docDirs[fl.docDirCount++] = rpmGetPath("%{_javadocdir}", NULL);
 +    fl.docDirs[fl.docDirCount++] = rpmGetPath("%{_examplesdir}", NULL);
      
      fl.fileList = NULL;

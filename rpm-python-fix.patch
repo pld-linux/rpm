@@ -1,6 +1,7 @@
---- rpm-4.3/python/Makefile.am.wig	2003-06-11 02:09:53.000000000 +0200
-+++ rpm-4.3/python/Makefile.am	2003-06-11 02:13:28.000000000 +0200
-@@ -29,47 +29,35 @@
+diff -urN rpm-4.3.org/python/Makefile.am rpm-4.3/python/Makefile.am
+--- rpm-4.3.org/python/Makefile.am	2003-12-27 23:56:46.082303664 +0100
++++ rpm-4.3/python/Makefile.am	2003-12-28 00:07:26.082008920 +0100
+@@ -29,46 +29,33 @@
  	rpmfi-py.h rpmmi-py.h rpmrc-py.h rpmte-py.h rpmts-py.h
  
  mylibs= \
@@ -8,11 +9,11 @@
 -	$(top_builddir)/rpmdb/.libs/librpmdb.so \
 -	$(top_builddir)/rpmio/.libs/librpmio.so \
 -	$(top_builddir)/popt/.libs/libpopt.so \
-+ 	$(top_builddir)/lib/librpm.la \
-+  	$(top_builddir)/rpmdb/librpmdb.la \
-+  	$(top_builddir)/rpmio/librpmio.la \
-+ 	-lbeecrypt \
-+  	-lpopt \
++	$(top_builddir)/lib/librpm.la \
++	$(top_builddir)/rpmdb/librpmdb.la \
++	$(top_builddir)/rpmio/librpmio.la \
++	-lbeecrypt \
++	-lpopt \
  	@WITH_LIBELF_LIB@
  
  LDADD =
@@ -26,11 +27,11 @@
 +rpmdb_LTLIBRARIES = _rpmdb.la
  
 -noinst_PROGRAMS = poptmodule.so
-+rpmmodule_la_LDFLAGS =	$(mylibs) $(LIBS) -module -avoid-version
-+rpmmodule_la_LIBADD =	@WITH_BEECRYPT_LIB@
++rpmmodule_la_LDFLAGS = $(mylibs) $(LIBS) -module -avoid-version
++rpmmodule_la_LIBADD =  @WITH_BEECRYPT_LIB@
  
 -rpmmodule_so_SOURCES =
--rpmmodule_so_LDFLAGS =	$(mylibs) $(LIBS) -shared -Wl,-soname,rpmmodule.so
+-rpmmodule_so_LDFLAGS = $(mylibs) $(LIBS) -shared -Wl,-soname,rpmmodule.so
 -rpmmodule_so_LDADD =	@WITH_BEECRYPT_LIB@
 +_rpmdb_la_SOURCES = _rpmdb.c
 +_rpmdb_la_LDFLAGS = $(mylibs) $(LIBS) -module -avoid-version
@@ -46,19 +47,18 @@
 -noinst_LTLIBRARIES = librpmmodule.la
 -librpmmodule_la_SOURCES = rpmmodule.c header-py.c \
 +rpmmodule_la_SOURCES = rpmmodule.c header-py.c \
- 	rpmbc-py.c rpmmpw-py.c rpmrng-py.c \
  	rpmal-py.c rpmds-py.c rpmdb-py.c rpmfd-py.c rpmfts-py.c \
  	rpmfi-py.c rpmmi-py.c rpmrc-py.c rpmte-py.c rpmts-py.c
+-librpmmodule_OBJECTS = $(subst .c,.o,$(librpmmodule_la_SOURCES))
+-
+-rpmmodule.so$(EXEEXT): librpmmodule.la
+-	$(CC) -o $@ $(librpmmodule_OBJECTS) $(rpmmodule_so_LDFLAGS)
+-
+-_rpmdb.so$(EXEEXT): _rpmdb.o
+-	$(CC) -o $@ _rpmdb.o $(_rpmdb_so_LDFLAGS)
+-
+-poptmodule.so$(EXEEXT): poptmodule.o
+-	$(CC) -o $@ poptmodule.o $(poptmodule_so_LDFLAGS)
  
--rpmmodule.so$(EXEEXT): $(librpmmodule_la_OBJECTS)
--	$(CC) -o $@ $(librpmmodule_la_OBJECTS) $(rpmmodule_so_LDFLAGS)
--
--_rpmdb.so$(EXEEXT): _rpmdb.lo
--	$(CC) -o $@ _rpmdb.lo $(_rpmdb_so_LDFLAGS)
--
--poptmodule.so$(EXEEXT): poptmodule.lo
--	$(CC) -o $@ poptmodule.lo $(poptmodule_so_LDFLAGS)
--
  # rpmmodule.c header-py.c \
  # 	rpmal-py.c rpmds-py.c rpmdb-py.c rpmfd-py.c rpmfi-py.c rpmmi-py.c \
- # 	rpmrc-py.c rpmte-py.c rpmts-py.c

@@ -1,6 +1,6 @@
-diff -uNr rpm-4.3.orig/po/es.po rpm-4.3/po/es.po
---- rpm-4.3.orig/po/es.po	Tue Sep  2 00:02:22 2003
-+++ rpm-4.3/po/es.po	Tue Sep  2 00:08:51 2003
+diff -urN rpm-4.3.org/po/es.po rpm-4.3/po/es.po
+--- rpm-4.3.org/po/es.po	2003-12-28 01:21:01.909701072 +0100
++++ rpm-4.3/po/es.po	2003-12-28 01:21:24.434276816 +0100
 @@ -2,17 +2,16 @@
  # Copyright (C) YEAR Free Software Foundation, Inc.
  # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -23,9 +23,57 @@ diff -uNr rpm-4.3.orig/po/es.po rpm-4.3/po/es.po
  
  #: build.c:40
  msgid "Failed build dependencies:\n"
-diff -uNr rpm-4.3.orig/po/id.po rpm-4.3/po/id.po
---- rpm-4.3.orig/po/id.po	Tue Sep  2 00:02:22 2003
-+++ rpm-4.3/po/id.po	Tue Sep  2 00:06:34 2003
+diff -urN rpm-4.3.org/po/fr.po rpm-4.3/po/fr.po
+--- rpm-4.3.org/po/fr.po	2003-12-28 01:21:01.906701528 +0100
++++ rpm-4.3/po/fr.po	2003-12-28 01:14:10.000000000 +0100
+@@ -460,7 +460,7 @@
+ #: build/files.c:502
+ #, c-format
+ msgid "Missing %s in %s %s\n"
+-msgstr "%s manquant(e) dans %s\n"
++msgstr "%s manquant(e) dans %s %s\n"
+ 
+ #: build/files.c:559
+ #, c-format
+@@ -845,7 +845,7 @@
+ #: build/parseFiles.c:42
+ #, c-format
+ msgid "line %d: Error parsing %%files: %s\n"
+-msgstr "ligne %d: erreur dans l'analyse syntaxique de %%files\n"
++msgstr "ligne %d: erreur dans l'analyse syntaxique de %%files: %s\n"
+ 
+ #: build/parseFiles.c:86
+ #, c-format
+@@ -2801,7 +2801,7 @@
+ #, c-format
+ msgid "package %s pre-transaction syscall(s): %s failed: %s"
+ msgstr ""
+-"échec du(des) appel(s) système(s) de la pré-transaction du paquetage %s: %s"
++"%s échec du(des) appel(s) système(s) de la pré-transaction du paquetage %s: %s"
+ 
+ #: lib/rpmps.c:262
+ #, c-format
+@@ -3441,7 +3441,7 @@
+ #: rpmdb/rpmdb.c:2910
+ #, c-format
+ msgid "error(%d) allocating new package instance\n"
+-msgstr "erreur en allouant une nouvelle instance de paquetage\n"
++msgstr "erreur(%d) en allouant une nouvelle instance de paquetage\n"
+ 
+ #: rpmdb/rpmdb.c:2964
+ msgid "rpmdbAdd: skipping"
+@@ -3607,7 +3607,7 @@
+ #: rpmio/macro.c:1310
+ #, c-format
+ msgid "A %% is followed by an unparseable macro\n"
+-msgstr "Un % est suivi d'une macro in-analysable\n"
++msgstr "Un %% est suivi d'une macro in-analysable\n"
+ 
+ #: rpmio/macro.c:1439
+ #, c-format
+diff -urN rpm-4.3.org/po/id.po rpm-4.3/po/id.po
+--- rpm-4.3.org/po/id.po	2003-12-28 01:21:01.914700312 +0100
++++ rpm-4.3/po/id.po	2003-12-28 01:21:24.438276208 +0100
 @@ -2,17 +2,16 @@
  # Copyright (C) YEAR Free Software Foundation, Inc.
  # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -48,9 +96,9 @@ diff -uNr rpm-4.3.orig/po/id.po rpm-4.3/po/id.po
  
  #: build.c:40
  msgid "Failed build dependencies:\n"
-diff -uNr rpm-4.3.orig/po/it.po rpm-4.3/po/it.po
---- rpm-4.3.orig/po/it.po	Tue Sep  2 00:02:22 2003
-+++ rpm-4.3/po/it.po	Tue Sep  2 00:06:05 2003
+diff -urN rpm-4.3.org/po/it.po rpm-4.3/po/it.po
+--- rpm-4.3.org/po/it.po	2003-12-28 01:21:01.903701984 +0100
++++ rpm-4.3/po/it.po	2003-12-28 01:21:24.441275752 +0100
 @@ -2,17 +2,16 @@
  # Copyright (C) YEAR Free Software Foundation, Inc.
  # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -73,9 +121,9 @@ diff -uNr rpm-4.3.orig/po/it.po rpm-4.3/po/it.po
  
  #: build.c:40
  msgid "Failed build dependencies:\n"
-diff -uNr rpm-4.3.orig/po/ja.po rpm-4.3/po/ja.po
---- rpm-4.3.orig/po/ja.po	Tue Sep  2 00:02:22 2003
-+++ rpm-4.3/po/ja.po	Tue Sep  2 00:09:51 2003
+diff -urN rpm-4.3.org/po/ja.po rpm-4.3/po/ja.po
+--- rpm-4.3.org/po/ja.po	2003-12-28 01:21:01.913700464 +0100
++++ rpm-4.3/po/ja.po	2003-12-28 01:21:24.445275144 +0100
 @@ -2,7 +2,6 @@
  # Kanda Mitsru <kanda@nn.iij4u.or.jp>
  # rpm message catalog
@@ -84,7 +132,7 @@ diff -uNr rpm-4.3.orig/po/ja.po rpm-4.3/po/ja.po
  msgid ""
  msgstr ""
  "Project-Id-Version: rpm 4.0.3\n"
-@@ -12,7 +11,7 @@
+@@ -13,7 +12,7 @@
  "Language-Team: JRPM <jrpm@linux.or.jp>\n"
  "MIME-Version: 1.0\n"
  "Content-Type: text/plain; charset=EUC-JP\n"
@@ -93,9 +141,35 @@ diff -uNr rpm-4.3.orig/po/ja.po rpm-4.3/po/ja.po
  
  #: build.c:40
  #, fuzzy
-diff -uNr rpm-4.3.orig/po/uk.po rpm-4.3/po/uk.po
---- rpm-4.3.orig/po/uk.po	Tue Sep  2 00:02:22 2003
-+++ rpm-4.3/po/uk.po	Tue Sep  2 00:07:15 2003
+diff -urN rpm-4.3.org/po/pt_BR.po rpm-4.3/po/pt_BR.po
+--- rpm-4.3.org/po/pt_BR.po	2003-12-28 01:21:01.905701680 +0100
++++ rpm-4.3/po/pt_BR.po	2003-12-28 01:14:58.000000000 +0100
+@@ -6,6 +6,9 @@
+ "Project-Id-Version: rpm 4.0.3\n"
+ "Report-Msgid-Bugs-To: \n"
+ "POT-Creation-Date: 2003-12-07 15:11-0500\n"
++"PO-Revision-Date: 2002-02-14 10:51+0000\n"
++"Last-Translator: Jos� Nuno Coelho Sanarra Pires <jncp@rnl.ist.utl.pt>\n"
++"Language-Team: pt <morais@kde.org\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=ISO-8859-1\n"
+ "Content-Transfer-Encoding: 8-bit\n"
+diff -urN rpm-4.3.org/po/sr.po rpm-4.3/po/sr.po
+--- rpm-4.3.org/po/sr.po	2003-12-28 01:21:01.882705176 +0100
++++ rpm-4.3/po/sr.po	2003-12-28 01:15:33.000000000 +0100
+@@ -3,6 +3,9 @@
+ "Project-Id-Version: rpm 4.0.3\n"
+ "Report-Msgid-Bugs-To: \n"
+ "POT-Creation-Date: 2003-12-07 15:11-0500\n"
++"PO-Revision-Date: 2002-02-14 10:51+0000\n"
++"Last-Translator: ?\n"
++"Language-Team: ?\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=iso-8859-2\n"
+ "Content-Transfer-Encoding: 8bit\n"
+diff -urN rpm-4.3.org/po/uk.po rpm-4.3/po/uk.po
+--- rpm-4.3.org/po/uk.po	2003-12-28 01:21:01.876706088 +0100
++++ rpm-4.3/po/uk.po	2003-12-28 01:21:24.448274688 +0100
 @@ -2,17 +2,16 @@
  # Copyright (C) YEAR Free Software Foundation, Inc.
  # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
