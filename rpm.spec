@@ -29,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.35
+Release:	0.%{snap}.36
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -446,7 +446,7 @@ Summary(pl):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	db >= %{reqdb_ver}
 Requires:	popt >= %{reqpopt_ver}
-Provides:	rpmlib(distver)
+Provides:	rpm-lib(distver)
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
 
