@@ -1,0 +1,77 @@
+--- rpm-4.3/po/pl.po.wiget	2004-03-29 01:25:18.000000000 +0200
++++ rpm-4.3/po/pl.po	2004-03-29 02:18:19.104290572 +0200
+@@ -1412,7 +1412,7 @@
+ #: lib/depends.c:851
+ #, c-format
+ msgid "ignore package name relation(s) [%d]\t%s -> %s\n"
+-msgstr "ignoruj relacje nazw pakietów [%d]\t%s -> %s\n"
++msgstr "ignorowanie relacji nazw pakietów [%d]\t%s -> %s\n"
+ 
+ #: lib/depends.c:972
+ #, c-format
+@@ -1839,7 +1839,6 @@
+ msgstr "nie wykonuj ¿adnych skryptów instalacyjnych"
+ 
+ #: lib/poptI.c:177
+-#, fuzzy
+ msgid "relocate files in non-relocatable package"
+ msgstr "przesuwanie plików w nieprzesuwalnym pakiecie"
+ 
+@@ -2649,7 +2648,7 @@
+ #: lib/rpminstall.c:441
+ #, c-format
+ msgid "skipping %s - transfer failed - %s\n"
+-msgstr "%s pomijany - transmisja %s nie powiod³a siê\n"
++msgstr "pominiêcie %s - transmisja %s nie powiod³a siê\n"
+ 
+ #: lib/rpminstall.c:496 lib/rpminstall.c:887 tools/rpmgraph.c:140
+ #, c-format
+@@ -2792,7 +2791,7 @@
+ msgstr "pakiet %s jest ju¿ zainstalowany"
+ 
+ #: lib/rpmps.c:223
+-#, fuzzy, c-format
++#, c-format
+ msgid "path %s in package %s is not relocatable"
+ msgstr "¶cie¿ka %s w pakiecie %s nie jest przesuwalna"
+ 
+@@ -2944,22 +2943,22 @@
+ #: lib/rpmsx.c:358
+ #, c-format
+ msgid "%s:  no newline on line number %d (only read %s)\n"
+-msgstr ""
++msgstr "%s:  brak znaku koñca linii w linii %d (odczytano tylko %s)\n"
+ 
+ #: lib/rpmsx.c:375
+ #, c-format
+ msgid "%s:  line number %d is missing fields (only read %s)\n"
+-msgstr ""
++msgstr "%s:  w linii %d brakuje pól (odczytano tylko %s)\n"
+ 
+ #: lib/rpmsx.c:406
+ #, c-format
+ msgid "%s:  unable to compile regular expression %s on line number %d:  %s\n"
+-msgstr ""
++msgstr "%s:  nie uda³o siê skompilowaæ wyra¿enia regularnego %s w linii %d:  %s\n"
+ 
+ #: lib/rpmsx.c:421 lib/rpmsx.c:436
+ #, c-format
+ msgid "%s:  invalid type specifier %s on line number %d\n"
+-msgstr ""
++msgstr "%s:  b³êdne okre¶lenie typu %s w linii %d\n"
+ 
+ #: lib/rpmsx.c:449
+ #, c-format
+@@ -4133,8 +4132,8 @@
+ msgstr "KATALOG"
+ 
+ # --- from popt/po/pl.po (in popt.h, not in .pot) ---
+-#~ msgid "Options implemented via popt alias/exec:"
+-#~ msgstr "Opcje zaimplementowane poprzez popt alias/exec:"
++msgid "Options implemented via popt alias/exec:"
++msgstr "Opcje zaimplementowane poprzez popt alias/exec:"
+ 
+-#~ msgid "Help options:"
+-#~ msgstr "Opcje pomocy:"
++msgid "Help options:"
++msgstr "Opcje pomocy:"
