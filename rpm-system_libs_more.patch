@@ -1,42 +1,15 @@
---- rpm-4.3/rpmio/Makefile.am.bb	Fri May 16 15:18:38 2003
-+++ rpm-4.3/rpmio/Makefile.am	Fri May 16 15:19:21 2003
-@@ -32,11 +32,10 @@
- 	rpmio.c rpmlog.c rpmmalloc.c \
- 	rpmpgp.c rpmrpc.c rpmsq.c rpmsw.c strcasecmp.c stubs.c url.c ugid.c
- librpmio_la_LDFLAGS = -release @VERSION@ $(LDFLAGS) \
-	$(top_builddir)/file/src/libfmagic.la \
-+	-lbeecrypt \
- 	@WITH_ZLIB_LIB@ \
- 	-lrt -lpthread
--librpmio_la_LIBADD = $(BEECRYPTLOBJS)
--librpmio_la_DEPENDENCIES = .created
- 
- $(top_builddir)/beecrypt/listobjs:
- 	${MAKE} -C $(top_builddir)/beecrypt listobjs
---- rpm-4.3/Makefile.am.bb	Fri May 16 15:16:52 2003
-+++ rpm-4.3/Makefile.am	Fri May 16 15:18:21 2003
-@@ -14,7 +14,7 @@
- 	po/*.in po/*.po po/rpm.pot \
- 	rpm.magic rpmpopt-$(VERSION) rpmqv.c rpm.c
- 
--SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ @WITH_POPT_SUBDIR@ beecrypt rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
-+SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ @WITH_POPT_SUBDIR@ rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
- 
- INCLUDES = \
- 	-I$(top_srcdir)/build \
---- rpm-4.3/configure.ac.bb	Fri May 16 15:17:00 2003
-+++ rpm-4.3/configure.ac	Fri May 16 15:17:27 2003
-@@ -1252,8 +1252,8 @@
+--- rpm-4.3/configure.ac.wiget	2003-06-11 02:15:29.000000000 +0200
++++ rpm-4.3/configure.ac	2003-06-11 02:15:29.000000000 +0200
+@@ -1273,7 +1273,7 @@
  dnl # XXX Propagate -lucb to popt ...
  dnl export LIBS INCPATH CONFIG_SITE
  
 -AC_CONFIG_SUBDIRS(beecrypt file)
 +AC_CONFIG_SUBDIRS(file)
-
+ 
  AC_OUTPUT([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
  	scripts/perl.req scripts/perl.prov
- 	scripts/php.req scripts/php.prov
-@@ -1277,7 +1275,6 @@
+@@ -1298,7 +1298,6 @@
  	python/mpw/Makefile
  	python/mpw/test/Makefile
    ], [	

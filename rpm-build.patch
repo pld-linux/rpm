@@ -1,12 +1,11 @@
-diff -ur rpm-4.0.4-/rpmio/Makefile.am rpm-4.0.4/rpmio/Makefile.am
---- rpm-4.0.4-/rpmio/Makefile.am	Tue Jul 23 10:23:46 2002
-+++ rpm-4.0.4/rpmio/Makefile.am	Tue Jul 23 10:47:16 2002
-@@ -50,7 +50,7 @@
- 	  [ ! -f $$lo -a -f $(top_builddir)/beecrypt/$$lo ] && $(LN_S) \
- 		$(top_builddir)/beecrypt/$$lo $$lo ; \
- 	  [ ! -f .libs/$$lo -a -f $(top_builddir)/beecrypt/.libs/$$lo ] && $(LN_S) \
--		../$(top_builddir)/beecrypt/.libs/$$lo .libs/$$lo ; \
-+		../$(top_builddir)/beecrypt/.libs/$$lo .libs/$$lo ; true ; \
- 	done
+--- rpm-4.3/rpmio/Makefile.am.wiget	2003-06-01 07:56:41.000000000 +0200
++++ rpm-4.3/rpmio/Makefile.am	2003-06-11 02:02:20.000000000 +0200
+@@ -43,7 +43,7 @@
+ 	if test X"@WITH_BEECRYPT_SUBDIR@" != X; then \
+ 	${MAKE} -C $(top_builddir)/@WITH_BEECRYPT_SUBDIR@ listobjs ; \
+ 	for lo in $(BEECRYPTLOBJS); do \
+-	  [ -f $$lo ] || $(LN_S) $(top_builddir)/@WITH_BEECRYPT_SUBDIR@/$$lo $$lo ; \
++	  [ -f $$lo ] || $(LN_S) $(top_builddir)/@WITH_BEECRYPT_SUBDIR@/$$lo $$lo ; true ; \
+ 	done \
+ 	fi
  	touch $@
- 

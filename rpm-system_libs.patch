@@ -1,6 +1,6 @@
---- rpm-4.3/rpmio/Makefile.am.wiget	Fri May 16 00:16:34 2003
-+++ rpm-4.3/rpmio/Makefile.am	Fri May 16 00:18:17 2003
-@@ -70,34 +70,34 @@
+--- rpm-4.3/rpmio/Makefile.am.wiget	2003-06-11 02:05:34.000000000 +0200
++++ rpm-4.3/rpmio/Makefile.am	2003-06-11 02:05:34.000000000 +0200
+@@ -65,34 +65,34 @@
  	$(LINT) $(DEFS) $(INCLUDES) $(librpmio_la_SOURCES)
  
  tdigest_SOURCES = tdigest.c
@@ -43,8 +43,8 @@
  
  tsw_SOURCES = tsw.c
  tsw_LDFLAGS = librpmio.la
---- rpm-4.3/rpmdb/Makefile.am.wiget	Tue Mar 25 13:49:44 2003
-+++ rpm-4.3/rpmdb/Makefile.am	Fri May 16 00:16:34 2003
+--- rpm-4.3/rpmdb/Makefile.am.wiget	2003-05-23 17:00:19.000000000 +0200
++++ rpm-4.3/rpmdb/Makefile.am	2003-06-11 02:05:34.000000000 +0200
 @@ -49,7 +49,7 @@
  	tagname.c tagtbl.c
  librpmdb_la_LDFLAGS = -release @VERSION@ $(LDFLAGS) \
@@ -54,9 +54,9 @@
  	@WITH_LIBELF_LIB@ \
  	@libdb3@
  librpmdb_la_LIBADD = $(DBLIBOBJS) $(DB3LOBJS)
---- rpm-4.3/lib/Makefile.am.wiget	Tue Apr  8 18:38:08 2003
-+++ rpm-4.3/lib/Makefile.am	Fri May 16 00:16:34 2003
-@@ -39,7 +39,7 @@
+--- rpm-4.3/lib/Makefile.am.wiget	2003-05-23 16:59:36.000000000 +0200
++++ rpm-4.3/lib/Makefile.am	2003-06-11 02:05:34.000000000 +0200
+@@ -40,7 +40,7 @@
  librpm_la_LDFLAGS = -release @VERSION@ $(LDFLAGS) \
  	$(top_builddir)/rpmdb/librpmdb.la \
  	$(top_builddir)/rpmio/librpmio.la \
@@ -65,9 +65,9 @@
  
  getdate.c: getdate.y
  	@echo expect 10 shift/reduce conflicts
---- rpm-4.3/tools/Makefile.am.wiget	Thu Apr 17 18:45:19 2003
-+++ rpm-4.3/tools/Makefile.am	Fri May 16 00:16:34 2003
-@@ -39,7 +39,7 @@
+--- rpm-4.3/tools/Makefile.am.wiget	2003-05-23 17:00:27.000000000 +0200
++++ rpm-4.3/tools/Makefile.am	2003-06-11 02:05:34.000000000 +0200
+@@ -40,7 +40,7 @@
  
  debugedit_SOURCES =	debugedit.c hashtab.c
  debugedit_LDADD =	@LDFLAGS_STATIC@ @WITH_LIBELF_LIB@ \
@@ -76,11 +76,11 @@
  
  javadeps_SOURCES =	javadeps.c
  
---- rpm-4.3/configure.ac.wiget	Fri May 16 00:16:34 2003
-+++ rpm-4.3/configure.ac	Fri May 16 00:16:44 2003
-@@ -410,6 +410,17 @@
- ])
- AC_SUBST(WITH_LIBDWARF_INCLUDE)
+--- rpm-4.3/configure.ac.wiget	2003-06-11 02:05:34.000000000 +0200
++++ rpm-4.3/configure.ac	2003-06-11 02:05:34.000000000 +0200
+@@ -431,6 +431,17 @@
+ AC_SUBST(WITH_BEECRYPT_INCLUDE)
+ AC_SUBST(WITH_BEECRYPT_LIB)
  
 +WITH_POPT_SUBDIR=
 +WITH_POPT_LIB=
@@ -96,7 +96,7 @@
  AC_CHECK_FUNC(setreuid, [], [
      AC_CHECK_LIB(ucb, setreuid, [if echo $LIBS | grep -- -lucb >/dev/null ;then :; else LIBS="$LIBS -lc -lucb" USEUCB=y;fi])
  ])
-@@ -470,6 +481,7 @@
+@@ -491,6 +502,7 @@
  
  dnl Check for Berkeley db3 API.
  AC_CHECK_FUNC(db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"],
@@ -104,7 +104,7 @@
    AC_CHECK_LIB(db-3.2, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.2"],
      AC_CHECK_LIB(db-3.1, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.1"],
        AC_CHECK_LIB(db-3.0, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.0"],
-@@ -478,6 +490,7 @@
+@@ -499,6 +511,7 @@
        )
      )
    )
@@ -112,7 +112,7 @@
  )
  
  if test X"$DBLIBSRCS" = X; then
-@@ -1236,7 +1249,7 @@
+@@ -1257,7 +1270,7 @@
  dnl # XXX Propagate -lucb to popt ...
  dnl export LIBS INCPATH CONFIG_SITE
  
@@ -121,7 +121,7 @@
  
  AC_OUTPUT([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
  	scripts/perl.req scripts/perl.prov
-@@ -1260,7 +1273,7 @@
+@@ -1281,7 +1294,7 @@
  	python/rpmdb/test/Makefile
  	python/mpw/Makefile
  	python/mpw/test/Makefile
@@ -130,14 +130,14 @@
  	echo timestamp > beecrypt/stamp-h.in
  	echo timestamp > stamp-h.in
    ]
---- rpm-4.3/Makefile.am.wiget	Mon May  5 10:44:39 2003
-+++ rpm-4.3/Makefile.am	Fri May 16 00:16:34 2003
+--- rpm-4.3/Makefile.am.wiget	2003-05-23 16:57:23.000000000 +0200
++++ rpm-4.3/Makefile.am	2003-06-11 02:08:38.000000000 +0200
 @@ -14,7 +14,7 @@
  	po/*.in po/*.po po/rpm.pot \
  	rpm.magic rpmpopt-$(VERSION) rpmqv.c rpm.c
  
--SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ popt beecrypt rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
-+SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ @WITH_POPT_SUBDIR@ beecrypt rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
+-SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ popt @WITH_BEECRYPT_SUBDIR@  rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
++SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ @WITH_FILE_SUBDIR@ @WITH_DB_SUBDIR@ @WITH_POPT_SUBDIR@ @WITH_BEECRYPT_SUBDIR@  rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
  
  INCLUDES = \
  	-I$(top_srcdir)/build \
