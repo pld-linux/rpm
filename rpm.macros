@@ -78,8 +78,11 @@ done \
 # Location of autoconf macros
 %_aclocaldir	%(aclocal --print-ac-dir)
 
-# Fixed location of top applink dir
+# Location of top applink dir
 %_applnkdir      /usr/X11R6/share/applnk
+
+# Location pixmaps for applnk/desktop files
+%_pixmapsdir	/usr/X11R6/share/pixmaps
 
 # Current date
 %date 		%(LC_ALL="C" date +"%a %b %d %Y")
