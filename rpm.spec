@@ -7,7 +7,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.2
-Release:	64
+Release:	65
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -71,8 +71,8 @@ BuildRequires:	bzip2-devel >= 1.0.1
 BuildRequires:	db1-devel >= 1.85
 BuildRequires:	db3-devel >= 3.1.17-9
 BuildRequires:	gettext-devel >= 0.10.38-3
-BuildRequires:	python-devel >= 2.2
-BuildRequires:	python-modules >= 2.2
+BuildRequires:	libtool
+BuildRequires:	patch >= 2.2
 BuildRequires:	python-devel >= 2.2.1
 BuildRequires:	python-modules >= 2.2.1
 BuildRequires:	zlib-devel >= 1.1.4
