@@ -571,7 +571,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %{_libdir}/rpm/macros.perl
 
-%defattr(644,root,root,755)
+%files pythonprov
 %defattr(644,root,root,755)
 %{_libdir}/rpm/macros.python
 
