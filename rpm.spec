@@ -87,6 +87,7 @@ Patch38:	%{name}-hack-norpmlibdep.patch
 Patch40:	%{name}-makefile-no_myLDADD_deps.patch
 Patch41:	%{name}-libdir64.patch
 Patch42:	%{name}-libdir-links.patch
+Patch43:	%{name}-find_required_pkgs_on_build.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -577,6 +578,7 @@ cat %{SOURCE14} >> macros.in
 %patch40 -p1
 %patch41 -p1
 %patch42 -p1
+%patch43 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
