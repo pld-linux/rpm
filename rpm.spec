@@ -37,16 +37,20 @@ Patch17:	%{name}-bash2.patch
 Patch18:	%{name}-perl-req-perlfile.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
-BuildRequires:	bzip2-static >= 1.0.1
-BuildRequires:	gdbm-static
-BuildRequires:	zlib-static
+BuildRequires:	gettext-devel
+BuildRequires:	automake
+%{!?bcond_off_static:BuildRequires:	db3-static >= 3.1.17}
+%{!?bcond_off_static:BuildRequires:	bzip2-static >= 1.0.1}
+%{!?bcond_off_static:BuildRequires:	gdbm-static}
+%{!?bcond_off_static:BuildRequires:	zlib-static}
+%{?bcond_off_static:BuildRequires:	db3-devel >= 3.1.17}
+%{?bcond_off_static:BuildRequires:	bzip2-devel >= 1.0.1}
+%{?bcond_off_static:BuildRequires:	gdbm-devel}
+%{?bcond_off_static:BuildRequires:	zlib-devel}
 BuildRequires:	gettext-devel >= 0.10.38-3
 BuildRequires:	libtool
 BuildRequires:	automake
 BuildRequires:	autoconf >= 2.13-8
-BuildRequires:	gettext-devel
-BuildRequires:	db1-devel >= 1.85
-BuildRequires:	db3-static >= 3.1.17
 BuildRequires:	zlib-static >= 1.1.4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	rpm-libs
@@ -218,7 +222,7 @@ autoconf
 	sed 's|@host_cpu@|%{_target_cpu}|' > macros.tmp
 	--enable-v1-packages
 %configure \
-%{__make}
+%{__make} %{?bcond_off_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
 	--with-python
 
 
