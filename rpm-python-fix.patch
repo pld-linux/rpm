@@ -27,7 +27,7 @@
  
 -noinst_PROGRAMS = poptmodule.so
 +rpmmodule_la_LDFLAGS =	$(mylibs) $(LIBS) -module -avoid-version
-+rpmmodule_la_LDADD =	@WITH_BEECRYPT_LIB@
++rpmmodule_la_LIBADD =	@WITH_BEECRYPT_LIB@
  
 -rpmmodule_so_SOURCES =
 -rpmmodule_so_LDFLAGS =	$(mylibs) $(LIBS) -shared -Wl,-soname,rpmmodule.so
