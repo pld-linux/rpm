@@ -5,7 +5,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.4
-Release:	0.30
+Release:	0.31
 License:	GPL
 Group:		Base
 Group(cs):	Základ
@@ -454,7 +454,8 @@ Este pacote contém scripts e programas executáveis que são usados para
 construir pacotes usando o RPM.
 
 %prep
-%setup -q -a12
+# seems applied, wiget please check it 
+#%patch1 -p1 
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -506,17 +507,6 @@ rm -f missing
 libtoolize --force --copy
 aclocal
 autoheader
-autoconf
-automake -a -c -f
-cd ../zlib
-rm -f missing
-# first call for work around libtoolize problems
-aclocal
-autoconf
-automake -a -c -f
-libtoolize --force --copy
-# second call for correct work
-aclocal
 autoconf
 automake -a -c -f
 aclocal
