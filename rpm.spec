@@ -177,7 +177,7 @@ construir pacotes usando o RPM.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
-#%patch11 -p1
+#%patch11 -p0
 %patch12 -p0
 %patch31 -p1
 install %{SOURCE2} macros.pld.in
