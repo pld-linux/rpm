@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0
-Release:	8
+Release:	9
 Group:		Base
 Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
