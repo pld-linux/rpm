@@ -1138,20 +1138,20 @@ Themes
 	[sv]:		Teman
 	[uk]:		Ù≈Õ…
 
-Themes/Gtk
-	[cs]:		TÈmata/Gtk
-	[da]:		Temaer/Gtk
-	[de]:		Themen/Gtk
-	[es]:		Temas/Gtk
-	[fr]:		ThËmes/Gtk
-	[is]:		ﬁemur/Gtk
-	[it]:		Temi/Gtk
-	[no]:		Temaer/Gtk
-	[pl]:		Motywy/Gtk
-	[pt]:		Temas/Gtk
-	[ru]:		Ù≈ÕŸ/Gtk
-	[sv]:		Teman/Gtk
-	[uk]:		Ù≈Õ…/Gtk
+Themes/GTK+
+	[cs]:		TÈmata/GTK+
+	[da]:		Temaer/GTK+
+	[de]:		Themen/GTK+
+	[es]:		Temas/GTK+
+	[fr]:		ThËmes/GTK+
+	[is]:		ﬁemur/GTK+
+	[it]:		Temi/GTK+
+	[no]:		Temaer/GTK+
+	[pl]:		Motywy/GTK+
+	[pt]:		Temas/GTK+
+	[ru]:		Ù≈ÕŸ/GTK+
+	[sv]:		Teman/GTK+
+	[uk]:		Ù≈Õ…/GTK+
 
 X11
 	[cs]:		X11
