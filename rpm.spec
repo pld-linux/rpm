@@ -106,7 +106,7 @@ BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.1
-BuildRequires:	db4.3-devel >= %{reqdb_ver}
+BuildRequires:	db-devel >= %{reqdb_ver}
 %{?with_apidocs:BuildRequires:	doxygen}
 BuildRequires:	elfutils-devel
 BuildRequires:	findutils
@@ -129,7 +129,7 @@ BuildRequires:	zlib-devel
 # Require static library only for static build
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
 BuildRequires:	bzip2-static >= 1.0.2-5
-BuildRequires:	db4.3-static >= %{reqdb_ver}
+BuildRequires:	db-static >= %{reqdb_ver}
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	elfutils-static
 #BuildRequires:	libmagic-static
@@ -213,7 +213,7 @@ RPM - це потужний менеджер пакет╕в, що може бути використаний для
 Summary:	RPMs library
 Summary(pl):	Biblioteki RPM-a
 Group:		Libraries
-Requires:	db4.3 >= %{reqdb_ver}
+Requires:	db >= %{reqdb_ver}
 %{?with_selinux:BuildRequires:	libselinux >= 1.18}
 Requires:	popt >= %{reqpopt_ver}
 %{?with_distver:Provides:	rpm-lib(distver)}
@@ -238,7 +238,7 @@ Group:		Development/Libraries
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
-Requires:	db4.3-devel >= %{reqdb_ver}
+Requires:	db-devel >= %{reqdb_ver}
 Requires:	elfutils-devel
 %{?with_selinux:Requires:	libselinux-devel}
 Requires:	popt-devel >= %{reqpopt_ver}
@@ -300,7 +300,7 @@ Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
-Requires:	db4.3-static >= %{reqdb_ver}
+Requires:	db-static >= %{reqdb_ver}
 Requires:	elfutils-static
 Requires:	popt-static >= %{reqpopt_ver}
 Requires:	zlib-static
