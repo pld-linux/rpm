@@ -127,8 +127,10 @@ Applications/Spreadsheets
 	[pl]:	Aplikacje/Arkusze kalkulacyjne
 
 Applications/System
-	[de]:	Applikationen/System
-	[pl]:	Aplikacje/System
+	[de]:		Applikationen/System
+	[pl]:		Aplikacje/System
+	[pt_BR]:	Aplicações/Sistema
+	[es]:		Aplicaciones/Sistema
 
 Applications/Terminal
 	[de]:	Applikationen/Terminal
