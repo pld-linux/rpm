@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.5
-Release:	12
+Release:	13
 Group:		Base
 Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
@@ -40,6 +40,7 @@ BuildRequires:	db3-static >= 3.1.14
 BuildRequires:	zlib-static >= 1.1.4
 Obsoletes:	rpm-libs
 %define __find_provides %{SOURCE4}
+%define _binary_payload w9.gzdio
 %define		__find_provides	%{SOURCE4}
 %define		pyrequires_eq() Requires:	%1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
 
