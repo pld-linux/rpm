@@ -56,7 +56,8 @@ diff -Nru rpm-4.0/macros.in rpm-4.0.new/macros.in
 -%_sysconfdir		%{_prefix}/etc
 +%_sysconfdir		/etc
  %_sharedstatedir	%{_prefix}/com
- %_localstatedir		%{_prefix}/var
+-%_localstatedir		%{_prefix}/var
++%_localstatedir		/var
  %_lib			lib
  %_libdir		%{_exec_prefix}/%{_lib}
  %_includedir		%{_prefix}/include
