@@ -1,7 +1,7 @@
 #
 # TODO:
-# - use system libmagic not internal libfmagic
-# - when really needed: _noauto{req,prov} for non-helper-generated deps
+# - consider using system libmagic not internal libfmagic
+#   (but internal has different method of passing output)
 #
 # Conditional build:
 %bcond_with	static	# build static rpmi (not supported at the moment)
@@ -29,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.20
+Release:	0.%{snap}.21
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
