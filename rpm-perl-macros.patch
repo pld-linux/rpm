@@ -43,29 +43,6 @@
 +echo "$requires
 +$requires_perl
 +$requires_mod"|  sort -u
---- rpm-3.0.3/scripts/perl.prov.wiget	Sat Jun  5 22:52:31 1999
-+++ rpm-3.0.3/scripts/perl.prov	Sat Oct 30 12:28:50 1999
-@@ -1,4 +1,4 @@
--#!/usr/bin/perl
-+#!@PERL@
- 
- # a simple script to print the proper name for perl libraries.
- 
-@@ -30,12 +30,12 @@
-   if (length($require{$module}) == 0) {
-     print "perl($module)\n";
-   } else {
--    print "perl($module)=$require{$module}\n";
-+    print "perl($module) = $require{$module}\n";
- 
-     # we need to print it without the version number until the
-     # requires syntax accepts version numbers correctly.
- 
--    print "perl($module)\n";
-+#    print "perl($module)\n";
-   }
- }
- 
 --- rpm-3.0.3/macros.in.wiget	Sat Oct 30 12:28:50 1999
 +++ rpm-3.0.3/macros.in	Sat Oct 30 12:28:50 1999
 @@ -248,6 +248,8 @@
@@ -199,3 +176,48 @@
  
        $require{$module}=$version;
        $line{$module}=$_;
+--- rpm-3.0.3/scripts/perl.prov.pld	Sat Jun  5 22:52:31 1999
++++ rpm-3.0.3/scripts/perl.prov	Sun Oct 31 02:17:45 1999
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl
++#!@PERL@
+ 
+ # a simple script to print the proper name for perl libraries.
+ 
+@@ -13,7 +13,9 @@
+ 
+ if ("@ARGV") {
+   foreach (@ARGV) {
+-    process_file($_);
++    if (! m=\.(so|gz|ph|pod)$=) {
++      process_file($_);
++    }
+   }
+ } else {
+ 
+@@ -21,7 +23,9 @@
+   # contents of the file.
+ 
+   foreach (<>) {
+-    process_file($_);
++    if (! m=\.(so|gz|ph|pod)$=) {
++      process_file($_);
++    }
+   }
+ }
+ 
+@@ -30,12 +34,12 @@
+   if (length($require{$module}) == 0) {
+     print "perl($module)\n";
+   } else {
+-    print "perl($module)=$require{$module}\n";
++    print "perl($module) = $require{$module}\n";
+ 
+     # we need to print it without the version number until the
+     # requires syntax accepts version numbers correctly.
+ 
+-    print "perl($module)\n";
++#    print "perl($module)\n";
+   }
+ }
+ 
