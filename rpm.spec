@@ -6,9 +6,11 @@ Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
 Summary(pl):	Aplikacja do zarz╠dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
+Summary(ru):	Менеджер пакетов от Red Hat
+Summary(uk):	Менеджер пакет╕в в╕д Red Hat
 Name:		rpm
 Version:	4.1
-Release:	5
+Release:	6
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/%{name}-%{version}.tar.gz
@@ -32,6 +34,9 @@ Source17:	%{name}-php-provides
 Source18:	%{name}-php-requires
 Source19:	%{name}-find-php-provides
 Source20:	%{name}-find-php-requires
+Source30:	builder
+Source31:	adapter.awk
+Source32:	pldnotify.awk
 Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-%{name}rc.patch
 Patch2:		%{name}-arch.patch
@@ -116,10 +121,10 @@ almacenaje de archivos, y informaciСn sobre el paquete, incluyendo
 nombre, versiСn y descripciСn.
 
 %description -l pl
-RPM jest doskonaЁym mened©erem pakietСw. DziЙki niemu bЙdziesz mСgЁ
-przebudowaФ, zainstalowaФ czy zweryfikowaФ dowolny pakiet. Informacje
-dotycz╠ce ka©dego pakietu, takie jak jego opis, lista plikСw
-wchodz╠cych w skЁad pakietu, zale©no╤ci od innych pakietСw, s╠
+RPM jest doskonaЁym programem zarz╠dzaj╠cym pakietami. Umo©liwia on
+przebudowanie, instalacjЙ czy weryfikacjЙ dowolnego pakietu.
+Informacje dotycz╠ce ka©dego pakietu, takie jak jego opis, lista
+plikСw wchodz╠cych w skЁad pakietu, zale©no╤ci od innych pakietСw, s╠
 przechowywane w bazie danych i mo©na je uzyskaФ za pomoc╠ opcji
 odpytywania programu rpm.
 
@@ -130,12 +135,28 @@ pacotes individuais de software. Um pacote consiste de um conjunto de
 arquivos e informaГУes adicionais, incluindo nome, versЦo e descriГЦo
 do pacote, permissУes dos arquivos, etc.
 
+%description -l ru
+RPM - это мощный менеджер пакетов, который может быть использован для
+создания, инсталляции, запросов (query), проверки, обновления и
+удаления программных пакетов. Пакет состоит из файлового архива и
+служебной информации, включающей название, версию, описание и другие
+данные о пакете.
+
+%description -l uk
+RPM - це потужний менеджер пакет╕в, що може бути використаний для
+створення, ╕нсталяц╕╖, запит╕в (query), перев╕рки, поновлення та
+видалення програмних пакет╕в. Пакет склада╓ться з файлового арх╕ву та
+службово╖ ╕нформац╕╖, що м╕стить назву, верс╕ю, опис та ╕ншу
+╕нформац╕ю про пакет.
+
 %package devel
 Summary:	Header files and libraries
 Summary(de):	Header-Dateien uns Libraries
 Summary(es):	Archivos de inclusiСn y bibliotecas para programas de manipulaciСn de paquetes rpm
 Summary(pl):	Pliki nagЁСwkowe i biblioteki statyczne
 Summary(pt_BR):	Arquivos de inclusЦo e bibliotecas para programas de manipulaГЦo de pacotes RPM
+Summary(ru):	Хедеры и библиотеки для программ, работающих с rpm-пакетами.
+Summary(uk):	Хедери та б╕бл╕отеки для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name} = %{version}
 Requires:	beecrypt-devel
@@ -166,8 +187,8 @@ herramientas que necesiten un conocimiento profundo de paquetes RPM.
 %description devel -l pl
 System RPM zawiera bibliotekЙ C, ktСra uЁatwia manipulowanie pakietami
 RPM oraz bazami danych. W zamiarze ma to upro╤ciФ tworzenie
-graficznych mened©erСw pakietСw oraz innych narzЙdzi, ktСre wymagaj╠
-szczegСЁowej wiedzy na temat pakietСw RPM.
+graficznych programСw zarz╠dzaj╠cych pakietami oraz innych narzЙdzi,
+ktСre wymagaj╠ szczegСЁowej wiedzy na temat pakietСw RPM.
 
 %description devel -l pt_BR
 O sistema de empacotamento RPM inclui uma biblioteca C que torna fАcil
@@ -175,11 +196,26 @@ a manipulaГЦo de pacotes e bases de dados RPM. Seu objetivo И
 facilitar a criaГЦo de gerenciadores grАficos de pacotes e outras
 ferramentas que precisem de conhecimento profundo de pacotes RPM.
 
+%description devel -l ru
+Система управления пакетами RPM содержит библиотеку C, которая
+упрощает манипуляцию пакетами RPM и соответствующими базами данных.
+Эта библиотека предназначена для облегчения создания графических
+пакетных менеджеров и других утилит, которым необходимо работать с
+пакетами RPM.
+
+%description devel -l uk
+Система керування пакетами RPM м╕стить б╕бл╕отеку C, котра спрощу╓
+роботу з пакетами RPM та в╕дпов╕дними базами даних. Ця б╕бл╕отека
+призначена для полегшення створення граф╕чних пакетних менеджер╕в та
+╕нших утил╕т, що працюють з пакетами RPM.
+
 %package static
 Summary:	RPM static libraries
 Summary(de):	RPMs statische Libraries
 Summary(pl):	Biblioteki statyczne RPM-a
 Summary(pt_BR):	Bibliotecas estАticas para o desenvolvimento de aplicaГУes RPM
+Summary(ru):	Статическая библиотека для программ, работающих с rpm-пакетами.
+Summary(uk):	Статична б╕бл╕отека для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
 
@@ -194,6 +230,16 @@ Biblioteki statyczne RPM-a.
 
 %description static -l pt_BR
 Bibliotecas estАticas para desenvolvimento.
+
+%description static -l ru
+Система управления пакетами RPM содержит библиотеку C, которая
+упрощает манипуляцию пакетами RPM и соответствующими базами данных.
+Это статическая библиотека RPM.
+
+%description static -l uk
+Система керування пакетами RPM м╕стить б╕бл╕отеку C, котра спрощу╓
+роботу з пакетами RPM та в╕дпов╕дними базами даних. Це статична
+б╕бл╕отека RPM.
 
 %package utils
 Summary:	Additional utilities for managing rpm packages and database
@@ -308,6 +354,8 @@ Summary:        Scripts for building binary RPM packages
 Summary(de):    Scripts fЭrs Bauen binДrer RPM-Pakete
 Summary(pl):    Skrypty pomocnicze do budowania binarnych RPM-Сw
 Summary(pt_BR): Scripts e programas executАveis usados para construir pacotes
+Summary(ru):	Скрипты и утилиты, необходимые для сборки пакетов
+Summary(uk):	Скрипти та утил╕ти, необх╕дн╕ для побудови пакет╕в
 Group:          Applications/File
 Requires:       %{name} = %{version}
 Requires:       /bin/id
@@ -345,6 +393,48 @@ Skrypty pomocnicze do budowania binarnych RPM-Сw.
 %description build -l pt_BR
 Este pacote contИm scripts e programas executАveis que sЦo usados para
 construir pacotes usando o RPM.
+
+%description build -l ru
+Различные вспомогательные скрипты и исполняемые программы, которые
+используются для сборки RPM'ов.
+
+%description build -l uk
+Р╕зноман╕тн╕ допом╕жн╕ скрипти та утил╕ти, як╕ використовуються для
+побудови RPM'╕в.
+
+%package build-tools
+Summary:	Scripts for managing .spec files and building RPM packages
+Summary(de):	Scripts fЭrs Bauen binДrer RPM-Pakete
+Summary(pl):	Skrypty pomocnicze do zarz╠dznia plikami .spec i budowania RPM-Сw
+Summary(pt_BR):	Scripts e programas executАveis usados para construir pacotes
+Summary(ru):	Скрипты и утилиты, необходимые для сборки пакетов
+Summary(uk):	Скрипти та утил╕ти, необх╕дн╕ для побудови пакет╕в
+Group:		Applications/File
+Requires:	%{name}-build = %{version}
+# these are optional
+#Requires:	cvs
+#Requires:	wget
+
+%description build-tools
+Scripts for managing .spec files and building RPM packages.
+
+%description build-tools -l de
+Scripts fЭrs Bauen RPM-Pakete.
+
+%description build-tools -l pl
+Skrypty pomocnicze do zarz╠dznia plikami .spec i do budowania RPM-Сw.
+
+%description build-tools -l pt_BR
+Este pacote contИm scripts e programas executАveis que sЦo usados para
+construir pacotes usando o RPM.
+
+%description build-tools -l ru
+Различные вспомогательные скрипты и исполняемые программы, которые
+используются для сборки RPM'ов.
+
+%description build-tools -l uk
+Р╕зноман╕тн╕ допом╕жн╕ скрипти та утил╕ти, як╕ використовуються для
+побудови RPM'╕в.
 
 %package -n beecrypt
 Summary:	Crypto library
@@ -510,6 +600,10 @@ install %{SOURCE15} $RPM_BUILD_ROOT%{_libdir}/rpm/compress-doc
 install %{SOURCE16} $RPM_BUILD_ROOT%{_libdir}/rpm/check-files
 install scripts/find-php*	$RPM_BUILD_ROOT%{_libdir}/rpm/
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_libdir}/rpm/
+
+install %{SOURCE30} $RPM_BUILD_ROOT%{_bindir}/builder
+install %{SOURCE31} $RPM_BUILD_ROOT%{_bindir}/adapter.awk
+install %{SOURCE32} $RPM_BUILD_ROOT%{_bindir}/pldnotify.awk
 
 install rpmio/ugid.h $RPM_BUILD_ROOT%{_includedir}/rpm
 
@@ -682,6 +776,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{py_sitedir}/*.so
 %attr(755,root,root) %{py_sitedir}/rpmdb/*.so
 %{py_sitedir}/rpmdb/*.py*
+
+%files build-tools
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/builder
+%attr(755,root,root) %{_bindir}/adapter.awk
+%attr(755,root,root) %{_bindir}/pldnotify.awk
 
 %files -n beecrypt
 %defattr(644,root,root,755)
