@@ -7,6 +7,7 @@
 %bcond_with	static	# build static rpmi (not supported at the moment)
 %bcond_without	doc	# don't generate documentation with doxygen
 %bcond_without	python	# don't build python bindings
+%bcond_without	selinux # dont enable selinux support
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
@@ -104,7 +105,7 @@ BuildRequires:	db-devel >= %{reqdb_ver}
 BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	elfutils-devel
 #BuildRequires:	libmagic-devel
-BuildRequires:	libselinux-devel
+%{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libtool
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
@@ -121,7 +122,7 @@ BuildRequires:	db-static >= %{reqdb_ver}
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	elfutils-static
 #BuildRequires:	libmagic-static
-BuildRequires:	libselinux-static
+%{?with_selinux:BuildRequires:	libselinux-static}
 BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
 %endif
@@ -209,7 +210,7 @@ Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
 Requires:	db-devel >= %{reqdb_ver}
 Requires:	elfutils-devel
-Requires:	libselinux-devel
+%{?with_selinux:Requires:	libselinux-devel}
 Requires:	popt-devel >= %{reqpopt_ver}
 Requires:	zlib-devel
 
@@ -649,6 +650,7 @@ mv -f macros.tmp macros.in
 	%{?with_doc:--with-apidocs} \
 	%{?with_python:--with-python=auto} \
 	%{!?with_python:--without-python} \
+	%{!?with_selinux:--without-selinux} \
 	--without-db
 
 # file_LDFLAGS, debugedit_LDADD - no need to link "file" and "debugedit" statically
