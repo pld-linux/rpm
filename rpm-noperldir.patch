@@ -1,0 +1,11 @@
+--- rpm-4.0.2/configure.in.wiget	Tue Jun 26 18:56:34 2001
++++ rpm-4.0.2/configure.in	Tue Jun 26 18:56:48 2001
+@@ -1094,7 +1094,7 @@
+ 	misc/Makefile po/Makefile.in intl/Makefile
+ 	doc/Makefile doc/manual/Makefile
+ 	doc/ja/Makefile doc/pl/Makefile doc/ru/Makefile doc/sk/Makefile
+-	python/Makefile perl/Makefile perl/Makefile.PL],
++	python/Makefile],
+ 	[echo timestamp > popt/stamp-h.in
+ 	echo timestamp > stamp-h.in])
+ dnl	touch Makefile.in
