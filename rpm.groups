@@ -209,7 +209,7 @@ Development/Debuggers
 	[pl]:		Programowanie/Odpluskwiacze
 
 Development/Libraries
-	[de]:		Entwicklung/Libraries
+	[de]:		Entwicklung/Bibliotheken
 	[es]:		Desarrollo/Bibliotecas
 	[fr]:		Development/Librairies
 	[pl]:		Programowanie/Biblioteki
@@ -218,7 +218,7 @@ Development/Libraries
 	[uk]:		Розробка/Б╕бл╕отеки
 
 Development/Libraries/Libc
-	[de]:		Entwicklung/Libraries/Libc
+	[de]:		Entwicklung/Bibliotheken/Libc
 	[es]:		Desarrollo/Bibliotecas/Libc
 	[fr]:		Development/Librairies/Libc
 	[pl]:		Programowanie/Biblioteki/Libc
@@ -302,7 +302,7 @@ Documentation
 	[ru]:		Документация
 
 Libraries
-	[de]:		Libraries
+	[de]:		Bibliotheken
 	[es]:		Bibliotecas
 	[fr]:		Librairies
 	[pl]:		Biblioteki
@@ -312,7 +312,7 @@ Libraries
 	[uk]:		Б╕бл╕отеки
 
 Libraries/XML
-	[de]:		Libraries/XML
+	[de]:		Bibliotheken/XML
 	[es]:		Bibliotecas/XML
 	[fr]:		Librairies/XML
 	[pl]:		Biblioteki/XML
@@ -428,7 +428,7 @@ X11/Applications/Editors
 	[pt]:		X11/AplicaГУes/Editores
 
 X11/Development/Libraries
-	[de]:		X11/Entwicklung/Libraries
+	[de]:		X11/Entwicklung/Bibliotheken
 	[es]:		X11/Desarrollo/Bibliotecas
 	[fr]:		X11/Development/Librairies
 	[pl]:		X11/Programowanie/Biblioteki
@@ -452,7 +452,7 @@ X11/Amusements
 	[pl]:		X11/Rozrywka
 
 X11/Libraries
-	[de]:		X11/Libraries
+	[de]:		X11/Bibliotheken
 	[es]:		X11/Bibliotecas
 	[fr]:		X11/Librairies
 	[pl]:		X11/Biblioteki
