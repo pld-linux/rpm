@@ -28,7 +28,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.15
+Release:	0.%{snap}.16
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -92,6 +92,7 @@ Patch39:	%{name}-pentiumX.patch
 Patch40:	%{name}-epoch0.patch
 Patch41:	%{name}-file-readelf-fix.patch
 Patch42:	%{name}-cpuid.patch
+Patch43:	%{name}-perl_req-INC_dirs.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -595,6 +596,7 @@ cat %{SOURCE11} >> macros.in
 %patch40 -p1
 %patch41 -p1
 %patch42 -p1
+%patch43 -p0
 
 cd scripts;
 mv -f perl.req perl.req.in
