@@ -67,7 +67,7 @@ BuildRequires:	automake
 BuildRequires:	bzip2-devel >= 1.0.1
 BuildRequires:	db4-devel >= 4.0.14
 BuildRequires:	doxygen
-BuildRequires:	gettext-devel >= 0.10.38-3
+BuildRequires:	gettext-devel >= 0.11.2
 BuildRequires:	libtool
 BuildRequires:	patch >= 2.2
 BuildRequires:	python-devel >= 2.2
