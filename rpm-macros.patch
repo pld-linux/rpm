@@ -1,6 +1,18 @@
---- rpm-2.93/macros.in.macros	Thu Apr  8 17:51:13 1999
-+++ rpm-2.93/macros.in	Thu Apr  8 18:02:34 1999
-@@ -66,13 +66,13 @@
+diff -ru rpm-3.0.1.old/macros.in rpm-3.0.1/macros.in
+--- rpm-3.0.1.old/macros.in	Tue Apr 27 21:46:45 1999
++++ rpm-3.0.1/macros.in	Fri May  7 03:24:13 1999
+@@ -55,8 +55,8 @@
+ %_builddir		%{_topdir}/BUILD
+ %_buildshell		/bin/sh
+ %_bzip2bin		@BZIP2BIN@
+-%_dbpath		%{_var}/lib/rpm
+-%_defaultdocdir		%{_usr}/doc
++%_dbpath		%{_var}/db/rpm
++%_defaultdocdir		%{_usr}/share/doc
+ #
+ # XXX fixowner, fixgroup, and fixperms are run at the end of hardcoded setup
+ %_fixowner		[ `%{__id} -u` = '0' ] && %{__chown} -Rf root
+@@ -69,13 +69,13 @@
  %_rpmdir		%{_topdir}/RPMS
  #
  # XXX Note escaped %% for use in headerSprintf
@@ -16,12 +28,15 @@
  #
  #==============================================================================
  # ---- Optional rpmrc macros.
-@@ -96,7 +96,7 @@
- #%_pgp_path
- #%_provides
- #%_timecheck
--#%vendor
-+%vendor			PLD
+@@ -154,8 +154,8 @@
+ %_libdir		%{_exec_prefix}/lib
+ %_includedir		%{_prefix}/include
+ %_oldincludedir		/usr/include
+-%_infodir		%{_prefix}/include
+-%_mandir		%{_prefix}/man
++%_infodir		%{_prefix}/share/info
++%_mandir		%{_prefix}/share/man
  
  #==============================================================================
- # ---- per-platform macros.
+ # ---- config.guess platform macros.
+Only in rpm-3.0.1: macros.in~
