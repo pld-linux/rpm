@@ -30,7 +30,6 @@ BuildPrereq:	automake
 BuildPrereq:	autoconf >= 2.13-8
 BuildPrereq:	gettext
 Requires:	glibc >= 2.1
-Requires:	/etc/cron.daily
 BuildRoot:	/tmp/%{name}-%{version}-root
 Obsoletes:	rpm-libs
 %define		pyrequires_eq() Requires:	%1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
@@ -164,6 +163,7 @@ rm -rf $RPM_BUILD_ROOT
 - rewrited by Artur Frysiak <wiget@pld.org.pl>,
 - patches with fixes maked by Artur Frysiak and Marcin Dalecki
   <dalecki@cs.net.pl>.
+
 Revision 1.79  2000/02/17 03:42:17  kloczek
 - release 25,
 - added "Conflicts: /usr/bin/id" and rebuilded in enviroment with id in
