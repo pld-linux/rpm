@@ -4,9 +4,9 @@
 # - use system libmagic not internal libfmagic
 #
 # Conditional build:
-%bcond_without	static	# - build shared /bin/rpm (doesn't work at the moment)
-%bcond_without	docs	# - don't generate documentation with doxygen
-%bcond_without	python	# - don't build python bindings
+%bcond_without	static	# build shared rpmi (doesn't work at the moment)
+%bcond_without	docs	# don't generate documentation with doxygen
+%bcond_without	python	# don't build python bindings
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
@@ -37,23 +37,20 @@ Source0:	ftp://distfiles.pld-linux.org/src/%{name}-%{version}.%{snap}.tar.bz2
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
-#Source4:	%{name}-find-rpm-provides
-Source5:	%{name}-find-spec-bcond
-Source6:	%{name}-find-lang
-#Source7:	%{name}-find-provides
-#Source8:	%{name}-find-requires
-Source9:	%{name}-groups-po.awk
-Source10:	%{name}-compress-doc
-Source11:	%{name}-check-files
-Source12:	%{name}-php-provides
-Source13:	%{name}-php-requires
-Source14:	%{name}.macros
+Source4:	%{name}-find-spec-bcond
+Source5:	%{name}-find-lang
+Source6:	%{name}-groups-po.awk
+Source7:	%{name}-compress-doc
+Source8:	%{name}-check-files
+Source9:	%{name}-php-provides
+Source10:	%{name}-php-requires
+Source11:	%{name}.macros
+Source12:	perl.prov
 #Source15:	%{name}-find-provides-wrapper
 #Source16:	%{name}-find-requires-wrapper
 Source30:	builder
 Source31:	adapter.awk
 Source32:	pldnotify.awk
-Source33:	perl.prov
 Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
@@ -564,11 +561,11 @@ cp -f platform.in macros.pld.in
 echo '%%define	_perl_deps	1' > macros.perl
 echo '# obsoleted file' > macros.python
 echo '%%define	_php_deps	1' > macros.php
-install %{SOURCE6} scripts/find-lang.sh
-install %{SOURCE12} scripts/php.prov.in
-install %{SOURCE13} scripts/php.req.in
-install %{SOURCE33} scripts/perl.prov
-cat %{SOURCE14} >> macros.in
+install %{SOURCE5} scripts/find-lang.sh
+install %{SOURCE9} scripts/php.prov.in
+install %{SOURCE10} scripts/php.req.in
+install %{SOURCE12} scripts/perl.prov
+cat %{SOURCE11} >> macros.in
 %patch22 -p1
 %patch23 -p1
 %patch24 -p1
@@ -592,7 +589,7 @@ cd ..
 rm -rf zlib libelf db db3 popt rpmdb/db.h
 
 # generate Group translations to *.po
-awk -f %{SOURCE9} %{SOURCE1}
+awk -f %{SOURCE6} %{SOURCE1}
 
 # update macros paths
 for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
@@ -656,9 +653,9 @@ install macros.php	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.php
 
 install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
-install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
-install %{SOURCE10} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
-install %{SOURCE11} $RPM_BUILD_ROOT%{_rpmlibdir}/check-files
+install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
+install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
+install %{SOURCE8} $RPM_BUILD_ROOT%{_rpmlibdir}/check-files
 install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 
