@@ -757,9 +757,9 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/striptofile
 %attr(755,root,root) %{_bindir}/unstripfile
 # not here
-#%{_libdir}/rpm/rpm.daily
-#%{_libdir}/rpm/rpm.log
-#%{_libdir}/rpm/rpm.xinetd
+#%%{_libdir}/rpm/rpm.daily
+#%%{_libdir}/rpm/rpm.log
+#%%{_libdir}/rpm/rpm.xinetd
 %{_libdir}/rpm/rpm2cpio.sh
 
 %{_mandir}/man8/rpm2cpio.8*
