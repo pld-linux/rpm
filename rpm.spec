@@ -19,6 +19,7 @@ Patch4:		rpm-rpmpopt.patch
 Patch5:		rpm-find-provides.patch
 Patch6:		rpm-perl-macros.patch
 Patch7:		rpm-find-lang-all-name.patch
+Patch8:		rpm-bzip2.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	bzip2-static >= 1.0.0
@@ -138,6 +139,7 @@ construir pacotes usando o RPM.
 %patch5 -p1
 %patch6 -p1 
 %patch7 -p1 
+%patch8 -p1
 %patch31 -p1
 install %{SOURCE2} macros.pld.in
 install %{SOURCE13} macros.python.in
