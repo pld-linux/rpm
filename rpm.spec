@@ -83,6 +83,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /bin/rpm --initdb
+/bin/rpm --rebuilddb
 
 %files
 
