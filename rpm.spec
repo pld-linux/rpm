@@ -217,6 +217,7 @@ Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
 Requires:	db-devel
 Requires:	elfutils-devel
+Requires:	libselinux-devel
 Requires:	popt-devel >= %{reqpopt_ver}
 Requires:	zlib-devel
 
