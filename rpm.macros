@@ -249,3 +249,5 @@ fi \
 #%_noautoreqdep		%{nil}
 #%_noautoprovfiles	%{nil}
 #%_noautoprov		%{nil}
+%_missing_doc_files_terminate_build	1%{nil}
+%_unpackaged_files_terminate_build	%{nil}
