@@ -185,6 +185,7 @@ _autoreqprov=n \
 %{?_noautoreqdep:_autoreqprov=y}\
 %{?_noautoprovfiles:_autoreqprov=y}\
 %{?_noautoprov:_autoreqprov=y}\
+%{?_noautocompressdoc:_autoreqprov=y}\
 if [ "$_autoreqprov" = "y" ] ; then \
     if [ -f %{_builddir}/__rpm_lock ] ; then \
 	echo "Some package using \%_noauto*  macros is already being built" >&2 \
@@ -195,6 +196,7 @@ if [ "$_autoreqprov" = "y" ] ; then \
     	touch %{_builddir}/__rpm_lock \
     fi \
 fi \
+%{?_noautocompressdoc:echo '%{_noautocompressdoc}' > %{_builddir}/__rpm_noautocompressdoc}\
 %{nil}
 
 %__os_install_post \
@@ -216,6 +218,7 @@ _autoreqprov=n \
 %{?_noautoprovfiles:_autoreqprov=y}\
 %{?_noautoprov:_autoreqprov=y}\
 %{?_noautoreqfiles:_autoreqprov=y}\
+%{?_noautocompressdoc:_autoreqprov=y}\
 if [ "$_autoreqprov" = "y" ] ; then \
 	rm -f %{_builddir}/__rpm_* \
 fi \
