@@ -15,12 +15,10 @@
 #-----------------------------------------------------------------
 # CFLAGS and LDFLAGS used to build
 
-%if %{_enable_debug_packages}%{!?_enable_debug_packages:0}
-%debuginfocflags        -ggdb
-%endif
+#%debuginfocflags        -ggdb
 
 %debugcflags	-O0 -g -Wall
-%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags:%debuginfocflags}
+%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags: %debuginfocflags}
 %rpmldflags	%{nil}
 
 # kernel compiler
