@@ -202,3 +202,22 @@ diff -urN rpm.org/tools/Makefile.am rpm/tools/Makefile.am
  
  javadeps_SOURCES =	javadeps.c
  
+--- rpm/python/Makefile.am.org	2004-11-18 20:01:55.658219108 +0100
++++ rpm/python/Makefile.am	2004-11-18 20:02:10.571929388 +0100
+@@ -16,7 +16,6 @@
+ 	-I$(top_srcdir)/rpmdb \
+ 	-I$(top_srcdir)/rpmio \
+ 	@WITH_BEECRYPT_INCLUDE@ \
+-	-I$(top_srcdir)/popt \
+ 	-I$(top_srcdir)/build \
+ 	-I$(pyincdir) \
+ 	@WITH_LIBELF_INCLUDE@ \
+@@ -31,7 +30,7 @@
+ 	$(top_builddir)/lib/librpm.la \
+ 	$(top_builddir)/rpmdb/librpmdb.la \
+ 	$(top_builddir)/rpmio/librpmio.la \
+-	$(top_builddir)/popt/libpopt.la \
++	-lpopt \
+ 	$(top_builddir)/build/librpmbuild.la \
+ 	@WITH_LIBELF_LIB@
+ 
