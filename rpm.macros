@@ -1,7 +1,8 @@
 # PLD rpm macros
 
 # other macros
-%_enable_debug_packages 1
+%epoch		0
+%_enable_debug_packages 0
 
 %__id		@__ID@
 %__id_u		%{__id} -u 
@@ -10,15 +11,15 @@
 
 %_fixowner       [ `%{__id_u}` = '0' ] && %{__chown_Rhf} root:@ROOT_GROUP@
 %_fixgroup       true
-%_fixperms             %{__chmod} -Rf @FIXPERMS@
+%_fixperms       %{__chmod} -Rf @FIXPERMS@
 %_topdir         %(echo $HOME)/rpm
 #-----------------------------------------------------------------
 # CFLAGS and LDFLAGS used to build
 
-#%debuginfocflags        -ggdb
+%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -ggdb}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
 
 %debugcflags	-O0 -g -Wall
-%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags: %debuginfocflags}
+%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
 %rpmldflags	%{nil}
 
 # kernel compiler
@@ -195,6 +196,9 @@ unset DISPLAY ||:\
 # Location of KDE documentation
 %_kdedocdir  %{_defaultdocdir}/kde/HTML
 
+# unsermake script
+%__unsermake /usr/share/unsermake/unsermake
+
 # Current date
 %date 		%(LC_ALL="C" date +"%a %b %d %Y")
 
@@ -211,18 +215,23 @@ unset DISPLAY ||:\
 %_rpmfilename		%%{NAME}-%%{VERSION}-%%{RELEASE}%{?debug:dbg}.%%{ARCH}.rpm
 
 # Requires name = version-release
-%requires_releq()  		%(LC_ALL="C" echo '%*' | xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}-%%{release}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
-%requires_releq_kernel_up()  	%(LC_ALL="C" rpm -qf --qf 'Prereq: kernel-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -vE "(is not|no such)")
-%requires_releq_kernel_smp()  	%(LC_ALL="C" rpm -qf --qf 'Prereq: kernel-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -vE "(is not|no such)")
-%requires_eq_to() %(LC_ALL="C" rpm -q --qf 'Requires: %1 = %%{epoch}:%%{version}\\n' %2 | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
+%requires_releq()		%(LC_ALL="C" echo '%*' | xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}-%%{release}\\n' | sed -e 's/ (none):/ /' | grep -v "is not")
+
+%releq_kernel_up()		%(LC_ALL="C" rpm -qf --qf 'kernel-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | grep -vE "(is not|no such)")
+%releq_kernel_smp()  		%(LC_ALL="C" rpm -qf --qf 'kernel-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | grep -vE "(is not|no such)")
+%requires_releq_kernel_up()  	%(LC_ALL="C" rpm -qf --qf 'PreReq: kernel-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | grep -vE "(is not|no such)")
+%requires_releq_kernel_smp()  	%(LC_ALL="C" rpm -qf --qf 'PreReq: kernel-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | grep -vE "(is not|no such)")
+
+%requires_eq_to() %(LC_ALL="C" rpm -q --qf 'Requires: %1 = %%{epoch}:%%{version}\\n' %2 | sed -e 's/ (none):/ /' | grep -v "is not")
 
 %apache_modules_api %(awk '/#define MODULE_MAGIC_NUMBER_MAJOR/ {print $3}' /usr/include/apache/ap_mmn.h 2>/dev/null || echo ERROR)
 
 # kernel version-release handling
-%__kernel_ver   %([ -f %{_kernelsrcdir}/include/linux/version.h ] && (grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2) || (awk '/^VERSION/ { ver = $0; gsub(/VERSION.*=/, NIL, ver); } /^PATCHLEVEL/ { plev = $0; gsub(/PATCHLEVEL.*=/, NIL, plev); } /^SUBLEVEL/ { slev = $0; gsub(/SUBLEVEL.*=/, NIL, slev); } END { printf("%d.%d.%d", ver, plev, slev); }' %{_kernelsrcdir}/Makefile 2> /dev/null))
+%__kernel_ver   %([ -f %{_kernelsrcdir}/include/linux/version.h ] && (grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | head -n 1 | cut -d'"' -f2) || (awk '/^VERSION/ { ver = $0; gsub(/VERSION.*=/, NIL, ver); } /^PATCHLEVEL/ { plev = $0; gsub(/PATCHLEVEL.*=/, NIL, plev); } /^SUBLEVEL/ { slev = $0; gsub(/SUBLEVEL.*=/, NIL, slev); } /^EXTRAVERSION/ { ever = $0; gsub(/EXTRAVERSION.*=/, NIL, ever); gsub(/ /, NIL, ever); } END { printf("%d.%d.%d%s", ver, plev, slev, ever); }' %{_kernelsrcdir}/Makefile 2> /dev/null))
 %__kernel_rel    %(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h --queryformat "%{RELEASE}" | grep -v "is not")
-%_kernel_ver     %(echo %{__kernel_ver}%{!?_without_dist_kernel:-%{__kernel_rel}})
-%_kernel_ver_str %(echo %{_kernel_ver} | sed s/-/_/g)
+%__kernel_rpmvr  %(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h --queryformat "%{VERSION}-%{RELEASE}" | grep -v "is not")
+%_kernel_ver     %{__kernel_ver}%{?with_dist_kernel:%(echo %{__kernel_ver} | grep -q -e - || echo -%{__kernel_rel})}
+%_kernel_ver_str %(echo %{!?_without_dist_kernel:%{__kernel_rpmvr}}%{?_without_dist_kernel:%{__kernel_ver}} | sed -e 's/-/_/')
 
 # sgml macros
 %xmlcat_add()            /usr/bin/xmlcatalog --noout --add nextCatalog \"\" %1 /etc/xml/catalog
@@ -302,7 +311,7 @@ unset DISPLAY ||:\
 if [ -d "$RPM_BUILD_ROOT" ]; then \
 echo "Remove RPATH from executable binaries and shared object files."; \
 find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" %{?_noautochrpath:! -regex "%{_noautochrpath}"} | xargs -r file | \
-	awk '/ELF.*(executable|shared object)/ {print $1}' | cut -d: -f1 | \
+	awk '/ELF.*(executable.*dynamically linked|shared object)/ {print $1}' | cut -d: -f1 | \
 while read file ; do \
 	rpath= ; \
 	chmod u+w "$file"; \
@@ -335,8 +344,8 @@ fi; } \
     if [ -d "$RPM_BUILD_ROOT" ]; then \
 echo "Compress kernel modules if any."; \
     if test -d $RPM_BUILD_ROOT/lib/modules ; then \
-       find $RPM_BUILD_ROOT/lib/modules -name \*o -type f -print | \
-       xargs -r %{__gzip} -9nf; \
+	find $RPM_BUILD_ROOT/lib/modules -name \*o -type f -print | \
+	xargs -r %{__gzip} -9nf; \
 	   find $RPM_BUILD_ROOT/lib/modules -name \*o -type l -printf "%p %l\n" | \
 	   while read a b; do ln -sf $b.gz $a.gz; rm -f $a; done; \
     fi; \
@@ -368,11 +377,11 @@ echo "Compress kernel modules if any."; \
 # Requires/Provides automation
 # exceptions system by Jacek Konieczny <jajcus@pld.org.pl>
 #
-%_noautoreqfiles	%(sed -e s'/#.*//' /etc/rpm/noautoreqfiles)
-%_noautoprovfiles	%(sed -e s'/#.*//' /etc/rpm/noautoprovfiles)
-%_noautoreq		%(sed -e s'/#.*//' /etc/rpm/noautoreq)
-%_noautoreqdep		%(sed -e s'/#.*//' /etc/rpm/noautoreqdep)
-%_noautoprov		%(sed -e s'/#.*//' /etc/rpm/noautoprov)
+%__noautoreqfiles	%(sed -e s'/#.*//' /etc/rpm/noautoreqfiles)%{?_noautoreqfiles: %{_noautoreqfiles}}
+%__noautoprovfiles	%(sed -e s'/#.*//' /etc/rpm/noautoprovfiles)%{?_noautoprovfiles: %{_noautoprovfiles}}
+%__noautoreq		%(sed -e s'/#.*//' /etc/rpm/noautoreq)%{?_noautoreq: %{_noautoreq}}
+%__noautoreqdep		%(sed -e s'/#.*//' /etc/rpm/noautoreqdep)%{?_noautoreqdep: %{_noautoreqdep}}
+%__noautoprov		%(sed -e s'/#.*//' /etc/rpm/noautoprov)%{?_noautoprov: %{_noautoprov}}
 #%_noautocompressdoc	%{nil}
 #
 %_missing_doc_files_terminate_build	1%{nil}
@@ -445,3 +454,51 @@ fi; \
 %xmms_general_plugindir       %(xmms-config --general-plugin-dir)
 
 %_target_base_arch	%(echo %{_target_cpu} | sed 's/i.86/i386/;s/athlon/i386/;s/pentium./i386/;s/amd64/x86_64/')
+
+# user/group checking macros
+#
+# Usage:
+#	%userremove myuser
+#
+%userremove	/usr/lib/rpm/user_group.sh user del
+%groupremove	/usr/lib/rpm/user_group.sh group del
+#
+# Usage:
+#	if %usertestrm myuser; then
+#		/usr/sbin/userdel -r myuser
+# Note:
+#	use these macros only if you need to call userdel/groupdel with
+#	a non-standard option or take an extra action; otherwise use the
+#	%userremove/%groupremove macros
+#
+%usertestrm	/usr/lib/rpm/user_group.sh user testrm
+%grouptestrm	/usr/lib/rpm/user_group.sh group testrm
+# user group membership management macros
+#
+# Usage:
+#	%addusertogroup myuser agroup
+#
+%addusertogroup	/usr/lib/rpm/user_group.sh user addtogroup
+
+# banner support (useful in {pre,post}{,un} and triggers)
+#
+# Usage:
+#	%banner name [-a] [-e] [-n] [-tn]
+# the banner text, the banner text
+# the banner text, and following line HAVE TO BE:
+# EOF
+# -a   - append to the banner
+# -e   - send to stderr instead of stdout
+# -n   - no show banner (overrides -t)
+# -t   - show only, if RPM_SCRIPTVERBOSITY >= n; default n=5
+%banner(a:e:n:t:)	\
+RPM_SCRIPTVERBOSITY=5 \
+[ -r /etc/sysconfig/rpm ] && . /etc/sysconfig/rpm \
+if [ -x /usr/bin/banner.sh ]; then \
+	CMD="/usr/bin/banner.sh %{-e:--stderr} %{!-n:\`[ $RPM_SCRIPTVERBOSITY -ge %{-t:%{-t*}}%{!-t:5} ] && echo '-s'\`} %{!-a:-m}%{-a:-M} %1" \
+else \
+	CMD="cat%{-e: >&2}" \
+fi \
+$CMD << EOF \
+%nil
+
