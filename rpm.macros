@@ -192,8 +192,8 @@
 %apache_modules_api %(awk '/#define MODULE_MAGIC_NUMBER_MAJOR/ {print $3}' /usr/include/apache/ap_mmn.h 2>/dev/null || echo ERROR)
 
 # kernel version-release handling
-%__kernel_ver    %(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
-%__kernel_rel    %(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/version.h --queryformat "%{RELEASE}" | grep -v "is not")
+%__kernel_ver   %([ -f %{_kernelsrcdir}/include/linux/version.h ] && (grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2) || (awk '/^VERSION/ { ver = $0; gsub(/VERSION.*=/, NIL, ver); } /^PATCHLEVEL/ { plev = $0; gsub(/PATCHLEVEL.*=/, NIL, plev); } /^SUBLEVEL/ { slev = $0; gsub(/SUBLEVEL.*=/, NIL, slev); } END { printf("%d.%d.%d", ver, plev, slev); }' %{_kernelsrcdir}/Makefile 2> /dev/null))
+%__kernel_rel    %(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h --queryformat "%{RELEASE}" | grep -v "is not")
 %_kernel_ver     %(echo %{__kernel_ver}%{!?_without_dist_kernel:-%{__kernel_rel}})
 %_kernel_ver_str %(echo %{_kernel_ver} | sed s/-/_/g)
 
