@@ -7,6 +7,7 @@
 #
 # Conditional build:
 # _without_static	- build shared /bin/rpm (doesn't work at the moment)
+# _without_docs		- don't generate documentation with doxygen
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
@@ -97,7 +98,7 @@ BuildRequires:	automake
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.1
 BuildRequires:	db-devel >= %{reqdb_ver}
-BuildRequires:	doxygen
+%{!?_without_docs:BuildRequires:	doxygen}
 BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	elfutils-devel
 #BuildRequires:	libmagic-devel
@@ -601,7 +602,7 @@ mv -f macros.tmp macros.in
 	CC="%{__cc}" CXX="%{__cxx}" CPP="%{__cpp}" \
 	--enable-shared \
 	--enable-static \
-	--with-apidocs \
+	%{!?_without_docs:--with-apidocs} \
 	--with-python=auto \
 	--without-db
 
