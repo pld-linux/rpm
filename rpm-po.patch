@@ -147,7 +147,7 @@ diff -urN rpm-4.3.org/po/pt_BR.po rpm-4.3/po/pt_BR.po
 @@ -6,6 +6,9 @@
  "Project-Id-Version: rpm 4.0.3\n"
  "Report-Msgid-Bugs-To: \n"
- "POT-Creation-Date: 2003-12-07 15:11-0500\n"
+ "POT-Creation-Date: 2004-01-05 17:24+0000\n"
 +"PO-Revision-Date: 2002-02-14 10:51+0000\n"
 +"Last-Translator: José Nuno Coelho Sanarra Pires <jncp@rnl.ist.utl.pt>\n"
 +"Language-Team: pt <morais@kde.org\n"
@@ -160,7 +160,7 @@ diff -urN rpm-4.3.org/po/sr.po rpm-4.3/po/sr.po
 @@ -3,6 +3,9 @@
  "Project-Id-Version: rpm 4.0.3\n"
  "Report-Msgid-Bugs-To: \n"
- "POT-Creation-Date: 2003-12-07 15:11-0500\n"
+ "POT-Creation-Date: 2004-01-05 17:24+0000\n"
 +"PO-Revision-Date: 2002-02-14 10:51+0000\n"
 +"Last-Translator: ?\n"
 +"Language-Team: ?\n"
