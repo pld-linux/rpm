@@ -25,7 +25,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.2
 Version:	%{ver}
-%define	rel	0.%{snap}.6
+%define	rel	0.%{snap}.7
 Release:	%{rel}
 %define	beecrypt_rel	%{ver}_%{rel}
 License:	GPL
@@ -729,9 +729,9 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_libdir}/rpm/brp-*
 %attr(755,root,root) %{_libdir}/rpm/check-files
 %attr(755,root,root) %{_libdir}/rpm/check-prereqs
-%attr(755,root,root) %{_libdir}/rpm/cpanflute
-%attr(755,root,root) %{_libdir}/rpm/cpanflute2
-%attr(755,root,root) %{_libdir}/rpm/Specfile.pm
+#%attr(755,root,root) %{_libdir}/rpm/cpanflute
+#%attr(755,root,root) %{_libdir}/rpm/cpanflute2
+#%attr(755,root,root) %{_libdir}/rpm/Specfile.pm
 %attr(755,root,root) %{_libdir}/rpm/http.req
 %attr(755,root,root) %{_libdir}/rpm/magic.*
 %attr(755,root,root) %{_libdir}/rpm/u_pkg.sh
@@ -817,7 +817,8 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 
 %files perlprov
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/rpm/perl*
+%attr(755,root,root) %{_libdir}/rpm/perl.*
+#%attr(755,root,root) %{_libdir}/rpm/perldeps.pl
 #%attr(755,root,root) %{_libdir}/rpm/find-perl-*
 %attr(755,root,root) %{_libdir}/rpm/find-*.perl
 %attr(755,root,root) %{_libdir}/rpm/find-prov.pl
