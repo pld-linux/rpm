@@ -7,7 +7,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.2
-Release:	55
+Release:	55.1
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -210,6 +210,7 @@ Summary:	Additional utilities for checking perl provides/requires in rpm package
 Summary(de):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
 Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w pakietach rpm
 Group:		Applications/File
+Requires:	%{name} = %{version}
 Requires:	perl-modules
 Requires:	findutils
 
