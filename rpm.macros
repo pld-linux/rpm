@@ -1,6 +1,3 @@
-# arch macro for Intel i?86 compatibile processors
-%ix86	i386 i486 i586 i686 i786 i886 i986
-
 #------------------------------------------------------------------------------
 # The GNUconfigure macro does the following:
 #       update config.guess and config.sub.
