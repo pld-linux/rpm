@@ -9,21 +9,6 @@
 %_fixgroup       true
 %_fixperms             %{__chmod} -Rf @FIXPERMS@
 %_topdir         %(echo $HOME)/rpm
-%_exec_prefix    %{_prefix}
-%_bindir         %{_exec_prefix}/bin
-%_sbindir        %{_exec_prefix}/sbin
-%_libexecdir     %{_exec_prefix}/lib
-%_datadir        %{_prefix}/share
-%_sharedstatedir /var/lib
-%_lib            lib
-%_libdir         %{_exec_prefix}/%{_lib}
-%_includedir     %{_prefix}/include
-%_oldincludedir  /usr/include
-%_sysconfdir     /etc
-%_localstatedir  /var
-%_infodir        /usr/share/info
-%_mandir         %{_prefix}/share/man
-%_defaultdocdir  %{_usr}/share/doc
 #-----------------------------------------------------------------
 # CFLAGS and LDFLAGS used to build
 
@@ -324,3 +309,37 @@ fi \
 %___emacs_lispdir_helper  -batch -q -eval '(while load-path (princ (concat (car load-path) "\\n")) (setq load-path (cdr load-path)))' 2> /dev/null|sed -n '/\\(.*\\/x\\?emacs\\/site-lisp\\)\\/\\?$/{s,,\\1,p;q;}'
 %_emacs_lispdir %(emacs %___emacs_lispdir_helper)
 %_xemacs_lispdir %(xemacs %___emacs_lispdir_helper)
+
+%__php_provides	@RPMCONFIGDIR@/php.prov
+%__php_requires @RPMCONFIGDIR@/php.req
+
+# Perl specific macro definitions.
+%define		perl_privlib	%(eval "`%{__perl} -V:installprivlib`"; echo $installprivlib)
+%define		perl_archlib	%(eval "`%{__perl} -V:installarchlib`"; echo $installarchlib)
+%define		perl_vendorlib	%(eval "`%{__perl} -V:installvendorlib`"; echo $installvendorlib)
+%define		perl_vendorarch	%(eval "`%{__perl} -V:installvendorarch`"; echo $installvendorarch)
+%define		perl_sitelib	%(eval "`%{__perl} -V:installsitelib`"; echo $installsitelib)
+%define		perl_sitearch	%(eval "`%{__perl} -V:installsitearch`"; echo $installsitearch)
+
+%define		php_pear_dir	%{_datadir}/pear
+
+# Python specific macro definitions.
+# python main version
+%define py_ver         %(echo `python -c "import sys; print sys.version[:3]"`)
+
+# directories
+%define py_prefix      %(echo `python -c "import sys; print sys.prefix"`)
+%define py_libdir      %{py_prefix}/lib/python%{py_ver}
+%define py_incdir      /usr/include/python%{py_ver}
+%define py_sitedir     %{py_libdir}/site-packages
+%define py_dyndir      %{py_libdir}/lib-dynload
+
+# pure python modules compilation
+%define py_comp        python -c "import compileall; import sys; compileall.compile_dir(sys.argv[1], ddir=sys.argv[1][len('$RPM_BUILD_ROOT'):])"
+
+%define py_ocomp       python -O -c "import compileall; import sys; compileall.compile_dir(sys.argv[1], ddir=sys.argv[1][len('$RPM_BUILD_ROOT'):])"
+
+# Software written in Python language require Python with main version
+# unchanged
+%define pyrequires_eq() Requires:       %1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
+
