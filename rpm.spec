@@ -87,6 +87,9 @@ Patch32:	%{name}-libdir-links.patch
 Patch33:	%{name}-find_required_pkgs_on_build.patch
 Patch34:	%{name}-noautoreqprovfiles.patch
 Patch35:	%{name}-context.patch
+Patch36:	%{name}-nls-fixes.patch
+# this one not wholly ported yet (_noauto{prov,req}, _{perl,php}_deps)
+#Patch37:	%{name}-userpmdepswrappers.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -533,8 +536,8 @@ construir pacotes usando o RPM.
 
 %prep
 %setup -q
-# pl.po translation
-#%patch0 -p1
+%patch36 -p1
+%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
