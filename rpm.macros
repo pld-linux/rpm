@@ -176,7 +176,7 @@ if [ "$_autoreqprov" = "y" ] ; then \
 fi \
 %{nil}
 
-%__spec_install_post \
+%__os_install_post \
 %{?_noautoreqfiles:for f in %{_noautoreqfiles} ; do echo %{?buildroot:%{buildroot}}$f >> %{_builddir}/__rpm_noautoreqfiles ; done }\
 %{?_noautoreq:for f in %{_noautoreq} ; do echo "$f" >> %{_builddir}/__rpm_noautoreq ; done }\
 %{?_noautoreqdep:for f in %{_noautoreqdep} ; do echo "$f" >> %{_builddir}/__rpm_noautoreqdep ; done }\
@@ -185,7 +185,6 @@ fi \
 %{__spec_install_post_strip}\
 %{__spec_install_post_compress_docs}\
 %{__arch_install_post}\
-%{__os_install_post}\
 %{nil}
 
 %__spec_clean_pre	%{___build_pre}\
