@@ -1,6 +1,9 @@
 Applications
-	[de]:	Applikationen
-	[pl]:	Aplikacje
+	[de]:		Applikationen
+	[pl]:		Aplikacje
+	[pt]:		Aplicações
+	[pt_BR]:	Aplicações
+	[es]:		Aplicaciones
 
 Applications/Archiving
 	[de]:	Applikationen/Archivierung
@@ -136,8 +139,10 @@ Applications/Text
 	[pl]:	Aplikacje/Tekst
 
 Applications/Sound
-	[de]:	Applikationen/Laut
-	[pl]:	Aplikacje/D¼wiêk
+	[de]:		Applikationen/Laut
+	[pl]:		Aplikacje/D¼wiêk
+	[pt_BR]:	Aplicações/Som
+	[es]:		Aplicaciones/Sonido
 
 Base
 	[de]:		Gründsätzlich
