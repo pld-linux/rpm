@@ -32,6 +32,7 @@ Patch13:	%{name}-rpmlibprov.patch
 Patch14:	%{name}-getrpmlibprov.patch
 Patch15:        %{name}-rpmlibprov-order.patch
 Patch16:	%{name}-find-KDE.patch
+Patch17:	%{name}-bash2.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	bzip2-static >= 1.0.1
@@ -181,6 +182,7 @@ construir pacotes usando o RPM.
 %patch14 -p1
 %patch15 -p1
 %patch16 -p1
+%patch17 -p1
 %patch31 -p1
 install %{SOURCE2} macros.pld.in
 %patch38 -p1
