@@ -41,7 +41,7 @@
  dnl if test $rpm_cv_regex = yes; then
  dnl     AC_DEFINE(USE_GNU_REGEX)
 -dnl     LIBOBJS="$LIBOBJS regex.o"
-+dnl     AC_LIBOBJ([regex.o])
++dnl     AC_LIBOBJ([regex])
  dnl fi
  
  dnl
@@ -50,8 +50,8 @@
  if test "$rpm_cv_glob" = yes; then
      AC_DEFINE(USE_GNU_GLOB)
 -    LIBOBJS="$LIBOBJS glob.o fnmatch.o"
-+    AC_LIBOBJ([glob.o])
-+    AC_LIBOBJ([fnmatch.o])
++    AC_LIBOBJ([glob])
++    AC_LIBOBJ([fnmatch])
  fi
  dnl
  dnl Auto-detect which python bindings should be built.
