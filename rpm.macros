@@ -90,6 +90,9 @@
 # Location of autoconf macros
 %_aclocaldir	%(aclocal --print-ac-dir)
 
+# Location of omf files
+%_omf_dest_dir	%(scrollkeeper-config --omfdir)
+
 # Location of pkgconfig files
 %_pkgconfigdir	/usr/lib/pkgconfig
 
