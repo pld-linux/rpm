@@ -7,7 +7,9 @@ Release:	37
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
+Group(es):	Base
 Group(pl):	Podstawowe
+Group(pt_BR):	Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
 Source1:	%{name}.groups
 Source2:	%{name}.macros
@@ -35,7 +37,7 @@ Patch10:	%{name}-cache.patch
 Patch11:	%{name}-suggestions.patch
 Patch12:	%{name}-rh-lame.patch
 Patch13:	%{name}-glob.patch
-Patch14:	%{name}-header_h.patch	
+Patch14:	%{name}-header_h.patch
 Patch15:	%{name}-fast-alAddPackage.patch
 Patch16:	%{name}-byKey.patch
 Patch17:	%{name}-perlprov.patch
@@ -105,8 +107,12 @@ do pacote, permissões dos arquivos, etc.
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne	
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne
 Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	òÁÚÒÁÂÏÔËÁ/âÉÂÌÉÏÔÅËÉ
+Group(uk):	òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 Summary(pt_BR):	Arquivos de inclusão e bibliotecas para programas de manipulação de pacotes RPM
 Group:		Development/Libraries
 Requires:	%{name} = %{version}
@@ -131,8 +137,12 @@ ferramentas que precisem de conhecimento profundo de pacotes RPM.
 Summary(pl):	Biblioteki statyczne rpm-a
 Summary(pl):	Biblioteki statyczne RPM-a
 Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	òÁÚÒÁÂÏÔËÁ/âÉÂÌÉÏÔÅËÉ
+Group(uk):	òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 Summary(pt_BR):	Bibliotecas estáticas para o desenvolvimento de aplicações RPM
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
@@ -213,6 +223,7 @@ Requires:	patch
 Requires:	texinfo
 Requires:	file >= 3.31
 Requires:	binutils
+Requires:	make
 Requires:	gcc >= 3.0.3
 Requires:	gcc
 Requires:	diffutils
@@ -224,10 +235,10 @@ Requires:	tar
 Requires:	textutils
 
 %description build
-%description -l de build
+Scripts for building binary RPM packages.
 
 %description build -l de
-%description -l pl build
+Scripts fürs Bauen binärer RPM-Pakete.
 Skrypty pomocnicze do budowania binarnych RPMów.
 %description build -l pl
 construir pacotes usando o RPM.
@@ -258,7 +269,7 @@ construir pacotes usando o RPM.
 %patch23 -p1
 %patch31 -p1
 %patch36 -p1
-cp platform.in macros.pld.in
+%patch37 -p1
 %patch38 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
@@ -337,12 +348,12 @@ EOF
 
 %find_lang %{name}
 
+# DON'T BREAK BUILD TREE!!!
+# rm -f doc/manual/Makefile*
+
 gzip -9nf RPM-PGP-KEY CHANGES doc/manual/*
 
 %clean
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 rm -rf $RPM_BUILD_ROOT
 
 %post	-p /sbin/ldconfig
