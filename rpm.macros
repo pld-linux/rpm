@@ -213,10 +213,7 @@ echo "Compress man and info pages."; \
 echo "Compress kernel modules if any."; \
 %{!?no_install_post_compress_modules: \
     %{?verbose:set -x;} \
-    if test -d $RPM_BUILD_ROOT/lib/modules ; then \
-       find $RPM_BUILD_ROOT/lib/modules -name \*.o -print | \
-       xargs -r %{__gzip} -9nf; \
-    fi; \
+    find $RPM_BUILD_ROOT/lib/modules -name \*.o -print | xargs -r %{__gzip} -9nf; \
 } }
 
 %_source_payload        w9.gzdio
