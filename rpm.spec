@@ -49,7 +49,6 @@ Source12:	perl.prov
 Source30:	builder
 Source31:	adapter.awk
 Source32:	pldnotify.awk
-Source33:	%{name}rc
 Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
@@ -690,7 +689,17 @@ install rpmio/ugid.h $RPM_BUILD_ROOT%{_includedir}/rpm
 
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm
 
-install %{SOURCE33} $RPM_BUILD_ROOT%{_sysconfdir}
+echo "# customized rpm options - global for host" > \
+	$RPM_BUILD_ROOT%{_sysconfdir}/rpmrc
+
+%ifarch i686
+cat >> $RPM_BUILD_ROOT%{_sysconfdir}/rpmrc << EOF
+
+# There is no 'pentium3' arch in PLD dist tree, so we translate it to i686.
+# Comment out the line below if You want to build pentium3 optimized packages.
+buildarchtranslate: pentium3: i686
+EOF
+%endif
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # customized rpm macros - global for host
