@@ -113,7 +113,10 @@
 %_pkgconfigdir	/usr/lib/pkgconfig
 
 # Location of top applink dir
-%_applnkdir      /usr/X11R6/share/applnk
+%_applnkdir	/usr/X11R6/share/applnk
+
+# Location of desktop files
+%_desktopdir	/usr/X11R6/share/applications
 
 # Location pixmaps for applnk/desktop files
 %_pixmapsdir	/usr/X11R6/share/pixmaps
@@ -167,6 +170,17 @@
 'SYSTEM "http://www.oasis-open.org/docbook/xml/%2/docbookx.dtd"                  "%{_datadir}/sgml/docbook/xml-dtd-%2/docbookx.dtd"' \
 '' \
 ; do echo $l; done >> %1 \
+}
+
+#-----------------------------------------------------------------
+# Update all GConf2 schemas
+#
+# Requires: GConf2
+#
+%gconf_schema_install { umask 022; \
+    GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" \
+    /usr/bin/gconftool-2 --makefile-install-rule \
+    /etc/gconf/schemas/*.schemas > /dev/null \
 }
 
 #-----------------------------------------------------------------
