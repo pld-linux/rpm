@@ -790,7 +790,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n beecrypt-devel
 %defattr(644,root,root,755)
 %{_prefix}/lib/libbeecrypt.so
-%attr(755,root,root) %{_prefix}/lib/libbeecrypt.la
+%{_prefix}/lib/libbeecrypt.la
 %{_includedir}/beecrypt
 
 %files -n beecrypt-static
