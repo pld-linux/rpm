@@ -101,6 +101,10 @@ Applications/Publishing/XML
 	[de]:	Applikationen/Publizieren/XML
 	[pl]:	Aplikacje/Publikowanie/XML
 
+Applications/Publishing/XML/Java
+	[de]:	Applikationen/Publizieren/XML/Java
+	[pl]:	Aplikacje/Publikowanie/XML/Java
+
 Applications/Shells
 	[de]:	Applikationen/Shells
 	[pl]:	Aplikacje/Pow³oki
@@ -218,16 +222,6 @@ Documentation
 	[es]:	Documentación
 	[pl]:	Dokumentacja
 
-Java
-   [pl]: Java
-
-Java/Networking/Daemons
-	[de]:	Java/Netzwerkwesen/Server
-	[pl]:	Java/Sieciowe/Serwery
-
-Java/Networking/Daemons/Additions
-	[pl]:	Java/Sieciowe/Serwery/Dodatki
-
 Libraries
 	[de]:		Libraries
 	[es]:		Bibliotecas
@@ -250,6 +244,14 @@ Networking/Admin
 Networking/Daemons
 	[de]:	Netzwerkwesen/Server
 	[pl]:	Sieciowe/Serwery
+
+Networking/Daemons/Java
+	[de]:	Netzwerkwesen/Server/Java
+	[pl]:	Sieciowe/Serwery/Java
+
+Networking/Daemons/Java/Extensions
+	[de]:	Netzwerkwesen/Server/Java/Extensionen
+	[pl]:	Sieciowe/Serwery/Java/Rozszerzenia
 
 Networking/News
 	[de]:	Netzwerkwesen/News
