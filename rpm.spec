@@ -102,7 +102,7 @@ rm -rf $RPM_BUILD_ROOT
 - changed Buildroot to /tmp/%%{name}-%%{version}-root,
 - added using %%{name} and %%{version} in Source,
 - added %lang macros for /usr/share/locale/*/LC_MESSAGES/rpm.mo files,
-- added %attr and %defattr macros in %files (allow build package from
+- added %attr and %defattr macros in %files (allows build package from
   non-root account).
 Revision 1.79  2000/02/17 03:42:17  kloczek
 - release 25,
