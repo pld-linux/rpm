@@ -157,7 +157,7 @@
        next;
      }
  
-@@ -108,8 +120,24 @@
+@@ -108,8 +120,28 @@
        # will be included with the name sys/systeminfo.ph so only use the
        # basename of *.ph files
  
@@ -172,6 +172,10 @@
 +      # skip all modules for oparating systems other than linux
 +
 +      ($module =~ m/Mac|OS2|MSDOS|Win32|VMS|vmsish/) && next;
++
++      # if the module name starts in a dot it is not a module name
++
++      ($module =~ m/^\./) && next;
 +
 +      # if the module ends with .pm strip it to leave only basename
 +
