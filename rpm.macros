@@ -1,6 +1,7 @@
 # PLD rpm macros
 
 # other macros
+%epoch		0
 %_enable_debug_packages 0
 
 %__id		@__ID@
