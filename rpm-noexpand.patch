@@ -1,0 +1,61 @@
+diff -urN rpm-4.0.2/build/parseChangelog.c rpm-4.0.2.new/build/parseChangelog.c
+--- rpm-4.0.2/build/parseChangelog.c	Tue Jan 16 00:10:04 2001
++++ rpm-4.0.2.new/build/parseChangelog.c	Thu Aug 30 23:41:32 2001
+@@ -213,7 +213,7 @@
+     
+     while (! (nextPart = isPart(spec->line))) {
+ 	appendStringBuf(sb, spec->line);
+-	if ((rc = readLine(spec, STRIP_COMMENTS)) > 0) {
++	if ((rc = readLine(spec, STRIP_COMMENTS | STRIP_NOEXPAND)) > 0) {
+ 	    nextPart = PART_NONE;
+ 	    break;
+ 	}
+diff -urN rpm-4.0.2/build/parseDescription.c rpm-4.0.2.new/build/parseDescription.c
+--- rpm-4.0.2/build/parseDescription.c	Tue Jan 16 00:10:04 2001
++++ rpm-4.0.2.new/build/parseDescription.c	Thu Aug 30 23:41:47 2001
+@@ -106,7 +106,7 @@
+ 	    appendLineStringBuf(sb, spec->line);
+ 	    if (t) t->t_nlines++;
+ 	    if ((rc =
+-		 readLine(spec, STRIP_TRAILINGSPACE | STRIP_COMMENTS)) > 0) {
++		readLine(spec, STRIP_TRAILINGSPACE | STRIP_COMMENTS | STRIP_NOEXPAND)) > 0) {
+ 		nextPart = PART_NONE;
+ 		break;
+ 	    }
+diff -urN rpm-4.0.2/build/parseSpec.c rpm-4.0.2.new/build/parseSpec.c
+--- rpm-4.0.2/build/parseSpec.c	Tue Jan 16 14:08:55 2001
++++ rpm-4.0.2.new/build/parseSpec.c	Thu Aug 30 23:58:52 2001
+@@ -131,12 +131,16 @@
+ 	ofi->readPtr = from;
+ 
+ 	/* Don't expand macros (eg. %define) in false branch of %if clause */
+-	if (spec->readStack->reading &&
+-	    expandMacros(spec, spec->macros, spec->lbuf, sizeof(spec->lbuf))) {
+-		rpmError(RPMERR_BADSPEC, _("line %d: %s\n"),
+-			spec->lineNum, spec->lbuf);
+-		return RPMERR_BADSPEC;
+-	}
++	/* Also don't expand macros in %changelog and %description, where 
++	  we set STRIP_NOEXPAND flag */
++	if (!(strip & STRIP_NOEXPAND)) {
++	    if (spec->readStack->reading &&
++		    expandMacros(spec, spec->macros, spec->lbuf, sizeof(spec->lbuf))) {
++			rpmError(RPMERR_BADSPEC, _("line %d: %s\n"),
++				spec->lineNum, spec->lbuf);
++			return RPMERR_BADSPEC;
++		    }
++	}	
+ 	spec->nextline = spec->lbuf;
+     }
+ 
+diff -urN rpm-4.0.2/build/rpmbuild.h rpm-4.0.2.new/build/rpmbuild.h
+--- rpm-4.0.2/build/rpmbuild.h	Thu Jan 11 15:15:15 2001
++++ rpm-4.0.2.new/build/rpmbuild.h	Thu Aug 30 23:25:00 2001
+@@ -69,6 +69,7 @@
+ #define STRIP_NOTHING             0
+ #define STRIP_TRAILINGSPACE (1 << 0)
+ #define STRIP_COMMENTS      (1 << 1)
++#define STRIP_NOEXPAND      (1 << 2)
+ 
+ #ifdef __cplusplus
+ extern "C" {
