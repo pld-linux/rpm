@@ -365,9 +365,17 @@ echo "Compress kernel modules if any."; \
 #
 # Requires: GConf2
 #
-%gconf_schema_install /usr/lib/rpm/gconf-schema-install
+%gconf_schema_install() \
+    umask 022; \
+    GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" \
+    /usr/bin/gconftool-2 --makefile-install-rule %{?1}%{!?1:/etc/gconf/schemas/*.schemas} > /dev/null \
+    %{nil}
 
-%gconf_schema_uninstall /usr/lib/rpm/gconf-schema-uninstall
+%gconf_schema_uninstall() \
+    umask 022; \
+    GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" \
+    /usr/bin/gconftool-2 --makefile-uninstall-rule %{?1} > /dev/null \
+    %{nil}
 
 #-----------------------------------------------------------------
 # post %install sequence:
