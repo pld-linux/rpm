@@ -1,0 +1,23 @@
+--- rpm-4.4.1/scripts/pythondeps.sh.orig	2004-12-07 01:57:55.000000000 +0100
++++ rpm-4.4.1/scripts/pythondeps.sh	2005-02-27 17:35:52.860244432 +0100
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ 
+ [ $# -ge 1 ] || {
+     cat > /dev/null
+@@ -9,12 +9,12 @@
+ case $1 in
+ -P|--provides)
+     shift
+-    grep "/usr/bin/python\*\$" >& /dev/null && echo "python(abi) = ${PYVER}"
++    grep "/usr/lib[^/]*/libpython2\..*\.so.*\$" >/dev/null && echo "python(abi) = ${PYVER}"
+     exit 0
+     ;;
+ -R|--requires)
+     shift
+-    grep "/usr/lib[^/]*/python${PYVER}/" >& /dev/null && echo "python(abi) = ${PYVER}"
++    grep "/usr/\(lib[^/]*\|share\)/python${PYVER}/" >/dev/null && echo "python(abi) = ${PYVER}"
+     exit 0
+     ;;
+ esac
