@@ -9,7 +9,7 @@ diff -urN rpm-3.0.5.orig/rpmrc.in rpm-3.0.5/rpmrc.in
 -buildarchtranslate: i686: i386
 -buildarchtranslate: i586: i386
 -buildarchtranslate: i486: i386
-+buildarchtranslate: athlon: i686
++buildarchtranslate: athlon: athlon
 +buildarchtranslate: i686: i686
 +buildarchtranslate: i586: i586
 +buildarchtranslate: i486: i486
