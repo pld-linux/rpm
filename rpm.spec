@@ -287,7 +287,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/find-provides
 %attr(755,root,root) %{_libdir}/rpm/find-rpm-provides
 %attr(755,root,root) %{_libdir}/rpm/find-spec-bcond
-%attr(755,root,root) %{_libdir}/rpm/remove-unneeded-elf-sections
 %attr(755,root,root) %{_libdir}/rpm/rpmb
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmt
