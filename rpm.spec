@@ -9,6 +9,7 @@ Copyright:	GPL
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-2.5.x/%{name}-%{version}.tar.gz
 Source1:	rpm.groups
 Source2:	rpm.8pl
+Source3:	rpm.macros
 Patch0:		rpm-rpmrc.patch
 Patch1:		rpm-i18n.patch
 Patch2:		rpm-find-requires.patch
@@ -72,6 +73,8 @@ install -d $RPM_BUILD_ROOT/var/lib/rpm \
 
 make DESTDIR="$RPM_BUILD_ROOT" install
 	pkgbindir="%{_bindir}"
+install %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/rpm/macros.pld
+
 install rpm.8ru $RPM_BUILD_ROOT/usr/man/ru/man8/rpm.8
 install rpm2cpio.8ru $RPM_BUILD_ROOT/usr/man/ru/man8/rpm2cpio.8
 install %{SOURCE2} $RPM_BUILD_ROOT/usr/man/pl/man8/rpm.8
@@ -82,11 +85,10 @@ gzip -9fn $RPM_BUILD_ROOT/usr/man/{ru/man8/*,man8/*} \
 	RPM-PGP-KEY CHANGES docs/*
 
 %clean
-#rm -rf $RPM_BUILD_ROOT
+rm -rf $RPM_BUILD_ROOT
 
 %post
 /bin/rpm --initdb
-/bin/rpm --rebuilddb
 
 %files
 
@@ -106,8 +108,11 @@ gzip -9fn $RPM_BUILD_ROOT/usr/man/{ru/man8/*,man8/*} \
 %attr(755,root,root) /usr/lib/rpm/find-*
 %attr(755,root,root) /usr/lib/rpm/freshen.sh
 %attr(755,root,root) /usr/lib/rpm/mkinstalldirs
+%attr(755,root,root) /usr/lib/rpm/config.*
+%attr(755,root,root) /usr/lib/rpm/getpo.sh
 
 /usr/lib/rpm/rpm*
+/usr/lib/rpm/macros*
 /usr/src/rpm
 
 %lang(cs)    /usr/share/locale/cs/LC_MESSAGES/rpm.mo
