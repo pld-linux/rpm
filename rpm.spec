@@ -983,11 +983,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_includedir}/rpm
 %{_libdir}/librpm*.la
 %attr(755,root,root) %{_libdir}/librpm.so
-%attr(755,root,root) %{_libdir}/librpm-*.so
+%attr(755,root,root) %{_libdir}/librpm-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmio.so
-%attr(755,root,root) %{_libdir}/librpmio-*.so
+%attr(755,root,root) %{_libdir}/librpmio-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmdb.so
-%attr(755,root,root) %{_libdir}/librpmdb-*.so
+%attr(755,root,root) %{_libdir}/librpmdb-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmbuild.so
 
 %files static
