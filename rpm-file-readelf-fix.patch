@@ -1,58 +1,58 @@
---- rpm.org/file/src/readelf.c.orig	2004-03-22 21:28:40.000000000 +0100
-+++ rpm/file/src/readelf.c	2004-03-28 23:25:50.806604968 +0200
-@@ -147,6 +147,9 @@
- 			    getu32(swap, ph32.p_align) : 4) \
+diff -ur rpm.org/file/src/readelf.c rpm/file/src/readelf.c
+--- rpm.org/file/src/readelf.c	2004-06-14 17:19:46.426166808 +0200
++++ rpm/file/src/readelf.c	2004-06-14 17:24:43.083068104 +0200
+@@ -136,6 +136,9 @@
+ 			    getu32(fm, ph32.p_align) : 4) \
  			 : (off_t) (ph64.p_align ?	\
- 			    getu64(swap, ph64.p_align) : 4)))
-+#define ph_filesz	(class == ELFCLASS32		\
-+			 ? getu32(swap, ph32.p_filesz)	\
-+			 : getu64(swap, ph64.p_filesz))
- #define nh_size		(class == ELFCLASS32		\
+ 			    getu64(fm, ph64.p_align) : 4)))
++#define ph_filesz	(class == ELFCLASS32            \
++			? getu32(swap, ph32.p_filesz)  \
++			: getu64(swap, ph64.p_filesz))
+ #define nh_size		(fm->cls == ELFCLASS32		\
  			 ? sizeof nh32			\
  			 : sizeof nh64)
-@@ -250,7 +253,7 @@
- 			file_badseek(ms);
- 			return -1;
+@@ -244,7 +247,7 @@
+ 			error(EXIT_FAILURE, 0, "lseek failed (%s).\n", strerror(errno));
+ 			/*@notreached@*/
  		}
--		bufsize = read(fd, nbuf, BUFSIZ);
-+		bufsize = read(fd, nbuf, ((ph_filesz < BUFSIZ) ? ph_filesz : BUFSIZ));
+-		bufsize = read(fm->fd, nbuf, BUFSIZ);
++		bufsize = read(fm->fd, nbuf, ((ph_filesz < BUFSIZ) ? ph_filesz : BUFSIZ));
  		if (bufsize == -1) {
- 			file_badread(ms);
- 			return -1;
-@@ -313,7 +316,7 @@
+ 			error(EXIT_FAILURE, 0, ": " "read failed (%s).\n", strerror(errno));
+ 			/*@notreached@*/
+@@ -290,7 +293,7 @@
  	noff = offset;
- 	doff = ELF_ALIGN(offset + namesz);
+ 	doff = ELF_ALIGN(offset + nh_namesz);
  
--	if (offset + namesz >= size) {
-+	if (offset + namesz > size) {
+-	if (offset + nh_namesz >= size) {
++	if (offset + nh_namesz > size) {
  		/*
  		 * We're past the end of the buffer.
  		 */
-@@ -321,7 +324,7 @@
+@@ -298,7 +301,7 @@
  	}
  
- 	offset = ELF_ALIGN(doff + descsz);
--	if (offset + descsz >= size) {
-+	if (doff + descsz > size) {
+ 	offset = ELF_ALIGN(doff + nh_descsz);
+-	if (offset + nh_descsz >= size)
++	if (doff + nh_descsz > size)
  		return offset;
- 	}
  
-@@ -670,7 +673,8 @@
- 				file_badseek(ms);
- 				return -1;
+ 	if (nh_namesz == 4 && strcmp((char *)&nbuf[noff], "GNU") == 0 &&
+@@ -601,7 +604,7 @@
+ 				error(EXIT_FAILURE, 0, "lseek failed (%s).\n", strerror(errno));
+ 				/*@notreached@*/
  			}
--			bufsize = read(fd, nbuf, sizeof(nbuf));
-+			bufsize = read(fd, nbuf,
-+				((ph_filesz < sizeof(nbuf)) ? ph_filesz : sizeof(nbuf)));
+-			bufsize = read(fm->fd, nbuf, sizeof(nbuf));
++			bufsize = read(fm->fd, nbuf, ((ph_filesz < sizeof(nbuf)) ? ph_filesz : sizeof(nbuf)));
  			if (bufsize == -1) {
- 				file_badread(ms);
- 				return -1;
-@@ -684,7 +688,7 @@
- 				if (offset == 0)
- 					break;
+ 				error(EXIT_FAILURE, 0, ": " "read failed (%s).\n",
+ 				    strerror(errno));
+@@ -614,7 +617,7 @@
+ 				offset = donote(fm, nbuf, offset,
+ 				    (size_t)bufsize, ph_align);
  			}
--			if (lseek(fd, savedoffset + offset, SEEK_SET)
-+			if (lseek(fd, savedoffset, SEEK_SET)
- 			    == (off_t)-1) {
- 				file_badseek(ms);
- 				return -1;
+-			if ((lseek(fm->fd, savedoffset + offset, SEEK_SET)) == (off_t)-1) {
++			if ((lseek(fm->fd, savedoffset, SEEK_SET)) == (off_t)-1) {
+ 			    error(EXIT_FAILURE, 0, "lseek failed (%s).\n", strerror(errno));
+ 			    /*@notreached@*/
+ 			}
