@@ -193,6 +193,18 @@ echo "Compress man and info pages."; \
 		strip --strip-unneeded --remove-section=.note  --remove-section=.comment $elfsharedlist; \
 	fi; } \
 } }
+#-----------------------------------------------------------------
+# Find and gzip all kernel modules
+#
+# Requires: find
+#
+#%no_install_post_compress_modules  1
+%__spec_install_post_compress_modules { \
+echo "Compress kernel modules if any."; \
+%{!?no_install_post_compress_modules: \
+    %{?verbose:set -x;} \
+    find $RPM_BUILD_ROOT/lib/modules -name \*.o -print | xargs -r %{__gzip} -9nf; \
+} }
 
 %_source_payload        w9.gzdio
 %_binary_payload        w9.bzdio
@@ -235,6 +247,7 @@ fi \
 %{?_noautoprov:for f in %{_noautoprov} ; do echo "$f" >> %{_builddir}/__rpm_noautoprov ; done }\
 %{__spec_install_post_strip}\
 %{__spec_install_post_compress_docs}\
+%{__spec_install_post_compress_modules}\
 %{__arch_install_post}\
 %{nil}
 
