@@ -83,7 +83,7 @@ RPM jest doskona³ym menad¿erem pakietów. Dziêki niemu bêdziesz móg³
 %description -l pl
 RPM jest doskona³ym mened¿erem pakietów. Dziêki niemu bêdziesz móg³
 wchodz±cych w sk³ad pakietu, zale¿no¶ci od innych pakietów s±
-przechowywane s± w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
+dotycz±ce ka¿dego pakietu, takie jak jego opis, lista plików
 wchodz±cych w sk³ad pakietu, zale¿no¶ci od innych pakietów, s±
 przechowywane w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
 do pacote, permissões dos arquivos, etc.
