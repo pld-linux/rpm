@@ -1,12 +1,12 @@
 --- rpm/build/rpmfc.c.orig	2004-11-22 11:39:55.000000000 +0100
 +++ rpm/build/rpmfc.c	2004-11-22 18:09:14.400710096 +0100
 @@ -1432,7 +1432,7 @@
-     size_t slen;
      int fcolor;
      int xx;
+ /*@observer@*/
 -    static const char * magicfile = "/usr/lib/rpm/magic";
 +    static const char * magicfile = "/usr/share/file/magic";
-     int msflags = MAGIC_COMPRESS|MAGIC_CHECK;	/* XXX what MAGIC_FOO flags? */
+     int msflags = MAGIC_CHECK;	/* XXX MAGIC_COMPRESS flag? */
      magic_t ms = NULL;
  
 diff -ur rpm.org/file/doc/Makefile.am rpm/file/doc/Makefile.am
@@ -26,8 +26,8 @@ diff -ur rpm.org/file/Makefile.am rpm/file/Makefile.am
  
  EXTRA_DIST = ChangeLog LEGAL.NOTICE MAINT README
  
--SUBDIRS = src magic doc
-+SUBDIRS = src magic
+-SUBDIRS = src magic doc python
++SUBDIRS = src magic python
 Tylko w rpm/file: Makefile.am.orig
 diff -ur rpm.org/file/src/Makefile.am rpm/file/src/Makefile.am
 --- rpm.org/file/src/Makefile.am	2004-11-18 15:04:33.000000000 +0100
@@ -47,7 +47,7 @@ diff -ur rpm.org/tools/Makefile.am rpm/tools/Makefile.am
 @@ -30,7 +30,7 @@
  
  pkgbindir = @RPMCONFIGDIR@
- pkgbin_PROGRAMS = debugedit javadeps rpmcache rpmdeps rpmfile
+ pkgbin_PROGRAMS = @WITH_LIBDWARF_DEBUGEDIT@ javadeps rpmcache rpmdeps rpmfile
 -MAGIC	= $(pkgbindir)/magic
 +MAGIC	= /usr/share/file/magic
  
