@@ -1,0 +1,7 @@
+- rpm.macros: don't add -s to LDFLAGS in %%configure if LDFLAGS!=""
+  (needed for not stripping ld.so during build)
+- patch to (buggy) installplatform script
+- removed brp-strip patch (it does nothing - ld.so is shared object, which
+  brp-strip doesn't strip)
+- db1 buildreq is _without_static-dependent
+- release 11
