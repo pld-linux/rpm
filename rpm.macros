@@ -252,19 +252,19 @@ fi \
 # Macros commonly used in %{pre,post}{un,}
 #
 # Usage:
-# [NAME=lircd;] [DESC="lirc daemon";] %chkconfig_post
-# [NAME=lircd;] %chkconfig_preun
+# [NAME=lircd;] [DESC="lirc daemon";] %chkconfig_add (in %post)
+# [NAME=lircd;] %chkconfig_del (in %preun)
 # %fix_info_dir (in %post)
-# GID=51; GROUP=http; [NAME=apache;] %groupadd (in %pre)
-# [UID=51;] USER=http; GROUP=http; COMMENT="HTTP User"
+# [GID=51;] [GROUP=http;] [NAME=apache;] %groupadd (in %pre)
+# [UID=51;] [USER=http;] [GROUP=http;] [COMMENT="HTTP User"]
 #	[HOMEDIR="/home/users/httpd [-m]";] [SHELL=/bin/false;]
 #	[NAME=apache;] %useradd (in %pre)
-# GROUP=http; %groupdel (in %postun)
-# USER=http; %userdel (in %postun)
+# [GROUP=http;] %groupdel (in %postun)
+# [USER=http;] %userdel (in %postun)
 # %rc_inetd_post
 # %rc_inetd_postun
 #
-%chkconfig_post [ -z "$NAME" ] && NAME=%{name} \
+%chkconfig_add [ -z "$NAME" ] && NAME=%{name} \
 /sbin/chkconfig --add $NAME \
 [ -z "$DESC" ] && DESC=$NAME
 if [ -f /var/lock/subsys/$NAME ]; then \
@@ -273,7 +273,7 @@ else \
         echo "Run \\"/etc/rc.d/init.d/$NAME start\\" to start $DESC." >&2 \
 fi
 
-%chkconfig_preun [ -z "$NAME" ] && NAME=%{name} \
+%chkconfig_del [ -z "$NAME" ] && NAME=%{name} \
 if [ "$1" = "0" ]; then \
         if [ -f /var/lock/subsys/$NAME ]; then \
                 /etc/rc.d/init.d/$NAME stop >&2 \
@@ -284,6 +284,7 @@ fi
 %fix_info_dir	[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} > /dev/null 2>&1
 
 %groupadd [ -z "$NAME" ] && NAME=%{name} \
+[ -z "$GROUP" ] && GROUP=%{name} \
 [ -n "$GID" ] && GID="-g $GID" \
 if [ -n "`getgid $GROUP`" ]; then \
         if [ "`getgid $GROUP`" != "$GID" ]; then \
@@ -295,8 +296,10 @@ else \
 fi
 
 %useradd [ -z "$NAME" ] && NAME=%{name} \
+[ -z "$USER" ] && USER=%{name} \
 [ -z "$HOMEDIR" ] && HOMEDIR=/home/users/$NAME \
-[ -n "$UID" ] && UID="-u $UID -r"
+[ -z "$GROUP" ] && GROUP=%{name} \
+[ -n "$UID" ] && UID="-u $UID -r" \
 if [ -n "`id -u $USER 2>/dev/null`" ]; then \
         if [ "`id -u $USER`" != "$UID" ]; then \
                 echo "Warning: user $USER doesn't have uid=$UID. Correct this before installing $NAME." 1>&2 \
@@ -307,11 +310,13 @@ else \
         /usr/sbin/useradd $UID -d "$HOMEDIR" -s $SHELL -c "$COMMENT" -g $GROUP $USER 1>&2 \
 fi
 
-%groupdel if [ "$1" = "0" ]; then \
+%groupdel [ -z "$GROUP" ] && GROUP=%{name} \
+if [ "$1" = "0" ]; then \
         /usr/sbin/groupdel $GROUP \
 fi
 
-%userdel if [ "$1" = "0" ]; then \
+%userdel [ -z "$USER" ] && USER=%{name} \
+if [ "$1" = "0" ]; then \
         /usr/sbin/userdel $USER \
 fi
 
