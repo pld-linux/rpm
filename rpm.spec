@@ -235,6 +235,8 @@ mv lib/Makefile.in.new lib/Makefile.in
 	--enable-v1-packages
 %configure \
 %{__make} %{?bcond_off_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
+sed -e 's/#include <rpmio\.h>/#include <rpm\/rpmio\.h>/g' lib/header.h > lib/header.h.new
+mv lib/header.h.new lib/header.h
 	--with-python
 
 
