@@ -1060,6 +1060,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files pythonprov
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.python
+%{_rpmlibdir}/pythondeps.sh
 
 %files php-pearprov
 %defattr(644,root,root,755)
