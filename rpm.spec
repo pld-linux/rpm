@@ -390,7 +390,7 @@ rm -f missing
 libtoolize --force --copy
 aclocal
 autoheader
-automake -a -c -f
+%{__autoconf}
 %{__automake}
 cd ..
 
