@@ -106,7 +106,7 @@
    foreach (@ARGV) {
 -    process_file($_);
 +    if (m=/usr/(bin|lib|share|X11R6/(lib|bin))/=) {
-+      if (! m=(/(doc|man|info|usr/src)/|\.(so|pl|ph|h|html|pod)$)=) {
++      if (! m=(/(doc|man|info|usr/src)/|\.(so|ph|h|html|pod)$)=) {
 +        process_file($_);
 +      }
 +    }
@@ -119,7 +119,7 @@
    foreach (<>) {
 -    process_file($_);
 +    if (m=/usr/(bin|lib|share|X11R6/(lib|bin))/=) {
-+      if (! m=(/(doc|man|info|usr/src)/|\.(so|pl|ph|h|html|pod)$)=) {
++      if (! m=(/(doc|man|info|usr/src)/|\.(so|ph|h|html|pod)$)=) {
 +        process_file($_);
 +      }
 +    }
