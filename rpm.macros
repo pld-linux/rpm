@@ -143,16 +143,16 @@
 %_kernelsrcdir	/usr/src/linux
 
 # XMMS specific macros
-%xmms_prefix			%(echo `xmms-config --prefix`)
-%xmms_exec_prefix		%(echo `xmms-config --exec-prefix`)
-%xmms_version			%(echo `xmms-config --version`)
-%xmms_datadir			%(echo `xmms-config --data-dir`)
-%xmms_plugindir			%(echo `xmms-config --plugin-dir`)
-%xmms_visualization_plugindir	%(echo `xmms-config --visualization-plugin-dir`)
-%xmms_input_plugindir		%(echo `xmms-config --input-plugin-dir`)
-%xmms_output_plugindir		%(echo `xmms-config --output-plugin-dir`)
-%xmms_effect_plugindir		%(echo `xmms-config --effect-plugin-dir`)
-%xmms_general_plugindir		%(echo `xmms-config --general-plugin-dir`)
+%xmms_prefix			%(xmms-config --prefix)
+%xmms_exec_prefix		%(xmms-config --exec-prefix)
+%xmms_version			%(xmms-config --version)
+%xmms_datadir			%(xmms-config --data-dir)
+%xmms_plugindir			%(xmms-config --plugin-dir)
+%xmms_visualization_plugindir	%(xmms-config --visualization-plugin-dir)
+%xmms_input_plugindir		%(xmms-config --input-plugin-dir)
+%xmms_output_plugindir		%(xmms-config --output-plugin-dir)
+%xmms_effect_plugindir		%(xmms-config --effect-plugin-dir)
+%xmms_general_plugindir		%(xmms-config --general-plugin-dir)
 
 # If non-empty "debug" macro defined, add "dbg" suffix to release number
 %_rpmfilename	%%{NAME}-%%{VERSION}-%%{RELEASE}%{?debug:dbg}.%%{ARCH}.rpm
