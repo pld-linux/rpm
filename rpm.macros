@@ -18,6 +18,8 @@
 %_localstatedir  /var
 %_infodir        /usr/share/info
 %_mandir         %{_prefix}/share/man
+%__id		@__ID@
+%__id_u		%{__id} -u 
 #-----------------------------------------------------------------
 # CFLAGS and LDFLAGS used to build
 
