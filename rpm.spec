@@ -217,6 +217,8 @@ Requires:	libtool
 Requires:	glibc-devel
 Requires:	sed
 Requires:	sed
+Requires:	autoconf
+Requires:	automake
 Requires:	popt >= 1.6.2-2
 Requires:	tar
 Requires:	textutils
