@@ -94,6 +94,7 @@ Patch40:	%{name}-epoch0.patch
 Patch41:	%{name}-file-readelf-fix.patch
 Patch42:	%{name}-cpuid.patch
 Patch43:	%{name}-perl_req-INC_dirs.patch
+Patch44:	%{name}-debuginfo.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -575,7 +576,6 @@ install %{SOURCE5} scripts/find-lang.sh
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
-sed -i -e 's#%%package debug#%%package debuginfo#g' macros.in
 cat %{SOURCE11} >> macros.in
 %patch22 -p1
 %patch23 -p1
@@ -599,6 +599,7 @@ cat %{SOURCE11} >> macros.in
 %patch41 -p1
 %patch42 -p1
 %patch43 -p0
+%patch44 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
