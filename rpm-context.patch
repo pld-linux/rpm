@@ -55,7 +55,7 @@ diff -u -u -r2.6 rpmsx.c
      if ((fp = fopen(fn, "r")) == NULL) {
 -	perror(fn);
 +	if (ENOENT == errno)
-+	    fprintf(stderr, _("Parsing SELinux file contexts skipped: %s: %s\n", fn, strerror(errno)));
++	    fprintf(stderr, _("Parsing SELinux file contexts skipped: %s: %s\n"), fn, strerror(errno));
 +	else
 +    	    perror(fn);
  	return -1;
