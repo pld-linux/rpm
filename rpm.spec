@@ -1,8 +1,6 @@
 #
 # TODO:
-# - learn find-perl-provides to use the __perl macro instead
-#   of /usr/bin/perl
-#   NOTE: there is no find-perl* now, only perl.{prov,req}
+# - fix perl.req and perl.prov to support _noauto macros
 # - use system libmagic not internal libfmagic
 #
 # Conditional build:
@@ -30,7 +28,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.2
+Release:	0.%{snap}.2.1
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -39,19 +37,19 @@ Source0:	ftp://distfiles.pld-linux.org/src/%{name}-%{version}.%{snap}.tar.gz
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
-Source4:	%{name}-find-rpm-provides
+#Source4:	%{name}-find-rpm-provides
 Source5:	%{name}-find-spec-bcond
 Source6:	%{name}-find-lang
-Source7:	%{name}-find-provides
-Source8:	%{name}-find-requires
+#Source7:	%{name}-find-provides
+#Source8:	%{name}-find-requires
 Source9:	%{name}-groups-po.awk
 Source10:	%{name}-compress-doc
 Source11:	%{name}-check-files
 Source12:	%{name}-php-provides
 Source13:	%{name}-php-requires
 Source14:	%{name}.macros
-Source15:	%{name}-find-provides-wrapper
-Source16:	%{name}-find-requires-wrapper
+#Source15:	%{name}-find-provides-wrapper
+#Source16:	%{name}-find-requires-wrapper
 Source30:	builder
 Source31:	adapter.awk
 Source32:	pldnotify.awk
@@ -88,7 +86,7 @@ Patch28:	%{name}-python-beecrypt.patch
 Patch29:	%{name}-man-typos.patch
 Patch30:	%{name}-man-pl.patch
 Patch31:	%{name}-fdClose-typo.patch
-Patch32:	%{name}-userpmdepswrappers.patch
+#Patch32:	%{name}-userpmdepswrappers.patch
 Patch33:	%{name}-provides-dont-obsolete.patch
 Patch34:	%{name}-examplesaredoc.patch
 Patch35:	%{name}-po.patch
@@ -138,9 +136,6 @@ Conflicts:	glibc < 2.2.92
 Conflicts:	poldek < 0.18.1-16
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-# not needed now (rpm processes rpmlib(*) deps internally) and didn't work
-# anyway (broken: uses obsolete find-provides script, pgrep(??? typo???))
-##define	__find_provides	%{SOURCE4}
 %define		_binary_payload	w9.gzdio
 %define		_noPayloadPrefix 1
 
@@ -599,7 +594,7 @@ cat %{SOURCE14} >> macros.in
 #%patch30 -p1
 # OBSOLETE
 #%patch31 -p1
-%patch32 -p1
+#%patch32 -p1
 %patch33 -p1
 %patch34 -p1
 %patch35 -p1
@@ -619,7 +614,6 @@ mv -f perl.req perl.req.in
 mv -f perl.prov perl.prov.in
 cd ..
 
-chmod +x %{SOURCE4}
 rm -rf zlib libelf db db3 popt rpmdb/db.h
 
 # generate Group translations to *.po
@@ -677,23 +671,19 @@ install -d $RPM_BUILD_ROOT/%{_lib}
 	DESTDIR=$RPM_BUILD_ROOT \
 	pkgbindir="%{_bindir}"
 
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/vpkg-provides*
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{prov,req}.pl
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{provides,requires}.perl
+
 install macros.perl	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.perl
 install macros.python	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.python
 install macros.php	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.php
 
 install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
-install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-rpm-provides
 install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
-# 2 following files - to be removed or changed to find-elf-*
-# (to generate only ELF dependencies using objdump)???
-# WARNING: don't even try to use, currently broken by some 64-bit experiments
-install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/find-provides
-install %{SOURCE8} $RPM_BUILD_ROOT%{_rpmlibdir}/find-requires
 install %{SOURCE10} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
 install %{SOURCE11} $RPM_BUILD_ROOT%{_rpmlibdir}/check-files
-install %{SOURCE15} $RPM_BUILD_ROOT%{_rpmlibdir}/find-provides-wrapper
-install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/find-requires-wrapper
 install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 
@@ -812,11 +802,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpm/noauto*
 %attr(755,root,root) %{_rpmlibdir}/compress-doc
 %attr(755,root,root) %{_rpmlibdir}/cross-build
-%attr(755,root,root) %{_rpmlibdir}/find-provides
-%attr(755,root,root) %{_rpmlibdir}/find-provides-wrapper
-%attr(755,root,root) %{_rpmlibdir}/find-requires
-%attr(755,root,root) %{_rpmlibdir}/find-requires-wrapper
-%attr(755,root,root) %{_rpmlibdir}/find-rpm-provides
+#%attr(755,root,root) %{_rpmlibdir}/find-provides
+#%attr(755,root,root) %{_rpmlibdir}/find-provides-wrapper
+#%attr(755,root,root) %{_rpmlibdir}/find-requires
+#%attr(755,root,root) %{_rpmlibdir}/find-requires-wrapper
+#%attr(755,root,root) %{_rpmlibdir}/find-rpm-provides
 %attr(755,root,root) %{_rpmlibdir}/find-spec-bcond
 %attr(755,root,root) %{_rpmlibdir}/find-lang.sh
 %attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
@@ -833,8 +823,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/magic.prov
 %attr(755,root,root) %{_rpmlibdir}/magic.req
 %attr(755,root,root) %{_rpmlibdir}/u_pkg.sh
-%attr(755,root,root) %{_rpmlibdir}/vpkg-provides.sh
-%attr(755,root,root) %{_rpmlibdir}/vpkg-provides2.sh
+#%attr(755,root,root) %{_rpmlibdir}/vpkg-provides.sh
+#%attr(755,root,root) %{_rpmlibdir}/vpkg-provides2.sh
 %attr(755,root,root) %{_rpmlibdir}/rpmb
 %attr(755,root,root) %{_rpmlibdir}/rpmt
 %{_rpmlibdir}/noarch-*
@@ -932,9 +922,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/perl.*
 #%attr(755,root,root) %{_rpmlibdir}/perldeps.pl
 #%attr(755,root,root) %{_rpmlibdir}/find-perl-*
-%attr(755,root,root) %{_rpmlibdir}/find-*.perl
-%attr(755,root,root) %{_rpmlibdir}/find-prov.pl
-%attr(755,root,root) %{_rpmlibdir}/find-req.pl
+#%attr(755,root,root) %{_rpmlibdir}/find-*.perl
+#%attr(755,root,root) %{_rpmlibdir}/find-prov.pl
+#%attr(755,root,root) %{_rpmlibdir}/find-req.pl
 %attr(755,root,root) %{_rpmlibdir}/get_magic.pl
 
 %files pythonprov
