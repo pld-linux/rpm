@@ -133,12 +133,15 @@ Der RPM-Packensystem enthält eine C-Library, die macht es einfach
 RPM-Pakete und Dateibanken zu manipulieren. Er eignet sich für
 Vereinfachung des Schaffens grafischer Paket-Manager und anderer
 herramientas que necesiten un conocimiento profundo de paquetes RPM.
-Pliki nag³ówkowe i biblioteki statyczne.
+
+%description devel -l pl
+System RPM zawiera bibliotekê C, która u³atwia manipulowanie pakietami
+RPM oraz bazami danych. W zamiarze ma to upro¶ciæ tworzenie
 graficznych mened¿erów pakietów oraz innych narzêdzi, które wymagaj±
 ferramentas que precisem de conhecimento profundo de pacotes RPM.
 
 %package static
-Summary(pl):	Biblioteki statyczne rpm-a
+Summary:	RPM static libraries
 Summary(pl):	Biblioteki statyczne RPM-a
 Group(de):	Entwicklung/Libraries
 Group(es):	Desarrollo/Bibliotecas
@@ -156,12 +159,12 @@ RPM static libraries.
 
 %description static -l de
 RPMs statische Libraries.
-Biblioteki statyczne rpm-a.
+
 %description static -l pl
 Bibliotecas estáticas para desenvolvimento.
 
 %package utils
-Summary(pl):	Dodatkowe narzêdzia do zarz±dzania baz± rpm-a i pakietami
+Summary:	Additional utilities for managing rpm packages and database
 Summary(de):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
 Group(de):	Applikationen/Datei
 Group(pl):	Aplikacje/Pliki
@@ -174,7 +177,7 @@ Additional utilities for managing rpm packages and database.
 
 %description utils -l de
 Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
-Dodatkowe narzêdzia do zarz±dzania baz± rpm-a i pakietami.
+
 %description utils -l pl
 Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami.
 
@@ -239,7 +242,7 @@ Esse pacote deve ser instalado se você quiser desenvolver programas em
 Python para manipular pacotes e bancos de dados RPM.
 
 %package build
-Summary(pl):	Skrypty pomocnicze do budowania binarnych RPMów
+Summary:	Scripts for building binary RPM packages
 Summary(pl):	Skrypty pomocnicze do budowania binarnych RPM-ów
 Group(de):	Applikationen/Datei
 Group(pl):	Aplikacje/Pliki
@@ -266,7 +269,7 @@ Scripts for building binary RPM packages.
 
 %description build -l de
 Scripts fürs Bauen binärer RPM-Pakete.
-Skrypty pomocnicze do budowania binarnych RPMów.
+
 %description build -l pl
 construir pacotes usando o RPM.
 
@@ -351,7 +354,7 @@ sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' macros.in | \
 
 %{__make} %{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
 
-	DESTDIR="$RPM_BUILD_ROOT" \
+	DESTDIR"$RPM_BUILD_ROOT \
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
