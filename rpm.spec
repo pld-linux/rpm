@@ -614,7 +614,7 @@ mv -f macros.tmp macros.in
 
 %{__make} \
 	%{?_without_static:rpm_LDFLAGS="\$(myLDFLAGS)"} \
-	myLDFLAGS="%{rpmldflags} -lelf"
+	myLDFLAGS="%{rpmldflags}" LDFLAGS="-lelf"
 
 %install
 rm -rf $RPM_BUILD_ROOT
