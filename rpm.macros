@@ -271,17 +271,6 @@ fi \
 %{?_noautocompressdoc:echo '%{_noautocompressdoc}' > %{_builddir}/__rpm_noautocompressdoc}\
 %{nil}
 
-%__os_install_post \
-%{?_noautoreqfiles:for f in %{_noautoreqfiles} ; do echo %{?buildroot:%{buildroot}}$f >> %{_builddir}/__rpm_noautoreqfiles ; done }\
-%{?_noautoreq:for f in %{_noautoreq} ; do echo "$f" >> %{_builddir}/__rpm_noautoreq ; done }\
-%{?_noautoreqdep:for f in %{_noautoreqdep} ; do echo "$f" >> %{_builddir}/__rpm_noautoreqdep ; done }\
-%{?_noautoprovfiles:for f in %{_noautoprovfiles} ; do echo %{?buildroot:%{buildroot}}$f >> %{_builddir}/__rpm_noautoprovfiles ; done }\
-%{?_noautoprov:for f in %{_noautoprov} ; do echo "$f" >> %{_builddir}/__rpm_noautoprov ; done }\
-%{__spec_install_post_strip}\
-%{__spec_install_post_compress_docs}\
-%{__spec_install_post_compress_modules}\
-%{__arch_install_post}\
-%{nil}
 
 %__spec_clean_pre	%{___build_pre}\
 _autoreqprov=n \
