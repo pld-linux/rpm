@@ -6,14 +6,14 @@ Release:	11
 Group:		Base
 Group(pl):	Bazowe
 Copyright:	GPL
-Source:		ftp://ftp.rpm.org/pub/rpm/dist/rpm-2.5.x/%{name}-%{version}.tar.gz
-#Patch0:		rpm-config.patch
-Patch1:		rpm-rpmrc.patch
-#Patch2:		rpm-glibc.patch
-Patch3:		rpm-groups.patch
-Patch4:		rpm-i18n.patch
-Patch5:		rpm-find-requires.patch
+Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-2.5.x/%{name}-%{version}.tar.gz
+Source1:	rpm.groups
+Source2:	rpm.8pl
+Patch0:		rpm-rpmrc.patch
+Patch1:		rpm-i18n.patch
+Patch2:		rpm-find-requires.patch
 Patch37:        %{name}-short_circuit.patch
+Icon:		rpm.gif
 Requires:	glibc >= 2.1
 BuildRoot:	/tmp/%{name}-%{version}-root
 Obsoletes:	rpm-libs
@@ -47,12 +47,9 @@ Pliki nag³ówkowe i biblioteki statyczne.
 graficznych mened¿erów pakietów oraz innych narzêdzi, które wymagaj±
 construir pacotes usando o RPM.
 %setup  -q
-#%patch0 -p1
+%patch0 -p1
 %patch1 -p1
-#%patch2 -p1
-#%patch3 -p1
-%patch4 -p1
-#%patch5 -p1
+%patch2 -p1
 install %{SOURCE13} macros.python.in
 mv -f perl.prov perl.prov.in)
 autoconf
@@ -68,19 +65,21 @@ make
 install -d $RPM_BUILD_ROOT/var/lib/rpm \
 	$RPM_BUILD_ROOT/usr/src/rpm/{SOURCES,SPECS,SRPMS,BUILD} \
 	$RPM_BUILD_ROOT/usr/src/rpm/RPMS/{$RPM_ARCH,noarch} \
-	$RPM_BUILD_ROOT/usr/man/ru/man8
+	$RPM_BUILD_ROOT/usr/man/{ru,pl}/man8
 
 make DESTDIR="$RPM_BUILD_ROOT" install
 	pkgbindir="%{_bindir}"
 install rpm.8ru $RPM_BUILD_ROOT/usr/man/ru/man8/rpm.8
 install rpm2cpio.8ru $RPM_BUILD_ROOT/usr/man/ru/man8/rpm2cpio.8
+install %{SOURCE2} $RPM_BUILD_ROOT/usr/man/pl/man8/rpm.8
 
-gzip -9fn $RPM_BUILD_ROOT/usr/man/{ru/man8/*,man8/*}
+install %{SOURCE1} doc/groups
 
-gzip -9nf RPM-PGP-KEY CHANGES docs/*
+gzip -9fn $RPM_BUILD_ROOT/usr/man/{ru/man8/*,man8/*} \
+	RPM-PGP-KEY CHANGES docs/*
 
 %clean
-#rm -rf $RPM_BUILD_ROOT
+rm -rf $RPM_BUILD_ROOT
 
 %post
 /bin/rpm --initdb
@@ -104,16 +103,7 @@ gzip -9nf RPM-PGP-KEY CHANGES docs/*
 %attr(755,root,root) /usr/lib/rpm/mkinstalldirs
 
 /usr/lib/rpm/rpm*
-
 /usr/src/rpm
-
-#%dir /usr/src/rpm/RPMS
-#%attr(755,root,root,755) /usr/src/rpm/RPMS/*
-
-#%dir /usr/src/rpm/SRPMS
-#%dir /usr/src/rpm/SPECS
-#%dir /usr/src/rpm/BUILD
-#%dir /usr/src/rpm/SOURCES
 
 %lang(cs)    /usr/share/locale/cs/LC_MESSAGES/rpm.mo
 %lang(de)    /usr/share/locale/de/LC_MESSAGES/rpm.mo
