@@ -1,0 +1,1 @@
+%requires_pkg() %(rpm -q --queryformat 'Requires: %%{NAME} = %%{VERSION}' %1)
