@@ -154,6 +154,9 @@
 # Location pixmaps for applnk/desktop files
 %_pixmapsdir	/usr/share/pixmaps
 
+# Location themable icons for applnk/desktop files
+%_iconsdir	/usr/share/icons
+
 # Location of fonts directories
 %_fontsdir	/usr/share/fonts
 
