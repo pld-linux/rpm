@@ -7,7 +7,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.2
-Release:	62
+Release:	63
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -94,6 +94,7 @@ Conflicts:	glibc < 2.2
 %define		py_ver		%(echo `python -c "import sys; print sys.version[:3]"`)
 %define		py_prefix	%(echo `python -c "import sys; print sys.prefix"`)
 %define		py_libdir	%{py_prefix}/lib/python%{py_ver}
+%define		py_sitedir	%{py_libdir}/site-packages
 %define		py_dyndir	%{py_libdir}/lib-dynload
 %define		pyrequires_eq() Requires:	%1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
 
@@ -247,7 +248,7 @@ Pythonie.
 Summary:	Python interface to RPM library
 Summary(pl):	Pythonowy interfejs do biblioteki RPM-a
 Summary(pt_BR):	Módulo Python para aplicativos que manipulam pacotes RPM
-%requires_eq	python
+Group:		Libraries/Python
 Requires:	%{name} = %{version}
 %pyrequires_eq	python
 Obsoletes:	rpm-python
