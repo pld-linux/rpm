@@ -459,10 +459,12 @@ get_files()
 
 		if [ -z "$NOURLS" ] && [ ! -f "`nourl $i`" -o -n "$UPDATE" ] && [ `echo $i | grep -E 'ftp://|http://|https://'` ]; then
 		    if [ -z "$NOMIRRORS" ] ; then
-			i="`find_mirror "$i"`"
+			im="`find_mirror "$i"`"
+		    else
+			im="$i"
 		    fi
-		    ${GETURI} "$i" || \
-			if [ `echo $i | grep -E 'ftp://'` ]; then ${GETURI2} "$i" ; fi
+		    ${GETURI} "$im" || \
+			if [ `echo $im | grep -E 'ftp://'` ]; then ${GETURI2} "$im" ; fi
 		fi
 
 
