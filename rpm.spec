@@ -1,4 +1,4 @@
-%define	date	19990507
+%define	date	19990513
 
 Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
