@@ -20,3 +20,14 @@
  AC_CHECK_HEADERS(fcntl.h getopt.h grp.h memory.h netdb.h pwd.h utime.h)
  
  AC_CHECK_HEADERS(sys/socket.h sys/select.h)
+--- rpm-4.0.2/lib/dbconfig.c.wiget	Wed Feb 21 12:05:37 2001
++++ rpm-4.0.2/lib/dbconfig.c	Wed Feb 21 12:06:42 2001
+@@ -4,7 +4,7 @@
+ 
+ #include "system.h"
+ 
+-#include <db3/db.h>
++#include <db.h>
+ 
+ #include <rpmlib.h>
+ #include <rpmmacro.h>
