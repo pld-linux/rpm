@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0
-Release:	1
+Release:	2
 Group:		Base
 Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
@@ -47,6 +47,7 @@ BuildRequires:	gettext-devel
 BuildRequires:	db1-devel >= 1.85
 BuildRequires:	db3-static >= 3.1.17
 BuildRequires:	zlib-static >= 1.1.4
+Conflicts:	glibc <= 2.2
 Obsoletes:	rpm-libs
 %define __find_provides %{SOURCE4}
 %define _binary_payload w9.gzdio
@@ -287,6 +288,10 @@ rm -rf $RPM_BUILD_ROOT
 %postun -p /sbin/ldconfig
 
 %attr(755,root,root) %{_libdir}/rpm/rpmdb
+%attr(755,root,root) %{_libdir}/rpm/rpmq
+%attr(755,root,root) %{_libdir}/rpm/rpmk
+%attr(755,root,root) %{_libdir}/rpm/rpmv
+%attr(755,root,root) %{_libdir}/rpm/rpmdb
 %attr(755,root,root) %{_libdir}/librpm*.so.*.*
 %{_mandir}/man8/rpm.8*
 %lang(pl) %{_mandir}/pl/man8/rpm.8*
@@ -348,14 +353,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/cpanflute
 %attr(755,root,root) %{_libdir}/rpm/http.req
 %attr(755,root,root) %{_libdir}/rpm/magic.*
-%attr(755,root,root) %{_libdir}/rpm/rpmdb
 %attr(755,root,root) %{_libdir}/rpm/rpmi
-%attr(755,root,root) %{_libdir}/rpm/rpmk
-%attr(755,root,root) %{_libdir}/rpm/rpmq
 %attr(755,root,root) %{_libdir}/rpm/u_pkg.sh
 %attr(755,root,root) %{_libdir}/rpm/rpme
 %attr(755,root,root) %{_libdir}/rpm/rpmu
-%attr(755,root,root) %{_libdir}/rpm/rpmv
 %attr(755,root,root) %{_libdir}/rpm/rpmb
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmt
