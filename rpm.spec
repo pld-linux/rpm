@@ -9,7 +9,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.0.2
-Release:	110
+Release:	111
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -118,7 +118,7 @@ Conflicts:	glibc < 2.2
 
 # Contains rpm.macro revision from HEAD which is currently
 # backported to Ra
-%define		rpm_macros_rev	1.118
+%define		rpm_macros_rev	1.127
 
 %description
 RPM is a powerful package manager, which can be used to build,
