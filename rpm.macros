@@ -248,8 +248,8 @@ unset DISPLAY ||:\
 #
 #%no_install_post_compress_docs	1
 %__spec_install_post_compress_docs { \
-echo "Compress man and info pages."; \
 %{!?no_install_post_compress_docs: \
+	echo "Compress man and info pages."; \
 	%{?verbose:set -x;} \
 	for i in /usr/share/man /usr/X11R6/man /usr/share/info; do \
 		if [ -d "$RPM_BUILD_ROOT$i" ]; then \
