@@ -1,0 +1,25 @@
+diff -urN rpm-4.3.org/macros.in rpm-4.3/macros.in
+--- rpm-4.3.org/macros.in	2004-05-13 00:35:16.239893312 +0200
++++ rpm-4.3/macros.in	2004-05-13 00:34:57.953673240 +0200
+@@ -118,7 +118,7 @@
+ %debug_package \
+ %ifnarch noarch\
+ %global __debug_package 1\
+-%package debug\
++%package debuginfo\
+ Summary: Debug information for package %{name}\
+ Group: Development/Debug\
+ AutoReqProv: 0\
+@@ -844,7 +844,11 @@
+ %__spec_install_pre	%{___build_pre}
+ %__spec_install_body	%{___build_body}
+ %__spec_install_post\
+-%{?__debug_package:%{__debug_install_post}}\
++%if %{?__debug_package:1}%{!?__debug_package:0}\
++%if %{__debug_package}\
++%{__debug_install_post}\
++%endif\
++%endif\
+ %{__arch_install_post}\
+ %{__os_install_post}\
+ %{nil}
