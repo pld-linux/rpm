@@ -1,0 +1,50 @@
+diff -ur rpm-4.0.2/lib/rpmrc.c rpm-4.0.2-new/lib/rpmrc.c
+--- rpm-4.0.2/lib/rpmrc.c	Tue Mar 13 13:55:25 2001
++++ rpm-4.0.2-new/lib/rpmrc.c	Fri Jan 25 01:02:59 2002
+@@ -897,7 +897,7 @@
+ static inline int RPMClass(void)
+ {
+ 	int cpu;
+-	unsigned int tfms, junk, cap;
++	unsigned int tfms, junk, cap, capamd;
+ 	
+ 	signal(SIGILL, model3);
+ 	
+@@ -906,16 +906,24 @@
+ 		
+ 	if(cpuid_eax(0x000000000)==0)
+ 		return 4;
+-	cpuid(0x000000001, &tfms, &junk, &junk, &cap);
++
++	cpuid(0x00000001, &tfms, &junk, &junk, &cap);
++	cpuid(0x80000001, &junk, &junk, &junk, &capamd);
+ 	
+ 	cpu = (tfms>>8)&15;
+ 	
+ 	if(cpu < 6)
+ 		return cpu;
+ 		
+-	if(cap & (1<<15))
+-		return 6;
+-		
++	if(cap & (1<<15)) {
++		// it supports CMOV instruction
++		if (capamd & (1<<30))
++			// it supports 3DNOWEXT
++			return 7;
++		else
++			return 6;
++	}
++	
+ 	return 5;
+ }
+ 
+@@ -1112,6 +1116,8 @@
+ 
+ 	    if (strchr("3456", un.machine[1]) && un.machine[1] != class)
+ 		un.machine[1] = class;
++	    if (class == '7')
++	        strcpy(un.machine,"athlon");
+ 	}
+ #	endif
+ 
