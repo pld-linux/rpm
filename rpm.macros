@@ -33,7 +33,7 @@
 # Build system path macros.
 #
 %__libtoolize           libtoolize --copy --force
-%__automake             automake -a -c -f --foreing %{!?debug:-Wall}
+%__automake             automake -a -c -f --foreing
 %__autoconf             autoconf %{!?debug:-Wall}
 
 #-----------------------------------------------------------------
