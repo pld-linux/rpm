@@ -108,6 +108,7 @@ BuildRequires:	zlib-static
 BuildRequires:	popt-static >= %{reqpopt_ver}
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+Requires:	popt >= %{reqpopt_ver}
 Conflicts:	glibc < 2.2.92
 
 %define		__find_provides	%{SOURCE4}
