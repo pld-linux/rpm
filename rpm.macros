@@ -111,7 +111,9 @@ echo "Compress man and info pages."; \
 %{?verbose:set -x;} \
 for i in /usr/share/man /usr/X11R6/man /usr/share/info; do \
 	if [ -d "$RPM_BUILD_ROOT$i" ]; then \
-		find "$RPM_BUILD_ROOT$i" -type f -a \! -name \*.gz -print | xargs %{__gzip} -9nf; \
+		find "$RPM_BUILD_ROOT$i" -name \*.bz2 -print | xargs %{__bzip2} -df; \
+		find "$RPM_BUILD_ROOT$i" -name \*.gz -print | xargs %{__gzip} -dnf; \
+		find "$RPM_BUILD_ROOT$i" -type f -print | xargs %{__gzip} -9nf; \
 	fi; \
 done; \
 }
