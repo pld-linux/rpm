@@ -56,15 +56,11 @@ Patch2:		%{name}-arch.patch
 Patch3:		%{name}-%{name}popt.patch
 Patch4:		%{name}-perl-macros.patch
 Patch5:		%{name}-perl-req-perlfile.patch
-Patch6:		%{name}-cache.patch
 Patch7:		%{name}-glob.patch
-Patch9:		%{name}-fast-alAddPackage.patch
-Patch10:	%{name}-byKey.patch
 Patch11:	%{name}-noexpand.patch
 Patch12:	%{name}-scripts-closefds.patch
 Patch13:	%{name}-python-macros.patch
 Patch16:	%{name}-drop-legacy-CLI.patch
-Patch15:	%{name}-4.1-branch.patch
 Patch18:	%{name}-gettext-in-header.patch
 Patch19:	%{name}-compress-doc.patch
 Patch20:	%{name}-lt14d.patch
@@ -484,13 +480,7 @@ construir pacotes usando o RPM.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-# not needed ? (break compilation)
-#%patch6 -p1
 %patch7 -p1
-# rejected (needed ?)
-#%patch9 -p1
-# too many rejects, Pawel please check if needed and rediff
-#%patch10 -p0
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
@@ -536,14 +526,6 @@ awk -f %{SOURCE14} %{SOURCE1}
 
 %build
 cd file
-rm -f missing
-%{__libtoolize}
-%{__aclocal}
-%{__autoheader}
-%{__autoconf}
-%{__automake}
-cd ..
-cd beecrypt
 rm -f missing
 %{__libtoolize}
 %{__aclocal}
