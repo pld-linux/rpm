@@ -137,17 +137,17 @@ rm -rf $RPM_BUILD_ROOT
 %lang(ru) %{_mandir}/ru/man8/*
 %lang(pl) %{_mandir}/pl/man8/*
 
-%lang(cs)    /usr/share/locale/cs/LC_MESSAGES/rpm.mo
-%lang(de)    /usr/share/locale/de/LC_MESSAGES/rpm.mo
-%lang(fi)    /usr/share/locale/fi/LC_MESSAGES/rpm.mo
-%lang(fr)    /usr/share/locale/fr/LC_MESSAGES/rpm.mo
-%lang(pl)    /usr/share/locale/pl/LC_MESSAGES/rpm.mo
-%lang(pt_BR) /usr/share/locale/pt_BR/LC_MESSAGES/rpm.mo
-%lang(ru)    /usr/share/locale/ru/LC_MESSAGES/rpm.mo
-%lang(sk)    /usr/share/locale/sk/LC_MESSAGES/rpm.mo
-%lang(sr)    /usr/share/locale/sr/LC_MESSAGES/rpm.mo
-%lang(sv)    /usr/share/locale/sv/LC_MESSAGES/rpm.mo
-%lang(tr)    /usr/share/locale/tr/LC_MESSAGES/rpm.mo
+%lang(cs)    %{_datadir}/locale/cs/LC_MESSAGES/rpm.mo
+%lang(de)    %{_datadir}/locale/de/LC_MESSAGES/rpm.mo
+%lang(fi)    %{_datadir}/locale/fi/LC_MESSAGES/rpm.mo
+%lang(fr)    %{_datadir}/locale/fr/LC_MESSAGES/rpm.mo
+%lang(pl)    %{_datadir}/locale/pl/LC_MESSAGES/rpm.mo
+%lang(pt_BR) %{_datadir}/locale/pt_BR/LC_MESSAGES/rpm.mo
+%lang(ru)    %{_datadir}/locale/ru/LC_MESSAGES/rpm.mo
+%lang(sk)    %{_datadir}/locale/sk/LC_MESSAGES/rpm.mo
+%lang(sr)    %{_datadir}/locale/sr/LC_MESSAGES/rpm.mo
+%lang(sv)    %{_datadir}/locale/sv/LC_MESSAGES/rpm.mo
+%lang(tr)    %{_datadir}/locale/tr/LC_MESSAGES/rpm.mo
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
 %attr(755,root,root) %dir /var/db/rpm
 
@@ -221,7 +221,7 @@ rm -rf $RPM_BUILD_ROOT
 - added -q %setup parameter,
 - changed Buildroot to /tmp/%%{name}-%%{version}-root,
 - added using %%{name} and %%{version} in Source,
-- added %lang macros for /usr/share/locale/*/LC_MESSAGES/rpm.mo files,
+- added %lang macros for %{_datadir}/locale/*/LC_MESSAGES/rpm.mo files,
 - added %attr and %defattr macros in %files (allow build package from
   non-root account),
 - build against GNU libc-2.1.
