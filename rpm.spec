@@ -15,7 +15,7 @@
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.9
 %define	beecrypt_ver	3.0.0-0.20030610.1
-%define	rpm_macros_rev	1.194
+%define	rpm_macros_rev	1.195
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -46,8 +46,6 @@ Source11:	%{name}.macros
 Source12:	perl.prov
 Source13:	%{name}-user_group.sh
 Source14:	%{name}.sysconfig
-Source15:	%{name}-gconf-schema-install
-Source16:	%{name}-gconf-schema-uninstall
 Source30:	builder
 Source31:	adapter.awk
 Source32:	pldnotify.awk
@@ -718,8 +716,6 @@ install %{SOURCE13} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
 install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
-install %{SOURCE15} $RPM_BUILD_ROOT%{_rpmlibdir}/gconf-schema-install
-install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/gconf-schema-uninstall
 
 install %{SOURCE30} $RPM_BUILD_ROOT%{_bindir}/builder
 install %{SOURCE31} $RPM_BUILD_ROOT%{_bindir}/adapter.awk
@@ -876,8 +872,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %doc %attr(755,root,root) %{_rpmlibdir}/convertrpmrc.sh
 %attr(755,root,root) %{_rpmlibdir}/user_group.sh
-%attr(755,root,root) %{_rpmlibdir}/gconf-schema-install
-%attr(755,root,root) %{_rpmlibdir}/gconf-schema-uninstall
 
 %attr(755,root,root) %{_bindir}/banner.sh
 
