@@ -219,7 +219,14 @@ autoheader
 
 autoheader
 autoconf
+# ugly workaround for automake
+sed -e 's#cpio.c $(DBLIBOBJS) depends.c#cpio.c depends.c#g' \
+	lib/Makefile.am > lib/Makefile.am.new
+mv lib/Makefile.am.new lib/Makefile.am
 automake -a -c
+sed -e 's#cpio.c depends.c#cpio.c $(DBLIBOBJS) depends.c#g' \
+	lib/Makefile.in > lib/Makefile.in.new
+mv lib/Makefile.in.new lib/Makefile.in
 %configure \
 	sed 's|@host_cpu@|%{_target_cpu}|' > macros.tmp
 	--enable-v1-packages
