@@ -3,6 +3,12 @@
 # - learn find-perl-provides to use the __perl macro instead
 #   of /usr/bin/perl
 #
+# Conditional build:
+# _without_static	- build shared /bin/rpm (doesn't work at the moment)
+# force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
+# force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
+# force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
+#
 %include        /usr/lib/rpm/macros.python
 %define	beecrypt_ver	2.2.0
 %define	beecrypt_rel	2
@@ -18,7 +24,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.1
-Release:	15
+Release:	15.1
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/%{name}-%{version}.tar.gz
@@ -109,6 +115,11 @@ Conflicts:	glibc < 2.2.92
 
 # don't require very fresh rpm.macros to build
 %define		__gettextize gettextize --copy --force --intl ; cp -f po/Makevars{.template,}
+
+# stabilize new build environment
+%define		__cc %{?force_cc}%{!?force_cc:%{_target_cpu}-pld-linux-gcc}
+%define		__cxx %{?force_cxx}%{!?force_cxx:%{_target_cpu}-pld-linux-g++}
+%define		__cpp %{?force_cpp}%{!?force_cpp:%{_target_cpu}-pld-linux-gcc -E}
 
 %description
 RPM is a powerful package manager, which can be used to build,
@@ -588,7 +599,9 @@ sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|'  \
 	-e 's|@host_cpu@|%{_target_cpu}|'  macros.in  > macros.tmp
 mv -f macros.tmp macros.in
 
+# pass CC and CXX too in case of building with some older configure macro
 %configure \
+	CC="%{__cc}" CXX="%{__cxx}" CPP="%{__cpp}" \
 	--enable-shared \
 	--enable-static \
 	--with-apidocs \
