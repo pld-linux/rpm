@@ -18,7 +18,7 @@
 %define	reqdb_ver	4.1.25-1
 %define	reqpopt_ver	1.9
 %define	beecrypt_ver	3.0.0-0.20030610.1
-%define rpm_macros_rev	1.124
+%define rpm_macros_rev	1.125
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -29,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-%define	rel	0.%{snap}.20.5
+%define	rel	0.%{snap}.20.6
 Release:	%{rel}
 License:	GPL
 Group:		Base
