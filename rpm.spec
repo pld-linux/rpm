@@ -1,6 +1,9 @@
 %include        /usr/lib/rpm/macros.python
 %define	beecrypt_ver	2.2.0
 %define	beecrypt_rel	2
+# versions of required libraries
+%define	reqdb_ver	4.1.25-1
+%define	reqpopt_ver	1.7
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -72,7 +75,7 @@ Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	bzip2-devel >= 1.0.1
-BuildRequires:	db-devel >= 4.1.25-1
+BuildRequires:	db-devel >= %{reqdb_ver}
 BuildRequires:	doxygen
 BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	libelf-devel
@@ -82,15 +85,15 @@ BuildRequires:	python-devel >= 2.2
 BuildRequires:	python-modules >= 2.2
 BuildRequires:	rpm-pythonprov
 BuildRequires:	zlib-devel
-BuildRequires:	popt-devel >= 1.7
+BuildRequires:	popt-devel >= %{reqpopt_ver}
 %if %{!?_without_static:1}%{?_without_static:0}
 # Require static library only for static build
 BuildRequires:	bzip2-static >= 1.0.2-5
-BuildRequires:	db-static >= 4.1.25
+BuildRequires:	db-static >= %{reqdb_ver}
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	libelf-static
 BuildRequires:	zlib-static
-BuildRequires:	popt-static >= 1.7
+BuildRequires:	popt-static >= %{reqpopt_ver}
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Conflicts:	glibc < 2.2.92
@@ -344,7 +347,8 @@ Python para manipular pacotes e bancos de dados RPM.
 Summary:	RPMs library
 Summary(pl):	Biblioteki RPM-a
 Group:		Libraries
-Requires:	popt >= 1.7
+Requires:	db >= %{reqdb_ver}
+Requires:	popt >= %{reqpopt_ver}
 
 %description lib
 RPMs library.
