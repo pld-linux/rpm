@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0
-Release:	8
+Release:	1
 Group:		Base
 Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
@@ -12,6 +12,9 @@ Source1:	%{name}.groups
 Source2:	%{name}.macros
 Source3:	%{name}-install-tree
 Source4:	%{name}-find-rpm-provides
+Source5:	%{name}-macros.perl
+Source6:	%{name}-find-perl-provides
+Source7:	%{name}-find-perl-requires
 Patch0:		%{name}-%{name}rc.patch
 Patch1:		%{name}-find-requires.patch
 Patch2:		%{name}-macros.patch
@@ -180,6 +183,9 @@ construir pacotes usando o RPM.
 %patch16 -p1
 %patch31 -p1
 install %{SOURCE2} macros.pld.in
+%patch38 -p1
+sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
+cp -f platform.in macros.pld.in
 install %{SOURCE13} macros.python.in
 (cd scripts; 
 install %{SOURCE7} scripts/find-perl-requires
@@ -280,6 +286,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/rpm.8*
 %lang(pl) %{_mandir}/pl/man8/rpm.8*
 %lang(ja) %{_mandir}/ja/man8/rpm.8*
+%lang(fr) %{_mandir}/fr/man8/rpm.8*
 %lang(ja) %{_mandir}/ja/man8/rpm.8*
 %lang(ko) %{_mandir}/ko/man8/rpm.8*
 %lang(pl) %{_mandir}/pl/man8/rpm.8*
@@ -287,19 +294,64 @@ rm -rf $RPM_BUILD_ROOT
 %lang(sk) %{_mandir}/sk/man8/rpm.8*
 
 %dir /var/lib/rpm
-%{_libdir}/rpm/rpmpopt
+%dir %{_libdir}/rpm
 
 %{_libdir}/rpm/macros.pld
+%{_libdir}/rpm/noarch-linux
+%{_libdir}/rpm/noarch-pld-linux
+%ifarch i386 i486 i586 i686
+%{_libdir}/rpm/i386-pld-linux
+%endif
+%ifarch i486 i586 i686
+%{_libdir}/rpm/i486-pld-linux
+%endif
+%ifarch i586 i686
+%{_libdir}/rpm/i586-pld-linux
+%endif
+%ifarch i686
+%{_libdir}/rpm/i686-pld-linux
+%{_libdir}/rpm/noarch-linux
+%endif
+%{_libdir}/rpm/noarch-pld-linux
+%{_libdir}/rpm/sparc-pld-linux
+%endif
+%ifarch sparc64
+%{_libdir}/rpm/sparc64-pld-linux
+%{_libdir}/rpm/i?86*
+%{_libdir}/rpm/athlon*
+%{_libdir}/rpm/alpha-pld-linux
+%ifarch sparc sparc64
+%endif
 
 %ifarch ppc
 %{_libdir}/rpm/ppc*
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rpmbuild
+%attr(755,root,root) %{_bindir}/rpme
 %attr(755,root,root) %{_bindir}/rpmu
 %attr(755,root,root) %{_libdir}/rpm/find-requires
 %attr(755,root,root) %{_libdir}/rpm/find-provides
 %attr(755,root,root) %{_libdir}/rpm/find-rpm-provides
 %attr(755,root,root) %{_libdir}/rpm/find-spec-bcond
+%attr(755,root,root) %{_libdir}/rpm/brb-*
+%attr(755,root,root) %{_libdir}/rpm/mkinstalldirs
+%attr(755,root,root) %{_libdir}/rpm/getpo.sh
+%attr(755,root,root) %{_libdir}/rpm/getpo.sh
+%attr(755,root,root) %{_libdir}/rpm/install-build-tree
+%attr(755,root,root) %{_libdir}/rpm/brp-*
+%attr(755,root,root) %{_libdir}/rpm/check-prereqs
+%attr(755,root,root) %{_libdir}/rpm/compress-doc
+%attr(755,root,root) %{_libdir}/rpm/cpanflute
+%attr(755,root,root) %{_libdir}/rpm/http.req
+%attr(755,root,root) %{_libdir}/rpm/magic.*
+%attr(755,root,root) %{_libdir}/rpm/rpmdb
+%attr(755,root,root) %{_libdir}/rpm/rpmi
+%attr(755,root,root) %{_libdir}/rpm/rpmk
+%attr(755,root,root) %{_libdir}/rpm/rpmq
+%attr(755,root,root) %{_libdir}/rpm/u_pkg.sh
+%attr(755,root,root) %{_libdir}/rpm/rpme
+%attr(755,root,root) %{_libdir}/rpm/rpmu
+%attr(755,root,root) %{_libdir}/rpm/rpmv
 %attr(755,root,root) %{_libdir}/rpm/rpmb
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmt
@@ -320,12 +372,17 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/*
 %files utils
 %defattr(644,root,root,755)
+%{_mandir}/man1/*
 %{_mandir}/man8/rpm2cpio.8*
+%lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
 %{_mandir}/man1/*
 %lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
 %lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
 %lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
 %lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
+
+%attr(755,root,root) %{_libdir}/rpm/find-{prov,req}.pl
+%attr(755,root,root) %{_libdir}/rpm/perl*
 %attr(755,root,root) %{_libdir}/rpm/find-perl-*
 %attr(755,root,root) %{_libdir}/rpm/find-*.perl
 %attr(755,root,root) %{_libdir}/rpm/find-prov.pl
