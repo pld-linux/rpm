@@ -120,7 +120,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmt
 /usr/include/rpm
-/usr/lib/lib*.a
+/usr/lib/librpm*.a
 %files utils
 %files -n python-rpm
 * Wed Mar 10 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
