@@ -118,7 +118,7 @@ diff -urN rpm.org/rpmrc.in rpm/rpmrc.in
 +#optflags: i386 -O2 -march=i486 -mcpu=pentium4
 +optflags: i486 -O2 -march=i486%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i486: %{specflags_i486}}}
 +optflags: i586 -O2 -march=i586%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i586: %{specflags_i586}}}
-+optflags: i686 -O2 -march=i686%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i686: %{specflags_i686}}} -mcpu=pentium4
++optflags: i686 -O2 -march=i686 -mcpu=pentium4%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i686: %{specflags_i686}}}
 +optflags: athlon -O2 -march=athlon%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_athlon: %{specflags_athlon}}}
 +optflags: ia64 -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia64: %{specflags_ia64}}}
 +optflags: x86_64 -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_x86_64: %{specflags_x86_64}}}
