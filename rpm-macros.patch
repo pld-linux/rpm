@@ -10,10 +10,9 @@ diff -ur rpm-3.0.1.old/configure.in rpm-3.0.1/configure.in
  	build/Makefile tools/Makefile scripts/Makefile
  	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
  	misc/Makefile po/Makefile.in intl/Makefile],
-Only in rpm-3.0.1: configure.in~
-diff -ur rpm-3.0.1.old/macros.in rpm-3.0.1/macros.in
---- rpm-3.0.1.old/macros.in	Fri May 14 20:59:43 1999
-+++ rpm-3.0.1/macros.in	Fri Jun  4 18:28:25 1999
+
+--- rpm-3.0.2/macros.in.macros	Fri May 14 20:59:43 1999
++++ rpm-3.0.2/macros.in	Tue Jul 20 12:44:52 1999
 @@ -60,12 +60,12 @@
  %_builddir		%{_topdir}/BUILD
  %_buildshell		/bin/sh
@@ -47,7 +46,14 @@ diff -ur rpm-3.0.1.old/macros.in rpm-3.0.1/macros.in
  #
  #==============================================================================
  # ---- Optional rpmrc macros.
-@@ -159,8 +159,8 @@
+@@ -153,14 +153,14 @@
+ %_sbindir		%{_exec_prefix}/sbin
+ %_libexecdir		%{_exec_prefix}/libexec
+ %_datadir		%{_prefix}/share
+-%_sysconfdir		%{_prefix}/etc
++%_sysconfdir		/etc
+ %_sharedstatedir	%{_prefix}/com
+ %_localstatedir		%{_prefix}/var
  %_libdir		%{_exec_prefix}/lib
  %_includedir		%{_prefix}/include
  %_oldincludedir		/usr/include
@@ -58,4 +64,3 @@ diff -ur rpm-3.0.1.old/macros.in rpm-3.0.1/macros.in
  
  #==============================================================================
  # ---- config.guess platform macros.
-Only in rpm-3.0.1: macros.in~
