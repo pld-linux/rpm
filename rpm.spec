@@ -178,7 +178,7 @@ autoconf
 %configure \
 	--enable-shared
 %configure \
-make
+%{__make}
 	--with-python
 
 
