@@ -27,7 +27,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-%define	rel	0.%{snap}.14
+%define	rel	0.%{snap}.15
 Release:	%{rel}
 License:	GPL
 Group:		Base
@@ -87,6 +87,7 @@ Patch29:	%{name}-man-typos.patch
 Patch30:	%{name}-man-pl.patch
 Patch31:	%{name}-fdClose-typo.patch
 Patch32:	%{name}-userpmdepswrappers.patch
+Patch33:	%{name}-provides-dont-obsolete.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -546,6 +547,7 @@ cat %{SOURCE14} >> macros.in
 %patch30 -p1
 %patch31 -p1
 %patch32 -p1
+%patch33 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
