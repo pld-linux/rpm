@@ -559,6 +559,19 @@ Applications/Text
 	[sv]:		TillДmpningar/Text
 	[uk]:		Прикладн╕ Програми/Текстов╕ утил╕ти
 
+Applications/WWW
+	[cs]:		Aplikace/WWW
+	[da]:		Programmer/WWW
+	[de]:		Applikationen/WWW
+	[es]:		Aplicaciones/WWW
+	[fr]:		Applications/WWW
+	[is]:		Forrit/WWW
+	[no]:		Applikasjoner/WWW
+	[pl]:		Aplikacje/WWW
+	[pt]:		AplicaГУes/WWW
+	[sl]:		Programi/WWW
+	[sv]:		TillДmpningar/WWW
+
 Base
 	[cs]:		ZАklad
 	[da]:		Basal
