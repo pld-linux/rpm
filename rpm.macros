@@ -429,6 +429,7 @@ echo "Compress kernel modules if any."; \
 
 # depmod macro
 %depmod() { \
+umask 022; \
 if [ -e /boot/System.map-%1 ]; then \
         /sbin/depmod -a -F /boot/System.map-%1 %1; \
 else \
