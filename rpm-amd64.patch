@@ -80,3 +80,15 @@ diff -urN rpm.org/rpmrc.in rpm/rpmrc.in
  
  #############################################################
  # Architecture compatibility
+diff -urN rpm.org/configure.ac rpm/configure.ac
+--- rpm.org/configure.ac	2004-07-02 23:11:17.214544320 +0200
++++ rpm/configure.ac	2004-07-02 23:11:43.369568152 +0200
+@@ -1110,7 +1110,7 @@
+ *86)		RPMCANONCOLOR=0; RPMCANONARCH=i386 ;;
+ ia32e*)		RPMCANONCOLOR=3; RPMCANONARCH=ia32e ;;
+ amd64*)		RPMCANONCOLOR=3; RPMCANONARCH=amd64 ;;
+-x86_64*)	RPMCANONCOLOR=3; RPMCANONARCH=x86_64 ;;
++x86_64*)	RPMCANONCOLOR=3; RPMCANONARCH=amd64 ;;
+ alpha*)		RPMCANONCOLOR=0; RPMCANONARCH=alpha ;;
+ sparc64*)	RPMCANONCOLOR=3; RPMCANONARCH=sparc64 ;;
+ sparc*)		RPMCANONCOLOR=3; RPMCANONARCH=sparc ;;
