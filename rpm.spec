@@ -693,7 +693,7 @@ mv -f macros.tmp macros.in
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/etc/cron.daily}
+install -d $RPM_BUILD_ROOT/{%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/etc/cron.daily,/var/log}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -723,7 +723,9 @@ install %{SOURCE31} $RPM_BUILD_ROOT%{_bindir}/adapter.awk
 install %{SOURCE32} $RPM_BUILD_ROOT%{_bindir}/pldnotify.awk
 
 install %{SOURCE33} $RPM_BUILD_ROOT%{_bindir}/banner.sh
+
 install %{SOURCE34} $RPM_BUILD_ROOT/etc/cron.daily/rpm
+> $RPM_BUILD_ROOT/var/log/rpmpkgs
 
 install rpmio/ugid.h $RPM_BUILD_ROOT%{_includedir}/rpm
 
@@ -855,6 +857,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpm/macros
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/rpm
 %attr(755,root,root) /etc/cron.daily/rpm
+%ghost /var/log/rpmpkgs
 
 %{_mandir}/man8/rpm.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
