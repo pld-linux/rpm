@@ -1,5 +1,5 @@
---- rpm-4.0/installplatform.orig	Wed Sep 13 19:57:58 2000
-+++ rpm-4.0/installplatform	Sun Dec 24 20:57:16 2000
+--- rpm-4.0.1/installplatform.wiget	Wed Jan 17 17:14:16 2001
++++ rpm-4.0.1/installplatform	Wed Jan 31 17:47:58 2001
 @@ -21,11 +21,12 @@
  
  RPM="./rpm --rcfile $TEMPRC"
@@ -24,10 +24,10 @@
  
  for SUBST in $SUBSTS ; do
    ARCH=`echo $arch | sed -e $SUBST`
-@@ -70,7 +70,7 @@
+@@ -86,7 +86,7 @@
  
-   cat $PLATFORM | \
-     sed -e "s,@RPMRC_OPTFLAGS@,$RPMRC_OPTFLAGS," \
+   cat $PLATFORM \
+   | sed -e "s,@RPMRC_OPTFLAGS@,$RPMRC_OPTFLAGS," \
 -	-e "s,@RPMRC_ARCH@,$base_arch," \
 +	-e "s,@RPMRC_ARCH@,$arch," \
  	-e "s,@LIB@,$LIB," \
