@@ -97,3 +97,17 @@ diff -urN rpm-4.0.4.org/build/files.c rpm-4.0.4/build/files.c
 +    
      return res;
  }
+diff -Nur rpm-4.0.4.orig/platform.in rpm-4.0.4/platform.in
+--- rpm-4.0.4.orig/platform.in	Sun Jun 30 00:07:54 2002
++++ rpm-4.0.4/platform.in	Sun Jun 30 00:13:45 2002
+@@ -89,6 +89,10 @@
+ #	Expanded at end of %install scriptlet.
+ #
+ 
++# Gets file list on input and buildroot as first parameter
++# and returns list of files not found in any package
++%__check_files		@prefix@/lib/rpm/check-files
++
+ %__arch_install_post   @ARCH_INSTALL_POST@
+ 
+ %__os_install_post    \
