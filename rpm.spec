@@ -16,6 +16,7 @@ Source5:	%{name}-macros.perl
 Source6:	%{name}-find-perl-provides
 Source7:	%{name}-find-perl-requires
 Source8:	%{name}-find-spec-bcond
+Source9:	%{name}-find-lang
 Patch0:		%{name}-rpmrc.patch
 Patch1:		%{name}-find-requires.patch
 Patch2:		%{name}-macros.patch
@@ -33,8 +34,7 @@ Patch12:	%{name}-segv.patch
 Patch14:	%{name}-am_fix.patch
 Patch15:	%{name}-perl-req-perlfile.patch
 Patch16:	%{name}-installplatform.patch
-Patch17:	%{name}-find-lang.patch
-Patch18:	%{name}-cache.patch
+Patch17:	%{name}-cache.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	gettext-devel
@@ -196,12 +196,12 @@ construir pacotes usando o RPM.
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
-%patch18 -p1
 %patch31 -p1
 install %{SOURCE2} macros.pld.in
 %patch38 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
+install %{SOURCE9} scripts/find-lang.sh
 install %{SOURCE13} macros.python.in
 (cd scripts; 
 install %{SOURCE7} scripts/find-perl-requires
