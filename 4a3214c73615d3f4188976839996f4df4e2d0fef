@@ -1,0 +1,3 @@
+- patch noexpand is back again, removed noexpanding %description
+- %date in _first_ line of %changelog was already not affected by this patch (by mistake)
+- added noexpanding %include and %%*if* clauses - special case
