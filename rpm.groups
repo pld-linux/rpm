@@ -152,15 +152,21 @@ Development
         [pl]:   	Programowanie
 	[pt_BR]:	Desenvolvimento
 	[es]:		Desarrollo
+	[uk]:		Розробка
+	[ru]:		Разработка
 
 Development/Debuggers
 	[de]:	Entwicklung/Debugger
 	[pl]:	Programowanie/Odpluskwiacze
 
 Development/Libraries
-	[de]:	Entwicklung/Libraries
-	[fr]:	Development/Librairies
-	[pl]:	Programowanie/Biblioteki
+	[de]:		Entwicklung/Libraries
+	[fr]:		Development/Librairies
+	[pl]:		Programowanie/Biblioteki
+	[pt_BR]:	Desenvolvimento/Bibliotecas
+	[es]:		Desarrollo/Bibliotecas
+	[uk]:		Розробка/Б╕бл╕отеки
+	[ru]:		Разработка/Библиотеки
 
 Development/Libraries/Libc
 	[de]:	Entwicklung/Libraries/Libc
@@ -209,10 +215,15 @@ Documentation
 	[pl]:	Dokumentacja
 
 Libraries
-	[de]:	Libraries
-	[es]:	Bibliotecas
-	[fr]:	Librairies
-	[pl]:	Biblioteki
+	[de]:		Libraries
+	[es]:		Bibliotecas
+	[fr]:		Librairies
+	[pl]:		Biblioteki
+	[uk]:		Б╕бл╕отеки
+	[ru]:		Библиотеки
+	[pt_BR]:	Bibliotecas
+	[es]:		Bibliotecas
+	
 
 Networking
 	[de]:	Netzwerkwesen
