@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0
-Release:	7
+Release:	8
 Group:		Base
 Group(pl):	Bazowe
 Copyright:	GPL
@@ -21,6 +21,10 @@ Patch38:        %{name}-section_test.patch
 #BuildPrereq:	gdbm-static
 #BuildPrereq:	zlib-static
 #BuildPrereq:	patch >= 2.2
+#BuildPrereq:	libtool
+#BuildPrereq:	automake
+#BuildPrereq:	autoconf
+#BuildPrereq:	gettext
 Requires:	glibc >= 2.1
 BuildRoot:	/tmp/%{name}-%{version}-root
 Obsoletes:	rpm-libs
@@ -61,12 +65,25 @@ construir pacotes usando o RPM.
 %patch4 -p1 
 install %{SOURCE13} macros.python.in
 mv -f perl.prov perl.prov.in)
-( cd popt; autoconf )
-
+( cd popt; 
+libtoolize --copy --force
+aclocal
+autoheader
+automake
 autoconf
-CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
+LDFLAGS="-s" CFLAGS="$RPM_OPT_FLAGS" \
 ./configure \
-	--prefix=/usr \
+	--prefix=/usr
+)
+
+libtoolize --copy --force
+aclocal
+autoheader
+automake
+autoconf
+LDFLAGS="-s" CFLAGS="$RPM_OPT_FLAGS" \
+./configure \
+        --prefix=/usr \
 	--disable-shared
 make
 	--with-python
@@ -85,6 +102,8 @@ install rpm2cpio.8ru $RPM_BUILD_ROOT/usr/man/ru/man8/rpm2cpio.8
 install %{SOURCE2} $RPM_BUILD_ROOT/usr/man/pl/man8/rpm.8
 
 install %{SOURCE1} docs/groups
+install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
+strip  $RPM_BUILD_ROOT/bin/rpm
 
 gzip -9fn $RPM_BUILD_ROOT/usr/man/{{ru,pl}/man8/*,man8/*} \
 	RPM-PGP-KEY CHANGES docs/*
