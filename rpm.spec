@@ -867,6 +867,40 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %ifarch ia64
 %{_rpmlibdir}/ia64*
 %endif
+%ifarch mips mipsel mips64 mips64el
+%{_rpmlibdir}/mips*
+%endif
+%ifarch ppc
+%{_rpmlibdir}/ppc*
+%endif
+%ifarch sparc sparc64
+%{_rpmlibdir}/sparc*
+%endif
+# must be here for "Requires: rpm-*prov" to work
+%{_rpmlibdir}/macros.perl
+%{_rpmlibdir}/macros.php
+# not used yet ... these six depend on perl
+#%attr(755,root,root) %{_rpmlibdir}/http.req
+#%attr(755,root,root) %{_rpmlibdir}/magic.prov
+#%attr(755,root,root) %{_rpmlibdir}/magic.req
+#%{_rpmlibdir}/sql.prov
+#%{_rpmlibdir}/sql.req
+#%{_rpmlibdir}/tcl.req
+%{_rpmlibdir}/trpm
+
+%attr(755,root,root) %{_bindir}/javadeps
+%attr(755,root,root) %{_bindir}/gendiff
+%attr(755,root,root) %{_bindir}/rpmbuild
+
+%{_mandir}/man1/gendiff.1*
+%{_mandir}/man8/rpmbuild.8*
+%lang(ja) %{_mandir}/ja/man8/rpmbuild.8*
+%lang(pl) %{_mandir}/pl/man1/gendiff.1*
+%lang(pl) %{_mandir}/pl/man8/rpmbuild.8*
+
+%files devel
+%defattr(644,root,root,755)
+%{_includedir}/rpm
 %ifarch ppc
 %{_rpmlibdir}/ppc*
 %endif
