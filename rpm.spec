@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.3
-Release:	24
+Release:	25
 Group:		Base
 Group(pl):	Podstawowe
 Copyright:	GPL
@@ -32,6 +32,7 @@ BuildRequires:	autoconf >= 2.13-8
 BuildRequires:	gettext-devel
 Requires:	glibc >= 2.1
 BuildRoot:	/tmp/%{name}-%{version}-root
+Conflicts:	/usr/bin/id
 Obsoletes:	rpm-libs
 %define		pyrequires_eq() Requires:	%1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
 RPM is a powerful package manager, which can be used to build, install, 
