@@ -1,0 +1,8 @@
+#!/bin/sh
+ulimit -c 0
+
+filelist=`sed "s/['\"]/\\\&/g"`
+
+echo $filelist|/usr/lib/rpm/find-provides
+/usr/lib/rpm/perl.prov $filelist
+

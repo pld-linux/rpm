@@ -1,0 +1,11 @@
+#!/bin/sh
+ulimit -c 0
+
+filelist=`sed "s/['\"]/\\\&/g"`
+
+requires="`echo $filelist|/usr/lib/rpm/find-requires`"
+requires_perl="`/usr/lib/rpm/perl.req $filelist`"
+requires_mod="`rpm -q --whatprovides --qf "%{NAME}\n"  $requires_perl 2>/dev/null`"
+echo "$requires
+$requires_perl
+$requires_mod"|  sort -u
