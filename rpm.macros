@@ -429,6 +429,27 @@ echo "Compress kernel modules if any."; \
 # Software written in Python language require Python with main version
 %pyrequires_eq() Requires:	python(bytecode) = %py_ver %1
 
+
+# Hardlink binary identical .pyc and .pyo files
+# (idea by glen <at> pld-linux <dot> org)
+%__spec_install_post_py_hardlink {\
+%{!?no_install_post_py_hardlink:
+[ ! -d "$RPM_BUILD_ROOT" ] || find "$RPM_BUILD_ROOT" -name '*.pyc' | while read a; do \
+	b="$(echo $a|sed -e 's/.pyc$/.pyo/')"; \
+	if cmp -s "$a" "$b"; then \
+		ln -f "$a" "$b"; \
+	fi; \
+done \
+} }
+
+# remove python sources, so that check-files won't complain                                                                
+# (idea by glen <at> pld-linux <dot> org)
+%py_postclean() \
+for d in %{py_sitescriptdir} %{py_sitedir}; do \
+ [ ! -d "$RPM_BUILD_ROOT$d" ] || find "$RPM_BUILD_ROOT$d" -name '*.py' -exec rm {} \; ;\
+done \
+%{nil}
+
 # depmod macro
 %depmod() { \
 umask 022; \
