@@ -1,16 +1,16 @@
 diff -urN rpm-4.0.2.org/acconfig.h rpm-4.0.2/acconfig.h
 --- rpm-4.0.2.org/acconfig.h	Fri Oct 12 18:23:02 2001
-+++ rpm-4.0.2/acconfig.h	Fri Oct 12 18:24:46 2001
-@@ -159,6 +159,9 @@
- /* Build with dmalloc support? */
- #undef DMALLOC
++++ rpm-4.0.2/acconfig.h	Fri Oct 12 18:50:55 2001
+@@ -29,6 +29,9 @@
+ /* Define as 1 if you have catgets and don't want to use GNU gettext.  */
+ #undef HAVE_CATGETS
  
++/* */
 +#undef HAVE_GETMNTENT
-+#undef fnmatch
 +
- ^L
- /* Leave that blank line there!!  Autoheader needs it.
-    If you're adding to this file, keep in mind:
+ /* Define as 1 if you have gettext and don't want to use GNU gettext.  */
+ #undef HAVE_GETTEXT
+ 
 diff -urN rpm-4.0.2.org/configure.in rpm-4.0.2/configure.in
 --- rpm-4.0.2.org/configure.in	Fri Oct 12 18:23:08 2001
 +++ rpm-4.0.2/configure.in	Fri Oct 12 18:25:18 2001
