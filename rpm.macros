@@ -179,11 +179,9 @@ unset DISPLAY ||:\
 # Location of pkgconfig files
 %_pkgconfigdir	/usr/%{_lib}/pkgconfig
 
-# Location of top applink dir
-%_applnkdir	/usr/X11R6/share/applnk
-
 # Location of desktop files
 %_desktopdir	/usr/share/applications
+%_applnkdir	ERROR:_applnkdir_is_obsolete_use_desktopdir_instead
 
 # Location of pixmaps for applnk/desktop files
 %_pixmapsdir	/usr/share/pixmaps
