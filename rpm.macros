@@ -179,6 +179,9 @@
 %requires_releq()  		%(LC_ALL="C" echo '%*' | xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}-%%{release}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
 %requires_releq_kernel_up()  	%(LC_ALL="C" rpm -qf --qf 'Prereq: kernel-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -vE "(is not|no such)")
 %requires_releq_kernel_smp()  	%(LC_ALL="C" rpm -qf --qf 'Prereq: kernel-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -vE "(is not|no such)")
+%requires_eq_to %(LC_ALL="C" rpm -q --qf 'Requires: %1 = %%{epoch}:%%{version}\\n' %2 | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
+
+%apache_modules_api %(awk '/#define MODULE_MAGIC_NUMBER_MAJOR/ {print $3}' `apr-config --includedir`/ap_mmn.h)
 
 # kernel version-release handling
 %__kernel_ver    %(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
