@@ -630,8 +630,8 @@ install -d $RPM_BUILD_ROOT/var/spool/repackage
 
 # move libs to /lib
 for a in librpm-%{ver}.so librpmdb-%{ver}.so librpmio-%{ver}.so ; do
-	mv -f $RPM_BUILD_ROOT/%{_libdir}/$a $RPM_BUILD_ROOT/lib/
-	ln -s /lib/$a $RPM_BUILD_ROOT/%{_libdir}/$a
+	mv -f $RPM_BUILD_ROOT%{_libdir}/$a $RPM_BUILD_ROOT/lib
+	ln -s /lib/$a $RPM_BUILD_ROOT%{_libdir}/$a
 done
 
 %find_lang %{name}
@@ -654,6 +654,10 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %doc RPM-PGP-KEY CHANGES manual
 
 %attr(755,root,root) /bin/rpm
+#%attr(755,root,root) %{_bindir}/rpmdb
+#%attr(755,root,root) %{_bindir}/rpmquery
+#%attr(755,root,root) %{_bindir}/rpmsign
+#%attr(755,root,root) %{_bindir}/rpmverify
 
 %dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpm/macros
@@ -669,6 +673,9 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %dir /var/lib/rpm
 %dir %attr(700,root,root) /var/spool/repackage
 %dir %{_libdir}/rpm
+#%attr(755,root,root) %{_libdir}/rpm/rpmd
+#%attr(755,root,root) %{_libdir}/rpm/rpmk
+#%attr(755,root,root) %{_libdir}/rpm/rpm[qv]
 
 %doc %attr(755,root,root) %{_libdir}/rpm/convertrpmrc.sh
 
@@ -757,15 +764,9 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/rpmdeps
 %attr(755,root,root) %{_bindir}/rpmgraph
 %attr(755,root,root) %{_bindir}/rpmfile
-#%attr(755,root,root) %{_bindir}/striptofile
-#%attr(755,root,root) %{_bindir}/unstripfile
 %attr(755,root,root) %{_libdir}/rpm/find-debuginfo.sh
 %attr(755,root,root) %{_libdir}/rpm/rpm2cpio.sh
-#%attr(755,root,root) %{_libdir}/rpm/rpmd
 %attr(755,root,root) %{_libdir}/rpm/rpmdiff*
-#%attr(755,root,root) %{_libdir}/rpm/rpmk
-#%attr(755,root,root) %{_libdir}/rpm/rpmq
-#%attr(755,root,root) %{_libdir}/rpm/rpmv
 %attr(755,root,root) %{_libdir}/rpm/tgpg
 %attr(755,root,root) %{_libdir}/rpm/rpmdb_loadcvt
 
@@ -785,7 +786,8 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 
 %files utils-static
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/rpm/rpmi
+%attr(755,root,root) %{_bindir}/rpm[ieu]
+%attr(755,root,root) %{_libdir}/rpm/rpm[ieu]
 
 %files perlprov
 %defattr(644,root,root,755)

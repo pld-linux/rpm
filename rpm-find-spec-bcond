@@ -1,5 +1,5 @@
 #!/bin/sh
-# Display bcond_* macros from given spec 
+# Display bcond (_with_*, _without_*) macros from given spec 
 # $Id$
 
 if [ "$#" = 0 ]; then
@@ -23,8 +23,8 @@ fi
 
 bconds=`awk -F"\n" 'BEGIN { chlog=0 }
 		/^%changelog/ { chlog=1 }
-		/bcond_[_a-z0-9]+/ && chlog == 0 {
-			match($0, /bcond_[_a-z0-9]+/);
+		/_with(out)?_[_a-z0-9]+/ && chlog == 0 {
+			match($0, /_with(out)?_[_a-z0-9]+/);
 	       		print substr($0, RSTART, RLENGTH)                       
 	    	}' $SPEC | sort -u`
 
