@@ -777,9 +777,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %dir /var/lib/rpm
 %dir %attr(700,root,root) /var/spool/repackage
-#%attr(755,root,root) %{_libdir}/rpm/rpmd
-#%attr(755,root,root) %{_libdir}/rpm/rpmk
-#%attr(755,root,root) %{_libdir}/rpm/rpm[qv]
+
+%dir %{_rpmlibdir}
+#%attr(755,root,root) %{_rpmlibdir}/rpmd
+#%attr(755,root,root) %{_rpmlibdir}/rpmk
+#%attr(755,root,root) %{_rpmlibdir}/rpm[qv]
 
 %doc %attr(755,root,root) %{_rpmlibdir}/convertrpmrc.sh
 
