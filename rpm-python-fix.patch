@@ -1,6 +1,6 @@
---- rpm-4.2/python/Makefile.am.wiget	Wed Jan  8 23:33:12 2003
-+++ rpm-4.2/python/Makefile.am	Thu Apr  3 15:52:29 2003
-@@ -28,45 +28,36 @@
+--- rpm-4.3/python/Makefile.am.wiget	Tue May  6 17:44:12 2003
++++ rpm-4.3/python/Makefile.am	Fri May 16 00:32:43 2003
+@@ -29,30 +29,31 @@
  	rpmfi-py.h rpmmi-py.h rpmrc-py.h rpmte-py.h rpmts-py.h
  
  mylibs= \
@@ -9,24 +9,34 @@
 -	$(top_builddir)/rpmio/.libs/librpmio.so \
 -	$(top_builddir)/popt/.libs/libpopt.so \
 +	$(top_builddir)/lib/librpm.la \
-+	$(top_builddir)/rpmdb/librpmdb.la \
-+	$(top_builddir)/rpmio/librpmio.la \
-+	-lpopt \
++ 	$(top_builddir)/rpmdb/librpmdb.la \
++ 	$(top_builddir)/rpmio/librpmio.la \
++ 	-lpopt \
  	@WITH_LIBELF_LIB@
  
  LDADD =
  
  pythondir = $(pylibdir)/site-packages
 -python_PROGRAMS = rpmmodule.so
++python_LTLIBRARIES = rpmmodule.la poptmodule.la
  
  rpmdbdir = $(pylibdir)/site-packages/rpmdb
 -rpmdb_PROGRAMS = _rpmdb.so
 +rpmdb_LTLIBRARIES = _rpmdb.la
  
 -noinst_PROGRAMS = poptmodule.so
+-
+-rpmmodule_so_SOURCES =
+-rpmmodule_so_LDFLAGS = $(mylibs) $(LIBS) -shared -Wl,-soname,rpmmodule.so
+-
+-_rpmdb_so_SOURCES = _rpmdb.c
+-_rpmdb_so_LDFLAGS = $(mylibs) $(LIBS) -shared -Wl,-soname,_rpmdb.so
+-
+-poptmodule_so_SOURCES = poptmodule.c
+-poptmodule_so_LDFLAGS = $(mylibs) $(LIBS) -shared -Wl,-soname,poptmodule.so
 +rpmmodule_la_SOURCES =
-+rpmmodule_la_LIBADD = $(mylibs) $(LIBS) 
-+rpmmodule_la_LDFLAGS = -module -avoid-version
++rpmmodule_la_LIBADD = $(mylibs) $(LIBS)
++rpmmodule_la_LDFLAGS = -module -avoid-version 
 +
 +_rpmdb_la_SOURCES = _rpmdb.c
 +_rpmdb_la_LIBADD = $(mylibs) $(LIBS)
@@ -36,20 +46,10 @@
 +poptmodule_la_LIBADD = $(mylibs) $(LIBS)
 +poptmodule_la_LDFLAGS = -module -avoid-version
  
--rpmmodule_so_SOURCES =
--rpmmodule_so_LDFLAGS = $(mylibs) $(LIBS) -shared -Wl,-soname,rpmmodule.so
--
--_rpmdb_so_SOURCES = _rpmdb.c
--_rpmdb_so_LDFLAGS = $(mylibs) $(LIBS) -shared -Wl,-soname,_rpmdb.so
--
--poptmodule_so_SOURCES = poptmodule.c
--poptmodule_so_LDFLAGS = $(mylibs) $(LIBS) -shared -Wl,-soname,poptmodule.so
--
--noinst_LTLIBRARIES = librpmmodule.la
--librpmmodule_la_SOURCES = rpmmodule.c header-py.c \
-+python_LTLIBRARIES = rpmmodule.la poptmodule.la
-+rpmmodule_la_SOURCES = rpmmodule.c header-py.c \
- 	rpmal-py.c rpmbc-py.c rpmds-py.c rpmdb-py.c rpmfd-py.c rpmfts-py.c \
+ noinst_LTLIBRARIES = librpmmodule.la
+ librpmmodule_la_SOURCES = rpmmodule.c header-py.c \
+@@ -60,15 +61,6 @@
+ 	rpmal-py.c rpmds-py.c rpmdb-py.c rpmfd-py.c rpmfts-py.c \
  	rpmfi-py.c rpmmi-py.c rpmrc-py.c rpmte-py.c rpmts-py.c
  
 -rpmmodule.so$(EXEEXT): $(librpmmodule_la_OBJECTS)

@@ -11,14 +11,15 @@
 # - some clean-up...                                                #
 #####################################################################
 
+die "You have to specify input files" if (@ARGV < 1);
+
 $pear = "/usr/share/pear";
 
 @files = ();
 %req = ();
 
-foreach (@ARGV ? $ARGV : <> ) {
-	chomp;
-	$f = $_;
+while (@ARGV > 0) {
+	$f = shift;
 	push @files, $f;
 	# skip non-php files
 	next unless ($f =~ /\.php$/);
@@ -48,7 +49,6 @@ foreach (@ARGV ? $ARGV : <> ) {
 			}
 
 			next if ($x =~ m|^\./| or $x =~ /\$/);
-			next unless ($x =~ /\.php$/);
 			$req{$x} = 1;
 		}
 
@@ -67,7 +67,6 @@ foreach (@ARGV ? $ARGV : <> ) {
 			}
 
 			next if ($x =~ /\$/);
-			next unless ($x =~ /\.php$/);
 
 			$x = "$file_dir/$x";
 			$x =~ s|/+|/|g;

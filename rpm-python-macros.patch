@@ -3,8 +3,8 @@
 @@ -1166,6 +1166,7 @@
  
  AC_OUTPUT([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
- 	scripts/perl.req scripts/perl.prov
-+	scripts/php.req scripts/php.prov
+ 	macros.perl scripts/perl.req scripts/perl.prov
++	macros.python macros.php scripts/php.req scripts/php.prov
  	rpmio/Makefile rpmdb/Makefile lib/Makefile build/Makefile
  	scripts/Makefile scripts/brp-redhat tools/Makefile
  	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
