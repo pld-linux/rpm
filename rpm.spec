@@ -1,5 +1,5 @@
-Summary:	Red Hat (and now also PLD) Package Manager
-Summary(de):	Red Hat (und jetzt auch PLD) Packet-Manager
+Summary:	RPM Package Manager
+Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Summary(pt_BR):	Gerenciador de pacotes RPM
