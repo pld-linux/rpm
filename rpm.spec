@@ -513,8 +513,8 @@ awk -f %{SOURCE14} %{SOURCE1}
 cd popt
 rm -f missing
 %{__libtoolize}
-aclocal
-autoheader
+%{__aclocal}
+%{__autoheader}
 %{__autoconf}
 %{__automake}
 cd ..
@@ -522,9 +522,9 @@ cd ..
 rm -f missing
 %{__libtoolize}
 %{__gettextize}
-aclocal
+%{__aclocal}
 autoupdate
-autoheader || :
+%{__autoheader} || :
 %{__autoconf}
 # ugly workaround for automake
 sed -e 's#cpio.c $(DBLIBOBJS) depends.c#cpio.c depends.c#g' \
