@@ -194,7 +194,7 @@ RPM static libraries.
 RPMs statische Libraries.
 
 %description static -l pl
-%description static l pt_BR
+Biblioteki statyczne RPM-a.
 
 %description static -l pt_BR
 Bibliotecas estáticas para desenvolvimento.
