@@ -1,10 +1,17 @@
 #-----------------------------------------------------------------
+# CFLAGS and LDFLAGS used to build
+
+%debugcflags	-O0 -g
+%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}
+%rpmldflags	%{!?debug:-s}
+
+#-----------------------------------------------------------------
 %configure { \
  if [ -n "$LINGUAS" ]; then unset LINGUAS; fi; \
- LDFLAGS="${LDFLAGS:-%{!?debug: -s}}" ; export LDFLAGS ; \
- CFLAGS="${CFLAGS:-%{!?debug:%optflags}%{?debug: -g -O0}}" ; export CFLAGS ; \
- CXXFLAGS="${CXXFLAGS:-%{!?debug:%optflags}%{?debug: -g -O0}}" ; export CXXFLAGS ; \
- FFLAGS="${FFLAGS:-%{!?debug:%optflags}%{?debug: -g -O0}}" ; export FFLAGS ; \
+ LDFLAGS="${LDFLAGS:-%rpmldflags}" ; export LDFLAGS ; \
+ CFLAGS="${CFLAGS:-%rpmcflags}" ; export CFLAGS ; \
+ CXXFLAGS="${CXXFLAGS:-%rpmcflags}" ; export CXXFLAGS ; \
+ FFLAGS="${FFLAGS:-%rpmcflags}" ; export FFLAGS ; \
  ./configure %{_target_platform} \
  	--prefix=%{_prefix} \
 	--exec-prefix=%{_exec_prefix} \
@@ -138,17 +145,14 @@ echo "Compress man and info pages."; \
 	fi; } \
 } }
 
-#-----------------------------------------------------------------
-# post %install sequence:
-# - compress all man and info pages,
-# - strip all ELF executables and ELF shared objects if not %debug.
-#
-%__spec_install_post { \
-%{__spec_install_post_strip} \
-%{__spec_install_post_compress_docs} }
-
 %_source_payload        w9.gzdio
 %_binary_payload        w9.bzdio
+
+#-----------------------------------------------------------------
+# post %install sequence:
+# - autodeps exceptions
+# - compress all man and info pages,
+# - strip all ELF executables and ELF shared objects if not %debug.
 
 ###################################################################
 # Requires/Provides automation
@@ -163,6 +167,8 @@ rm -f %{_builddir}/__rpm_*\
 %{?_noautoreqdep:for f in %{_noautoreqdep} ; do echo "$f" >> %{_builddir}/__rpm_noautoreqdep ; done }\
 %{?_noautoprovfiles:for f in %{_noautoprovfiles} ; do echo %{?buildroot:%{buildroot}}$f >> %{_builddir}/__rpm_noautoprovfiles ; done }\
 %{?_noautoprov:for f in %{_noautoprov} ; do echo "$f" >> %{_builddir}/__rpm_noautoprov ; done }\
+%{__spec_install_post_strip}\
+%{__spec_install_post_compress_docs}\
 %{__arch_install_post}\
 %{__os_install_post}\
 %{nil}
