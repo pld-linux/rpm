@@ -163,6 +163,9 @@
 # Location of Gtk and associated libraries documentation
 %_gtkdocdir  %{_defaultdocdir}/gtk-doc/html
 
+# Location of KDE documentation
+%_kdedocdir  %{_defaultdocdir}/kde/HTML
+
 # Current date
 %date 		%(LC_ALL="C" date +"%a %b %d %Y")
 
