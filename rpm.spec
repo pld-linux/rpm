@@ -689,16 +689,10 @@ install rpmio/ugid.h $RPM_BUILD_ROOT%{_includedir}/rpm
 
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm
 
-echo "# customized rpm options - global for host" > \
-	$RPM_BUILD_ROOT%{_sysconfdir}/rpmrc
-
-%ifarch i686
-cat >> $RPM_BUILD_ROOT%{_sysconfdir}/rpmrc << EOF
-
-# There is no 'pentium3' arch in PLD dist tree, so we translate it to i686.
-# Comment out the line below if You want to build pentium3 optimized packages.
-buildarchtranslate: pentium3: i686
-EOF
+%ifarch %{ix86}
+ix86re=$(echo "(%{ix86})"|sed 's/ /|/g')
+perl -p -i -e 's/^(buildarchtranslate: '"$ix86re"': ).*/\1%{_target_cpu}/' \
+	$RPM_BUILD_ROOT%{_rpmlibdir}/rpmrc
 %endif
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
@@ -781,8 +775,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpm/macros
-
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpmrc
 
 %{_mandir}/man8/rpm.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
