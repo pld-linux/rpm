@@ -47,6 +47,7 @@
 	gettextize --copy --force; \
     fi; \
 }
+%__autopoint		autopoint --force
 %__automake             automake -a -c -f --foreign
 %__autoconf             autoconf %{?debug:-Wall}
 
