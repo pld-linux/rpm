@@ -51,6 +51,7 @@ Patch23:	%{name}-perlprov-perl5.6.patch
 Patch24:	%{name}-ac25x.patch
 Patch25:	%{name}-gettext-in-header.patch
 Patch26:	%{name}-compress-doc.patch
+Patch27:	%{name}-lt14d.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	autoconf >= 2.52
@@ -383,11 +384,12 @@ construir pacotes usando o RPM.
 %patch17 -p1
 %patch18 -p1
 %patch19 -p1
-%patch22 -p1 -b .wiget
+%patch22 -p1
 %patch23 -p1
 %patch24 -p1
 %patch25 -p1
 %patch26 -p1
+%patch27 -p1
 %patch31 -p1
 %patch36 -p1
 %patch37 -p1
