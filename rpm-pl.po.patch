@@ -1,5 +1,5 @@
---- rpm/po/pl.po.orig	2004-07-14 23:50:42.253925056 +0200
-+++ rpm/po/pl.po	2004-07-15 00:09:46.984899496 +0200
+--- rpm/po/pl.po.orig	2004-08-21 22:36:29.223155800 +0200
++++ rpm/po/pl.po	2004-08-21 22:57:27.273903016 +0200
 @@ -4,20 +4,20 @@
  # get your own copy of PePeSza from http://www.ids.pl/~pkollegu/pepesza.html
  # Wojciech Drapiñski <wojciech.drapinski@zie.pg.gda.pl>, 1999.
@@ -10,7 +10,8 @@
  #
  msgid ""
  msgstr ""
- "Project-Id-Version: rpm 4.3-20030515\n"
+-"Project-Id-Version: rpm 4.3-20030515\n"
++"Project-Id-Version: rpm 4.4-20040614\n"
  "Report-Msgid-Bugs-To: \n"
 -"POT-Creation-Date: 2004-03-28 04:42+0200\n"
 -"PO-Revision-Date: 2003-06-08 22:42+0200\n"
@@ -263,7 +264,7 @@
  #, c-format
  msgid "Package has no %%description: %s\n"
  msgstr "Pakiet nie ma %%description: %s\n"
-@@ -1386,47 +1386,47 @@
+@@ -1507,47 +1507,47 @@
  msgid "package %s was already added, replacing with %s\n"
  msgstr "pakiet %s by³ ju¿ dodany, jest zastêpowany przez %s\n"
  
@@ -321,7 +322,7 @@
  msgid ""
  "========== tsorting packages (order, #predecessors, #succesors, tree, "
  "depth)\n"
-@@ -1434,27 +1434,27 @@
+@@ -1555,27 +1555,27 @@
  "========== tsortowanie pakietów (kolejno¶æ, #poprzedniki, #nastêpniki, "
  "drzewo, g³êboko¶æ)\n"
  
@@ -354,7 +355,7 @@
  msgid "(not a number)"
  msgstr "(nie jest liczb±)"
  
-@@ -1840,9 +1840,8 @@
+@@ -1961,9 +1961,8 @@
  msgstr "nie wykonuj ¿adnych skryptów instalacyjnych"
  
  #: lib/poptI.c:177
@@ -365,7 +366,7 @@
  
  #: lib/poptI.c:180
  msgid "save erased package files by renaming into sub-directory"
-@@ -2238,70 +2237,70 @@
+@@ -2359,70 +2358,70 @@
  "setexeccon(%s) nie powiod³o siê z kontekstu \"%s\": %s\n"
  "Kontynujê ...\n"
  
@@ -450,7 +451,7 @@
  #, c-format
  msgid "Attempting to mark %s as erased in score board(0x%x).\n"
  msgstr "Próba oznakowania %s jako usuniêtego w tablicy punktów(0x%x).\n"
-@@ -2353,8 +2352,8 @@
+@@ -2474,8 +2473,8 @@
  msgid "package has neither file owner or id lists\n"
  msgstr "pakiet nie ma list w³a¶cicieli ani id plików\n"
  
@@ -461,7 +462,7 @@
  #: tools/rpmgraph.c:120 tools/rpmgraph.c:157
  #, c-format
  msgid "open of %s failed: %s\n"
-@@ -2369,7 +2368,7 @@
+@@ -2490,7 +2489,7 @@
  msgid "old format source packages cannot be queried\n"
  msgstr "pakiety w starym formacie nie mog± byæ odpytywane\n"
  
@@ -470,7 +471,7 @@
  #, c-format
  msgid "%s: not an rpm package (or package manifest): %s\n"
  msgstr "%s: nie jest pakietem rpm (ani \"manifestem\" pakietu): %s\n"
-@@ -2413,32 +2412,32 @@
+@@ -2534,32 +2533,32 @@
  msgid "no package provides %s\n"
  msgstr "¿aden pakiet nie udostêpnia %s\n"
  
@@ -509,7 +510,7 @@
  #, c-format
  msgid "package %s is not installed\n"
  msgstr "pakiet %s nie jest zainstalowany\n"
-@@ -2544,15 +2543,15 @@
+@@ -2665,15 +2664,15 @@
  msgid "OK"
  msgstr "OK"
  
@@ -528,7 +529,7 @@
  #, c-format
  msgid ""
  "The \"B\" dependency needs an epoch (assuming same epoch as \"A\")\n"
-@@ -2561,170 +2560,181 @@
+@@ -2682,170 +2681,181 @@
  "Zale¿no¶æ \"B\" wymaga epoch (przyjêto epoch takie samo jak \"A\")\n"
  "\tA = \"%s\"\tB = \"%s\"\n"
  
@@ -745,7 +746,7 @@
  #: lib/rpmlead.c:56
  #, c-format
  msgid "read failed: %s (%d)\n"
-@@ -2740,7 +2750,6 @@
+@@ -2861,7 +2871,6 @@
  "nazwy plików zapisano jako (dirName,baseName,dirIndex) a nie jako ¶cie¿ki."
  
  #: lib/rpmlibprov.c:35
@@ -753,7 +754,7 @@
  msgid "package payload can be compressed using bzip2."
  msgstr "dane pakietu mog± byæ skompresowane bzipem2."
  
-@@ -2793,7 +2802,7 @@
+@@ -2914,7 +2923,7 @@
  msgstr "pakiet %s jest ju¿ zainstalowany"
  
  #: lib/rpmps.c:223
@@ -762,7 +763,7 @@
  msgid "path %s in package %s is not relocatable"
  msgstr "¶cie¿ka %s w pakiecie %s nie jest przesuwalna"
  
-@@ -2847,122 +2856,127 @@
+@@ -2968,122 +2977,127 @@
  msgid "unknown error %d encountered while manipulating package %s"
  msgstr "wyst±pi³ nieznany b³±d %d w trakcie manipulowania pakietem %s"
  
@@ -918,7 +919,7 @@
  #, c-format
  msgid "%s:  invalid context %s on line number %d\n"
  msgstr "%s:  nieprawid³owy kontekst %s w lini numer %d\n"
-@@ -3018,12 +3032,12 @@
+@@ -3139,12 +3153,12 @@
  #: lib/rpmts.c:1535
  #, c-format
  msgid "Creating transaction score board(%p, %p)\n"
@@ -933,7 +934,7 @@
  
  #: lib/rpmts.c:1550
  #, c-format
-@@ -3035,12 +3049,12 @@
+@@ -3156,12 +3170,12 @@
  #: lib/rpmts.c:1577
  #, c-format
  msgid "\tAdding entry for %s to score board.\n"
@@ -948,7 +949,7 @@
  
  #. We found this one, so just add the element type to the one
  #. * already there.
-@@ -3048,27 +3062,27 @@
+@@ -3169,27 +3183,27 @@
  #: lib/rpmts.c:1592
  #, c-format
  msgid "\tUpdating entry for %s in score board.\n"
@@ -981,7 +982,7 @@
  
  #: lib/signature.c:133
  #, c-format
-@@ -3244,31 +3258,31 @@
+@@ -3365,31 +3379,31 @@
  
  #: lib/transaction.c:1003
  msgid "Transaction failed...rolling back\n"
@@ -1024,7 +1025,7 @@
  msgid "\tRepackaged package not found!.\n"
  msgstr "\tPrzepakowany pakiet nie znaleziony!.\n"
  
-@@ -3277,79 +3291,89 @@
+@@ -3398,79 +3412,89 @@
  #. * the next one.  Perhaps I should return an error at this
  #. * point, but if this was not the correct one, at least the correct one
  #. * would be found.
@@ -1144,7 +1145,7 @@
  
  #. ===============================================
  #. * For packages being installed:
-@@ -3359,14 +3383,14 @@
+@@ -3480,14 +3504,14 @@
  #. * For packages being removed:
  #. * - count files.
  #.
@@ -1162,7 +1163,7 @@
  
  #. ===============================================
  #. * Initialize transaction element file info for package:
-@@ -3376,7 +3400,7 @@
+@@ -3497,7 +3521,7 @@
  #. * calling fpLookupList only once. I'm not sure that the speedup is
  #. * worth the trouble though.
  #.
@@ -1171,7 +1172,7 @@
  #, c-format
  msgid "computing %d file fingerprints\n"
  msgstr "obliczanie %d odcisków plików\n"
-@@ -3384,38 +3408,38 @@
+@@ -3505,38 +3529,38 @@
  #. ===============================================
  #. * Compute file disposition for each package in transaction set.
  #.
@@ -1225,7 +1226,7 @@
  
  #: lib/verify.c:437
  #, c-format
-@@ -3507,77 +3531,77 @@
+@@ -3628,77 +3652,77 @@
  msgid "%s has too large or too small integer value, skipped\n"
  msgstr "%s ma zbyt du¿± lub zbyt ma³± warto¶æ ca³kowit±, pominiêto\n"
  
@@ -1321,7 +1322,7 @@
  msgid "%a %b %d %Y"
  msgstr "%a %d %b %Y"
  
-@@ -3783,144 +3807,144 @@
+@@ -3904,144 +3928,144 @@
  msgstr "======================== aktywny %d pusty %d\n"
  
  #. XXX just in case
@@ -1497,9 +1498,160 @@
  #, c-format
  msgid "logging into %s as %s, pw %s\n"
  msgstr "logowanie do %s jako %s, has³o %s\n"
-@@ -4134,8 +4158,8 @@
+@@ -4165,7 +4189,7 @@
+ msgid "%s: read manifest failed: %s\n"
+ msgstr "%s: odczyt \"manifestu\" nie powiód³ siê: %s\n"
+ 
+-#: ../rpmpopt:34 ../rpmpopt:290 ../rpmpopt:363
++#: ../rpmpopt:34 ../rpmpopt:320 ../rpmpopt:415
+ msgid "list install/erase scriptlets from package(s)"
+ msgstr "wypisz skrypty (de)instalacyjne z pakietu(ów)"
+ 
+@@ -4177,43 +4201,71 @@
+ msgid "set user/group ownership of files in a package"
+ msgstr "ustaw u¿ytkownika/grupê w³a¶ciciela plików w pakiecie"
+ 
+-#: ../rpmpopt:47 ../rpmpopt:294 ../rpmpopt:367
++#: ../rpmpopt:47 ../rpmpopt:324 ../rpmpopt:419
+ msgid "list capabilities this package conflicts with"
+ msgstr "wypisz w³asno¶ci z którymi ten pakiet jest w konflikcie"
+ 
+-#: ../rpmpopt:50 ../rpmpopt:297 ../rpmpopt:370
++#: ../rpmpopt:50 ../rpmpopt:327 ../rpmpopt:422
+ msgid "list other packages removed by installing this package"
+ msgstr "wypisz inne pakiety usuwane przy instalacji tego pakietu"
+ 
+-#: ../rpmpopt:53 ../rpmpopt:300 ../rpmpopt:373
++#: ../rpmpopt:53 ../rpmpopt:330 ../rpmpopt:425
+ msgid "list capabilities that this package provides"
+ msgstr "wypisz w³asno¶ci dostarczane przez ten pakiet"
+ 
+-#: ../rpmpopt:57 ../rpmpopt:304 ../rpmpopt:377
++#: ../rpmpopt:57 ../rpmpopt:334 ../rpmpopt:429
+ msgid "list capabilities required by package(s)"
+ msgstr "wypisz w³asno¶ci wymagane przez pakiet(y)"
+ 
+-#: ../rpmpopt:71 ../rpmpopt:318 ../rpmpopt:390
++#: ../rpmpopt:71 ../rpmpopt:348 ../rpmpopt:442
+ msgid "list descriptive information from package(s)"
+ msgstr "wypisz informacje opisowe z pakietu(ów)"
+ 
+-#: ../rpmpopt:74 ../rpmpopt:321 ../rpmpopt:393
++#: ../rpmpopt:74 ../rpmpopt:351 ../rpmpopt:445
+ msgid "list change logs for this package"
+ msgstr "wypisz kronikê zmian dla tego pakietu"
+ 
+-#: ../rpmpopt:80 ../rpmpopt:327 ../rpmpopt:399
++#: ../rpmpopt:80 ../rpmpopt:357 ../rpmpopt:451
+ msgid "list trigger scriptlets from package(s)"
+ msgstr "wypisz skrypty trigger z pakietu(ów)"
+ 
+-#: ../rpmpopt:84 ../rpmpopt:331 ../rpmpopt:403
++#: ../rpmpopt:84 ../rpmpopt:361 ../rpmpopt:455
+ msgid "list package(s) by install time, most recent first"
+ msgstr "wypisz pakiet(y) wed³ug czasu instalacji od naj¶wie¿szego"
+ 
+-#: ../rpmpopt:87 ../rpmpopt:334 ../rpmpopt:406
++#: ../rpmpopt:87 ../rpmpopt:364 ../rpmpopt:458
+ msgid "list all files from each package"
+ msgstr "wypisz wszystkie pliki z ka¿dego pakietu"
+ 
+-#: ../rpmpopt:90 ../rpmpopt:93
++#: ../rpmpopt:90 ../rpmpopt:367 ../rpmpopt:461
++msgid "list file names with classes"
++msgstr "wypisz nazwy plików z klasami"
++
++#: ../rpmpopt:93 ../rpmpopt:370 ../rpmpopt:464
++msgid "list file names with colors"
++msgstr "wypisz nazwy plików z kolorami"
++
++#: ../rpmpopt:96
++msgid "list file names with security context from header"
++msgstr "wypisz nazwy plików z kontekstami bezpieczeñstwa z nag³ówka"
++
++#: ../rpmpopt:99 ../rpmpopt:376 ../rpmpopt:470
++msgid "list file names with security context from file system"
++msgstr "wypisz nazwy plików z kontekstami bezpieczeñstwa z systemu"
++
++#: ../rpmpopt:102 ../rpmpopt:379 ../rpmpopt:473
++msgid "list file names with security context from policy RE"
++msgstr "wypisz nazwy plików z kontekstami bezpieczeñstwa z polityki"
++
++#: ../rpmpopt:105 ../rpmpopt:382 ../rpmpopt:476
++msgid "list file names with provides"
++msgstr "wypisz nazwy plików z dostarczanymi w³asno¶ciami"
++
++#: ../rpmpopt:108 ../rpmpopt:385 ../rpmpopt:479
++msgid "list file names with requires"
++msgstr "wypisz nazwy plików z wymaganymi w³asno¶ciami"
++
++#: ../rpmpopt:111
+ msgid ""
+ "find package name that contains a provided capability (needs rpmdb-redhat "
+ "package installed)"
+@@ -4221,42 +4273,54 @@
+ "znajd¼ nazwê pakietu, który dostarcza w³asno¶æ (wymaga zainstalowanego "
+ "pakietu rpmdb-redhat)"
+ 
+-#: ../rpmpopt:103
++#: ../rpmpopt:114
++msgid ""
++"find package name that contains a required capability (needs rpmdb-redhat "
++"package installed)"
++msgstr ""
++"znajd¼ nazwê pakietu, który wymaga w³asno¶ci (wymaga zainstalowanego "
++"pakietu rpmdb-redhat)"
++
++#: ../rpmpopt:124
+ msgid "set buildroot <policy> (e.g. compress man pages)"
+-msgstr "ustaw <polisê> buildroot (np. kompresowanie stron manuala)"
++msgstr "ustaw <politykê> buildroot (np. kompresowanie stron manuala)"
+ 
+-#: ../rpmpopt:104
++#: ../rpmpopt:125
+ msgid "<policy>"
+-msgstr "<polisa>"
++msgstr "<polityka>"
+ 
+-#: ../rpmpopt:179 ../rpmpopt:194 ../rpmpopt:209
++#: ../rpmpopt:209 ../rpmpopt:224 ../rpmpopt:239
+ msgid "enable configure <option> for build"
+ msgstr "w³±cz <opcjê> konfiguracji przy budowaniu"
+ 
+-#: ../rpmpopt:180 ../rpmpopt:183 ../rpmpopt:195 ../rpmpopt:198 ../rpmpopt:210
+-#: ../rpmpopt:213
++#: ../rpmpopt:210 ../rpmpopt:213 ../rpmpopt:225 ../rpmpopt:228
++#: ../rpmpopt:240 ../rpmpopt:243
+ msgid "<option>"
+ msgstr "<opcja>"
+ 
+-#: ../rpmpopt:182 ../rpmpopt:197 ../rpmpopt:212
++#: ../rpmpopt:212 ../rpmpopt:227 ../rpmpopt:242
+ msgid "disable configure <option> for build"
+ msgstr "wy³±cz <opcjê> konfiguracji przy budowaniu"
+ 
+-#: ../rpmpopt:186 ../rpmpopt:201 ../rpmpopt:216 ../rpmpopt:224 ../rpmpopt:232
+-#: ../rpmpopt:240 ../rpmpopt:248 ../rpmpopt:256 ../rpmpopt:264 ../rpmpopt:337
+-#: ../rpmpopt:409 ../rpmpopt:417
++#: ../rpmpopt:216 ../rpmpopt:231 ../rpmpopt:246 ../rpmpopt:254
++#: ../rpmpopt:262 ../rpmpopt:270 ../rpmpopt:278 ../rpmpopt:286
++#: ../rpmpopt:294 ../rpmpopt:389 ../rpmpopt:483 ../rpmpopt:491
+ msgid "use database in DIRECTORY"
+ msgstr "u¿yj bazy danych w KATALOGu"
+ 
+-#: ../rpmpopt:187 ../rpmpopt:202 ../rpmpopt:217 ../rpmpopt:225 ../rpmpopt:233
+-#: ../rpmpopt:241 ../rpmpopt:249 ../rpmpopt:257 ../rpmpopt:265 ../rpmpopt:338
+-#: ../rpmpopt:410 ../rpmpopt:418
++#: ../rpmpopt:217 ../rpmpopt:232 ../rpmpopt:247 ../rpmpopt:255
++#: ../rpmpopt:263 ../rpmpopt:271 ../rpmpopt:279 ../rpmpopt:287
++#: ../rpmpopt:295 ../rpmpopt:390 ../rpmpopt:484 ../rpmpopt:492
+ msgid "DIRECTORY"
  msgstr "KATALOG"
  
++#: ../rpmpopt:373 ../rpmpopt:467
++msgid "list file names with security context"
++msgstr "wypisz nazwy plików z kontekstami bezpieczeñstwa"
++
  # --- from popt/po/pl.po (in popt.h, not in .pot) ---
 -#~ msgid "Options implemented via popt alias/exec:"
 -#~ msgstr "Opcje zaimplementowane poprzez popt alias/exec:"
