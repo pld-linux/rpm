@@ -7,7 +7,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.2
-Release:	82
+Release:	83
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -73,6 +73,7 @@ Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-test_stage.patch
 Patch39:        %{name}-exclude.patch
 Patch40:        %{name}-check_files.patch
+Patch41:        %{name}-choke-on-evil-doc.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.50
@@ -391,6 +392,7 @@ construir pacotes usando o RPM.
 %patch38 -p1
 %patch39 -p1
 #%patch40 -p1
+%patch41 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
