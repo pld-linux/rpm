@@ -18,7 +18,7 @@ diff -Nura rpm-4.3/doc/pl/rpmbuild.8 rpm-4.3.aft/doc/pl/rpmbuild.8
  Przechodzi wprost do podanego etapu (tzn. pomija wszystkie etapy
 -prowadz±ce do podanego). Prawid³owe tylko z \fB-bc\fR i \fB-bi\fR.
 +prowadz±ce do podanego). Prawid³owe tylko z \fB-bc\fR, \fB-bi\fR
-+i \fB-bb\fR (-bi --short-circuit mo¿e odnosiæ siê tylko do PLD).
++i \fB-bb\fR (-bb --short-circuit odnosi siê do PLD i jest niezalecane).
  .TP
  \fB--sign\fR
  Osadza w pakiecie sygnaturê GPG. Sygnatura ta mo¿e byæ u¿ywana do
@@ -32,8 +32,8 @@ diff -Nura rpm-4.3/doc/rpmbuild.8 rpm-4.3.aft/doc/rpmbuild.8
 -up to the specified stage).  Only valid with \fB-bc\fR
 -and \fB-bi\fR.
 +up to the specified stage).  Only valid with \fB-bc\fR, \fB-bi\fR
-+and \fB-bb\fR (note: -bi in conjunction with --short-circuit maybe
-+is PLD-specific only).
++and \fB-bb\fR (note: -bb in conjunction with --short-circuit is
++PLD-specific and not recommended).
  .TP
  \fB--sign\fR
  Embed a GPG signature in the package. This signature can be used
