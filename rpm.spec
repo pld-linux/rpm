@@ -862,7 +862,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %endif
 %ifarch amd64
 %{_rpmlibdir}/amd64*
-%{_rpmlibdir}/x86_64*
 %endif
 %ifarch sparc sparc64
 %{_rpmlibdir}/sparc*
