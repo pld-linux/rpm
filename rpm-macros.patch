@@ -39,3 +39,15 @@ diff -Nur rpm-3.0.1/macros.in rpm-3.0.1.pld/macros.in
  
  #==============================================================================
  # ---- config.guess platform macros.
+diff -ru rpm-3.0.1.old/configure.in rpm-3.0.1/configure.in
+--- rpm-3.0.1.old/configure.in	Wed May 19 10:17:34 1999
++++ rpm-3.0.1/configure.in	Wed May 19 10:18:32 1999
+@@ -781,7 +781,7 @@
+ export LIBS INCPATH
+ 
+ AC_CONFIG_SUBDIRS(popt)
+-AC_OUTPUT([Makefile rpmrc macros lib/Makefile
++AC_OUTPUT([Makefile rpmrc macros macros.pld lib/Makefile
+ 	build/Makefile tools/Makefile scripts/Makefile
+ 	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
+ 	misc/Makefile po/Makefile.in intl/Makefile],
