@@ -77,7 +77,7 @@
 +      else
 +	return (void *) p;
 +    }
-+  if(l > nmemb-1)
++  if((long)l > (long)nmemb-1)
 +	  return NULL;
 +  p = (void *) (((const char *) base) + (l * size));
 +  return (void *)p;
