@@ -160,34 +160,36 @@ gzip -9fn $RPM_BUILD_ROOT%{_mandir}/{{ru,pl}/man8/*,man8/*} \
 	RPM-PGP-KEY CHANGES docs/*
 
 %pre
-if [ -e /var/state/rpm ] && [ -L /var/state/rpm ]; then
+if [ -L /var/state/rpm ]; then
 	echo "WARNING: upgrade cannot be done because /var/state/rpm is symlink"
 	exit 1
 fi
-if [ -e /var/lib/rpm ] && [ ! -L /var/lib/rpm ]; then
-	mkdir -p /var/state/rpm
-	cp -ap /var/lib/rpm/* /var/state/rpm
-	rm -rf /var/lib/rpm
-	ln -sf /var/state/rpm /var/lib/rpm
-	echo "RPM Database moved from /var/lib/rpm to /var/state/rpm" 1>&2
-	echo "Run second time upgradeing rpm package for complete operation" 1>&2
-	exit 1
-fi
-if [ -e /var/db/rpm ] && [ ! -L /var/db/rpm ]; then
-	mkdir -p /var/state/rpm
-	cp -ap /var/db/rpm/* /var/state/rpm
-	rm -rf /var/db/rpm
-	ln -sf /var/state/rpm /var/db/rpm
-	echo "RPM Database moved from /var/db/rpm to /var/state/rpm" 1>&2
-	echo "Run second time upgradeing rpm package for complete operation" 1>&2
-	exit 1
+if [ ! -d /var/state/rpm ]; then 
+	if [ -e /var/lib/rpm ] && [ ! -L /var/lib/rpm ]; then
+		mkdir -p /var/state/rpm
+		cp -ap /var/lib/rpm/* /var/state/rpm
+		rm -rf /var/lib/rpm
+		ln -sf /var/state/rpm /var/lib/rpm
+		echo "RPM Database moved from /var/lib/rpm to /var/state/rpm" 1>&2
+		echo "Run second time upgradeing rpm package for complete operation" 1>&2
+		exit 1
+	fi
+	if [ -e /var/db/rpm ] && [ ! -L /var/db/rpm ]; then
+		mkdir -p /var/state/rpm
+		cp -ap /var/db/rpm/* /var/state/rpm
+		rm -rf /var/db/rpm
+		ln -sf /var/state/rpm /var/db/rpm
+		echo "RPM Database moved from /var/db/rpm to /var/state/rpm" 1>&2
+		echo "Run second time upgradeing rpm package for complete operation" 1>&2
+		exit 1
+	fi
 fi
 
 %post
-if [ -e /var/lib/rpm ] && [ -L /var/lib/rpm ]; then
+if [ -L /var/lib/rpm ]; then
 	rm -rf /var/lib/rpm
 fi
-if [ -e /var/db/rpm ] &&[ -L /var/db/rpm ]; then
+if [ -L /var/db/rpm ]; then
 	rm -rf /var/db/rpm
 fi
 /bin/rpm --initdb
