@@ -1,0 +1,37 @@
+--- rpm-4.1/tools/striptofile.c~	Wed May 14 22:09:57 2003
++++ rpm-4.1/tools/striptofile.c	Wed May 14 22:29:45 2003
+@@ -1,8 +1,8 @@
+ #include "system.h"
+ 
+ #include <elf.h>
+-#include <libelf/libelf.h>
+-#include <libelf/gelf.h>
++#include <libelf.h>
++#include <gelf.h>
+ #include <popt.h>
+ 
+ #include "sections.h"
+--- rpm-4.1/tools/sections.h~	Thu Aug 22 18:03:06 2002
++++ rpm-4.1/tools/sections.h	Wed May 14 22:30:51 2003
+@@ -1,7 +1,7 @@
+ #ifndef SECTIONS_H
+ #define SECTIONS_H
+ 
+-#include <libelf/gelf.h>
++#include <gelf.h>
+ 
+ typedef struct {
+   GElf_Word debug_section; /* Section index in debug file. */
+--- rpm-4.1/tools/unstripfile.c~	Wed May 14 22:09:57 2003
++++ rpm-4.1/tools/unstripfile.c	Wed May 14 22:34:42 2003
+@@ -1,8 +1,8 @@
+ #include "system.h"
+ 
+ #include <elf.h>
+-#include <libelf/libelf.h>
+-#include <libelf/gelf.h>
++#include <libelf.h>
++#include <gelf.h>
+ 
+ #include "sections.h"
+ #include "utils.h"
