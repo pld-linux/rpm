@@ -31,9 +31,12 @@ use Safe;
 sub new {
 	my $class = shift;
 	my $self = {
-		inc => [ sort { length $b cmp length $a } grep m#^/#, @INC ],
+		inc => [
+			sort { length $b cmp length $a } grep m#^/#,
+			map { y#/#/#s; s#/$##; $_ } @INC
+		],
 		provide => {},
-		safe => Safe->new,
+		safe    => Safe->new,
 		@_,
 	};
 	bless $self, $class;
@@ -57,7 +60,7 @@ sub process_file {
 	# if the file lives under @INC, we can
 	# obtain the package name from it's path
 	for (@{ $self->{inc} }) {
-		if ($file =~ m#\Q$_\E/?(.+)$#) {    # we can't use ^ here
+		if ($file =~ m#\Q$_\E/(.+)$#) {    # we can't use ^ here
 			$package = $1;
 
 			if ($package !~ s/\.pm$//) {    # it's a *.pl
