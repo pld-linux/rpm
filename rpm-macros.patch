@@ -12,7 +12,7 @@ diff -urN rpm-4.0.2.org/configure.in rpm-4.0.2/configure.in
  	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
 diff -urN rpm-4.0.2.org/macros.in rpm-4.0.2/macros.in
 --- rpm-4.0.2.org/macros.in	Mon Apr  2 10:12:52 2001
-+++ rpm-4.0.2/macros.in	Mon Apr  2 10:30:19 2001
++++ rpm-4.0.2/macros.in	Mon Apr  2 11:43:51 2001
 @@ -90,7 +90,7 @@
  %_bzip2bin		@BZIP2BIN@
  %_dbpath		%{_var}/lib/rpm
@@ -75,7 +75,7 @@ diff -urN rpm-4.0.2.org/macros.in rpm-4.0.2/macros.in
  %{?__libtoolize:[ -f configure.in ] && %{__libtoolize} --copy --force} ; \
 -./configure %{_target_platform} \\\
 +./configure \\\
-+	--host=%{_host} \\\
++	--host=%{_target_platform} \\\
   	--prefix=%{_prefix} \\\
  	--exec-prefix=%{_exec_prefix} \\\
  	--bindir=%{_bindir} \\\

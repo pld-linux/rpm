@@ -13,7 +13,7 @@
  CXXFLAGS="${CXXFLAGS:-%rpmcflags}" ; export CXXFLAGS ; \
  FFLAGS="${FFLAGS:-%rpmcflags}" ; export FFLAGS ; \
  ./configure \
- 	--host=%{_host} \
+	--host=%{_target_platform} \
  	--prefix=%{_prefix} \
 	--exec-prefix=%{_exec_prefix} \
 	--bindir=%{_bindir} \
