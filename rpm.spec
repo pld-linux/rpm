@@ -246,7 +246,7 @@ Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
 Requires:	bzip2-static
 Requires:	db-static
-Requires:	libelf-static
+Requires:	elfutils-static
 Requires:	popt-static >= 1.7
 Requires:	zlib-static
 
