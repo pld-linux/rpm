@@ -12,8 +12,8 @@
 # Based on autogen.sh from GNOME and orginal GNUconfigure
 #
 %GNUconfigure(MCs:)      \
-  CFLAGS="$(CFLAGS:-%{optflags})" ; export CFLAGS; \
-  LDFLAGS="$(LDFLAGS:-%{-s:-s}"  ; export LDFLAGS; \
+  CFLAGS="${CFLAGS:-'%optflags'}" ; export CFLAGS; \
+  LDFLAGS="${LDFLAGS:-'%{-s:-s}'}"  ; export LDFLAGS; \
   %{-C:_mydir="`pwd`"; %{-M: %{__mkdir} -p %{-C*};} cd %{-C*}} \
   dirs="`find ${_mydir} -name configure.in -print`"; export dirs; \
     for coin in `echo ${dirs}` \
@@ -58,9 +58,9 @@ done \
   %{-C:cd ${_mydir}; unset _mydir}
 
 #-----------------------------------------------------------------
-%configure { CFLAGS="$(CFLAGS:-$RPM_OPT_FLAGS)" ; export CFLAGS ; \
- CXXFLAGS="$(CXXFLAGS:-$RPM_OPT_FLAGS)" ; export CXXFLAGS ; \
- FFLAGS="$(FFLAGS:-$RPM_OPT_FLAGS)" ; export FFLAGS ; \
+%configure { CFLAGS="${CFLAGS:-'%optflags'}" ; export CFLAGS ; \
+ CXXFLAGS="${CXXFLAGS:-'%optflags'}" ; export CXXFLAGS ; \
+ FFLAGS="${FFLAGS:-'%optflags'}" ; export FFLAGS ; \
  ./configure %{_target_platform} \
  	--prefix=%{_prefix} \
 	--exec-prefix=%{_exec_prefix} \
