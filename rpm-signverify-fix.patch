@@ -1,0 +1,26 @@
+--- rpm-4.0.2/lib/rpmchecksig.c	Wed Apr  3 15:13:56 2002
++++ rpm-4.0.2/lib/rpmchecksig.c.mis	Wed Apr  3 15:21:54 2002
+@@ -330,7 +330,6 @@ int rpmCheckSig(rpmCheckSigFlags flags, 
+ 		      case RPMSIGTAG_PGP5:	/* XXX legacy */
+ 		      case RPMSIGTAG_PGP:
+ 			switch (res3) {
+-			/* Do not consider these a failure */
+ 			case RPMSIG_NOKEY:
+ 			case RPMSIG_NOTTRUSTED:
+ 			{   int offset = 7;
+@@ -349,6 +348,7 @@ int rpmCheckSig(rpmCheckSigFlags flags, 
+ 				strncat(untrustedKeys, tempKey + offset, 8);
+ 			      }
+ 			    }
++                            res2 = 1;
+ 			}   break;
+ 			default:
+ 			    strcat(buffer, "PGP ");
+@@ -365,6 +365,7 @@ int rpmCheckSig(rpmCheckSigFlags flags, 
+ 			    tempKey = strstr(result, "key ID");
+ 			    if (tempKey)
+ 				strncat(missingKeys, tempKey+7, 8);
++                            res2 = 1;                            
+ 			    break;
+ 			default:
+ 			    strcat(buffer, "GPG ");
