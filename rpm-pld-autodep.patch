@@ -49,8 +49,8 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
 +	if (r==0) j++;
 +	else {
 +		rpmMessage(RPMMESS_NORMAL, 
-+			"Compilation of regular expresion '%s'"
-+		        " (expanded from '%s') failed. Skipping it.\n",
++			_("Compilation of regular expresion '%s'"
++		        " (expanded from '%s') failed. Skipping it.\n"),
 +			patterns[i],str);
 +	}
 +    }
@@ -91,7 +91,7 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
  	if (fc->skipProv)
  	    return 0;
 +	noauto=rpmfcExpandRegexps("%{_noautoprov}",&noauto_c);
-+	rpmMessage(RPMMESS_DEBUG, "%i _noautoprov patterns.\n",noauto_c);
++	rpmMessage(RPMMESS_DEBUG, _("%i _noautoprov patterns.\n"),noauto_c);
  	xx = snprintf(buf, sizeof(buf), "%%{?__%s_provides}", nsdep);
  	depsp = &fc->provides;
  	dsContext = RPMSENSE_FIND_PROVIDES;
@@ -100,7 +100,7 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
  	if (fc->skipReq)
  	    return 0;
 +	noauto=rpmfcExpandRegexps("%{_noautoreq}",&noauto_c);
-+	rpmMessage(RPMMESS_DEBUG, "%i _noautoreq patterns.\n",noauto_c);
++	rpmMessage(RPMMESS_DEBUG, _("%i _noautoreq patterns.\n"),noauto_c);
  	xx = snprintf(buf, sizeof(buf), "%%{?__%s_requires}", nsdep);
  	depsp = &fc->requires;
  	dsContext = RPMSENSE_FIND_REQUIRES;
@@ -109,11 +109,11 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
  /*@=branchstate@*/
  
 +	    for(j=0;j<noauto_c;j++){
-+		rpmMessage(RPMMESS_DEBUG, "Checking %c: '%s'"
-+		    " against _noauto expr. #%i\n",deptype,N,j);
++		rpmMessage(RPMMESS_DEBUG, _("Checking %c: '%s'"
++		    " against _noauto expr. #%i\n"),deptype,N,j);
 +		if (!regexec(&noauto[j],N,0,NULL,0)) {
-+		    rpmMessage(RPMMESS_NORMAL, "Skipping %c: '%s'"
-+			" as it matches _noauto expr. #%i\n",deptype,N,j);
++		    rpmMessage(RPMMESS_NORMAL, _("Skipping %c: '%s'"
++			" as it matches _noauto expr. #%i\n"),deptype,N,j);
 +		    break;
 +		}
 +	    }
@@ -312,7 +312,7 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
 +    
 +    ts = rpmtsCreate(); /* XXX ts created in main() should be used */
 +    
-+    rpmMessage(RPMMESS_NORMAL, "Searching for required packages....\n");
++    rpmMessage(RPMMESS_NORMAL, _("Searching for required packages....\n"));
 +
 +    nddict = argvCount(fc->ddict);
 +    previx = -1;
@@ -336,31 +336,31 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
 +
 +        if (deptype!='R') continue;
 +
-+        rpmMessage(RPMMESS_DEBUG, "#%i requires: %s,%s,%i\n",ix,N,EVR,Flags);
++        rpmMessage(RPMMESS_DEBUG, _("#%i requires: %s,%s,%i\n"),ix,N,EVR,Flags);
 +        if (EVR && EVR[0]) {
-+            rpmMessage(RPMMESS_DEBUG, "skipping #%i require\n");
++            rpmMessage(RPMMESS_DEBUG, _("skipping #%i require\n"));
 +            continue;
 +        }
 +        for(j=0;j<noautoreqdep_c;j++) 
 +            if (!regexec(&noautoreqdep[j],N,0,NULL,0)) {
 +                rpmMessage(RPMMESS_NORMAL, 
-+                        "skipping %s requirement processing"
-+			" (matches noautoreqdep pattern: #%i)\n",N,j);
++                        _("skipping %s requirement processing"
++			" (matches noautoreqdep pattern #%i)\n"),N,j);
 +                break;
 +            }
 +        if (j<noautoreqdep_c) continue;
 +        if (N[0]=='/') {
-+            rpmMessage(RPMMESS_DEBUG, "skipping #%i require (is file requirement)\n");
++            rpmMessage(RPMMESS_DEBUG, _("skipping #%i require (is file requirement)\n"));
 +            continue;
 +        }
 +        it=rpmtsInitIterator(ts, RPMTAG_PROVIDENAME, N, 0);
 +        if (!it) {
-+            rpmMessage(RPMMESS_DEBUG, "%s -> not found\n",N);
++            rpmMessage(RPMMESS_DEBUG, _("%s -> not found\n"),N);
 +            continue;
 +        }
-+        rpmMessage(RPMMESS_DEBUG, "Iterator: %p\n",it);
++        rpmMessage(RPMMESS_DEBUG, _("Iterator: %p\n"),it);
 +        if (rpmdbGetIteratorCount(it)>1) {
-+            rpmMessage(RPMMESS_DEBUG, "%s -> multiple (skipping)\n",N);
++            rpmMessage(RPMMESS_DEBUG, _("%s -> multiple (skipping)\n"),N);
 +            rpmdbFreeIterator(it);
 +            continue;
 +        }
@@ -369,7 +369,7 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
 +        r=rpmHeaderGetEntry(hdr,RPMTAG_NAME,NULL,(void **)&hname, NULL);
 +        assert(r<2);
 +        if (!strcmp(hname,N)) {
-+            rpmMessage(RPMMESS_DEBUG, "%s -> %s (skipping)\n",N,hname);
++            rpmMessage(RPMMESS_DEBUG, _("%s -> %s (skipping)\n"),N,hname);
 +            rpmdbFreeIterator(it);
 +            continue;
 +        }
@@ -425,8 +425,8 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
 +		    if (!regexec(&noautoprovfiles[j],
 +			    fc->fn[fc->ix]+buildroot_l,0,NULL,0)) {
 +			rpmMessage(RPMMESS_NORMAL, 
-+				"skipping %s provides detection"
-+				" (matches noautoprovfiles pattern #%i)\n",
++				_("skipping %s provides detection"
++				" (matches noautoprovfiles pattern #%i)\n"),
 +				fc->fn[fc->ix],j);
 +			findprov=0;
 +			break;
@@ -436,8 +436,8 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
 +		    if (!regexec(&noautoreqfiles[j],
 +			    fc->fn[fc->ix]+buildroot_l,0,NULL,0)) {
 +			rpmMessage(RPMMESS_NORMAL, 
-+				"skipping %s requires detection"
-+				" (matches noautoreqfiles pattern #%i)\n",
++				_("skipping %s requires detection"
++				" (matches noautoreqfiles pattern #%i)\n"),
 +				fc->fn[fc->ix],j);
 +			findreq=0;
 +			break;
@@ -456,3 +456,143 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
  /*@-boundswrite@*/
      /* Generate per-file indices into package dependencies. */
      nddict = argvCount(fc->ddict);
+--- rpm-4.3/po/POTFILES.in.orig	2004-01-04 03:13:02.000000000 +0100
++++ rpm-4.3/po/POTFILES.in	2004-02-01 21:05:50.567248776 +0100
+@@ -22,6 +22,7 @@
+ build/parseSpec.c
+ build/poptBT.c
+ build/reqprov.c
++build/rpmfc.c
+ build/spec.c
+ lib/cpio.c
+ lib/depends.c
+--- rpm-4.3/po/pl.po.orig	2004-02-01 20:53:10.000000000 +0100
++++ rpm-4.3/po/pl.po	2004-02-01 21:20:36.532561576 +0100
+@@ -1295,6 +1295,127 @@
+ msgid "lookup i18N strings in specfile catalog"
+ msgstr "wyszukaj wpisy I18N w katalogu pliku spec"
+ 
++#: build/rpmfc.c:94
++#, c-format
++msgid "\texecv(%s) pid %d\n"
++msgstr "\texecv(%s) pid %d\n"
++
++#. XXX this error message is probably not seen.
++#: build/rpmfc.c:100
++#, c-format
++msgid "Couldn't exec %s: %s\n"
++msgstr "Nie mo¿na uruchomiæ %s: %s\n"
++
++#: build/rpmfc.c:105
++#, c-format
++msgid "Couldn't fork %s: %s\n"
++msgstr "Nie mo¿na wykonaæ fork %s: %s\n"
++
++#: build/rpmfc.c:190
++#, c-format
++msgid "\twaitpid(%d) rc %d status %x\n"
++msgstr "\twaitpid(%d) rc %d status %x\n"
++
++#: build/rpmfc.c:194
++#, c-format
++msgid "%s failed\n"
++msgstr "%s nie powiod³o siê\n"
++
++#: build/rpmfc.c:198
++#, c-format
++msgid "failed to write all data to %s\n"
++msgstr "Nie uda³o siê zapisaæ wszystkich danych do %s\n"
++
++#: build/rpmfc.c:334
++#, c-format
++msgid "Compilation of regular expresion '%s' (expanded from '%s') failed. Skipping it.\n"
++msgstr "Kompilacja wyra¿enia regularnego '%s' (powsta³ego z '%s') nie powiod³a siê; pominiêto.\n"
++
++#: build/rpmfc.c:395
++#, c-format
++msgid "%i _noautoprov patterns.\n"
++msgstr "%i wzorców _noautoprov.\n"
++
++#: build/rpmfc.c:405
++#, c-format
++msgid "%i _noautoreq patterns.\n"
++msgstr "%i wzorców _noautoreq.\n"
++
++#: build/rpmfc.c:459
++#, c-format
++msgid "Checking %c: '%s' against _noauto expr. #%i\n"
++msgstr "Sprawdzanie %c: '%s' z wyra¿eniem _noauto #%i\n"
++
++#: build/rpmfc.c:462
++#, c-format
++msgid "Skipping %c: '%s' as it matches _noauto expr. #%i\n"
++msgstr "Pominiêto %c: '%s' pasuj±ce do wyra¿enia _noauto #%i\n"
++
++#. XXX ts created in main() should be used
++#: build/rpmfc.c:1173
++msgid "Searching for required packages....\n"
++msgstr "Poszukiwanie wymaganych pakietów...\n"
++
++#: build/rpmfc.c:1197
++#, c-format
++msgid "#%i requires: %s,%s,%i\n"
++msgstr "#%i wymaga: %s,%s,%i\n"
++
++#: build/rpmfc.c:1199
++#, c-format
++msgid "skipping #%i require\n"
++msgstr "pominiêto zale¿no¶æ #%i\n"
++
++#: build/rpmfc.c:1205
++#, c-format
++msgid "skipping %s requirement processing (matches noautoreqdep pattern #%i)\n"
++msgstr "pominiêto przetwarzanie zale¿no¶ci %s (pasuje do wzorca noautoreqdep #%i)\n"
++
++#: build/rpmfc.c:1211
++#, c-format
++msgid "skipping #%i require (is file requirement)\n"
++msgstr "pominiêto zale¿no¶æ #%i (zale¿no¶æ od pliku)\n"
++
++#: build/rpmfc.c:1216
++#, c-format
++msgid "%s -> not found\n"
++msgstr "%s -> nie znaleziono\n"
++
++#: build/rpmfc.c:1219
++#, c-format
++msgid "Iterator: %p\n"
++msgstr "Iterator: %p\n"
++
++#: build/rpmfc.c:1221
++#, c-format
++msgid "%s -> multiple (skipping)\n"
++msgstr "%s -> wiele (pominiêto)\n"
++
++#: build/rpmfc.c:1230
++#, c-format
++msgid "%s -> %s (skipping)\n"
++msgstr "%s -> %s (pominiêto)\n"
++
++#: build/rpmfc.c:1295
++#, c-format
++msgid "skipping %s provides detection (matches noautoprovfiles pattern #%i)\n"
++msgstr "pominiêto wykrywanie w³asno¶ci %s (pasuje do wzorca noautoprovfiles #%i)\n"
++
++#: build/rpmfc.c:1306
++#, c-format
++msgid "skipping %s requires detection (matches noautoreqfiles pattern #%i)\n"
++msgstr "pominiêto wykrywanie w³asno¶ci %s (pasuje do wzorca noautoreqfiles #%i)\n"
++
++#: build/rpmfc.c:1642
++#, c-format
++msgid "Finding  %s: %s\n"
++msgstr "Poszukiwanie %s: %s\n"
++
++#: build/rpmfc.c:1648 build/rpmfc.c:1657
++#, c-format
++msgid "Failed to find %s:\n"
++msgstr "Nie uda³o siê odnale¼æ %s:\n"
++
+ #: build/spec.c:237
+ #, c-format
+ msgid "line %d: Bad number: %s\n"
