@@ -338,9 +338,9 @@ echo "Compress kernel modules if any."; \
 #
 %_noautoreqfiles	%(sed -e s'/#.*//' /etc/rpm/noautoreqfiles)
 %_noautoprovfiles	%(sed -e s'/#.*//' /etc/rpm/noautoprovfiles)
-#%_noautoreq		%{nil}
+%_noautoreq		%(sed -e s'/#.*//' /etc/rpm/noautoreq)
 %_noautoreqdep		%(sed -e s'/#.*//' /etc/rpm/noautoreqdep)
-#%_noautoprov		%{nil}
+%_noautoprov		%(sed -e s'/#.*//' /etc/rpm/noautoprov)
 #%_noautocompressdoc	%{nil}
 #
 %_missing_doc_files_terminate_build	1%{nil}
@@ -350,8 +350,10 @@ echo "Compress kernel modules if any."; \
 %_emacs_lispdir %(emacs %___emacs_lispdir_helper)
 %_xemacs_lispdir %(xemacs %___emacs_lispdir_helper)
 
-%__php_provides	@RPMCONFIGDIR@/php.prov
-%__php_requires @RPMCONFIGDIR@/php.req
+%__php_provides	%{nil}
+%__php_requires %{nil}
+%__perl_provides %{nil}
+%__perl_requires %{nil}
 
 # Perl specific macro definitions.
 %perl_privlib	%(eval "`%{__perl} -V:installprivlib`"; echo $installprivlib)
