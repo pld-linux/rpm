@@ -36,7 +36,6 @@ Source11:	%{name}-find-requires
 Source12:	%{name}-non-english-man-pages.tar.bz2
 Source13:	%{name}-macros.python
 Patch0:		%{name}-%{name}rc.patch
-Patch1:		%{name}-macros.patch
 Patch2:		%{name}-arch.patch
 Patch3:		%{name}-%{name}popt.patch
 Patch4:		%{name}-perl-macros.patch
@@ -454,8 +453,6 @@ Este pacote contém scripts e programas executáveis que são usados para
 construir pacotes usando o RPM.
 
 %prep
-# seems applied, wiget please check it 
-#%patch1 -p1 
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -486,7 +483,7 @@ construir pacotes usando o RPM.
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
-#install %{SOURCE9} scripts/find-lang.sh
+install %{SOURCE9} scripts/find-lang.sh
 install %{SOURCE13} macros.python.in
 install %{SOURCE6} scripts/find-perl-provides
 install %{SOURCE7} scripts/find-perl-requires
