@@ -87,7 +87,7 @@ done \
 %_aclocaldir	%(aclocal --print-ac-dir)
 
 # Location of pkgconfig files
-%_pkgcondigdir	/usr/lib/pkgconfig
+%_pkgconfigdir	/usr/lib/pkgconfig
 
 # Location of top applink dir
 %_applnkdir      /usr/X11R6/share/applnk
