@@ -100,7 +100,7 @@
  
 --- rpm-3.0.3.perl/scripts/perl.req	Sat Jun  5 22:52:31 1999
 +++ rpm-3.0.3/scripts/perl.req	Fri Oct 22 12:21:33 1999
-@@ -26,16 +26,20 @@
+@@ -26,16 +26,22 @@
  
  
  foreach $module (sort keys %require) {
@@ -109,7 +109,9 @@
 +    if ($module =~ /^[0-9._]+$/) {
 +      print "perl >= $module\n";
 +    } else {
-+      print "perl($module)\n";
++      if ($module !~ /\.ph$/ && $module !~ /\.pl/) {
++        print "perl($module)\n";
++      }
 +    }
    } else {
  
