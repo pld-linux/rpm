@@ -427,8 +427,7 @@ echo "Compress kernel modules if any."; \
 %py_ocomp       python -O -c "import compileall; import sys; compileall.compile_dir(sys.argv[1], ddir=sys.argv[1][len('$RPM_BUILD_ROOT'):])"
 
 # Software written in Python language require Python with main version
-# unchanged
-%pyrequires_eq() Requires:       %1 >= 1:%py_ver %1 < 1:%(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
+%pyrequires_eq() Requires:	python(bytecode) = %py_ver %1
 
 # depmod macro
 %depmod() { \
