@@ -107,24 +107,34 @@ done \
 # Requires: xargs, find
 #
 %__spec_install_post_compress_docs { \
-%{verbose:set -x}%{!verbose:exec > /dev/null}; \
-if [ -d "$RPM_BUILD_ROOT%{_mandir}" ]; then \
-	find "$RPM_BUILD_ROOT%{_mandir}" -type f -print | xargs %{__gzip} -9nf; \
-fi; \
-if [ -d "$RPM_BUILD_ROOT%{_infodir}" ]; then \
-	find $RPM_BUILD_ROOT%{_infodir} -type f -print | xrgs %{__gzip} -9nf; \
-fi; \
+echo "Compress man and info pages."; \
+%{?verbose:set -x;} \
+for i in /usr/share/man /usr/X11R6/man /usr/share/info; do \
+	if [ -d "$RPM_BUILD_ROOT$i" ]; then \
+		find "$RPM_BUILD_ROOT$i" -type f -print | xargs %{__gzip} -9nf; \
+	fi; \
+done; \
 }
 
 #-----------------------------------------------------------------
 # find and gzip all files in %{_mandir} and %{infodir}
 #
-# Requires: find, awk, strip
+# Requires: find, awk, strip, cut, xargs
 #
-%__spec_install_post_strip { \
-%{?debug:#}if [ -x /usr/lib/rpm/remove-unneeded-elf-sections ]; then \
-	/usr/lib/rpm/remove-unneeded-elf-sections %{buildroot}; \
-fi; \
+%__spec_install_post_strip {%{!?debug: \
+	%{?verbose:set -x;} \
+	echo "Strip executable binaries and shared object files."; \
+	filelist=`find $RPM_BUILD_ROOT -type f`; \
+	elfexelist=`echo $filelist | xargs -r file | \
+		awk '/ELF.*executable/ {print $1}' | cut -d: -f1`; \
+	elfsharedlist=`echo $filelist | xargs -r file | \
+		awk '/LF.*shared object/ {print $1}' | cut -d: -f1`; \
+	if [ -n "$elfexelist" ]; then \
+		strip --remove-section=.note  --remove-section=.comment $elfexelist; \
+	fi; \
+	if [ -n "$elfsharedlist" ]; then \
+		strip --strip-unneeded --remove-section=.note  --remove-section=.comment $elfsharedlist; \
+	fi; } \
 }
 
 #-----------------------------------------------------------------
@@ -133,6 +143,6 @@ fi; \
 # - strip all ELF executables and ELF shared objects if not %debug.
 #
 %__spec_install_post { \
-#%{__spec_install_post_strip} \
-#%{__spec_install_post_compress_docs} \
+%{__spec_install_post_strip} \
+%{__spec_install_post_compress_docs} \
 }
