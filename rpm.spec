@@ -1,8 +1,8 @@
 Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
-Version:	3.0.1
-Release:	15
+Version:	3.0.2
+Release:	7
 Group:		Base
 Group(pl):	Podstawowe
 Copyright:	GPL
@@ -62,9 +62,9 @@ Pliki nag³ówkowe i biblioteki statyczne.
 graficznych mened¿erów pakietów oraz innych narzêdzi, które wymagaj±
 construir pacotes usando o RPM.
 %setup  -q
-%patch0 -p1 
+%patch0 -p0
 %patch1 -p1
-%patch2 -p1
+%patch2 -p0
 %patch1 -p1
 %patch4 -p1 
 %patch5 -p1
