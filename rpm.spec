@@ -26,7 +26,7 @@ BuildPrereq:	zlib-static
 BuildPrereq:	patch >= 2.2
 BuildPrereq:	libtool
 BuildPrereq:	automake
-BuildPrereq:	autoconf
+BuildPrereq:	autoconf >= 2.13-8
 BuildPrereq:	gettext
 Requires:	glibc >= 2.1
 BuildRoot:	/tmp/%{name}-%{version}-root
