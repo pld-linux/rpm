@@ -2,7 +2,7 @@ Summary:	Red Hat (and now also PLD) Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0.2
-Release:	8
+Release:	9
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -240,6 +240,14 @@ install %{SOURCE3} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 install %{SOURCE10} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides
 install %{SOURCE11} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
+install %{SOURCE15} $RPM_BUILD_ROOT%{_libdir}/rpm/compress-doc
+
+install rpmio/ugid.h $RPM_BUILD_ROOT%{_includedir}/rpm
+
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm
+cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
+# customized rpm macros - global for host
+#
 #%%_install_langs pl_PL:en_US
 %%distribution PLD
 EOF
@@ -263,6 +271,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/rpmv
 %attr(755,root,root) %{_libdir}/librpm*.so.*.*
 %attr(755,root,root) %{_libdir}/rpm/rpmdb
+%attr(755,root,root) %{_libdir}/rpm/rpmq
+%attr(755,root,root) %{_libdir}/rpm/rpmk
+%attr(755,root,root) %{_libdir}/rpm/rpmv
 %attr(755,root,root) %{_libdir}/librpm*.so.*.*
 %{_mandir}/man8/rpm.8*
 %lang(pl) %{_mandir}/pl/man8/rpm.8*
