@@ -575,6 +575,7 @@ install %{SOURCE5} scripts/find-lang.sh
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
+sed -i -e 's#%%package debug#%%package debuginfo#g' macros.in
 cat %{SOURCE11} >> macros.in
 %patch22 -p1
 %patch23 -p1
