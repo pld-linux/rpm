@@ -39,7 +39,7 @@ diff -urN rpm-3.0.5.orig/macros.in rpm-3.0.5/macros.in
 diff -urN rpm-3.0.5.orig/macros.perl.in rpm-3.0.5/macros.perl.in
 --- rpm-3.0.5.orig/macros.perl.in	Thu Jan  1 01:00:00 1970
 +++ rpm-3.0.5/macros.perl.in	Sun Jul 30 00:07:06 2000
-@@ -0,0 +1,11 @@
+@@ -0,0 +1,12 @@
 +# Perl specific macro definitions.
 +# To make use of these macros insert the following line into your spec file:
 +# %include @RPMCONFIGDIR@/macros.perl
@@ -50,6 +50,7 @@ diff -urN rpm-3.0.5.orig/macros.perl.in rpm-3.0.5/macros.perl.in
 +%define		perl_sitelib	%(eval "`perl -V:installsitelib`"; echo $installsitelib)
 +%define		perl_sitearch	%(eval "`perl -V:installsitearch`"; echo $installsitearch)
 +%define		perl_archlib	%(eval "`perl -V:installarchlib`"; echo $installarchlib)
++%define		perl_privlib	%(eval "`perl -V:installprivlib`"; echo $installprivlib)
 +
 diff -urN rpm-3.0.5.orig/scripts/Makefile.am rpm-3.0.5/scripts/Makefile.am
 --- rpm-3.0.5.orig/scripts/Makefile.am	Sun Jul  9 17:36:20 2000
