@@ -7,7 +7,7 @@ fi
 for i in `echo $@`; do
 	i=`echo $i | grep "\.php"`
 	if [ -n "$i" ]; then
-		j=`cat $i |grep -i ^require_once|egrep -v "^ \*"|cut -f 2 -d "\""|sed -e "s/\//_/"|cut -f 1 -d "."`
+		j=`cat $i |grep -i ^require_once|egrep -v "^ \*"|sed -e "s/['|\"]//" |cut -f 2 -d " "|sed -e "s/\//_/"|cut -f 1 -d "."`
 		if [ -n "$j" ]; then
 			for p in $j; do
 				echo "Requires:	pear($p)"
