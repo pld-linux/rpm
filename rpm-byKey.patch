@@ -1,0 +1,47 @@
+--- ./lib/rpmlib.h.org	Sun Jun 17 13:38:45 2001
++++ ./lib/rpmlib.h	Sun Jun 17 13:37:38 2001
+@@ -764,6 +764,7 @@
+     const char * byName;
+     const char * byVersion;
+     const char * byRelease;
++    const void * byKey;
+     Header byHeader;
+     /* these needs fields are misnamed -- they are used for the package
+        which isn't needed as well */
+--- ./lib/depends.c.org	Sun Jun 17 13:38:59 2001
++++ ./lib/depends.c	Sun Jun 17 13:36:56 2001
+@@ -1250,7 +1250,7 @@
+ }
+ 
+ static int checkPackageDeps(rpmTransactionSet ts, struct problemsSet * psp,
+-		Header h, const char * keyName, uint_32 multiLib)
++		Header h, const char * keyName, uint_32 multiLib, void *key)
+ {
+     const char * name, * version, * release;
+     const char ** requires;
+@@ -1311,6 +1311,7 @@
+ 	    psp->problems[psp->num].byName = xstrdup(name);
+ 	    psp->problems[psp->num].byVersion = xstrdup(version);
+ 	    psp->problems[psp->num].byRelease = xstrdup(release);
++	    psp->problems[psp->num].byKey = key;
+ 	    psp->problems[psp->num].needsName = xstrdup(requires[i]);
+ 	    psp->problems[psp->num].needsVersion = xstrdup(requiresEVR[i]);
+ 	    psp->problems[psp->num].needsFlags = requireFlags[i];
+@@ -1431,7 +1432,7 @@
+ 
+     rpmdbPruneIterator(mi, ts->removedPackages, ts->numRemovedPackages, 1);
+     while ((h = rpmdbNextIterator(mi)) != NULL) {
+-	if (checkPackageDeps(ts, psp, h, key, 0)) {
++	if (checkPackageDeps(ts, psp, h, key, 0,NULL)) {
+ 	    rc = 1;
+ 	    break;
+ 	}
+@@ -1995,7 +1996,7 @@
+     for (i = 0, p = ts->addedPackages.list; i < npkgs; i++, p++)
+     {
+ 
+-	rc = checkPackageDeps(ts, &ps, p->h, NULL, p->multiLib);
++	rc = checkPackageDeps(ts, &ps, p->h, NULL, p->multiLib,p->key);
+ 	if (rc)
+ 	    goto exit;
+ 
