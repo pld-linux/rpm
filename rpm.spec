@@ -76,14 +76,14 @@ BuildRequires:	zlib-static >= 1.1.4
 Obsoletes:	rpm-libs
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	rpm-libs
-%define __find_provides %{SOURCE4}
-%define _binary_payload w9.gzdio
+Conflicts:	glibc < 2.2
+
 %define		__find_provides	%{SOURCE4}
-%define py_ver         %(echo `python -c "import sys; print sys.version[:3]"`)
-%define py_prefix      %(echo `python -c "import sys; print sys.prefix"`)
-%define py_libdir      %{py_prefix}/lib/python%{py_ver}
-%define py_sitedir     %{py_libdir}/site-packages
-%define py_dyndir      %{py_libdir}/lib-dynload
+%define		_binary_payload	w9.gzdio
+
+%define		py_ver		%(echo `python -c "import sys; print sys.version[:3]"`)
+%define		py_prefix	%(echo `python -c "import sys; print sys.prefix"`)
+%define		py_libdir	%{py_prefix}/lib/python%{py_ver}
 %define		py_dyndir	%{py_libdir}/lib-dynload
 %define		pyrequires_eq() Requires:	%1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
 
@@ -253,6 +253,7 @@ Group:		Applications/File
 Requires:	/bin/id
 Requires:	awk
 Requires:	binutils
+Requires:	diffutils
 Requires:	file >= 3.31
 Requires:	gcc >= 3.0.3
 Requires:	gcc
