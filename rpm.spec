@@ -48,7 +48,7 @@ systemu.
 przechowywane w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
 %package libs
 Summary:	RPM shared libraries
-Summary(pl):	Bibliteki wspó³dzielone rpm-a
+Summary(pl):	Biblioteki wspó³dzielone rpm-a
 Group:		Libraries
 Group(pl):	Biblioteki
 Requires:	%{name} = %{version}
@@ -57,7 +57,7 @@ Requires:	%{name} = %{version}
 RPM shared libraries.
 
 %description -l pl libs
-Bibliteki wspó³dzielone rpm-a.
+Biblioteki wspó³dzielone rpm-a.
 
 do pacote, permissões dos arquivos, etc.
 Summary:	Header files and libraries 
@@ -77,7 +77,7 @@ Pliki nag³ówkowe i biblioteki statyczne.
 graficznych mened¿erów pakietów oraz innych narzêdzi, które wymagaj±
 ferramentas que precisem de conhecimento profundo de pacotes RPM.
 
-Summary(pl):	Bibliteki statyczne rpm-a
+Summary(pl):	Biblioteki statyczne rpm-a
 Summary(pl):	Biblioteki statyczne RPM-a
 Group(pl):	Programowanie/Biblioteki
 Summary(pt_BR):	Bibliotecas estáticas para o desenvolvimento de aplicações RPM
@@ -86,7 +86,7 @@ Requires:	%{name}-devel = %{version}
 
 %description static
 %description -l pl static
-Bibliteki statyczne rpm-a.
+Biblioteki statyczne rpm-a.
 %description static -l pl
 Bibliotecas estáticas para desenvolvimento.
 
