@@ -126,6 +126,7 @@ BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
 %endif
 Requires:	popt >= %{reqpopt_ver}
+Requires:	%{name}-lib = %{version}-%{release}
 Conflicts:	glibc < 2.2.92
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
