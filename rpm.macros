@@ -151,10 +151,10 @@
 # Location of desktop files
 %_desktopdir	/usr/share/applications
 
-# Location pixmaps for applnk/desktop files
+# Location of pixmaps for applnk/desktop files
 %_pixmapsdir	/usr/share/pixmaps
 
-# Location themable icons for applnk/desktop files
+# Location of themable icons for applnk/desktop files
 %_iconsdir	/usr/share/icons
 
 # Location of fonts directories
