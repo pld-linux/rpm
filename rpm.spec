@@ -25,7 +25,7 @@ Patch10:	rpm-exclude-examples-doc.patch
 Patch11:	rpm-db3.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
-Provides:	rpmlib(VersionedDependencies) <= 3.0.3-1
+Provides:	rpmlib(VersionedDependencies) = 3.0.3-1
 Requires:	glibc >= 2.1
 BuildRequires:	bzip2-static >= 1.0.1
 BuildRequires:	gdbm-static
