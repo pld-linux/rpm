@@ -15,8 +15,7 @@
 %include        /usr/lib/rpm/macros.python
 %define snap	20030610
 # versions of required libraries
-#define	reqdb_ver	4.2.50-1  -- when? now?
-%define	reqdb_ver	4.1.25-1
+%define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.9
 %define	beecrypt_ver	3.0.0-0.20030610.1
 %define rpm_macros_rev	1.132
@@ -30,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.28
+Release:	0.%{snap}.29
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -128,6 +127,8 @@ BuildRequires:	zlib-static
 %endif
 Requires:	popt >= %{reqpopt_ver}
 Conflicts:	glibc < 2.2.92
+# avoid SEGV caused by mixed db versions
+Conflicts:	poldek < 0.18.1-16
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # not needed now (rpm processes rpmlib(*) deps internally) and didn't work
@@ -433,6 +434,8 @@ Summary(pl):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	db >= %{reqdb_ver}
 Requires:	popt >= %{reqpopt_ver}
+# avoid SEGV caused by mixed db versions
+Conflicts:	poldek < 0.18.1-16
 
 %description lib
 RPMs library.
