@@ -5,12 +5,12 @@ diff -Nru rpm-4.1/lib/rpmrc.c rpm-4.1.new/lib/rpmrc.c
  	/* Expand ~/ to $HOME/ */
  	fn[0] = '\0';
  	if (r[0] == '~' && r[1] == '/') {
-+			const char * etc_dir = getenv("ETC_DIR");
++			const char * etc_dir = getenv("HOME_ETC");
  	    const char * home = getenv("HOME");
 -	    if (home == NULL) {
 +			if (etc_dir) {
 +	    	if (strlen(etc_dir) > (sizeof(fn) - strlen(r))) {
-+					rpmError(RPMERR_RPMRC, _("Cannot read %s, ETC_DIR is too large.\n"),r);
++					rpmError(RPMERR_RPMRC, _("Cannot read %s, HOME_ETC is too large.\n"),r);
 +					rc = 1;
 +					break;
 +	    	}
@@ -71,7 +71,7 @@ diff -Nru rpm-4.1/rpmio/macro.c rpm-4.1.new/rpmio/macro.c
 -		mfile += 2;
 -		strncpy(buf, home, sizeof(buf));
 -		strncat(buf, "/", sizeof(buf) - strlen(buf));
-+			char *etc_dir = getenv("ETC_DIR");
++			char *etc_dir = getenv("HOME_ETC");
 +
 +			if (etc_dir) {
 +				mfile += 2;
@@ -92,3 +92,16 @@ diff -Nru rpm-4.1/rpmio/macro.c rpm-4.1.new/rpmio/macro.c
  	fd = Fopen(buf, "r.fpio");
  	if (fd == NULL || Ferror(fd)) {
  	    if (fd) (void) Fclose(fd);
+--- rpm-4.3/po/pl.po.orig	2003-06-10 23:59:11.000000000 +0200
++++ rpm-4.3/po/pl.po	2003-06-11 00:06:16.000000000 +0200
+@@ -2834,6 +2834,10 @@
+ msgid "Please contact rpm-list@redhat.com\n"
+ msgstr "Proszê skontaktowaæ siê z rpm-list@redhat.com\n"
+ 
++#: lib/rpmrc.c:1764
++msgid "Cannot read %s, HOME_ETC is too large.\n"
++msgstr "Nie mo¿na odczytaæ %s, HOME_ETC jest zbyt du¿e.\n"
++
+ #: lib/rpmrc.c:1765
+ #, c-format
+ msgid "Cannot expand %s\n"

@@ -61,7 +61,7 @@ Patch7:		%{name}-glob.patch
 Patch11:	%{name}-noexpand.patch
 Patch12:	%{name}-scripts-closefds.patch
 Patch13:	%{name}-python-macros.patch
-Patch16:	%{name}-drop-legacy-CLI.patch
+#Patch16:	%{name}-drop-legacy-CLI.patch
 Patch18:	%{name}-gettext-in-header.patch
 Patch19:	%{name}-compress-doc.patch
 Patch20:	%{name}-lt14d.patch
@@ -498,8 +498,6 @@ construir pacotes usando o RPM.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-# find-spec-bcond need update
-# po/pl.po need update
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
@@ -507,7 +505,6 @@ construir pacotes usando o RPM.
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
-%patch16 -p1
 %patch18 -p1
 %patch19 -p1
 %patch20 -p1
