@@ -1,6 +1,7 @@
 #
 # TODO:
 # - detected Requires lists are not printed at the end of build (Provides etc. are)
+# - fix pythondeps detection (*.py[co] should belong to python class; autodetect P(abi))
 # - consider using system libmagic not internal libfmagic
 #   (but internal has different method of passing output)
 # - after ac drop amd64 patch and make x86_64 generic arch + subarchs amd64 and ia32e
