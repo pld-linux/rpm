@@ -737,7 +737,7 @@ Development/Languages/Fortran
 	[da]:		Udvikling/Sprog/Fortran
 	[de]:		Entwicklung/Sprachen/Fortran
 	[es]:		Desarrollo/Lenguajes/Fortran
-	[fr]:		DÃ©velopment/Langues/Fortran
+	[fr]:		DÃ©veloppement/Langues/Fortran
 	[is]:		Þróunartól/Forritunarmál/Fortran
 	[it]:		Sviluppo/Linguaggi/Fortran
 	[ja]:		³«È¯/¸À¸ì/Fortran
@@ -754,7 +754,7 @@ Development/Languages/Java
 	[da]:		Udvikling/Sprog/Java
 	[de]:		Entwicklung/Sprachen/Java
 	[es]:		Desarrollo/Lenguajes/Java
-	[fr]:		DÃ©velopment/Langues/Java
+	[fr]:		DÃ©veloppement/Langues/Java
 	[is]:		Þróunartól/Forritunarmál/Java
 	[it]:		Sviluppo/Linguaggi/Java
 	[ja]:		³«È¯/¸À¸ì/Java
@@ -771,7 +771,7 @@ Development/Languages/Modula3
 	[da]:		Udvikling/Sprog/Modula3
 	[de]:		Entwicklung/Sprachen/Modula3
 	[es]:		Desarrollo/Lenguajes/Modula3
-	[fr]:		DÃ©velopment/Langues/Modula3
+	[fr]:		DÃ©veloppement/Langues/Modula3
 	[is]:		Þróunartól/Forritunarmál/Modula3
 	[it]:		Sviluppo/Linguaggi/Modula3
 	[ja]:		³«È¯/¸À¸ì/Modula3
@@ -788,7 +788,7 @@ Development/Languages/PHP
 	[da]:		Udvikling/Sprog/PHP
 	[de]:		Entwicklung/Sprachen/PHP
 	[es]:		Desarrollo/Lenguajes/PHP
-	[fr]:		DÃ©velopment/Langues/PHP
+	[fr]:		DÃ©veloppement/Langues/PHP
 	[is]:		Þróunartól/Forritunarmál/PHP
 	[it]:		Sviluppo/Linguaggi/PHP
 	[ja]:		³«È¯/¸À¸ì/PHP
@@ -805,7 +805,7 @@ Development/Languages/Perl
 	[da]:		Udvikling/Sprog/Perl
 	[de]:		Entwicklung/Sprachen/Perl
 	[es]:		Desarrollo/Lenguajes/Perl
-	[fr]:		DÃ©velopment/Langues/Perl
+	[fr]:		DÃ©veloppement/Langues/Perl
 	[is]:		Þróunartól/Forritunarmál/Perl
 	[it]:		Sviluppo/Linguaggi/Perl
 	[ja]:		³«È¯/¸À¸ì/Perl
@@ -822,7 +822,7 @@ Development/Languages/Python
 	[da]:		Udvikling/Sprog/Python
 	[de]:		Entwicklung/Sprachen/Python
 	[es]:		Desarrollo/Lenguajes/Python
-	[fr]:		DÃ©velopment/Langues/Python
+	[fr]:		DÃ©veloppement/Langues/Python
 	[is]:		Þróunartól/Forritunarmál/Python
 	[it]:		Sviluppo/Linguaggi/Python
 	[ja]:		³«È¯/¸À¸ì/Python
@@ -839,7 +839,7 @@ Development/Languages/Scheme
 	[da]:		Udvikling/Sprog/Scheme
 	[de]:		Entwicklung/Sprachen/Scheme
 	[es]:		Desarrollo/Lenguajes/Scheme
-	[fr]:		DÃ©velopment/Langues/Scheme
+	[fr]:		DÃ©veloppement/Langues/Scheme
 	[is]:		Þróunartól/Forritunarmál/Scheme
 	[it]:		Sviluppo/Linguaggi/Scheme
 	[ja]:		³«È¯/¸À¸ì/Scheme
@@ -856,7 +856,7 @@ Development/Languages/Tcl
 	[da]:		Udvikling/Sprog/Tcl
 	[de]:		Entwicklung/Sprachen/Tcl
 	[es]:		Desarrollo/Lenguajes/Tcl
-	[fr]:		DÃ©velopment/Langues/Tcl
+	[fr]:		DÃ©veloppement/Langues/Tcl
 	[is]:		Þróunartól/Forritunarmál/Tcl
 	[it]:		Sviluppo/Linguaggi/Tcl
 	[ja]:		³«È¯/¸À¸ì/Tcl
@@ -873,7 +873,7 @@ Development/Libraries
 	[da]:		Udvikling/Biblioteker
 	[de]:		Entwicklung/Bibliotheken
 	[es]:		Desarrollo/Bibliotecas
-	[fr]:		DÃ©velopment/Librairies
+	[fr]:		DÃ©veloppement/Librairies
 	[is]:		Þróunartól/Aðgerðasöfn
 	[it]:		Sviluppo/Librerie
 	[ja]:		³«È¯/¥é¥¤¥Ö¥é¥ê
@@ -891,7 +891,7 @@ Development/Libraries/Libc
 	[da]:		Udvikling/Biblioteker/Libc
 	[de]:		Entwicklung/Bibliotheken/Libc
 	[es]:		Desarrollo/Bibliotecas/Libc
-	[fr]:		DÃ©velopment/Librairies/Libc
+	[fr]:		DÃ©veloppement/Librairies/Libc
 	[is]:		Þróunartól/Aðgerðasöfn/Libc
 	[it]:		Sviluppo/Librerie/Libc
 	[ja]:		³«È¯/¥é¥¤¥Ö¥é¥ê/Libc
@@ -909,7 +909,7 @@ Development/Tools
 	[da]:		Udvikling/Værktøj
 	[de]:		Entwicklung/Tools
 	[es]:		Desarrollo/Herramientas
-	[fr]:		DÃ©velopment/Outils
+	[fr]:		DÃ©veloppement/Outils
 	[is]:		Þróunartól/Tól
 	[it]:		Sviluppo/Tool
 	[ja]:		³«È¯/¥Ä¡¼¥ë
@@ -926,7 +926,7 @@ Development/Version Control
 	[da]:		Udvikling/Versionskontrol
 	[de]:		Entwicklung/Versionkontrolle
 	[es]:		Desarrollo/Control de Versiones
-	[fr]:		DÃ©velopment/ContrÃ´le de version
+	[fr]:		DÃ©veloppement/ContrÃ´le de version
 	[is]:		Þróunartól/Útgáfu Stýring
 	[it]:		Sviluppo/Controllo della versione
 	[no]:		Utvikling/Versjonskontroll
@@ -1378,7 +1378,7 @@ X11/Development/Libraries
 	[da]:		X11/Udvikling/Biblioteker
 	[de]:		X11/Entwicklung/Bibliotheken
 	[es]:		X11/Desarrollo/Bibliotecas
-	[fr]:		X11/DÃ©velopment/Librairies
+	[fr]:		X11/DÃ©veloppement/Librairies
 	[is]:		X11/Þróunartól/Aðgerðasöfn
 	[it]:		X11/Sviluppo/Librerie
 	[ja]:		X11/³«È¯/¥é¥¤¥Ö¥é¥ê
@@ -1396,7 +1396,7 @@ X11/Development/Tools
 	[da]:		X11/Udvikling/Værktøj
 	[de]:		X11/Entwicklung/Tools
 	[es]:		X11/Desarrollo/Herramientas
-	[fr]:		X11/DÃ©velopment/Outils
+	[fr]:		X11/DÃ©veloppement/Outils
 	[is]:		X11/Þróunartól/Tól
 	[it]:		X11/Sviluppo/Tool
 	[ja]:		X11/³«È¯/¥Ä¡¼¥ë
