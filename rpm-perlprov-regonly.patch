@@ -1,24 +1,3 @@
-diff -Nur rpm-4.0.2.orig/scripts/perl.prov rpm-4.0.2/scripts/perl.prov
---- rpm-4.0.2.orig/scripts/perl.prov	Thu Jan 24 15:17:27 2002
-+++ rpm-4.0.2/scripts/perl.prov	Thu Jan 24 16:04:16 2002
-@@ -48,7 +48,7 @@
- if ("@ARGV") {
-   foreach (@ARGV) {
-      if (! m=(/(doc|usr/src)/|\.(so|gz|ph|pod|h|html)$)=) {
--      process_file($_);
-+      process_file($_) if -f "$_";
-     }
-   }
- } else {
-@@ -58,7 +58,7 @@
- 
-   foreach (<>) {
-      if (! m=(/(doc|usr/src)/|\.(so|gz|ph|pod|h|html)$)=) {
--      process_file($_);
-+      process_file($_) if -f "$_";
-     }
-   }
- }
 diff -Nur rpm-4.0.2.orig/scripts/perl.req rpm-4.0.2/scripts/perl.req
 --- rpm-4.0.2.orig/scripts/perl.req	Thu Jan 24 15:17:27 2002
 +++ rpm-4.0.2/scripts/perl.req	Thu Jan 24 16:04:53 2002
