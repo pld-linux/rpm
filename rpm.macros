@@ -72,7 +72,7 @@ else \
     ); \
   fi \
 done \
-  %{-C:${_mydir}}%{!-C:.}/%{configure}
+  %{-C:${_mydir}}%{!-C:.}/%{configure} \
   %{-C:cd ${_mydir}; unset _mydir}
 
 # Location of autoconf macros
@@ -111,7 +111,7 @@ echo "Compress man and info pages."; \
 %{?verbose:set -x;} \
 for i in /usr/share/man /usr/X11R6/man /usr/share/info; do \
 	if [ -d "$RPM_BUILD_ROOT$i" ]; then \
-		find "$RPM_BUILD_ROOT$i" -type f -print | xargs %{__gzip} -9nf; \
+		find "$RPM_BUILD_ROOT$i" -type f -a \! -name \*.gz -print | xargs %{__gzip} -9nf; \
 	fi; \
 done; \
 }
