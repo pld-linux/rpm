@@ -10,11 +10,13 @@ Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-3.0.x/%{name}-%{version}.tar.gz
 Source1:	rpm.groups
 Source2:	rpm.8pl
 Source3:	rpm.macros
+Source4:	rpm.pl.po
 Patch0:		rpm-rpmrc.patch
 Patch1:		rpm-i18n.patch
 Patch2:		rpm-find-requires.patch
 Patch3:		rpm-macros.patch
 Patch4:		rpm-po.patch
+Patch5:		rpm-GNUconfigure.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildPrereq:	bzip2-static
@@ -63,14 +65,19 @@ construir pacotes usando o RPM.
 %patch2 -p1
 %patch1 -p1
 %patch4 -p1 
+%patch5 -p1
+%patch31 -p1
+install %{SOURCE4} po/pl.po
 install %{SOURCE13} macros.python.in
 mv -f perl.prov perl.prov.in)
 LDFLAGS="-s"; export LDFLAGS
 
-( cd popt; %GNUconfigure )
+( cd popt; 
+%GNUconfigure
+)
+
+%GNUconfigure -- --disable-shared 
 %configure \
-%GNUconfigure \
-	--disable-shared
 make
 	--with-python
 
