@@ -486,8 +486,8 @@ fi; \
 # the banner text, the banner text
 # the banner text, and following line
 #EOF
-# NOTE:
-# You can use <<'EOF' <<-EOF, or whatever, just remember it must be one word
+# You can use any form of here-document, <<'EOF' <<-EOT, can do
+# NOTE: if your use "<<-EOF", then You can actually indent in here-document.
 #
 # -a   - append to the banner
 # -e   - send to stderr instead of stdout
@@ -501,6 +501,6 @@ if [ -x /usr/bin/banner.sh ]; then \
 else \
 	CMD="cat%{-e: >&2}" \
 fi \
-$CMD %2 \
+$CMD %2%{?3: %3} \
 %nil
 
