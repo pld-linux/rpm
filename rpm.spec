@@ -31,7 +31,7 @@ Name:		rpm
 %define	ver	4.4
 %define	sover	4.3
 Version:	%{ver}
-Release:	0.%{snap}.0.1
+Release:	0.%{snap}.0.2
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -144,9 +144,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		ix86 i386 i486 i586 i686 athlon pentium3 pentium4
 
 # stabilize new build environment
-%define		__cc %{?force_cc}%{!?force_cc:%{_target_cpu}-pld-linux-gcc}
-%define		__cxx %{?force_cxx}%{!?force_cxx:%{_target_cpu}-pld-linux-g++}
-%define		__cpp %{?force_cpp}%{!?force_cpp:%{_target_cpu}-pld-linux-gcc -E}
+%define		__newcc %{?force_cc}%{!?force_cc:%{_target_cpu}-pld-linux-gcc}
+%define		__newcxx %{?force_cxx}%{!?force_cxx:%{_target_cpu}-pld-linux-g++}
+%define		__newcpp %{?force_cpp}%{!?force_cpp:%{_target_cpu}-pld-linux-gcc -E}
 
 %define		_rpmlibdir /usr/lib/rpm
 
@@ -595,11 +595,9 @@ cat %{SOURCE11} >> macros.in
 %patch35 -p1
 %patch36 -p1
 %patch37 -p1
-# STILL NOT FIXED IN RPM???
-#%patch38 -p1
+%patch38 -p1
 %patch40 -p1
-# SAME AS patch38
-#%patch41 -p1
+%patch41 -p1
 %patch43 -p0
 %patch44 -p1
 #%patch100 -p1
@@ -651,9 +649,9 @@ mv -f macros.tmp macros.in
 
 # pass CC and CXX too in case of building with some older configure macro
 %configure \
-	CC="%{__cc}" \
-	CXX="%{__cxx}" \
-	CPP="%{__cpp}" \
+	CC="%{__newcc}" \
+	CXX="%{__newcxx}" \
+	CPP="%{__newcpp}" \
 	--enable-shared \
 	--enable-static \
 	%{?with_doc:--with-apidocs} \
@@ -664,6 +662,9 @@ mv -f macros.tmp macros.in
 
 # file_LDFLAGS, debugedit_LDADD - no need to link "file" and "debugedit" statically
 %{__make} \
+	CC="%{__cc}" \
+	CXX="%{__cxx}" \
+	CPP="%{__cpp}" \
 	pylibdir=%{py_libdir} \
 	myLDFLAGS="%{rpmldflags}" \
 	file_LDFLAGS= \
