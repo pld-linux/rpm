@@ -7,7 +7,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.2
-Release:	69
+Release:	70
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -532,6 +532,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/find-spec-bcond
 %attr(755,root,root) %{_libdir}/rpm/find-lang.sh
 %attr(755,root,root) %{_libdir}/rpm/mkinstalldirs
+%attr(755,root,root) %{_libdir}/rpm/config.*
 %attr(755,root,root) %{_libdir}/rpm/getpo.sh
 %attr(755,root,root) %{_libdir}/rpm/install-build-tree
 %attr(755,root,root) %{_libdir}/rpm/brp-*
