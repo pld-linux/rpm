@@ -1,5 +1,5 @@
---- rpm-4.0/scripts/perl.req	Mon Dec 16 11:36:15 2000
-+++ rpm-4.0.mis/scripts/perl.req	Mon Dec 16 11:46:28 2000
+--- rpm.orig/scripts/perl.req	Thu Mar 17 11:26:15 2005
++++ rpm/scripts/perl.req	Thu Mar 17 11:27:54 2005
 @@ -61,6 +61,11 @@
    }
  }
@@ -12,7 +12,7 @@
  
  foreach $module (sort keys %require) {
    if (length($require{$module}) == 0) {
-@@ -82,6 +86,53 @@
+@@ -82,6 +87,53 @@
  exit 0;
  
  
@@ -66,7 +66,7 @@
  
  sub process_file {
    
-@@ -90,6 +141,8 @@
+@@ -90,6 +142,8 @@
    
    open(FILE, "<$file")||
      die("$0: Could not open file: '$file' : $!\n");
@@ -75,7 +75,7 @@
    
    while (<FILE>) {
      
-@@ -112,6 +165,10 @@
+@@ -112,6 +166,10 @@
        last;
      }
  
@@ -86,14 +86,23 @@
      # Each keyword can appear multiple times.  Don't
      #  bother with datastructures to store these strings,
      #  if we need to print it print it now.
-@@ -209,6 +266,10 @@
-       # if the module name starts in a dot it is not a module name.
+@@ -178,7 +236,7 @@
+       # if module is a number then both require and use interpret that
+       # to mean that a particular version of perl is specified
+ 
+-	print "perl > $module\n";
++	print "perl >= $module\n";
+ 	next;
+       };
+ 
+@@ -210,6 +268,10 @@
  
        ($module =~ m/^\./) && next;
-+
+ 
 +      # name starts in a non alphanumeric character it is not a module 
 +      # name.
 +      ($module =~ m/^\W/) && next;
- 
++
        # if the module ends with .pm strip it to leave only basename.
  
+       $module =~ s/\.pm$//;
