@@ -1,16 +1,17 @@
 %include        /usr/lib/rpm/macros.python
 %define	beecrypt_ver	2.2.0
+%define	beecrypt_rel	0.90
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
 Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
-Version:	4.0.4
-Release:	0.84
+Version:	4.1
+Release:	0.1
 License:	GPL
 Group:		Base
-Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/%{name}-%{version}.tar.gz
 Source1:	%{name}.groups
 Source2:	%{name}.macros
 Source3:	%{name}-install-tree
@@ -63,6 +64,8 @@ Patch28:	%{name}-check_files.patch
 Patch29:	%{name}-gettext0.11.patch
 Patch30:	%{name}-choke-on-evil-doc.patch
 Patch31:	%{name}-build.patch
+Patch32:	%{name}-python-link.patch
+Patch33:	%{name}-system_libs.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -71,6 +74,7 @@ BuildRequires:	bzip2-devel >= 1.0.1
 BuildRequires:	db4-devel >= 4.0.14
 BuildRequires:	doxygen
 BuildRequires:	gettext-devel >= 0.11.4-2
+BuildRequires:	libelf-devel
 BuildRequires:	libtool
 BuildRequires:	patch >= 2.2
 BuildRequires:	python-devel >= 2.2
@@ -133,7 +137,7 @@ Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne
 Summary(pt_BR):	Arquivos de inclusão e bibliotecas para programas de manipulação de pacotes RPM
 Group:		Development/Libraries
 Requires:	%{name} = %{version}
-Requires:	popt-devel
+Requires:	popt-devel >= 1.7
 Requires:	beecrypt-devel
 Requires:	db4-devel
 
@@ -193,7 +197,7 @@ Summary(de):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
 Summary(pl):	Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{version}
-Requires:	popt >= 1.6.4
+Requires:	popt >= 1.7
 
 %description utils
 Additional utilities for managing rpm packages and database.
@@ -319,12 +323,11 @@ Requires:       grep
 Requires:       gzip
 Requires:       make
 Requires:       patch
-Requires:       popt >= 1.6.2-2
+Requires:       popt >= 1.7
 Requires:       sed
 Requires:       sh-utils
 Requires:       tar
 Requires:       textutils
-Requires:       popt >= 1.6.4
 
 %description build
 Scripts for building binary RPM packages.
@@ -343,6 +346,7 @@ construir pacotes usando o RPM.
 Summary:	Crypto library
 Summary(pl):	Biblioteka kryptograficzna
 Version:	%{beecrypt_ver}
+Release:	%{beecrypt_rel}
 Epoch:		1
 Group:		Libraries
 
@@ -356,6 +360,7 @@ Biblioteka kryptograficzna (zmodyfikowana na potrzeby rpma).
 Summary:	Crypto library - development files
 Summary(pl):	Biblioteka kryptograficzna - pliki developerskie
 Version:	%{beecrypt_ver}
+Release:	%{beecrypt_rel}
 Group:		Development/Libraries
 Requires:	beecrypt = %{beecrypt_ver}
 Epoch:		1
@@ -370,6 +375,7 @@ Biblioteka kryptograficzna - pliki developerskie.
 Summary:	Crypto library - static version
 Summary(pl):	Statyczna biblioteka kryptograficzna
 Version:	%{beecrypt_ver}
+Release:	%{beecrypt_rel}
 Group:		Development/Libraries
 Requires:	beecrypt-devel = %{beecrypt_ver}
 Epoch:		1
@@ -386,34 +392,47 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
+# needed ?
+#%patch5 -p1
 %patch6 -p1
-%patch7 -p1
-%patch8 -p1
+# applied
+#%patch7 -p1
+# not needed ? (break compilation)
+#%patch8 -p1
 %patch9 -p1
-%patch10 -p1
-%patch11 -p1
+# needed ?
+#%patch10 -p1
+# rejected (needed ?)
+#%patch11 -p1
 # too many rejects, Pawel please check if needed and rediff
 #%patch12 -p0
 %patch13 -p1
 %patch14 -p1
-%patch15 -p1
-%patch16 -p1
+# applied
+#%patch15 -p1
+# applied
+#%patch16 -p1
 %patch17 -p1
 %patch18 -p1
-%patch19 -p1
+# fixed
+#%patch19 -p1
 %patch20 -p1
-%patch21 -p1
+# needed ?
+#%patch21 -p1
 %patch22 -p1
 %patch23 -p1
-%patch24 -p1
+#%patch24 -p1
 %patch25 -p1
 %patch26 -p1
 %patch27 -p1
-%patch28 -p1
+# applied
+#%patch28 -p1
 %patch29 -p1
-%patch30 -p1
+# applied
+#%patch30 -p1
 %patch31 -p1
+%patch32 -p1
+%patch33 -p1 -b .wiget
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
@@ -428,11 +447,13 @@ install %{SOURCE18} scripts/php.req.in
 install %{SOURCE19} scripts/find-php-provides
 install %{SOURCE20} scripts/find-php-requires
 
-(cd scripts;
+cd scripts;
 mv -f perl.req perl.req.in
-mv -f perl.prov perl.prov.in)
+mv -f perl.prov perl.prov.in
+cd ..
 
 chmod +x %{SOURCE4}
+rm -rf zlib libelf
 
 %build
 # generate Group translations to *.po
@@ -484,7 +505,7 @@ mv -f macros.tmp macros.in
 	--without-db
 
 %{__make} \
-	%{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"} \
+	%{?_without_static:rpm_LDFLAGS="\$(myLDFLAGS)"} \
 	myLDFLAGS="%{rpmldflags}"
 
 %install
@@ -522,8 +543,10 @@ EOF
 %find_lang %{name}
 
 rm -f doc/manual/Makefile*
-
-gzip -9nf RPM-PGP-KEY CHANGES doc/manual/*
+rm -f $RPM_BUILD_ROOT%{_datadir}/locale/*/*/popt.mo
+rm -f $RPM_BUILD_ROOT%{_mandir}/man3/popt.3*
+rm -f $RPM_BUILD_ROOT%{_includedir}/pop.h
+rm -f $RPM_BUILD_ROOT%{_libdir}/libpopt*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -535,7 +558,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc RPM-PGP-KEY.gz CHANGES.gz doc/manual/*
+%doc RPM-PGP-KEY CHANGES doc/manual/*
 
 %attr(755,root,root) /bin/rpm
 
@@ -636,6 +659,12 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rpm2cpio
 %attr(755,root,root) %{_libdir}/rpm/rpmdiff*
+%attr(755,root,root) %{_libdir}/rpm/tgpg
+%attr(755,root,root) %{_libdir}/rpm/find-debuginfo.sh
+%attr(755,root,root) %{_bindir}/rpmgraph
+%attr(755,root,root) %{_bindir}/rpmcache
+%attr(755,root,root) %{_bindir}/striptofile
+%attr(755,root,root) %{_bindir}/unstripfile
 # not here
 #%{_prefix}/lib/rpm/rpm.daily
 #%{_prefix}/lib/rpm/rpm.log
@@ -647,6 +676,8 @@ rm -rf $RPM_BUILD_ROOT
 %lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
 %lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
 %lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
+%{_mandir}/man8/rpmcache.8*
+%{_mandir}/man8/rpmgraph.8*
 
 %files perlprov
 %defattr(644,root,root,755)
@@ -671,7 +702,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n python-rpm
 %defattr(644,root,root,755)
-%{py_sitedir}/*.so
+%attr(755,root,root) %{py_sitedir}/*.so
+%attr(755,root,root) %{py_sitedir}/rpmdb/*.so
+%{py_sitedir}/rpmdb/*.py*
 
 %files -n beecrypt
 %defattr(644,root,root,755)
