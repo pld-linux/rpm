@@ -2,16 +2,17 @@ Index: lib/fsm.c
 ===================================================================
 RCS file: /cvs/devel/rpm/lib/fsm.c,v
 retrieving revision 2.101
-retrieving revision 2.102
-diff -u -u -r2.101 -r2.102
+retrieving revision 2.103
+diff -u -u -r2.101 -r2.103
 --- rpm/lib/fsm.c	5 Jan 2004 14:09:47 -0000	2.101
-+++ rpm/lib/fsm.c	9 Jan 2004 23:20:07 -0000	2.102
-@@ -2152,7 +2152,7 @@
++++ rpm/lib/fsm.c	10 Jan 2004 18:48:19 -0000	2.103
+@@ -2152,7 +2152,8 @@
  	    }
  	break;
      case FSM_LSETFCON:
 -	if (fsm->fcontext == NULL)
-+	if (fsm->fcontext == NULL || *fsm->fcontext == '\0')
++	if (fsm->fcontext == NULL || *fsm->fcontext == '\0'
++	 || !strcmp(fsm->fcontext, "<<none>>"))
  	    break;
  	rc = lsetfilecon(fsm->path, (security_context_t)fsm->fcontext);
  	if (_fsm_debug && (stage & FSM_SYSCALL))
