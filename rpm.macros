@@ -319,6 +319,19 @@ echo "Compress kernel modules if any."; \
 %_source_payload        w9.gzdio
 %_binary_payload        w9.bzdio
 
+%compile_pch { \
+incdir=%(eval "%{_includedir}") \
+if [ -d "${RPM_BUILD_ROOT}%{_includedir}" ]; then \
+echo "Compiling headers"; \
+cd ${RPM_BUILD_ROOT}%{_includedir} \
+find ./ -name \*.h -exec "%{__cc}" "%{rpmcflags}" {} ';' \
+find ./ -name \*.gch -exec "echo" "%exclude" "%{_includedir}/{}" ";" \
+> $RPM_BUILD_DIR/%{name}-exclude.pch \
+find ./ -name \*.gch -exec "echo" "%{_includedir}/{}" ";" \
+> $RPM_BUILD_DIR/%{name}-list.pch \
+fi \
+}
+
 #-----------------------------------------------------------------
 # Update all GConf2 schemas
 #
