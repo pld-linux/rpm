@@ -709,8 +709,8 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 #
 # remove or replace with file_contexts path if you want to use custom
 # SELinux file contexts policy instead of one stored in packages payload
-%_install_file_context_path	%{nil}
-%_verify_file_context_path	%{nil}
+%%_install_file_context_path	%%{nil}
+%%_verify_file_context_path	%%{nil}
 EOF
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF
