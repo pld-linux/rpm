@@ -26,6 +26,14 @@ diff -urN rpm-4.3.org/po/es.po rpm-4.3/po/es.po
 diff -urN rpm-4.3.org/po/fr.po rpm-4.3/po/fr.po
 --- rpm-4.3.org/po/fr.po	2003-12-28 01:21:01.906701528 +0100
 +++ rpm-4.3/po/fr.po	2003-12-28 01:14:10.000000000 +0100
+@@ -7,7 +7,6 @@
+ # N'hésitez pas à m'envoyez un courriel si vous avez des
+ # suggestions/corrections.
+ #
+-#, fuzzy
+ msgid ""
+ msgstr ""
+ "Project-Id-Version: RPM 4.2.1\n"
 @@ -460,7 +460,7 @@
  #: build/files.c:502
  #, c-format
