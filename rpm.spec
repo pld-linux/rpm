@@ -4,7 +4,6 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0.2
 Release:	48
-Release:	47
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
