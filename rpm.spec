@@ -275,4 +275,4 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n python-rpm
 * %{date} PLD Team <pld-list@pld.org.pl>
-All below listed persons can be reached on <cvs_login>@pld.org.pl
+%{py_sitedir}/*.so
