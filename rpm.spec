@@ -3,6 +3,7 @@ Summary(de):	Red Hat (und jetzt auch PLD) Packet-Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0.2
+Release:	48
 Release:	47
 License:	GPL
 Group:		Base
@@ -53,6 +54,7 @@ Patch25:	%{name}-am_ac.patch
 Patch26:	%{name}-python-macros.patch
 Patch27:	%{name}-hardlink-fixes.patch
 Patch28:	%{name}-perlprov-regonly.patch
+Patch29:	%{name}-cxx.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 URL:		http://www.rpm.org/
@@ -72,7 +74,6 @@ BuildRequires:	zlib-devel >= 1.1.4
 BuildRequires:	db3-static >= 3.1.17-9
 BuildRequires:	db1-static >= 1.85
 BuildRequires:	zlib-static
-%endif
 BuildRequires:	zlib-static >= 1.1.4
 Obsoletes:	rpm-libs
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -306,6 +307,7 @@ construir pacotes usando o RPM.
 %patch26 -p0
 %patch27 -p1
 %patch28 -p1
+%patch29 -p1
 %patch31 -p1
 %patch36 -p1
 %patch37 -p1
@@ -323,6 +325,7 @@ install %{SOURCE9} scripts/find-lang.sh
 mv -f perl.req perl.req.in
 mv -f perl.prov perl.prov.in)
 %build
+# generate Group translations to *.po
 awk -f %{SOURCE14} %{SOURCE1}
 
 cd popt
@@ -330,6 +333,7 @@ autoconf
 automake -a -c
 aclocal
 autoheader
+automake -a -c -f
 %{__automake}
 cd ..
 
@@ -349,11 +353,18 @@ sed -e 's#python1.5#python%{py_ver}#g' \
 	python/Makefile.in > python/Makefile.in.new
 mv -f python/Makefile.in.new python/Makefile.in
 
+sed -e 's#python1.5#python%{py_ver}#g' \
+	python/Makefile.in > python/Makefile.in.new
+sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' macros.in | \
+	sed 's|@host_cpu@|%{_target_cpu}|' | \
+# config.guess doesn't handle athlon, so we have to change it by hand.
+# rpm checks for CPU type at runtime, but it looks better
 sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' macros.in | \
 	sed 's|@host_cpu@|%{_target_cpu}|' > macros.tmp
 	--enable-v1-packages \
 	--with-python
 %configure \
+	--enable-shared \
 	--enable-v1-packages \
 	--with-python
 
