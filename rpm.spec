@@ -1,7 +1,7 @@
 Summary:     Red Hat Package Manager
 Name:        rpm
-Version:     2.5.3
-Release:     2
+Version:     2.5.4
+Release:     3
 Group:       Utilities/System
 Source:      ftp://ftp.rpm.org/pub/rpm/dist/rpm-2.5.x/%{name}-%{version}.tar.gz
 Patch0:      rpm.patch
@@ -35,7 +35,7 @@ make
 	--with-python
 
 
-install -d $RPM_BUILD_ROOT/{var/lib/rpm,usr/src/redhat/{SOURCES,SPECS,RPMS/{$RPM_ARCH,noarch},SRPMS,BUILD}}
+install -d $RPM_BUILD_ROOT/{var/lib/rpm,usr/src/rpm/{SOURCES,SPECS,RPMS/{$RPM_ARCH,noarch},SRPMS,BUILD}}
 make installprefix="$RPM_BUILD_ROOT" install
 	pkgbindir="%{_bindir}"
 %clean
@@ -57,11 +57,11 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/rpm/rpmpopt
 %attr(644, root,  man) /usr/man/man8/*
 %attr(700, root, root) %dir /var/lib/rpm
-/usr/src/redhat
+/usr/src/rpm
 %lang(de) /usr/share/locale/de/LC_MESSAGES/rpm.mo
 %lang(fi) /usr/share/locale/fi/LC_MESSAGES/rpm.mo
 %lang(fr) /usr/share/locale/fr/LC_MESSAGES/rpm.mo
-%lang(pt) /usr/share/locale/pt-br/LC_MESSAGES/rpm.mo
+%lang(pt) /usr/share/locale/pt*/LC_MESSAGES/rpm.mo
 %lang(sv) /usr/share/locale/sv/LC_MESSAGES/rpm.mo
 %lang(tr) /usr/share/locale/tr/LC_MESSAGES/rpm.mo
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
@@ -71,6 +71,10 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/lib*.a
 %files utils
 %files -n python-rpm
+* Tue Sep 15 1998 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
+  [2.5.4-3]
+- /usr/src/redhat changed to /usr/src/rpm.
+
 * Sun Aug 30 1998 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
   [2.5.2-2]
 - fixed tr.po,
