@@ -95,17 +95,17 @@ while test $# -gt 0 ; do
     esac
 done    
 
-find $TOP_DIR -type f -name \*.mo | xargs file | egrep -v ', 1 messages$' |\
+echo '%defattr(644,root,root,755)' > $MO_NAME
+
+find $TOP_DIR -type f -name \*.mo | xargs -r file | egrep -v ', 1 messages$' |\
 sed '
 s/:.*//
-1i\
-%defattr (644, root, root, 755)
 s:'"$TOP_DIR"'::
 '"$ALL_NAME$MO"'s:\(.*/share/locale/\)\([^/_]\+\)\(.*\.mo$\):%lang(\2) \1\2\3:
 '"$NO_ALL_NAME$MO"'s:\(.*/share/locale/\)\([^/]\+\)\(.*/'"$NAME"'\.mo$\):%lang(\2) \1\2\3:
 s:^\([^%].*\)::
 s:%lang(C) ::
-s:^\$::' | egrep -v '^$' > $MO_NAME
+s:^\$::' | egrep -v '^$' >> $MO_NAME
 
 find $TOP_DIR -type d|sed '
 s:'"$TOP_DIR"'::
