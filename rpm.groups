@@ -1,0 +1,267 @@
+Applications
+	[pl]:	Aplikacje
+
+Applications/Communications
+	[pl]:	Aplikacje/Komunikacja
+
+Applications/Editors
+	[pl]:	Aplikacje/Edytory
+	[pt]:	X11/Aplicações/Editores
+
+Applications/Editors/Emacs
+	[pl]:	Aplikacje/Edytory/Emacs
+
+Applications/Editors/XEmacs
+	[pl]:	Aplikacje/Edytory/XEmacs
+
+Applications/Editors/Vim
+	[pl]:	Aplikacje/Edytory/Vim
+
+Applications/Emulators
+	[pl]:	Aplikacje/Emulatory
+
+Applications/Engineering
+	[pl]:	Aplikacje/In¿ynierskie
+
+Applications/Spreadsheets
+	[pl]:	Aplikacje/Arkusze kalkulacyjne
+
+Applications/Databases
+	[pl]:	Aplikacje/Bazy danych
+
+Applications/Databases/User Interfaces
+	[pl]:	Aplikacje/Bazy danych/Interfejsy
+
+Applications/Graphics
+	[pl]:	Aplikacje/Grafika
+
+Applications/Networking
+	[pl]:	Aplikacje/Sieciowe
+
+Applications/Mail
+	[pl]:	Aplikacje/Poczta
+	[pt]:	Aplicações/Correio Eletrônico
+
+Applications/Math
+	[pl]:	Aplikacje/Matematyczne
+
+Applications/News
+	[pl]:	Aplikacje/News
+
+Applications/Publishing
+	[pl]:	Aplikacje/Publikowanie
+
+Applications/Publishing/TeX
+	[pl]:	Aplikacje/Publikowanie/TeX
+
+Applications/Publishing/SGML
+	[pl]:	Aplikacje/Publikowanie/SGML
+
+Applications/Publishing/XML
+	[pl]:	Aplikacje/Publikowanie/XML
+
+Applications/Sound
+	[pl]:	Aplikacje/D¼wiêk
+
+Base
+	[pl]:	Podstawowe
+
+Base/Kernel
+	[pl]:	Podstawowe/J±dro
+
+Base/Authentication and Autorization
+	[pl]:	Podstawowe/Autentykacja i Autoryzacja
+
+Base/Utilities
+	[pl]:	Podstawowe/Narzêdzia
+
+Daemons
+	[pl]:	Serwery
+
+Development/Libraries
+	[fr]:	Development/Librairies
+	[pl]:	Programowanie/Biblioteki
+
+Development/Libraries/Libc
+	[pl]:	Programowanie/Biblioteki/Libc
+
+Development/Languages
+	[pl]:	Programowanie/Jêzyki
+
+Development/Languages/Fortran
+	[pl]:	Programowanie/Jêzyki/Fortran
+
+Development/Languages/Tcl
+	[pl]:	Programowanie/Jêzyki/Tcl
+
+Development/Languages/Perl
+	[pl]:	Programowanie/Jêzyki/Perl
+
+Development/Languages/Python
+	[pl]:	Programowanie/Jêzyki/Python
+
+Development/Building
+	[pl]:	Programowanie/Budowanie
+
+Development/Version Control
+	[pl]:	Programowanie/Zarz±dzanie wersjami
+
+Development/Tools
+	[fr]:	Development/Outils
+	[pl]:	Programowanie/Narzêdzia
+
+Documentation
+	[pl]:	Dokumentacja
+
+Libraries
+	[fr]:	Librairies
+	[pl]:	Biblioteki
+
+Utilities
+	[pl]:	Narzêdzia
+
+Utilities/Archiving
+	[pl]:	Narzêdzia/Archiwizacja
+
+Utilities/Console
+	[pl]:	Narzêdzia/Konsola
+
+Utilities/File
+	[pl]:	Narzêdzia/Pliki
+
+Utilities/Printing
+	[pl]:	Narzêdzia/Drukowanie
+
+Utilities/System
+	[pl]:	Narzêdzia/System
+
+Utilities/Terminal
+	[pl]:	Narzêdzia/Terminal
+
+Utilities/Text
+	[fr]:	Utilitaires/Texte
+	[pl]:	Narzêdzia/Tekst
+
+X11
+	[pl]:	X11
+
+X11/Applications
+	[pl]:	X11/Aplikacje
+
+X11/Applications/Graphics
+	[pl]:	X11/Aplikacje/Grafika
+
+X11/Applications/Multimedia
+	[pl]:	X11/Aplikacje/Multimedia
+
+X11/Applications/Networking
+	[pl]:	X11/Aplikacje/Sieciowe
+
+X11/Applications/Editors
+	[pl]:	X11/Aplikacje/Edytory
+	[pt]	X11/Aplicações/Editores
+
+X11/Development/Libraries
+	[pl]:	X11/Programowanie/Biblioteki
+
+X11/Fonts
+	[pl]:	X11/Fonty
+
+X11/GNOME
+	[pl]:	X11/GNOME
+
+X11/GNOME/Applications
+	[pl]:	X11/GNOME/Aplikacje
+	
+X11/GNOME/Libraries
+	[pl]:	X11/GNOME/Biblioteki
+
+X11/GNOME/Development/Libraries
+	[pl]:	X11/GNOME/Programowanie/Biblioteki
+
+X11/GNOME/Development
+	[pl]:	X11/GNOME/Programowanie
+
+X11/KDE
+	[pl]:	X11/KDE
+
+X11/KDE/Applications
+	[pl]:	X11/KDE/Aplikacje
+
+X11/KDE/Graphics
+	[pl]:	X11/KDE/Grafika
+
+X11/KDE/Development
+	[pl]:	X11/KDE/Programowanie
+
+X11/KDE/Development/Libraries
+	[pl]:	X11/KDE/Programowanie/Biblioteki
+
+X11/KDE/Games
+	[pl]:	X11/KDE/Gry
+
+X11/KDE/utilities
+	[pl]:	X11/KDE/Narzêdzia
+
+X11/KDE/Libraries
+	[pl]:	X11/KDE/Biblioteki
+
+X11/Games
+	[pl]:	X11/Gry
+
+X11/Games/Strategy
+	[pl]:	X11/Gry/Strategiczne
+
+X11/Games/Video
+	[pl]:	X11/Gry/Wideo
+
+X11/Amusements
+	[pl]:	X11/Rozrywka
+
+X11/Utilities
+	[pl]:	X11/Narzêdzia
+
+X11/Libraries
+	[pl]:	X11/Biblioteki
+
+X11/Window Managers
+	[pl]:	X11/Zarz±dcy Okien
+	[es]:	X11/Administraadores De Ventanas
+	[fr]:	X11/Gestionnaires De Fenêtres
+
+X11/Window Managers/Tools
+	[pl]:	X11/Zarz±dcy Okien/Narzêdzia
+
+X11/XFree86
+	[pl]:	X11/XFree86
+
+X11/XFree86/Servers
+	[pl]:	X11/XFree86/Serwery
+
+Networking
+	[pl]:	Sieciowe
+
+Networking/Admin
+	[pl]:	Sieciowe/Administacyjne
+
+Networking/Daemons
+	[pl]:	Sieciowe/Serwery
+
+Networking/News
+	[pl]:	Sieciowe/News
+
+Networking/Utilities
+	[pl]:	Sieciowe/Narzêdzia
+
+Development
+	[pl]:	Programowanie
+
+Development/Debuggers
+	[pl]:	Programowanie/Odpluskwiacze
+
+Shells
+	[pl]:	Pow³oki
+
+Games
+	[pl]:	Gry
+
