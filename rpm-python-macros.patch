@@ -1,5 +1,5 @@
---- rpm-4.0.4/configure.in.wiget	Tue Feb 12 23:26:36 2002
-+++ rpm-4.0.4/configure.in	Tue Feb 12 23:27:46 2002
+--- rpm-4.0.4/configure.ac.wiget	Tue Feb 12 23:26:36 2002
++++ rpm-4.0.4/configure.ac	Tue Feb 12 23:27:46 2002
 @@ -1166,6 +1166,7 @@
  
  AC_OUTPUT([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec

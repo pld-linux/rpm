@@ -1,21 +1,13 @@
---- rpm-4.0.4/scripts/Makefile.am.wiget	Mon Feb  4 01:11:15 2002
-+++ rpm-4.0.4/scripts/Makefile.am	Tue Feb 12 21:32:36 2002
-@@ -11,6 +11,7 @@
+--- rpm-4.1/scripts/Makefile.am.wiget	Thu Aug 22 19:31:42 2002
++++ rpm-4.1/scripts/Makefile.am	Wed Sep 18 23:52:19 2002
+@@ -31,4 +31,5 @@
  	magic.prov magic.req perl.prov perl.req rpmdiff rpmdiff.cgi \
  	rpm.daily rpm.log rpm.xinetd rpm2cpio.sh \
- 	sql.prov sql.req tcl.req trpm u_pkg.sh \
-+ 	find-perl-requires find-perl-provides \
+ 	sql.prov sql.req tcl.req tgpg trpm u_pkg.sh \
++  	find-perl-requires find-perl-provides \
  	vpkg-provides.sh vpkg-provides2.sh
- 
- installprefix = $(DESTDIR)
-@@ -27,4 +28,5 @@
- 	magic.prov magic.req perl.prov perl.req rpmdiff rpmdiff.cgi \
- 	rpm.daily rpm.log rpm.xinetd rpm2cpio.sh \
- 	sql.prov sql.req tcl.req trpm u_pkg.sh \
-+ 	find-perl-requires find-perl-provides \
- 	vpkg-provides.sh vpkg-provides2.sh
---- rpm-4.0.4/scripts/perl.prov.wiget	Thu Jan 31 23:22:06 2002
-+++ rpm-4.0.4/scripts/perl.prov	Tue Feb 12 21:25:39 2002
+--- rpm-4.1/scripts/perl.prov.wiget	Fri Feb  1 16:20:26 2002
++++ rpm-4.1/scripts/perl.prov	Wed Sep 18 23:50:15 2002
 @@ -47,7 +47,9 @@
  
  if ("@ARGV") {
@@ -38,11 +30,11 @@
    }
  }
  
---- rpm-4.0.4/scripts/perl.req.wiget	Thu Jan 31 21:32:12 2002
-+++ rpm-4.0.4/scripts/perl.req	Tue Feb 12 21:37:11 2002
+--- rpm-4.1/scripts/perl.req.wiget	Mon Jun  3 22:56:33 2002
++++ rpm-4.1/scripts/perl.req	Wed Sep 18 23:50:15 2002
 @@ -1,4 +1,4 @@
 -#!/usr/bin/perl
-+#!@PERL@
++#!@__PERL@
  
  # RPM (and it's source code) is covered under two separate licenses. 
  
@@ -84,7 +76,7 @@
    } else {
  
      # I am not using rpm3.0 so I do not want spaces arround my
-@@ -202,7 +214,31 @@
+@@ -209,7 +221,31 @@
        # will be included with the name sys/systeminfo.ph so only use the
        # basename of *.ph files
  
@@ -117,27 +109,19 @@
  
        $require{$module}=$version;
        $line{$module}=$_;
---- rpm-4.0.4/configure.in.wiget	Wed Jan 23 02:01:43 2002
-+++ rpm-4.0.4/configure.in	Tue Feb 12 21:30:54 2002
-@@ -228,6 +228,7 @@
-     AC_PATH_PROG(__MKDIR, mkdir, /bin/mkdir, $MYPATH)
-     AC_PATH_PROG(__MV, mv, /bin/mv, $MYPATH)
-     AC_PATH_PROG(__PATCH, patch, /usr/bin/patch, $MYPATH)
-+    AC_PATH_PROG(PERL, perl, /usr/bin/perl, $MYPATH)
-     AC_MSG_CHECKING(old version of patch)
-     PATCHVERSION=`patch --version 2>&1`
- 
-@@ -1164,6 +1165,7 @@
- AC_CONFIG_SUBDIRS(popt beecrypt zlib $WITH_DB_SUBDIR)
+--- rpm-4.1/configure.ac.wiget	Thu Aug 22 19:01:34 2002
++++ rpm-4.1/configure.ac	Wed Sep 18 23:50:46 2002
+@@ -1194,6 +1194,7 @@
+ AC_CONFIG_SUBDIRS(popt beecrypt zlib libelf db3)
  
  AC_OUTPUT([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
 +	macros.perl scripts/perl.req scripts/perl.prov
  	rpmio/Makefile rpmdb/Makefile lib/Makefile build/Makefile
- 	scripts/Makefile scripts/brp-redhat tools/Makefile
- 	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
---- rpm-4.0.4/macros.in.wiget	Tue Feb 12 21:25:39 2002
-+++ rpm-4.0.4/macros.in	Tue Feb 12 21:29:18 2002
-@@ -898,8 +898,10 @@
+ 	scripts/Makefile scripts/brp-redhat
+ 	scripts/macros.perl scripts/macros.php scripts/macros.python
+--- rpm-4.1/macros.in.wiget	Sun Sep  1 00:30:19 2002
++++ rpm-4.1/macros.in	Wed Sep 18 23:50:46 2002
+@@ -1012,8 +1012,10 @@
  #	%dir %{perl_sitearch}/auto/Image
  #
  %requires_eq()	%(LC_ALL="C" echo '%*' | xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")

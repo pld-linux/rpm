@@ -1,44 +1,17 @@
---- rpm-4.0.4/rpmdb/dbconfig.c.wiget	Sun Jan 20 17:48:23 2002
-+++ rpm-4.0.4/rpmdb/dbconfig.c	Wed Feb 13 22:45:40 2002
-@@ -15,7 +15,7 @@
- /*@=redef@*/
- #endif
+--- rpm-4.1/rpmdb/rpmdb.h.wiget	Tue Sep 17 16:56:35 2002
++++ rpm-4.1/rpmdb/rpmdb.h	Thu Sep 19 00:19:26 2002
+@@ -9,7 +9,7 @@
  
--#include <db3/db.h>
-+#include DB_H
- 
+ #include <assert.h>
  #include <rpmlib.h>
- #include <rpmmacro.h>
---- rpm-4.0.4/rpmdb/db3.c.wiget	Sun Jan 20 18:09:56 2002
-+++ rpm-4.0.4/rpmdb/db3.c	Wed Feb 13 22:45:57 2002
-@@ -23,7 +23,7 @@
- /*@=redef@*/
- #endif
+-#include <db.h>
++#include <db4/db.h>
  
--#include <db3/db.h>
-+#include DB_H
- 
- #include <rpmlib.h>
- #include <rpmmacro.h>
---- rpm-4.0.4/system.h.wiget	Wed Feb 13 22:46:12 2002
-+++ rpm-4.0.4/system.h	Wed Feb 13 22:48:21 2002
-@@ -581,4 +581,13 @@
- #ifndef MOUNTED
- #define MOUNTED "/etc/mnttab"
- #endif
-+
-+#ifdef HAVE_DB4_DB_H
-+#define DB_H <db4/db.h>
-+#elif defined(HAVE_DB3_DB_H)
-+#define DB_H <db3/db.h>
-+#else
-+#define DB_H <db.h>
-+#endif
-+
- #endif	/* H_SYSTEM */
---- rpm-4.0.4/configure.in.wiget	Wed Feb 13 22:48:32 2002
-+++ rpm-4.0.4/configure.in	Wed Feb 13 22:53:31 2002
-@@ -393,14 +393,16 @@
+ /*@-exportlocal@*/
+ /*@unchecked@*/
+--- rpm-4.1/configure.ac.wiget	Thu Sep 19 00:14:53 2002
++++ rpm-4.1/configure.ac	Thu Sep 19 00:17:45 2002
+@@ -437,10 +437,11 @@
  if test $withval = no ; then
  dnl ------------------ without internal db
  
@@ -47,16 +20,15 @@
  
  dnl Check for Berkeley db3 API.
  AC_CHECK_FUNC(db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"],
--  AC_CHECK_LIB(db-3.2, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.2"],
--    AC_CHECK_LIB(db-3.1, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.1"],
--      AC_CHECK_LIB(db-3.0, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.0"],
--        AC_CHECK_LIB(db, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb"],
 +  AC_CHECK_LIB(db-4.0, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-4.0"],
-+    AC_CHECK_LIB(db-3.2, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.2"],
-+      AC_CHECK_LIB(db-3.1, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.1"],
-+        AC_CHECK_LIB(db-3.0, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.0"],
-+          AC_CHECK_LIB(db, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb"],
-+          ,$libthread)
-         ,$libthread)
-       ,$libthread)
-     ,$libthread)
+   AC_CHECK_LIB(db-3.2, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.2"],
+     AC_CHECK_LIB(db-3.1, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.1"],
+       AC_CHECK_LIB(db-3.0, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.0"],
+@@ -449,6 +450,7 @@
+       )
+     )
+   )
++  )
+ )
+ 
+ if test X"$DBLIBSRCS" = X; then

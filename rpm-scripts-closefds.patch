@@ -1,19 +1,19 @@
---- rpm-4.0.4/lib/rpminstall.c.wiget	Tue Feb 12 23:08:40 2002
-+++ rpm-4.0.4/lib/rpminstall.c	Tue Feb 12 23:12:50 2002
-@@ -97,8 +97,15 @@
- 	if (filename == NULL || filename[0] == '\0')
- 	    return NULL;
- 	fd = Fopen(filename, "r.ufdio");
--	if (fd)
-+	if (fd) {
-+	    int oldfl;
+--- rpm-4.1/lib/rpminstall.c.wiget	Mon Sep 16 21:06:08 2002
++++ rpm-4.1/lib/rpminstall.c	Thu Sep 19 00:03:36 2002
+@@ -126,8 +126,15 @@
+ 		xx = Fclose(fd);
+ 		fd = NULL;
+ 	    }
+-	} else
++	} else {
++ 	    int oldfl;
  	    fd = fdLink(fd, "persist (showProgress)");
-+	    oldfl=Fcntl(fd, F_GETFD, 0);
-+	    if(oldfl >= 0) {
-+		oldfl |= FD_CLOEXEC; /* scripts shouldn't inherit rpm file descriptor */
-+		Fcntl(fd, F_SETFD, oldfl);
-+	    }
-+	}
++ 	    oldfl=Fcntl(fd, F_GETFD, 0);
++ 	    if(oldfl >= 0) {
++ 		oldfl |= FD_CLOEXEC; /* scripts shouldn't inherit rpm file descriptor */
++ 		Fcntl(fd, F_SETFD, oldfl);
++ 	    }
++ 	}
+ 	/*@=type@*/
  	return fd;
  	/*@notreached@*/ break;
- 
