@@ -17,7 +17,7 @@
 # versions of required libraries
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.9
-%define	beecrypt_ver	4.0.0
+%define	beecrypt_ver	2:4.0.0
 %define	rpm_macros_rev	1.162
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
