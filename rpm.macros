@@ -108,6 +108,8 @@
 # requires name = version-release
 %requires_releq()  %(LC_ALL="C" rpm -q --queryformat 'Requires:%%{NAME} = %%{VERSION}-%%{RELEASE}' %1| grep -v "is not")
 %requires_kernel_releq() %(LC_ALL="C" rpm -q --queryformat 'Prereq:kernel = %%{VERSION}-%%{RELEASE}' kernel-headers | grep -v "is not")
+%requires_releq_kernel_up() %(LC_ALL="C" rpm -q --queryformat 'Prereq:kernel-up = %%{VERSION}-%%{RELEASE}' kernel-headers | grep -v "is not")
+%requires_releq_kernel_smp() %(LC_ALL="C" rpm -q --queryformat 'Prereq:kernel-smp = %%{VERSION}-%%{RELEASE}' kernel-headers | grep -v "is not")
 
 #-----------------------------------------------------------------
 # find and gzip all files in %{_mandir} and %{infodir}
