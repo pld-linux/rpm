@@ -18,7 +18,7 @@
 %define	reqdb_ver	4.1.25-1
 %define	reqpopt_ver	1.9
 %define	beecrypt_ver	3.0.0-0.20030610.1
-%define rpm_macros_rev	1.130
+%define rpm_macros_rev	1.132
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -29,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.27
+Release:	0.%{snap}.28
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -93,6 +93,7 @@ Patch34:	%{name}-examplesaredoc.patch
 Patch35:	%{name}-po.patch
 Patch36:	%{name}-amd64.patch
 Patch37:	%{name}-notsc.patch
+Patch38:	%{name}-hack-norpmlibdep.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -127,7 +128,9 @@ Requires:	popt >= %{reqpopt_ver}
 Conflicts:	glibc < 2.2.92
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		__find_provides	%{SOURCE4}
+# not needed now (rpm processes rpmlib(*) deps internally) and didn't work
+# anyway (broken: uses obsolete find-provides script, pgrep(??? typo???))
+##define	__find_provides	%{SOURCE4}
 %define		_binary_payload	w9.gzdio
 %define		_noPayloadPrefix 1
 
@@ -576,6 +579,7 @@ cat %{SOURCE14} >> macros.in
 %patch35 -p1
 %patch36 -p1
 %patch37 -p1
+%patch38 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
@@ -649,6 +653,7 @@ install %{SOURCE4} $RPM_BUILD_ROOT%{_libdir}/rpm/find-rpm-provides
 install %{SOURCE5} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 # 2 following files - to be removed or changed to find-elf-*
 # (to generate only ELF dependencies using objdump)???
+# WARNING: don't even try to use, currently broken by some 64-bit experiments
 install %{SOURCE7} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
 install %{SOURCE10} $RPM_BUILD_ROOT%{_libdir}/rpm/compress-doc
