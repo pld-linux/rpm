@@ -48,13 +48,14 @@ elflibrequires=`for f in $elfliblist; do
 done | sed "s/['\"]/\\\&/g" | grep -v 'libNoVersion.so' | sort -u
 `
 
-for f in $scriptlist; do
+scriptrequires=`for f in $scriptlist; do
     if [ -x $f ]; then
 	head -1 $f | sed -ne '/^\#\!/p' | sed -e 's/^\#\![	]*//' | cut -d" " -f1
     fi
 done | sort -u
+`
 
-for f in $liblist $exelist ; do
+elflibverrequires=`for f in $liblist $exelist ; do
     objdump -p $f | awk '
 	BEGIN { START=0; LIBNAME=""; }
 	/Version References:/ { START=1; }
@@ -66,12 +67,15 @@ for f in $liblist $exelist ; do
 	/^$/ { START=0; }
     '
 done | sort -u
+`
 # Generate name of rpm package provides library
 
 allrequires="$aoutexerequires
 $elfexerequires
 $aoutlibrequires
-$elflibrequires"
+$elflibrequires
+$scriptrequires
+$elflibverrequires"
 
 if [ -f __rpm_noautoreq ] ; then
 	for i in `cat __rpm_noautoreq`; do
