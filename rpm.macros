@@ -210,7 +210,7 @@ echo "Compress man and info pages."; \
 		awk '/LF.*shared object/ {print $1}' | cut -d: -f1`; \
 	if [ -n "$elfexelist$elfsharedlist" ]; then \
 		chrpath -d $elfexelist $elfsharedlist; \
-	fi; \
+	fi; } \
 } }
 #-----------------------------------------------------------------
 # Find and gzip all kernel modules
