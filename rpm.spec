@@ -59,6 +59,7 @@ Patch31:	%{name}-athlon-identify.patch
 Patch32:	%{name}-gettext-in-header.patch
 Patch33:	%{name}-perlprov-perl5.6.patch
 Patch34:	%{name}-groups-po.patch
+Patch35:	%{name}-ac25x.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 URL:		http://www.rpm.org/
@@ -354,6 +355,7 @@ construir pacotes usando o RPM.
 %endif
 
 %patch32 -p1
+%patch35 -p1
 %patch35 -p1
 %patch36 -p1
 %patch37 -p1
