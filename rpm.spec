@@ -2,13 +2,15 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.4
-Release:	6
+Release:	7
 Group:		Base
 Group(pl):	Podstawowe
 License:	GPL
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-3.0.x/%{name}-%{version}.tar.gz
 Source1:	rpm.groups
-Source3:	rpm.macros
+Source2:	rpm.macros
+Source3:	rpm-find-requires-pre
+Source4:	rpm-find-requires-post
 Source5:	rpm-install-tree
 Patch0:		rpm-rpmrc.patch
 Patch1:		rpm-find-requires.patch
@@ -138,7 +140,7 @@ construir pacotes usando o RPM.
 %patch6 -p1 
 %patch7 -p1 
 %patch31 -p1
-install %{SOURCE3} macros.pld.in
+install %{SOURCE2} macros.pld.in
 install %{SOURCE13} macros.python.in
 (cd scripts; 
 mv perl.req perl.req.in
@@ -178,6 +180,9 @@ install %{SOURCE5} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
 	pkgbindir="%{_bindir}"
 
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
+install %{SOURCE3} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires-pre
+install %{SOURCE4} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires-post
+
 strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*
 
 #%%_install_langs pl_PL:en_US
@@ -241,8 +246,7 @@ rm -rf $RPM_BUILD_ROOT
 %lang(ko) %{_mandir}/ko/man8/rpm.8*
 %dir /usr/lib/rpm
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
-# przenie¶æ do %%doc
-#%attr(755,root,root) %{_libdir}/rpm/convertrpmrc.sh
+%lang(sk) %{_mandir}/sk/man8/rpm.8*
 
 %dir /var/lib/rpm
 %{_libdir}/rpm/rpmpopt
