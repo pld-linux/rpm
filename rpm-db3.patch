@@ -17,7 +17,7 @@ diff -ur rpm-3.0.5/lib/dbindex.h rpm-3.0.5.bak/lib/dbindex.h
  #ifndef H_DBINDEX
  #define H_DBINDEX
  
-+#include <db3/db_185.h>
++#include <db_185.h>
 +/*
  #ifdef HAVE_DB1_DB_H
  #include <db1/db.h>
