@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	2.5.6
-Release:	2d
+Release:	3d
 Group:		Base
 Group(pl):	Bazowe
 URL:		ftp://ftp.rpm.org/pub/rpm/dist/rpm-2.5.x
@@ -26,7 +26,7 @@ zainstalowaæ czy zweryfikowaæ dowolny pakiet. Informacje dotycz±ce ka¿dego
 pakietu s± przechowywane w bazie danych i dostêpne tylko dla administratora 
 systemu.
 przechowywane w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
-%package devel
+%package	devel
 Summary:	Header files and libraries 
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne	
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne
@@ -43,7 +43,7 @@ creation of graphical package managers and other tools that need
 Pliki nag³ówkowe i biblioteki statyczne.
 graficznych mened¿erów pakietów oraz innych narzêdzi, które wymagaj±
 construir pacotes usando o RPM.
-%setup -q
+%setup  -q
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -76,7 +76,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 
-%doc RPM-PGP-KEY.bz2 CHANGES.bz2 groups.bz2 docs/*
+%doc {RPM-PGP-KEY,CHANGES,groups}.bz2 docs/*
 %postun -p /sbin/ldconfig
 
 %attr(755,root,root) /usr/bin/gendiff
