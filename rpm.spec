@@ -26,7 +26,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.53.2%{?with_distver:+distver}
+Release:	0.%{snap}.54%{?with_distver:+distver}
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -622,6 +622,7 @@ cat %{SOURCE11} >> macros.in
 %if "%{py_ver}" == "2.4"
 %patch48 -p1
 %endif
+%patch49 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
