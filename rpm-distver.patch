@@ -1,0 +1,231 @@
+--- rpm.orig/lib/rpmte.h	2004-04-03 12:30:57.000000000 +0000
++++ rpm/lib/rpmte.h	2004-08-27 15:00:40.000000000 +0000
+@@ -77,6 +77,7 @@
+     const char * arch;		/*!< Architecture hint. */
+ /*@only@*/ /*@null@*/
+     const char * os;		/*!< Operating system hint. */
++    const char * dist;		/*!< Distribution. */
+     int archScore;		/*!< (TR_ADDED) Arch score. */
+     int osScore;		/*!< (TR_ADDED) Os score. */
+ 
+@@ -238,6 +239,15 @@
+ 	/*@*/;
+ 
+ /**
++ * Retrieve distribution string of transaction element.
++ * @param te		transaction element
++ * @return		distribution string
++ */
++/*@observer@*/ /*@null@*/
++extern const char * rpmteDist(rpmte te)
++	/*@*/;
++
++/**
+  * Retrieve color bits of transaction element.
+  * @param te		transaction element
+  * @return		color bits
+--- rpm.orig/lib/rpmps.h	2003-12-30 13:14:50.000000000 +0000
++++ rpm/lib/rpmps.h	2004-08-25 19:57:22.000000000 +0000
+@@ -36,7 +36,8 @@
+     RPMPROB_OLDPACKAGE,	/*!< package ... (which is newer than ...) is already installed */
+     RPMPROB_DISKSPACE,	/*!< installing package ... needs ... on the ... filesystem */
+     RPMPROB_DISKNODES,	/*!< installing package ... needs ... on the ... filesystem */
+-    RPMPROB_BADPRETRANS	/*!< (unimplemented) */
++    RPMPROB_BADPRETRANS,	/*!< (unimplemented) */
++    RPMPROB_OLDDISTRO	/*!< */
+  } rpmProblemType;
+ 
+ /**
+--- rpm.orig/lib/rpmps.c	2003-12-30 13:14:50.000000000 +0000
++++ rpm/lib/rpmps.c	2004-08-25 20:20:19.000000000 +0000
+@@ -268,6 +268,11 @@
+ 		altNEVR+2,
+ 		(prob->ulong1 ? "" : _("(installed) ")), pkgNEVR);
+ 	break;
++	case RPMPROB_OLDDISTRO:
++	rc = snprintf(buf, nb,
++		_("package %s is for older distribution than already installed %s"),
++		pkgNEVR, altNEVR);
++	break;
+     default:
+ 	rc = snprintf(buf, nb,
+ 		_("unknown error %d encountered while manipulating package %s"),
+--- rpm.orig/lib/rpmlib.h	2004-06-14 00:39:06.000000000 +0000
++++ rpm/lib/rpmlib.h	2004-09-02 16:34:46.000000000 +0000
+@@ -1021,6 +1021,8 @@
+ int rpmvercmp(const char * a, const char * b)
+ 	/*@*/;
+ 
++int rpmdistcmp(const char *a, const char *b);
++
+ /** \ingroup rpmtrans
+  * Check dependency against internal rpmlib feature provides.
+  * @param key		dependency
+--- rpm.orig/lib/rpmvercmp.c	2004-03-25 21:01:22.000000000 +0000
++++ rpm/lib/rpmvercmp.c	2004-09-02 16:42:34.000000000 +0000
+@@ -8,6 +8,28 @@
+ 
+ #include "debug.h"
+ 
++/* choose which distro is newer */
++/* return 1: a is newer than b */
++/*        0: a and b are the same version */
++/*       -1: b is newer than a */
++
++int rpmdistcmp(const char *a, const char *b)
++{
++	const char *dist = rpmExpand("%{?distribution}", NULL);
++	
++	if (dist == NULL || *dist == '\0')
++		return 0;
++	
++	if ((strcmp(a,dist) == 0) || (strcmp(b,dist) == 0))
++		return 0;
++
++	if ((strncmp(a,dist,strlen(dist)) == 0) && 
++			(strncmp(b,dist,strlen(dist)) == 0))
++		return (rpmvercmp(a,b));
++
++	return 0;
++}
++
+ /* compare alpha and numeric segments of two versions */
+ /* return 1: a is newer than b */
+ /*        0: a and b are the same version */
+--- rpm.orig/lib/transaction.c	2004-05-20 21:23:01.000000000 +0000
++++ rpm/lib/transaction.c	2004-09-02 16:41:31.000000000 +0000
+@@ -650,6 +650,31 @@
+ }
+ 
+ /**
++ * Check if current package is from a newer distribution than installed one.
++ * @param p		current transaction element
++ * @param h		installed header
++ * @return		1: current is newer than installed
++ * 				0: dist comparison doesn't apply for any reason
++ * 			   -1: current is older than installed
++ */
++static int compareDistVersion(const rpmte p, const Header h)
++{
++	const char * cdist; /* current package */
++	const char * idist; /* installed package */
++
++	rc = rpmExpandNumeric("%{?_dont_compare_distversion}");
++	if (rc == 1)
++		return 0;
++
++	if (!headerGetEntry(h, RPMTAG_DISTRIBUTION, NULL, (void **) &idist, NULL))
++		return 0;
++	if (!(cdist = rpmteDist(p)))
++		return 0;
++
++	return (rpmdistcmp(cdist,idist));
++}
++
++/**
+  * Ensure that current package is newer than installed package.
+  * @param ts		transaction set
+  * @param p		current transaction element
+@@ -670,6 +695,23 @@
+     if (p == NULL || h == NULL)
+ 	return 1;
+ 
++	rc = compareDistVersion(p, h);
++	if (rc == 1)
++		return 1;
++	else if (rc == -1)
++	{
++		rpmps ps = rpmtsProblems(ts);
++		const char * altNEVR = hGetNEVR(h, NULL);
++		rpmpsAppend(ps, RPMPROB_OLDDISTRO,
++			rpmteNEVR(p), rpmteKey(p),
++			NULL, NULL,
++			altNEVR,
++			0);
++		altNEVR = _free(altNEVR);
++		ps = rpmpsFree(ps);
++		return 0;
++	}
++
+ /*@-boundswrite@*/
+     nb = strlen(rpmteNEVR(p)) + (rpmteE(p) != NULL ? strlen(rpmteE(p)) : 0) + 1;
+     t = alloca(nb);
+@@ -695,9 +737,9 @@
+ 		0);
+ 	altNEVR = _free(altNEVR);
+ 	ps = rpmpsFree(ps);
+-	rc = 1;
+-    } else
+ 	rc = 0;
++    } else
++	rc = 1;
+ 
+     return rc;
+ }
+@@ -1521,12 +1563,15 @@
+ 				rpmteO(p));
+ 	    }
+ 
+-	    while (rpmdbNextIterator(mi) != NULL) {
+-		rpmpsAppend(ps, RPMPROB_PKG_INSTALLED,
+-			rpmteNEVR(p), rpmteKey(p),
+-			NULL, NULL,
+-			NULL, 0);
+-		/*@innerbreak@*/ break;
++		Header h;
++	    while ((h = rpmdbNextIterator(mi)) != NULL) {
++			if(compareDistVersion(p, h) == 0) {
++				rpmpsAppend(ps, RPMPROB_PKG_INSTALLED,
++					rpmteNEVR(p), rpmteKey(p),
++					NULL, NULL,
++					NULL, 0);
++				/*@innerbreak@*/ break;
++			}
+ 	    }
+ 	    mi = rpmdbFreeIterator(mi);
+ 	}
+--- rpm.orig/lib/rpmte.c	2004-04-03 12:30:57.000000000 +0000
++++ rpm/lib/rpmte.c	2004-08-27 15:05:56.000000000 +0000
+@@ -60,6 +60,7 @@
+     p->arch = _free(p->arch);
+     p->epoch = _free(p->epoch);
+     p->name = _free(p->name);
++    p->dist = _free(p->dist);
+     p->NEVR = _free(p->NEVR);
+     p->NEVRA = _free(p->NEVRA);
+ 
+@@ -93,7 +94,7 @@
+     HGE_t hge = (HGE_t)headerGetEntryMinMemory;
+     rpmte savep;
+     int_32 * ep;
+-    const char * arch, * os;
++    const char * arch, * os, * dist;
+     char * t;
+     size_t nb;
+     int xx;
+@@ -110,6 +111,13 @@
+      */
+     p->db_instance = 0;
+ 
++    dist = NULL;
++    xx = hge(h, RPMTAG_DISTRIBUTION, NULL, (void **)&dist, NULL);
++    if (dist != NULL)
++        p->dist = xstrdup(dist);
++    else
++        p->dist = NULL;
++	
+     arch = NULL;
+     xx = hge(h, RPMTAG_ARCH, NULL, (void **)&arch, NULL);
+     if (arch != NULL) {
+@@ -279,6 +287,11 @@
+     return (te != NULL ? te->os : NULL);
+ }
+ 
++const char * rpmteDist(rpmte te)
++{
++    return (te != NULL ? te->dist : NULL);
++}
++
+ uint_32 rpmteColor(rpmte te)
+ {
+     return (te != NULL ? te->color : 0);
