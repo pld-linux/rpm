@@ -471,6 +471,10 @@ Requires:	gcc >= 3.0.3
 %else
 Requires:	gcc
 %endif
+%ifarch amd64
+Conflicts:	automake < 1:1.7.9-2
+Conflicts:	libtool < 2:1.5-13
+%endif
 Requires:	glibc-devel
 Requires:	grep
 Requires:	gzip
