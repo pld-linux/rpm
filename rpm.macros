@@ -5,7 +5,7 @@
 %__chown_Rhf           @__CHOWN_RHF@
 %__chgrp_Rhf           @__CHGRP_RHF@
 
-%_fixowner       [ `%{__id_u}` = '0' ] && %{__chown_Rhf} root.@ROOT_GROUP@
+%_fixowner       [ `%{__id_u}` = '0' ] && %{__chown_Rhf} root:@ROOT_GROUP@
 %_fixgroup       true
 %_fixperms             %{__chmod} -Rf @FIXPERMS@
 %_topdir         %(echo $HOME)/rpm
