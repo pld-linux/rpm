@@ -1,7 +1,7 @@
 diff -Nru rpm-4.0/rpmpopt.in rpm-4.0.new/rpmpopt.in
 --- rpm-4.0/rpmpopt.in	Wed Nov 15 19:18:35 2000
 +++ rpm-4.0.new/rpmpopt.in	Wed Nov 15 19:18:15 2000
-@@ -80,6 +80,17 @@
+@@ -80,6 +80,19 @@
  # Build policies enabled from command line. Last policy applies.
  rpm alias --buildpolicy --define '__os_install_post @RPMCONFIGDIR@/brp-!#:+'
  
@@ -11,8 +11,10 @@ diff -Nru rpm-4.0/rpmpopt.in rpm-4.0.new/rpmpopt.in
 +# Compiling with debuginfo may be enabled by --debug
 +rpm alias --debug --define 'debug 1'
 +
-+# Display spec's bcond_* 
-+rpm exec --bcond find-spec-bcond
++# Conditional building 
++rpm exec  --bcond   find-spec-bcond
++rpm alias --with    --define "bcond_on_!#:+ 1"
++rpm alias --without --define "bcond_off_!#:+ 1"
 +
 +# Don't remove $BUILDROOT if --noclean
 +
