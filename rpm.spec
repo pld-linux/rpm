@@ -10,10 +10,11 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 #
 %include        /usr/lib/rpm/macros.python
+%define snap	20030322
 %define	beecrypt_ver	2.2.0
 # versions of required libraries
 %define	reqdb_ver	4.1.25-1
-%define	reqpopt_ver	1.7
+%define	reqpopt_ver	1.8
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -24,12 +25,12 @@ Summary(uk):	íÅÎÅÄÖÅÒ ÐÁËÅÔ¦× ×¦Ä RPM
 Name:		rpm
 %define	ver	4.2
 Version:	%{ver}
-%define	rel	0.1
+%define	rel	0.%{snap}.1
 Release:	%{rel}
 %define	beecrypt_rel	%{ver}_%{rel}
 License:	GPL
 Group:		Base
-Source0:	ftp://ftp.rpm.org/pub/rpm/test-4.2/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.rpm.org/pub/rpm/test-4.2/%{name}-%{version}.%{snap}.tar.gz
 Source1:	%{name}.groups
 Source2:	%{name}.macros
 Source3:	%{name}-install-tree
@@ -85,7 +86,6 @@ Patch28:	%{name}-beecrypt-opt.patch
 Patch29:	%{name}-python-pic.patch
 Patch30:	%{name}-home_etc.patch
 Patch31:	%{name}-system_libs-more.patch
-Patch32:	%{name}-nofile.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -189,7 +189,7 @@ Requires:	%{name} = %{version}
 Requires:	bzip2-devel
 Requires:	db-devel
 Requires:	elfutils-devel
-Requires:	popt-devel >= 1.7
+Requires:	popt-devel >= %{reqpopt_ver}
 Requires:	zlib-devel
 
 %description devel
@@ -247,7 +247,7 @@ Requires:	%{name}-devel = %{version}
 Requires:	bzip2-static
 Requires:	db-static
 Requires:	elfutils-static
-Requires:	popt-static >= 1.7
+Requires:	popt-static >= %{reqpopt_ver}
 Requires:	zlib-static
 
 %description static
@@ -278,7 +278,7 @@ Summary(de):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
 Summary(pl):	Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{version}
-Requires:	popt >= 1.7
+Requires:	popt >= %{reqpopt_ver}
 
 %description utils
 Additional utilities for managing rpm packages and database.
@@ -393,6 +393,7 @@ Summary(uk):	óËÒÉÐÔÉ ÔÁ ÕÔÉÌ¦ÔÉ, ÎÅÏÂÈ¦ÄÎ¦ ÄÌÑ ÐÏÂÕÄÏ×É ÐÁËÅÔ¦×
 Group:		Applications/File
 Requires(pre):	findutils
 Requires:	%{name} = %{version}
+Requires:	%{name}-utils = %{version}
 Requires:	/bin/id
 Requires:	awk
 Requires:	binutils
@@ -551,12 +552,12 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch25 -p1
 # need review
 #%%patch26 -p1
-%patch27 -p1
+# obsoleted ?
+#%%patch27 -p1
 %patch28 -p1
 %patch29 -p1
 %patch30 -p1
 %patch31 -p1
-%patch32 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
@@ -596,6 +597,15 @@ rm -f missing
 %{__autoconf}
 %{__automake}
 cd ..
+cd file
+rm -f missing
+%{__libtoolize}
+%{__aclocal}
+%{__autoheader}
+%{__autoconf}
+%{__automake}
+cd ..
+
 
 
 rm -f missing
@@ -666,7 +676,8 @@ install -d $RPM_BUILD_ROOT/var/spool/repackage
 
 %find_lang %{name}
 
-rm -f doc/manual/Makefile*
+cp -a doc/manual manual
+rm -f manual/Makefile*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -681,7 +692,7 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc RPM-PGP-KEY CHANGES doc/manual/*
+%doc RPM-PGP-KEY CHANGES manual
 
 %attr(755,root,root) /bin/rpm
 
@@ -786,8 +797,9 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/rpmcache
 %attr(755,root,root) %{_bindir}/rpmdeps
 %attr(755,root,root) %{_bindir}/rpmgraph
-%attr(755,root,root) %{_bindir}/striptofile
-%attr(755,root,root) %{_bindir}/unstripfile
+%attr(755,root,root) %{_bindir}/rpmfile
+#%attr(755,root,root) %{_bindir}/striptofile
+#%attr(755,root,root) %{_bindir}/unstripfile
 %attr(755,root,root) %{_libdir}/rpm/find-debuginfo.sh
 %attr(755,root,root) %{_libdir}/rpm/rpm2cpio.sh
 %attr(755,root,root) %{_libdir}/rpm/rpmd
@@ -796,6 +808,8 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_libdir}/rpm/rpmk
 %attr(755,root,root) %{_libdir}/rpm/rpmq
 %attr(755,root,root) %{_libdir}/rpm/tgpg
+%attr(755,root,root) %{_libdir}/rpm/rpmdb_loadcvt
+%{_libdir}/rpm/magic
 
 # not here
 #%%{_libdir}/rpm/rpm.daily
