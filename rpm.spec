@@ -4,7 +4,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.1
-Release:	6.%{date}
+Release:	7.%{date}
 Group:		Base
 Group(pl):	Bazowe
 Copyright:	GPL
@@ -13,6 +13,8 @@ Source1:	rpm.groups
 Source2:	rpm.8pl
 Source3:	rpm.macros
 Source4:	rpm.pl.po
+Source5:	rpm-backup
+Source6:	rpm-backup.sh
 Patch0:		rpm-rpmrc.patch
 Patch1:		rpm-i18n.patch
 Patch2:		rpm-find-requires.patch
@@ -32,6 +34,7 @@ BuildPrereq:	automake
 BuildPrereq:	autoconf >= 2.13-8
 BuildPrereq:	gettext
 Requires:	glibc >= 2.1
+Requires:	/etc/cron.daily
 BuildRoot:	/tmp/%{name}-%{version}-root
 Obsoletes:	rpm-libs
 %define		pyrequires_eq() Requires:	%1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
@@ -89,7 +92,8 @@ make
 
 
 %{__make} %{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
-install -d $RPM_BUILD_ROOT/var/db/rpm \
+install -d $RPM_BUILD_ROOT/var/db/{rpm,backups/rpm} \
+	$RPM_BUILD_ROOT/etc/{cron.daily,sysconfig} \
 	$RPM_BUILD_ROOT%{_mandir}/{ru,pl}/man8 \
 	$RPM_BUILD_ROOT/etc/skel/C/rpm/{SRPMS,RPMS,SOURCES,SPECS,BUILD}
 
@@ -102,6 +106,8 @@ install rpm2cpio.8ru $RPM_BUILD_ROOT%{_mandir}/ru/man8/rpm2cpio.8
 install %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/pl/man8/rpm.8
 
 install %{SOURCE1} docs/groups
+install %{SOURCE5} $RPM_BUILD_ROOT/etc/sysconfig
+install %{SOURCE6} $RPM_BUILD_ROOT/etc/cron.daily
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 strip  $RPM_BUILD_ROOT/{bin/rpm,%{_bindir}/*} || :
 
@@ -111,10 +117,10 @@ gzip -9fn $RPM_BUILD_ROOT%{_mandir}/{{ru,pl}/man8/*,man8/*} \
 %pre
 if [ -e /var/lib/rpm ] && [ ! -L /var/lib/rpm ]; then
 	mkdir -p /var/db/rpm /var/db/rpm.old
-	cp -a /var/lib/rpm/* /var/db/rpm
-	cp -a /var/lib/rpm/* /var/db/rpm.old
+	cp -ap /var/lib/rpm/* /var/db/rpm
+	cp -ap /var/lib/rpm/* /var/db/rpm.old
 	echo "Yours old rpm database backuped in /var/db/rpm.old" >&2
-	echo "Run \'rpm --rebuilddb\' to update rpm database" >&2
+	echo "Run 'rpm --rebuilddb' to update rpm database" >&2
 fi
 
 %post
@@ -151,6 +157,9 @@ rm -rf $RPM_BUILD_ROOT
 %lang(tr)    %{_datadir}/locale/tr/LC_MESSAGES/rpm.mo
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
 %attr(755,root,root) %dir /var/db/rpm
+%attr(755,root,root) %dir /var/db/backups/rpm
+%attr(750,root,root) /etc/cron.daily/rpm-backup.sh
+%attr(640,root,root) /etc/sysconfig/rpm-backup
 
 %dir /usr/lib/rpm
 %attr(755,root,root) %{_prefix}/lib/rpm/find-*
@@ -178,6 +187,7 @@ rm -rf $RPM_BUILD_ROOT
 - rewrited by Artur Frysiak <wiget@pld.org.pl>,
 - patches with fixes maked by Artur Frysiak and Marcin Dalecki
   <dalecki@cs.net.pl>.
+
 Revision 1.79  2000/02/17 03:42:17  kloczek
 - release 25,
 - added "Conflicts: /usr/bin/id" and rebuilded in enviroment with id in
