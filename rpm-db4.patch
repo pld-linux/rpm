@@ -1,62 +1,154 @@
---- rpm-4.0.4/rpmdb/dbconfig.c.wiget	Sun Jan 20 17:48:23 2002
-+++ rpm-4.0.4/rpmdb/dbconfig.c	Wed Feb 13 22:45:40 2002
-@@ -15,7 +15,7 @@
- /*@=redef@*/
- #endif
- 
--#include <db3/db.h>
-+#include DB_H
- 
- #include <rpmlib.h>
- #include <rpmmacro.h>
---- rpm-4.0.4/rpmdb/db3.c.wiget	Sun Jan 20 18:09:56 2002
-+++ rpm-4.0.4/rpmdb/db3.c	Wed Feb 13 22:45:57 2002
-@@ -23,7 +23,7 @@
- /*@=redef@*/
- #endif
- 
--#include <db3/db.h>
-+#include DB_H
- 
- #include <rpmlib.h>
- #include <rpmmacro.h>
---- rpm-4.0.4/system.h.wiget	Wed Feb 13 22:46:12 2002
-+++ rpm-4.0.4/system.h	Wed Feb 13 22:48:21 2002
-@@ -581,4 +581,13 @@
- #ifndef MOUNTED
- #define MOUNTED "/etc/mnttab"
- #endif
-+
-+#ifdef HAVE_DB4_DB_H
-+#define DB_H <db4/db.h>
-+#elif defined(HAVE_DB3_DB_H)
-+#define DB_H <db3/db.h>
-+#else
-+#define DB_H <db.h>
-+#endif
-+
- #endif	/* H_SYSTEM */
---- rpm-4.0.4/configure.in.wiget	Wed Feb 13 22:48:32 2002
-+++ rpm-4.0.4/configure.in	Wed Feb 13 22:53:31 2002
-@@ -393,14 +393,16 @@
+--- rpm-4.1/configure.ac.wiget	Thu Sep 19 00:14:53 2002
++++ rpm-4.1/configure.ac	Thu Sep 19 00:17:45 2002
+@@ -437,10 +437,11 @@
  if test $withval = no ; then
  dnl ------------------ without internal db
  
 -AC_CHECK_HEADERS(db3/db.h)
-+AC_CHECK_HEADERS(db4/db.h db3/db.h)
++AC_CHECK_HEADERS(db.h)
  
  dnl Check for Berkeley db3 API.
  AC_CHECK_FUNC(db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"],
++  AC_CHECK_LIB(db-4.1, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-4.1"],
 -  AC_CHECK_LIB(db-3.2, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.2"],
--    AC_CHECK_LIB(db-3.1, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.1"],
--      AC_CHECK_LIB(db-3.0, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.0"],
--        AC_CHECK_LIB(db, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb"],
 +  AC_CHECK_LIB(db-4.0, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-4.0"],
-+    AC_CHECK_LIB(db-3.2, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.2"],
-+      AC_CHECK_LIB(db-3.1, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.1"],
-+        AC_CHECK_LIB(db-3.0, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.0"],
-+          AC_CHECK_LIB(db, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb"],
-+          ,$libthread)
-         ,$libthread)
-       ,$libthread)
-     ,$libthread)
+     AC_CHECK_LIB(db-3.1, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.1"],
+       AC_CHECK_LIB(db-3.0, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.0"],
+@@ -449,6 +450,7 @@
+       )
+     )
+   )
++  )
+ )
+ 
+ if test X"$DBLIBSRCS" = X; then
+--- rpm-4.1/rpmdb/db3.c.orig	Tue Aug 13 20:42:39 2002
++++ rpm-4.1/rpmdb/db3.c	Mon Aug 26 18:56:12 2002
+@@ -366,7 +396,7 @@
+     if (db != NULL)
+ 	rc = db->sync(db, flags);
+     /* XXX DB_INCOMPLETE is returned occaisionally with multiple access. */
++    _printit = _debug;
+-    _printit = (rc == DB_INCOMPLETE ? 0 : _debug);
+     rc = cvtdberr(dbi, "db->sync", rc, _printit);
+     return rc;
+ }
+@@ -599,10 +633,11 @@
+ {
+     DB * db = dbi->dbi_db;
+     DB * secondary = dbisecondary->dbi_db;
++    DB_TXN * txnid = NULL;
+     int rc;
+ 
+ /*@-moduncon@*/ /* FIX: annotate db3 methods */
++    rc = db->associate(db, txnid, secondary, callback, flags);
+-    rc = db->associate(db, secondary, callback, flags);
+ /*@=moduncon@*/
+     rc = cvtdberr(dbi, "db->associate", rc, _debug);
+     return rc;
+@@ -789,6 +830,7 @@
+ 
+     DB * db = NULL;
+     DB_ENV * dbenv = NULL;
++    DB_TXN * txnid = NULL;
+     u_int32_t oflags;
+     int _printit;
+ 
+@@ -1124,8 +1180,8 @@
+ 			? dbfullpath : dbfile;
+ #endif
+ 
++		rc = db->open(db, txnid, dbpath, dbsubfile,
++		    dbi->dbi_type, oflags, dbi->dbi_perms);
+-		rc = db->open(db, dbpath, dbsubfile,
+-		    dbi->dbi_type, oflags, dbi->dbi_perms);
+ 
+ 		if (rc == 0 && dbi->dbi_type == DB_UNKNOWN) {
+ #if (DB_VERSION_MAJOR == 3 && DB_VERSION_MINOR == 3 && DB_VERSION_PATCH == 11) \
+
+--- /python/_rpmdb.c.orig	Thu Oct 17 20:19:03 2002
++++ /python/_rpmdb.c	Thu Oct 17 20:24:07 2002
+@@ -410,25 +410,6 @@
+     switch (err) {
+         case 0:                     /* successful, no error */      break;
+ 
+-        case DB_INCOMPLETE:
+-#if INCOMPLETE_IS_WARNING
+-            strcpy(errTxt, db_strerror(err));
+-            if (_db_errmsg[0]) {
+-                strcat(errTxt, " -- ");
+-                strcat(errTxt, _db_errmsg);
+-                _db_errmsg[0] = 0;
+-            }
+-#if PYTHON_API_VERSION >= 1010 /* if Python 2.1 or better use warning framework */
+-            exceptionRaised = PyErr_Warn(PyExc_RuntimeWarning, errTxt);
+-#else
+-            fprintf(stderr, errTxt);
+-            fprintf(stderr, "\n");
+-#endif
+-
+-#else  /* do an exception instead */
+-        errObj = DBIncompleteError;
+-#endif
+-        break;
+ 
+         case DB_KEYEMPTY:           errObj = DBKeyEmptyError;       break;
+         case DB_KEYEXIST:           errObj = DBKeyExistError;       break;
+@@ -1025,7 +1006,7 @@
+ 
+ 
+     MYDB_BEGIN_ALLOW_THREADS;
+-    err = self->db->associate(self->db,
++    err = self->db->associate(self->db, NULL,
+                               secondaryDB->db,
+                               _db_associateCallback,
+                               flags);
+@@ -1498,7 +1479,7 @@
+     }
+ 
+     MYDB_BEGIN_ALLOW_THREADS;
+-    err = self->db->open(self->db, filename, dbname, type, flags, mode);
++    err = self->db->open(self->db, NULL, filename, dbname, type, flags, mode);
+     MYDB_END_ALLOW_THREADS;
+     if (makeDBError(err)) {
+         self->db = NULL;
+@@ -1851,7 +1832,6 @@
+         MAKE_HASH_ENTRY(nkeys);
+         MAKE_HASH_ENTRY(ndata);
+         MAKE_HASH_ENTRY(pagesize);
+-        MAKE_HASH_ENTRY(nelem);
+         MAKE_HASH_ENTRY(ffactor);
+         MAKE_HASH_ENTRY(buckets);
+         MAKE_HASH_ENTRY(free);
+@@ -3337,7 +3317,6 @@
+ 
+ #define MAKE_ENTRY(name)  _addIntToDict(d, #name, sp->st_##name)
+ 
+-    MAKE_ENTRY(lastid);
+     MAKE_ENTRY(nmodes);
+ #if (DBVER >= 32)
+     MAKE_ENTRY(maxlocks);
+@@ -4116,7 +4095,6 @@
+     ADD_INT(d, DB_APPEND);
+     ADD_INT(d, DB_BEFORE);
+     ADD_INT(d, DB_CACHED_COUNTS);
+-    ADD_INT(d, DB_CHECKPOINT);
+ #if (DBVER >= 33)
+     ADD_INT(d, DB_COMMIT);
+ #endif
+@@ -4124,7 +4102,6 @@
+ #if (DBVER >= 32)
+     ADD_INT(d, DB_CONSUME_WAIT);
+ #endif
+-    ADD_INT(d, DB_CURLSN);
+     ADD_INT(d, DB_CURRENT);
+ #if (DBVER >= 33)
+     ADD_INT(d, DB_FAST_STAT);
+@@ -4164,7 +4141,6 @@
+     ADD_INT(d, DB_DONOTINDEX);
+ #endif
+ 
+-    ADD_INT(d, DB_INCOMPLETE);
+     ADD_INT(d, DB_KEYEMPTY);
+     ADD_INT(d, DB_KEYEXIST);
+     ADD_INT(d, DB_LOCK_DEADLOCK);
