@@ -6,7 +6,7 @@ Group:       Utilities/System
 Source:      ftp://ftp.rpm.org/pub/rpm/dist/rpm-2.5.x/%{name}-%{version}.tar.gz
 Patch0:      rpm.patch
 Copyright:   GPL
-BuildRoot:   /var/tmp/%{name}-%{version}-root
+BuildRoot:   /tmp/%{name}-%{version}-root
 Conflicts:   patch < 2.5
 Obsoletes:	rpm-libs
 %define		pyrequires_eq() Requires:	%1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
@@ -35,7 +35,7 @@ make
 	--with-python
 
 
-install -d $RPM_BUILD_ROOT/usr/{lib,src/redhat{SOURCES,SPECS,RPMS/{$RPM_ARCH,noarch},SRPMS,BUILD}}
+install -d $RPM_BUILD_ROOT/{var/lib/rpm,usr/src/redhat/{SOURCES,SPECS,RPMS/{$RPM_ARCH,noarch},SRPMS,BUILD}}
 make installprefix="$RPM_BUILD_ROOT" install
 	pkgbindir="%{_bindir}"
 %clean
@@ -45,26 +45,24 @@ rm -rf $RPM_BUILD_ROOT
 /bin/rpm --initdb
 
 %files
-%deffattr(644, root, root, 755)
+%defattr(644, root, root, 755)
 %doc RPM-PGP-KEY CHANGES groups docs/*
 %attr(755, root, root) /bin/rpm
 %attr(755, root, root) /usr/bin/*
 %attr(644, root,  man) /usr/man/man8/*
-/usr/lib/rpm
-%dir /usr/src/redhat
-%lang(cz) /usr/share/locale/cz/LC_MESSAGES/rpm.mo
-%lang(de) /usr/share/locale/cz/LC_MESSAGES/rpm.mo
-%lang(fi) /usr/share/locale/cz/LC_MESSAGES/rpm.mo
-%lang(fr) /usr/share/locale/cz/LC_MESSAGES/rpm.mo
+%attr(700, root, root) %dir /var/lib/rpm
+/usr/src/redhat
+%lang(de) /usr/share/locale/de/LC_MESSAGES/rpm.mo
+%lang(fi) /usr/share/locale/fi/LC_MESSAGES/rpm.mo
+%lang(fr) /usr/share/locale/fr/LC_MESSAGES/rpm.mo
 %lang(pt) /usr/share/locale/pt-br/LC_MESSAGES/rpm.mo
 %lang(sv) /usr/share/locale/sv/LC_MESSAGES/rpm.mo
 %lang(tr) /usr/share/locale/tr/LC_MESSAGES/rpm.mo
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
 %attr(755,root,root) %{_libdir}/rpm/rpmi
-%deffattr(644, root, root, 755)
+%defattr(644, root, root, 755)
 /usr/include/rpm
-/usr/lib/librpm.a
-/usr/lib/librpmbuild.a
+/usr/lib/lib*.a
 %files utils
 %files -n python-rpm
 * Sun Aug 30 1998 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
