@@ -76,7 +76,7 @@ diff -durN rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
 +            rpmMessage(RPMMESS_DEBUG, "%s -> not found\n",N);
 +            continue;
 +        }
-+        rpmMessage(RPMMESS_NORMAL, "Iterator: %p\n",it);
++        rpmMessage(RPMMESS_DEBUG, "Iterator: %p\n",it);
 +        if (rpmdbGetIteratorCount(it)>1) {
 +            rpmMessage(RPMMESS_DEBUG, "%s -> multiple (skipping)\n",N);
 +            rpmdbFreeIterator(it);
