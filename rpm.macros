@@ -104,3 +104,6 @@ done \
 
 # If non-empty "debug" macro defined, add "dbg" suffix to release number
 %_rpmfilename		%%{NAME}-%%{VERSION}-%%{RELEASE}%{?debug:dbg}.%%{ARCH}.rpm
+
+# remove .comment and .note from ELFs 
+%__spec_install_post   /usr/lib/rpm/remove-unneeded-elf-sections %{buildroot}
