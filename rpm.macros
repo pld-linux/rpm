@@ -16,7 +16,7 @@
 # CFLAGS and LDFLAGS used to build
 
 %if %{_enable_debug_packages}%{!?_enable_debug_packages:0}
-%debuginfocflags        -ggdb -Wall
+%debuginfocflags        -ggdb
 %endif
 
 %debugcflags	-O0 -g -Wall
