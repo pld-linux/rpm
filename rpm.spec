@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.4
-Release:	4
+Release:	5
 Group:		Base
 Group(pl):	Podstawowe
 License:	GPL
@@ -167,7 +167,7 @@ make
 
 
 %{__make} %{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
-install -d $RPM_BUILD_ROOT/var/state/rpm \
+install -d $RPM_BUILD_ROOT/var/lib/rpm \
 	$RPM_BUILD_ROOT%{_mandir}/{ru,pl}/man8
 
 make DESTDIR="$RPM_BUILD_ROOT" pkgbindir="%{_bindir}" install
@@ -188,26 +188,26 @@ gzip -9fn $RPM_BUILD_ROOT%{_mandir}/{{ru,pl}/man8/*,man8/*} \
 	RPM-PGP-KEY CHANGES doc/manual/*
 
 %pre
-if [ -L /var/state/rpm ]; then
+if [ -L /var/lib/rpm ]; then
 	echo "WARNING: upgrade cannot be done because /var/state/rpm is symlink"
 	exit 1
 fi
-if [ ! -d /var/state/rpm ]; then 
-	if [ -e /var/lib/rpm ] && [ ! -L /var/lib/rpm ]; then
-		mkdir -p /var/state/rpm
-		cp -ap /var/lib/rpm/* /var/state/rpm
-		rm -rf /var/lib/rpm
-		ln -sf /var/state/rpm /var/lib/rpm
-		echo "RPM Database moved from /var/lib/rpm to /var/state/rpm" 1>&2
+if [ ! -d /var/lib/rpm ]; then 
+	if [ -e /var/state/rpm ] && [ ! -L /var/state/rpm ]; then
+		mkdir -p /var/lib/rpm
+		cp -ap /var/state/rpm/* /var/lib/rpm
+		rm -rf /var/state/rpm
+		ln -sf /var/lib/rpm /var/state/rpm
+		echo "RPM Database moved from /var/state/rpm to /var/lib/rpm" 1>&2
 		echo "Run second time upgradeing rpm package for complete operation" 1>&2
 		exit 1
 	fi
 	if [ -e /var/db/rpm ] && [ ! -L /var/db/rpm ]; then
-		mkdir -p /var/state/rpm
-		cp -ap /var/db/rpm/* /var/state/rpm
+		mkdir -p /var/lib/rpm
+		cp -ap /var/db/rpm/* /var/lib/rpm
 		rm -rf /var/db/rpm
-		ln -sf /var/state/rpm /var/db/rpm
-		echo "RPM Database moved from /var/db/rpm to /var/state/rpm" 1>&2
+		ln -sf /var/lib/rpm /var/db/rpm
+		echo "RPM Database moved from /var/db/rpm to /var/lib/rpm" 1>&2
 		echo "Run second time upgradeing rpm package for complete operation" 1>&2
 		exit 1
 	fi
@@ -220,7 +220,7 @@ fi
 if [ -L /var/db/rpm ]; then
 	rm -rf /var/db/rpm
 fi
-if [ ! -f /var/state/rpm/packages.rpm ]; then
+if [ ! -f /var/lib/rpm/packages.rpm ]; then
 	/bin/rpm --initdb
 fi
 
@@ -238,7 +238,7 @@ rm -rf $RPM_BUILD_ROOT
 %lang(pl) %{_mandir}/pl/man8/rpm.8*
 %lang(ja) %{_mandir}/ja/man8/rpm.8*
 %lang(ja) %{_mandir}/ja/man8/rpm.8*
-%dir /var/state/rpm
+%lang(ko) %{_mandir}/ko/man8/rpm.8*
 %dir /usr/lib/rpm
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
 # przenie¶æ do %%doc
