@@ -47,6 +47,8 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644, root, root, 755)
 %doc RPM-PGP-KEY CHANGES groups docs/*
+/usr/lib/rpmrc
+/usr/lib/rpmpopt
 %attr(755, root, root) /bin/rpm
 %attr(755, root, root) /usr/bin/*
 %attr(644, root,  man) /usr/man/man8/*
