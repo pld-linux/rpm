@@ -416,11 +416,14 @@ fi; \
 }
 
 # XMMS specific macros
-%xmms_data_dir                 %(echo `xmms-config --data-dir`)
-%xmms_plugin_dir               %(echo `xmms-config --plugin-dir`)
-%xmms_visualization_plugin_dir %(echo `xmms-config --visualization-plugin-dir`)
-%xmms_input_plugin_dir         %(echo `xmms-config --input-plugin-dir`)
-%xmms_output_plugin_dir        %(echo `xmms-config --output-plugin-dir`)
-%xmms_effect_plugin_dir        %(echo `xmms-config --effect-plugin-dir`)
-%xmms_general_plugin_dir       %(echo `xmms-config --general-plugin-dir`)
+%xmms_prefix                  %(echo `xmms-config --prefix`)
+%xmms_exec_prefix             %(echo `xmms-config --exec-prefix`)
+%xmms_version                 %(echo `xmms-config --version`)
+%xmms_datadir                 %(echo `xmms-config --data-dir`)
+%xmms_plugindir               %(echo `xmms-config --plugin-dir`)
+%xmms_visualization_plugindir %(echo `xmms-config --visualization-plugin-dir`)
+%xmms_input_plugindir         %(echo `xmms-config --input-plugin-dir`)
+%xmms_output_plugindir        %(echo `xmms-config --output-plugin-dir`)
+%xmms_effect_plugindir        %(echo `xmms-config --effect-plugin-dir`)
+%xmms_general_plugindir       %(echo `xmms-config --general-plugin-dir`)
 
