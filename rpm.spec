@@ -28,7 +28,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.7
+Release:	0.%{snap}.8
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -87,6 +87,7 @@ Patch34:	%{name}-nls-fixes.patch
 Patch35:	%{name}-missing-prototypes.patch
 Patch36:	%{name}-pld-autodep.patch
 Patch37:	%{name}-rpmsq.patch
+Patch38:	%{name}-file-readelf.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -585,6 +586,7 @@ cat %{SOURCE11} >> macros.in
 %patch35 -p1
 %patch36 -p1
 %patch37 -p1
+%patch38 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
