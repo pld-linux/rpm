@@ -29,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.26
+Release:	0.%{snap}.27
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -92,6 +92,7 @@ Patch33:	%{name}-provides-dont-obsolete.patch
 Patch34:	%{name}-examplesaredoc.patch
 Patch35:	%{name}-po.patch
 Patch36:	%{name}-amd64.patch
+Patch37:	%{name}-notsc.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -574,6 +575,7 @@ cat %{SOURCE14} >> macros.in
 %patch34 -p1
 %patch35 -p1
 %patch36 -p1
+%patch37 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
