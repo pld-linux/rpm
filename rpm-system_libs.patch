@@ -118,19 +118,18 @@ diff -urN rpm.org/rpmdb/Makefile.am rpm/rpmdb/Makefile.am
  	@WITH_LIBELF_LIB@
  librpmdb_la_LIBADD = $(DBLIBOBJS) $(libdb_la)
  librpmdb_la_DEPENDENCIES = $(DBLIBOBJS) $(libdb_la)
-diff -urN rpm.org/rpmio/Makefile.am rpm/rpmio/Makefile.am
---- rpm.org/rpmio/Makefile.am	2004-06-14 11:46:09.817153912 +0200
-+++ rpm/rpmio/Makefile.am	2004-06-14 11:48:20.584274288 +0200
-@@ -11,7 +11,6 @@
- INCLUDES = -I. \
+--- rpm.org/rpmio/Makefile.am.org	2004-11-18 17:42:53.756263795 +0100
++++ rpm.org/rpmio/Makefile.am	2004-11-18 17:43:09.526885309 +0100
+@@ -12,7 +12,6 @@
  	-I$(top_srcdir) \
  	@WITH_BEECRYPT_INCLUDE@ \
+ 	@WITH_LUA_INCLUDE@ \
 -	-I$(top_srcdir)/popt \
- 	-I$(top_srcdir)/lua/include \
- 	-I$(top_srcdir)/lua/local \
  	@INCPATH@
-@@ -69,34 +68,34 @@
- 	$(LINT) $(DEFS) $(INCLUDES) $(librpmio_la_SOURCES)
+ 
+ pkgincdir = $(pkgincludedir)
+@@ -70,43 +69,43 @@
+ tax_LDADD = librpmio.la
  
  tdigest_SOURCES = tdigest.c
 -tdigest_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la -lgcrypt
@@ -145,6 +144,17 @@ diff -urN rpm.org/rpmio/Makefile.am rpm/rpmio/Makefile.am
  tfts_LDFLAGS = -all-static
 -tfts_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
 +tfts_LDADD = librpmio.la -lpopt
+ 
+ tget_SOURCES = tget.c
+ tget_LDFLAGS = -all-static
+-tget_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++tget_LDADD = librpmio.la -lpopt
+ 
+ tput_SOURCES = tput.c
+ tput_LDFLAGS = -all-static
+-tput_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++tput_LDADD = librpmio.la -lpopt
+ 
  
  tglob_SOURCES = tglob.c
  tglob_LDFLAGS = -all-static

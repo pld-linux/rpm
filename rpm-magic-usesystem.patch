@@ -9,13 +9,13 @@ diff -urN rpm-4.3.org/file/Makefile.am rpm-4.3/file/Makefile.am
 diff -urN rpm-4.3.org/file/src/Makefile.am rpm-4.3/file/src/Makefile.am
 --- rpm-4.3.org/file/src/Makefile.am	2004-01-07 02:01:54.159548970 +0100
 +++ rpm-4.3/file/src/Makefile.am	2004-01-07 02:09:30.670672672 +0100
-@@ -24,7 +24,7 @@
- file_LDADD =	libfmagic.la
+@@ -3,7 +3,7 @@
  
+ #MAGIC	 = $(pkgdatadir)/magic
  pkglibdir =  @prefix@/lib/rpm
--MAGIC	 = $(pkglibdir)/magic
-+MAGIC	 = /usr/share/file/magic
- CPPFLAGS = -DMAGIC='"$(MAGIC)"'
+-MAGIC    = $(pkglibdir)/magic
++MAGIC    = /usr/share/file/magic
  
- listobjs:
+ AM_CPPFLAGS = -DMAGIC='"$(MAGIC)"'
+ 
 

@@ -1,7 +1,7 @@
 diff -urN rpm.org/rpmrc.in rpm/rpmrc.in
---- rpm.org/rpmrc.in	2004-06-01 23:50:45.000000000 +0200
-+++ rpm/rpmrc.in	2004-07-08 01:21:16.468982520 +0200
-@@ -11,60 +11,118 @@
+--- rpm.org/rpmrc.in	2004-10-14 20:43:36.000000000 +0200
++++ rpm/rpmrc.in	2004-11-18 17:37:41.454167194 +0100
+@@ -11,63 +11,65 @@
  #############################################################
  # Values for RPM_OPT_FLAGS for various platforms
  
@@ -32,6 +32,9 @@ diff -urN rpm.org/rpmrc.in rpm/rpmrc.in
 -optflags: m68k -O2 -g -fomit-frame-pointer
 -
 -optflags: ppc -O2 -g -fsigned-char
+-optflags: ppc8260 -O2 -g -fsigned-char
+-optflags: ppc8560 -O2 -g -fsigned-char
+-optflags: ppc32dy4 -O2 -g -fsigned-char
 -optflags: ppciseries -O2 -g -fsigned-char
 -optflags: ppcpseries -O2 -g -fsigned-char
 -optflags: ppc64 -O2 -g -fsigned-char
@@ -56,69 +59,14 @@ diff -urN rpm.org/rpmrc.in rpm/rpmrc.in
 -optflags: atariclone -O2 -g -fomit-frame-pointer
 -optflags: milan -O2 -g -fomit-frame-pointer
 -optflags: hades -O2 -g -fomit-frame-pointer
--
--optflags: s390 -O2 -g
--optflags: s390x -O2 -g
-+optflags: i386 -O2 -march=i386 -mcpu=i686
-+optflags: i486 -O2 -march=i486
-+optflags: i586 -O2 -march=i586
-+optflags: i686 -O2 -march=i686 -mcpu=pentium4
-+optflags: pentium3 -O2 -march=pentium3
-+optflags: pentium4 -O2 -march=pentium4
-+optflags: athlon -O2 -march=athlon
-+optflags: ia64 -O2
-+optflags: x86_64 -O2
-+optflags: amd64 -O2
-+optflags: ia32e -O2
-+
-+optflags: alpha -O2 -mieee
-+optflags: alphaev5 -O2 -mieee -mcpu=ev5
-+optflags: alphaev56 -O2 -mieee -mcpu=ev56
-+optflags: alphapca56 -O2 -mieee -mcpu=pca56
-+optflags: alphaev6 -O2 -mieee -mcpu=ev6
-+optflags: alphaev67 -O2 -mieee -mcpu=ev67
-+
-+optflags: sparc -O2 -m32 -mtune=ultrasparc
-+optflags: sparcv8 -O2 -m32 -mcpu=ultrasparc -mv8
-+optflags: sparcv9 -O2 -m32 -mcpu=ultrasparc
-+optflags: sparc64 -O2 -m64 -mcpu=ultrasparc
-+
-+optflags: m68k -O2 -fomit-frame-pointer
-+
-+optflags: ppc -O2 -fsigned-char
-+optflags: ppciseries -O2 -fsigned-char
-+optflags: ppcpseries -O2 -fsigned-char
-+optflags: ppc64 -O2 -fsigned-char
-+
-+optflags: parisc -O2 -mpa-risc-1-0
-+optflags: hppa1.0 -O2 -mpa-risc-1-0
-+optflags: hppa1.1 -O2 -mpa-risc-1-0
-+optflags: hppa1.2 -O2 -mpa-risc-1-0
-+optflags: hppa2.0 -O2 -mpa-risc-1-0
-+
-+optflags: mips -O2
-+optflags: mipsel -O2
-+
-+optflags: armv3l -O2 -fsigned-char -fomit-frame-pointer -march=armv3
-+optflags: armv4b -O2 -fsigned-char -fomit-frame-pointer -march=armv4
-+optflags: armv4l -O2 -fsigned-char -fomit-frame-pointer -march=armv4
-+
-+optflags: atarist -O2 -fomit-frame-pointer
-+optflags: atariste -O2 -fomit-frame-pointer
-+optflags: ataritt -O2 -fomit-frame-pointer
-+optflags: falcon -O2 -fomit-frame-pointer
-+optflags: atariclone -O2 -fomit-frame-pointer
-+optflags: milan -O2 -fomit-frame-pointer
-+optflags: hades -O2 -fomit-frame-pointer
-+
-+optflags: s390 -O2
-+optflags: s390x -O2
-+
-+optflags: i386 -O2 -march=i386%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i386: %{specflags_i386}}}
-+#optflags: i386 -O2 -march=i486 -mcpu=pentium4
++optflags: i386 -O2 -march=i386 -mcpu=pentium4%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i386: %{specflags_i386}}}
 +optflags: i486 -O2 -march=i486%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i486: %{specflags_i486}}}
-+optflags: i586 -O2 -march=i586%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i586: %{specflags_i586}}}
-+optflags: i686 -O2 -march=i686 -mcpu=pentium4%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i686: %{specflags_i686}}}
++optflags: i586 -O2 -march=i586%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i586: %{specflags
++_i586}}}
++optflags: i686 -O2 -march=i686 -mcpu=pentium4%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i6
++86: %{specflags_i686}}}
++optflags: pentium3 -O2 -march=pentium3%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_pentium3: %{specflags_pentium3}}}
++optflags: pentium4 -O2 -march=pentium4%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_pentium4: %{specflags_pentium4}}}
 +optflags: athlon -O2 -march=athlon%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_athlon: %{specflags_athlon}}}
 +optflags: ia64 -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia64: %{specflags_ia64}}}
 +optflags: x86_64 -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_x86_64: %{specflags_x86_64}}}
@@ -135,14 +83,17 @@ diff -urN rpm.org/rpmrc.in rpm/rpmrc.in
 +optflags: sparc -O2 -m32 -mtune=ultrasparc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}}
 +optflags: sparcv8 -O2 -m32 -mcpu=ultrasparc -mv8%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparcv8: %{specflags_sparcv8}}}
 +optflags: sparcv9 -O2 -m32 -mcpu=ultrasparc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparcv9: %{specflags_sparcv9}}}
-+optflags: sparc64 -O2 -m64 -mcpu=ultrasparc -Wcast-align%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparc64: %{specflags_sparc64}}}
++optflags: sparc64 -O2 -m64 -mcpu=ultrasparc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparc64: %{specflags_sparc64}}}
 +
 +optflags: m68k -O2 -fomit-frame-pointer%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_m68k: %{specflags_m68k}}}
 +
 +optflags: ppc -O2 -fsigned-char%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ppc: %{specflags_ppc}}}
-+optflags: ppciseries -O2 -fsigned-char%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ppc: %{specflags_ppc}}%{?specflags_ppciseries: %{specflags_ppciseries}}}
-+optflags: ppcpseries -O2 -fsigned-char%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ppc: %{specflags_ppc}}%{?specflags_ppcpseries: %{specflags_ppcpseries}}}
-+optflags: ppc64 -O2 -fsigned-char%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ppc: %{specflags_ppc}}%{?specflags_ppc64: %{specflags_ppc64}}}
++optflags: ppc8260 -O2 -fsigned-char%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ppc8260: %{specflags_ppc8260}}}
++optflags: ppc8560 -O2 -fsigned-char%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ppc8560: %{specflags_ppc8560}}}
++optflags: ppc32dy4 -O2 -fsigned-char%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ppc32dy4: %{specflags_ppc32dy4}}}
++optflags: ppciseries -O2 -fsigned-char%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ppciseries: %{specflags_ppciseries}}}
++optflags: ppcpseries -O2 -fsigned-char%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ppcpseries: %{specflags_ppcpseries}}}
++optflags: ppc64 -O2 -fsigned-char%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ppc64: %{specflags_ppc64}}}
 +
 +optflags: parisc -O2 -mpa-risc-1-0%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_parisc: %{specflags_parisc}}}
 +optflags: hppa1.0 -O2 -mpa-risc-1-0%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_hppa1_0: %{specflags_hppa1_0}}}
@@ -164,13 +115,11 @@ diff -urN rpm.org/rpmrc.in rpm/rpmrc.in
 +optflags: atariclone -O2 -fomit-frame-pointer%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_atariclone: %{specflags_atariclone}}}
 +optflags: milan -O2 -fomit-frame-pointer%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_milan: %{specflags_milan}}}
 +optflags: hades -O2 -fomit-frame-pointer%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_hades: %{specflags_hades}}}
-+
+ 
+-optflags: s390 -O2 -g
+-optflags: s390x -O2 -g
 +optflags: s390 -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_s390: %{specflags_s390}}}
 +optflags: s390x -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_s390: %{specflags_s390}}%{?specflags_s390x: %{specflags_s390x}}}
-+
-+  
-+  #############################################################
-+  # Canonical arch names and numbers
  
  #############################################################
  # Canonical arch names and numbers

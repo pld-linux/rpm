@@ -35,18 +35,6 @@ diff -urN rpm.org/build/parseSpec.c rpm/build/parseSpec.c
  	arch = _free(arch);
      } else if (! strncmp("%ifos", s, sizeof("%ifos")-1)) {
  	const char *os = rpmExpand("%{_target_os}", NULL);
-diff -urN rpm.org/installplatform rpm/installplatform
---- rpm.org/installplatform	2004-06-14 14:53:29.722428584 +0200
-+++ rpm/installplatform	2004-06-14 14:57:50.898723752 +0200
-@@ -66,7 +66,7 @@
-     ppc-linux) MULTILIBNO=1 ;;
-     ppc64-linux) LIB=lib64; MULTILIBNO=2 ;;
-     i?86-linux|pentium?-linux|athlon-linux) MULTILIBNO=1 ;;
--    x86_64-linux) LIB=lib64; MULTILIBNO=2 ;;
-+    x86_64-linux|amd64-linux|ia32e-linux) LIB=lib64; MULTILIBNO=2 ;;
-   esac
- 
-   if [ -n "$MULTILIBNO" ]; then
 diff -urN rpm.org/lib/rpmrc.c rpm/lib/rpmrc.c
 --- rpm.org/lib/rpmrc.c	2004-06-14 14:53:19.117040848 +0200
 +++ rpm/lib/rpmrc.c	2004-06-14 14:55:21.421447752 +0200

@@ -13,17 +13,14 @@ diff -urN rpm-4.3.org/Makefile.am rpm-4.3/Makefile.am
 diff -urN rpm-4.3.org/rpmdb/Makefile.am rpm-4.3/rpmdb/Makefile.am
 --- rpm-4.3.org/rpmdb/Makefile.am	2003-12-28 01:33:46.160517288 +0100
 +++ rpm-4.3/rpmdb/Makefile.am	2003-12-28 01:56:22.000000000 +0100
-@@ -25,18 +25,15 @@
+@@ -25,17 +25,13 @@
  noinst_HEADERS = fprint.h header_internal.h legacy.h
  
  pkgbindir = @RPMCONFIGDIR@
 -pkgbin_PROGRAMS = \
--	rpmdb_deadlock rpmdb_dump rpmdb_load rpmdb_svc rpmdb_stat rpmdb_verify
--noinst_PROGRAMS = \
--	rpmdb_archive rpmdb_checkpoint rpmdb_printlog rpmdb_recover \
--	rpmdb_upgrade
-+pkgbin_PROGRAMS =
-+noinst_PROGRAMS =
+-	rpmdb_archive rpmdb_checkpoint rpmdb_deadlock rpmdb_dump rpmdb_load \
+-	rpmdb_printlog rpmdb_recover rpmdb_svc rpmdb_stat rpmdb_upgrade \
+-	rpmdb_verify 
  
  mylibs = librpmdb.la
  

@@ -54,24 +54,24 @@
  #==============================================================================
  rpmd	alias --dbpath		--define '_dbpath !#:+' \
  	--POPTdesc=$"use database in DIRECTORY" \
---- rpm-4.3/po/pl.po.orig	2003-06-10 23:48:19.000000000 +0200
-+++ rpm-4.3/po/pl.po	2003-06-10 23:59:11.000000000 +0200
-@@ -3791,6 +3791,18 @@
- msgid "disable configure <option> for build"
- msgstr "wy³±cz <opcjê> konfiguracji przy budowaniu"
- 
-+#: ../rpmpopt:217
-+msgid "make all needed dirs for building binary rpms"
-+msgstr "utwórz wszystkie katalogi potrzebne do budowania binarnych RPM-ów"
-+
-+#: ../rpmpopt:220
-+msgid "build packages with debug information"
-+msgstr "buduj pakiety z informacjami do odpluskwiania"
-+
-+#: ../rpmpopt:223
-+msgid "find all --with/--without values"
-+msgstr "znajd¼ wszystkie warto¶ci --with/--without"
-+
- #: ../rpmpopt:216 ../rpmpopt:231 ../rpmpopt:246 ../rpmpopt:254
- #: ../rpmpopt:262 ../rpmpopt:270 ../rpmpopt:278 ../rpmpopt:286
- #: ../rpmpopt:294 ../rpmpopt:389 ../rpmpopt:483 ../rpmpopt:491
+;--- rpm-4.3/po/pl.po.orig	2003-06-10 23:48:19.000000000 +0200
+;+++ rpm-4.3/po/pl.po	2003-06-10 23:59:11.000000000 +0200
+;@@ -3791,6 +3791,18 @@
+; msgid "disable configure <option> for build"
+; msgstr "wy³±cz <opcjê> konfiguracji przy budowaniu"
+; 
+;+#: ../rpmpopt:217
+;+msgid "make all needed dirs for building binary rpms"
+;+msgstr "utwórz wszystkie katalogi potrzebne do budowania binarnych RPM-ów"
+;+
+;+#: ../rpmpopt:220
+;+msgid "build packages with debug information"
+;+msgstr "buduj pakiety z informacjami do odpluskwiania"
+;+
+;+#: ../rpmpopt:223
+;+msgid "find all --with/--without values"
+;+msgstr "znajd¼ wszystkie warto¶ci --with/--without"
+;+
+; #: ../rpmpopt:216 ../rpmpopt:231 ../rpmpopt:246 ../rpmpopt:254
+; #: ../rpmpopt:262 ../rpmpopt:270 ../rpmpopt:278 ../rpmpopt:286
+; #: ../rpmpopt:294 ../rpmpopt:389 ../rpmpopt:483 ../rpmpopt:491
