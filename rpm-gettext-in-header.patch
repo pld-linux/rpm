@@ -6,7 +6,7 @@
  
 -    return entry->data;
 +/* when everything fail, try gettext */
-+    return _(entry->data);
++    return ((entry->data != NULL) && *(char*)(entry->data)) ? _(entry->data) : entry->data;
  }
  
  /**
