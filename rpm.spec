@@ -29,7 +29,7 @@ Summary(uk):	íÅÎÅÄÖÅÒ ÐÁËÅÔ¦× ×¦Ä RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-%define	rel	0.%{snap}.18
+%define	rel	0.%{snap}.19
 Release:	%{rel}
 License:	GPL
 Group:		Base
@@ -302,6 +302,25 @@ Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
 
 %description utils -l pl
 Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami.
+
+%package utils-perl
+Summary:	Additional utilities for managing rpm packages and database
+Summary(de):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
+Summary(pl):	Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami
+Group:		Applications/File
+Requires:	%{name} = %{version}
+Requires:	%{name}-utils = %{version}
+Requires:	popt >= %{reqpopt_ver}
+
+%description utils-perl
+Additional utilities for managing rpm packages and database.
+
+%description utils-perl -l de
+Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
+
+%description utils-perl -l pl
+Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami.
+
 
 %package utils-static
 Summary:	Static rpm utilities
@@ -824,10 +843,12 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/rpmfile
 %attr(755,root,root) %{_libdir}/rpm/find-debuginfo.sh
 %attr(755,root,root) %{_libdir}/rpm/rpm2cpio.sh
-%attr(755,root,root) %{_libdir}/rpm/rpmdiff*
 %attr(755,root,root) %{_libdir}/rpm/tgpg
 %attr(755,root,root) %{_libdir}/rpm/rpmdb_loadcvt
 
+%files utils-perl
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/rpm/rpmdiff*
 # not here
 #%%{_libdir}/rpm/rpm.daily
 #%%{_libdir}/rpm/rpm.log
