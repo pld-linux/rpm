@@ -17,7 +17,7 @@
 # versions of required libraries
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.9
-%define	beecrypt_ver	3.0.0-0.20030610.1
+%define	beecrypt_ver	4.0.0
 %define	rpm_macros_rev	1.158
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
@@ -91,6 +91,7 @@ Patch40:	%{name}-epoch0.patch
 Patch41:	%{name}-file-readelf-fix.patch
 Patch43:	%{name}-perl_req-INC_dirs.patch
 Patch44:	%{name}-debuginfo.patch
+Patch45:	%{name}-beecrypt4.patch
 Patch100:	%{name}-pl.po.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
@@ -547,8 +548,6 @@ construir pacotes usando o RPM.
 
 %prep
 %setup -q -n %{name}
-# UPDATE
-#%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -602,6 +601,7 @@ cat %{SOURCE11} >> macros.in
 %patch41 -p1
 %patch43 -p0
 %patch44 -p1
+%patch45 -p1
 %patch100 -p1
 
 cd scripts;
