@@ -121,8 +121,7 @@ echo "Compress man and info pages."; \
 			find "$RPM_BUILD_ROOT$i" -type f -print | xargs -r %{__gzip} -9nf; \
 		fi; \
 	done; \
-} \
-}
+} }
 
 #-----------------------------------------------------------------
 # Strip executable binaries and shared object files
@@ -145,8 +144,7 @@ echo "Compress man and info pages."; \
 	if [ -n "$elfsharedlist" ]; then \
 		strip --strip-unneeded --remove-section=.note  --remove-section=.comment $elfsharedlist; \
 	fi; } \
-} \
-}
+} }
 
 #-----------------------------------------------------------------
 # post %install sequence:
@@ -155,8 +153,7 @@ echo "Compress man and info pages."; \
 #
 %__spec_install_post { \
 %{__spec_install_post_strip} \
-%{__spec_install_post_compress_docs} \
-}
+%{__spec_install_post_compress_docs} }
 
 %_source_payload        w9.gzdio
 %_binary_payload        w9.bzdio
