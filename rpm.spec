@@ -103,8 +103,9 @@ BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.1
 BuildRequires:	db-devel >= %{reqdb_ver}
 %{?with_doc:BuildRequires:	doxygen}
-BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	elfutils-devel
+BuildRequires:	findutils
+BuildRequires:	gettext-devel >= 0.11.4-2
 #BuildRequires:	libmagic-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
@@ -621,6 +622,10 @@ for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
 	sed -e 's@lib/rpm/redhat@lib/rpm/pld@g' $f > ${f}.tmp
 	mv -f ${f}.tmp $f
 done
+
+# ... and make some cleanings
+rm -fr $(find ./ -type d -name CVS )
+rm -f  $(find ./ -type f -name ".cvsignore" )
 
 %build
 cd file
