@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.5
-Release:	11.9
+Release:	11.91
 Group:		Base
 Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
@@ -23,6 +23,7 @@ Patch8:		%{name}-file3.31.patch
 Patch9:		%{name}-find-lang-name-matching.patch
 Patch10:	%{name}-exclude-examples-doc.patch
 Patch11:	%{name}-db3.patch
+Patch12:	%{name}-rpm-v1.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 Provides:	rpmlib(VersionedDependencies) = 3.0.3-1
@@ -166,6 +167,7 @@ construir pacotes usando o RPM.
 %patch7 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 %patch31 -p1
 install %{SOURCE2} macros.pld.in
 install %{SOURCE13} macros.python.in
@@ -188,7 +190,8 @@ autoheader
 automake --add-missing --gnu
 autoconf
 %configure \
-	--enable-shared
+	sed 's|@host_cpu@|%{_target_cpu}|' > macros.tmp
+	--enable-v1-packages
 %configure \
 %{__make}
 	--with-python
