@@ -292,6 +292,7 @@ Requires:	findutils
 Requires:	gcc >= 3.0.3
 %else
 Requires:	gcc
+%endif
 Requires:	glibc-devel
 Requires:	grep
 Requires:	gzip
