@@ -428,6 +428,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/rpm/athlon*
 %endif
 %ifarch sparc sparc64
+%{_libdir}/rpm/sparc*
+%endif
+%ifarch alpha
+%{_libdir}/rpm/alpha*
 %endif
 %ifarch ppc
 %{_libdir}/rpm/ppc*
