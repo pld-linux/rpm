@@ -200,3 +200,14 @@ diff -urN rpm-4.3.org/po/uk.po rpm-4.3/po/uk.po
  
  #: build.c:40
  msgid "Failed build dependencies:\n"
+--- rpm-4.3/configure.ac.orig	2004-02-01 20:53:09.000000000 +0100
++++ rpm-4.3/configure.ac	2004-02-01 21:22:12.430982800 +0100
+@@ -37,7 +37,7 @@
+ AM_INIT_AUTOMAKE([foreign])
+ 
+ dnl Set of available languages.
+-ALL_LINGUAS="cs da de fi fr gl is ja ko no pl pt pt_BR ro ru sk sl sr sv tr"
++ALL_LINGUAS="cs da de fi fr gl is ja ko nb pl pt pt_BR ro ru sk sl sr@Latn sv tr"
+ 
+ dnl Checks for programs.
+ AC_PROG_CXX
