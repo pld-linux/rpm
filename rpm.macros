@@ -34,7 +34,7 @@
 #
 %__libtoolize           libtoolize --copy --force
 %__automake             automake -a -c -f --foreing
-%__autoconf             autoconf %{!?debug:-Wall}
+%__autoconf             autoconf %{?debug:-Wall}
 
 #-----------------------------------------------------------------
 %configure2_13 { \
