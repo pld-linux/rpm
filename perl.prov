@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-use Safe;
 use strict;
 
 # perl.prov - find information about perl modules for RPM
@@ -10,45 +9,60 @@ use strict;
 # I think we should not, and provide them only for the perl.req script,
 # while it scans files in that particular application.
 
-# This shoud be provided as a library -- the same functionality is
-# needed by the perl.req script.
 
-my %provide;
-my @inc = sort { length $b cmp length $a } grep m#^/.+#, @INC;
-my $safe = new Safe;
+# check if we are called directly
+if ($0 =~ m#(?:^|/)perl.prov$#) {
+	my $prov = new RPM::PerlReq;
+	# process @ARGV or STDIN
+	foreach ( @ARGV ? @ARGV : <> ) {
+		chomp;
+		next if -l || !-f _;                # skip non-files and symlinks
+		next if m#/usr/(?:share/doc|src)/#; # lot of false alarms; warning: we omit ^ here
+		next if !m#\.p[ml]$#;               # we only care about *.pm and *.pl files
+		$prov->process_file($_);
+	}
+	$prov->print_result;
+}
 
-# process @ARGV or STDIN
-foreach ( @ARGV ? @ARGV : <> ) {
-	chomp;
-	next if !-f || -l;                # skip non-files and symlinks
-	next if m#/usr/(?:doc|src)/#;     # lot of false alarms; warning: we ignore ^ here
-	next if !m#\.p[ml]$#;             # we only care about *.pm and *.pl files
-	process_file($_) if -f;
+
+package RPM::PerlReq;
+use Safe;
+
+sub new {
+	my $class = shift;
+	my $self = {
+		inc => [ sort { length $b cmp length $a } grep m#^/#, @INC ],
+		provide => {},
+		safe => Safe->new,
+		@_,
+	};
+	bless $self, $class;
 }
 
 # print out what we found
-for ( sort keys %provide ) {
-	print "perl($_)" . ( length $provide{$_} ? " = $provide{$_}" : '' ) . "\n";
-#	warn  "perl($_)" . ( length $provide{$_} ? " = $provide{$_}" : '' ) . "\n";
+sub print_result {
+	my $self = shift;
+	for (sort keys %{ $self->{provide} }) {
+		print "perl($_)"
+		  . (length $self->{provide}->{$_} ? " = $self->{provide}->{$_}" : '')
+		  . "\n";
+	}
 }
 
-############################################################
-#####   functions                                      #####
-############################################################
-
 sub process_file {
+	my $self = shift;
 	my $file = shift;
 	my ( $package, $version );
 
 	# if the file lives under @INC, we can
 	# obtain the package name from it's path
-	for (@inc) {
-		if ( $file =~ m#\Q$_\E/?(.+)$# ) { # warning: we ignore ^ here
+	for (@{ $self->{inc} }) {
+		if ($file =~ m#\Q$_\E/?(.+)$#) {    # we can't use ^ here
 			$package = $1;
 
-			if ( $package !~ s/\.pm$// ) {    # it's a *.pl
-				# $package =~ m#([^/]+)$#;
-				# $provide{$1} = '';
+			if ($package !~ s/\.pm$//) {    # it's a *.pl
+			#	$package =~ m#([^/]+)$#;
+			#	$provide{$1} = '';
 				return 1;
 			}
 
@@ -60,6 +74,7 @@ sub process_file {
 	# it can be a *.pl oustide @INC
 	return if /\.pl$/;
 
+	local *FILE;
 	open FILE, $file or die "$0: cannot open file `$file': $!";
 
 	while (<FILE>) {
@@ -84,7 +99,7 @@ sub process_file {
 		}
 
 		if ( !defined $version && /([\$*])(([\w\:\']*)\bVERSION)\b.*\=/ ) {
-			( $version = $safe->reval($_) ) =~ s/^\s+|alpha|beta|\s+$//g;
+			( $version = $self->{safe}->reval($_) ) =~ s/^\s+|alpha|beta|\s+$//g;
 			if ( defined $version
 				&& length $version
 				&& $version =~ /[^\d\._abcdefgh]/ )
@@ -100,7 +115,7 @@ sub process_file {
 		return 0;
 	}
 
-	$provide{$package} = $version;
+	$self->{provide}->{$package} = $version;
 
 	close FILE or die "$0: cannot close file `$file': $!";
 
@@ -115,5 +130,8 @@ sub match_the_path {
 	$pack =~ s#::#/#g;
 	$file =~ /\Q$pack\E(?:\.pm)?$/;
 }
+
+
+1;
 
 # vim: ts=4 sw=4 noet noai nosi cin
