@@ -1,16 +1,18 @@
+# to build for athlon you need release at least 49
+
 Summary:	Red Hat (and now also PLD) Package Manager
 Summary(de):	Red Hat (und jetzt auch PLD) Packet-Manager
 Summary(es):	Gestor de paquetes RPM
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
-Version:	4.0.4
-Release:	0.29.2
+Version:	4.0.2
+Release:	50
 License:	GPL
 Group:		Base
 Group(cs):	Základ
 Group(da):	Basal
-Group(de):	Gründsätzlich
+Group(de):	Basis
 Group(es):	Base
 Group(fr):	Base
 Group(it):	Base
@@ -40,32 +42,40 @@ Patch1:		%{name}-macros.patch
 Patch2:		%{name}-arch.patch
 Patch3:		%{name}-%{name}popt.patch
 Patch4:		%{name}-perl-macros.patch
-Patch5:		%{name}-am_fix.patch
-Patch6:		%{name}-perl-req-perlfile.patch
-Patch7:		%{name}-installplatform.patch
-Patch8:		%{name}-cache.patch
-Patch9:		%{name}-glob.patch
-Patch10:	%{name}-header_h.patch
-Patch11:	%{name}-fast-alAddPackage.patch
-Patch12:	%{name}-byKey.patch
-Patch13:	%{name}-noexpand.patch
-Patch14:	%{name}-scripts-closefds.patch
-Patch15:	%{name}-python-amfix.patch
-Patch16:	%{name}-non-english-man-pages.patch
-Patch17:	%{name}-python-macros.patch
-Patch18:	%{name}-perlprov-regonly.patch
-Patch19:	%{name}-acconfig.patch
-Patch20:	%{name}-db4.patch
-Patch21:	%{name}-pl.po.patch
-Patch22:	%{name}-drop-legacy-CLI.patch
+Patch5:		%{name}-db3.patch
+Patch6:		%{name}-segv.patch
+Patch7:		%{name}-am_fix.patch
+Patch8:		%{name}-perl-req-perlfile.patch
+Patch9:		%{name}-installplatform.patch
+Patch10:	%{name}-cache.patch
+Patch11:	%{name}-suggestions.patch
+Patch12:	%{name}-rh-lame.patch
+Patch13:	%{name}-glob.patch
+Patch14:	%{name}-header_h.patch
+Patch15:	%{name}-fast-alAddPackage.patch
+Patch16:	%{name}-byKey.patch
+Patch17:	%{name}-perlprov.patch
+Patch18:	%{name}-noperldir.patch
+Patch19:	popt-cvs20010530.patch
+Patch20:	%{name}-noexpand.patch
+Patch21:	%{name}-scripts-closefds.patch
+Patch22:	%{name}-python-amfix.patch
+Patch23:	%{name}-non-english-man-pages.patch
+Patch24:	%{name}-progress-nontty.patch
+Patch25:	%{name}-am_ac.patch
+Patch26:	%{name}-python-macros.patch
+Patch27:	%{name}-hardlink-fixes.patch
+Patch28:	%{name}-perlprov-regonly.patch
+Patch29:	%{name}-cxx.patch
+Patch30:	%{name}-athlon.patch
+Patch31:	%{name}-athlon-identify.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
-BuildRequires:	db4-devel >= 4.0.14
-BuildRequires:	doxygen
+BuildRequires:	bzip2-devel >= 1.0.1
 BuildRequires:	db1-devel >= 1.85
 BuildRequires:	db3-devel >= 3.1.17-9
 BuildRequires:	gettext-devel >= 0.10.38-3
@@ -76,11 +86,12 @@ BuildRequires:	python-modules >= 2.2.1
 BuildRequires:	zlib-devel >= 1.1.4
 %if %{!?_without_static:1}%{?_without_static:0}
 # Require static library only for static build
-BuildRequires:	db4-static >= 4.0.14
+BuildRequires:	bzip2-static >= 1.0.1
 BuildRequires:	db1-static >= 1.85
 BuildRequires:	zlib-static
 BuildRequires:	glibc-static >= 2.2.0
 BuildRequires:	zlib-static >= 1.1.4
+%endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	rpm-libs
 Conflicts:	glibc < 2.2
@@ -150,8 +161,6 @@ Group(sv):	Utveckling/Bibliotek
 Group(uk):	òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 Summary(pt_BR):	Arquivos de inclusão e bibliotecas para programas de manipulação de pacotes RPM
 Group:		Development/Libraries
-Requires:	beecrypt-devel
-Requires:	db4-devel
 Requires:	%{name} = %{version}
 Requires:	popt-devel
 
@@ -314,13 +323,13 @@ Group:		Development/Languages/Python
 Group(cs):	Vývojové prostøedky/Programovací jazyky/Python
 Group(da):	Udvikling/Sprog/Python
 Group(de):	Entwicklung/Sprachen/Python
-Group(es):	Desarrollo/Lenguages/Python
+Group(es):	Desarrollo/Lenguajes/Python
 Group(fr):	Development/Langues/Python
 Group(it):	Sviluppo/Linguaggi/Python
 Group(ja):	³«È¯/¸À¸ì/Python
 Group(no):	Utvikling/Programmeringsspråk/Python
 Group(pl):	Programowanie/Jêzyki/Python
-Group(pt):	Desenvolvimento/Línguas/Python
+Group(pt):	Desenvolvimento/Linguagens/Python
 Group(ru):	òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ/Python
 Group(sv):	Utveckling/Språk/Python
 Summary(pt_BR):	Módulo Python para aplicativos que manipulam pacotes RPM
@@ -350,53 +359,6 @@ escritas em Python utilizem a interface fornecida pelas bibliotecas
 RPM (RPM Package Manager).
 
 Esse pacote deve ser instalado se você quiser desenvolver programas em
-%package lib
-Summary:	RPMs library
-Group:		Libraries
-Group(de):	Bibliotheken
-Group(es):	Bibliotecas
-Group(fr):	Librairies
-Group(pl):	Biblioteki
-Group(pt):	Bibliotecas
-Group(pt_BR):	Bibliotecas
-Group(ru):	âÉÂÌÉÏÔÅËÉ
-Group(uk):	â¦ÂÌ¦ÏÔÅËÉ
-
-
-%description lib
-RPMs library
-
-%package -n beecrypt
-Summary:	Crypto library
-Group:		Libraries
-Group(de):	Bibliotheken
-Group(es):	Bibliotecas
-Group(fr):	Librairies
-Group(pl):	Biblioteki
-Group(pt):	Bibliotecas
-Group(pt_BR):	Bibliotecas
-Group(ru):	âÉÂÌÉÏÔÅËÉ
-Group(uk):	â¦ÂÌ¦ÏÔÅËÉ
-
-%description -n beecrypt
-Crypto library
-
-%package -n beecrypt-devel
-Summary:	Crypto library - development files
-Group:		Development/Libraries
-Group(de):	Entwicklung/Bibliotheken
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(pl):	Programowanie/Biblioteki
-Group(pt):	Desenvolvimento/Bibliotecas
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(ru):	òÁÚÒÁÂÏÔËÁ/âÉÂÌÉÏÔÅËÉ
-Group(uk):	òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
-
-
-%description -n beecrypt-devel
-Crypto library - development files
-
 Python para manipular pacotes e bancos de dados RPM.
 
 %package build
@@ -464,19 +426,30 @@ construir pacotes usando o RPM.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
-%patch11 -p1
-# too many rejects, Pawel please check if needed and rediff
-#%patch12 -p0
+%patch9 -p1
+%patch10 -p1
 %patch11 -p0
 %patch12 -p0
-%patch15 -p1
-%patch16 -p1
+%patch13 -p1
+%patch14 -p1
 %patch15 -p0
 %patch16 -p0
 %patch17 -p1
 %patch18 -p1
 %patch19 -p1
-%patch22 -p1 -b .wiget
+%patch20 -p1
+%patch21 -p1
+%patch22 -p1
+%patch23 -p1
+%patch24 -p1
+%patch25 -p1
+%patch26 -p0
+%patch27 -p1
+%patch28 -p1
+%patch29 -p1
+%patch30 -p1
+
+%ifarch athlon
 %patch31 -p1
 %patch36 -p1
 %patch37 -p1
@@ -484,7 +457,7 @@ construir pacotes usando o RPM.
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
-#install %{SOURCE9} scripts/find-lang.sh
+install %{SOURCE5} macros.perl.in
 install %{SOURCE13} macros.python.in
 install %{SOURCE6} scripts/find-perl-provides
 install %{SOURCE7} scripts/find-perl-requires
@@ -499,25 +472,7 @@ awk -f %{SOURCE14} %{SOURCE1}
 
 cd popt
 autoconf
-automake -a -c -f
-cd ../beecrypt
-rm -f missing
-libtoolize --force --copy
-aclocal
-autoheader
-autoconf
-automake -a -c -f
-cd ../zlib
-rm -f missing
-# first call for work around libtoolize problems
-aclocal
-autoconf
-automake -a -c -f
-libtoolize --force --copy
-# second call for correct work
-aclocal
-autoconf
-automake -a -c -f
+automake -a -c
 aclocal
 autoheader
 automake -a -c -f
@@ -527,19 +482,29 @@ cd ..
 rm -f missing
 libtoolize --force --copy
 autoconf
-automake -a -c -f
+aclocal
+autoupdate
+autoheader || :
+%{__autoconf}
+automake -a -c
+sed -e 's#cpio.c $(DBLIBOBJS) depends.c#cpio.c depends.c#g' \
+	lib/Makefile.am > lib/Makefile.am.new
+mv -f lib/Makefile.am.new lib/Makefile.am
+%{__automake}
+sed -e 's#cpio.c depends.c#cpio.c $(DBLIBOBJS) depends.c#g' \
+	lib/Makefile.in > lib/Makefile.in.new
+mv -f lib/Makefile.in.new lib/Makefile.in
 
 sed -e 's#python1.5#python%{py_ver}#g' \
 	python/Makefile.in > python/Makefile.in.new
-sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|'  \
-	-e 's|@host_cpu@|%{_target_cpu}|'  macros.in  > macros.tmp
+mv -f python/Makefile.in.new python/Makefile.in
+
 # config.guess doesn't handle athlon, so we have to change it by hand.
 # rpm checks for CPU type at runtime, but it looks better
 sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' macros.in | \
 	sed 's|@host_cpu@|%{_target_cpu}|' > macros.tmp
-	--with-apidocs \
-	--with-python \
-	--without-db
+mv -f macros.tmp macros.in
+
 %configure \
 	--enable-shared \
 	--enable-v1-packages \
@@ -588,7 +553,11 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
-
+%attr(755,root,root) /bin/rpm
+%attr(755,root,root) %{_bindir}/rpmdb
+%attr(755,root,root) %{_bindir}/rpmquery
+%attr(755,root,root) %{_bindir}/rpmsign
+%attr(755,root,root) %{_bindir}/rpmverify
 %attr(755,root,root) %{_libdir}/rpm/rpmdb
 %attr(755,root,root) %{_libdir}/rpm/rpmq
 %attr(755,root,root) %{_libdir}/rpm/rpmk
@@ -609,7 +578,9 @@ rm -rf $RPM_BUILD_ROOT
 %dir /var/lib/rpm
 %dir %{_libdir}/rpm
 
-%{_libdir}/rpm/noarch-*
+%{_libdir}/rpm/macros.python
+%doc %attr(755,root,root) %{_libdir}/rpm/convertrpmrc.sh
+
 %{_libdir}/rpm/rpmrc
 %{_libdir}/rpm/rpmpopt*
 %{_libdir}/rpm/macros
@@ -624,13 +595,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 %ifarch alpha
 %{_libdir}/rpm/alpha*
-%files lib
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/librpm*-*.so
 %endif
 %ifarch ppc
 %{_libdir}/rpm/ppc*
-%attr(755,root,root) %{_libdir}/rpm/cross-build
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rpmbuild
 %attr(755,root,root) %{_bindir}/rpme
@@ -650,31 +617,16 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/cpanflute
 %attr(755,root,root) %{_libdir}/rpm/http.req
 %attr(755,root,root) %{_libdir}/rpm/magic.*
+%attr(755,root,root) %{_libdir}/rpm/rpmdiff*
 %attr(755,root,root) %{_libdir}/rpm/u_pkg.sh
-# not used yet ...
-%{_libdir}/rpm/sql.prov
-%{_libdir}/rpm/sql.req
-%{_libdir}/rpm/tcl.req
-%{_libdir}/rpm/trpm
-
-%attr(755,root,root) %{_bindir}/javadeps
-%attr(755,root,root) %{_bindir}/gendiff
-%attr(755,root,root) %{_bindir}/rpmbuild
-
-%{_mandir}/man1/*
-%{_mandir}/man8/rpmbuild.8*
+%attr(755,root,root) %{_libdir}/rpm/vpkg-provides.sh
+%attr(755,root,root) %{_libdir}/rpm/vpkg-provides2.sh
 %attr(755,root,root) %{_libdir}/rpm/rpmb
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmt
 %attr(755,root,root) %{_libdir}/rpm/rpme
-%attr(755,root,root) %{_libdir}/librpm.la
-%attr(755,root,root) %{_libdir}/librpm.so
-%attr(755,root,root) %{_libdir}/librpmio.la
-%attr(755,root,root) %{_libdir}/librpmio.so
-%attr(755,root,root) %{_libdir}/librpmdb.la
-%attr(755,root,root) %{_libdir}/librpmdb.so
-%attr(755,root,root) %{_libdir}/librpmbuild.la
-%attr(755,root,root) %{_libdir}/librpmbuild.so
+%attr(755,root,root) %{_libdir}/rpm/rpmu
+
 %files devel
 %defattr(644,root,root,755)
 %{_includedir}/rpm
@@ -682,16 +634,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/librpm*.so
 
 %files static
-%attr(755,root,root) %{_bindir}/rpm[2qvseiu]*
-%attr(755,root,root) %{_bindir}/rpmdb
-%attr(755,root,root) %{_libdir}/rpm/rpm[edikqv]
-%attr(755,root,root) %{_libdir}/rpm/rpmdiff*
-%{_prefix}/lib/rpm/rpm.daily
-%{_prefix}/lib/rpm/rpm.log
-%{_prefix}/lib/rpm/rpm.xinetd
-%{_prefix}/lib/rpm/rpm2cpio.sh
+%attr(755,root,root) %{_bindir}/*
 %files utils
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/gendiff
 %attr(755,root,root) %{_bindir}/javadeps
 %attr(755,root,root) %{_bindir}/rpm2cpio
 
@@ -712,20 +658,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/get_magic.pl
 
 %{_libdir}/rpm/macros.perl
-# this subpackage need fix
-#%files -n python-rpm
-#%defattr(644,root,root,755)
-#%{py_sitedir}/*.so
 
-%files -n beecrypt
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libbeecrypt.so.*.*
-
-%files -n beecrypt-devel
 %defattr(644,root,root,755)
-%{_prefix}/lib/libbeecrypt.so
-%{_prefix}/lib/libbeecrypt.la
-%{_includedir}/beecrypt
 %{_libdir}/rpm/macros.python
 
 %files -n python-rpm
