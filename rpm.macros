@@ -471,3 +471,19 @@ fi; \
 #	%addusertogroup myuser agroup
 #
 %addusertogroup	/usr/lib/rpm/user_group.sh user addtogroup
+
+# banner support (useful in {pre,post}{,un} and triggers)
+#
+# Usage:
+#	%banner name [-a] [-n] [-tn]
+# the banner text, the banner text
+# the banner text, and following line HAVE TO BE:
+# EOF
+# -a   - append to the banner
+# -n   - no show banner (overriden by -t)
+# -t   - show only, if RPM_SCRIPTVERBOSITY >= n
+%banner(a:n:t:)	\
+	[ -r /etc/sysconfig/rpm ] && . /etc/sysconfig/rpm || RPM_SCRIPTVERBOSITY=5; \
+	banner.sh %{!-t:%{!-n:-s}} %{-t:`[ $RPM_SCRIPTVERBOSITY -ge %{-t*} ] && echo "-s"`} %{!-a:-m}%{-a:-M} %1 << EOF\
+%nil
+
