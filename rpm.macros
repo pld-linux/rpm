@@ -38,7 +38,14 @@
 # Build system path macros.
 #
 %__libtoolize           libtoolize --copy --force
-%__gettextize           gettextize --copy --force
+%__gettextize { \
+    if gettextize --version | grep -q '0\.11\.' ; then \
+        gettextize --copy --force  --intl; \
+	cp -f po/Makevars{.template,}; \
+    else \
+        gettextize --copy --force; \
+    fi; \
+}		
 %__automake             automake -a -c -f --foreign
 %__autoconf             autoconf %{?debug:-Wall}
 
@@ -223,6 +230,15 @@ echo "Compress kernel modules if any."; \
 
 %_source_payload        w9.gzdio
 %_binary_payload        w9.bzdio
+
+#-----------------------------------------------------------------
+# Update all GConf2 schemas
+#
+# Requires: GConf2
+#
+%gconf_schema_install  GCONF_CONFIG_SOURCE="" \
+    %{_bindir}/gconftool-2 --makefile-install-rule \
+    /etc/X11/GNOME2/gconf/schemas/*.schemas > /dev/null
 
 #-----------------------------------------------------------------
 # post %install sequence:
