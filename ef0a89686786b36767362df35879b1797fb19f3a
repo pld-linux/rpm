@@ -1,0 +1,4 @@
+- release 15
+- rpmGlob() now are locale independent
+- --with foo generate now _with_foo (not _with_foo)
+  symilar for --without
