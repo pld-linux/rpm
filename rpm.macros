@@ -106,10 +106,10 @@ done \
 #
 # Requires: xargs, find
 #
-%install_post_compress_docs	1
+#%install_post_no_compress_docs	1
 %__spec_install_post_compress_docs { \
 echo "Compress man and info pages."; \
-%{?install_post_compress_docs: \
+%{!?install_no_post_compress_docs: \
 	%{?verbose:set -x;} \
 	for i in /usr/share/man /usr/X11R6/man /usr/share/info; do \
 		if [ -d "$RPM_BUILD_ROOT$i" ]; then \
@@ -126,9 +126,9 @@ echo "Compress man and info pages."; \
 #
 # Requires: find, awk, strip, cut, xargs
 #
-%install_post_strip	1
+#%install_post_no_strip	1
 %__spec_install_post_strip {%{!?debug: \
-%{?install_post_strip: \
+%{!?install_no_post_strip: \
 	%{?verbose:set -x;} \
 	echo "Strip executable binaries and shared object files."; \
 	filelist=`find $RPM_BUILD_ROOT -type f`; \
