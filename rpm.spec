@@ -2,14 +2,13 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.4
-Release:	10
+Release:	11
 Group:		Base
 Group(pl):	Podstawowe
 License:	GPL
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-3.0.x/%{name}-%{version}.tar.gz
 Source1:	rpm.groups
 Source2:	rpm.macros
-Source3:	rpm-find-requires
 Source5:	rpm-install-tree
 Patch0:		rpm-rpmrc.patch
 Patch1:		rpm-find-requires.patch
@@ -22,6 +21,7 @@ Patch7:		rpm-find-lang-all-name.patch
 Patch8:		rpm-bzip2.patch
 Patch9:		rpm-file3.31.patch
 Patch10:	rpm-find-lang-name-matching.patch
+Patch11:	rpm-exclude-examples-doc.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	bzip2-static >= 1.0.0
@@ -153,6 +153,7 @@ construir pacotes usando o RPM.
 %patch8 -p1
 %patch7 -p1
 %patch10 -p1
+%patch11 -p1
 %patch31 -p1
 install %{SOURCE2} macros.pld.in
 install %{SOURCE13} macros.python.in
@@ -194,8 +195,6 @@ install %{SOURCE5} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
 	pkgbindir="%{_bindir}"
 
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
-install %{SOURCE3} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
-
 strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*
 
 #%%_install_langs pl_PL:en_US
