@@ -1,9 +1,0 @@
---- rpm-4.0.2/python/Makefile.am.orig	Mon Jun 19 01:26:50 2000
-+++ rpm-4.0.2/python/Makefile.am	Sun Sep  9 00:41:37 2001
-@@ -25,5 +25,5 @@
- noinst_LTLIBRARIES = librpmmodule.la
- librpmmodule_la_SOURCES = rpmmodule.c hash.c upgrade.c
- 
--rpmmodule.so: $(librpmmodule_la_OBJECTS)
-+rpmmodule.so$(EXEEXT): $(librpmmodule_la_OBJECTS)
- 	$(LINK) -o $@ $^ $(rpmmodule_so_LDFLAGS)
