@@ -1,14 +1,12 @@
-%define	date	19990519
-
 Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.1
-Release:	7.%{date}
+Release:	14
 Group:		Base
 Group(pl):	Podstawowe
 Copyright:	GPL
-Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-3.0.x/%{name}-%{version}.%{date}.tar.gz
+Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-3.0.x/%{name}-%{version}.tar.gz
 Source1:	rpm.groups
 Source2:	rpm.8pl
 Source3:	rpm.macros
@@ -111,6 +109,8 @@ install %{SOURCE6} $RPM_BUILD_ROOT/etc/cron.daily
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 strip  $RPM_BUILD_ROOT/{bin/rpm,%{_bindir}/*} || :
 
+#%%_install_langs pl_PL:en_US
+%%distribution PLD
 gzip -9fn $RPM_BUILD_ROOT%{_mandir}/{{ru,pl}/man8/*,man8/*} \
 	RPM-PGP-KEY CHANGES docs/*
 
@@ -133,7 +133,7 @@ fi
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files
+%files -f rpm.lang
 
 %doc RPM-PGP-KEY.gz CHANGES.gz docs/*
 %postun -p /sbin/ldconfig
@@ -143,18 +143,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/*
 %lang(ru) %{_mandir}/ru/man8/*
 %lang(pl) %{_mandir}/pl/man8/*
-
-%lang(cs)    %{_datadir}/locale/cs/LC_MESSAGES/rpm.mo
-%lang(de)    %{_datadir}/locale/de/LC_MESSAGES/rpm.mo
-%lang(fi)    %{_datadir}/locale/fi/LC_MESSAGES/rpm.mo
-%lang(fr)    %{_datadir}/locale/fr/LC_MESSAGES/rpm.mo
-%lang(pl)    %{_datadir}/locale/pl/LC_MESSAGES/rpm.mo
-%lang(pt_BR) %{_datadir}/locale/pt_BR/LC_MESSAGES/rpm.mo
-%lang(ru)    %{_datadir}/locale/ru/LC_MESSAGES/rpm.mo
-%lang(sk)    %{_datadir}/locale/sk/LC_MESSAGES/rpm.mo
-%lang(sr)    %{_datadir}/locale/sr/LC_MESSAGES/rpm.mo
-%lang(sv)    %{_datadir}/locale/sv/LC_MESSAGES/rpm.mo
-%lang(tr)    %{_datadir}/locale/tr/LC_MESSAGES/rpm.mo
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
 %attr(755,root,root) %dir /var/db/rpm
 %attr(755,root,root) %dir /var/db/backups/rpm
