@@ -449,6 +449,7 @@ Summary(pl):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	db >= %{reqdb_ver}
 Requires:	popt >= %{reqpopt_ver}
+Provides:	rpmlib(distver)
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
 
