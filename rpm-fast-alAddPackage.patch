@@ -1,11 +1,11 @@
---- ./lib/depends.c.org	Sat Jun 16 14:14:11 2001
-+++ ./lib/depends.c	Sat Jun 16 14:19:12 2001
-@@ -335,18 +335,19 @@
+--- ./lib/depends.c.org	Mon Jun 25 17:59:49 2001
++++ ./lib/depends.c	Mon Jun 25 18:04:00 2001
+@@ -335,18 +335,21 @@
  	for (dirNum = 0; dirNum < numDirs; dirNum++) {
  	    dirNeedle.dirName = (char *) dirNames[dirNum];
  	    dirNeedle.dirNameLen = strlen(dirNames[dirNum]);
 -	    dirMatch = bsearch(&dirNeedle, al->dirs, origNumDirs,
-+	    dirMatch = bsearchnl(&dirNeedle, al->dirs, origNumDirs,
++	    dirMatch = bsearchnl(&dirNeedle, al->dirs, al->numDirs,
  			       sizeof(dirNeedle), dirInfoCompare);
 -	    if (dirMatch) {
 -		dirMapping[dirNum] = dirMatch - al->dirs;
@@ -15,7 +15,9 @@
 -		al->dirs[al->numDirs].dirNameLen = strlen(dirNames[dirNum]);
 -		al->dirs[al->numDirs].files = NULL;
 -		al->dirs[al->numDirs].numFiles = 0;
-+	    if (dirInfoCompare(dirMatch, &dirNeedle)!=0) {
++	    if (dirMatch==NULL || dirInfoCompare(dirMatch, &dirNeedle)!=0) {
++		if(dirMatch==NULL)
++			dirMatch=al->dirs+al->numDirs;
 +		memmove(dirMatch+1, dirMatch, 
 +			((al->dirs+al->numDirs) - dirMatch)*sizeof(*al->dirs));
 +		dirMatch->dirName = xstrdup(dirNames[dirNum]);
@@ -29,7 +31,7 @@
  	}
  
  	free(dirNames);
-@@ -374,9 +375,6 @@
+@@ -374,9 +377,6 @@
  
  	    first = last + 1;
  	}
@@ -39,9 +41,9 @@
  
      }
  
---- ./lib/misc.c.org	Sat Jun 16 14:14:12 2001
-+++ ./lib/misc.c	Sat Jun 16 14:14:30 2001
-@@ -869,3 +869,38 @@
+--- ./lib/misc.c.org	Mon Jun 25 17:59:49 2001
++++ ./lib/misc.c	Mon Jun 25 18:04:36 2001
+@@ -869,3 +869,39 @@
  		&pEVR, 1);
      }
  }
@@ -50,7 +52,8 @@
 + * Modified by Pawel Kolodziej <pawelk@pld.org.pl>
 + * Perform a binary search for KEY in BASE which has NMEMB elements
 + * of SIZE bytes each.  The comparisons are done by (*COMPAR)(). 
-+ * Return element not less then KEY. Never return NULL
++ * Return element not less then KEY. Return NULL if all elements are 
++ * less then KEY
 + */
 +void *
 +bsearchnl (const void *key, const void *base, size_t nmemb, size_t size,
@@ -75,13 +78,13 @@
 +	return (void *) p;
 +    }
 +  if(l > nmemb-1)
-+	  l=nmemb-1;
++	  return NULL;
 +  p = (void *) (((const char *) base) + (l * size));
 +  return (void *)p;
 +}
 +
---- ./lib/misc.h.org	Sat Jun 16 14:14:12 2001
-+++ ./lib/misc.h	Sat Jun 16 14:14:30 2001
+--- ./lib/misc.h.org	Mon Jun 25 17:59:49 2001
++++ ./lib/misc.h	Mon Jun 25 18:01:53 2001
 @@ -102,6 +102,12 @@
   */
  void providePackageNVR(Header h);
