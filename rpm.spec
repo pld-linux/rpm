@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.2
-Release:	7
+Release:	
 Group:		Base
 Group(pl):	Podstawowe
 Copyright:	GPL
@@ -160,7 +160,11 @@ gzip -9fn $RPM_BUILD_ROOT%{_mandir}/{{ru,pl}/man8/*,man8/*} \
 	RPM-PGP-KEY CHANGES docs/*
 
 %pre
-if [ ! -L /var/lib/rpm ]; then
+if [ -e /var/state/rpm ] && [ -L /var/state/rpm ]; then
+	echo "WARNING: upgrade cannot be done because /var/state/rpm is symlink"
+	exit 1
+fi
+if [ -e /var/lib/rpm ] && [ ! -L /var/lib/rpm ]; then
 	mkdir -p /var/state/rpm
 	cp -ap /var/lib/rpm/* /var/state/rpm
 	rm -rf /var/lib/rpm
@@ -169,7 +173,7 @@ if [ ! -L /var/lib/rpm ]; then
 	echo "Run second time upgradeing rpm package for complete operation" 1>&2
 	exit 1
 fi
-if [ ! -L /var/db/rpm ]; then
+if [ -e /var/db/rpm ] && [ ! -L /var/db/rpm ]; then
 	mkdir -p /var/state/rpm
 	cp -ap /var/db/rpm/* /var/state/rpm
 	rm -rf /var/db/rpm
@@ -180,10 +184,10 @@ if [ ! -L /var/db/rpm ]; then
 fi
 
 %postin
-if [ -L /var/lib/rpm ]; then
+if [ -e /var/lib/rpm ] && [ -L /var/lib/rpm ]; then
 	rm -rf /var/lib/rpm
 fi
-if [ -L /var/db/rpm ]; then
+if [ -e /var/db/rpm ] &&[ -L /var/db/rpm ]; then
 	rm -rf /var/db/rpm
 fi
 
