@@ -58,6 +58,7 @@ Applications/File
 Applications/Graphics
 	[de]:	Applikationen/Grafik
 	[pl]:	Aplikacje/Grafika
+	[pt]:	Aplicações/Gráficos
 
 Applications/Games
 	[de]:	Applikationen/Spiele
@@ -260,6 +261,7 @@ X11/Applications/Games/Strategy
 X11/Applications/Graphics
 	[de]:	X11/Applikationen/Grafik
 	[pl]:	X11/Aplikacje/Grafika
+	[pt]:	X11/Aplicações/Gráficos
 
 X11/Applications/Multimedia
 	[de]:	X11/Applikationen/Multimedia
