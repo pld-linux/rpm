@@ -186,7 +186,7 @@ RPM - це потужний менеджер пакет╕в, що може бути використаний для
 Summary:	Header files and libraries
 Summary(de):	Header-Dateien uns Libraries
 Summary(es):	Archivos de inclusiСn y bibliotecas para programas de manipulaciСn de paquetes rpm
-Summary(pl):	Pliki nagЁСwkowe i biblioteki statyczne
+Summary(pl):	Pliki nagЁСwkowe i biblioteki
 Summary(pt_BR):	Arquivos de inclusЦo e bibliotecas para programas de manipulaГЦo de pacotes RPM
 Summary(ru):	Хедеры и библиотеки для программ, работающих с rpm-пакетами
 Summary(uk):	Хедери та б╕бл╕отеки для програм, що працюють з пакетами rpm
