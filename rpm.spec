@@ -61,7 +61,7 @@ construir pacotes usando o RPM.
 install %{SOURCE13} macros.python.in
 mv -f perl.prov perl.prov.in)
 autoconf
-CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" 
+CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
 ./configure \
 	--prefix=/usr \
 	--disable-shared
