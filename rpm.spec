@@ -18,7 +18,7 @@
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.9
 %define	beecrypt_ver	3.0.0-0.20030610.1
-%define	rpm_macros_rev	1.153
+%define	rpm_macros_rev	1.158
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -29,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.23
+Release:	0.%{snap}.28
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -103,8 +103,9 @@ BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.1
 BuildRequires:	db-devel >= %{reqdb_ver}
 %{?with_doc:BuildRequires:	doxygen}
-BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	elfutils-devel
+BuildRequires:	findutils
+BuildRequires:	gettext-devel >= 0.11.4-2
 #BuildRequires:	libmagic-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
@@ -463,6 +464,7 @@ Requires:	/bin/id
 Requires:	awk
 Requires:	binutils
 Requires:	chrpath >= 0.10-4
+Requires:	cpio
 Requires:	diffutils
 Requires:	file >= 4.01
 Requires:	fileutils
@@ -621,6 +623,10 @@ for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
 	sed -e 's@lib/rpm/redhat@lib/rpm/pld@g' $f > ${f}.tmp
 	mv -f ${f}.tmp $f
 done
+
+# ... and make some cleanings
+rm -fr $(find ./ -type d -name CVS )
+rm -f  $(find ./ -type f -name ".cvsignore" )
 
 %build
 cd file
