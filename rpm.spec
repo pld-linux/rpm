@@ -272,9 +272,6 @@ RPMs library.
 %description lib -l pl
 Biblioteki RPMa.
 
-%description -n beecrypt-static -l pl
-Statyczna wersja biblioteki kryptograficznej.
-
 %package build
 Summary:        Scripts for building binary RPM packages
 Summary(de):    Scripts fürs Bauen binärer RPM-Pakete
