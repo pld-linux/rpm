@@ -1,3 +1,26 @@
+#-----------------------------------------------------------------
+%configure { \
+ if [ -n "$LINGUAS" ]; then unset LINGUAS; fi; \
+ LDFLAGS="${LDFLAGS}%{!?debug: -s}" ; export LDFLAGS ; \
+ CFLAGS="${CFLAGS:-%optflags}%{?debug: -g -O}" ; export CFLAGS ; \
+ CXXFLAGS="${CXXFLAGS:-%optflags}%{?debug: -g -O}" ; export CXXFLAGS ; \
+ FFLAGS="${FFLAGS:-%optflags}%{?debug: -g -O}" ; export FFLAGS ; \
+ unset LINGUAS || : ; \
+ ./configure %{_target_platform} \
+ 	--prefix=%{_prefix} \
+	--exec-prefix=%{_exec_prefix} \
+	--bindir=%{_bindir} \
+	--sbindir=%{_sbindir} \
+	--sysconfdir=%{_sysconfdir} \
+	--datadir=%{_datadir} \
+	--includedir=%{_includedir} \
+	--libdir=%{_libdir} \
+	--libexecdir=%{_libexecdir} \
+	--localstatedir=%{_localstatedir} \
+	--sharedstatedir=%{_sharedstatedir} \
+	--mandir=%{_mandir} \
+	--infodir=%{_infodir} }
+
 #------------------------------------------------------------------------------
 # The GNUconfigure macro does the following:
 #       update config.guess and config.sub.
@@ -9,8 +32,6 @@
 # Based on autogen.sh from GNOME and orginal GNUconfigure
 #
 %GNUconfigure(MCs:)      \
-  CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS; \
-  LDFLAGS="${LDFLAGS:-'%{-s:-s}'}"  ; export LDFLAGS; \
   %{-C:_mydir="`pwd`"; %{-M: %{__mkdir} -p %{-C*};} cd %{-C*}} \
   dirs="`find ${_mydir} -name configure.in -print`"; export dirs; \
     for coin in `echo ${dirs}` \
@@ -51,31 +72,8 @@ else \
     ); \
   fi \
 done \
-  %{-C:${_mydir}}%{!-C:.}/configure %{_target_platform} --prefix=%{_prefix} --exec-prefix=%{_exec_prefix} --bindir=%{_bindir} --sbindir=%{_sbindir} --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} --includedir=%{_includedir} --libdir=%{_libdir} --libexecdir=%{_libexecdir} --localstatedir=%{_localstatedir} --sharedstatedir=%{_sharedstatedir} --mandir=%{_mandir} --infodir=%{_infodir} %* ; \
+  %{-C:${_mydir}}%{!-C:.}/%{configure}
   %{-C:cd ${_mydir}; unset _mydir}
-
-#-----------------------------------------------------------------
-%configure { \
- if [ -n "$LINGUAS" ]; then unset LINGUAS; fi; \
- LDFLAGS="${LDFLAGS}%{!?debug: -s}" ; export LDFLAGS ; \
- CFLAGS="${CFLAGS:-%optflags}%{?debug: -g -O}" ; export CFLAGS ; \
- CXXFLAGS="${CXXFLAGS:-%optflags}%{?debug: -g -O}" ; export CXXFLAGS ; \
- FFLAGS="${FFLAGS:-%optflags}%{?debug: -g -O}" ; export FFLAGS ; \
- unset LINGUAS || : ; \
- ./configure %{_target_platform} \
- 	--prefix=%{_prefix} \
-	--exec-prefix=%{_exec_prefix} \
-	--bindir=%{_bindir} \
-	--sbindir=%{_sbindir} \
-	--sysconfdir=%{_sysconfdir} \
-	--datadir=%{_datadir} \
-	--includedir=%{_includedir} \
-	--libdir=%{_libdir} \
-	--libexecdir=%{_libexecdir} \
-	--localstatedir=%{_localstatedir} \
-	--sharedstatedir=%{_sharedstatedir} \
-	--mandir=%{_mandir} \
-	--infodir=%{_infodir} }
 
 # Location of autoconf macros
 %_aclocaldir	%(aclocal --print-ac-dir)
