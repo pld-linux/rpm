@@ -8,6 +8,8 @@
 
 RPM_BUILD_ROOT=$1
 
+[ ! -d "$RPM_BUILD_ROOT" ] && exit 1
+
 [ "$TMPDIR" ] || TMPDIR=/tmp
 FILES_DISK=`mktemp $TMPDIR/rpmXXXXXX`
 FILES_RPM=`mktemp $TMPDIR/rpmXXXXXX`
