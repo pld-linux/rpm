@@ -564,8 +564,8 @@ construir pacotes usando o RPM.
 %patch21 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
-echo '%%define	__perl_provides	/usr/lib/rpm/perl.prov' > macros.perl
-echo '%%define	__perl_requires	/usr/lib/rpm/perl.req' >> macros.perl
+echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
+echo '%%define	__perl_requires	%%{__perl} /usr/lib/rpm/perl.req' >> macros.perl
 echo '# obsoleted file' > macros.python
 echo '%%define	__php_provides	/usr/lib/rpm/php.prov' > macros.php
 echo '%%define	__php_requires	/usr/lib/rpm/php.req' >> macros.php
