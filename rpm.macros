@@ -61,7 +61,7 @@ done \
 %configure { CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; \
  CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; \
  FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
- unset LINGUAS ; \
+ unset LINGUAS || : ; \
  ./configure %{_target_platform} \
  	--prefix=%{_prefix} \
 	--exec-prefix=%{_exec_prefix} \
