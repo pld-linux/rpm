@@ -35,7 +35,7 @@ Patch11:	%{name}-suggestions.patch
 Patch12:	%{name}-rh-lame.patch
 Patch13:	%{name}-glob.patch
 Patch14:	%{name}-header_h.patch	
-Patch15:	%{name}-deps-lfind.patch
+Patch15:	%{name}-fast-alAddPackage.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	gettext-devel
@@ -216,6 +216,7 @@ construir pacotes usando o RPM.
 %patch12 -p0
 %patch11 -p0
 %patch12 -p0
+%patch15 -p0
 %patch31 -p1
 install %{SOURCE2} macros.pld.in
 %patch38 -p1
