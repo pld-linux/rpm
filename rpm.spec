@@ -14,6 +14,9 @@ Patch1:		rpm-i18n.patch
 Patch2:		rpm-find-requires.patch
 Patch37:        %{name}-short_circuit.patch
 Icon:		rpm.gif
+#BuildPrereq:	bzip2-static
+#BuildPrereq:	zlib-static
+#BuildPrereq:	patch >= 2.2
 Requires:	glibc >= 2.1
 BuildRoot:	/tmp/%{name}-%{version}-root
 Obsoletes:	rpm-libs
@@ -79,7 +82,7 @@ gzip -9fn $RPM_BUILD_ROOT/usr/man/{ru/man8/*,man8/*} \
 	RPM-PGP-KEY CHANGES docs/*
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+#rm -rf $RPM_BUILD_ROOT
 
 %post
 /bin/rpm --initdb
