@@ -300,6 +300,7 @@ Group(de):	Applikationen/Datei
 Group(pl):	Aplikacje/Pliki
 Summary(pt_BR):	Scripts e programas executáveis usados para construir pacotes
 Group:		Applications/File
+Requires:	%{name} = %{version}
 Requires:	/bin/id
 Requires:	awk
 Requires:	binutils
@@ -417,7 +418,7 @@ mv -f python/Makefile.in.new python/Makefile.in
 sed -e 's#python1.5#python%{py_ver}#g' \
 	python/Makefile.in > python/Makefile.in.new
 sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' macros.in | \
-	sed 's|@host_cpu@|%{_target_cpu}|' | \
+	sed 's|@host_cpu@|%{_target_cpu}|' > macros.tmp
 # config.guess doesn't handle athlon, so we have to change it by hand.
 # rpm checks for CPU type at runtime, but it looks better
 sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' macros.in | \
