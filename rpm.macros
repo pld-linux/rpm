@@ -224,7 +224,7 @@ echo "Compress kernel modules if any."; \
        find $RPM_BUILD_ROOT/lib/modules -name \*.o -type f -print | \
        xargs -r %{__gzip} -9nf; \
 	   find $RPM_BUILD_ROOT/lib/modules -name \*.o -type l -printf "%p %l\n" | \
-	   while read a b; do ln -sf $b.gz $a.gz; rm -f $a; done \
+	   while read a b; do ln -sf $b.gz $a.gz; rm -f $a; done; \
     fi; \
 } }
 
