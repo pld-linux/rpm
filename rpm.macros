@@ -235,12 +235,12 @@ unset DISPLAY ||:\
 %_kernel_ver_str %(echo %{!?_without_dist_kernel:%{__kernel_rpmvr}}%{?_without_dist_kernel:%{__kernel_ver}} | sed -e 's/-/_/g')
 
 # sgml macros
-%xmlcat_add()            /usr/bin/xmlcatalog --noout --add nextCatalog \"\" %1 /etc/xml/catalog
-%xmlcat_del()            /usr/bin/xmlcatalog --noout --del %1 /etc/xml/catalog
+%xmlcat_add()            /usr/bin/xmlcatalog --noout --add nextCatalog \"\" %1 /etc/xml/catalog ;
+%xmlcat_del()            /usr/bin/xmlcatalog --noout --del %1 /etc/xml/catalog ;
 %xmlcat_add_rewrite      /usr/bin/xmlcatalog --noout --add rewriteSystem
-%xmlcat_create()          /usr/bin/xmlcatalog --noout --create %1
-%sgmlcat_add()           /usr/bin/install-catalog --add %1 %2 > /dev/null
-%sgmlcat_del()           /usr/bin/install-catalog --remove %1 %2 > /dev/null
+%xmlcat_create()          /usr/bin/xmlcatalog --noout --create %1 ;
+%sgmlcat_add()           /usr/bin/install-catalog --add %1 %2 > /dev/null ;
+%sgmlcat_del()           /usr/bin/install-catalog --remove %1 %2 > /dev/null ;
 %docbook_sgmlcat_fix() { for l in \
 '' \
 '  -- default decl --' \
