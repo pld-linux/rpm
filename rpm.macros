@@ -76,7 +76,12 @@ done \
 	--mandir=%{_mandir} \
 	--infodir=%{_infodir} }
 #------------------------------------------------------------------------  
-# usage (in %files)
-# %(%find_lang %{name})
+# usage 
+# (in %install)
+# %find_lang %{name}
 #
-%find_lang	@RPMCONFIGDIR@/find-lang.sh %{_builddir}
+# %file -f %{name}.lang
+#
+
+%find_lang	@RPMCONFIGDIR@/find-lang.sh %{buildroot}
+
