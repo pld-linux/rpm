@@ -74,7 +74,7 @@ BuildRequires:	zlib-devel
 BuildRequires:	python-modules >= 2.2.1
 BuildRequires:	zlib-devel >= 1.1.4
 %if %{!?_without_static:1}%{?_without_static:0}
-BuildRequires:	db4-static >= 4.0.14
+BuildRequires:	db4-static >= 4.0.14-2
 BuildRequires:	db1-static >= 1.85
 BuildRequires:	zlib-static
 BuildRequires:	glibc-static >= 2.2.0
