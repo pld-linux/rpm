@@ -79,12 +79,6 @@ if [ -f __rpm_noautoreq ] ; then
 	done
 fi
 
-if [ -f __rpm_noautoreqdep ] ; then
-	for i in `cat __rpm_noautoreqdep`; do
-		allrequires=`echo $allrequires | sed "s!\<$i[[:space:]]*!!g"`
-	done
-fi
-
 # Delete all the provided stuff
 
 echo $filelist|/usr/lib/rpm/find-provides|awk '
@@ -99,6 +93,12 @@ END {
 notprovreqs=`echo "$allrequires"|awk -f .findreq_delprovs_$$`
 rm .findreq_delprovs_$$
 echo "$notprovreqs" | sort -u
+
+if [ -f __rpm_noautoreqdep ] ; then
+	for i in `cat __rpm_noautoreqdep`; do
+		notprovreqs=`echo $notprovreqs | sed "s!\<$i[[:space:]]*!!g"`
+	done
+fi
 
 echo "$notprovreqs" | LC_ALL=C xargs -r -- rpm -q --whatprovides --qf "%{NAME}\n"  2>/dev/null \
 	| grep -v "no package provides" | sort -u
