@@ -73,7 +73,7 @@ Patch22:	%{name}-build.patch
 Patch24:	%{name}-system_libs.patch
 Patch25:	%{name}-bb-and-short-circuit.patch
 Patch28:	%{name}-beecrypt-opt.patch
-Patch30:	%{name}-home_etc.patch
+Patch30:	%{name}-etc_dir.patch
 Patch31:	%{name}-system_libs-more.patch
 Patch32:	%{name}-php-deps.patch
 Patch33:	%{name}-python-fix.patch
@@ -538,7 +538,7 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch24 -p1
 %patch25 -p1
 %patch28 -p1
-#%patch30 -p1
+%patch30 -p1
 %patch31 -p1
 %patch32 -p1
 %patch33 -p1
