@@ -555,9 +555,9 @@ construir pacotes usando o RPM.
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
-echo '%define	_perl_deps	1' > macros.perl
+echo '%%define	_perl_deps	1' > macros.perl
 echo '# obsoleted file' > macros.python
-echo '%define	_php_deps	1' > macros.php
+echo '%%define	_php_deps	1' > macros.php
 install %{SOURCE6} scripts/find-lang.sh
 install %{SOURCE12} scripts/php.prov.in
 install %{SOURCE13} scripts/php.req.in
