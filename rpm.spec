@@ -277,7 +277,7 @@ Pakiet rpm-python zawiera modu³, który pozwala aplikacjom napisanym w
 Pythonie na u¿ywanie interfejsu dostarczanego przez biblioteki RPM-a.
 
 Pakiet ten powinien zostaæ zainstalowany, je¶li chcesz pisaæ w
-%description python -l pt_BR -n
+%description python -l pt_BR
 
 %description -n python-rpm -l pt_BR
 O pacote rpm-python contém um módulo que permite que aplicações
