@@ -1,15 +1,15 @@
 Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
-Version:	2.5.6
-Release:	5
+Version:	2.91
+Release:	1
 Group:		Base
 Group(pl):	Bazowe
 Copyright:	GPL
 Source:		ftp://ftp.rpm.org/pub/rpm/dist/rpm-2.5.x/%{name}-%{version}.tar.gz
-Patch0:		rpm-config.patch
+#Patch0:		rpm-config.patch
 Patch1:		rpm-rpmrc.patch
-Patch2:		rpm-glibc.patch
+#Patch2:		rpm-glibc.patch
 Patch3:		rpm-groups.patch
 Patch4:		rpm-i18n.patch
 Patch5:		rpm-find-requires.patch
@@ -47,12 +47,12 @@ Pliki nag³ówkowe i biblioteki statyczne.
 graficznych mened¿erów pakietów oraz innych narzêdzi, które wymagaj±
 construir pacotes usando o RPM.
 %setup  -q
-%patch0 -p1
+#%patch0 -p1
 %patch1 -p1
-%patch2 -p1
+#%patch2 -p1
 %patch1 -p1
 %patch4 -p1
-%patch5 -p1
+#%patch5 -p1
 install %{SOURCE13} macros.python.in
 mv -f perl.prov perl.prov.in)
 autoconf
@@ -173,6 +173,7 @@ rm -rf $RPM_BUILD_ROOT
 - added %attr and %defattr macros in %files (allow build package from
   non-root account),
 - build against GNU libc-2.1.
+
 Revision 1.79  2000/02/17 03:42:17  kloczek
 - release 25,
 - added "Conflicts: /usr/bin/id" and rebuilded in enviroment with id in
