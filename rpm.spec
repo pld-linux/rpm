@@ -14,8 +14,8 @@ Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
 Summary(pl):	Aplikacja do zarz╠dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
-Summary(ru):	Менеджер пакетов от Red Hat
-Summary(uk):	Менеджер пакет╕в в╕д Red Hat
+Summary(ru):	Менеджер пакетов от RPM
+Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.1
 Release:	13
