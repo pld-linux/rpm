@@ -1,6 +1,6 @@
-diff -durN rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
---- rpm-4.3.orig/build/rpmfc.c	2004-01-04 16:05:16.000000000 +0100
-+++ rpm-4.3/build/rpmfc.c	2004-01-04 17:48:35.453302966 +0100
+diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
+--- rpm-4.3.orig/build/rpmfc.c	2004-01-11 15:51:47.000000000 +0100
++++ rpm-4.3/build/rpmfc.c	2004-01-11 16:18:57.129541284 +0100
 @@ -1,6 +1,7 @@
  #include "system.h"
  
@@ -161,7 +161,16 @@ diff -durN rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
      int colormask;
  } * rpmfcApplyTbl;
  
-@@ -1187,6 +1201,27 @@
+@@ -1088,7 +1102,7 @@
+     s=rpmExpand("%{_noautoreqdep}",NULL);
+     if (s) {
+     	poptParseArgvString(s,&noautoreqdep_c,(const char ***)&noautoreqdep);
+-	    s = _free(s);
++	s = _free(s);
+     }
+     if (noautoreqdep==NULL) noautoreqdep_c=0;
+     
+@@ -1187,6 +1201,31 @@
      int ix;
      int i;
      int xx;
@@ -172,47 +181,53 @@ diff -durN rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
 +    int noautoreqfiles_c;
 +    ARGV_t noautoprovfiles=NULL;
 +    int noautoprovfiles_c;
++    const char *buildroot;
++    int buildroot_l;
 +
-+    s=rpmExpand("%{buildroot}%{_noautoreqfiles}",NULL);
++    buildroot=rpmExpand("%{buildroot}",NULL);
++    buildroot_l=strlen(buildroot);
++    
++    s=rpmExpand("%{_noautoreqfiles}",NULL);
 +    if (s) {
 +    	poptParseArgvString(s,&noautoreqfiles_c,(const char ***)&noautoreqfiles);
-+	    s = _free(s);
++	s = _free(s);
 +    }
 +    if (noautoreqfiles==NULL) noautoreqfiles_c=0;
-+ 
-+    s=rpmExpand("%{buildroot}%{_noautoprovfiles}",NULL);
++    s=rpmExpand("%{_noautoprovfiles}",NULL);
 +    if (s) {
 +    	poptParseArgvString(s,&noautoprovfiles_c,(const char ***)&noautoprovfiles);
-+	    s = _free(s);
++	s = _free(s);
 +    }
 +    if (noautoprovfiles==NULL) noautoprovfiles_c=0;
  
      /* Generate package and per-file dependencies. */
      for (fc->ix = 0; fc->fn[fc->ix] != NULL; fc->ix++) {
-@@ -1194,10 +1229,33 @@
+@@ -1194,10 +1233,35 @@
  	for (fcat = rpmfcApplyTable; fcat->func != NULL; fcat++) {
  	    if (!(fc->fcolor->vals[fc->ix] & fcat->colormask))
  		/*@innercontinue@*/ continue;
 -	    xx = (*fcat->func) (fc);
 +            findprov=1;
-+            for(j=0;j<noautoprovfiles_c;j++) {
-+                if (fnmatch(noautoprovfiles[j],fc->fn[fc->ix],0)==0) {
-+                    rpmMessage(RPMMESS_NORMAL, 
-+                            "skipping %s provides detection (matches noautoprovfiles pattern: %s)\n",
-+                            fc->fn[fc->ix],noautoprovfiles[j]);
-+            	    findprov=0;
-+                    break;
-+                }
-+	    }
 +            findreq=1;
-+            for(j=0;j<noautoreqfiles_c;j++) {
-+                if (fnmatch(noautoreqfiles[j],fc->fn[fc->ix],0)==0) {
-+                    rpmMessage(RPMMESS_NORMAL, 
-+                            "skipping %s requires detection (matches noautoreqfiles pattern: %s)\n",
-+                            fc->fn[fc->ix],noautoreqfiles[j]);
-+            	    findreq=0;
-+                    break;
-+                }
++	    if (strncmp(fc->fn[fc->ix],buildroot,buildroot_l)==0) {/* sanity check */
++		for(j=0;j<noautoprovfiles_c;j++) {
++		    if (fnmatch(noautoprovfiles[j],fc->fn[fc->ix]+buildroot_l,0)==0) {
++			rpmMessage(RPMMESS_NORMAL, 
++				"skipping %s provides detection (matches noautoprovfiles pattern: %s)\n",
++				fc->fn[fc->ix],noautoprovfiles[j]);
++			findprov=0;
++			break;
++		    }
++		}
++		for(j=0;j<noautoreqfiles_c;j++) {
++		    if (fnmatch(noautoreqfiles[j],fc->fn[fc->ix]+buildroot_l,0)==0) {
++			rpmMessage(RPMMESS_NORMAL, 
++				"skipping %s requires detection (matches noautoreqfiles pattern: %s)\n",
++				fc->fn[fc->ix],noautoreqfiles[j]);
++			findreq=0;
++			break;
++		    }
++		}
 +	    }
 +	    xx = (*fcat->func) (fc,findprov,findreq);
  	}
