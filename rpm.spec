@@ -18,7 +18,7 @@ Summary(ru):	Менеджер пакетов от Red Hat
 Summary(uk):	Менеджер пакет╕в в╕д Red Hat
 Name:		rpm
 Version:	4.1
-Release:	12
+Release:	13
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/%{name}-%{version}.tar.gz
