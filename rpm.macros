@@ -244,7 +244,7 @@ echo "Compress kernel modules if any."; \
 # Requires: GConf2
 #
 %gconf_schema_install { \
-    GCONF_CONFIG_SOURCE="" \
+    GCONF_CONFIG_SOURCE="xml:readwrite:/etc/X11/GNOME2/gconf/gconf.xml.defaults" \
     /usr/X11R6/bin/gconftool-2 --makefile-install-rule \
     /etc/X11/GNOME2/gconf/schemas/*.schemas > /dev/null \
 }
