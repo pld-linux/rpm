@@ -1,5 +1,5 @@
---- rpm-4.3/po/pl.po.wiget	2004-03-29 01:25:18.000000000 +0200
-+++ rpm-4.3/po/pl.po	2004-03-29 02:18:19.104290572 +0200
+--- rpm-4.4/po/pl.po.wiget	2004-04-08 11:32:45.000000000 +0200
++++ rpm-4.4/po/pl.po	2004-04-08 12:03:05.249165400 +0200
 @@ -1412,7 +1412,7 @@
  #: lib/depends.c:851
  #, c-format
@@ -36,31 +36,31 @@
  msgstr "¶cie¿ka %s w pakiecie %s nie jest przesuwalna"
  
 @@ -2944,22 +2943,22 @@
- #: lib/rpmsx.c:358
+ #: lib/rpmsx.c:359
  #, c-format
  msgid "%s:  no newline on line number %d (only read %s)\n"
 -msgstr ""
 +msgstr "%s:  brak znaku koñca linii w linii %d (odczytano tylko %s)\n"
  
- #: lib/rpmsx.c:375
+ #: lib/rpmsx.c:376
  #, c-format
  msgid "%s:  line number %d is missing fields (only read %s)\n"
 -msgstr ""
 +msgstr "%s:  w linii %d brakuje pól (odczytano tylko %s)\n"
  
- #: lib/rpmsx.c:406
+ #: lib/rpmsx.c:407
  #, c-format
  msgid "%s:  unable to compile regular expression %s on line number %d:  %s\n"
 -msgstr ""
 +msgstr "%s:  nie uda³o siê skompilowaæ wyra¿enia regularnego %s w linii %d:  %s\n"
  
- #: lib/rpmsx.c:421 lib/rpmsx.c:436
+ #: lib/rpmsx.c:422 lib/rpmsx.c:437
  #, c-format
  msgid "%s:  invalid type specifier %s on line number %d\n"
 -msgstr ""
 +msgstr "%s:  b³êdne okre¶lenie typu %s w linii %d\n"
  
- #: lib/rpmsx.c:449
+ #: lib/rpmsx.c:450
  #, c-format
 @@ -4133,8 +4132,8 @@
  msgstr "KATALOG"
