@@ -29,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-%define	rel	0.%{snap}.20.6
+%define	rel	0.%{snap}.20.7
 Release:	%{rel}
 License:	GPL
 Group:		Base
@@ -76,7 +76,7 @@ Patch16:	%{name}-etc_dir.patch
 Patch17:	%{name}-system_libs-more.patch
 Patch18:	%{name}-php-deps.patch
 Patch19:	%{name}-python-fix.patch
-#Patch20:	%{name}-spec-prep-pre.patch
+
 Patch21:	%{name}-perl_req.patch
 Patch22:	%{name}-system_libs_more.patch
 Patch23:	%{name}-python_2_3.patch
@@ -547,7 +547,6 @@ construir pacotes usando o RPM.
 %patch17 -p1
 %patch18 -p1
 %patch19 -p1
-# patch20 -- look down
 %patch21 -p1
 %patch22 -p1
 %patch23 -p1
@@ -563,7 +562,6 @@ install %{SOURCE12} scripts/php.prov.in
 install %{SOURCE13} scripts/php.req.in
 install %{SOURCE33} scripts/perl.prov
 cat %{SOURCE14} >> macros.in
-# %patch20 -p1 -- merged into macros
 %patch25 -p1
 %patch26 -p1
 %patch27 -p1
@@ -694,6 +692,9 @@ libglide3.so.3
 libgtkmozembed.so
 libgtksuperwin.so
 libxpcom.so
+EOF
+cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc <<EOF
+# global list of file masks not to be compressed in DOCDIR
 EOF
 
 # for rpm -e|-U --repackage

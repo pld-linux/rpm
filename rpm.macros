@@ -330,38 +330,14 @@ echo "Compress kernel modules if any."; \
 ###################################################################
 # Requires/Provides automation
 # exceptions system by Jacek Konieczny <jajcus@pld.org.pl>
-%__spec_prep_pre \
-_autoreqprov=n \
-%{?_noautocompressdoc:_autoreqprov=y}\
-if [ "$_autoreqprov" = "y" ] ; then \
-    if [ -f %{_builddir}/__rpm_lock ] ; then \
-	echo "Some package using \%_noauto*  macros is already being built" >&2 \
-	echo "If it is not true delete %{_builddir}/__rpm_lock" >&2 \
-	exit 1 \
-    else \
-	rm -f %{_builddir}/__rpm_*\
-    	touch %{_builddir}/__rpm_lock \
-    fi \
-fi \
-%{?_noautocompressdoc:echo '%{_noautocompressdoc}' > %{_builddir}/__rpm_noautocompressdoc}\
-%{___build_pre}\
-%{nil}
-
-
-%__spec_clean_pre	%{___build_pre}\
-_autoreqprov=n \
-%{?_noautocompressdoc:_autoreqprov=y}\
-if [ "$_autoreqprov" = "y" ] ; then \
-	rm -f %{_builddir}/__rpm_* \
-fi \
-%{nil}
-
-
-#%_noautoreqfiles	"%{_defaultdocdir}.*" "%{_examplesdir}.*"
+#
+#%_noautoreqfiles	'%{_defaultdocdir}.*' '%{_examplesdir}.*'
 #%_noautoreq		%{nil}
 #%_noautoreqdep		%{nil}
 #%_noautoprovfiles	%{nil}
 #%_noautoprov		%{nil}
+#%_noautocompressdoc	%{nil}
+#
 %_missing_doc_files_terminate_build	1%{nil}
 %_unpackaged_files_terminate_build	%{nil}
 # (X)emacs support

@@ -26,7 +26,7 @@ diff -ur rpm-4.0.4/platform.in rpm-4.0.4-/platform.in
  %{nil}
  
 +# Executed at after copying %doc to DOCDIR, with $DOCDIR set
-+%__compress_doc		@prefix@/lib/rpm/compress-doc
++%__compress_doc		@prefix@/lib/rpm/compress-doc%{?_noautocompressdoc: --noautocompressdoc='%{_noautocompressdoc}'}
 +
  @redhat@#---------------------------------------------------------------------
  @redhat@#	Expanded at end of %prep
