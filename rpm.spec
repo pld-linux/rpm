@@ -26,7 +26,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-%define	rel	0.%{snap}.10
+%define	rel	0.%{snap}.11
 Release:	%{rel}
 License:	GPL
 Group:		Base
@@ -47,6 +47,8 @@ Source11:	%{name}-check-files
 Source12:	%{name}-php-provides
 Source13:	%{name}-php-requires
 Source14:	%{name}.macros
+Source15:	%{name}-find-provides-wrapper
+Source16:	%{name}-find-requires-wrapper
 Source30:	builder
 Source31:	adapter.awk
 Source32:	pldnotify.awk
@@ -612,10 +614,14 @@ install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
 install %{SOURCE4} $RPM_BUILD_ROOT%{_libdir}/rpm/find-rpm-provides
 install %{SOURCE5} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
+# 2 following files - to be removed or changed to find-elf-*
+# (to generate only ELF dependencies using objdump)???
 install %{SOURCE7} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
 install %{SOURCE10} $RPM_BUILD_ROOT%{_libdir}/rpm/compress-doc
 install %{SOURCE11} $RPM_BUILD_ROOT%{_libdir}/rpm/check-files
+install %{SOURCE15} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides-wrapper
+install %{SOURCE16} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires-wrapper
 install scripts/find-php*	$RPM_BUILD_ROOT%{_libdir}/rpm
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_libdir}/rpm
 
@@ -631,6 +637,32 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 #
 #%%_install_langs pl_PL:en_US
 %%distribution PLD
+EOF
+
+cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF
+# global list of files (name regexps) which don't generate Provides
+EOF
+cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov <<EOF
+# global list of capabilities (regexps) not to be used in Provides
+EOF
+cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles <<EOF
+# global list of files (name regexps) which don't generate Requires
+/usr/src/examples/.*
+/usr/share/doc/.*
+EOF
+cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq <<EOF
+# global list of capabilities (regexps) not to be used in Requires
+EOF
+cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep <<EOF
+# global list of capabilities (SONAME, perl(module), php(module) regexps)
+# which don't generate dependencies on package NAMES
+libGL.so.1
+libGLU.so.1
+libOSMesa.so.4
+libglide3.so.3
+libgtkmozembed.so
+libgtksuperwin.so
+libxpcom.so
 EOF
 
 # for rpm -e|-U --repackage
@@ -698,10 +730,13 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 
 %files build
 %defattr(644,root,root,755)
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpm/noauto*
 %attr(755,root,root) %{_libdir}/rpm/compress-doc
 %attr(755,root,root) %{_libdir}/rpm/cross-build
-%attr(755,root,root) %{_libdir}/rpm/find-requires
 %attr(755,root,root) %{_libdir}/rpm/find-provides
+%attr(755,root,root) %{_libdir}/rpm/find-provides-wrapper
+%attr(755,root,root) %{_libdir}/rpm/find-requires
+%attr(755,root,root) %{_libdir}/rpm/find-requires-wrapper
 %attr(755,root,root) %{_libdir}/rpm/find-rpm-provides
 %attr(755,root,root) %{_libdir}/rpm/find-spec-bcond
 %attr(755,root,root) %{_libdir}/rpm/find-lang.sh
