@@ -15,6 +15,7 @@ Applications
 	[ru]:		Приложения
 	[sl]:		Programi
 	[sv]:		TillДmpningar
+	[uk]:		Прикладн╕ Програми
 
 Applications/Archiving
 	[cs]:		Aplikace/ArchivovАnМ
@@ -28,9 +29,10 @@ Applications/Archiving
 	[no]:		Applikasjoner/Arkivering
 	[pl]:		Aplikacje/Archiwizacja
 	[pt]:		AplicaГУes/Arquivos
-	[ru]:		Приложения/Архивирование
+	[ru]:		Приложения/Архивация
 	[sl]:		Programi/Arhiviranje
 	[sv]:		TillДmpningar/Arkivering
+	[uk]:		Прикладн╕ Програми/Арх╕вац╕я
 
 Applications/Communications
 	[cs]:		Aplikace/Komunikace
@@ -44,9 +46,10 @@ Applications/Communications
 	[no]:		Applikasjoner/Kommunikasjon
 	[pl]:		Aplikacje/Komunikacja
 	[pt]:		AplicaГУes/ComunicaГУes
-	[ru]:		Приложения/Связь
+	[ru]:		Приложения/Коммуникации
 	[sl]:		Programi/Komunikacije
 	[sv]:		TillДmpningar/Kommunikation
+	[uk]:		Прикладн╕ Програми/Комун╕кац╕╖
 
 Applications/Console
 	[cs]:		Aplikace/Konzole
@@ -61,6 +64,7 @@ Applications/Console
 	[pt]:		AplicaГУes/Console
 	[ru]:		Приложения/Консоль
 	[sv]:		TillДmpningar/Konsolen
+	[uk]:		Прикладн╕ Програми/Консоль
 
 Applications/Databases
 	[cs]:		Aplikace/DatabАze
@@ -78,6 +82,7 @@ Applications/Databases
 	[ru]:		Приложения/Базы данных
 	[sl]:		Programi/Zbirke podatkov
 	[sv]:		TillДmpningar/Databaser
+	[uk]:		Прикладн╕ Програми/Бази даних
 
 Applications/Databases/Interfaces
 	[cs]:		Aplikace/DatabАze/RozhranМ
@@ -93,6 +98,7 @@ Applications/Databases/Interfaces
 	[ru]:		Приложения/Базы данных/Интерфейсы
 	[sl]:		Programi/Zbirke podatkov/Vmesniki
 	[sv]:		TillДmpningar/Databaser/GrДnssnitten
+	[uk]:		Прикладн╕ Програми/Бази даних/╤нтерфейс╕
 
 Applications/Dictionaries
 	[cs]:		Aplikace/SlovnМky
@@ -108,6 +114,7 @@ Applications/Dictionaries
 	[ru]:		Приложения/Словари
 	[sl]:		Programi/Slovarji
 	[sv]:		TillДmpningar/Ordlistor
+	[uk]:		Прикладн╕ Програми/Словники
 
 Applications/Editors
 	[cs]:		Aplikace/Editory
@@ -124,6 +131,7 @@ Applications/Editors
 	[ru]:		Приложения/Редакторы
 	[sl]:		Programi/Urejevalniki
 	[sv]:		TillДmpningar/Editorer
+	[uk]:		Прикладн╕ Програми/Редактори
 
 Applications/Editors/Emacs
 	[cs]:		Aplikace/Editory/Emacs
@@ -140,6 +148,7 @@ Applications/Editors/Emacs
 	[ru]:		Приложения/Редакторы/Emacs
 	[sl]:		Programi/Urejevalniki/Emacs
 	[sv]:		TillДmpningar/Editorer/Emacs
+	[uk]:		Прикладн╕ Програми/Редактори/Emacs
 
 Applications/Editors/Vim
 	[cs]:		Aplikace/Editory/Vim
@@ -156,6 +165,7 @@ Applications/Editors/Vim
 	[ru]:		Приложения/Редакторы/Vim
 	[sl]:		Programi/Urejevalniki/Vim
 	[sv]:		TillДmpningar/Editorer/Vim
+	[uk]:		Прикладн╕ Програми/Редактори/Vim
 
 Applications/Editors/XEmacs
 	[cs]:		Aplikace/Editory/XEmacs
@@ -172,6 +182,7 @@ Applications/Editors/XEmacs
 	[ru]:		Приложения/Редакторы/XEmacs
 	[sl]:		Programi/Urejevalniki/XEmacs
 	[sv]:		TillДmpningar/Editorer/XEmacs
+	[uk]:		Прикладн╕ Програми/Редактори/XEmacs
 
 Applications/Emulators
 	[de]:		Applikationen/Emulatoren
@@ -217,9 +228,10 @@ Applications/File
 	[pl]:		Aplikacje/Pliki
 	[pt]:		AplicaГУes/Ficheiros
 	[pt_BR]:	AplicaГУes/Arquivos
-	[ru]:		Приложения/Работа с файлами
+	[ru]:		Приложения/Файловые утилиты
 	[sl]:		Programi/Datoteke
 	[sv]:		TillДmpningar/Fil
+	[uk]:		Прикладн╕ Програми/Файлов╕ утил╕ти
 
 Applications/Graphics
 	[cs]:		Aplikace/Grafika
@@ -237,6 +249,7 @@ Applications/Graphics
 	[ru]:		Приложения/Графика
 	[sl]:		Programi/Grafika
 	[sv]:		TillДmpningar/Grafik
+	[uk]:		Прикладн╕ Програми/Граф╕ка
 
 Applications/Games
 	[cs]:		Aplikace/Hry
@@ -253,6 +266,7 @@ Applications/Games
 	[ru]:		Приложения/Игры
 	[sl]:		Programi/Igre
 	[sv]:		TillДmpningar/Spel
+	[uk]:		Прикладн╕ Програми/╤гри
 
 Applications/Networking
 	[cs]:		Aplikace/SМ╩ovИ
@@ -266,9 +280,10 @@ Applications/Networking
 	[pl]:		Aplikacje/Sieciowe
 	[pt]:		AplicaГУes/Rede
 	[pt_BR]:	AplicaГУes/Rede
-	[ru]:		Приложения/Сетевые
+	[ru]:		Приложения/Сеть
 	[sl]:		Programi/Omre╬ni
 	[sv]:		TillДmpningar/NДtverk
+	[uk]:		Прикладн╕ Програми/Мережа
 
 Applications/Mail
 	[cs]:		Aplikace/Po╧ta
@@ -284,6 +299,7 @@ Applications/Mail
 	[ru]:		Приложения/Электронная почта
 	[sl]:		Programi/Po╧tna
 	[sv]:		TillДmpningar/Post
+	[uk]:		Прикладн╕ Програми/Пошта
 
 Applications/Math
 	[cs]:		Aplikace/MatematickИ
@@ -298,6 +314,7 @@ Applications/Math
 	[ru]:		Приложения/Математические
 	[sl]:		Programi/MatematiХni
 	[sv]:		TillДmpningar/Matemataisk
+	[uk]:		Прикладн╕ Програми/Математика
 
 Applications/News
 	[cs]:		Aplikace/News
@@ -329,6 +346,7 @@ Applications/Printing
 	[ru]:		Приложения/Печать
 	[sl]:		Programi/Tiskanje
 	[sv]:		TillДmpningar/Utskrift
+	[uk]:		Прикладн╕ Програми/Друк
 
 Applications/Publishing
 	[cs]:		Aplikace/PublikovАnМ
@@ -343,9 +361,10 @@ Applications/Publishing
 	[pl]:		Aplikacje/Publikowanie
 	[pt]:		AplicaГУes/PublicaГЦo
 	[pt_BR]:	AplicaГУes/EditoraГЦo
-	[ru]:		Приложения/Издательство
+	[ru]:		Приложения/Типография
 	[sl]:		Programi/Zalo╬ni╧tvo
 	[sv]:		TillДmpningar/Publicering
+	[uk]:		Прикладн╕ Програми/Типограф╕я
 
 Applications/Publishing/SGML
 	[cs]:		Aplikace/PublikovАnМ/SGML
@@ -363,6 +382,7 @@ Applications/Publishing/SGML
 	[ru]:		Приложения/Издательство/SGML
 	[sl]:		Programi/Zalo╬ni╧tvo/SGML
 	[sv]:		TillДmpningar/Publicering/SGML
+	[uk]:		Прикладн╕ Програми/Типограф╕я/SGML
 
 Applications/Publishing/TeX
 	[cs]:		Aplikace/PublikovАnМ/TeX
@@ -380,6 +400,7 @@ Applications/Publishing/TeX
 	[ru]:		Приложения/Издательство/TeX
 	[sl]:		Programi/Zalo╬ni╧tvo/TeX
 	[sv]:		TillДmpningar/Publicering/TeX
+	[uk]:		Прикладн╕ Програми/Типограф╕я/TeX
 
 Applications/Publishing/XML
 	[cs]:		Aplikace/PublikovАnМ/XML
@@ -397,6 +418,7 @@ Applications/Publishing/XML
 	[ru]:		Приложения/Издательство/XML
 	[sl]:		Programi/Zalo╬ni╧tvo/XML
 	[sv]:		TillДmpningar/Publicering/XML
+	[uk]:		Прикладн╕ Програми/Типограф╕я/XML
 
 Applications/Publishing/XML/Java
 	[cs]:		Aplikace/PublikovАnМ/XML/Java
@@ -414,6 +436,7 @@ Applications/Publishing/XML/Java
 	[ru]:		Приложения/Издательство/XML/Java
 	[sl]:		Programi/Zalo╬ni╧tvo/XML/Java
 	[sv]:		TillДmpningar/Publicering/XML/Java
+	[uk]:		Прикладн╕ Програми/Типограф╕я/XML/Java
 
 Applications/Shells
 	[cs]:		Aplikace/Shelly
@@ -428,9 +451,10 @@ Applications/Shells
 	[pl]:		Aplikacje/PowЁoki
 	[pt]:		AplicaГУes/Shells
 	[pt_BR]:	AplicaГУes/Shells
-	[ru]:		Приложения/Оболочки
+	[ru]:		Приложения/Командные процессоры
 	[sl]:		Programi/Ukazne lupine
 	[sv]:		TillДmpningar/Skal
+	[uk]:		Прикладн╕ Програми/Командн╕ процесори
 
 Applications/Sound
 	[cs]:		Aplikace/Zvuk
@@ -447,6 +471,7 @@ Applications/Sound
 	[ru]:		Приложения/Звук
 	[sl]:		Programi/Zvok
 	[sv]:		TillДmpningar/Ljud
+	[uk]:		Прикладн╕ Програми/Звук
 
 Applications/Spreadsheets
 	[cs]:		Aplikace/Tabulkove procesorЩ
@@ -459,9 +484,10 @@ Applications/Spreadsheets
 	[no]:		Applikasjoner/Regneark
 	[pl]:		Aplikacje/Arkusze kalkulacyjne
 	[pt]:		AplicaГУes/Folhas de CАlculo
-	[ru]:		Приложения/электронныя таблицы
+	[ru]:		Приложения/Электронные таблицы
 	[sl]:		Programi/Preglednice
 	[sv]:		TillДmpningar/Kalkylark
+	[uk]:		Прикладн╕ Програми/Електронна таблиця
 
 Applications/System
 	[cs]:		Aplikace/SystИm
@@ -479,6 +505,7 @@ Applications/System
 	[ru]:		Приложения/Система
 	[sl]:		Programi/Sistem
 	[sv]:		TillДmpningar/System
+	[uk]:		Прикладн╕ Програми/Система
 
 Applications/Terminal
 	[cs]:		Aplikace/TerminАl
@@ -494,6 +521,7 @@ Applications/Terminal
 	[ru]:		Приложения/Терминал
 	[sl]:		Programi/Terminal
 	[sv]:		TillДmpningar/Terminal
+	[uk]:		Прикладн╕ Програми/Терм╕нали
 
 Applications/Text
 	[cs]:		Aplikace/Text
@@ -507,9 +535,10 @@ Applications/Text
 	[no]:		Applikasjoner/Tekst
 	[pl]:		Aplikacje/Tekst
 	[pt]:		AplicaГУes/Texto
-	[ru]:		Приложения/Работа с текстами
+	[ru]:		Приложения/Текстовые утилиты
 	[sl]:		Programi/Besedilo
 	[sv]:		TillДmpningar/Text
+	[uk]:		Прикладн╕ Програми/Текстов╕ утил╕ти
 
 Base
 	[cs]:		ZАklad
@@ -524,9 +553,10 @@ Base
 	[pl]:		Podstawowe
 	[pt]:		Base
 	[pt_BR]:	Base
-	[ru]:		Базовый набор
+	[ru]:		База
 	[sl]:		Osnova
 	[sv]:		Bas
+	[uk]:		База
 
 Base/Kernel
 	[cs]:		ZАklad/JАdro
@@ -540,9 +570,10 @@ Base/Kernel
 	[no]:		Basis/Kjerne
 	[pl]:		Podstawowe/J╠dro
 	[pt]:		Base/NЗcleo
-	[ru]:		Базовый набор/Ядро
+	[ru]:		База/Ядро
 	[sl]:		Osnova/Jedro
 	[sv]:		Bas/KДrna
+	[uk]:		База/Ядро
 
 Base/Authentication and Authorization
 	[cs]:		ZАklad/Autentizace a autorizace
@@ -552,9 +583,10 @@ Base/Authentication and Authorization
 	[it]:		Base/Autenticazione e autorizzazione
 	[pl]:		Podstawowe/Autentykacja i autoryzacja
 	[pt]:		Base/AutenticaГЦo e AutorizaГЦo
-	[ru]:		Базовый набор/Аутентификация и авторизация
+	[ru]:		База/Аутентификация и авторизация
 	[sl]:		Osnova/Avtentikacija in identifikacija
 	[sv]:		Bas/Autentisering och Auktorisering
+	[uk]:		База/Аутентикац╕я та авторизац╕я
 
 Base/Utilities
 	[cs]:		ZАklad/Utility
@@ -568,9 +600,10 @@ Base/Utilities
 	[pl]:		Podstawowe/NarzЙdzia
 	[pt]:		Base/Utilidades
 	[pt_BR]:	Base/UtilitАrios
-	[ru]:		Базовый набор/Приложения
+	[ru]:		База/Утилиты
 	[sl]:		Osnova/PripomoХki
 	[sv]:		Bas/Verktyg
+	[uk]:		База/Утил╕ти
 
 Daemons
 	[cs]:		DИmoni
@@ -587,6 +620,7 @@ Daemons
 	[ru]:		Демоны
 	[sl]:		Stre╬niki
 	[sv]:		Demoner
+	[uk]:		Демони
 
 Development
 	[cs]:		VЩvojovИ prostЬedky
@@ -634,6 +668,7 @@ Development/Debuggers
 	[ru]:		Разработка/Отладчики
 	[sl]:		Razvoj/Razhro╧Хevalniki
 	[sv]:		Utveckling/FelsЖkning
+	[uk]:		Розробка/В╕дладчики
 
 Development/Languages
 	[cs]:		VЩvojovИ prostЬedky/ProgramovacМ jazyky
@@ -650,6 +685,7 @@ Development/Languages
 	[ru]:		Разработка/Языки
 	[sl]:		Razvoj/Jeziki
 	[sv]:		Utveckling/SprЕk
+	[uk]:		Розробка/Мови
 
 Development/Languages/Fortran
 	[cs]:		VЩvojovИ prostЬedky/ProgramovacМ jazyky/Fortran
@@ -666,6 +702,7 @@ Development/Languages/Fortran
 	[ru]:		Разработка/Языки/Fortran
 	[sl]:		Razvoj/Jeziki/Fortran
 	[sv]:		Utveckling/SprЕk/Fortran
+	[uk]:		Розробка/Мови/Fortran
 
 Development/Languages/Java
 	[cs]:		VЩvojovИ prostЬedky/ProgramovacМ jazyky/Java
@@ -682,6 +719,7 @@ Development/Languages/Java
 	[ru]:		Разработка/Языки/Java
 	[sl]:		Razvoj/Jeziki/Java
 	[sv]:		Utveckling/SprЕk/Java
+	[uk]:		Розробка/Мови/Java
 
 Development/Languages/Modula3
 	[cs]:		VЩvojovИ prostЬedky/ProgramovacМ jazyky/Modula3
@@ -698,6 +736,7 @@ Development/Languages/Modula3
 	[ru]:		Разработка/Языки/Modula3
 	[sl]:		Razvoj/Jeziki/Modula3
 	[sv]:		Utveckling/SprЕk/Modula3
+	[uk]:		Розробка/Мови/Modula3
 
 Development/Languages/PHP
 	[cs]:		VЩvojovИ prostЬedky/ProgramovacМ jazyky/PHP
@@ -714,6 +753,7 @@ Development/Languages/PHP
 	[ru]:		Разработка/Языки/PHP
 	[sl]:		Razvoj/Jeziki/PHP
 	[sv]:		Utveckling/SprЕk/PHP
+	[uk]:		Розробка/Мови/PHP
 
 Development/Languages/Perl
 	[cs]:		VЩvojovИ prostЬedky/ProgramovacМ jazyky/Perl
@@ -730,6 +770,7 @@ Development/Languages/Perl
 	[ru]:		Разработка/Языки/Perl
 	[sl]:		Razvoj/Jeziki/Perl
 	[sv]:		Utveckling/SprЕk/Perl
+	[uk]:		Розробка/Мови/Perl
 
 Development/Languages/Python
 	[cs]:		VЩvojovИ prostЬedky/ProgramovacМ jazyky/Python
@@ -746,6 +787,7 @@ Development/Languages/Python
 	[ru]:		Разработка/Языки/Python
 	[sl]:		Razvoj/Jeziki/Python
 	[sv]:		Utveckling/SprЕk/Python
+	[uk]:		Розробка/Мови/Python
 
 Development/Languages/Scheme
 	[cs]:		VЩvojovИ prostЬedky/ProgramovacМ jazyky/Scheme
@@ -762,6 +804,7 @@ Development/Languages/Scheme
 	[ru]:		Разработка/Языки/Scheme
 	[sl]:		Razvoj/Jeziki/Scheme
 	[sv]:		Utveckling/SprЕk/Scheme
+	[uk]:		Розробка/Мови/Scheme
 
 Development/Languages/Tcl
 	[cs]:		VЩvojovИ prostЬedky/ProgramovacМ jazyky/Tcl
@@ -778,6 +821,7 @@ Development/Languages/Tcl
 	[ru]:		Разработка/Языки/Tcl
 	[sl]:		Razvoj/Jeziki/Tcl
 	[sv]:		Utveckling/SprЕk/Tcl
+	[uk]:		Розробка/Мови/Tcl
 
 Development/Libraries
 	[cs]:		VЩvojovИ prostЬedky/Knihovny
@@ -830,6 +874,7 @@ Development/Tools
 	[ru]:		Разработка/Инструменты
 	[sl]:		Razvoj/Orodja
 	[sv]:		Utveckling/Verktyg
+	[uk]:		Розробка/╤нструменти
 
 Development/Version Control
 	[cs]:		VЩvojovИ prostЬedky/SprАv verzМ
@@ -845,6 +890,7 @@ Development/Version Control
 	[ru]:		Разработка/Контроль версий
 	[sl]:		Razvoj/Nadzor razliХic
 	[sv]:		Utveckling/Versionshantering
+	[uk]:		Розробка/Керуванне верс╕ями
 
 Documentation
 	[cs]:		Dokumentace
@@ -860,6 +906,7 @@ Documentation
 	[ru]:		Документация
 	[sl]:		Dokumentacija
 	[sv]:		Dokumentation
+	[uk]:		Документац╕я
 
 Libraries
 	[cs]:		Knihovny
@@ -909,9 +956,10 @@ Networking
 	[pl]:		Sieciowe
 	[pt]:		Rede
 	[pt_BR]:	Rede
-	[ru]:		Сетевые
+	[ru]:		Сеть
 	[sl]:		Omre╬ni
 	[sv]:		NДtverk
+	[uk]:		Мережа
 
 Networking/Admin
 	[cs]:		SМ╩ovИ/Administrace
@@ -924,8 +972,9 @@ Networking/Admin
 	[no]:		Nettverks/Administrasjon
 	[pl]:		Sieciowe/Administracyjne
 	[pt]:		Rede/AdministraГЦo
-	[ru]:		Сетевые/Управление
+	[ru]:		Сеть/Управление
 	[sv]:		NДtverk/Administration
+	[uk]:		Мережа/Керуванне
 
 Networking/Daemons
 	[cs]:		SМ╩ovИ/DИmoni
@@ -938,9 +987,10 @@ Networking/Daemons
 	[no]:		Nettverks/Daemoner
 	[pl]:		Sieciowe/Serwery
 	[pt]:		Rede/Servidores
-	[ru]:		Сетевые/Демоны
+	[ru]:		Сеть/Демоны
 	[sl]:		Omre╬ni/Stre╬niki
 	[sv]:		NДtverk/Demoner
+	[uk]:		Мережа/Демони
 
 Networking/Daemons/Java
 	[cs]:		SМ╩ovИ/DИmoni/Java
@@ -953,9 +1003,10 @@ Networking/Daemons/Java
 	[no]:		Nettverks/Daemoner/Java
 	[pl]:		Sieciowe/Serwery/Java
 	[pt]:		Rede/Servidores/Java
-	[ru]:		Сетевые/Демоны/Java
+	[ru]:		Сеть/Демоны/Java
 	[sl]:		Omre╬ni/Stre╬niki/Java
 	[sv]:		NДtverk/Demoner/Java
+	[uk]:		Мережа/Демони/Java
 
 Networking/Daemons/Java/Extensions
 	[cs]:		SМ╩ovИ/DИmoni/Java/Roz╧МЬenМ
@@ -967,9 +1018,10 @@ Networking/Daemons/Java/Extensions
 	[no]:		Nettverks/Daemoner/Java/Utvidelser
 	[pl]:		Sieciowe/Serwery/Java/Rozszerzenia
 	[pt]:		Rede/Servidores/Java/ExtensУes
-	[ru]:		Сетевые/Демоны/Java/Расширения
+	[ru]:		Сеть/Демоны/Java/Расширения
 	[sl]:		Omre╬ni/Stre╬niki/Java/Raz╧iritve
 	[sv]:		NДtverk/Demoner/Java/Utvidgningar
+	[uk]:		Мережа/Демони/Java/Расширение
 
 Networking/Daemons/Java/Servlets
 	[pl]:		Sieciowe/Serwery/Java/Servlety
@@ -986,7 +1038,7 @@ Networking/News
 	[pl]:		Sieciowe/News
 	[pt]:		Rede/News
 	[pt_BR]:	Rede/News
-	[ru]:		Сетевые/Новости
+	[ru]:		Сеть/Новости
 	[sl]:		Omre╬ni/NoviХarske
 	[sv]:		NДtverk/Nyheter
 
@@ -1002,9 +1054,10 @@ Networking/Utilities
 	[pl]:		Sieciowe/NarzЙdzia
 	[pt]:		Rede/Utilidades
 	[pt_BR]:	Rede/UtilitАrios
-	[ru]:		Сетевые/Приложения
+	[ru]:		Сеть/Утилиты
 	[sl]:		Omre╬ni/PripomoХki
 	[sv]:		NДtverk/Verktyg
+	[uk]:		Мережа/Утил╕ти
 
 Themes
 	[cs]:		TИmata
@@ -1019,6 +1072,7 @@ Themes
 	[pt]:		Temas
 	[ru]:		Темы
 	[sv]:		Teman
+	[uk]:		Теми
 
 Themes/Gtk
 	[cs]:		TИmata/Gtk
@@ -1033,6 +1087,7 @@ Themes/Gtk
 	[pt]:		Temas/Gtk
 	[ru]:		Темы/Gtk
 	[sv]:		Teman/Gtk
+	[uk]:		Теми/Gtk
 
 X11
 	[cs]:		X11
@@ -1052,6 +1107,7 @@ X11
 	[sl]:		X11
 	[sv]:		X11
 	[uk]:		X11
+	[uk]:		X11
 
 X11/Amusements
 	[cs]:		X11/ZАbava
@@ -1069,6 +1125,7 @@ X11/Amusements
 	[ru]:		X11/Развлечения
 	[sl]:		X11/Zabava
 	[sv]:		X11/UnderhЕllning
+	[uk]:		X11/Розваги
 
 X11/Applications
 	[cs]:		X11/Aplikace
@@ -1087,6 +1144,7 @@ X11/Applications
 	[ru]:		X11/Приложения
 	[sl]:		X11/Programi
 	[sv]:		X11/TillДmpningar
+	[uk]:		X11/Прикладн╕ Програми
 
 X11/Applications/Editors
 	[cs]:		X11/Aplikace/Editory
@@ -1103,6 +1161,7 @@ X11/Applications/Editors
 	[ru]:		X11/Приложения/Редакторы
 	[sl]:		X11/Programi/Urejevalniki
 	[sv]:		X11/TillДmpningar/Editorer
+	[uk]:		X11/Прикладн╕ Програми/Редактори
 
 X11/Applications/Games
 	[cs]:		X11/Aplikace/Hry
@@ -1119,6 +1178,7 @@ X11/Applications/Games
 	[ru]:		X11/Приложения/Игры
 	[sl]:		X11/Programi/Igre
 	[sv]:		X11/TillДmpningar/Spel
+	[uk]:		X11/Прикладн╕ Програми/╤гри
 
 X11/Applications/Games/Strategy
 	[cs]:		X11/Aplikace/Hry/StrategickИ
@@ -1150,6 +1210,7 @@ X11/Applications/Graphics
 	[ru]:		X11/Приложения/Графика
 	[sl]:		X11/Programi/Grafika
 	[sv]:		X11/TillДmpningar/Grafik
+	[uk]:		X11/Прикладн╕ Програми/Граф╕ка
 
 X11/Applications/Multimedia
 	[cs]:		X11/Aplikace/MultimИdia
@@ -1166,6 +1227,7 @@ X11/Applications/Multimedia
 	[ru]:		X11/Приложения/Мультимедиа
 	[sl]:		X11/Programi/VeХpredstavnost
 	[sv]:		X11/TillДmpningar/Multimedia
+	[uk]:		X11/Прикладн╕ Програми/Мультимед╕а
 
 X11/Applications/Networking
 	[cs]:		X11/Aplikace/SМ╩ovИ
@@ -1179,9 +1241,10 @@ X11/Applications/Networking
 	[pl]:		X11/Aplikacje/Sieciowe
 	[pt]:		X11/AplicaГУes/Rede
 	[pt_BR]:	X11/AplicaГУes/Rede
-	[ru]:		X11/Приложения/Сетевые
+	[ru]:		X11/Приложения/Сеть
 	[sl]:		X11/Programi/Omre╬ni
 	[sv]:		X11/TillДmpningar/NДtverk
+	[uk]:		X11/Прикладн╕ Програми/Мережа
 
 X11/Applications/Science
 	[cs]:		X11/Aplikace/VЛdeckИ
@@ -1193,6 +1256,7 @@ X11/Applications/Science
 	[pt]:		X11/AplicaГУes/CiЙncia
 	[ru]:		X11/Приложения/Наука
 	[sv]:		X11/TillДmpningar/Vetenskaplig
+	[uk]:		X11/Прикладн╕ Програми/Наука
 
 X11/Development/Libraries
 	[cs]:		X11/VЩvojovИ prostЬedky/Knihovny
@@ -1227,6 +1291,7 @@ X11/Development/Tools
 	[ru]:		X11/Разработка/Инструменты
 	[sl]:		X11/Razvoj/Orodja
 	[sv]:		X11/Utveckling/Verktyg
+	[uk]:		X11/Розробка/╤нструменти
 
 X11/Fonts
 	[cs]:		X11/Fonty
@@ -1242,6 +1307,7 @@ X11/Fonts
 	[ru]:		X11/Шрифты
 	[sl]:		X11/Pisave
 	[sv]:		X11/Typsnitt
+	[uk]:		X11/Шрифти
 
 X11/Libraries
 	[cs]:		X11/Knihovny
@@ -1275,6 +1341,7 @@ X11/Window Managers
 	[ru]:		X11/Оконные менеджеры
 	[sl]:		X11/Upravljalniki
 	[sv]:		X11/FЖnsterhanterarna
+	[uk]:		X11/В╕конн╕ менеджери
 
 X11/Window Managers/Tools
 	[cs]:		X11/OkennМ mana╬ery/NАstroje
@@ -1290,6 +1357,7 @@ X11/Window Managers/Tools
 	[ru]:		X11/Оконные менеджеры/Инструменты
 	[sl]:		X11/Upravljalniki/Orodja
 	[sv]:		X11/FЖnsterhanterarna/Verktyg
+	[uk]:		X11/В╕конн╕ менеджери/╤нструменти
 
 X11/XFree86
 	[cs]:		X11/XFree86
@@ -1324,3 +1392,4 @@ X11/XFree86/Servers
 	[ru]:		X11/XFree86/Серверы
 	[sl]:		X11/XFree86/Stre╬niki
 	[sv]:		X11/XFree86/Servrar
+	[uk]:		X11/XFree86/Сервери
