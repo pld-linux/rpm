@@ -72,7 +72,7 @@ Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	bzip2-devel >= 1.0.1
-BuildRequires:	db-devel >= 4.1.24-4
+BuildRequires:	db-devel >= 4.1.25-1
 BuildRequires:	doxygen
 BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	libelf-devel
@@ -86,7 +86,7 @@ BuildRequires:	popt-devel >= 1.7
 %if %{!?_without_static:1}%{?_without_static:0}
 # Require static library only for static build
 BuildRequires:	bzip2-static >= 1.0.2-5
-BuildRequires:	db-static >= 4.1
+BuildRequires:	db-static >= 4.1.25
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	libelf-static
 BuildRequires:	zlib-static
