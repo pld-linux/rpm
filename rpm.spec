@@ -38,6 +38,8 @@ Patch14:	%{name}-header_h.patch
 Patch15:	%{name}-fast-alAddPackage.patch
 Patch16:	%{name}-byKey.patch
 Patch17:	%{name}-perlprov.patch
+Patch18:	%{name}-noperldir.patch
+Patch19:	popt-cvs20010530.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	gettext-devel
@@ -191,6 +193,7 @@ Requires:	libtool
 Requires:	glibc-devel
 Requires:	sed
 Requires:	sed
+Requires:	popt >= 1.6.2-2
 Requires:	tar
 Requires:	textutils
 
@@ -221,6 +224,8 @@ construir pacotes usando o RPM.
 %patch15 -p0
 %patch16 -p0
 %patch15 -p0
+%patch16 -p0
+%patch17 -p1
 %patch31 -p1
 install %{SOURCE2} macros.pld.in
 %patch38 -p1
@@ -236,17 +241,20 @@ install %{SOURCE9} scripts/find-lang.sh
 mv -f perl.req perl.req.in
 mv -f perl.prov perl.prov.in)
 
-(cd popt;
- libtoolize --force --copy
- aclocal
- autoheader
- autoconf
- automake -a -c)
+cd popt
+autoupdate
+awk -f %{SOURCE14} %{SOURCE1}
+
+cd popt
+autoconf
+automake -a -c
+cd ..
 autoheader
+autoupdate
 %{__automake}
 cd ..
 
-autoheader
+libtoolize --force --copy
 autoconf
 # ugly workaround for automake
 sed -e 's#cpio.c $(DBLIBOBJS) depends.c#cpio.c depends.c#g' \
