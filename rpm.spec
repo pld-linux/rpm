@@ -33,6 +33,7 @@ BuildRequires:	libtool
 BuildRequires:	automake
 BuildRequires:	autoconf >= 2.13-8
 BuildRequires:	gettext-devel
+BuildRequires:	db3-devel
 Requires:	glibc >= 2.1
 BuildRequires:	zlib-static >= 1.1.4
 Obsoletes:	rpm-libs
