@@ -25,32 +25,27 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.2
 Version:	%{ver}
-%define	rel	0.%{snap}.1
+%define	rel	0.%{snap}.3
 Release:	%{rel}
 %define	beecrypt_rel	%{ver}_%{rel}
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/test-4.2/%{name}-%{version}.%{snap}.tar.gz
 Source1:	%{name}.groups
-Source2:	%{name}.macros
+Source2:	%{name}.platform
 Source3:	%{name}-install-tree
 Source4:	%{name}-find-%{name}-provides
 Source5:	%{name}-macros.perl
-Source6:	%{name}-find-perl-provides
-Source7:	%{name}-find-perl-requires
 Source8:	%{name}-find-spec-bcond
 Source9:	%{name}-find-lang
 Source10:	%{name}-find-provides
 Source11:	%{name}-find-requires
-Source12:	%{name}-macros.php
-Source13:	%{name}-macros.python
 Source14:	%{name}-groups-po.awk
 Source15:	%{name}-compress-doc
 Source16:	%{name}-check-files
 Source17:	%{name}-php-provides
 Source18:	%{name}-php-requires
-Source19:	%{name}-find-php-provides
-Source20:	%{name}-find-php-requires
+Source20:	%{name}.macros
 Source30:	builder
 Source31:	adapter.awk
 Source32:	pldnotify.awk
@@ -69,7 +64,7 @@ Patch10:	%{name}-byKey.patch
 Patch11:	%{name}-noexpand.patch
 Patch12:	%{name}-scripts-closefds.patch
 Patch13:	%{name}-python-macros.patch
-Patch14:	%{name}-perlprov-regonly.patch
+#Patch14:	%{name}-perlprov-regonly.patch
 Patch16:	%{name}-drop-legacy-CLI.patch
 Patch15:	%{name}-4.1-branch.patch
 Patch18:	%{name}-gettext-in-header.patch
@@ -86,6 +81,7 @@ Patch28:	%{name}-beecrypt-opt.patch
 Patch29:	%{name}-python-pic.patch
 Patch30:	%{name}-home_etc.patch
 Patch31:	%{name}-system_libs-more.patch
+Patch32:	%{name}-php-deps.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -118,6 +114,7 @@ Conflicts:	glibc < 2.2.92
 
 %define		__find_provides	%{SOURCE4}
 %define		_binary_payload	w9.gzdio
+%define		_noPayloadPrefix 1
 
 # don't require very fresh rpm.macros to build
 %define		__gettextize gettextize --copy --force --intl ; cp -f po/Makevars{.template,}
@@ -539,7 +536,8 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
-%patch14 -p1
+# outdated
+#%%patch14 -p1
 %patch16 -p1
 %patch18 -p1
 %patch19 -p1
@@ -558,20 +556,18 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch29 -p1
 %patch30 -p1
 %patch31 -p1
+%patch32 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
-install %{SOURCE5} macros.perl.in
-install %{SOURCE13} macros.python.in
-install %{SOURCE12} macros.php.in
-install %{SOURCE6} scripts/find-perl-provides
-install %{SOURCE7} scripts/find-perl-requires
+echo '# obsoleted file' > macros.perl
+echo '# obsoleted file' > macros.python
+echo '# obsoleted file' > macros.php
 install %{SOURCE9} scripts/find-lang.sh
 install %{SOURCE17} scripts/php.prov.in
 install %{SOURCE18} scripts/php.req.in
-install %{SOURCE19} scripts/find-php-provides
-install %{SOURCE20} scripts/find-php-requires
 install %{SOURCE33} scripts/perl.prov
+cat %{SOURCE20} >> macros.in
 
 cd scripts;
 mv -f perl.req perl.req.in
@@ -637,6 +633,7 @@ mv -f macros.tmp macros.in
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT/lib
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -674,8 +671,15 @@ EOF
 # for rpm -e|-U --repackage
 install -d $RPM_BUILD_ROOT/var/spool/repackage
 
+# move libs to /lib
+for a in librpm-%{ver}.so librpmdb-%{ver}.so librpmio-%{ver}.so ; do
+	mv -f $RPM_BUILD_ROOT/%{_libdir}/$a $RPM_BUILD_ROOT/lib/
+	ln -s /lib/$a $RPM_BUILD_ROOT/%{_libdir}/$a
+done
+
 %find_lang %{name}
 
+rm -rf manual
 cp -a doc/manual manual
 rm -f manual/Makefile*
 
@@ -719,6 +723,7 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 
 %files lib
 %defattr(644,root,root,755)
+%attr(755,root,root) /lib/librpm*-*.so
 %attr(755,root,root) %{_libdir}/librpm*-*.so
 
 %files build
@@ -777,13 +782,10 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %files devel
 %defattr(644,root,root,755)
 %{_includedir}/rpm
-%{_libdir}/librpm.la
+%{_libdir}/librpm*.la
 %attr(755,root,root) %{_libdir}/librpm.so
-%{_libdir}/librpmio.la
 %attr(755,root,root) %{_libdir}/librpmio.so
-%{_libdir}/librpmdb.la
 %attr(755,root,root) %{_libdir}/librpmdb.so
-%{_libdir}/librpmbuild.la
 %attr(755,root,root) %{_libdir}/librpmbuild.so
 
 %files static
@@ -828,7 +830,7 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %files perlprov
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/rpm/perl*
-%attr(755,root,root) %{_libdir}/rpm/find-perl-*
+#%attr(755,root,root) %{_libdir}/rpm/find-perl-*
 %attr(755,root,root) %{_libdir}/rpm/find-*.perl
 %attr(755,root,root) %{_libdir}/rpm/find-prov.pl
 %attr(755,root,root) %{_libdir}/rpm/find-req.pl
