@@ -145,7 +145,7 @@
 %xmlcat_create()          /usr/bin/xmlcatalog --noout --create %1
 %sgmlcat_add()           /usr/bin/install-catalog --add %1 %2 > /dev/null
 %sgmlcat_del()           /usr/bin/install-catalog --remove %1 %2 > /dev/null
-%sgmlcat_fix() { for l in \
+%docbook_sgmlcat_fix() { for l in \
 '' \
 '  -- default decl --' \
 'DTDDECL "-//OASIS//DTD DocBook XML V%2//EN" "../../xml.dcl"' \
