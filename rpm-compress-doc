@@ -34,10 +34,10 @@ fi
 
 FIND_CMD="find . -type f "
 for SUF in $EXCLUDE_SUFFIXES ; do
-	FIND_CMD="$FIND_CMD -a -not -name *.$SUF"
+	FIND_CMD="$FIND_CMD -a -not -name '*.$SUF'"
 done
 
-$FIND_CMD | while read FILENAME ; do
+eval $FIND_CMD | while read FILENAME ; do
 	if test -n "$EXCLUDE_MASKS" ; then
 		if eval "case \$(basename \"$FILENAME\") in
 			 $EXCLUDE_MASKS ) true ;;
