@@ -3,7 +3,7 @@ Summary(de):	Red Hat (und jetzt auch PLD) Packet-Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0.2
-Release:	13
+Release:	14
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -37,7 +37,7 @@ Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	gettext-devel
 BuildRequires:	automake
-BuildRequires:	db3-devel >= 3.1.17
+BuildRequires:	db3-devel >= 3.1.17-9
 BuildRequires:	bzip2-devel >= 1.0.1
 BuildRequires:	gdbm-devel
 BuildRequires:	zlib-devel
@@ -48,7 +48,7 @@ BuildRequires:	autoconf >= 2.13-8
 %if %{!?bcond_off_static:1}%{?bcond_off_static:0}
 BuildRequires:	zlib-devel >= 1.1.4
 # Require static library only for static build
-BuildRequires:	db3-static >= 3.1.17
+BuildRequires:	db3-static >= 3.1.17-9
 BuildRequires:	bzip2-static >= 1.0.1
 BuildRequires:	gdbm-static
 BuildRequires:	zlib-static
@@ -184,6 +184,7 @@ Requires:	gcc
 Requires:	diffutils
 Requires:	libtool
 Requires:	glibc-devel
+Requires:	sed
 Requires:	sed
 Requires:	tar
 Requires:	textutils
