@@ -18,7 +18,7 @@ for files in `echo $@`; do
 	files=`echo $files | grep "\.php$"`
 	if [ -n "$files" ]; then
 		# Requires trough  new call:
-		j=`cat $files | grep -i new | egrep "(=|return)" | egrep -v "^[[:space:]*]*(\/\/|#|\*|/\*)" | tr -d "\r" | egrep "[;|(|)|{|}|,][[:space:]*]*$" | awk -F "new " '{ print $2 }' | sed "s/[(|;|.]/ /g" | cut -f 1 -d " " | sed "s/^$.*//"`
+		j=`cat $files | grep -iw new | egrep "(=|return)" | egrep -v "^[[:space:]*]*(\/\/|#|\*|/\*)" | tr -d "\r" | egrep "[;|(|)|{|}|,][[:space:]*]*$" | awk -F "new " '{ print $2 }' | sed "s/[(|;|.]/ /g" | cut -f 1 -d " " | sed "s/^$.*//"`
 		if [ -n "$j" ]; then
 			for feature in $j; do
 				echo "pear($feature)"
