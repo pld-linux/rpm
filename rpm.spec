@@ -7,7 +7,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.2
-Release:	56
+Release:	57
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -455,6 +455,10 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
+%files -f %{name}.lang
+%defattr(644,root,root,755)
+%doc RPM-PGP-KEY.gz CHANGES.gz doc/manual/*
+
 %attr(755,root,root) /bin/rpm
 %attr(755,root,root) %{_bindir}/rpmdb
 %attr(755,root,root) %{_bindir}/rpmquery
@@ -500,6 +504,10 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 %ifarch ppc
 %{_libdir}/rpm/ppc*
+%endif
+
+
+%files build
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rpmbuild
 %attr(755,root,root) %{_bindir}/rpme
@@ -536,7 +544,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/librpm*.so
 
 %files static
-%attr(755,root,root) %{_bindir}/*
+%defattr(644,root,root,755)
+%{_libdir}/librpm*.a
+
 %files utils
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/gendiff
