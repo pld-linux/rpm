@@ -473,6 +473,7 @@ Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
 Requires:	binutils
+Requires:	bzip2
 Requires:	chrpath >= 0.10-4
 Requires:	cpio
 Requires:	diffutils
