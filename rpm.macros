@@ -46,7 +46,7 @@
 %__automake             automake -a -c -f --foreign
 %__autoconf             autoconf %{?debug:-Wall}
 
-%dependencytracking	" "
+%dependencytracking	%{nil}
 #-----------------------------------------------------------------
 %configure2_13 { \
  if [ -n "$LINGUAS" ]; then unset LINGUAS; fi; \
