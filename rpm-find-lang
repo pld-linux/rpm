@@ -12,6 +12,7 @@
 #work based on this file.
 
 #changes:
+# $Id$
 # 2001-01-08 Micha³ Kochanowicz <mkochano@pld.org.pl>
 #   * --all-name support for KDE.
 # 2000-11-28 Rafa³ Cygnarowski <pascalek@pld.org.pl>
@@ -126,8 +127,8 @@ s:'"$TOP_DIR"'::
 s:^\([^%].*\)::
 s:%lang(C) ::' >> $MO_NAME
 
-if [ "$(cat $MO_NAME | grep -v defattr | wc -w)" -le 0  ]; then
-        echo "Error: international files not found !"
+if [ "$(cat $MO_NAME | egrep -v '(^%defattr|^$)' | wc -w)" -le 0  ]; then
+        echo 'Error: international files not found !'
         exit 1
 fi
 
