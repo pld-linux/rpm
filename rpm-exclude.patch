@@ -19,7 +19,7 @@
  	{ "%readme",	RPMFILE_README },
  	{ "%license",	RPMFILE_LICENSE },
  	{ "%multilib",	0 },
-@@ -986,12 +987,16 @@
+@@ -986,12 +987,20 @@
      clp = *cpioList = xmalloc(sizeof(**cpioList) * fl->fileListRecsUsed);
  
      for (flp = fl->fileList, count = fl->fileListRecsUsed; count > 0; flp++, count--) {
@@ -28,12 +28,16 @@
 -		flp->fileURL);
 -	    fl->processingFailed = 1;
 -	}
-+	if ((count > 1) && !strcmp(flp->fileURL, flp[1].fileURL))
-+	    if (!(flp[1].flags & RPMFILE_EXCLUDE)) {
++	if ((count > 1) && !strcmp(flp->fileURL, flp[1].fileURL)) {
++	    if (!((flp->flags | flp[1].flags) & RPMFILE_EXCLUDE)) {
 +	        rpmError(RPMERR_BADSPEC, _("File listed twice: %s\n"),
 +	    	    flp->fileURL);
 +	        fl->processingFailed = 1;
++	    } else {
++		flp->flags |= RPMFILE_EXCLUDE;
++		flp[1].flags |= RPMFILE_EXCLUDE;
 +	    }
++	}
  
 +	/* Skip files that were marked with %exclude. */
 +	if (flp->flags & RPMFILE_EXCLUDE) continue;
