@@ -518,7 +518,7 @@
 +    noautoprov = rpmfcFreeRegexps(noautoprov, noautoprov_c);
 +    noautoreq = rpmfcFreeRegexps(noautoreq, noautoreq_c);
 +
-+    
++    /* rpmfcFindRequiredPackages(fc); - do not use package names in R/P */
 +
  /*@-boundswrite@*/
      /* Generate per-file indices into package dependencies. */
