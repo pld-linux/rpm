@@ -1,6 +1,6 @@
 Summary:     Red Hat Package Manager
 Name:        rpm
-Version:     2.5.2
+Version:     2.5.3
 Release:     2
 Group:       Utilities/System
 Source:      ftp://ftp.rpm.org/pub/rpm/dist/rpm-2.5.x/%{name}-%{version}.tar.gz
