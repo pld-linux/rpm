@@ -284,7 +284,7 @@ Biblioteka kryptograficzna.
 Summary:	Crypto library - development files
 Summary(pl):	Biblioteka kryptograficzna - pliki developerskie.
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
+Requires:	beecrypt = %{version}
 
 %description -n beecrypt-devel
 Crypto library - development files.
@@ -296,7 +296,7 @@ Biblioteka kryptograficzna - pliki developerskie.
 Summary:	Crypto library - static version
 Summary(pl):	Statyczna biblioteka kryptograficzna
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	beecrypt-devel = %{version}
 
 %description -n beecrypt-static
 Static version of crypto library.
