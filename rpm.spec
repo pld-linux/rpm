@@ -63,7 +63,6 @@ Patch38:        %{name}-section_test.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.50
-BuildRequires:	automake
 BuildRequires:	db4-devel >= 4.0.14
 BuildRequires:	doxygen
 BuildRequires:	db1-devel >= 1.85
@@ -75,7 +74,6 @@ BuildRequires:	zlib-devel
 BuildRequires:	python-modules >= 2.2.1
 BuildRequires:	zlib-devel >= 1.1.4
 %if %{!?_without_static:1}%{?_without_static:0}
-# Require static library only for static build
 BuildRequires:	db4-static >= 4.0.14
 BuildRequires:	db1-static >= 1.85
 BuildRequires:	zlib-static
