@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0
-Release:	11
+Release:	12
 Group:		Base
 Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
@@ -212,14 +212,14 @@ mv -f perl.prov perl.prov.in)
  libtoolize --force --copy
  aclocal
  autoheader
- automake --add-missing --gnu
- autoconf)
+ autoconf
+ automake -a -c)
 autoheader
 %{__automake}
 
 autoheader
-automake --add-missing --gnu
 autoconf
+automake -a -c
 %configure \
 	sed 's|@host_cpu@|%{_target_cpu}|' > macros.tmp
 	--enable-v1-packages
