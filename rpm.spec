@@ -13,7 +13,7 @@
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
-%include        /usr/%{_lib}/rpm/macros.python
+%include        /usr/lib/rpm/macros.python
 %define snap	20030610
 # versions of required libraries
 %define	reqdb_ver	4.2.50-1
@@ -98,7 +98,7 @@ Patch38:	%{name}-hack-norpmlibdep.patch
 Patch39:	%{name}-db42.patch
 Patch40:	%{name}-makefile-no_myLDADD_deps.patch
 Patch41:	%{name}-libdir64.patch
-Patch42:	%{name}-no-gnu.patch
+Patch42:	%{name}-libdir-links.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -149,6 +149,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		__cc %{?force_cc}%{!?force_cc:%{_target_cpu}-pld-linux-gcc}
 %define		__cxx %{?force_cxx}%{!?force_cxx:%{_target_cpu}-pld-linux-g++}
 %define		__cpp %{?force_cpp}%{!?force_cpp:%{_target_cpu}-pld-linux-gcc -E}
+
+%define		_rpmlibdir /usr/lib/rpm
 
 %description
 RPM is a powerful package manager, which can be used to build,
@@ -662,25 +664,25 @@ install -d $RPM_BUILD_ROOT/%{_lib}
 	DESTDIR=$RPM_BUILD_ROOT \
 	pkgbindir="%{_bindir}"
 
-install macros.perl	$RPM_BUILD_ROOT%{_libdir}/rpm/macros.perl
-install macros.python	$RPM_BUILD_ROOT%{_libdir}/rpm/macros.python
-install macros.php	$RPM_BUILD_ROOT%{_libdir}/rpm/macros.php
+install macros.perl	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.perl
+install macros.python	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.python
+install macros.php	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.php
 
 install %{SOURCE1} doc/manual/groups
-install %{SOURCE3} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
-install %{SOURCE4} $RPM_BUILD_ROOT%{_libdir}/rpm/find-rpm-provides
-install %{SOURCE5} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
+install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
+install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-rpm-provides
+install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
 # 2 following files - to be removed or changed to find-elf-*
 # (to generate only ELF dependencies using objdump)???
 # WARNING: don't even try to use, currently broken by some 64-bit experiments
-install %{SOURCE7} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides
-install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
-install %{SOURCE10} $RPM_BUILD_ROOT%{_libdir}/rpm/compress-doc
-install %{SOURCE11} $RPM_BUILD_ROOT%{_libdir}/rpm/check-files
-install %{SOURCE15} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides-wrapper
-install %{SOURCE16} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires-wrapper
-install scripts/find-php*	$RPM_BUILD_ROOT%{_libdir}/rpm
-install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_libdir}/rpm
+install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/find-provides
+install %{SOURCE8} $RPM_BUILD_ROOT%{_rpmlibdir}/find-requires
+install %{SOURCE10} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
+install %{SOURCE11} $RPM_BUILD_ROOT%{_rpmlibdir}/check-files
+install %{SOURCE15} $RPM_BUILD_ROOT%{_rpmlibdir}/find-provides-wrapper
+install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/find-requires-wrapper
+install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}
+install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 
 install %{SOURCE30} $RPM_BUILD_ROOT%{_bindir}/builder
 install %{SOURCE31} $RPM_BUILD_ROOT%{_bindir}/adapter.awk
@@ -750,7 +752,7 @@ rm -rf $RPM_BUILD_ROOT
 %postun lib -p /sbin/ldconfig
 
 %pre build
-find %{_libdir}/rpm -name '*-linux' -type l | xargs rm -f
+find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
@@ -775,16 +777,15 @@ find %{_libdir}/rpm -name '*-linux' -type l | xargs rm -f
 
 %dir /var/lib/rpm
 %dir %attr(700,root,root) /var/spool/repackage
-%dir %{_libdir}/rpm
 #%attr(755,root,root) %{_libdir}/rpm/rpmd
 #%attr(755,root,root) %{_libdir}/rpm/rpmk
 #%attr(755,root,root) %{_libdir}/rpm/rpm[qv]
 
-%doc %attr(755,root,root) %{_libdir}/rpm/convertrpmrc.sh
+%doc %attr(755,root,root) %{_rpmlibdir}/convertrpmrc.sh
 
-%{_libdir}/rpm/rpmrc
-%{_libdir}/rpm/rpmpopt*
-%{_libdir}/rpm/macros
+%{_rpmlibdir}/rpmrc
+%{_rpmlibdir}/rpmpopt*
+%{_rpmlibdir}/macros
 
 %files lib
 %defattr(644,root,root,755)
@@ -794,55 +795,59 @@ find %{_libdir}/rpm -name '*-linux' -type l | xargs rm -f
 %files build
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpm/noauto*
-%attr(755,root,root) %{_libdir}/rpm/compress-doc
-%attr(755,root,root) %{_libdir}/rpm/cross-build
-%attr(755,root,root) %{_libdir}/rpm/find-provides
-%attr(755,root,root) %{_libdir}/rpm/find-provides-wrapper
-%attr(755,root,root) %{_libdir}/rpm/find-requires
-%attr(755,root,root) %{_libdir}/rpm/find-requires-wrapper
-%attr(755,root,root) %{_libdir}/rpm/find-rpm-provides
-%attr(755,root,root) %{_libdir}/rpm/find-spec-bcond
-%attr(755,root,root) %{_libdir}/rpm/find-lang.sh
-%attr(755,root,root) %{_libdir}/rpm/mkinstalldirs
-%attr(755,root,root) %{_libdir}/rpm/config.*
-%attr(755,root,root) %{_libdir}/rpm/getpo.sh
-%attr(755,root,root) %{_libdir}/rpm/install-build-tree
-%attr(755,root,root) %{_libdir}/rpm/brp-*
-%attr(755,root,root) %{_libdir}/rpm/check-files
-%attr(755,root,root) %{_libdir}/rpm/check-prereqs
-#%attr(755,root,root) %{_libdir}/rpm/cpanflute
-#%attr(755,root,root) %{_libdir}/rpm/cpanflute2
-#%attr(755,root,root) %{_libdir}/rpm/Specfile.pm
-%attr(755,root,root) %{_libdir}/rpm/http.req
-%attr(755,root,root) %{_libdir}/rpm/magic.prov
-%attr(755,root,root) %{_libdir}/rpm/magic.req
-%attr(755,root,root) %{_libdir}/rpm/u_pkg.sh
-%attr(755,root,root) %{_libdir}/rpm/vpkg-provides.sh
-%attr(755,root,root) %{_libdir}/rpm/vpkg-provides2.sh
-%attr(755,root,root) %{_libdir}/rpm/rpmb
-%attr(755,root,root) %{_libdir}/rpm/rpmt
-%{_libdir}/rpm/noarch-*
+%attr(755,root,root) %{_rpmlibdir}/compress-doc
+%attr(755,root,root) %{_rpmlibdir}/cross-build
+%attr(755,root,root) %{_rpmlibdir}/find-provides
+%attr(755,root,root) %{_rpmlibdir}/find-provides-wrapper
+%attr(755,root,root) %{_rpmlibdir}/find-requires
+%attr(755,root,root) %{_rpmlibdir}/find-requires-wrapper
+%attr(755,root,root) %{_rpmlibdir}/find-rpm-provides
+%attr(755,root,root) %{_rpmlibdir}/find-spec-bcond
+%attr(755,root,root) %{_rpmlibdir}/find-lang.sh
+%attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
+%attr(755,root,root) %{_rpmlibdir}/config.*
+%attr(755,root,root) %{_rpmlibdir}/getpo.sh
+%attr(755,root,root) %{_rpmlibdir}/install-build-tree
+%attr(755,root,root) %{_rpmlibdir}/brp-*
+%attr(755,root,root) %{_rpmlibdir}/check-files
+%attr(755,root,root) %{_rpmlibdir}/check-prereqs
+#%attr(755,root,root) %{_rpmlibdir}/cpanflute
+#%attr(755,root,root) %{_rpmlibdir}/cpanflute2
+#%attr(755,root,root) %{_rpmlibdir}/Specfile.pm
+%attr(755,root,root) %{_rpmlibdir}/http.req
+%attr(755,root,root) %{_rpmlibdir}/magic.prov
+%attr(755,root,root) %{_rpmlibdir}/magic.req
+%attr(755,root,root) %{_rpmlibdir}/u_pkg.sh
+%attr(755,root,root) %{_rpmlibdir}/vpkg-provides.sh
+%attr(755,root,root) %{_rpmlibdir}/vpkg-provides2.sh
+%attr(755,root,root) %{_rpmlibdir}/rpmb
+%attr(755,root,root) %{_rpmlibdir}/rpmt
+%{_rpmlibdir}/noarch-*
 %ifarch i386 i486 i586 i686 athlon
-%{_libdir}/rpm/i?86*
-%{_libdir}/rpm/athlon*
+%{_rpmlibdir}/i?86*
+%{_rpmlibdir}/athlon*
+%endif
+%ifarch amd64
+%{_rpmlibdir}/amd64*
+%{_rpmlibdir}/x86_64*
 %endif
 %ifarch sparc sparc64
-%{_libdir}/rpm/sparc*
+%{_rpmlibdir}/sparc*
 %endif
 %ifarch alpha
-%{_libdir}/rpm/alpha*
+%{_rpmlibdir}/alpha*
 %endif
 %ifarch ppc
-%{_libdir}/rpm/ppc*
+%{_rpmlibdir}/ppc*
 %endif
 # must be here for "Requires: rpm-*prov" to work
-%{_libdir}/rpm/macros.perl
-%{_libdir}/rpm/macros.php
+%{_rpmlibdir}/macros.perl
+%{_rpmlibdir}/macros.php
 # not used yet ...
-%{_libdir}/rpm/sql.prov
-%{_libdir}/rpm/sql.req
-%{_libdir}/rpm/tcl.req
-%{_libdir}/rpm/trpm
+%{_rpmlibdir}/sql.prov
+%{_rpmlibdir}/sql.req
+%{_rpmlibdir}/tcl.req
+%{_rpmlibdir}/trpm
 
 %attr(755,root,root) %{_bindir}/javadeps
 %attr(755,root,root) %{_bindir}/gendiff
@@ -875,18 +880,18 @@ find %{_libdir}/rpm -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/rpmdeps
 %attr(755,root,root) %{_bindir}/rpmgraph
 %attr(755,root,root) %{_bindir}/rpmfile
-%attr(755,root,root) %{_libdir}/rpm/find-debuginfo.sh
-%attr(755,root,root) %{_libdir}/rpm/rpm2cpio.sh
-%attr(755,root,root) %{_libdir}/rpm/tgpg
-%attr(755,root,root) %{_libdir}/rpm/rpmdb_loadcvt
+%attr(755,root,root) %{_rpmlibdir}/find-debuginfo.sh
+%attr(755,root,root) %{_rpmlibdir}/rpm2cpio.sh
+%attr(755,root,root) %{_rpmlibdir}/tgpg
+%attr(755,root,root) %{_rpmlibdir}/rpmdb_loadcvt
 
 %files utils-perl
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/rpm/rpmdiff*
+%attr(755,root,root) %{_rpmlibdir}/rpmdiff*
 # not here
-#%%{_libdir}/rpm/rpm.daily
-#%%{_libdir}/rpm/rpm.log
-#%%{_libdir}/rpm/rpm.xinetd
+#%%{_rpmlibdir}/rpm.daily
+#%%{_rpmlibdir}/rpm.log
+#%%{_rpmlibdir}/rpm.xinetd
 
 %{_mandir}/man8/rpm2cpio.8*
 %{_mandir}/man8/rpmdeps.8*
@@ -905,26 +910,26 @@ find %{_libdir}/rpm -name '*-linux' -type l | xargs rm -f
 %files utils-static
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rpm[ieu]
-%attr(755,root,root) %{_libdir}/rpm/rpm[ieu]
+%attr(755,root,root) %{_rpmlibdir}/rpm[ieu]
 
 %files perlprov
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/rpm/perl.*
-#%attr(755,root,root) %{_libdir}/rpm/perldeps.pl
-#%attr(755,root,root) %{_libdir}/rpm/find-perl-*
-%attr(755,root,root) %{_libdir}/rpm/find-*.perl
-%attr(755,root,root) %{_libdir}/rpm/find-prov.pl
-%attr(755,root,root) %{_libdir}/rpm/find-req.pl
-%attr(755,root,root) %{_libdir}/rpm/get_magic.pl
+%attr(755,root,root) %{_rpmlibdir}/perl.*
+#%attr(755,root,root) %{_rpmlibdir}/perldeps.pl
+#%attr(755,root,root) %{_rpmlibdir}/find-perl-*
+%attr(755,root,root) %{_rpmlibdir}/find-*.perl
+%attr(755,root,root) %{_rpmlibdir}/find-prov.pl
+%attr(755,root,root) %{_rpmlibdir}/find-req.pl
+%attr(755,root,root) %{_rpmlibdir}/get_magic.pl
 
 %files pythonprov
 %defattr(644,root,root,755)
-%{_libdir}/rpm/macros.python
+%{_rpmlibdir}/macros.python
 
 %files php-pearprov
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/rpm/php*
-%attr(755,root,root) %{_libdir}/rpm/find-php*
+%attr(755,root,root) %{_rpmlibdir}/php*
+%attr(755,root,root) %{_rpmlibdir}/find-php*
 
 %if %{with python}
 %files -n python-rpm
