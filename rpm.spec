@@ -1,10 +1,10 @@
-%define	date	19990513
+%define	date	19990517
 
 Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.1
-Release:	5.%{date}
+Release:	6.%{date}
 Group:		Base
 Group(pl):	Bazowe
 Copyright:	GPL
@@ -18,6 +18,9 @@ Patch1:		rpm-i18n.patch
 Patch2:		rpm-find-requires.patch
 Patch3:		rpm-macros.patch
 Patch4:		rpm-po.patch
+Patch5:		rpm-moredoc.patch
+Patch6:		rpm-arch.patch
+Patch7:		rpm-pld.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildPrereq:	bzip2-static
@@ -66,6 +69,9 @@ construir pacotes usando o RPM.
 %patch2 -p1
 %patch1 -p1
 %patch4 -p1 
+%patch5 -p1
+%patch6 -p1 
+%patch7 -p1 
 %patch31 -p1
 install %{SOURCE4} po/pl.po
 install %{SOURCE13} macros.python.in
@@ -75,8 +81,7 @@ LDFLAGS="-s"; export LDFLAGS
 ( cd popt; 
 %GNUconfigure
 )
-
-%GNUconfigure 
+%GNUconfigure
 %configure \
 make
 	--with-python
@@ -87,9 +92,9 @@ install -d $RPM_BUILD_ROOT/var/db/rpm \
 	$RPM_BUILD_ROOT%{_mandir}/{ru,pl}/man8 \
 	$RPM_BUILD_ROOT/etc/skel/C/rpm/{SRPMS,RPMS,SOURCES,SPECS,BUILD}
 
-make DESTDIR="$RPM_BUILD_ROOT" pkgbindir="/usr/bin" install
+make DESTDIR="$RPM_BUILD_ROOT" pkgbindir="%{_bindir}" install
 
-install %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/rpm/macros.pld
+install %{SOURCE3} $RPM_BUILD_ROOT%{_prefix}/lib/rpm/macros.pld
 	pkgbindir="%{_bindir}"
 install rpm.8ru $RPM_BUILD_ROOT%{_mandir}/ru/man8/rpm.8
 install rpm2cpio.8ru $RPM_BUILD_ROOT%{_mandir}/ru/man8/rpm2cpio.8
@@ -97,7 +102,7 @@ install %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/pl/man8/rpm.8
 
 install %{SOURCE1} docs/groups
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
-strip  $RPM_BUILD_ROOT/{bin/rpm,usr/bin/*} || :
+strip  $RPM_BUILD_ROOT/{bin/rpm,%{_bindir}/*} || :
 
 gzip -9fn $RPM_BUILD_ROOT%{_mandir}/{{ru,pl}/man8/*,man8/*} \
 	RPM-PGP-KEY CHANGES docs/*
@@ -126,7 +131,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc RPM-PGP-KEY.gz CHANGES.gz docs/*
 %postun -p /sbin/ldconfig
 
-%attr(755,root,root) /usr/bin/*
+%attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/rpm/rpmdb
 %{_mandir}/man8/*
 %lang(ru) %{_mandir}/ru/man8/*
@@ -147,22 +152,22 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %dir /var/db/rpm
 
 %dir /usr/lib/rpm
-%attr(755,root,root) /usr/lib/rpm/find-*
-%attr(755,root,root) /usr/lib/rpm/freshen.sh
-%attr(755,root,root) /usr/lib/rpm/mkinstalldirs
-%attr(755,root,root) /usr/lib/rpm/config.*
-%attr(755,root,root) /usr/lib/rpm/getpo.sh
+%attr(755,root,root) %{_prefix}/lib/rpm/find-*
+%attr(755,root,root) %{_prefix}/lib/rpm/freshen.sh
+%attr(755,root,root) %{_prefix}/lib/rpm/mkinstalldirs
+%attr(755,root,root) %{_prefix}/lib/rpm/config.*
+%attr(755,root,root) %{_prefix}/lib/rpm/getpo.sh
 
-/usr/lib/rpm/rpm*
-/usr/lib/rpm/macros*
+%{_prefix}/lib/rpm/rpm*
+%{_prefix}/lib/rpm/macros*
 
 /etc/skel/C/rpm
 %attr(755,root,root) %{_libdir}/rpm/rpmb
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmt
-/usr/include/rpm
-/usr/lib/librpm*.a
-/usr/lib/librpm*.la
+%attr(755,root,root) %{_libdir}/rpm/rpme
+%{_libdir}/librpm*.a
+%{_libdir}/librpm*.la
 %files utils
 %files -n python-rpm
 * Fri Apr 30 1999 Artur Frysiak <wiget@pld.org.pl>
