@@ -13,6 +13,8 @@
 
 die "You have to specify input files" if (@ARGV < 1);
 
+$pear = "/usr/share/pear";
+
 @files = ();
 %req = ();
 
@@ -22,6 +24,14 @@ while (@ARGV > 0) {
 	# skip non-php files
 	next unless ($f =~ /\.php$/);
 	open(F, "< $f") or die;
+
+	if ($f =~ /$pear/) {
+		$file_dir = $f;
+		$file_dir =~ s|.*$pear/||;
+		$file_dir =~ s|/[^/]*$||;
+	} else {
+		$file_dir = undef;
+	}
 
 	while (<F>) {
 		# skip comments
@@ -39,6 +49,27 @@ while (@ARGV > 0) {
 			}
 
 			next if ($x =~ m|^\./| or $x =~ /\$/);
+			$req{$x} = 1;
+		}
+
+		next unless (defined $file_dir);
+
+		while (/(\W|^)(require|include)(_once)?
+			  \s* \(? \s* dirname \s* \( \s* __FILE__ \s* \) \s* \. \s*
+			  ("([^"]*)"|'([^']*)') 
+			  \s* \)? \s* ;/xg) {
+			if ($5 ne "") {
+				$x = $5;
+			} elsif ($6 ne "") {
+				$x = $6;
+			} else {
+				next;
+			}
+
+			next if ($x =~ /\$/);
+
+			$x = "$file_dir/$x";
+			$x =~ s|/+|/|g;
 			$req{$x} = 1;
 		}
 	}
