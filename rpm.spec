@@ -10,7 +10,7 @@ Summary(ru):	Менеджер пакетов от Red Hat
 Summary(uk):	Менеджер пакет╕в в╕д Red Hat
 Name:		rpm
 Version:	4.1
-Release:	11
+Release:	12
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/%{name}-%{version}.tar.gz
@@ -342,14 +342,15 @@ Python para manipular pacotes e bancos de dados RPM.
 
 %package lib
 Summary:	RPMs library
-Summary(pl):	Biblioteki RPMa
+Summary(pl):	Biblioteki RPM-a
 Group:		Libraries
+Requires:	popt >= 1.7
 
 %description lib
 RPMs library.
 
 %description lib -l pl
-Biblioteki RPMa.
+Biblioteki RPM-a.
 
 %package build
 Summary:	Scripts for building binary RPM packages
