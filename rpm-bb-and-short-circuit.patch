@@ -9,3 +9,31 @@
  	    /*@fallthrough@*/
  	case 'i':
  	    ba->buildAmount |= RPMBUILD_INSTALL;
+diff -Nura rpm-4.3/doc/pl/rpmbuild.8 rpm-4.3.aft/doc/pl/rpmbuild.8
+--- rpm-4.3/doc/pl/rpmbuild.8	2004-05-20 14:13:22.000000000 +0200
++++ rpm-4.3.aft/doc/pl/rpmbuild.8	2004-05-20 14:10:43.000000000 +0200
+@@ -145,7 +145,8 @@
+ .TP
+ \fB--short-circuit\fR
+ Przechodzi wprost do podanego etapu (tzn. pomija wszystkie etapy
+-prowadz±ce do podanego). Prawid³owe tylko z \fB-bc\fR i \fB-bi\fR.
++prowadz±ce do podanego). Prawid³owe tylko z \fB-bc\fR, \fB-bi\fR
++i \fB-bb\fR (-bi --short-circuit mo¿e odnosiæ siê tylko do PLD).
+ .TP
+ \fB--sign\fR
+ Osadza w pakiecie sygnaturê GPG. Sygnatura ta mo¿e byæ u¿ywana do
+diff -Nura rpm-4.3/doc/rpmbuild.8 rpm-4.3.aft/doc/rpmbuild.8
+--- rpm-4.3/doc/rpmbuild.8	2004-05-20 14:13:22.000000000 +0200
++++ rpm-4.3.aft/doc/rpmbuild.8	2004-05-20 14:10:13.000000000 +0200
+@@ -167,8 +167,9 @@
+ .TP
+ \fB--short-circuit\fR
+ Skip straight to specified stage (i.e., skip all stages leading
+-up to the specified stage).  Only valid with \fB-bc\fR
+-and \fB-bi\fR.
++up to the specified stage).  Only valid with \fB-bc\fR, \fB-bi\fR
++and \fB-bb\fR (note: -bi in conjunction with --short-circuit maybe
++is PLD-specific only).
+ .TP
+ \fB--sign\fR
+ Embed a GPG signature in the package. This signature can be used
