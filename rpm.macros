@@ -20,6 +20,7 @@
 
 %debugcflags	-O0 -g -Wall
 %rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
+%rpmcxxflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
 %rpmldflags	%{nil}
 
 # kernel compiler
