@@ -84,7 +84,7 @@ install %{SOURCE2} $RPM_BUILD_ROOT/usr/man/pl/man8/rpm.8
 
 install %{SOURCE1} docs/groups
 
-gzip -9fn $RPM_BUILD_ROOT/usr/man/{ru/man8/*,man8/*} \
+gzip -9fn $RPM_BUILD_ROOT/usr/man/{{ru,pl}/man8/*,man8/*} \
 	RPM-PGP-KEY CHANGES docs/*
 
 %post
