@@ -22,6 +22,7 @@ Source10:	%{name}-find-provides
 Source11:	%{name}-find-requires
 Source12:	%{name}-non-english-man-pages.tar.bz2
 Source13:	%{name}-macros.python
+Source14:	%{name}-groups-po.awk
 Patch0:		%{name}-%{name}rc.patch
 Patch2:		%{name}-arch.patch
 Patch3:		%{name}-%{name}popt.patch
@@ -389,6 +390,9 @@ install %{SOURCE9} scripts/find-lang.sh
 (cd scripts;
 mv -f perl.req perl.req.in
 mv -f perl.prov perl.prov.in)
+# generate Group translations to *.po
+awk -f %{SOURCE14} %{SOURCE1}
+
 %build
 # generate Group translations to *.po
 awk -f %{SOURCE14} %{SOURCE1}
