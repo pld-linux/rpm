@@ -112,12 +112,14 @@
 LANG=C\
 export LANG\
 unset DISPLAY ||:\
+unset LINGUAS ||:\
 %{nil}
 
 %build %%build\
 LANG=C\
 export LANG\
 unset DISPLAY ||:\
+unset LINGUAS ||:\
 %{nil}
 
 %install %{?_enable_debug_packages:%{?buildsubdir:%{debug_package}}}\
@@ -125,6 +127,7 @@ unset DISPLAY ||:\
 LANG=C\
 export LANG\
 unset DISPLAY ||:\
+unset LINGUAS ||:\
 %{nil}
 
 # ------------------------------------------------------------------------
