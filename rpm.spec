@@ -6,7 +6,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.4
-Release:	0.71
+Release:	0.72
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -24,6 +24,7 @@ Source11:	%{name}-find-requires
 Source12:	%{name}-non-english-man-pages.tar.bz2
 Source13:	%{name}-macros.python
 Source14:	%{name}-groups-po.awk
+Source15:	%{name}-compress-doc
 Patch0:		%{name}-%{name}rc.patch
 Patch2:		%{name}-arch.patch
 Patch3:		%{name}-%{name}popt.patch
@@ -49,6 +50,7 @@ Patch22:	%{name}-drop-legacy-CLI.patch
 Patch23:	%{name}-perlprov-perl5.6.patch
 Patch24:	%{name}-ac25x.patch
 Patch25:	%{name}-gettext-in-header.patch
+Patch26:	%{name}-compress-doc.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	autoconf >= 2.52
@@ -385,6 +387,7 @@ construir pacotes usando o RPM.
 %patch23 -p1
 %patch24 -p1
 %patch25 -p1
+%patch26 -p1
 %patch31 -p1
 %patch36 -p1
 %patch37 -p1
@@ -462,6 +465,7 @@ install macros.python $RPM_BUILD_ROOT%{_libdir}/rpm/macros.python
 
 install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
+install %{SOURCE15} $RPM_BUILD_ROOT%{_libdir}/rpm/compress-doc
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 install %{SOURCE10} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides
 install %{SOURCE11} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
@@ -533,6 +537,7 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 %ifarch ppc
 %{_libdir}/rpm/ppc*
+%attr(755,root,root) %{_libdir}/rpm/compress-doc
 %attr(755,root,root) %{_libdir}/rpm/cross-build
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rpmbuild
