@@ -18,6 +18,7 @@ Patch4:		rpm-pld.patch
 Patch5:		rpm-rpmpopt.patch
 Patch6:		rpm-findlangs.patch
 Patch7:		rpm-perl-macros.patch
+Patch8:		rpm-perl-path.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	bzip2-static
@@ -120,9 +121,14 @@ construir pacotes usando o RPM.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 %patch31 -p1
 install %{SOURCE3} macros.pld.in
 install %{SOURCE13} macros.python.in
+(cd scripts; 
+mv perl.req perl.req.in
+mv perl.prov perl.prov.in)
+
 mv -f perl.prov perl.prov.in)
 LDFLAGS="-s"; export LDFLAGS
 
