@@ -1,7 +1,20 @@
-diff -Nur rpm-3.0.1/macros.in rpm-3.0.1.pld/macros.in
---- rpm-3.0.1/macros.in	Tue May 11 11:24:08 1999
-+++ rpm-3.0.1.pld/macros.in	Mon May 17 20:07:52 1999
-@@ -55,8 +55,8 @@
+diff -ur rpm-3.0.1.old/configure.in rpm-3.0.1/configure.in
+--- rpm-3.0.1.old/configure.in	Fri Jun  4 18:21:31 1999
++++ rpm-3.0.1/configure.in	Fri Jun  4 18:22:00 1999
+@@ -781,7 +781,7 @@
+ export LIBS INCPATH
+ 
+ AC_CONFIG_SUBDIRS(popt)
+-AC_OUTPUT([Makefile rpmrc macros lib/Makefile
++AC_OUTPUT([Makefile rpmrc macros macros.pld lib/Makefile
+ 	build/Makefile tools/Makefile scripts/Makefile
+ 	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
+ 	misc/Makefile po/Makefile.in intl/Makefile],
+Only in rpm-3.0.1: configure.in~
+diff -ur rpm-3.0.1.old/macros.in rpm-3.0.1/macros.in
+--- rpm-3.0.1.old/macros.in	Fri May 14 20:59:43 1999
++++ rpm-3.0.1/macros.in	Fri Jun  4 18:28:25 1999
+@@ -60,12 +60,12 @@
  %_builddir		%{_topdir}/BUILD
  %_buildshell		/bin/sh
  %_bzip2bin		@BZIP2BIN@
@@ -11,8 +24,14 @@ diff -Nur rpm-3.0.1/macros.in rpm-3.0.1.pld/macros.in
 +%_defaultdocdir		%{_usr}/share/doc
  #
  # XXX fixowner, fixgroup, and fixperms are run at the end of hardcoded setup
- %_fixowner		[ `%{__id} -u` = '0' ] && %{__chown} -Rf root
-@@ -69,13 +69,13 @@
+-%_fixowner		[ `%{__id} -u` = '0' ] && %{__chown} -Rf root
+-%_fixgroup		[ `%{__id} -u` = '0' ] && %{__chgrp} -Rf @ROOT_GROUP@
++%_fixowner		[ `%{__id} -u` = '0' ] && %{__chown} -Rf root.@ROOT_GROUP@
++#%_fixgroup		[ `%{__id} -u` = '0' ] && %{__chgrp} -Rf @ROOT_GROUP@
+ %_fixperms		%{__chmod} -Rf @FIXPERMS@
+ #
+ %_gzipbin		@GZIPBIN@
+@@ -74,13 +74,13 @@
  %_rpmdir		%{_topdir}/RPMS
  #
  # XXX Note escaped %% for use in headerSprintf
@@ -28,7 +47,7 @@ diff -Nur rpm-3.0.1/macros.in rpm-3.0.1.pld/macros.in
  #
  #==============================================================================
  # ---- Optional rpmrc macros.
-@@ -154,8 +154,8 @@
+@@ -159,8 +159,8 @@
  %_libdir		%{_exec_prefix}/lib
  %_includedir		%{_prefix}/include
  %_oldincludedir		/usr/include
@@ -39,15 +58,4 @@ diff -Nur rpm-3.0.1/macros.in rpm-3.0.1.pld/macros.in
  
  #==============================================================================
  # ---- config.guess platform macros.
-diff -ru rpm-3.0.1.old/configure.in rpm-3.0.1/configure.in
---- rpm-3.0.1.old/configure.in	Wed May 19 10:17:34 1999
-+++ rpm-3.0.1/configure.in	Wed May 19 10:18:32 1999
-@@ -781,7 +781,7 @@
- export LIBS INCPATH
- 
- AC_CONFIG_SUBDIRS(popt)
--AC_OUTPUT([Makefile rpmrc macros lib/Makefile
-+AC_OUTPUT([Makefile rpmrc macros macros.pld lib/Makefile
- 	build/Makefile tools/Makefile scripts/Makefile
- 	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
- 	misc/Makefile po/Makefile.in intl/Makefile],
+Only in rpm-3.0.1: macros.in~
