@@ -29,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.28.1
+Release:	0.%{snap}.28.2
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -607,6 +607,7 @@ cat %{SOURCE11} >> macros.in
 %patch42 -p1
 %patch43 -p0
 %patch44 -p1
+%patch45 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
