@@ -11,7 +11,7 @@ fi
 
 
 echo $filelist|/usr/lib/rpm/find-provides
-provides_perl=`/usr/lib/rpm/perl.prov $filelist`
+provides_perl=`echo $filelist | xargs /usr/lib/rpm/perl.prov`
 if [ -f __rpm_noautoprov ] ; then
 	for i in `cat __rpm_noautoprov`; do
 		provides_perl=`echo $provides_perl | sed "s!\<$i[[:space:]]*!!g"`

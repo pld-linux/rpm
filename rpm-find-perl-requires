@@ -9,8 +9,8 @@ if [ -f __rpm_noautoreqfiles ] ; then
 	done
 fi
 
-requires="`echo $filelist|/usr/lib/rpm/find-requires`"
-requires_perl="`/usr/lib/rpm/perl.req $filelist`"
+requires="`echo $filelist | /usr/lib/rpm/find-requires`"
+requires_perl="`echo $filelist | xargs /usr/lib/rpm/perl.req`"
 
 eval "`perl -V:installsitearch`"
 if [ -n "`echo $filelist | grep $installsitearch`" ] ; then
