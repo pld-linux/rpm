@@ -1,26 +1,29 @@
---- rpm-4.0.2/build/files.c	Sun May 26 13:40:43 2002
-+++ rpm-4.0.2-filon/build/files.c	Sun May 26 13:39:44 2002
-@@ -1987,7 +1987,7 @@
-  */
- static int generateDepends(Spec spec, Package pkg,
- 			   struct cpioFileMapping *cpioList, int cpioCount,
--			   int multiLib)
-+			   int multiLib, StringBuf fileList, int *fileListLen)
- {
-     StringBuf writeBuf;
-     int writeBytes;
-@@ -2013,7 +2013,9 @@
- 	}
+diff -Nur rpm-4.0.4.orig/build/files.c rpm-4.0.4/build/files.c
+--- rpm-4.0.4.orig/build/files.c	Sun Jun 30 00:07:54 2002
++++ rpm-4.0.4/build/files.c	Sun Jun 30 00:13:08 2002
+@@ -2412,7 +2412,8 @@
  
- 	writeBytes += strlen(cpioList->fsPath) + 1;
-+	*fileListLen += strlen(cpioList->fsPath) + 1;
- 	appendLineStringBuf(writeBuf, cpioList->fsPath);
-+	appendLineStringBuf(fileList, cpioList->fsPath);
+ /**
+  */
+-static int generateDepends(Spec spec, Package pkg, TFI_t cpioList, int multiLib)
++static int generateDepends(Spec spec, Package pkg, TFI_t cpioList, int multiLib,
++		StringBuf fileList, int *fileListLen)
+ 	/*@globals rpmGlobalMacroContext,
+ 		fileSystem, internalState @*/
+ 	/*@modifies cpioList, rpmGlobalMacroContext,
+@@ -2450,6 +2451,10 @@
+ 	writeBytes += strlen(fi->dnl[fi->dil[i]]);
+ 	appendLineStringBuf(writeBuf, fi->bnl[i]);
+ 	writeBytes += strlen(fi->bnl[i]) + 1;
++	appendStringBuf(fileList, fi->dnl[fi->dil[i]]);
++	*fileListLen += strlen(fi->dnl[fi->dil[i]]);
++	appendLineStringBuf(fileList, fi->bnl[i]);
++	*fileListLen += strlen(fi->bnl[i]) + 1;
      }
  
      for (dm = depMsgs; dm->msg != NULL; dm++) {
-@@ -2190,10 +2192,54 @@
-     FREE(versions);
+@@ -2655,10 +2660,54 @@
+     versions = hfd(versions, dvt);
  }
  
 +int checkFiles(StringBuf fileList, int fileListLen)
@@ -57,8 +60,8 @@
 +exit:
 +    
 +    freeStringBuf(readBuf);
-+    FREE(myargv[0]);
-+    FREE(myargv[1]);
++    _free(myargv[0]);
++    _free(myargv[1]);
 +
 +    return rc;
 +}
@@ -74,19 +77,20 @@
      
      for (pkg = spec->packages; pkg != NULL; pkg = pkg->next) {
  	const char *n, *v, *r;
-@@ -2213,13 +2260,23 @@
+@@ -2678,14 +2727,24 @@
       * XXX existence (rather than value) that will need to change as well.
       */
- 	if (headerGetEntry(pkg->header, RPMTAG_MULTILIBS, NULL, NULL, NULL)) {
--	    generateDepends(spec, pkg, pkg->cpioList, pkg->cpioCount, 1);
--	    generateDepends(spec, pkg, pkg->cpioList, pkg->cpioCount, 2);
-+	    generateDepends(spec, pkg, pkg->cpioList, pkg->cpioCount, 1, fileList, &fileListLen);
-+	    generateDepends(spec, pkg, pkg->cpioList, pkg->cpioCount, 2, fileList, &fileListLen);
+ 	if (headerIsEntry(pkg->header, RPMTAG_MULTILIBS)) {
+-	    (void) generateDepends(spec, pkg, pkg->cpioList, 1);
+-	    (void) generateDepends(spec, pkg, pkg->cpioList, 2);
++	    (void) generateDepends(spec, pkg, pkg->cpioList, 1, fileList, &fileListLen);
++	    (void) generateDepends(spec, pkg, pkg->cpioList, 2, fileList, &fileListLen);
  	} else
--	    generateDepends(spec, pkg, pkg->cpioList, pkg->cpioCount, 0);
-+	    generateDepends(spec, pkg, pkg->cpioList, pkg->cpioCount, 0, fileList, &fileListLen);
+-	    (void) generateDepends(spec, pkg, pkg->cpioList, 0);
++	    (void) generateDepends(spec, pkg, pkg->cpioList, 0, fileList, &fileListLen);
+ 	/*@-noeffect@*/
  	printDeps(pkg->header);
- 	
+ 	/*@=noeffect@*/
      }
  
 +    /* Now we have in fileList list of files from all packages.
@@ -101,10 +105,11 @@
 +    
      return res;
  }
---- rpm-4.0.2/platform.in	Sun May 26 13:40:43 2002
-+++ rpm-4.0.2-filon/platform.in	Sun May 26 12:11:26 2002
-@@ -38,6 +38,10 @@
- #	Expanded at end of %install
+diff -Nur rpm-4.0.4.orig/platform.in rpm-4.0.4/platform.in
+--- rpm-4.0.4.orig/platform.in	Sun Jun 30 00:07:54 2002
++++ rpm-4.0.4/platform.in	Sun Jun 30 00:13:45 2002
+@@ -89,6 +89,10 @@
+ #	Expanded at end of %install scriptlet.
  #
  
 +# Gets file list on input and buildroot as first parameter
