@@ -88,6 +88,7 @@ Patch33:	%{name}-find_required_pkgs_on_build.patch
 Patch34:	%{name}-noautoreqprovfiles.patch
 Patch35:	%{name}-context.patch
 Patch36:	%{name}-nls-fixes.patch
+Patch37:	%{name}-missing-prototypes.patch
 # this one not wholly ported yet (_noauto{prov,req}, _{perl,php}_deps)
 #Patch37:	%{name}-userpmdepswrappers.patch
 URL:		http://www.rpm.org/
@@ -583,6 +584,7 @@ cat %{SOURCE11} >> macros.in
 %patch33 -p1
 %patch34 -p1
 %patch35 -p1
+%patch36 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
