@@ -1,5 +1,7 @@
 #
 # TODO:
+# - update patches
+# - build popt from rpm.spec? (no separate popt-1.10.x tarballs available)
 # - consider using system libmagic not internal libfmagic
 #   (but internal has different method of passing output)
 # - after ac drop amd64 patch and make x86_64 generic arch + subarchs amd64 and ia32e
@@ -29,16 +31,15 @@ Summary(pt_BR):	Gerenciador de pacotes RPM
 Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
-%define	ver	4.4
 %define	sover	4.4
-Version:	%{ver}
-Release:	0.%{snap}.0.7
+Version:	4.4.1
+Release:	0.1
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
 # Snap tarball is generated from rpm-4_4 branch
-Source0:	ftp://distfiles.pld-linux.org/src/%{name}-%{version}.%{snap}.tar.bz2
-# Source0-md5:	9960ab3e3023b49b42c1e85acef33de5
+Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
+# Source0-md5:	90ded9047b1b69d918c6c7c7b56fd7a9
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
