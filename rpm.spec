@@ -202,6 +202,7 @@ mv -f perl.prov perl.prov.in)
  automake -a -c)
 autoheader
 %{__automake}
+cd ..
 
 autoheader
 autoconf
