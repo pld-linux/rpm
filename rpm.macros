@@ -433,7 +433,7 @@ echo "Compress kernel modules if any."; \
 # Hardlink binary identical .pyc and .pyo files
 # (idea by glen <at> pld-linux <dot> org)
 %__spec_install_post_py_hardlink {\
-%{!?no_install_post_py_hardlink:
+%{!?no_install_post_py_hardlink: \
 [ ! -d "$RPM_BUILD_ROOT" ] || find "$RPM_BUILD_ROOT" -name '*.pyc' | while read a; do \
 	b="$(echo $a|sed -e 's/.pyc$/.pyo/')"; \
 	if cmp -s "$a" "$b"; then \
