@@ -38,6 +38,7 @@
 # Build system path macros.
 #
 %__libtoolize           libtoolize --copy --force
+%__gettextize           gettextize --copy --force
 %__automake             automake -a -c -f --foreign
 %__autoconf             autoconf %{?debug:-Wall}
 
