@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.5
-Release:	11.91
+Release:	11.92
 Group:		Base
 Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
@@ -208,14 +208,11 @@ install macros.pld $RPM_BUILD_ROOT%{_libdir}/rpm/macros.pld
 
 install macros.perl $RPM_BUILD_ROOT%{_libdir}/rpm/macros.perl
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
-strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*
-
 #%%_install_langs pl_PL:en_US
 %%distribution PLD
 EOF
 
-gzip -9nf $RPM_BUILD_ROOT%{_mandir}/{{ja,ru,pl}/man8/*,man8/*} \
-	RPM-PGP-KEY CHANGES doc/manual/*
+%find_lang %{name}
 
 %pre
 if [ -L /var/lib/rpm ]; then
