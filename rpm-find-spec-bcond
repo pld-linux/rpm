@@ -23,12 +23,12 @@ fi
 
 bconds=`awk -F"\n" 'BEGIN { chlog=0 }
 		/^%changelog/ { chlog=1 }
-		/_with(out)?_[_a-z0-9]+/ && chlog == 0 {
-			match($0, /_with(out)?_[_a-z0-9]+/);
+		/_with(out)?_[_a-zA-Z0-9]+/ && chlog == 0 {
+			match($0, /_with(out)?_[_a-zA-Z0-9]+/);
 	       		print substr($0, RSTART, RLENGTH)                       
 	    	}
 		/^%bcond_with/ && chlog == 0 {
-			match($0, /bcond_with(out)?[ 	]+[_a-z0-9]+/);
+			match($0, /bcond_with(out)?[ 	]+[_a-zA-Z0-9]+/);
 				 bcond = substr($0, RSTART +5 , RLENGTH -5);
 				 gsub(/ /,"_",bcond);
 				 print bcond
