@@ -18,7 +18,7 @@
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.9
 %define	beecrypt_ver	3.0.0-0.20030610.1
-%define	rpm_macros_rev	1.161
+%define	rpm_macros_rev	1.162
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -29,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.30
+Release:	0.%{snap}.31
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -146,6 +146,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # don't require very fresh rpm.macros to build
 %define		__gettextize gettextize --copy --force --intl ; cp -f po/Makevars{.template,}
+%define		ix86 i386 i486 i586 i686 athlon pentium3 pentium4
 
 # stabilize new build environment
 %define		__cc %{?force_cc}%{!?force_cc:%{_target_cpu}-pld-linux-gcc}
@@ -469,6 +470,7 @@ Requires:	binutils
 Requires:	chrpath >= 0.10-4
 Requires:	cpio
 Requires:	diffutils
+Requires:	elfutils
 Requires:	file >= 4.01
 Requires:	fileutils
 Requires:	findutils
@@ -476,10 +478,6 @@ Requires:	findutils
 Requires:	gcc >= 3.0.3
 %else
 Requires:	gcc
-%endif
-%ifarch amd64
-Conflicts:	automake < 1:1.7.9-2
-Conflicts:	libtool < 2:1.5-13
 %endif
 Requires:	glibc-devel
 Requires:	grep
@@ -492,6 +490,11 @@ Requires:	sh-utils
 Requires:	tar
 Requires:	textutils
 Provides:	rpmbuild(macros) = %{rpm_macros_rev}
+Provides:	rpmbuild(noauto) = 2
+%ifarch amd64
+Conflicts:	automake < 1:1.7.9-2
+Conflicts:	libtool < 2:1.5-13
+%endif
 
 %description build
 Scripts for building binary RPM packages.
@@ -735,8 +738,8 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov <<EOF
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles <<EOF
 # global list of files (regexps) which don't generate Requires
-/usr/src/examples/.*
-/usr/share/doc/.*
+^/usr/src/examples/
+^/usr/share/doc/
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq <<EOF
 # global list of script capabilities (regexps) not to be used in Requires
@@ -744,49 +747,50 @@ EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep <<EOF
 # global list of capabilities (SONAME, perl(module), php(module) regexps)
 # which don't generate dependencies on package NAMES
-libGL.so.1
-libGLU.so.1
-libOSMesa.so.4
-libglide3.so.3
-libgtkmozembed.so
-libgtksuperwin.so
-libxpcom.so
-# xlibs
-libFS.so
-libI810XvMC.so
-libICE.so
-libSM.so
-libX11.so
-libXRes.so
-libXTrap.so
-libXaw.so
-libXaw.so
-libXcursor.so
-libXext.so
-libXfont.so
-libXfontcache.so
-libXft.so
-libXft.so
-libXi.so
-libXinerama.so
-libXmu.so
-libXmuu.so
-libXp.so
-libXpm.so
-libXrandr.so
-libXrender.so
-libXss.so
-libXt.so
-libXtst.so
-libXv.so
-libXvMC.so
-libXxf86dga.so
-libXxf86misc.so
-libXxf86rush.so
-libXxf86vm.so
-libfontenc.so
-libxkbfile.so
-libxkbui.so
+# -- OpenGL implementation
+^libGL.so.1$
+^libGLU.so.1$
+^libOSMesa.so
+# -- Glide
+^libglide3.so.3$
+# -- mozilla
+^libgtkmozembed.so$
+^libgtksuperwin.so$
+^libxpcom.so$
+# -- X11 implementation
+^libFS.so
+^libI810XvMC.so
+^libICE.so
+^libSM.so
+^libX11.so
+^libXRes.so
+^libXTrap.so
+^libXaw.so
+^libXcursor.so
+^libXext.so
+^libXfont.so
+^libXfontcache.so
+^libXft.so
+^libXi.so
+^libXinerama.so
+^libXmu.so
+^libXmuu.so
+^libXp.so
+^libXpm.so
+^libXrandr.so
+^libXrender.so
+^libXss.so
+^libXt.so
+^libXtst.so
+^libXv.so
+^libXvMC.so
+^libXxf86dga.so
+^libXxf86misc.so
+^libXxf86rush.so
+^libXxf86vm.so
+^libfontenc.so
+^libxkbfile.so
+^libxkbui.so
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc <<EOF
 # global list of file masks not to be compressed in DOCDIR
@@ -884,9 +888,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_rpmlibdir}/cpanflute
 #%attr(755,root,root) %{_rpmlibdir}/cpanflute2
 #%attr(755,root,root) %{_rpmlibdir}/Specfile.pm
-%attr(755,root,root) %{_rpmlibdir}/http.req
-%attr(755,root,root) %{_rpmlibdir}/magic.prov
-%attr(755,root,root) %{_rpmlibdir}/magic.req
 %attr(755,root,root) %{_rpmlibdir}/u_pkg.sh
 #%attr(755,root,root) %{_rpmlibdir}/vpkg-provides.sh
 #%attr(755,root,root) %{_rpmlibdir}/vpkg-provides2.sh
@@ -898,26 +899,35 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/pentium*
 %{_rpmlibdir}/athlon*
 %endif
+%ifarch alpha
+%{_rpmlibdir}/alpha*
+%endif
 %ifarch amd64
 %{_rpmlibdir}/amd64*
 %{_rpmlibdir}/x86_64*
 %endif
-%ifarch sparc sparc64
-%{_rpmlibdir}/sparc*
+%ifarch ia64
+%{_rpmlibdir}/ia64*
 %endif
-%ifarch alpha
-%{_rpmlibdir}/alpha*
+%ifarch mips mipsel mips64 mips64el
+%{_rpmlibdir}/mips*
 %endif
 %ifarch ppc
 %{_rpmlibdir}/ppc*
 %endif
+%ifarch sparc sparc64
+%{_rpmlibdir}/sparc*
+%endif
 # must be here for "Requires: rpm-*prov" to work
 %{_rpmlibdir}/macros.perl
 %{_rpmlibdir}/macros.php
-# not used yet ...
-%{_rpmlibdir}/sql.prov
-%{_rpmlibdir}/sql.req
-%{_rpmlibdir}/tcl.req
+# not used yet ... these six depend on perl
+#%attr(755,root,root) %{_rpmlibdir}/http.req
+#%attr(755,root,root) %{_rpmlibdir}/magic.prov
+#%attr(755,root,root) %{_rpmlibdir}/magic.req
+#%{_rpmlibdir}/sql.prov
+#%{_rpmlibdir}/sql.req
+#%{_rpmlibdir}/tcl.req
 %{_rpmlibdir}/trpm
 
 %attr(755,root,root) %{_bindir}/javadeps
