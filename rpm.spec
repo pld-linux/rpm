@@ -91,7 +91,7 @@ BuildRequires:	db-devel >= %{reqdb_ver}
 BuildRequires:	doxygen
 BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	elfutils-devel
-BuildRequires:	libmagic-devel
+#BuildRequires:	libmagic-devel
 BuildRequires:	libtool
 BuildRequires:	patch >= 2.2
 BuildRequires:	python-devel >= 2.2
@@ -105,7 +105,7 @@ BuildRequires:	bzip2-static >= 1.0.2-5
 BuildRequires:	db-static >= %{reqdb_ver}
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	elfutils-static
-BuildRequires:	libmagic-devel
+#BuildRequires:	libmagic-devel
 BuildRequires:	zlib-static
 BuildRequires:	popt-static >= %{reqpopt_ver}
 %endif
