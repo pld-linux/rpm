@@ -1,8 +1,8 @@
 Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
-Version:	2.93
-Release:	1
+Version:	2.95
+Release:	4
 Group:		Base
 Group(pl):	Bazowe
 Copyright:	GPL
@@ -18,6 +18,7 @@ Patch4:		rpm-po.patch
 Patch37:        %{name}-short_circuit.patch
 Icon:		rpm.gif
 #BuildPrereq:	bzip2-static
+#BuildPrereq:	gdbm-static
 #BuildPrereq:	zlib-static
 #BuildPrereq:	patch >= 2.2
 Requires:	glibc >= 2.1
@@ -57,7 +58,7 @@ construir pacotes usando o RPM.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
+%patch4 -p1 
 install %{SOURCE13} macros.python.in
 mv -f perl.prov perl.prov.in)
 autoconf
@@ -72,9 +73,6 @@ make
 %{__make} %{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
 install -d $RPM_BUILD_ROOT/var/lib/rpm \
 	$RPM_BUILD_ROOT/usr/man/{ru,pl}/man8
-
-#	$RPM_BUILD_ROOT/usr/src/rpm/{SOURCES,SPECS,SRPMS,BUILD} \
-#	$RPM_BUILD_ROOT/usr/src/rpm/RPMS/{$RPM_ARCH,noarch} \
 
 make DESTDIR="$RPM_BUILD_ROOT" install
 	pkgbindir="%{_bindir}"
@@ -97,7 +95,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 
-
 %doc RPM-PGP-KEY.gz CHANGES.gz docs/*
 %postun -p /sbin/ldconfig
 
@@ -107,19 +104,6 @@ rm -rf $RPM_BUILD_ROOT
 /usr/man/man8/*
 %lang(ru) /usr/man/ru/man8/*
 %lang(pl) /usr/man/pl/man8/*
-
-%attr(755,root,root) %dir /var/lib/rpm
-
-%dir /usr/lib/rpm
-%attr(755,root,root) /usr/lib/rpm/find-*
-%attr(755,root,root) /usr/lib/rpm/freshen.sh
-%attr(755,root,root) /usr/lib/rpm/mkinstalldirs
-%attr(755,root,root) /usr/lib/rpm/config.*
-%attr(755,root,root) /usr/lib/rpm/getpo.sh
-
-/usr/lib/rpm/rpm*
-/usr/lib/rpm/macros*
-#/usr/src/rpm
 
 %lang(cs)    /usr/share/locale/cs/LC_MESSAGES/rpm.mo
 %lang(de)    /usr/share/locale/de/LC_MESSAGES/rpm.mo
@@ -132,6 +116,19 @@ rm -rf $RPM_BUILD_ROOT
 %lang(sr)    /usr/share/locale/sr/LC_MESSAGES/rpm.mo
 %lang(sv)    /usr/share/locale/sv/LC_MESSAGES/rpm.mo
 %lang(tr)    /usr/share/locale/tr/LC_MESSAGES/rpm.mo
+
+%attr(755,root,root) %dir /var/lib/rpm
+
+%dir /usr/lib/rpm
+%attr(755,root,root) /usr/lib/rpm/find-*
+%attr(755,root,root) /usr/lib/rpm/freshen.sh
+%attr(755,root,root) /usr/lib/rpm/mkinstalldirs
+%attr(755,root,root) /usr/lib/rpm/config.*
+%attr(755,root,root) /usr/lib/rpm/getpo.sh
+
+/usr/lib/rpm/rpm*
+/usr/lib/rpm/macros*
+
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmt
