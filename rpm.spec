@@ -1,4 +1,4 @@
-%define	date	19990503
+%define	date	19990507
 
 Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
@@ -8,7 +8,7 @@ Release:	5.%{date}
 Group:		Base
 Group(pl):	Bazowe
 Copyright:	GPL
-Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-3.0.x/%{name}-%{version}-%{date}.tar.gz
+Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-3.0.x/%{name}-%{version}.%{date}.tar.gz
 Source1:	rpm.groups
 Source2:	rpm.8pl
 Source3:	rpm.macros
@@ -83,27 +83,40 @@ make
 
 
 %{__make} %{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
-install -d $RPM_BUILD_ROOT/var/lib/rpm \
-	$RPM_BUILD_ROOT/usr/man/{ru,pl}/man8 \
+install -d $RPM_BUILD_ROOT/var/db/rpm \
+	$RPM_BUILD_ROOT/usr/share/man/{ru,pl}/man8 \
 	$RPM_BUILD_ROOT/etc/skel/C/rpm/{SRPMS,RPMS,SOURCES,SPECS,BUILD}
 
 make DESTDIR="$RPM_BUILD_ROOT" pkgbindir="/usr/bin" install
 
 install %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/rpm/macros.pld
 	pkgbindir="%{_bindir}"
-install rpm.8ru $RPM_BUILD_ROOT/usr/man/ru/man8/rpm.8
-install rpm2cpio.8ru $RPM_BUILD_ROOT/usr/man/ru/man8/rpm2cpio.8
-install %{SOURCE2} $RPM_BUILD_ROOT/usr/man/pl/man8/rpm.8
+install rpm.8ru $RPM_BUILD_ROOT/usr/share/man/ru/man8/rpm.8
+install rpm2cpio.8ru $RPM_BUILD_ROOT/usr/share/man/ru/man8/rpm2cpio.8
+install %{SOURCE2} $RPM_BUILD_ROOT/usr/share/man/pl/man8/rpm.8
 
 install %{SOURCE1} docs/groups
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 strip  $RPM_BUILD_ROOT/{bin/rpm,usr/bin/*} || :
 
-gzip -9fn $RPM_BUILD_ROOT/usr/man/{{ru,pl}/man8/*,man8/*} \
+gzip -9fn $RPM_BUILD_ROOT/usr/share/man/{{ru,pl}/man8/*,man8/*} \
 	RPM-PGP-KEY CHANGES docs/*
+
+%pre
+if [ -e /var/lib/rpm ] && [ ! -L /var/lib/rpm ]; then
+	mkdir -p /var/db/rpm /var/db/rpm.old
+	cp -a /var/lib/rpm/* /var/db/rpm
+	cp -a /var/lib/rpm/* /var/db/rpm.old
+	echo "Yours old rpm database backuped in /var/db/rpm.old" >&2
+	echo "Run \'rpm --rebuilddb\' to update rpm database" >&2
+fi
 
 %post
 /bin/rpm --initdb
+if [ -e /var/lib/rpm ] && [ ! -L /var/lib/rpm ]; then
+	rm -rf /var/lib/rpm/
+	ln -s ../db/rpm /var/lib/rpm
+fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -115,9 +128,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %attr(755,root,root) /usr/bin/*
 %attr(755,root,root) %{_libdir}/rpm/rpmdb
-/usr/man/man8/*
-%lang(ru) /usr/man/ru/man8/*
-%lang(pl) /usr/man/pl/man8/*
+/usr/share/man/man8/*
+%lang(ru) /usr/share/man/ru/man8/*
+%lang(pl) /usr/share/man/pl/man8/*
 
 %lang(cs)    /usr/share/locale/cs/LC_MESSAGES/rpm.mo
 %lang(de)    /usr/share/locale/de/LC_MESSAGES/rpm.mo
@@ -131,7 +144,7 @@ rm -rf $RPM_BUILD_ROOT
 %lang(sv)    /usr/share/locale/sv/LC_MESSAGES/rpm.mo
 %lang(tr)    /usr/share/locale/tr/LC_MESSAGES/rpm.mo
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
-%attr(755,root,root) %dir /var/lib/rpm
+%attr(755,root,root) %dir /var/db/rpm
 
 %dir /usr/lib/rpm
 %attr(755,root,root) /usr/lib/rpm/find-*
