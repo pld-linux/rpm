@@ -59,7 +59,7 @@
 +optflags: ia64 -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia64: %{specflags_ia64}}}
 +optflags: x86_64 -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_x86_64: %{specflags_x86_64}}}
 +
-+optflags: alpha -O2 -mieee %{!?nospecflags:%{specflags} %{specflags_alpha}}
++optflags: alpha -O2 -mieee%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_alpha: %{specflags_alpha}}}
 +optflags: alphaev5 -O2 -mieee -mcpu=ev5%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_alpha: %{specflags_alpha}}%{?specflags_alphaev5: %{specflags_alphaev5}}}
 +optflags: alphaev56 -O2 -mieee -mcpu=ev56%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_alpha: %{specflags_alpha}}%{?specflags_alphaev56: %{specflags_alphaev56}}}
 +optflags: alphapca56 -O2 -mieee -mcpu=pca56%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_alpha: %{specflags_alpha}}%{?specflags_alphapca56: %{specflags_alphapca56}}}
