@@ -14,7 +14,7 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
 %include        /usr/lib/rpm/macros.python
-%define snap	20030610
+%define snap	20031227
 # versions of required libraries
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.9
@@ -30,12 +30,12 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.32
+Release:	0.%{snap}.1
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
 Source0:	ftp://distfiles.pld-linux.org/src/%{name}-%{version}.%{snap}.tar.gz
-# Source0-md5:	f923fe5ca8f0803868ae7bcc0fabe9bb
+# Source0-md5:	dcfe5575c62531838be5a0bebdaf0d1e
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -129,6 +129,7 @@ BuildRequires:	elfutils-static
 #BuildRequires:	libmagic-static
 BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
+BuildRequires:	libselinux-devel
 %endif
 Requires:	popt >= %{reqpopt_ver}
 Requires:	%{name}-lib = %{version}-%{release}
@@ -547,7 +548,8 @@ construir pacotes usando o RPM.
 
 %prep
 %setup -q
-%patch0 -p1
+# pl.po translation
+#%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -559,7 +561,8 @@ construir pacotes usando o RPM.
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
-%patch12 -p1
+# OBSOLETE (C)
+#%patch12 -p1
 %patch13 -p1
 %patch14 -p1
 %patch15 -p1
@@ -569,10 +572,11 @@ construir pacotes usando o RPM.
 %patch19 -p1
 %patch20 -p1
 %patch21 -p1
-%patch22 -p1
-%patch23 -p1
+# 1x1h MERGE WITH 14, no - OBSOLETE
+#%patch22 -p1
+# 3x1h OBSOLETE (already handled in quite well way)
+#%patch23 -p1
 %patch24 -p1
-
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
 echo '%%define	_perl_deps	1' > macros.perl
@@ -583,13 +587,17 @@ install %{SOURCE12} scripts/php.prov.in
 install %{SOURCE13} scripts/php.req.in
 install %{SOURCE33} scripts/perl.prov
 cat %{SOURCE14} >> macros.in
-%patch25 -p1
+#%patch25 -p1
 %patch26 -p1
 %patch27 -p1
-%patch28 -p1
-%patch29 -p1
-%patch30 -p1
-%patch31 -p1
+# obsolete?
+#%patch28 -p1
+# OBSOLETE
+#%patch29 -p1
+# OBSOLETE
+#%patch30 -p1
+# OBSOLETE
+#%patch31 -p1
 %patch32 -p1
 %patch33 -p1
 %patch34 -p1
@@ -597,11 +605,13 @@ cat %{SOURCE14} >> macros.in
 %patch36 -p1
 %patch37 -p1
 %patch38 -p1
-%patch39 -p1
+# OBSOLETE
+#%patch39 -p1
 %patch40 -p1
 %patch41 -p1
 %patch42 -p1
-%patch43 -p1
+# OBSOLETE
+#%patch43 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
