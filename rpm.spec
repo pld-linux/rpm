@@ -9,7 +9,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.0.2
-Release:	107
+Release:	108
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -115,6 +115,10 @@ Conflicts:	glibc < 2.2
 %define		py_sitedir	%{py_libdir}/site-packages
 %define		py_dyndir	%{py_libdir}/lib-dynload
 %define		pyrequires_eq() Requires:	%1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
+
+# Contains rpm.macro revision from HEAD which is currently
+# backported to Ra
+%define		rpm_macro_rev	1.118
 
 %description
 RPM is a powerful package manager, which can be used to build,
@@ -357,6 +361,7 @@ Summary(pt_BR):	Scripts e programas executАveis usados para construir pacotes
 Summary(ru):	Скрипты и утилиты, необходимые для сборки пакетов
 Summary(uk):	Скрипти та утил╕ти, необх╕дн╕ для побудови пакет╕в
 Group:		Applications/File
+Provides:	rpmbuild(macros) = %{rpm_macros_rev}
 Requires:	%{name} = %{version}
 Requires:	/bin/id
 Requires:	awk
