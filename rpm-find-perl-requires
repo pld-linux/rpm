@@ -11,6 +11,12 @@ fi
 
 requires="`echo $filelist|/usr/lib/rpm/find-requires`"
 requires_perl="`/usr/lib/rpm/perl.req $filelist`"
+
+eval "`perl -V:installsitearch`"
+if [ -n "`echo $filelist | grep $installsitearch`" ] ; then
+        requires_perlarch="$installsitearch `LC_ALL="C" rpm -q --queryformat '%{NAME} = %{VERSION}' perl| grep -v "is not"`"
+fi
+
 if [ -f __rpm_noautoreq ] ; then
 	for i in `cat __rpm_noautoreq`; do
 		requires_perl=`echo $requires_perl | sed "s!\<$i[[:space:]]*!!g"`
@@ -27,4 +33,5 @@ fi
 requires_mod="`LC_ALL=C rpm -q --whatprovides --qf "%{NAME}\n"  $requires_perl_t 2>/dev/null`"
 echo "$requires
 $requires_perl
+$requires_perlarch
 $requires_mod"| grep -v "no package provides" | sort -u
