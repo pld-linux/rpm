@@ -126,6 +126,9 @@
 # Location of fonts directories
 %_fontsdir	/usr/share/fonts
 
+# Location of Gtk and associated libraries documentation
+_gtkdocdir  %{_defaultdocdir}/gtk-doc/html
+
 # Current date
 %date 		%(LC_ALL="C" date +"%a %b %d %Y")
 
