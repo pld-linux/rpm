@@ -1,25 +1,24 @@
---- rpm-3.0.4/rpmrc.in.wiget	Wed Mar  1 00:22:44 2000
-+++ rpm-3.0.4/rpmrc.in	Wed Mar 22 16:53:54 2000
-@@ -4,10 +4,15 @@
+diff -Nru rpm-3.0.5/rpmrc.in rpm-3.0.5.new/rpmrc.in
+--- rpm-3.0.5/rpmrc.in	Sun Jul  9 17:35:56 2000
++++ rpm-3.0.5.new/rpmrc.in	Tue Jul 25 10:16:43 2000
+@@ -2,12 +2,12 @@
  
- # Please send new entries to rpm-list@redhat.com
+ #############################################################
  
+-# Please send new entries to rpm-list@redhat.com
 +# Please send new entries to pld-list@pld.org.pl
-+
+ 
  #############################################################
  # Values for RPM_OPT_FLAGS for various platforms
  
 -optflags: i386 -O2 -m486 -fno-strength-reduce
 +optflags: i386 -O2 -march=i386
-+optflags: i486 -O2 -march=i386
-+optflags: i586 -O2 -march=pentium
-+optflags: i686 -O2 -march=pentiumpro
- optflags: alpha -O2
- optflags: sparc -O2
- optflags: sparcv9 -O2 -mv8 -mtune=ultrasparc
-@@ -255,5 +260,5 @@
- buildarch_compat: milan: m68kmint noarch
- buildarch_compat: hades: m68kmint noarch
+ optflags: i486 -O2 -march=i486
+ optflags: i586 -O2 -march=i586
+ optflags: i686 -O2 -march=i686
+@@ -260,5 +260,5 @@
+ buildarch_compat: ia64: noarch
+ buildarch_compat: s390: noarch
  
 -macrofiles:	@RPMCONFIGDIR@/macros:@RPMCONFIGDIR@/%{_target}/macros:@SYSCONFIGDIR@/macros.specspo:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/.rpmmacros
 +macrofiles:	@RPMCONFIGDIR@/macros:@RPMCONFIGDIR@/macros.pld:@RPMCONFIGDIR@/%{_target}/macros:@SYSCONFIGDIR@/macros.specspo:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/.rpmmacros
