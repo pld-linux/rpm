@@ -13,7 +13,7 @@
 
 BEGIN {
 	preamble = 1		# Is it part of preamble? Default - yes
-	boc = 2			# Beggining of %changelog
+	boc = 4			# Beggining of %changelog
 	bod = 0			# Beggining of %description
 	tw = 70        		# Descriptions width
 	
@@ -101,12 +101,12 @@ defattr == 1 {
 	}
 
 	# Define _prefix and _mandir if it is X11 application
-	if (/^%description$/ && x11 == 1) {
-		print "%define\t\t_prefix\t\t/usr/X11R6"
-		print "%define\t\t_mandir\t\t%{_prefix}/man\n"
-		prefix = "/usr/X11R6"
-		x11 = 2
-	}
+#	if (/^%description$/ && x11 == 1) {
+#		print "%define\t\t_prefix\t\t/usr/X11R6"
+#		print "%define\t\t_mandir\t\t%{_prefix}/man\n"
+#		prefix = "/usr/X11R6"
+#		x11 = 2
+#	}
 	
 	# Format description
 	if (description == 1 && !/^%[a-z]+/ && !/^%description/) {
@@ -271,25 +271,38 @@ defattr == 1 {
 /^%changelog/, (/^%[a-z]+$/ && !/^%changelog/) {
 	preamble = 0
 	has_changelog = 1
+	skip = 0
 	# There should be some CVS keywords on the first line of %changelog.
-	if (boc == 1) {
-		if (!/PLD Team/) {
-			print "* %{date} PLD Team <feedback@pld.org.pl>" > changelog_file
-			printf "All persons listed below can be reached at " > changelog_file
-			print "<cvs_login>@pld.org.pl\n" > changelog_file
-			print "$" "Log:$" > changelog_file
-		}
-		boc = 0
+	if (boc == 3) {
+		if (!/PLD Team/)
+			print "* %{date} PLD Team <feedback@pld-linux.org>" > changelog_file
+		else
+			skip = 1
+		boc = 2
 	}
-	
+	if (boc == 2 && !skip) {
+		if (!/All persons listed below/) {
+			printf "All persons listed below can be reached at " > changelog_file
+			print "<cvs_login>@pld-linux.org\n" > changelog_file
+		} else
+			skip = 1
+		boc = 1
+	}
+	if (boc == 1 && !skip) {
+		if (!/^$/) {
+			if (!/\$.*Log:.*\$/)
+				print "$" "Log:$" > changelog_file
+			boc = 0
+		}
+	}
 	# Define date macro.
-	if (boc == 2) {
+	if (boc == 4) {
 		if (date == 0) {
 			printf "%%define date\t%%(echo `LC_ALL=\"C\"" > changelog_file
 			print " date +\"%a %b %d %Y\"`)" > changelog_file
 			date = 1
 		}
-		boc = 1
+		boc = 3
 	}
 
 	sub(/[ \t]+$/, "")
@@ -495,12 +508,14 @@ END {
 	if (has_changelog == 0)
 		print "%changelog"
 
-	if (boc > 0) {
-		print "* %{date} PLD Team <feedback@pld.org.pl>"
+	if (boc > 2)
+		print "* %{date} PLD Team <feedback@pld-linux.org>"
+	if (boc > 1) {
 		printf "All persons listed below can be reached at "
-		print "<cvs_login>@pld.org.pl\n"
-		print "$" "Log:$"
+		print "<cvs_login>@pld-linux.org\n"
 	}
+	if (boc > 0)
+		print "$" "Log:$"
 }
 
 function fixedsub(s1,s2,t,      ind) {
@@ -514,7 +529,7 @@ function fixedsub(s1,s2,t,      ind) {
 function format_preamble()
 {
 	sub(/:[ \t]*/, ":")
-	if (match($0, /[A-Za-z0-9()#_ \t]+[ \t]*:[ \t]*/) == 1) {
+	if (match($0, /[A-Za-z0-9(),#_ \t]+[ \t]*:[ \t]*/) == 1) {
 		if (RLENGTH < 8)
 			sub(/:/, ":\t\t")
 		else
@@ -546,7 +561,7 @@ function use_macros()
 		gsub("%{_prefix}/lib", "%{_libdir}")
 
 	for (c = 1; c <= NF; c++) {
-		if ($c ~ sysconfdir "/{?cron.d")
+		if ($c ~ sysconfdir "/{?cron.")
 			continue;
 		if ($c ~ sysconfdir "/{?crontab.d")
 			continue;
@@ -589,7 +604,9 @@ function use_macros()
 	gsub("%{prefix}/info", "%{_infodir}")
 	gsub("%{_prefix}/info", "%{_infodir}")
 
-	gsub("%{_datadir}/aclocal", "%{_aclocaldir}")
+	if (prefix !~ "/X11R6") {
+		gsub("%{_datadir}/aclocal", "%{_aclocaldir}")
+	}
 
 	if (prefix != "/") {
 		for (c = 1; c <= NF; c++) {
@@ -603,8 +620,11 @@ function use_macros()
 	gsub("%{PACKAGE_VERSION}", "%{version}")
 	gsub("%{PACKAGE_NAME}", "%{name}")
 
-	gsub("%{_datadir}/gnome/apps", "%{_applnkdir}")
-	gsub("%{_datadir}/applnk", "%{_applnkdir}")
+	# we can move files between tge dirs below
+	if ($0 !~ "%{_applnkdir}") {
+		gsub("%{_datadir}/gnome/apps", "%{_applnkdir}")
+		gsub("%{_datadir}/applnk", "%{_applnkdir}")
+	}
 
 	gsub("^make$", "%{__make}")
 	gsub("^make ", "%{__make} ")
