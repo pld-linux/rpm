@@ -629,7 +629,7 @@ cat %{SOURCE11} >> macros.in
 %patch44 -p1
 %patch45 -p1
 %patch46 -p1
-#%%patch47 -p1
+%patch47 -p1
 %patch100 -p1
 %patch3 -p1
 
