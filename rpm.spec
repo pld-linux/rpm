@@ -242,7 +242,7 @@ Pythonie.
 
 %package -n python-rpm
 Summary:	Python interface to RPM library
-Group:		Development/Languages/Python
+Summary(pl):	Pythonowy interfejs do biblioteki RPM-a
 Summary(pt_BR):	Módulo Python para aplicativos que manipulam pacotes RPM
 %requires_eq	python
 Requires:	%{name} = %{version}
