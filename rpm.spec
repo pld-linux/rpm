@@ -97,6 +97,7 @@ Patch44:	%{name}-debuginfo.patch
 Patch45:	%{name}-beecrypt4.patch
 Patch46:	%{name}-doxygen_hack.patch
 Patch47:	%{name}-distver.patch
+Patch48:	%{name}-gcc4.patch
 Patch100:	%{name}-pl.po.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
@@ -628,6 +629,7 @@ cat %{SOURCE11} >> macros.in
 # NEEDS UPDATE
 # %patch46 -p1
 %{?with_distver:%patch47 -p1}
+%patch48 -p1
 # NEEDS UPDATE
 #%patch100 -p1
 %patch3 -p1
