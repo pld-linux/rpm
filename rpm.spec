@@ -84,6 +84,7 @@ Patch27:	%{name}-link.patch
 Patch28:	%{name}-beecrypt-opt.patch
 Patch29:	%{name}-python-pic.patch
 Patch30:	%{name}-home_etc.patch
+Patch31:	%{name}-libelf.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -184,7 +185,7 @@ Group:		Development/Libraries
 Requires:	%{name} = %{version}
 Requires:	bzip2-devel
 Requires:	db-devel
-Requires:	libelf-devel
+Requires:	elfutils-devel
 Requires:	popt-devel >= 1.7
 Requires:	zlib-devel
 
@@ -612,7 +613,7 @@ mv -f macros.tmp macros.in
 
 %{__make} \
 	%{?_without_static:rpm_LDFLAGS="\$(myLDFLAGS)"} \
-	myLDFLAGS="%{rpmldflags}"
+	myLDFLAGS="%{rpmldflags} -lelf"
 
 %install
 rm -rf $RPM_BUILD_ROOT
