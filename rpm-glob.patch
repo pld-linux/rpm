@@ -1,21 +1,23 @@
---- rpm-4.0.4/lib/misc.c.wiget	Sun Jan 20 23:10:19 2002
-+++ rpm-4.0.4/lib/misc.c	Tue Feb 12 22:41:39 2002
-@@ -514,6 +514,11 @@
-     const char * path;
-     const char * globURL;
+--- rpm-4.3/rpmio/macro.c.wiget	2004-03-29 16:28:53.888505462 +0200
++++ rpm-4.3/rpmio/macro.c	2004-03-29 16:28:58.432791708 +0200
+@@ -1638,14 +1638,29 @@
+     int argc = 0;
+     const char ** argv = NULL;
      char * globRoot = NULL;
+-    size_t maxb, nb;
 +#ifdef ENABLE_NLS	
 +	char * old_collate = NULL;
 +	char * old_ctype = NULL;
 +	char * t;
 +#endif
-     size_t maxb, nb;
-     glob_t gl;
-     int ut;
-@@ -524,6 +529,17 @@
++	size_t maxb, nb;
+     int i, j;
+     int rc;
+ 
+     rc = XpoptParseArgvString(patterns, &ac, &av);
      if (rc)
  	return rc;
- 
+-
 +#ifdef ENABLE_NLS
 +	t = setlocale(LC_COLLATE, NULL);
 +	if (t)
@@ -27,13 +29,14 @@
 +	setlocale(LC_CTYPE, "C");
 +#endif
 +	
+     if (av != NULL)
      for (j = 0; j < ac; j++) {
- 	if (!myGlobPatternP(av[j])) {
- 	    if (argc == 0)
-@@ -609,6 +625,16 @@
+ 	const char * globURL;
+@@ -1725,7 +1740,17 @@
  
  
  exit:
+-    av = _free(av);
 +#ifdef ENABLE_NLS
 +    if (old_collate) {
 +	setlocale(LC_COLLATE, old_collate);
@@ -44,6 +47,7 @@
 +	free(old_ctype);
 +    }
 +#endif
-     av = _free(av);
++	av = _free(av);
+ /*@-branchstate@*/
      if (rc || argvPtr == NULL) {
- 	if (argv != NULL)
+ /*@-dependenttrans -unqualifiedtrans@*/

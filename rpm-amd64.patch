@@ -1,7 +1,22 @@
-diff -urN rpm-4.3.org/build/parseSpec.c rpm-4.3/build/parseSpec.c
---- rpm-4.3.org/build/parseSpec.c	2003-12-27 23:56:47.451095576 +0100
-+++ rpm-4.3/build/parseSpec.c	2003-12-28 00:32:48.447574176 +0100
-@@ -189,6 +189,15 @@
+--- rpm-4.3/lib/rpmrc.c.wiget	2004-03-29 17:57:18.370308937 +0200
++++ rpm-4.3/lib/rpmrc.c	2004-03-29 17:57:18.757248575 +0200
+@@ -1349,6 +1349,13 @@
+ 	}
+ #	endif
+ 
++#       if defined(__linux__) && defined(__amd64__)
++        {
++	    /* Defaults to amd64 if compiler supports __amd64__ */
++           strcpy(un.machine, "amd64");
++        }
++#       endif
++
+ #	if defined(__linux__) && defined(__powerpc__)
+ 	{
+ 	    unsigned pvr = 0;
+--- rpm-4.3/build/parseSpec.c.wiget	2004-03-29 17:57:18.169340288 +0200
++++ rpm-4.3/build/parseSpec.c	2004-03-29 17:57:18.738251538 +0200
+@@ -192,6 +192,15 @@
      return 0;
  }
  /*@=boundswrite@*/
@@ -17,7 +32,7 @@ diff -urN rpm-4.3.org/build/parseSpec.c rpm-4.3/build/parseSpec.c
  
  /*@-boundswrite@*/
  int readLine(Spec spec, int strip)
-@@ -277,13 +286,15 @@
+@@ -281,13 +290,15 @@
  	match = 0;
      } else if (! strncmp("%ifarch", s, sizeof("%ifarch")-1)) {
  	const char *arch = rpmExpand("%{_target_cpu}", NULL);
@@ -35,13 +50,12 @@ diff -urN rpm-4.3.org/build/parseSpec.c rpm-4.3/build/parseSpec.c
  	arch = _free(arch);
      } else if (! strncmp("%ifos", s, sizeof("%ifos")-1)) {
  	const char *os = rpmExpand("%{_target_os}", NULL);
-diff -urN rpm-4.3.org/installplatform rpm-4.3/installplatform
---- rpm-4.3.org/installplatform	2003-12-27 23:56:26.892221000 +0100
-+++ rpm-4.3/installplatform	2003-12-28 00:37:53.285231808 +0100
+--- rpm-4.3/installplatform.wiget	2004-03-29 13:15:48.000000000 +0200
++++ rpm-4.3/installplatform	2004-03-29 17:59:25.241516318 +0200
 @@ -31,6 +31,7 @@
  
  case "$arch" in
-   i[3456]86|athlon) SUBSTS='s_i386_i386_ s_i386_i486_ s_i386_i586_ s_i386_i686_ s_i386_athlon_' ;;
+   i[3456]86|pentium[34]|athlon) SUBSTS='s_i386_i386_ s_i386_i486_ s_i386_i586_ s_i386_i686_ s_i386_pentium3_ s_i386_pentium4_ s_i386_athlon_' ;;
 +  x86_64*|amd64*) SUBSTS="s/${arch}/x86_64/ s/${arch}/amd64/" ;;
    alpha*) SUBSTS='s_alpha_alpha_ s_alpha_alphaev5_ s_alpha_alphaev56_ s_alpha_alphapca56_ s_alpha_alphaev6_ s_alpha_alphaev67_' ;;
    sparc*) SUBSTS='s_sparc\(64\|v9\)_sparc_ s_sparc64_sparcv9_;s_sparc\([^v]\|$\)_sparcv9\1_ s_sparcv9_sparc64_;s_sparc\([^6]\|$\)_sparc64\1_' ;;
@@ -49,33 +63,15 @@ diff -urN rpm-4.3.org/installplatform rpm-4.3/installplatform
 @@ -66,7 +67,7 @@
      ppc-linux) MULTILIBNO=1 ;;
      ppc64-linux) LIB=lib64; MULTILIBNO=2 ;;
-     i?86-linux|athlon-linux) MULTILIBNO=1 ;;
+     i?86-linux|pentium?-linux|athlon-linux) MULTILIBNO=1 ;;
 -    x86_64-linux) LIB=lib64; MULTILIBNO=2 ;;
 +    x86_64-linux|amd64-linux) LIB=lib64; MULTILIBNO=2 ;;
    esac
  
    if [ -n "$MULTILIBNO" ]; then
-diff -urN rpm-4.3.org/lib/rpmrc.c rpm-4.3/lib/rpmrc.c
---- rpm-4.3.org/lib/rpmrc.c	2003-12-27 23:56:25.717399600 +0100
-+++ rpm-4.3/lib/rpmrc.c	2003-12-28 00:38:48.681810248 +0100
-@@ -1278,6 +1278,13 @@
- 	}
- #	endif
- 
-+#       if defined(__linux__) && defined(__amd64__)
-+        {
-+	    /* Defaults to amd64 if compiler supports __amd64__ */
-+           strcpy(un.machine, "amd64");
-+        }
-+#       endif
-+
- #	if defined(__linux__) && defined(__powerpc__)
- 	{
- 	    unsigned pvr = 0;
-diff -urN rpm-4.3.org/rpmrc.in rpm-4.3/rpmrc.in
---- rpm-4.3.org/rpmrc.in	2003-12-28 00:27:30.039979488 +0100
-+++ rpm-4.3/rpmrc.in	2003-12-28 00:40:25.817043448 +0100
-@@ -203,8 +203,8 @@
+--- rpm-4.3/rpmrc.in.wiget	2004-03-29 17:57:18.034361344 +0200
++++ rpm-4.3/rpmrc.in	2004-03-29 18:00:54.728554825 +0200
+@@ -211,8 +211,8 @@
  
  buildarchtranslate: ia64: ia64
  
@@ -83,6 +79,6 @@ diff -urN rpm-4.3.org/rpmrc.in rpm-4.3/rpmrc.in
 -buildarchtranslate: amd64: x86_64
 +buildarchtranslate: x86_64: amd64
 +buildarchtranslate: amd64: amd64
+ buildarchtranslate: ia32e: x86_64
  
  #############################################################
- # Architecture compatibility

@@ -1,18 +1,5 @@
-diff -urN rpm-4.3.org/Makefile.am rpm-4.3/Makefile.am
---- rpm-4.3.org/Makefile.am	2003-12-28 01:33:43.917858224 +0100
-+++ rpm-4.3/Makefile.am	2003-12-28 02:01:02.060822640 +0100
-@@ -14,7 +14,7 @@
- 	po/*.in po/*.po po/rpm.pot \
- 	rpm.magic rpmpopt-$(VERSION) rpmqv.c rpm.c
- 
--SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ @WITH_BEECRYPT_SUBDIR@  rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
-+SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_BEECRYPT_SUBDIR@  rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
- 
- INCLUDES = \
- 	-I$(top_srcdir)/build \
-diff -urN rpm-4.3.org/rpmdb/Makefile.am rpm-4.3/rpmdb/Makefile.am
---- rpm-4.3.org/rpmdb/Makefile.am	2003-12-28 01:33:46.160517288 +0100
-+++ rpm-4.3/rpmdb/Makefile.am	2003-12-28 01:56:22.000000000 +0100
+--- rpm-4.3/rpmdb/Makefile.am.wiget	2004-03-29 17:33:38.840351655 +0200
++++ rpm-4.3/rpmdb/Makefile.am	2004-03-29 17:33:38.871346791 +0200
 @@ -25,18 +25,15 @@
  noinst_HEADERS = fprint.h header_internal.h legacy.h
  
@@ -44,3 +31,14 @@ diff -urN rpm-4.3.org/rpmdb/Makefile.am rpm-4.3/rpmdb/Makefile.am
  librpmdb_la_DEPENDENCIES = $(DBLIBOBJS) $(libdb_la)
  
  # XXX make sure that db.h symlink is generated
+--- rpm-4.3/Makefile.am.wiget	2004-03-29 17:33:38.844351027 +0200
++++ rpm-4.3/Makefile.am	2004-03-29 17:41:16.140688405 +0200
+@@ -14,7 +14,7 @@
+ 	po/*.in po/*.po po/rpm.pot \
+ 	rpm.magic rpmpopt-$(VERSION) rpmqv.c rpm.c
+ 
+-SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ @WITH_BEECRYPT_SUBDIR@ lua rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
++SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_BEECRYPT_SUBDIR@ lua rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
+ 
+ INCLUDES = \
+ 	-I$(top_srcdir)/build \

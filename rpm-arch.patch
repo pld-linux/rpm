@@ -1,28 +1,12 @@
-diff -urN rpm-3.0.5.orig/rpmrc.in rpm-3.0.5/rpmrc.in
---- rpm-3.0.5.orig/rpmrc.in	Sat Jul 29 23:56:53 2000
-+++ rpm-3.0.5/rpmrc.in	Sun Jul 30 00:03:28 2000
-@@ -120,10 +120,10 @@
- 
- buildarchtranslate: ia64: ia64
- 
--buildarchtranslate: athlon: i386
--buildarchtranslate: i686: i386
--buildarchtranslate: i586: i386
--buildarchtranslate: i486: i386
-+buildarchtranslate: athlon: athlon
-+buildarchtranslate: i686: i686
-+buildarchtranslate: i586: i586
-+buildarchtranslate: i486: i486
- buildarchtranslate: i386: i386
- 
- buildarchtranslate: osfmach3_ppc: ppc
-@@ -134,7 +134,8 @@
- buildarchtranslate: sun4d: sparc
+--- rpm-4.3/rpmrc.in.wiget	2004-03-29 16:08:10.816846952 +0200
++++ rpm-4.3/rpmrc.in	2004-03-29 16:08:10.825845538 +0200
+@@ -189,7 +189,8 @@
  buildarchtranslate: sun4m: sparc
+ buildarchtranslate: sparcv8: sparc
  buildarchtranslate: sparcv9: sparc
 -buildarchtranslate: sun4u: sparc64
 +buildarchtranslate: sun4u: sparc
 +buildarchtranslate: sparc64: sparc
  
- buildarchtranslate: atarist: m68kmint
- buildarchtranslate: atariste: m68kmint
+ buildarchtranslate: osfmach3_ppc: ppc
+ buildarchtranslate: powerpc: ppc

@@ -1,7 +1,6 @@
-diff -urN rpm-4.3.org/rpmrc.in rpm-4.3/rpmrc.in
---- rpm-4.3.org/rpmrc.in	2003-12-28 00:17:35.518360512 +0100
-+++ rpm-4.3/rpmrc.in	2003-12-28 00:25:19.224866408 +0100
-@@ -11,56 +11,58 @@
+--- rpm-4.3/rpmrc.in.wiget	2004-03-29 13:15:48.000000000 +0200
++++ rpm-4.3/rpmrc.in	2004-03-29 16:06:34.794938804 +0200
+@@ -11,60 +11,58 @@
  #############################################################
  # Values for RPM_OPT_FLAGS for various platforms
  
@@ -9,10 +8,13 @@ diff -urN rpm-4.3.org/rpmrc.in rpm-4.3/rpmrc.in
 -optflags: i486 -O2 -g -march=i486
 -optflags: i586 -O2 -g -march=i586
 -optflags: i686 -O2 -g -march=i686
+-optflags: pentium3 -O2 -g -march=pentium3
+-optflags: pentium4 -O2 -g -march=pentium4
 -optflags: athlon -O2 -g -march=athlon
 -optflags: ia64 -O2 -g
 -optflags: x86_64 -O2 -g
 -optflags: amd64 -O2 -g
+-optflags: ia32e -O2 -g
 -
 -optflags: alpha -O2 -g -mieee
 -optflags: alphaev5 -O2 -g -mieee -mcpu=ev5
@@ -22,6 +24,7 @@ diff -urN rpm-4.3.org/rpmrc.in rpm-4.3/rpmrc.in
 -optflags: alphaev67 -O2 -g -mieee -mcpu=ev67
 -
 -optflags: sparc -O2 -g -m32 -mtune=ultrasparc
+-optflags: sparcv8 -O2 -g -m32 -mcpu=ultrasparc -mv8
 -optflags: sparcv9 -O2 -g -m32 -mcpu=ultrasparc
 -optflags: sparc64 -O2 -g -m64 -mcpu=ultrasparc
 -
@@ -52,9 +55,6 @@ diff -urN rpm-4.3.org/rpmrc.in rpm-4.3/rpmrc.in
 -optflags: atariclone -O2 -g -fomit-frame-pointer
 -optflags: milan -O2 -g -fomit-frame-pointer
 -optflags: hades -O2 -g -fomit-frame-pointer
--
--optflags: s390 -O2 -g
--optflags: s390x -O2 -g
 +optflags: i386 -O2 -march=i386%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i386: %{specflags_i386}}}
 +#optflags: i386 -O2 -march=i386 -mcpu=i686
 +optflags: i486 -O2 -march=i486%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i486: %{specflags_i486}}}
@@ -106,7 +106,9 @@ diff -urN rpm-4.3.org/rpmrc.in rpm-4.3/rpmrc.in
 +
 +optflags: s390 -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_s390: %{specflags_s390}}}
 +optflags: s390x -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_s390: %{specflags_s390}}%{?specflags_s390x: %{specflags_s390x}}}
-+
+ 
+-optflags: s390 -O2 -g
+-optflags: s390x -O2 -g
  
  #############################################################
  # Canonical arch names and numbers
