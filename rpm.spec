@@ -618,8 +618,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
-%post   -n beecrypt -p /sbin/ldconfig
-%postun -n beecrypt -p /sbin/ldconfig
 
 %pre build
 find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
