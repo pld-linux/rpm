@@ -445,3 +445,22 @@ fi; \
 %xmms_general_plugindir       %(xmms-config --general-plugin-dir)
 
 %_target_base_arch	%(echo %{_target_cpu} | sed 's/i.86/i386/;s/athlon/i386/;s/pentium./i386/;s/amd64/x86_64/')
+
+# user/group checking macros
+#
+# Usage:
+#	%userremove myuser
+#
+%userremove	/usr/lib/rpm/user_group.sh user del
+%groupremove	/usr/lib/rpm/user_group.sh group del
+#
+# Usage:
+#	if %usertestrm myuser; then
+#		/usr/sbin/userdel -r myuser
+# Note:
+#	use these macros only if you need to call userdel/groupdel with
+#	a non-standard option or take an extra action; otherwise use the
+#	%userremove/%groupremove macros
+#
+%usertestrm	/usr/lib/rpm/user_group.sh user testrm
+%grouptestrm	/usr/lib/rpm/user_group.sh group testrm
