@@ -1,6 +1,5 @@
-diff -Nru rpm-4.0/lib/db3.c rpm-4.0.new/lib/db3.c
---- rpm-4.0/lib/db3.c	Fri Aug  4 21:48:35 2000
-+++ rpm-4.0.new/lib/db3.c	Wed Nov 15 19:32:53 2000
+--- rpm-4.0/lib/db3.c.wiget	Fri Aug  4 21:48:35 2000
++++ rpm-4.0/lib/db3.c	Wed Nov 15 22:28:52 2000
 @@ -9,7 +9,7 @@
  typedef	int int32_t;
  #endif
@@ -10,3 +9,14 @@ diff -Nru rpm-4.0/lib/db3.c rpm-4.0.new/lib/db3.c
  
  #include <rpmlib.h>
  #include <rpmmacro.h>
+--- rpm-4.0/configure.in.wiget	Wed Nov 15 22:32:50 2000
++++ rpm-4.0/configure.in	Wed Nov 15 22:31:57 2000
+@@ -396,7 +396,7 @@
+ AC_HEADER_DIRENT
+ AC_HEADER_TIME
+ 
+-AC_CHECK_HEADERS(db_185.h db1/db.h db3/db.h)
++AC_CHECK_HEADERS(db_185.h db1/db.h db3/db.h db.h)
+ AC_CHECK_HEADERS(fcntl.h getopt.h grp.h memory.h netdb.h pwd.h utime.h)
+ 
+ AC_CHECK_HEADERS(sys/socket.h sys/select.h)
