@@ -25,7 +25,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.2
 Version:	%{ver}
-%define	rel	0.%{snap}.5
+%define	rel	0.%{snap}.6
 Release:	%{rel}
 %define	beecrypt_rel	%{ver}_%{rel}
 License:	GPL
@@ -77,6 +77,7 @@ Patch30:	%{name}-etc_dir.patch
 Patch31:	%{name}-system_libs-more.patch
 Patch32:	%{name}-php-deps.patch
 Patch33:	%{name}-python-fix.patch
+Patch34:	%{name}-spec-prep-pre.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -553,6 +554,7 @@ install %{SOURCE17} scripts/php.prov.in
 install %{SOURCE18} scripts/php.req.in
 install %{SOURCE33} scripts/perl.prov
 cat %{SOURCE20} >> macros.in
+%patch34 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
