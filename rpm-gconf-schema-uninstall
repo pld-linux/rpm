@@ -1,0 +1,7 @@
+#!/bin/sh
+umask 022
+export GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults"
+if [ $# -gt 0 ] ; then
+    /usr/bin/gconftool-2 --makefile-uninstall-rule \
+    "$@" > /dev/null 
+fi
