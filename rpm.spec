@@ -84,7 +84,7 @@ nombre, versión y descripción.
 RPM jest doskona³ym menad¿erem pakietów. Dziêki niemu bêdziesz móg³
 %description -l pl
 RPM jest doskona³ym mened¿erem pakietów. Dziêki niemu bêdziesz móg³
-wchodz±cych w sk³ad pakietu, zale¿no¶ci od innych pakietów s±
+przebudowaæ, zainstalowaæ czy zweryfikowaæ dowolny pakiet. Informacje
 dotycz±ce ka¿dego pakietu, takie jak jego opis, lista plików
 wchodz±cych w sk³ad pakietu, zale¿no¶ci od innych pakietów, s±
 przechowywane w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
@@ -105,13 +105,13 @@ Requires:	popt-devel
 The RPM packaging system includes a C library that makes it easy to
 manipulate RPM packages and databases. It is intended to ease the
 creation of graphical package managers and other tools that need
-%description -l de devel
+intimate knowledge of RPM packages.
 
 %description devel -l de
 Der RPM-Packensystem enthält eine C-Library, die macht es einfach
 RPM-Pakete und Dateibanken zu manipulieren. Er eignet sich für
 Vereinfachung des Schaffens grafischer Paket-Manager und anderer
-%description -l pl devel
+herramientas que necesiten un conocimiento profundo de paquetes RPM.
 Pliki nag³ówkowe i biblioteki statyczne.
 graficznych mened¿erów pakietów oraz innych narzêdzi, które wymagaj±
 ferramentas que precisem de conhecimento profundo de pacotes RPM.
@@ -127,10 +127,10 @@ Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
 
 %description static
-%description -l de static
+RPM static libraries.
 
 %description static -l de
-%description -l pl static
+RPMs statische Libraries.
 Biblioteki statyczne rpm-a.
 %description static -l pl
 Bibliotecas estáticas para desenvolvimento.
@@ -145,10 +145,10 @@ Group:		Applications/File
 Requires:	%{name} = %{version}
 
 %description utils
-%description -l de utils
+Additional utilities for managing rpm packages and database.
 
 %description utils -l de
-%description -l pl utils
+Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
 Dodatkowe narzêdzia do zarz±dzania baz± rpm-a i pakietami.
 %description utils -l pl
 Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami.
@@ -165,10 +165,10 @@ Requires:	findutils
 
 %description perlprov
 Additional utilities for checking perl provides/requires in rpm
-%description -l de perlprov
+packages.
 
 %description perlprov -l de
-%description -l pl perlprov
+Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen.
 Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci dla skryptów perl w
 %description perlprov -l pl
 Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w
@@ -206,7 +206,6 @@ Requires:	textutils
 Skrypty pomocnicze do budowania binarnych RPMów.
 %description build -l pl
 construir pacotes usando o RPM.
-%setup  -q
 %prep
 %setup -q -a12
 %patch0 -p1
@@ -236,14 +235,13 @@ sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
 install %{SOURCE9} scripts/find-lang.sh
 install %{SOURCE13} macros.python.in
-(cd scripts; 
+install %{SOURCE6} scripts/find-perl-provides
 install %{SOURCE7} scripts/find-perl-requires
 install %{SOURCE9} scripts/find-lang.sh
 
 (cd scripts;
 mv -f perl.req perl.req.in
 mv -f perl.prov perl.prov.in)
-
 %build
 awk -f %{SOURCE14} %{SOURCE1}
 
@@ -304,7 +302,7 @@ EOF
 
 %find_lang %{name}
 
-%post   -p /sbin/ldconfig
+gzip -9nf RPM-PGP-KEY CHANGES doc/manual/*
 
 %clean
 %clean
