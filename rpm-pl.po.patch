@@ -1589,7 +1589,7 @@
  msgid ""
  "find package name that contains a provided capability (needs rpmdb-redhat "
  "package installed)"
-@@ -4221,42 +4273,54 @@
+@@ -4221,42 +4273,61 @@
  "znajd¼ nazwê pakietu, który dostarcza w³asno¶æ (wymaga zainstalowanego "
  "pakietu rpmdb-redhat)"
  
@@ -1662,3 +1662,10 @@
 -#~ msgstr "Opcje pomocy:"
 +msgid "Help options:"
 +msgstr "Opcje pomocy:"
++
++# --- from popt (displayed using rpm domain)
++msgid "Show this help message"
++msgstr "Poka¿ tê pomoc"
++
++msgid "Display brief usage message"
++msgstr "Wy¶wietl skrócony sposób u¿ycia"
