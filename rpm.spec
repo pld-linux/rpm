@@ -15,6 +15,7 @@ Source4:	%{name}-find-rpm-provides
 Source5:	%{name}-macros.perl
 Source6:	%{name}-find-perl-provides
 Source7:	%{name}-find-perl-requires
+Source8:	%{name}-find-spec-bcond
 Patch0:		%{name}-%{name}rc.patch
 Patch1:		%{name}-find-requires.patch
 Patch2:		%{name}-macros.patch
@@ -229,6 +230,7 @@ install macros.pld $RPM_BUILD_ROOT%{_libdir}/rpm/macros.pld
 
 install macros.perl $RPM_BUILD_ROOT%{_libdir}/rpm/macros.perl
 install macros.python $RPM_BUILD_ROOT%{_libdir}/rpm/macros.python
+
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 #%%_install_langs pl_PL:en_US
 %%distribution PLD
@@ -330,6 +332,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rpmbuild
 %attr(755,root,root) %{_bindir}/rpme
+%attr(755,root,root) %{_bindir}/rpmi
 %attr(755,root,root) %{_bindir}/rpmu
 %attr(755,root,root) %{_libdir}/rpm/find-requires
 %attr(755,root,root) %{_libdir}/rpm/find-provides
