@@ -3,13 +3,34 @@
 [ -f /etc/sysconfig/rpm ] && . /etc/sysconfig/rpm
 [ -z "$RPM_SCRIPTVERBOSITY" ] && RPM_SCRIPTVERBOSITY=5
 
+if [ -x /usr/bin/banner.sh ]; then
+	BANNERCMD="/usr/bin/banner.sh "
+	BANNERPARA="-s -M user-group.error"
+else
+	BANNERCMD="cat"
+	BANNERPARA=""
+fi
+
 if [ "$1" = user -o "$1" = group ]; then
 	MODE=$1
 else
-	echo ERROR
+	echo ERROR | $BANNERCMD $BANNERPARA
 	exit 2
 fi
 shift
+
+bannercmd()
+{
+	if [ "$BANNERCMD" == cat ]; then
+		echo cat
+	else
+		if [ "$RPM_SCRIPTVERBOSITY" -lt 2 ]; then
+			echo "$BANNERCMD -s -M $1"
+		else
+			echo "$BANNERCMD -M $1"
+		fi
+	fi
+}
 
 testrm()
 {
@@ -28,7 +49,7 @@ if [ "$1" = "testrm" ]; then
 	exit $?
 elif [ "$1" = del ]; then
 	if testrm $2; then
-		[ "$RPM_SCRIPTVERBOSITY" -lt 2 ] || echo "Removing $MODE $2"
+		echo "Removing $MODE $2" | `bannercmd "${MODE}del-$2"`
 		/usr/sbin/${MODE}del $2 || :
 	fi
 elif [ "$MODE" = "user" -a "$1" = "addtogroup" ]; then
@@ -36,7 +57,7 @@ elif [ "$MODE" = "user" -a "$1" = "addtogroup" ]; then
 	GROUP=$3
 	GROUPS=`id -n -G $USER | sed -e's/^[^ ]* //;s/ /,/g'`
 	if ! echo ",$GROUPS," | grep -q ",$GROUP," ; then
-	    [ "$RPM_SCRIPTVERBOSITY" -lt 2 ] || echo "Adding user $USER to group $GROUP"
+	    echo "Adding user $USER to group $GROUP" | `bannercmd "${MODE}mod-$USER"`
 	    usermod -G "$GROUPS,$GROUP" $USER
 	fi
 else
