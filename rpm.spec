@@ -3,7 +3,7 @@ Summary(de):	Red Hat (und jetzt auch PLD) Packet-Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0.2
-Release:	35
+Release:	36
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -20,6 +20,7 @@ Source8:	%{name}-find-spec-bcond
 Source9:	%{name}-find-lang
 Source10:	%{name}-find-provides
 Source11:	%{name}-find-requires
+Source12:	%{name}-non-english-man-pages.tar.gz
 Patch0:		%{name}-rpmrc.patch
 Patch1:		%{name}-macros.patch
 Patch2:		%{name}-arch.patch
@@ -43,6 +44,7 @@ Patch19:	popt-cvs20010530.patch
 Patch20:	%{name}-noexpand.patch
 Patch21:	%{name}-scripts-closefds.patch
 Patch22:	%{name}-python-amfix.patch
+Patch23:	%{name}-non-english-man-pages.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	gettext-devel >= 0.10.38-3
@@ -232,7 +234,7 @@ Requires:	textutils
 Skrypty pomocnicze do budowania binarnych RPMów.
 %description build -l pl
 construir pacotes usando o RPM.
-%setup -q
+
 %prep
 %setup -q -a12
 %patch0 -p1
@@ -256,6 +258,7 @@ construir pacotes usando o RPM.
 %patch18 -p1
 %patch19 -p1
 %patch22 -p1
+%patch23 -p1
 %patch31 -p1
 %patch36 -p1
 cp platform.in macros.pld.in
@@ -358,9 +361,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/rpmk
 %attr(755,root,root) %{_libdir}/rpm/rpmv
 %attr(755,root,root) %{_libdir}/librpm*.so.*.*
+
+%dir %{_sysconfdir}/rpm
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpm/macros
+
 %{_mandir}/man8/rpm.8*
-%lang(pl) %{_mandir}/pl/man8/rpm.8*
-%lang(ja) %{_mandir}/ja/man8/rpm.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
 %lang(ja) %{_mandir}/ja/man8/rpm.8*
 %lang(ko) %{_mandir}/ko/man8/rpm.8*
@@ -425,8 +430,10 @@ rm -rf $RPM_BUILD_ROOT
 %files utils
 %defattr(644,root,root,755)
 %{_mandir}/man1/*
+%attr(755,root,root) %{_bindir}/javadeps
+%attr(755,root,root) %{_bindir}/rpm2cpio
+
 %{_mandir}/man8/rpm2cpio.8*
-%lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
 %{_mandir}/man1/*
 %lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
 %lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
