@@ -8,7 +8,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.1
-Release:	1.5
+Release:	2
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/%{name}-%{version}.tar.gz
@@ -63,7 +63,7 @@ Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	bzip2-devel >= 1.0.1
-BuildRequires:	db-devel >= 4.1.24-3
+BuildRequires:	db-devel >= 4.1.24-4
 BuildRequires:	doxygen
 BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	libelf-devel
