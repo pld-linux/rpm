@@ -114,6 +114,7 @@ BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
 %{?with_python:BuildRequires:	python-devel >= 2.2}
 BuildRequires:	python-modules >= 2.2
+BuildRequires:	readline-devel
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpm-pythonprov
 BuildRequires:	zlib-devel
