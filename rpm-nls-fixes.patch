@@ -1,0 +1,31 @@
+--- rpm-4.3/build/files.c.orig	2004-01-04 03:11:41.000000000 +0100
++++ rpm-4.3/build/files.c	2004-01-10 21:10:38.696969160 +0100
+@@ -1769,7 +1769,7 @@
+ 
+     switch (tag) {
+     default:
+-	rpmError(RPMERR_BADSPEC, _("%s: can't load unknwon tag (%d).\n"),
++	rpmError(RPMERR_BADSPEC, _("%s: can't load unknown tag (%d).\n"),
+ 		fn, tag);
+ 	goto exit;
+ 	/*@notreached@*/
+--- rpm-4.3/lib/rpminstall.c.orig	2004-01-04 03:13:00.000000000 +0100
++++ rpm-4.3/lib/rpminstall.c	2004-01-10 21:11:34.296516744 +0100
+@@ -509,7 +509,7 @@
+ 	eiu->isSource = headerIsEntry(eiu->h, RPMTAG_SOURCEPACKAGE);
+ 
+ 	if (eiu->isSource) {
+-	    rpmMessage(RPMMESS_DEBUG, "\tadded source package [%d]\n",
++	    rpmMessage(RPMMESS_DEBUG, _("\tadded source package [%d]\n"),
+ 		eiu->numSRPMS);
+ 	    eiu->sourceURL = xrealloc(eiu->sourceURL,
+ 				(eiu->numSRPMS + 2) * sizeof(*eiu->sourceURL));
+@@ -579,7 +579,7 @@
+ 
+ 	switch(rc) {
+ 	case 0:
+-	    rpmMessage(RPMMESS_DEBUG, "\tadded binary package [%d]\n",
++	    rpmMessage(RPMMESS_DEBUG, _("\tadded binary package [%d]\n"),
+ 			eiu->numRPMS);
+ 	    /*@switchbreak@*/ break;
+ 	case 1:
