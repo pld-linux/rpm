@@ -36,6 +36,7 @@
  CFLAGS="${CFLAGS:-%rpmcflags}" ; export CFLAGS ; \
  CXXFLAGS="${CXXFLAGS:-%rpmcflags}" ; export CXXFLAGS ; \
  FFLAGS="${FFLAGS:-%rpmcflags}" ; export FFLAGS ; \
+ CPPFLAGS="${CPPFLAGS:-}" ; export CPPFLAGS ; \
  %{?__cc:CC=%{__cc} ; export CC ; } \
  %{?__cxx:CXX=%{__cxx} ; export CXX ; } \
  ./configure \
@@ -61,6 +62,7 @@
 	CFLAGS="${CFLAGS:-%rpmcflags}" \
 	CXXFLAGS="${CXXFLAGS:-%rpmcflags}" \
 	FFLAGS="${FFLAGS:-%rpmcflags}" \
+	CPPFLAGS="${CPPFLAGS:-%rpmcflags}" \
 	%{?__cc:CC=%{__cc}} \
 	%{?__cxx:CXX=%{__cxx}} \
 	--build=%{_target_platform} \
