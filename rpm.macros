@@ -118,10 +118,10 @@
 %_pkgconfigdir	/usr/lib/pkgconfig
 
 # Location of top applink dir
-%_applnkdir      /usr/X11R6/share/applnk
+%_applnkdir      %{_datadir}/applnk
 
 # Location pixmaps for applnk/desktop files
-%_pixmapsdir	/usr/X11R6/share/pixmaps
+%_pixmapsdir	%{_datadir}/pixmaps
 
 # Location of fonts directories
 %_fontsdir	/usr/share/fonts
