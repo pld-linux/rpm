@@ -1,5 +1,5 @@
---- rpm-4.1/po/pl.po.orig	Tue Sep 17 21:38:05 2002
-+++ rpm-4.1/po/pl.po	Wed Oct 23 22:59:28 2002
+--- rpm-4.1/po/pl.po.orig	Thu Oct 24 00:57:03 2002
++++ rpm-4.1/po/pl.po	Thu Oct 24 21:48:26 2002
 @@ -7,9 +7,9 @@
  #
  msgid ""
@@ -149,6 +149,25 @@
  
  #: rpmqv.c:299
  #, c-format
+@@ -147,15 +145,15 @@
+ 
+ #: rpmqv.c:369
+ msgid "unexpected query flags"
+-msgstr "b³êdna konstrukcja argumentów odpytywania"
++msgstr "b³êdne flagi zapytania"
+ 
+ #: rpmqv.c:372
+ msgid "unexpected query format"
+-msgstr "b³êdna konstrukcja argumentów odpytywania"
++msgstr "b³êdny format zapytania"
+ 
+ #: rpmqv.c:375
+ msgid "unexpected query source"
+-msgstr "b³êdna konstrukcja argumentów odpytywania"
++msgstr "b³êdne odniesienie zapytania"
+ 
+ #: rpmqv.c:417
+ msgid "only installation, upgrading, rmsource and rmspec may be forced"
 @@ -237,27 +235,28 @@
  msgstr "--justdb mo¿na u¿yæ tylko w trakcie instalacji lub usuwania pakietów"
  
@@ -250,7 +269,7 @@
  msgstr ""
 +"\n"
 +"\n"
-+"B³edy budowania RPM-a:\n"
++"B³êdy budowania RPM-a:\n"
  
  #: build/expression.c:225
 -#, fuzzy
@@ -760,7 +779,7 @@
 +#, c-format
  msgid "Unable to open sigtarget %s: %s\n"
 -msgstr "Nie mo¿na odczytaæ sigtarget: %s"
-+msgstr "Nie mo¿na odczytaæ sigtargetu %s: %s\n"
++msgstr "Nie mo¿na otworzyæ nag³ówka do zapisania sygnatury %s: %s\n"
  
  #: build/pack.c:655
 -#, fuzzy, c-format
@@ -1066,7 +1085,7 @@
 -#, fuzzy
  msgid "Spec file can't use BuildRoot\n"
 -msgstr "W pliku spec nie mo¿na u¿ywaæ wpisów BuildRoot"
-+msgstr "Pliku spec nie mo¿e u¿ywaæ BuildRoot\n"
++msgstr "Plik spec nie mo¿e u¿ywaæ BuildRoot\n"
  
  #: build/parsePrep.c:45
 -#, fuzzy, c-format
@@ -1271,7 +1290,7 @@
 +#, c-format
  msgid "malformed %%include statement\n"
 -msgstr "b³ednie sformatowany wpis %%include"
-+msgstr "b³ednie sformu³owany wpis %%include\n"
++msgstr "b³êdnie sformu³owany wpis %%include\n"
  
  #: build/parseSpec.c:542
 -#, fuzzy
@@ -1443,7 +1462,7 @@
  #: build/poptBT.c:225
  msgid "generate package header(s) compatible with (legacy) rpm[23] packaging"
  msgstr ""
-+"generuj nag³ówki pakietu kompatybilne z (wymiaraj±cymi) pakietami rpm[23]"
++"generuj nag³ówki pakietu kompatybilne z (wymieraj±cymi) pakietami rpm[23]"
  
  #: build/poptBT.c:229 lib/poptALL.c:216 lib/poptI.c:265 lib/poptI.c:272
  #: lib/poptQV.c:329 lib/poptQV.c:338 lib/poptQV.c:377
@@ -1792,7 +1811,7 @@
  #: lib/package.c:454
  msgid "hdr SHA1: BAD, not hex\n"
 -msgstr ""
-+msgstr "hdr SHA1: B£ÊDNY, nie szestnastkowy\n"
++msgstr "hdr SHA1: B£ÊDNY, nie szesnastkowy\n"
  
  #: lib/package.c:472
  msgid "hdr DSA: BAD, not binary\n"
@@ -1845,7 +1864,7 @@
  msgid "packaging version 1 is not supported by this version of RPM\n"
 -msgstr ""
 -"tylko pakiety z numerem g³ównym <= 3 s± obs³ugiwane przez t± wersjê RPM'a"
-+msgstr "pakiety w wersji 1 nie s± obs³ugiwane przez t± wersjê RPM-a\n"
++msgstr "pakiety w wersji 1 nie s± obs³ugiwane przez tê wersjê RPM-a\n"
  
  #: lib/package.c:776
 -#, fuzzy
@@ -1853,7 +1872,7 @@
  "only packaging with major numbers <= 4 is supported by this version of RPM\n"
  msgstr ""
 -"tylko pakiety z numerem g³ównym <= 3 s± obs³ugiwane przez t± wersjê RPM'a"
-+"tylko pakiety z numerem g³ównym <= 4 s± obs³ugiwane przez t± wersjê RPM-a\n"
++"tylko pakiety z numerem g³ównym <= 4 s± obs³ugiwane przez tê wersjê RPM-a\n"
  
  #: lib/package.c:787 lib/rpmchecksig.c:230 lib/rpmchecksig.c:721
 -#, fuzzy, c-format
@@ -1926,7 +1945,7 @@
 -#, fuzzy
  msgid "send stdout to CMD"
 -msgstr "przeka¿ standartowe wyj¶cie do <komenda>"
-+msgstr "przeka¿ standartowe wyj¶cie do POLECENIA"
++msgstr "przeka¿ standardowe wyj¶cie do POLECENIA"
  
  #: lib/poptALL.c:228
  msgid "CMD"
@@ -2357,6 +2376,15 @@
  
  #: lib/poptQV.c:226
  msgid "list all configuration files"
+@@ -2120,7 +2044,7 @@
+ 
+ #: lib/poptQV.c:230
+ msgid "dump basic file information"
+-msgstr "podaj postawowe informacje o pliku"
++msgstr "podaj podstawowe informacje o pliku"
+ 
+ #: lib/poptQV.c:234
+ msgid "list files in package"
 @@ -2129,107 +2053,93 @@
  #: lib/poptQV.c:239
  #, c-format
@@ -2866,7 +2894,7 @@
 +#, c-format
  msgid "excluding multilib path %s%s\n"
 -msgstr "wy³±czanie %s\n"
-+msgstr "wy³±czanie ¶cie¿li multilib %s%s\n"
++msgstr "wy³±czanie ¶cie¿ki multilib %s%s\n"
  
  #: lib/rpmfi.c:746
 -#, fuzzy, c-format
@@ -2901,13 +2929,13 @@
  #: lib/rpminstall.c:206
  msgid "Repackaging..."
 -msgstr ""
-+msgstr "Przepakowywanie..."
++msgstr "Ponowne pakowywanie..."
  
  #: lib/rpminstall.c:208
 -#, fuzzy
  msgid "Repackaging erased files..."
 -msgstr "pakiet nie ma plików\n"
-+msgstr "Przepakowywanie usuniêtych plików..."
++msgstr "Ponowne pakowanie usuniêtych plików..."
  
  #: lib/rpminstall.c:227
  msgid "Upgrading..."
@@ -2928,6 +2956,15 @@
 +msgstr "Dodawanie celu: %s\n"
  
  #: lib/rpminstall.c:402
+ #, c-format
+@@ -2697,7 +2597,7 @@
+ #: lib/rpminstall.c:572
+ #, c-format
+ msgid "file %s requires a newer version of RPM\n"
+-msgstr "plik %s wymaga nowszej wersji RPM\n"
++msgstr "plik %s wymaga nowszej wersji RPM-a\n"
+ 
+ #: lib/rpminstall.c:614
  #, c-format
 @@ -2706,22 +2606,21 @@
  
@@ -3158,7 +3195,7 @@
 +#, c-format
  msgid "Bad arch/os number: %s (%s:%d)\n"
 -msgstr "B³êdny numer arch/os: %s (%s:%d)"
-+msgstr "B³êdny numer arch/os: %s (%s:%d)\n"
++msgstr "B³êdny numer architektury/systemu: %s (%s:%d)\n"
  
  #: lib/rpmrc.c:408
 -#, fuzzy, c-format
@@ -3889,7 +3926,7 @@
 +#, c-format
  msgid "replace files in %s with files from %s to recover"
 -msgstr "naprawcze zastêpowanie plików w %s plikami z %s"
-+msgstr "nale¿y zastêpiæ pliki w %s plikami z %s w celu naprawy"
++msgstr "aby odzyskaæ, nale¿y zast±piæ pliki w %s plikami z %s"
  
  #: rpmdb/rpmdb.c:3839
 -#, fuzzy, c-format
@@ -3908,7 +3945,7 @@
 +#, c-format
  msgid "Macro %%%s has unterminated body\n"
 -msgstr "Makro %%%s ma niezakoñczon± strukturê"
-+msgstr "Makro %%%s ma niezakoñczone cia³o\n"
++msgstr "Makro %%%s ma nie zakoñczone cia³o\n"
  
  #: rpmio/macro.c:687
 -#, fuzzy, c-format
@@ -3922,7 +3959,7 @@
 +#, c-format
  msgid "Macro %%%s has unterminated opts\n"
 -msgstr "Makro %%%s ma niezakoñczone opcje"
-+msgstr "Makro %%%s ma niezakoñczone opcje\n"
++msgstr "Makro %%%s ma nie zakoñczone opcje\n"
  
  #: rpmio/macro.c:698
 -#, fuzzy, c-format
@@ -4039,7 +4076,7 @@
 -#, fuzzy
  msgid "(no error)"
 -msgstr "(b³±d 0x%x)"
-+msgstr "(brak b³±du)"
++msgstr "(brak b³êdu)"
  
  #. !< RPMLOG_EMERG
  #: rpmio/rpmlog.c:130 rpmio/rpmlog.c:131 rpmio/rpmlog.c:132
@@ -4070,7 +4107,7 @@
  
  #: rpmio/url.c:267
  #, c-format
-@@ -3748,1778 +3630,162 @@
+@@ -3748,1778 +3630,275 @@
  
  #. XXX Fstrerror
  #: rpmio/url.c:543
@@ -4986,7 +5023,8 @@
 -#, fuzzy
 -#~ msgid "cannot get %s lock on database\n"
 -#~ msgstr "utworzenie blokady %s na bazie danych nie jest mo¿liwe"
--
++msgstr "KATALOG"
+ 
 -#, fuzzy
 -#~ msgid ""
 -#~ "old format database is present; use --rebuilddb to generate a new format "
@@ -4994,11 +5032,15 @@
 -#~ msgstr ""
 -#~ "baza danych jest w starym formacie; u¿yj --rebuilddb aby wygenerowaæ "
 -#~ "bazê  w nowym formacie"
--
++# --- added from popt/po/pl.po (from .pot) ---
+ 
 -#, fuzzy
 -#~ msgid "error(%d) counting packages\n"
 -#~ msgstr "b³±d szukania pakietu %s\n"
--
++#: popt.c:34
++msgid "unknown errno"
++msgstr "nieznane errno"
+ 
 -#~ msgid "(unknown type)"
 -#~ msgstr "(nieznany typ)"
 -
@@ -5814,86 +5856,165 @@
 -
 -#~ msgid "Couldn't write header/archive to temp file"
 -#~ msgstr "Nie mo¿na zapisaæ nag³ówka/archiwum do pliku tymczasowego"
--
++#: popt.c:940
++#, c-format
++msgid "option type (%d) not implemented in popt\n"
++msgstr "rodzaj opcji (%d) nie zaimplementowany w popt\n"
+ 
 -#~ msgid "Couldn't read sigtarget"
 -#~ msgstr "Nie mo¿na odczytaæ sigtarget"
--
++#: popt.c:1160
++msgid "missing argument"
++msgstr "brak parametru"
+ 
 -#~ msgid "Couldn't write package"
 -#~ msgstr "Nie mo¿na zapisaæ pakietu"
--
++#: popt.c:1162
++msgid "unknown option"
++msgstr "nieznana opcja"
+ 
 -#~ msgid "--nofiles may only be specified during package verification"
 -#~ msgstr "--nofiles mo¿na u¿yæ tylko w trakcie sprawdzania pakietów"
--
++#: popt.c:1164
++msgid "mutually exclusive logical operations requested"
++msgstr "¿±danie wykluczaj±cych siê operacji"
+ 
 -#~ msgid "--clean may only be used with -b and -t"
 -#~ msgstr "--clean mo¿na u¿yæ tylko z -b i -t"
--
++#: popt.c:1166
++msgid "opt->arg should not be NULL"
++msgstr "opt->arg nie mo¿e byæ NULL"
+ 
 -#~ msgid "--rmsource may only be used with -b and -t"
 -#~ msgstr "--rmsource mo¿na u¿yæ tylko z -b i -t"
--
++#: popt.c:1168
++msgid "aliases nested too deeply"
++msgstr "zbyt du¿e zag³êbienie aliasów"
+ 
 -#~ msgid "--short-circuit may only be used during package building"
 -#~ msgstr "--short-circuit mo¿na u¿yæ tylko w trakcie budowania pakietów"
--
++#: popt.c:1170
++msgid "error in parameter quoting"
++msgstr "b³±d w cytowaniu parametru"
+ 
 -#~ msgid "--short-circuit may only be used with -bc, -bi, -bs, -tc -ti, or -ts"
 -#~ msgstr "--short-circuit mo¿na u¿yæ tylko z -bc, -bi, -bs, -tc -ti lub -ts"
--
++#: popt.c:1172
++msgid "invalid numeric value"
++msgstr "b³êdna warto¶æ liczbowa"
+ 
 -#~ msgid ""
 -#~ "Use `%%_signature pgp5' instead of `%%_signature pgp' in macro file.\n"
 -#~ msgstr ""
 -#~ "U¿yj `%%_signature pgp5' zamiast `%%_signature pgp' w pliku makra.\n"
--
++#: popt.c:1174
++msgid "number too large or too small"
++msgstr "liczba zbyt du¿a lub zbyt ma³a"
+ 
 -#~ msgid "pgp version 5 not found: "
 -#~ msgstr "nie znaleziono pgp w wersji 5: "
--
++#: popt.c:1176
++msgid "memory allocation failed"
++msgstr "b³±d alokacji pamiêci"
+ 
 -#~ msgid ""
 -#~ "Use `%%_signature pgp' instead of `%%_signature pgp5' in macro file.\n"
 -#~ msgstr ""
 -#~ "U¿yj `%%_signature pgp' zamiast `%%_signature pgp5' w pliku makra.\n"
--
++#: popt.c:1180
++msgid "unknown error"
++msgstr "nieznany b³±d"
+ 
 -#~ msgid "Finding provides...\n"
 -#~ msgstr "Wyszukiwanie udostêpnianych zasobów...\n"
--
++#: popthelp.c:57
++msgid "Show this help message"
++msgstr "Poka¿ tê pomoc"
+ 
 -#~ msgid "Failed to find requires"
 -#~ msgstr "Wyszukiwanie nie powiod³o siê"
--
++#: popthelp.c:58
++msgid "Display brief usage message"
++msgstr "Wy¶wietl skrócony sposób u¿ycia"
+ 
 -#~ msgid "Prereqs:"
 -#~ msgstr "Prerekwizyty:"
--
++#: popthelp.c:61
++msgid "Display option defaults in message"
++msgstr "Wy¶wietl domy¶lne opcje w opisie"
+ 
 -#~ msgid "Requires:"
 -#~ msgstr "Wymagane zasoby:"
--
++#: popthelp.c:103
++msgid "NONE"
++msgstr "BRAK"
+ 
 -#~ msgid "dependencies: looking for %s\n"
 -#~ msgstr "zale¿no¶ci: wyszukiwanie %s\n"
--
++#: popthelp.c:105
++msgid "VAL"
++msgstr "WART"
+ 
 -#~ msgid "failed build prerequisites:\n"
 -#~ msgstr "budowanie prerekwizytów nie powiod³o siê:\n"
--
++#: popthelp.c:109
++msgid "INT"
++msgstr "INT"
+ 
 -#~ msgid "unexpected query specifiers"
 -#~ msgstr "nieoczekiwane typy odpytywania"
--
++#: popthelp.c:110
++msgid "LONG"
++msgstr "LONG"
+ 
 -#~ msgid "No files after %%defattr(): %s"
 -#~ msgstr "Brak nazw plików po %%defattr(): %s"
--
++#: popthelp.c:111
++msgid "STRING"
++msgstr "£AÑCUCH"
+ 
 -#~ msgid "Bad %%config() syntax: %s"
 -#~ msgstr "B³edna sk³adnia %%config(): %s"
--
++#: popthelp.c:112
++msgid "FLOAT"
++msgstr "FLOAT"
+ 
 -#~ msgid "Invalid %%config token: %s"
 -#~ msgstr "B³êdny znak %%config: %s"
--
++#: popthelp.c:113
++msgid "DOUBLE"
++msgstr "DOUBLE"
+ 
 -#~ msgid "line %d: No file names in Conflicts: %s"
 -#~ msgstr "linia %d: Brak nazw plików w Conflicts: %s"
--
++#: popthelp.c:114
++msgid "ARG"
++msgstr "PARAM"
+ 
 -#~ msgid "line %d: No versions in PreReq: %s"
 -#~ msgstr "linia %d: Brak wersji w PreReq: %s"
--
++#: popthelp.c:486
++msgid "Usage:"
++msgstr "U¿ycie:"
+ 
 -#~ msgid "%s is not an RPM\n"
 -#~ msgstr "%s nie jest RPM-em\n"
--
++#: popthelp.c:510
++msgid "[OPTION...]"
++msgstr "[OPCJA...]"
+ 
 -#~ msgid "Bad %%lang() syntax: %s"
 -#~ msgstr "B³edna sk³adnia %%lang(): %s"
--
++# --- from popt/po/pl.po (not in .pot) ---
+ 
 -#~ msgid "%%lang() entries are 2 characters: %s"
 -#~ msgstr "wpisy %%lang() musz± byæ dwuznakowe: %s"
--
++#: popt.h:158
++msgid "Options implemented via popt alias/exec:"
++msgstr "Opcje zaimplementowane poprzez popt alias/exec:"
+ 
 -#~ msgid "showing package: %d\n"
 -#~ msgstr "bierz±cy pakiet: %d\n"
-+msgstr "KATALOG"
++#: popt.h:168
++msgid "Help options:"
++msgstr "Opcje pomocy:"

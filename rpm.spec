@@ -8,7 +8,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.1
-Release:	1.1
+Release:	1.2
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/%{name}-%{version}.tar.gz
@@ -23,6 +23,7 @@ Source8:	%{name}-find-spec-bcond
 Source9:	%{name}-find-lang
 Source10:	%{name}-find-provides
 Source11:	%{name}-find-requires
+Source12:	%{name}-macros.php
 Source13:	%{name}-macros.python
 Source14:	%{name}-groups-po.awk
 Source15:	%{name}-compress-doc
@@ -31,33 +32,32 @@ Source17:	%{name}-php-provides
 Source18:	%{name}-php-requires
 Source19:	%{name}-find-php-provides
 Source20:	%{name}-find-php-requires
-Source21:	%{name}-macros.php
 Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-%{name}rc.patch
 Patch2:		%{name}-arch.patch
 Patch3:		%{name}-%{name}popt.patch
 Patch4:		%{name}-perl-macros.patch
-Patch6:		%{name}-perl-req-perlfile.patch
-Patch8:		%{name}-cache.patch
-Patch9:		%{name}-glob.patch
-Patch10:	%{name}-header_h.patch
-Patch11:	%{name}-fast-alAddPackage.patch
-Patch12:	%{name}-byKey.patch
-Patch13:	%{name}-noexpand.patch
-Patch14:	%{name}-scripts-closefds.patch
-Patch17:	%{name}-python-macros.patch
-Patch18:	%{name}-perlprov-regonly.patch
-Patch20:	%{name}-db4.patch
-Patch22:	%{name}-drop-legacy-CLI.patch
-Patch23:	%{name}-perlprov-perl5.6.patch
-Patch25:	%{name}-gettext-in-header.patch
-Patch26:	%{name}-compress-doc.patch
-Patch27:	%{name}-lt14d.patch
-Patch29:	%{name}-gettext0.11.patch
-Patch31:	%{name}-build.patch
-Patch32:	%{name}-python-link.patch
-Patch33:	%{name}-system_libs.patch
-Patch34:	%{name}-bb-and-short-circuit.patch
+Patch5:		%{name}-perl-req-perlfile.patch
+Patch6:		%{name}-cache.patch
+Patch7:		%{name}-glob.patch
+Patch8:		%{name}-header_h.patch
+Patch9:		%{name}-fast-alAddPackage.patch
+Patch10:	%{name}-byKey.patch
+Patch11:	%{name}-noexpand.patch
+Patch12:	%{name}-scripts-closefds.patch
+Patch13:	%{name}-python-macros.patch
+Patch14:	%{name}-perlprov-regonly.patch
+Patch15:	%{name}-db4.patch
+Patch16:	%{name}-drop-legacy-CLI.patch
+Patch17:	%{name}-perlprov-perl5.6.patch
+Patch18:	%{name}-gettext-in-header.patch
+Patch19:	%{name}-compress-doc.patch
+Patch20:	%{name}-lt14d.patch
+Patch21:	%{name}-gettext0.11.patch
+Patch22:	%{name}-build.patch
+Patch23:	%{name}-python-link.patch
+Patch24:	%{name}-system_libs.patch
+Patch25:	%{name}-bb-and-short-circuit.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -388,37 +388,37 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch6 -p1
+%patch5 -p1
 # not needed ? (break compilation)
-#%patch8 -p1
-%patch9 -p1
+#%patch6 -p1
+%patch7 -p1
 # needed ?
-#%patch10 -p1
+#%patch8 -p1
 # rejected (needed ?)
-#%patch11 -p1
+#%patch9 -p1
 # too many rejects, Pawel please check if needed and rediff
-#%patch12 -p0
+#%patch10 -p0
+%patch11 -p1
+%patch12 -p1
 %patch13 -p1
 %patch14 -p1
+%patch15 -p1
+%patch16 -p1
 %patch17 -p1
 %patch18 -p1
+%patch19 -p1
 %patch20 -p1
+%patch21 -p1
 %patch22 -p1
 %patch23 -p1
+%patch24 -p1
 %patch25 -p1
-%patch26 -p1
-%patch27 -p1
-%patch29 -p1
-%patch31 -p1
-%patch32 -p1
-%patch33 -p1
-%patch34 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
 install %{SOURCE5} macros.perl.in
 install %{SOURCE13} macros.python.in
-install %{SOURCE21} macros.php.in
+install %{SOURCE12} macros.php.in
 install %{SOURCE6} scripts/find-perl-provides
 install %{SOURCE7} scripts/find-perl-requires
 install %{SOURCE9} scripts/find-lang.sh
