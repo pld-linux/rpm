@@ -3,7 +3,7 @@ Summary(de):	Red Hat (und jetzt auch PLD) Packet-Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0.2
-Release:	40
+Release:	41
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -222,7 +222,6 @@ Group:		Applications/File
 Requires:	sh-utils
 Requires:	binutils
 Requires:	patch
-Requires:	texinfo
 Requires:	file >= 3.31
 Requires:	binutils
 Requires:	make
