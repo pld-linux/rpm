@@ -53,6 +53,29 @@ retrieving revision 2.6.2.3
 diff -u -u -r2.6.2.2 -r2.6.2.3
 --- rpm/configure.ac	22 Aug 2002 19:18:56 -0000	2.6.2.2
 +++ rpm/configure.ac	9 Oct 2002 19:05:38 -0000	2.6.2.3
+@@ -437,10 +437,12 @@
+ if test $withval = no ; then
+ dnl ------------------ without internal db
+ 
+-AC_CHECK_HEADERS(db3/db.h)
++AC_CHECK_HEADERS(db.h)
+ 
+ dnl Check for Berkeley db3 API.
+ AC_CHECK_FUNC(db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"],
++  AC_CHECK_LIB(db-4.1, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-4.1"],
++  AC_CHECK_LIB(db-4.0, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-4.0"],
+   AC_CHECK_LIB(db-3.2, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.2"],
+     AC_CHECK_LIB(db-3.1, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.1"],
+       AC_CHECK_LIB(db-3.0, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.0"],
+@@ -449,6 +451,8 @@
+       )
+     )
+   )
++  )
++  )
+ )
+ 
+ if test X"$DBLIBSRCS" = X; then
 @@ -1094,6 +1094,7 @@
  dnl Determine the canonical arch-vendor-os for the build machine
  case "${build_cpu}" in
