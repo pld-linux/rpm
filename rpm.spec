@@ -13,7 +13,7 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
 %include	/usr/lib/rpm/macros.python
-%define	snap	20040107
+%define	snap	20040614
 # versions of required libraries
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.9
@@ -27,9 +27,10 @@ Summary(pt_BR):	Gerenciador de pacotes RPM
 Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
-%define	ver	4.3
+%define	ver	4.4
+%define	sover	4.3
 Version:	%{ver}
-Release:	0.%{snap}.24
+Release:	0.%{snap}.0.1
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -56,7 +57,6 @@ Patch2:		%{name}-arch.patch
 Patch3:		%{name}-rpmpopt.patch
 Patch4:		%{name}-perl-macros.patch
 Patch5:		%{name}-perl-req-perlfile.patch
-Patch6:		%{name}-glob.patch
 Patch7:		%{name}-noexpand.patch
 Patch8:		%{name}-scripts-closefds.patch
 Patch9:		%{name}-python-macros.patch
@@ -143,6 +143,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # don't require very fresh rpm.macros to build
 %define		__gettextize gettextize --copy --force --intl ; cp -f po/Makevars{.template,}
+%define		ix86 i386 i486 i586 i686 athlon pentium3 pentium4
 
 # stabilize new build environment
 %define		__cc %{?force_cc}%{!?force_cc:%{_target_cpu}-pld-linux-gcc}
@@ -545,14 +546,14 @@ construir pacotes usando o RPM.
 побудови RPM'╕в.
 
 %prep
-%setup -q
-%patch0 -p1
+%setup -q -n %{name}
+# UPDATE
+#%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
@@ -561,7 +562,8 @@ construir pacotes usando o RPM.
 %patch12 -p1
 %patch13 -p1
 %patch14 -p1
-%patch15 -p1
+# home-etc FIXME
+#%patch15 -p1
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
@@ -585,22 +587,29 @@ cat %{SOURCE11} >> macros.in
 %patch24 -p1
 %patch25 -p1
 %patch26 -p1
-%patch27 -p1
+# DROP, amd64 is not the same thing as ia32e or x86_64 at least in terms of gcc optimizations
+#%patch27 -p1
 %patch28 -p1
 %patch29 -p1
 %patch30 -p1
 %patch31 -p1
 %patch32 -p1
-%patch33 -p1
-%patch34 -p1
+# DROP
+#%patch33 -p1
+# UPDATE
+#%patch34 -p1
 %patch35 -p1
 %patch36 -p1
 %patch37 -p1
-%patch38 -p1
-%patch39 -p1
+# STILL NOT FIXED IN RPM???
+#%patch38 -p1
+# OBSOLETE, merged upstream
+#%patch39 -p1
 %patch40 -p1
-%patch41 -p1
-%patch42 -p1
+# SAME AS patch38
+#%patch41 -p1
+# OBSOLETE, merged upstream
+#%patch42 -p1
 %patch43 -p0
 %patch44 -p1
 
@@ -752,10 +761,11 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc <<EOF
 EOF
 
 # for rpm -e|-U --repackage
-install -d $RPM_BUILD_ROOT/var/spool/repackage
+install -d $RPM_BUILD_ROOT/var/{spool/repackage,lock/rpm}
+touch $RPM_BUILD_ROOT/var/lock/rpm/transaction
 
 # move libs to /lib
-for a in librpm-%{ver}.so librpmdb-%{ver}.so librpmio-%{ver}.so ; do
+for a in librpm-%{sover}.so librpmdb-%{sover}.so librpmio-%{sover}.so ; do
 	mv -f $RPM_BUILD_ROOT%{_libdir}/$a $RPM_BUILD_ROOT/%{_lib}
 	ln -s /%{_lib}/$a $RPM_BUILD_ROOT%{_libdir}/$a
 done
@@ -801,6 +811,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %dir /var/lib/rpm
 %dir %attr(700,root,root) /var/spool/repackage
+%dir /var/lock/rpm
+/var/lock/rpm/transaction
 
 %dir %{_rpmlibdir}
 #%attr(755,root,root) %{_rpmlibdir}/rpmd
