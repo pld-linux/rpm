@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.4
-Release:	7
+Release:	8
 Group:		Base
 Group(pl):	Podstawowe
 License:	GPL
@@ -192,7 +192,7 @@ strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*
 %%distribution PLD
 EOF
 
-gzip -9fn $RPM_BUILD_ROOT%{_mandir}/{{ru,pl}/man8/*,man8/*} \
+gzip -9fn $RPM_BUILD_ROOT%{_mandir}/{{ja,ru,pl}/man8/*,man8/*} \
 	RPM-PGP-KEY CHANGES doc/manual/*
 
 %pre
