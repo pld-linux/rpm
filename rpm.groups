@@ -232,6 +232,9 @@ X11/Applications/Networking
 	[de]:	X11/Applikationen/Netzwerkwesen
 	[pl]:	X11/Aplikacje/Sieciowe
 
+X11/Applications/Science
+	[pl]:	X11/Aplikacje/Nauka
+
 X11/Applications/Editors
 	[de]:	X11/Applikationen/Editors
 	[pl]:	X11/Aplikacje/Edytory
