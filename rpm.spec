@@ -1,4 +1,4 @@
-%define	date	19990517
+%define	date	19990519
 
 Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
@@ -21,6 +21,7 @@ Patch4:		rpm-po.patch
 Patch5:		rpm-moredoc.patch
 Patch6:		rpm-arch.patch
 Patch7:		rpm-pld.patch
+Patch8:		rpm-find-lang.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildPrereq:	bzip2-static
@@ -72,8 +73,10 @@ construir pacotes usando o RPM.
 %patch5 -p1
 %patch6 -p1 
 %patch7 -p1 
+%patch8 -p1 
 %patch31 -p1
 install %{SOURCE4} po/pl.po
+install %{SOURCE3} macros.pld.in
 install %{SOURCE13} macros.python.in
 mv -f perl.prov perl.prov.in)
 LDFLAGS="-s"; export LDFLAGS
@@ -94,7 +97,7 @@ install -d $RPM_BUILD_ROOT/var/db/rpm \
 
 make DESTDIR="$RPM_BUILD_ROOT" pkgbindir="%{_bindir}" install
 
-install %{SOURCE3} $RPM_BUILD_ROOT%{_prefix}/lib/rpm/macros.pld
+install macros.pld $RPM_BUILD_ROOT%{_prefix}/lib/rpm/macros.pld
 	pkgbindir="%{_bindir}"
 install rpm.8ru $RPM_BUILD_ROOT%{_mandir}/ru/man8/rpm.8
 install rpm2cpio.8ru $RPM_BUILD_ROOT%{_mandir}/ru/man8/rpm2cpio.8
