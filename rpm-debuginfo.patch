@@ -1,6 +1,6 @@
 diff -urN rpm-4.3.org/macros.in rpm-4.3/macros.in
 --- rpm-4.3.org/macros.in	2004-05-20 22:09:48.582353920 +0200
-+++ rpm-4.3/macros.in	2004-05-20 22:12:42.086977208 +0200
++++ rpm-4.3/macros.in	2004-05-20 22:40:19.156064416 +0200
 @@ -118,15 +118,20 @@
  %debug_package \
  %ifnarch noarch\
@@ -39,3 +39,12 @@ diff -urN rpm-4.3.org/macros.in rpm-4.3/macros.in
  %%install\
  LANG=C\
  export LANG\
+@@ -1404,7 +1414,7 @@
+     %{?verbose:set -x;} \
+     if [ -d "$RPM_BUILD_ROOT" ]; then \
+ 	echo "Strip executable binaries, archives and shared object files."; \
+-	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" %{?_noautostrip:! -regex "%{_noautostrip}"}`; \
++	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*\.debug" %{?_noautostrip:! -regex "%{_noautostrip}"}`; \
+ 	elfexelist=`echo $filelist | xargs -r file | \
+ 		awk '/ELF.*executable/ {print $1}' | cut -d: -f1`; \
+ 	elfsharedlist=`echo $filelist | xargs -r file | \
