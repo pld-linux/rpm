@@ -5,7 +5,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.4
-Release:	0.60
+Release:	0.61
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -183,6 +183,7 @@ Bibliotecas estáticas para desenvolvimento.
 Summary:	Additional utilities for managing rpm packages and database
 Summary(de):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
 Summary(pl):	Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami
+Requires:	popt >= 1.6.4
 Group:		Applications/File
 Requires:	%{name} = %{version}
 
@@ -334,6 +335,7 @@ Requires:	patch
 Requires:	popt >= 1.6.2-2
 Requires:	sed
 Requires:	textutils
+Requires:	popt >= 1.6.4
 Requires:	tar
 Requires:	textutils
 
