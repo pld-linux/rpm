@@ -160,8 +160,8 @@
 +%define		perl_sitearch	%(eval "`perl -V:installsitearch`"; echo $installsitearch)
 +%define		perl_archlib	%(eval "`perl -V:installarchlib`"; echo $installarchlib)
 +
---- rpm-3.0.3/configure.in.wiget	Sat Oct 30 12:28:50 1999
-+++ rpm-3.0.3/configure.in	Sat Oct 30 12:28:50 1999
+--- rpm-3.0.3/configure.in.wiget	Sat Oct 30 13:17:49 1999
++++ rpm-3.0.3/configure.in	Sat Oct 30 13:18:52 1999
 @@ -181,6 +181,7 @@
  	AC_MSG_RESULT(patch later then 2.2 found)
      fi
@@ -170,12 +170,14 @@
      AC_PATH_PROG(PGPBIN, pgp, /usr/bin/pgp, $MYPATH)
      AC_PATH_PROG(__RM, rm, /bin/rm, $MYPATH)
      AC_PATH_PROG(__TAR, tar, /bin/tar, $MYPATH)
-@@ -907,7 +908,8 @@
+@@ -906,8 +907,9 @@
+ export LIBS INCPATH CONFIG_SITE
  
  AC_CONFIG_SUBDIRS(popt)
- AC_OUTPUT([Makefile rpmrc macros macros.pld lib/Makefile
+-AC_OUTPUT([Makefile rpmrc macros macros.pld lib/Makefile
 -	build/Makefile tools/Makefile scripts/Makefile
-+	build/Makefile tools/Makefile 
++AC_OUTPUT([Makefile rpmrc macros macros.pld macros.perl lib/Makefile
++	build/Makefile tools/Makefile
 +        scripts/Makefile scripts/perl.req scripts/perl.prov
  	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
  	misc/Makefile po/Makefile.in intl/Makefile
