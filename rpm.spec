@@ -1,8 +1,8 @@
 Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
-Version:	2.92
-Release:	11
+Version:	2.93
+Release:	1
 Group:		Base
 Group(pl):	Bazowe
 Copyright:	GPL
@@ -14,6 +14,7 @@ Patch0:		rpm-rpmrc.patch
 Patch1:		rpm-i18n.patch
 Patch2:		rpm-find-requires.patch
 Patch3:		rpm-macros.patch
+Patch4:		rpm-po.patch
 Patch37:        %{name}-short_circuit.patch
 Icon:		rpm.gif
 #BuildPrereq:	bzip2-static
@@ -52,14 +53,15 @@ Pliki nag³ówkowe i biblioteki statyczne.
 graficznych mened¿erów pakietów oraz innych narzêdzi, które wymagaj±
 construir pacotes usando o RPM.
 %setup  -q
-%patch0 -p1
+%patch0 -p1 
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 install %{SOURCE13} macros.python.in
 mv -f perl.prov perl.prov.in)
 autoconf
-CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
+CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" 
 ./configure \
 	--prefix=/usr \
 	--disable-shared
@@ -69,9 +71,10 @@ make
 
 %{__make} %{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
 install -d $RPM_BUILD_ROOT/var/lib/rpm \
-	$RPM_BUILD_ROOT/usr/src/rpm/{SOURCES,SPECS,SRPMS,BUILD} \
-	$RPM_BUILD_ROOT/usr/src/rpm/RPMS/{$RPM_ARCH,noarch} \
 	$RPM_BUILD_ROOT/usr/man/{ru,pl}/man8
+
+#	$RPM_BUILD_ROOT/usr/src/rpm/{SOURCES,SPECS,SRPMS,BUILD} \
+#	$RPM_BUILD_ROOT/usr/src/rpm/RPMS/{$RPM_ARCH,noarch} \
 
 make DESTDIR="$RPM_BUILD_ROOT" install
 	pkgbindir="%{_bindir}"
@@ -86,15 +89,16 @@ install %{SOURCE1} docs/groups
 gzip -9fn $RPM_BUILD_ROOT/usr/man/{ru/man8/*,man8/*} \
 	RPM-PGP-KEY CHANGES docs/*
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %post
 /bin/rpm --initdb
 
+%clean
+rm -rf $RPM_BUILD_ROOT
+
 %files
 
-%doc {RPM-PGP-KEY,CHANGES}.gz docs/*
+
+%doc RPM-PGP-KEY.gz CHANGES.gz docs/*
 %postun -p /sbin/ldconfig
 
 %attr(755,root,root) /usr/bin/gendiff
@@ -115,17 +119,18 @@ rm -rf $RPM_BUILD_ROOT
 
 /usr/lib/rpm/rpm*
 /usr/lib/rpm/macros*
-/usr/src/rpm
+#/usr/src/rpm
 
 %lang(cs)    /usr/share/locale/cs/LC_MESSAGES/rpm.mo
 %lang(de)    /usr/share/locale/de/LC_MESSAGES/rpm.mo
 %lang(fi)    /usr/share/locale/fi/LC_MESSAGES/rpm.mo
 %lang(fr)    /usr/share/locale/fr/LC_MESSAGES/rpm.mo
+%lang(pl)    /usr/share/locale/pl/LC_MESSAGES/rpm.mo
 %lang(pt_BR) /usr/share/locale/pt_BR/LC_MESSAGES/rpm.mo
 %lang(ru)    /usr/share/locale/ru/LC_MESSAGES/rpm.mo
-#%lang(sk)    /usr/share/locale/sk/LC_MESSAGES/rpm.mo
-%lang(sv)    /usr/share/locale/sv/LC_MESSAGES/rpm.mo
+%lang(sk)    /usr/share/locale/sk/LC_MESSAGES/rpm.mo
 %lang(sr)    /usr/share/locale/sr/LC_MESSAGES/rpm.mo
+%lang(sv)    /usr/share/locale/sv/LC_MESSAGES/rpm.mo
 %lang(tr)    /usr/share/locale/tr/LC_MESSAGES/rpm.mo
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
 %attr(755,root,root) %{_libdir}/rpm/rpmi
