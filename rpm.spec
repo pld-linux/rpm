@@ -66,7 +66,7 @@ Patch30:	%{name}-choke-on-evil-doc.patch
 Patch31:	%{name}-build.patch
 Patch32:	%{name}-python-link.patch
 Patch33:	%{name}-system_libs.patch
-Patch34:	%{name}-bb-short-circuit.patch
+Patch34:	%{name}-bb-and-short-circuit.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
