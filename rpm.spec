@@ -713,13 +713,13 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %{_includedir}/rpm
-%attr(755,root,root) %{_libdir}/librpm.la
+%{_libdir}/librpm.la
 %attr(755,root,root) %{_libdir}/librpm.so
-%attr(755,root,root) %{_libdir}/librpmio.la
+%{_libdir}/librpmio.la
 %attr(755,root,root) %{_libdir}/librpmio.so
-%attr(755,root,root) %{_libdir}/librpmdb.la
+%{_libdir}/librpmdb.la
 %attr(755,root,root) %{_libdir}/librpmdb.so
-%attr(755,root,root) %{_libdir}/librpmbuild.la
+%{_libdir}/librpmbuild.la
 %attr(755,root,root) %{_libdir}/librpmbuild.so
 
 %files static
