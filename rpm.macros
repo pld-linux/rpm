@@ -367,7 +367,7 @@ echo "Compress kernel modules if any."; \
 
 # directories
 %py_prefix      %(echo `python -c "import sys; print sys.prefix"`)
-%py_libdir      %{py_prefix}/lib/python%{py_ver}
+%py_libdir      %{py_prefix}/%{_lib}/python%{py_ver}
 %py_incdir      /usr/include/python%{py_ver}
 %py_sitedir     %{py_libdir}/site-packages
 %py_dyndir      %{py_libdir}/lib-dynload
