@@ -57,7 +57,7 @@ for bcond in $bconds; do
                      }
                   } END { print val }" $SPEC`;
 
-    if [ $isset -eq 1 ]; then
+    if [ "$isset" -eq 1 ]; then
 	echo "WARN: $bcond defined in spec";
     fi
 done
