@@ -482,10 +482,13 @@ fi; \
 # banner support (useful in {pre,post}{,un} and triggers)
 #
 # Usage:
-#	%banner name [-a] [-e] [-n] [-tn]
+#	%banner name [-a] [-e] [-n] [-tn] <<EOF
 # the banner text, the banner text
-# the banner text, and following line HAVE TO BE:
-# EOF
+# the banner text, and following line
+#EOF
+# NOTE:
+# You can use <<'EOF' <<-EOF, or whatever, just remember it must be one word
+#
 # -a   - append to the banner
 # -e   - send to stderr instead of stdout
 # -n   - no show banner (overrides -t)
@@ -494,10 +497,10 @@ fi; \
 RPM_SCRIPTVERBOSITY=5 \
 [ -r /etc/sysconfig/rpm ] && . /etc/sysconfig/rpm \
 if [ -x /usr/bin/banner.sh ]; then \
-	CMD="/usr/bin/banner.sh %{-e:--stderr} %{!-n:\`[ $RPM_SCRIPTVERBOSITY -ge %{-t:%{-t*}}%{!-t:5} ] && echo '-s'\`} %{!-a:-m}%{-a:-M} %1" \
+	CMD="/usr/bin/banner.sh %{-e:--stderr} %{!-n:$([ $RPM_SCRIPTVERBOSITY -ge %{-t:%{-t*}}%{!-t:5} ] && echo -s)} %{!-a:-m}%{-a:-M} %1" \
 else \
 	CMD="cat%{-e: >&2}" \
 fi \
-$CMD << EOF \
+$CMD %2 \
 %nil
 
