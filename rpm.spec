@@ -26,7 +26,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-%define	rel	0.%{snap}.6
+%define	rel	0.%{snap}.7
 Release:	%{rel}
 License:	GPL
 Group:		Base
@@ -518,7 +518,7 @@ construir pacotes usando o RPM.
 %patch30 -p1
 %patch31 -p1
 %patch32 -p1
-%patch33 -p1 -b .wiget
+%patch33 -p1
 # patch34 -- look down
 %patch35 -p1
 %patch36 -p1
