@@ -66,6 +66,7 @@
 	--sharedstatedir=%{_sharedstatedir} \
 	--mandir=%{_mandir} \
 	--infodir=%{_infodir} \
+	--x-libraries=/usr/X11R6/%{_lib} \
 }
 
 #----------------------------------------------------------------
@@ -91,6 +92,7 @@
 	--sharedstatedir=%{_sharedstatedir} \
 	--mandir=%{_mandir} \
 	--infodir=%{_infodir} \
+	--x-libraries=/usr/X11R6/%{_lib} \
 }
 
 # ------------------------------------------------------------------------
@@ -278,7 +280,7 @@ while read file ; do \
 	for dir in `chrpath -l "$file" | \
 		    awk '/RPATH=/ { gsub(/.*RPATH=/,""); gsub(/:/," "); print $0 }'` ; do \
 			case $dir in \
-			/home/* | /tmp/* | /usr/lib | /lib | /usr/local/lib | /usr/X11R6/lib ) \
+			/home/* | /tmp/* | /usr/lib* | /lib* | /usr/local/lib* | /usr/X11R6/lib* ) \
 				echo "remove-rpath: $dir in $file"; \
 				;; \
 			* ) \
