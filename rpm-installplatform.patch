@@ -5,7 +5,7 @@
  RPM="./rpm --rcfile $TEMPRC"
  
 -arch="`$RPM --eval '%{_arch}'`"
-+CHARCH='s_i.86_i386_;s_sparc.*_sparc_;s_alpha.*_alpha_'
++CHARCH='s_i.86_i386_;s_sparc[^-]*_sparc_;s_alpha[^-]*_alpha_'
 +arch="`$RPM --eval '%{_arch}' | sed -e $CHARCH`"
  VENDOR="`$RPM --eval '%{_vendor}'`"
  OS="`$RPM --eval '%{_os}'`"
