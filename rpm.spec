@@ -2,7 +2,7 @@ Summary:	Red Hat (and now also PLD) Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0.2
-Release:	5
+Release:	6
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -80,7 +80,7 @@ Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne
 Group(de):	Entwicklung/Libraries
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
-Requires:	%{name}-libs = %{version}
+Summary(pt_BR):	Arquivos de inclusão e bibliotecas para programas de manipulação de pacotes RPM
 Group:		Development/Libraries
 Requires:	%{name} = %{version}
 Requires:	popt-devel
