@@ -29,6 +29,30 @@
 	--infodir=%{_infodir} \
 }
 
+#----------------------------------------------------------------
+%configure2_50 { \
+ if [ -n "$LINGUAS" ]; then unset LINGUAS; fi; \
+ ./configure \
+ 	LDFLAGS="${LDFLAGS:-%rpmldflags}" \
+	CFLAGS="${CFLAGS:-%rpmcflags}" \
+	CXXFLAGS="${CXXFLAGS:-%rpmcflags}" \
+	FFLAGS="${FFLAGS:-%rpmcflags}" \
+	--build=%{_target_platform} \
+ 	--prefix=%{_prefix} \
+	--exec-prefix=%{_exec_prefix} \
+	--bindir=%{_bindir} \
+	--sbindir=%{_sbindir} \
+	--sysconfdir=%{_sysconfdir} \
+	--datadir=%{_datadir} \
+	--includedir=%{_includedir} \
+	--libdir=%{_libdir} \
+	--libexecdir=%{_libexecdir} \
+	--localstatedir=%{_localstatedir} \
+	--sharedstatedir=%{_sharedstatedir} \
+	--mandir=%{_mandir} \
+	--infodir=%{_infodir} \
+}
+
 #------------------------------------------------------------------------------
 # The GNUconfigure macro does the following:
 #       update config.guess and config.sub.
