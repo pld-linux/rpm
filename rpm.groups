@@ -5,12 +5,14 @@ Applications
 	[pl]:		Aplikacje
 	[pt]:		AplicaГУes
 	[pt_BR]:	AplicaГУes
+	[ru]:		Приложения
 
 Applications/Archiving
 	[de]:		Applikationen/Archivierung
 	[es]:		Aplicaciones/Archivar
 	[fr]:		Applications/Archivage
 	[pl]:		Aplikacje/Archiwizacja
+	[ru]:		Приложения/Архивирование
 
 Applications/Console
 	[de]:		Applikationen/Konsole
@@ -25,6 +27,7 @@ Applications/Communications
 	[fr]:		Applications/Transmissions
 	[pl]:		Aplikacje/Komunikacja
 	[pt]:		AplicaГУes/ComunicaГУes
+	[ru]:		Приложения/Связь
 
 Applications/Databases
 	[de]:		Applikationen/Datenbanken
@@ -32,6 +35,7 @@ Applications/Databases
 	[fr]:		Applications/Bases de DonnИes
 	[pl]:		Aplikacje/Bazy Danych
 	[pt]:		AplicaГУes/Bases de Dados
+	[ru]:		Приложения/Базы данных
 
 Applications/Databases/Interfaces
 	[de]:		Applikationen/Datenbanken/Schnittstellen
@@ -53,6 +57,7 @@ Applications/Editors
 	[fr]:		Applications/Editeurs
 	[pl]:		Aplikacje/Edytory
 	[pt]:		AplicaГУes/Editores
+	[ru]:		Приложения/Редакторы
 
 Applications/Editors/Emacs
 	[de]:		Applikationen/Editors/Emacs
@@ -60,6 +65,7 @@ Applications/Editors/Emacs
 	[fr]:		Applications/Editeurs/Emacs
 	[pl]:		Aplikacje/Edytory/Emacs
 	[pt]:		AplicaГУes/Editores/Emacs
+	[ru]:		Приложения/Редакторы/Emacs
 
 Applications/Editors/XEmacs
 	[de]:		Applikationen/Editors/XEmacs
@@ -67,6 +73,7 @@ Applications/Editors/XEmacs
 	[fr]:		Applications/Editeurs/XEmacs
 	[pl]:		Aplikacje/Edytory/XEmacs
 	[pt]:		AplicaГУes/Editores/XEmacs
+	[ru]:		Приложения/Редакторы/XEmacs
 
 Applications/Editors/Vim
 	[de]:		Applikationen/Editors/Vim
@@ -74,6 +81,7 @@ Applications/Editors/Vim
 	[fr]:		Applications/Editeurs/Vim
 	[pl]:		Aplikacje/Edytory/Vim
 	[pt]:		AplicaГУes/Editores/Vim
+	[ru]:		Приложения/Редакторы/Vim
 
 Applications/Emulators
 	[de]:		Applikationen/Emulators
@@ -81,6 +89,7 @@ Applications/Emulators
 	[fr]:		Applications/иmulateurs
 	[pl]:		Aplikacje/Emulatory
 	[pt]:		AplicaГУes/Emuladores
+	[ru]:		Приложения/Редакторы
 
 Applications/Engineering
 	[de]:		Applikationen/Ingenieurwesen
@@ -88,14 +97,16 @@ Applications/Engineering
 	[fr]:		Applications/IngИnierie
 	[pl]:		Aplikacje/In©ynierskie
 	[pt]:		AplicaГУes/Engenharia
+	[ru]:		Приложения/Инженерные приложения
 
-Applications/File
+Applications/Filez
 	[de]:		Applikationen/Datei
 	[es]:		Aplicaciones/Archivos
 	[fr]:		Applications/Fichiers
 	[pl]:		Aplikacje/Pliki
 	[pt]:		AplicaГУes/Ficheiros
 	[pt_BR]:	AplicaГУes/Arquivos
+	[ru]:		Приложения/Работа с файлами
 
 Applications/Graphics
 	[de]:		Applikationen/Graphiken
@@ -103,6 +114,7 @@ Applications/Graphics
 	[fr]:		Applications/Graphiques
 	[pl]:		Aplikacje/Grafika
 	[pt]:		AplicaГУes/GrАficos
+	[ru]:		Приложения/Графика
 
 Applications/Games
 	[de]:		Applikationen/Spiele
@@ -110,6 +122,7 @@ Applications/Games
 	[fr]:		Applications/Jeux
 	[pl]:		Aplikacje/Gry
 	[pt]:		AplicaГУes/Jogos
+	[ru]:		Приложения/Игры
 
 Applications/Networking
 	[de]:		Applikationen/Netzwerkwesen
@@ -118,6 +131,7 @@ Applications/Networking
 	[pl]:		Aplikacje/Sieciowe
 	[pt]:		AplicaГУes/Rede
 	[pt_BR]:	AplicaГУes/Rede
+	[ru]:		Приложения/Сетевые
 
 Applications/Mail
 	[de]:		Applikationen/Post
@@ -139,6 +153,7 @@ Applications/News
 	[fr]:		Applications/News
 	[pl]:		Aplikacje/News
 	[pt]:		AplicaГУes/News
+	[ru]:		Приложения/News
 
 Applications/Printing
 	[de]:		Applikationen/Drucken
@@ -153,6 +168,7 @@ Applications/Publishing
 	[fr]:		Aplicaciones/иdition
 	[pl]:		Aplikacje/Publikowanie
 	[pt_BR]:	AplicaГУes/EditoraГЦo
+	[ru]:		Приложения/Издательство
 
 Applications/Publishing/TeX
 	[de]:		Applikationen/Publizieren/TeX
@@ -160,6 +176,7 @@ Applications/Publishing/TeX
 	[fr]:		Aplicaciones/иdition/TeX
 	[pl]:		Aplikacje/Publikowanie/TeX
 	[pt_BR]:	AplicaГУes/EditoraГЦo/TeX
+	[ru]:		Приложения/Издательство/TeX
 
 Applications/Publishing/SGML
 	[de]:		Applikationen/Publizieren/SGML
@@ -167,6 +184,7 @@ Applications/Publishing/SGML
 	[fr]:		Aplicaciones/иdition/SGML
 	[pl]:		Aplikacje/Publikowanie/SGML
 	[pt_BR]:	AplicaГУes/EditoraГЦo/SGML
+	[ru]:		Приложения/Издательство/SGML
 
 Applications/Publishing/XML
 	[de]:		Applikationen/Publizieren/XML
@@ -174,6 +192,7 @@ Applications/Publishing/XML
 	[fr]:		Aplicaciones/иdition/XML
 	[pl]:		Aplikacje/Publikowanie/XML
 	[pt_BR]:	AplicaГУes/EditoraГЦo/XML
+	[ru]:		Приложения/Издательство/XML
 
 Applications/Publishing/XML/Java
 	[de]:		Applikationen/Publizieren/XML/Java
@@ -181,6 +200,7 @@ Applications/Publishing/XML/Java
 	[fr]:		Aplicaciones/иdition/XML/Java
 	[pl]:		Aplikacje/Publikowanie/XML/Java
 	[pt_BR]:	AplicaГУes/EditoraГЦo/XML/Java
+	[ru]:		Приложения/Издательство/XML/Java
 
 Applications/Shells
 	[de]:		Applikationen/Shells
@@ -189,11 +209,12 @@ Applications/Shells
 	[pl]:		Aplikacje/PowЁoki
 	[pt]:		AplicaГУes/Shells
 	[pt_BR]:	AplicaГУes/Shells
+	[ru]:		Приложения/Оболочки
 
 Applications/Spreadsheets
 	[de]:		Applikationen/ArbeitsblДtter
 	[pl]:		Aplikacje/Arkusze kalkulacyjne
-
+	[ru]:		Приложения/электронныя таблицы
 Applications/System
 	[de]:		Applikationen/System
 	[es]:		Aplicaciones/Sistema
@@ -201,6 +222,7 @@ Applications/System
 	[pl]:		Aplikacje/System
 	[pt]:		AplicaГУes/Sistema
 	[pt_BR]:	AplicaГУes/Sistema
+	[ru]:		Приложения/Система
 
 Applications/Terminal
 	[de]:		Applikationen/Terminal
@@ -215,6 +237,7 @@ Applications/Text
 	[fr]:		Aplicaciones/Texte
 	[pl]:		Aplikacje/Tekst
 	[pt]:		AplicaГУes/Texto
+	[ru]:		Приложения/Работа с текстами
 
 Applications/Sound
 	[de]:		Applikationen/Laut
@@ -231,6 +254,7 @@ Base
 	[pl]:		Podstawowe
 	[pt]:		Base
 	[pt_BR]:	Base
+	[ru]:		Базовый набор
 
 Base/Kernel
 	[de]:		GrundsДtzlich/Kern
@@ -238,6 +262,7 @@ Base/Kernel
 	[fr]:		Base/Grain
 	[pl]:		Podstawowe/J╠dro
 	[pt]:		Base/Semente
+	[ru]:		Базовый набор/Ядро
 
 Base/Authentication and Authorization
 	[de]:		GrundsДtzlich/Authentisierung und ErmДchtigung
@@ -253,6 +278,7 @@ Base/Utilities
 	[pl]:		Podstawowe/NarzЙdzia
 	[pt]:		Base/Utilidades
 	[pt_BR]:	Base/tilitАrios
+	[ru]:		Базовый набор/Приложения
 
 Daemons
 	[de]:		Server
@@ -260,6 +286,7 @@ Daemons
 	[fr]:		Serveurs
 	[pl]:		Serwery
 	[pt]:		Server
+	[ru]:		Демоны
 
 Development
         [de]:   	Entwicklung
@@ -276,6 +303,7 @@ Development/Debuggers
 	[es]:		Desarrollo/Depuradores
 	[fr]:		DИveloppement/Debuggers
 	[pl]:		Programowanie/Odpluskwiacze
+	[ru]:		Разработка/Отладчики
 
 Development/Libraries
 	[de]:		Entwicklung/Bibliotheken
@@ -311,6 +339,7 @@ Development/Languages/Fortran
 	[fr]:		Development/Langues/Fortran
 	[pl]:		Programowanie/JЙzyki/Fortran
 	[pt]:		Desenvolvimento/LМnguas/Fortran
+	[ru]:		Разработка/Языки/Fortran
 
 Development/Languages/Java
 	[de]:		Entwicklung/Sprachen/Java
@@ -318,6 +347,7 @@ Development/Languages/Java
 	[fr]:		Development/Langues/Java
 	[pl]:		Programowanie/JЙzyki/Java
 	[pt]:		Desenvolvimento/LМnguas/Java
+	[ru]:		Разработка/Языки/Java
 
 Development/Languages/Modula3
 	[de]:		Entwicklung/Sprachen/Modula3
@@ -325,6 +355,7 @@ Development/Languages/Modula3
 	[fr]:		Development/Langues/Modula3
 	[pl]:		Programowanie/JЙzyki/Modula3
 	[pt]:		Desenvolvimento/LМnguas/Modula3
+	[ru]:		Разработка/Языки/Modula3
 
 Development/Languages/PHP
 	[de]:		Entwicklung/Sprachen/PHP
@@ -332,6 +363,7 @@ Development/Languages/PHP
 	[fr]:		Development/Langues/PHP
 	[pl]:		Programowanie/JЙzyki/PHP
 	[pt]:		Desenvolvimento/LМnguas/PHP
+	[ru]:		Разработка/Языки/PHP
 
 Development/Languages/Perl
 	[de]:		Entwicklung/Sprachen/Perl
@@ -339,6 +371,7 @@ Development/Languages/Perl
 	[fr]:		Development/Langues/Perl
 	[pl]:		Programowanie/JЙzyki/Perl
 	[pt]:		Desenvolvimento/LМnguas/Perl
+	[ru]:		Разработка/Языки/Perl
 
 Development/Languages/Python
 	[de]:		Entwicklung/Sprachen/Python
@@ -346,6 +379,7 @@ Development/Languages/Python
 	[fr]:		Development/Langues/Python
 	[pl]:		Programowanie/JЙzyki/Python
 	[pt]:		Desenvolvimento/LМnguas/Python
+	[ru]:		Разработка/Языки/Python
 
 Development/Languages/Scheme
 	[de]:		Entwicklung/Sprachen/Scheme
@@ -353,6 +387,7 @@ Development/Languages/Scheme
 	[fr]:		Development/Langues/Scheme
 	[pl]:		Programowanie/JЙzyki/Scheme
 	[pt]:		Desenvolvimento/LМnguas/Scheme
+	[ru]:		Разработка/Языки/Scheme
 
 Development/Languages/Tcl
 	[de]:		Entwicklung/Sprachen/Tcl
@@ -360,6 +395,7 @@ Development/Languages/Tcl
 	[fr]:		Development/Langues/Tcl
 	[pl]:		Programowanie/JЙzyki/Tcl
 	[pt]:		Desenvolvimento/LМnguas/Tcl
+	[ru]:		Разработка/Языки/Tcl
 
 Development/Building
 	[de]:		Entwicklung/Bauen
@@ -375,6 +411,7 @@ Development/Tools
 	[fr]:		Development/Outils
 	[pl]:		Programowanie/NarzЙdzia
 	[pt]:		Desenvolvimento/Ferramentas
+	[ru]:		Разработка/Инструменты
 
 Documentation
 	[de]:		Dokumentation
@@ -426,6 +463,7 @@ Networking/Daemons
 	[fr]:		RИseau/Serveurs
 	[pl]:		Sieciowe/Serwery
 	[pt]:		Rede/Server
+	[ru]:		Сетевые/Демоны
 
 Networking/Daemons/Java
 	[de]:		Netzwerkwesen/Server/Java
@@ -433,6 +471,7 @@ Networking/Daemons/Java
 	[fr]:		RИseau/Serveurs/Java
 	[pl]:		Sieciowe/Serwery/Java
 	[pt]:		Rede/Server/Java
+	[ru]:		Сетевые/Демоны/Java
 
 Networking/Daemons/Java/Extensions
 	[de]:		Netzwerkwesen/Server/Java/Extensionen
@@ -440,6 +479,7 @@ Networking/Daemons/Java/Extensions
 	[fr]:		RИseau/Serveurs/Java/Extensions
 	[pl]:		Sieciowe/Serwery/Java/Rozszerzenia
 	[pt]:		Rede/Server/Java/ExtensУes
+	[ru]:		Сетевые/Демоны/Java/Расширения
 
 Networking/Daemons/Java/Servlets
 	[pl]:		Sieciowe/Serwery/Java/Servlety
@@ -451,6 +491,7 @@ Networking/News
 	[pl]:		Sieciowe/News
 	[pt]:		Rede/News
 	[pt_BR]:	Rede/News
+	[ru]:		Сетевые/News
 
 Networking/Utilities
 	[de]:		Netzwerkwesen/Werkzeuge
@@ -459,6 +500,7 @@ Networking/Utilities
 	[pl]:		Sieciowe/NarzЙdzia
 	[pt]:		Rede/Utilidades
 	[pt_BR]:	Rede/UtilitАrios
+	[ru]:		Сетевые/Приложения
 
 Themes
 	[de]:		Themen
@@ -493,6 +535,7 @@ X11/Applications
 	[pl]:		X11/Aplikacje
 	[pt]:		X11/AplicaГУes
 	[pt_BR]:	X11/AplicaГУes
+	[ru]:		X11/Приложения
 
 X11/Applications/Games
 	[de]:		X11/Applikationen/Spiele
@@ -501,6 +544,7 @@ X11/Applications/Games
 	[fr]:		X11/Applications/Jeux
 	[pl]:		X11/Aplikacje/Gry
 	[pt]:		X11/AplicaГУes/Jogos
+	[ru]:		X11/Приложения/Игры
 
 X11/Applications/Games/Strategy
 	[de]:		X11/Applikationen/Spiele/Strategie
@@ -515,6 +559,7 @@ X11/Applications/Graphics
 	[fr]:		X11/Applications/Graphiques
 	[pl]:		X11/Aplikacje/Grafika
 	[pt]:		X11/AplicaГУes/GrАficos
+	[ru]:		X11/Приложения/Графика
 
 X11/Applications/Multimedia
 	[de]:		X11/Applikationen/Multimedia
@@ -522,6 +567,7 @@ X11/Applications/Multimedia
 	[fr]:		X11/Applications/MultimИdia
 	[pl]:		X11/Aplikacje/Multimedia
 	[pt]:		X11/AplicaГУes/Multimedia
+	[ru]:		X11/Приложения/Мультимедиа
 
 X11/Applications/Networking
 	[de]:		X11/Applikationen/Netzwerkwesen
@@ -530,6 +576,7 @@ X11/Applications/Networking
 	[pl]:		X11/Aplikacje/Sieciowe
 	[pt]:		X11/AplicaГУes/Rede
 	[pt_BR]:	X11/AplicaГУes/Rede
+	[ru]:		X11/Приложения/Сетевые
 
 X11/Applications/Science
 	[de]:		X11/Applikationen/Wissenschaft
@@ -544,6 +591,7 @@ X11/Applications/Editors
 	[fr]:		X11/Applications/Editeurs
 	[pl]:		X11/Aplikacje/Edytory
 	[pt]:		X11/AplicaГУes/Editores
+	[ru]:		X11/Приложения/Редакторы
 
 X11/Development/Libraries
 	[de]:		X11/Entwicklung/Bibliotheken
@@ -560,12 +608,14 @@ X11/Development/Tools
 	[fr]:		X11/Development/Outils
 	[pl]:		X11/Programowanie/NarzЙdzia
 	[pt]:		X11/Desenvolvimento/Ferramentas
+	[ru]:		X11/Разработка/Инструменты
 
 X11/Fonts
 	[de]:		X11/Fonts
 	[es]:		X11/Tipos de Letra
 	[pl]:		X11/Fonty
 	[pt]:		X11/Fontes
+	[ru]:		X11/Шрифты
 
 X11/Amusements
 	[de]:		X11/Unterhaltung
@@ -573,6 +623,7 @@ X11/Amusements
 	[fr]:		X11/Amusements
 	[pl]:		X11/Rozrywka
 	[pt]:		X11/Divertimentos
+	[ru]:		X11/Развлечения
 
 X11/Libraries
 	[de]:		X11/Bibliotheken
@@ -612,3 +663,4 @@ X11/XFree86/Servers
 	[fr]:		X11/XFree86/Serveurs
 	[pl]:		X11/XFree86/Serwery
 	[pt]:		X11/XFree86/Server
+	[ru]:		X11/XFree86/Серверы
