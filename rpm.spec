@@ -88,6 +88,7 @@ Patch35:	%{name}-missing-prototypes.patch
 Patch36:	%{name}-pld-autodep.patch
 Patch37:	%{name}-rpmsq.patch
 Patch38:	%{name}-file-readelf.patch
+Patch39:	%{name}-pentium3.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -587,6 +588,7 @@ cat %{SOURCE11} >> macros.in
 %patch36 -p1
 %patch37 -p1
 %patch38 -p1
+%patch39 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
@@ -817,8 +819,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/rpmb
 %attr(755,root,root) %{_rpmlibdir}/rpmt
 %{_rpmlibdir}/noarch-*
-%ifarch i386 i486 i586 i686 athlon
+%ifarch %{ix86}
 %{_rpmlibdir}/i?86*
+%{_rpmlibdir}/pentium*
 %{_rpmlibdir}/athlon*
 %endif
 %ifarch amd64
