@@ -11,6 +11,7 @@ Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-3.0.x/%{name}-%{version}.tar.gz
 Source1:	%{name}.groups
 Source2:	%{name}.macros
 Source3:	%{name}-install-tree
+Source4:	%{name}-find-rpm-provides
 Patch0:		%{name}-%{name}rc.patch
 Patch1:		%{name}-find-requires.patch
 Patch2:		%{name}-macros.patch
@@ -26,7 +27,6 @@ Patch11:	%{name}-db3.patch
 Patch12:	%{name}-rpm-v1.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
-Provides:	rpmlib(VersionedDependencies) = 3.0.3-1
 Requires:	glibc >= 2.1
 BuildRequires:	bzip2-static >= 1.0.1
 BuildRequires:	gdbm-static
@@ -39,6 +39,8 @@ BuildRequires:	gettext-devel
 BuildRequires:	db3-static >= 3.1.14
 BuildRequires:	zlib-static >= 1.1.4
 Obsoletes:	rpm-libs
+%define __find_provides %{SOURCE4}
+%define		__find_provides	%{SOURCE4}
 %define		pyrequires_eq() Requires:	%1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
 
 %description
@@ -175,6 +177,8 @@ install %{SOURCE13} macros.python.in
 install %{SOURCE7} scripts/find-perl-requires
 install %{SOURCE9} scripts/find-lang.sh
 
+(cd scripts;
+mv -f perl.req perl.req.in
 mv -f perl.prov perl.prov.in)
 
 (cd popt;
@@ -207,6 +211,7 @@ install macros.pld $RPM_BUILD_ROOT%{_libdir}/rpm/macros.pld
 	pkgbindir="%{_bindir}"
 
 install macros.perl $RPM_BUILD_ROOT%{_libdir}/rpm/macros.perl
+install macros.python $RPM_BUILD_ROOT%{_libdir}/rpm/macros.python
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 #%%_install_langs pl_PL:en_US
 %%distribution PLD
