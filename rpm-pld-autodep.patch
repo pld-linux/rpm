@@ -1,6 +1,5 @@
-diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
---- rpm-4.3.orig/build/rpmfc.c	2004-01-16 14:21:42.283166337 +0100
-+++ rpm-4.3/build/rpmfc.c	2004-01-16 14:38:10.000000000 +0100
+--- rpm-4.3/build/rpmfc.c.orig	Wed May 19 11:30:29 2004
++++ rpm-4.3/build/rpmfc.c	Wed May 19 16:36:54 2004
 @@ -1,6 +1,7 @@
  #include "system.h"
  
@@ -18,11 +17,11 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
  
  #if HAVE_GELF_H
  #include <gelf.h>
-@@ -301,6 +304,57 @@
+@@ -301,14 +304,83 @@
      return buf;
  };
  
-+regex_t * rpmfcExpandRegexps(const char * str,int *count){
++static regex_t * rpmfcExpandRegexps(const char * str,int *count){
 +    int i,j,r;
 +    const char *s;
 +    ARGV_t patterns=NULL;
@@ -64,7 +63,22 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
 +    return compiled;
 +}
 +
-+regex_t * rpmfcFreeRegexps(regex_t *regexps,int count){
++static int rpmfcMatchRegexps(regex_t *regexps, int count, const char *str, char deptype)
++{
++    int j;
++    for(j = 0; j < count; j++) {
++	rpmMessage(RPMMESS_DEBUG,
++	    _("Checking %c: '%s' against _noauto expr. #%i\n"), deptype, str, j);
++	if (!regexec(&regexps[j], str, 0, NULL, 0)) {
++	    rpmMessage(RPMMESS_NORMAL,
++		_("Skipping %c: '%s' as it matches _noauto expr. #%i\n"), deptype, str, j);
++	    return 1;
++	}
++    }
++    return 0;
++}
++
++static regex_t * rpmfcFreeRegexps(regex_t *regexps,int count){
 +    int i;
 +	
 +    if (regexps)
@@ -76,73 +90,46 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
  /**
   * Run per-interpreter dependency helper.
   * @param fc		file classifier
-@@ -326,6 +380,9 @@
-     int pac;
-     int xx;
-     int i;
-+    int noauto_c=0;
-+    regex_t *noauto=NULL;
-+    int j;
- 
-     switch (deptype) {
-     default:
-@@ -334,6 +391,8 @@
-     case 'P':
- 	if (fc->skipProv)
- 	    return 0;
-+	noauto=rpmfcExpandRegexps("%{_noautoprov}",&noauto_c);
-+	rpmMessage(RPMMESS_DEBUG, _("%i _noautoprov patterns.\n"),noauto_c);
- 	xx = snprintf(buf, sizeof(buf), "%%{?__%s_provides}", nsdep);
- 	depsp = &fc->provides;
- 	dsContext = RPMSENSE_FIND_PROVIDES;
-@@ -342,6 +401,8 @@
-     case 'R':
- 	if (fc->skipReq)
- 	    return 0;
-+	noauto=rpmfcExpandRegexps("%{_noautoreq}",&noauto_c);
-+	rpmMessage(RPMMESS_DEBUG, _("%i _noautoreq patterns.\n"),noauto_c);
- 	xx = snprintf(buf, sizeof(buf), "%%{?__%s_requires}", nsdep);
- 	depsp = &fc->requires;
- 	dsContext = RPMSENSE_FIND_REQUIRES;
-@@ -394,6 +455,16 @@
+  * @param deptype	'P' == Provides:, 'R' == Requires:, helper
+  * @param nsdep		class name for interpreter (e.g. "perl")
++ * @param noauto	_noauto* regexps
++ * @param noauto_c	# of _noauto* regexps
+  * @return		0 on success
+  */
+-static int rpmfcHelper(rpmfc fc, unsigned char deptype, const char * nsdep)
++static int rpmfcHelper(rpmfc fc, unsigned char deptype, const char * nsdep,
++    regex_t * noauto, int noauto_c)
+ 	/*@globals rpmGlobalMacroContext, h_errno, fileSystem, internalState @*/
+ 	/*@modifies fc, rpmGlobalMacroContext, fileSystem, internalState @*/
+ {
+@@ -394,6 +466,8 @@
  	    }
  /*@=branchstate@*/
  
-+	    for(j=0;j<noauto_c;j++){
-+		rpmMessage(RPMMESS_DEBUG, _("Checking %c: '%s'"
-+		    " against _noauto expr. #%i\n"),deptype,N,j);
-+		if (!regexec(&noauto[j],N,0,NULL,0)) {
-+		    rpmMessage(RPMMESS_NORMAL, _("Skipping %c: '%s'"
-+			" as it matches _noauto expr. #%i\n"),deptype,N,j);
-+		    break;
-+		}
-+	    }
-+	    if (j<noauto_c) continue;
++	    if(rpmfcMatchRegexps(noauto, noauto_c, N, deptype))
++		continue;
  
  	    /* Add tracking dependency for versioned Provides: */
  	    if (!fc->tracked && deptype == 'P' && *EVR != '\0') {
-@@ -422,6 +493,7 @@
-     }
-     sb_stdout = freeStringBuf(sb_stdout);
- 
-+    noauto=rpmfcFreeRegexps(noauto,noauto_c);
-     return 0;
- }
- 
-@@ -637,9 +709,11 @@
+@@ -637,9 +711,16 @@
  /**
   * Extract script dependencies.
   * @param fc		file classifier
 + * @param findprov	1 to enable provides
 + * @param findreq	1 to enable requires
++ * @param noautoprov	_noautoprov regexps
++ * @param noautoprov_c	# of _noautoprov regexps
++ * @param noautoreq	_noautoreq regexps
++ * @param noautoreq_c	# of _noautoreq regexps
   * @return		0 on success
   */
 -static int rpmfcSCRIPT(rpmfc fc)
-+static int rpmfcSCRIPT(rpmfc fc,int findprov,int findreq)
++static int rpmfcSCRIPT(rpmfc fc, int findprov, int findreq,
++    regex_t *noautoprov, int noautoprov_c, regex_t *noautoreq, int noautoreq_c)
  	/*@globals rpmGlobalMacroContext, h_errno, fileSystem, internalState @*/
  	/*@modifies fc, rpmGlobalMacroContext, fileSystem, internalState @*/
  {
-@@ -691,7 +765,7 @@
+@@ -691,7 +772,7 @@
  	*se = '\0';
  	se++;
  
@@ -151,48 +138,57 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
  	    /* Add to package requires. */
  	    ds = rpmdsSingle(RPMTAG_REQUIRENAME, s, "", RPMSENSE_FIND_REQUIRES);
  	    xx = rpmdsMerge(&fc->requires, ds);
-@@ -718,19 +792,22 @@
+@@ -718,19 +799,22 @@
      (void) fclose(fp);
  
      if (fc->fcolor->vals[fc->ix] & RPMFC_PERL) {
 -	if (fc->fcolor->vals[fc->ix] & RPMFC_MODULE)
-+	if (findprov && fc->fcolor->vals[fc->ix] & RPMFC_MODULE)
- 	    xx = rpmfcHelper(fc, 'P', "perl");
+-	    xx = rpmfcHelper(fc, 'P', "perl");
 -	if (is_executable || (fc->fcolor->vals[fc->ix] & RPMFC_MODULE))
+-	    xx = rpmfcHelper(fc, 'R', "perl");
++	if (findprov && fc->fcolor->vals[fc->ix] & RPMFC_MODULE)
++	    xx = rpmfcHelper(fc, 'P', "perl", noautoprov, noautoprov_c);
 +	if (findreq && (is_executable || (fc->fcolor->vals[fc->ix] & RPMFC_MODULE)))
- 	    xx = rpmfcHelper(fc, 'R', "perl");
++	    xx = rpmfcHelper(fc, 'R', "perl", noautoreq, noautoreq_c);
      }
      if (fc->fcolor->vals[fc->ix] & RPMFC_PYTHON) {
 -	xx = rpmfcHelper(fc, 'P', "python");
 -	if (is_executable)
+-	    xx = rpmfcHelper(fc, 'R', "python");
 +	if (findprov)
-+	    xx = rpmfcHelper(fc, 'P', "python");
++	    xx = rpmfcHelper(fc, 'P', "python", noautoprov, noautoprov_c);
 +	if (findreq && is_executable)
- 	    xx = rpmfcHelper(fc, 'R', "python");
++	    xx = rpmfcHelper(fc, 'R', "python", noautoreq, noautoreq_c);
      }
      if (fc->fcolor->vals[fc->ix] & RPMFC_PHP) {
-+            if (findprov)
- 		xx = rpmfcHelper(fc, 'P', "php");
+-		xx = rpmfcHelper(fc, 'P', "php");
 -	    xx = rpmfcHelper(fc, 'R', "php");
++            if (findprov)
++		xx = rpmfcHelper(fc, 'P', "php", noautoprov, noautoprov_c);
 +            if (findreq)
-+                xx = rpmfcHelper(fc, 'R', "php");
++                xx = rpmfcHelper(fc, 'R', "php", noautoreq, noautoreq_c);
  	}
  
      return 0;
-@@ -739,9 +816,11 @@
+@@ -739,9 +823,16 @@
  /**
   * Extract Elf dependencies.
   * @param fc		file classifier
 + * @param findprov	1 to enable provides
 + * @param findreq	1 to enable requires
++ * @param noautoprov	_noautoprov regexps
++ * @param noautoprov_c	# of _noautoprov regexps
++ * @param noautoreq	_noautoreq regexps
++ * @param noautoreq_c	# of _noautoreq regexps
   * @return		0 on success
   */
 -static int rpmfcELF(rpmfc fc)
-+static int rpmfcELF(rpmfc fc,int findprov,int findreq)
++static int rpmfcELF(rpmfc fc, int findprov, int findreq,
++    regex_t *noautoprov, int noautoprov_c, regex_t *noautoreq, int noautoreq_c)
  	/*@globals rpmGlobalMacroContext, h_errno, fileSystem, internalState @*/
  	/*@modifies fc, rpmGlobalMacroContext, fileSystem, internalState @*/
  {
-@@ -853,17 +932,19 @@
+@@ -853,17 +944,19 @@
  				t = stpcpy(t, "(64bit)");
  #endif
  			    t++;
@@ -202,6 +198,10 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
 +                                ds = rpmdsSingle(RPMTAG_PROVIDES,
 +                                            buf, "", RPMSENSE_FIND_PROVIDES);
 +                                xx = rpmdsMerge(&fc->provides, ds);
++
++                                /* Add to file dependencies. */
++                                xx = rpmfcSaveArg(&fc->ddict,
++                                            rpmfcFileDep(t, fc->ix, ds));
  
 -			    /* Add to package provides. */
 -			    ds = rpmdsSingle(RPMTAG_PROVIDES,
@@ -211,17 +211,14 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
 -			    /* Add to file dependencies. */
 -			    xx = rpmfcSaveArg(&fc->ddict,
 -					rpmfcFileDep(t, fc->ix, ds));
-+                                /* Add to file dependencies. */
-+                                xx = rpmfcSaveArg(&fc->ddict,
-+                                            rpmfcFileDep(t, fc->ix, ds));
- 
+-
 -			    ds = rpmdsFree(ds);
 +                                ds = rpmdsFree(ds);
 +                            }
  			}
  			auxoffset += aux->vda_next;
  		    }
-@@ -914,15 +995,17 @@
+@@ -914,15 +1007,17 @@
  #endif
  			    t++;
  
@@ -229,16 +226,17 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
 -			    ds = rpmdsSingle(RPMTAG_REQUIRENAME,
 -					buf, "", RPMSENSE_FIND_REQUIRES);
 -			    xx = rpmdsMerge(&fc->requires, ds);
+-
+-			    /* Add to file dependencies. */
+-			    xx = rpmfcSaveArg(&fc->ddict,
+-					rpmfcFileDep(t, fc->ix, ds));
+-			    ds = rpmdsFree(ds);
 +                            if (findreq) {
 +                                /* Add to package dependencies. */
 +                                ds = rpmdsSingle(RPMTAG_REQUIRENAME,
 +                                            buf, "", RPMSENSE_FIND_REQUIRES);
 +                                xx = rpmdsMerge(&fc->requires, ds);
- 
--			    /* Add to file dependencies. */
--			    xx = rpmfcSaveArg(&fc->ddict,
--					rpmfcFileDep(t, fc->ix, ds));
--			    ds = rpmdsFree(ds);
++
 +                                /* Add to file dependencies. */
 +                                xx = rpmfcSaveArg(&fc->ddict,
 +                                            rpmfcFileDep(t, fc->ix, ds));
@@ -247,7 +245,7 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
  			}
  			auxoffset += aux->vna_next;
  		    }
-@@ -947,6 +1030,7 @@
+@@ -947,6 +1042,7 @@
  			/* Files with executable bit set only. */
  			if (fc->skipReq || !(st->st_mode & (S_IXUSR|S_IXGRP|S_IXOTH)))
  			    /*@innercontinue@*/ continue;
@@ -255,7 +253,7 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
  			/* Add to package requires. */
  			depsp = &fc->requires;
  			tagN = RPMTAG_REQUIRENAME;
-@@ -959,6 +1043,7 @@
+@@ -959,6 +1055,7 @@
  			/* Add to package provides. */
  			if (fc->skipProv)
  			    /*@innercontinue@*/ continue;
@@ -263,7 +261,7 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
  			depsp = &fc->provides;
  			tagN = RPMTAG_PROVIDENAME;
  			dsContext = RPMSENSE_FIND_PROVIDES;
-@@ -997,7 +1082,7 @@
+@@ -997,7 +1094,7 @@
      /*@=branchstate =uniondef @*/
  
      /* For DSO's, provide the basename of the file if DT_SONAME not found. */
@@ -272,20 +270,21 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
  	depsp = &fc->provides;
  	tagN = RPMTAG_PROVIDENAME;
  	dsContext = RPMSENSE_FIND_PROVIDES;
-@@ -1045,7 +1130,7 @@
+@@ -1045,7 +1142,8 @@
  }
  
  typedef struct rpmfcApplyTbl_s {
 -    int (*func) (rpmfc fc);
-+    int (*func) (rpmfc fc,int findprov,int findreq);
++    int (*func) (rpmfc fc, int findprov, int findreq,
++	regex_t *noautoprov, int noautoprov_c, regex_t *noautoreq, int noautoreq_c);
      int colormask;
  } * rpmfcApplyTbl;
  
-@@ -1058,6 +1143,109 @@
+@@ -1058,6 +1156,109 @@
      { NULL, 0 }
  };
  
-+int rpmfcFindRequiredPackages(rpmfc fc) 
++static int rpmfcFindRequiredPackages(rpmfc fc) 
 +{
 +    rpmts ts=NULL;
 +    const char * s;
@@ -391,65 +390,76 @@ diff -dur rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
  int rpmfcApply(rpmfc fc)
  {
      rpmfcApplyTbl fcat;
-@@ -1075,6 +1263,21 @@
+@@ -1075,6 +1276,29 @@
      int ix;
      int i;
      int xx;
 +    int j;
 +    int findprov;
 +    int findreq;
-+    regex_t *noautoreqfiles=NULL;
-+    int noautoreqfiles_c;
-+    regex_t *noautoprovfiles=NULL;
++    regex_t *noautoprovfiles = NULL;
 +    int noautoprovfiles_c;
++    regex_t *noautoreqfiles = NULL;
++    int noautoreqfiles_c;
++    regex_t *noautoprov = NULL;
++    int noautoprov_c;
++    regex_t *noautoreq = NULL;
++    int noautoreq_c;
 +    const char *buildroot;
 +    int buildroot_l;
 +
-+    buildroot=rpmExpand("%{buildroot}",NULL);
-+    buildroot_l=strlen(buildroot);
++    buildroot = rpmExpand("%{buildroot}",NULL);
++    buildroot_l = strlen(buildroot);
 +    
-+    noautoreqfiles=rpmfcExpandRegexps("%{_noautoreqfiles}",&noautoreqfiles_c);
-+    noautoprovfiles=rpmfcExpandRegexps("%{_noautoprovfiles}",&noautoprovfiles_c);
++    noautoprovfiles = rpmfcExpandRegexps("%{_noautoprovfiles}",&noautoprovfiles_c);
++    noautoreqfiles = rpmfcExpandRegexps("%{_noautoreqfiles}",&noautoreqfiles_c);
++    noautoprov = rpmfcExpandRegexps("%{_noautoprov}",&noautoprov_c);
++    noautoreq = rpmfcExpandRegexps("%{_noautoreq}",&noautoreq_c);
++    rpmMessage(RPMMESS_DEBUG, _("%i _noautoprov patterns.\n"),noautoprov_c);
++    rpmMessage(RPMMESS_DEBUG, _("%i _noautoreq patterns.\n"),noautoreq_c);
  
      /* Generate package and per-file dependencies. */
      for (fc->ix = 0; fc->fn[fc->ix] != NULL; fc->ix++) {
-@@ -1082,10 +1285,41 @@
+@@ -1082,10 +1306,44 @@
  	for (fcat = rpmfcApplyTable; fcat->func != NULL; fcat++) {
  	    if (!(fc->fcolor->vals[fc->ix] & fcat->colormask))
  		/*@innercontinue@*/ continue;
 -	    xx = (*fcat->func) (fc);
-+            findprov=1;
-+            findreq=1;
++	    findprov = 1;
++	    findreq = 1;
 +	    if (strncmp(fc->fn[fc->ix],buildroot,buildroot_l)==0) {/* sanity check */
-+		for(j=0;j<noautoprovfiles_c;j++) {
++		for(j = 0; j < noautoprovfiles_c; j++) {
 +		    if (!regexec(&noautoprovfiles[j],
-+			    fc->fn[fc->ix]+buildroot_l,0,NULL,0)) {
-+			rpmMessage(RPMMESS_NORMAL, 
++			    fc->fn[fc->ix] + buildroot_l, 0, NULL, 0)) {
++			rpmMessage(RPMMESS_NORMAL,
 +				_("skipping %s provides detection"
 +				" (matches noautoprovfiles pattern #%i)\n"),
-+				fc->fn[fc->ix],j);
-+			findprov=0;
++				fc->fn[fc->ix], j);
++			findprov = 0;
 +			break;
 +		    }
 +		}
-+		for(j=0;j<noautoreqfiles_c;j++) {
++		for(j = 0; j < noautoreqfiles_c; j++) {
 +		    if (!regexec(&noautoreqfiles[j],
-+			    fc->fn[fc->ix]+buildroot_l,0,NULL,0)) {
-+			rpmMessage(RPMMESS_NORMAL, 
++			    fc->fn[fc->ix] + buildroot_l, 0, NULL, 0)) {
++			rpmMessage(RPMMESS_NORMAL,
 +				_("skipping %s requires detection"
 +				" (matches noautoreqfiles pattern #%i)\n"),
-+				fc->fn[fc->ix],j);
-+			findreq=0;
++				fc->fn[fc->ix], j);
++			findreq = 0;
 +			break;
 +		    }
 +		}
 +	    }
-+	    xx = (*fcat->func) (fc,findprov,findreq);
++	    xx = (*fcat->func) (fc, findprov, findreq,
++		noautoprov, noautoprov_c, noautoreq, noautoreq_c);
  	}
      }
  
-+    noautoreqfiles=rpmfcFreeRegexps(noautoreqfiles,noautoreqfiles_c);
-+    noautoprovfiles=rpmfcFreeRegexps(noautoprovfiles,noautoprovfiles_c);
++    noautoprovfiles = rpmfcFreeRegexps(noautoprovfiles,noautoprovfiles_c);
++    noautoreqfiles = rpmfcFreeRegexps(noautoreqfiles,noautoreqfiles_c);
++    noautoprov = rpmfcFreeRegexps(noautoprov, noautoprov_c);
++    noautoreq = rpmfcFreeRegexps(noautoreq, noautoreq_c);
 +
 +    rpmfcFindRequiredPackages(fc);
 +
