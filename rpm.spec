@@ -64,7 +64,7 @@ Summary:	Header files and libraries
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne	
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne
 Group(pl):	Programowanie/Biblioteki
-Requires:	%{name} = %{version}
+Requires:	%{name}-libs = %{version}
 Requires:	%{name} = %{version}
 Requires:	popt-devel
 
@@ -80,7 +80,7 @@ ferramentas que precisem de conhecimento profundo de pacotes RPM.
 Summary(pl):	Bibliteki statyczne rpm-a
 Group:		Libraries/Development
 Group(pl):	Biblioteki/Programowanie
-Requires:	%{name} = %{version}
+Summary(pt_BR):	Bibliotecas estáticas para o desenvolvimento de aplicações RPM
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
 
@@ -165,8 +165,8 @@ if [ ! -L /var/lib/rpm ]; then
 	cp -ap /var/lib/rpm/* /var/state/rpm
 	rm -rf /var/lib/rpm
 	ln -sf /var/state/rpm /var/lib/rpm
-	echo "RPM Database moved from /var/lib/rpm to /var/state/rpm" >&2
-	echo "Run second time upgradeing rpm package for complete operation"
+	echo "RPM Database moved from /var/lib/rpm to /var/state/rpm" 1>&2
+	echo "Run second time upgradeing rpm package for complete operation" 1>&2
 	exit 1
 fi
 if [ ! -L /var/db/rpm ]; then
@@ -174,8 +174,8 @@ if [ ! -L /var/db/rpm ]; then
 	cp -ap /var/db/rpm/* /var/state/rpm
 	rm -rf /var/db/rpm
 	ln -sf /var/state/rpm /var/db/rpm
-	echo "RPM Database moved from /var/db/rpm to /var/state/rpm" >&2
-	echo "Run second time upgradeing rpm package for complete operation"
+	echo "RPM Database moved from /var/db/rpm to /var/state/rpm" 1>&2
+	echo "Run second time upgradeing rpm package for complete operation" 1>&2
 	exit 1
 fi
 
