@@ -2,9 +2,9 @@
 %configure { \
  if [ -n "$LINGUAS" ]; then unset LINGUAS; fi; \
  LDFLAGS="${LDFLAGS:-%{!?debug: -s}}" ; export LDFLAGS ; \
- CFLAGS="${CFLAGS:-%optflags}%{?debug: -g -O0}" ; export CFLAGS ; \
- CXXFLAGS="${CXXFLAGS:-%optflags}%{?debug: -g -O0}" ; export CXXFLAGS ; \
- FFLAGS="${FFLAGS:-%optflags}%{?debug: -g -O0}" ; export FFLAGS ; \
+ CFLAGS="${CFLAGS:-%{!?debug:%optflags}%{?debug: -g -O0}}" ; export CFLAGS ; \
+ CXXFLAGS="${CXXFLAGS:-%{!?debug:%optflags}%{?debug: -g -O0}}" ; export CXXFLAGS ; \
+ FFLAGS="${FFLAGS:-%{!?debug:%optflags}%{?debug: -g -O0}}" ; export FFLAGS ; \
  ./configure %{_target_platform} \
  	--prefix=%{_prefix} \
 	--exec-prefix=%{_exec_prefix} \
