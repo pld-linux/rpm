@@ -1,3 +1,8 @@
+#
+# TODO:
+# - learn find-perl-provides to use the __perl macro instead
+#   of /usr/bin/perl
+#
 %include        /usr/lib/rpm/macros.python
 %define	beecrypt_ver	2.2.0
 %define	beecrypt_rel	2
@@ -40,6 +45,7 @@ Source20:	%{name}-find-php-requires
 Source30:	builder
 Source31:	adapter.awk
 Source32:	pldnotify.awk
+Source33:	perl.prov
 Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-%{name}rc.patch
 Patch2:		%{name}-arch.patch
@@ -57,7 +63,6 @@ Patch13:	%{name}-python-macros.patch
 Patch14:	%{name}-perlprov-regonly.patch
 Patch15:	%{name}-4.1-branch.patch
 Patch16:	%{name}-drop-legacy-CLI.patch
-Patch17:	%{name}-perlprov-perl5.6.patch
 Patch18:	%{name}-gettext-in-header.patch
 Patch19:	%{name}-compress-doc.patch
 Patch20:	%{name}-lt14d.patch
@@ -510,7 +515,6 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch14 -p1
 %patch15 -p1
 %patch16 -p1
-%patch17 -p1
 %patch18 -p1
 %patch19 -p1
 %patch20 -p1
@@ -536,6 +540,7 @@ install %{SOURCE17} scripts/php.prov.in
 install %{SOURCE18} scripts/php.req.in
 install %{SOURCE19} scripts/find-php-provides
 install %{SOURCE20} scripts/find-php-requires
+install %{SOURCE32} scripts/perl.prov
 
 cd scripts;
 mv -f perl.req perl.req.in
