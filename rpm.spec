@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0
-Release:	2
+Release:	3
 Group:		Base
 Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
@@ -47,7 +47,7 @@ BuildRequires:	gettext-devel
 BuildRequires:	db1-devel >= 1.85
 BuildRequires:	db3-static >= 3.1.17
 BuildRequires:	zlib-static >= 1.1.4
-Conflicts:	glibc <= 2.2
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	rpm-libs
 %define __find_provides %{SOURCE4}
 %define _binary_payload w9.gzdio
