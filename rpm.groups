@@ -145,8 +145,10 @@ Daemons
 	[pl]:	Serwery
 
 Development
-        [de]:   Entwicklung
-        [pl]:   Programowanie
+        [de]:   	Entwicklung
+        [pl]:   	Programowanie
+	[pt_BR]:	Desenvolvimento
+	[es]:		Desarrollo
 
 Development/Debuggers
 	[de]:	Entwicklung/Debugger
@@ -238,8 +240,10 @@ Themes/Gtk
 	[pl]:	Motywy/Gtk
 
 X11
-	[de]:	X11
-	[pl]:	X11
+	[de]:		X11
+	[pl]:		X11
+	[pt_BR]:	X11
+	[es]:		X11
 
 X11/Applications
 	[de]:	X11/Applikationen
