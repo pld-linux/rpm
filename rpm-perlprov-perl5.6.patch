@@ -1,6 +1,24 @@
 diff -urN rpm-4.0.2/scripts/perl.prov rpm-4.0.2-grabba/scripts/perl.prov
---- rpm-4.0.2/scripts/perl.prov	Wed Feb 27 13:04:35 2002
-+++ rpm-4.0.2-grabba/scripts/perl.prov	Wed Feb 27 13:47:06 2002
+--- rpm-4.0.2/scripts/perl.prov	Sun Mar  3 15:04:17 2002
++++ rpm-4.0.2-grabba/scripts/perl.prov	Sun Mar  3 15:05:45 2002
+@@ -47,7 +47,7 @@
+ 
+ if ("@ARGV") {
+   foreach (@ARGV) {
+-     if (! m=(/(doc|usr/src)/|\.(so|gz|ph|pod|h|html)$)=) {
++     if (! m=(/(doc|usr/src)/|\.(so|gz|ph|pod|h|html|al|ix)$)=) {
+       process_file($_) if -f "$_";
+     }
+   }
+@@ -57,7 +57,7 @@
+   # contents of the file.
+ 
+   foreach (<>) {
+-     if (! m=(/(doc|usr/src)/|\.(so|gz|ph|pod|h|html)$)=) {
++     if (! m=(/(doc|usr/src)/|\.(so|gz|ph|pod|h|html|al|ix)$)=) {
+       process_file($_) if -f "$_";
+     }
+   }
 @@ -116,7 +116,7 @@
      # package name so we report all namespaces as if they were
      # provided packages (really ugly).
