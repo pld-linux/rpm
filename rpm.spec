@@ -2,6 +2,7 @@
 # TODO:
 # - consider using system libmagic not internal libfmagic
 #   (but internal has different method of passing output)
+# - after ac drop amd64 patch and make x86_64 generic arch + subarchs amd64 and ia32e
 #
 # Conditional build:
 %bcond_with	static	# build static rpmi (not supported at the moment)
@@ -587,8 +588,7 @@ cat %{SOURCE11} >> macros.in
 %patch24 -p1
 %patch25 -p1
 %patch26 -p1
-# DROP, amd64 is not the same thing as ia32e or x86_64 at least in terms of gcc optimizations
-#%patch27 -p1
+%patch27 -p1
 %patch28 -p1
 %patch29 -p1
 %patch30 -p1
