@@ -26,7 +26,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.53%{?with_distver:+distver}
+Release:	0.%{snap}.53.1%{?with_distver:+distver}
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -100,6 +100,7 @@ Patch45:	%{name}-no_version_check_in_obsoletes.patch
 Patch46:	%{name}-python24.patch
 Patch47:	%{name}-distver.patch
 Patch48:	%{name}-python24-dictiter.patch
+Patch49:	%{name}-patch-quote.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
