@@ -26,7 +26,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-%define	rel	0.%{snap}.8
+%define	rel	0.%{snap}.9
 Release:	%{rel}
 License:	GPL
 Group:		Base
@@ -80,6 +80,7 @@ Patch38:	%{name}-no-bin-env.patch
 Patch39:	%{name}-specflags.patch
 Patch40:	%{name}-magic-usesystem.patch
 Patch41:	%{name}-dontneedutils.patch
+Patch42:	%{name}-python-beecrypt.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -534,6 +535,7 @@ cat %{SOURCE20} >> macros.in
 %patch39 -p1
 %patch40 -p1
 %patch41 -p1
+%patch42 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
