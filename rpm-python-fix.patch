@@ -1,6 +1,6 @@
 --- rpm-4.3/python/Makefile.am.wiget	2003-05-06 17:44:12.000000000 +0200
 +++ rpm-4.3/python/Makefile.am	2003-06-10 13:22:13.859888700 +0200
-@@ -29,45 +29,34 @@
+@@ -29,45 +29,35 @@
  	rpmfi-py.h rpmmi-py.h rpmrc-py.h rpmte-py.h rpmts-py.h
  
  mylibs= \
@@ -11,6 +11,7 @@
 +	$(top_builddir)/lib/librpm.la \
 + 	$(top_builddir)/rpmdb/librpmdb.la \
 + 	$(top_builddir)/rpmio/librpmio.la \
++	-lbeecrypt \
 + 	-lpopt \
  	@WITH_LIBELF_LIB@
  
