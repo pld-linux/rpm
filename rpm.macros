@@ -26,7 +26,8 @@
 %rpmldflags	%{!?debug:-s}
 
 # kernel compiler
-%kgcc		egcs
+%kgcc		kgcc
+%kgcc_package	egcs
 
 #-----------------------------------------------------------------
 %configure2_13 { \
