@@ -17,6 +17,7 @@
 %define	reqdb_ver	4.1.25-1
 %define	reqpopt_ver	1.9
 %define	beecrypt_ver	3.0.0-0.20030610.1
+%define rpm_macros_rev	1.118
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -27,7 +28,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-%define	rel	0.%{snap}.16
+%define	rel	0.%{snap}.17
 Release:	%{rel}
 License:	GPL
 Group:		Base
@@ -422,6 +423,7 @@ Summary(pt_BR):	Scripts e programas executАveis usados para construir pacotes
 Summary(ru):	Скрипты и утилиты, необходимые для сборки пакетов
 Summary(uk):	Скрипти та утил╕ти, необх╕дн╕ для побудови пакет╕в
 Group:		Applications/File
+Provides:	rpmbuild(macros) = %{rpm_macros_rev}
 Requires(pre):	findutils
 Requires:	%{name} = %{version}
 Requires:	%{name}-utils = %{version}
