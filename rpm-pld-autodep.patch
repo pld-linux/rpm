@@ -1,5 +1,5 @@
 --- rpm-4.3/build/rpmfc.c.orig	Wed May 19 11:30:29 2004
-+++ rpm-4.3/build/rpmfc.c	Wed May 19 16:36:54 2004
++++ rpm-4.3/build/rpmfc.c	Wed May 19 17:03:01 2004
 @@ -1,6 +1,7 @@
  #include "system.h"
  
@@ -134,7 +134,7 @@
  	se++;
  
 -	if (is_executable) {
-+	if (is_executable && findreq) {
++	if (is_executable && findreq && !rpmfcMatchRegexps(noautoreq, noautoreq_c, s, 'R')) {
  	    /* Add to package requires. */
  	    ds = rpmdsSingle(RPMTAG_REQUIRENAME, s, "", RPMSENSE_FIND_REQUIRES);
  	    xx = rpmdsMerge(&fc->requires, ds);
@@ -188,12 +188,24 @@
  	/*@globals rpmGlobalMacroContext, h_errno, fileSystem, internalState @*/
  	/*@modifies fc, rpmGlobalMacroContext, fileSystem, internalState @*/
  {
-@@ -853,17 +944,19 @@
+@@ -844,26 +935,31 @@
+ 			 && !(filter_GLIBC_PRIVATE != 0
+ 				&& !strcmp(s, "GLIBC_PRIVATE")))
+ 			{
++			    int doauto;
++
+ 			    buf[0] = '\0';
+ 			    t = buf;
+ 			    t = stpcpy( stpcpy( stpcpy( stpcpy(t, soname), "("), s), ")");
+ 
++			    doauto = findprov && !rpmfcMatchRegexps(noautoprov, noautoprov_c, buf, 'P');
+ #if !defined(__alpha__)
+ 			    if (isElf64)
  				t = stpcpy(t, "(64bit)");
  #endif
  			    t++;
 +                            
-+                            if (findprov) {
++                            if (doauto) {
 +                                /* Add to package provides. */
 +                                ds = rpmdsSingle(RPMTAG_PROVIDES,
 +                                            buf, "", RPMSENSE_FIND_PROVIDES);
@@ -218,7 +230,20 @@
  			}
  			auxoffset += aux->vda_next;
  		    }
-@@ -914,15 +1007,17 @@
+@@ -904,25 +1000,30 @@
+ 			 && !(filter_GLIBC_PRIVATE != 0
+ 				&& !strcmp(s, "GLIBC_PRIVATE")))
+ 			{
++			    int doauto;
++
+ 			    buf[0] = '\0';
+ 			    t = buf;
+ 			    t = stpcpy( stpcpy( stpcpy( stpcpy(t, soname), "("), s), ")");
+ 
++			    doauto = findreq && !rpmfcMatchRegexps(noautoreq, noautoreq_c, buf, 'R');
+ #if !defined(__alpha__)
+ 			    if (isElf64)
+ 				t = stpcpy(t, "(64bit)");
  #endif
  			    t++;
  
@@ -231,7 +256,7 @@
 -			    xx = rpmfcSaveArg(&fc->ddict,
 -					rpmfcFileDep(t, fc->ix, ds));
 -			    ds = rpmdsFree(ds);
-+                            if (findreq) {
++                            if (doauto) {
 +                                /* Add to package dependencies. */
 +                                ds = rpmdsSingle(RPMTAG_REQUIRENAME,
 +                                            buf, "", RPMSENSE_FIND_REQUIRES);
@@ -245,15 +270,23 @@
  			}
  			auxoffset += aux->vna_next;
  		    }
-@@ -947,6 +1042,7 @@
+@@ -947,23 +1048,30 @@
  			/* Files with executable bit set only. */
  			if (fc->skipReq || !(st->st_mode & (S_IXUSR|S_IXGRP|S_IXOTH)))
  			    /*@innercontinue@*/ continue;
-+                        if (!findreq) continue;
++                        if (!findreq)
++			    continue;
  			/* Add to package requires. */
  			depsp = &fc->requires;
  			tagN = RPMTAG_REQUIRENAME;
-@@ -959,6 +1055,7 @@
+ 			dsContext = RPMSENSE_FIND_REQUIRES;
+ 			s = elf_strptr(elf, shdr->sh_link, dyn->d_un.d_val);
+ assert(s != NULL);
++			if(rpmfcMatchRegexps(noautoreq, noautoreq_c, s, 'R'))
++			    continue;
+ 			/*@switchbreak@*/ break;
+ 		    case DT_SONAME:
+ 			gotSONAME = 1;
  			/* Add to package provides. */
  			if (fc->skipProv)
  			    /*@innercontinue@*/ continue;
@@ -261,7 +294,14 @@
  			depsp = &fc->provides;
  			tagN = RPMTAG_PROVIDENAME;
  			dsContext = RPMSENSE_FIND_PROVIDES;
-@@ -997,7 +1094,7 @@
+ 			s = elf_strptr(elf, shdr->sh_link, dyn->d_un.d_val);
+ assert(s != NULL);
++			if(rpmfcMatchRegexps(noautoprov, noautoprov_c, s, 'P'))
++			    continue;
+ 			/*@switchbreak@*/ break;
+ 		    }
+ 		    if (s == NULL)
+@@ -997,7 +1105,7 @@
      /*@=branchstate =uniondef @*/
  
      /* For DSO's, provide the basename of the file if DT_SONAME not found. */
@@ -270,7 +310,24 @@
  	depsp = &fc->provides;
  	tagN = RPMTAG_PROVIDENAME;
  	dsContext = RPMSENSE_FIND_PROVIDES;
-@@ -1045,7 +1142,8 @@
+@@ -1015,6 +1123,8 @@
+ 	t = stpcpy(t, s);
+ /*@=nullpass@*/
+ 
++      if(!rpmfcMatchRegexps(noautoprov, noautoprov_c, buf, 'P'))
++
+ #if !defined(__alpha__)
+ 	if (isElf64)
+ 	    t = stpcpy(t, "()(64bit)");
+@@ -1032,6 +1142,7 @@
+ /*@=boundswrite@*/
+ 
+ 	ds = rpmdsFree(ds);
++      }
+     }
+ 
+ exit:
+@@ -1045,7 +1156,8 @@
  }
  
  typedef struct rpmfcApplyTbl_s {
@@ -280,7 +337,7 @@
      int colormask;
  } * rpmfcApplyTbl;
  
-@@ -1058,6 +1156,109 @@
+@@ -1058,6 +1170,109 @@
      { NULL, 0 }
  };
  
@@ -390,7 +447,7 @@
  int rpmfcApply(rpmfc fc)
  {
      rpmfcApplyTbl fcat;
-@@ -1075,6 +1276,29 @@
+@@ -1075,6 +1290,29 @@
      int ix;
      int i;
      int xx;
@@ -420,7 +477,7 @@
  
      /* Generate package and per-file dependencies. */
      for (fc->ix = 0; fc->fn[fc->ix] != NULL; fc->ix++) {
-@@ -1082,10 +1306,44 @@
+@@ -1082,10 +1320,44 @@
  	for (fcat = rpmfcApplyTable; fcat->func != NULL; fcat++) {
  	    if (!(fc->fcolor->vals[fc->ix] & fcat->colormask))
  		/*@innercontinue@*/ continue;
