@@ -1,8 +1,8 @@
 Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
-Version:	3.0.4
-Release:	13
+Version:	3.0.5
+Release:	1
 Group:		Base
 Group(pl):	Podstawowe
 License:	GPL
@@ -19,11 +19,10 @@ Patch4:		rpm-rpmpopt.patch
 Patch5:		rpm-find-provides.patch
 Patch6:		rpm-perl-macros.patch
 Patch7:		rpm-find-lang-all-name.patch
-Patch8:		rpm-bzip2.patch
-Patch9:		rpm-file3.31.patch
-Patch10:	rpm-find-lang-name-matching.patch
-Patch11:	rpm-exclude-examples-doc.patch
-PAtch12:	rpm-v4support.patch
+Patch8:		rpm-file3.31.patch
+Patch9:		rpm-find-lang-name-matching.patch
+Patch10:	rpm-exclude-examples-doc.patch
+Patch11:	rpm-db2.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	bzip2-static >= 1.0.1
@@ -158,7 +157,6 @@ construir pacotes usando o RPM.
 %patch7 -p1
 %patch10 -p1
 %patch11 -p1
-%patch12 -p1
 %patch31 -p1
 install %{SOURCE2} macros.pld.in
 install %{SOURCE13} macros.python.in
@@ -299,7 +297,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files static
 %attr(755,root,root) %{_bindir}/*
-%attr(755,root,root) %{_libdir}/rpm/freshen.sh
 %files utils
 %defattr(644,root,root,755)
 %{_mandir}/man8/rpm2cpio.8*
