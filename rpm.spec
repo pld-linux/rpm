@@ -452,7 +452,7 @@ Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
 Requires:	binutils
-Requires:	chrpath
+Requires:	chrpath >= 0.10-4
 Requires:	diffutils
 Requires:	file >= 4.01
 Requires:	fileutils
