@@ -314,7 +314,7 @@
  	t = stpcpy(t, s);
  /*@=nullpass@*/
  
-+      if(!rpmfcMatchRegexps(noautoprov, noautoprov_c, buf, 'P'))
++      if(!rpmfcMatchRegexps(noautoprov, noautoprov_c, buf, 'P')) {
 +
  #if !defined(__alpha__)
  	if (isElf64)
