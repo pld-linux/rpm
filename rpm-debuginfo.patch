@@ -1,6 +1,6 @@
 diff -urN rpm-4.3.org/macros.in rpm-4.3/macros.in
---- rpm-4.3.org/macros.in	2004-05-13 00:35:16.239893312 +0200
-+++ rpm-4.3/macros.in	2004-05-13 00:41:19.778627024 +0200
+--- rpm-4.3.org/macros.in	2004-05-20 22:09:48.582353920 +0200
++++ rpm-4.3/macros.in	2004-05-20 22:12:42.086977208 +0200
 @@ -118,15 +118,20 @@
  %debug_package \
  %ifnarch noarch\
@@ -16,25 +16,26 @@ diff -urN rpm-4.3.org/macros.in rpm-4.3/macros.in
  This package provides debug information for package %{name}.\
  Debug information is useful when developing applications that use this\
  package or when debugging this package.\
+-%files debug -f debugfiles.list\
 +%description debuginfo -l pl\
 +Ten pakiet dostarcza informacje dla debuggera dla pakietu %{name}.\
 +Informacje te s± przydatne przy rozwijaniu aplikacji u¿ywaj±cych tego\
 +pakietu oraz przy odpluskwianiu samego pakietu.\
--%files debug -f debugfiles.list\
 +%files debuginfo -f debugfiles.list\
  %defattr(-,root,root)\
  %endif\
  %{nil}
-@@ -844,7 +849,11 @@
- %__spec_install_pre	%{___build_pre}
- %__spec_install_body	%{___build_body}
- %__spec_install_post\
--%{?__debug_package:%{__debug_install_post}}\
-+%if %{?__debug_package:1}%{!?__debug_package:0}\
-+%if %{__debug_package}\
-+%{__debug_install_post}\
-+%endif\
-+%endif\
- %{__arch_install_post}\
- %{__os_install_post}\
+@@ -1247,7 +1252,12 @@
+ unset DISPLAY ||:\
  %{nil}
+ 
+-%install %{?_enable_debug_packages:%{?buildsubdir:%{debug_package}}}\
++%install \
++%if %{?_enable_debug_packages:1}%{!?_enable_debug_packages:0}\
++%if %{_enable_debug_packages}\
++%{?buildsubdir:%{debug_package}}\
++%endif\
++%endif\
+ %%install\
+ LANG=C\
+ export LANG\
