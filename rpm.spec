@@ -25,7 +25,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.2
 Version:	%{ver}
-%define	rel	0.%{snap}.3
+%define	rel	0.%{snap}.4
 Release:	%{rel}
 %define	beecrypt_rel	%{ver}_%{rel}
 License:	GPL
@@ -809,6 +809,7 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmk
 %attr(755,root,root) %{_libdir}/rpm/rpmq
+%attr(755,root,root) %{_libdir}/rpm/rpmv
 %attr(755,root,root) %{_libdir}/rpm/tgpg
 %attr(755,root,root) %{_libdir}/rpm/rpmdb_loadcvt
 %{_libdir}/rpm/magic
