@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.3
-Release:	19
+Release:	20
 Group:		Base
 Group(pl):	Podstawowe
 Copyright:	GPL
@@ -18,6 +18,7 @@ Patch4:		rpm-pld.patch
 Patch5:		rpm-rpmpopt.patch
 Patch6:		rpm-findlangs.patch
 Patch7:		rpm-perl-macros.patch
+Patch8:		rpm-nodeps.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	bzip2-static
@@ -120,6 +121,7 @@ construir pacotes usando o RPM.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 %patch31 -p1
 install %{SOURCE3} macros.pld.in
 install %{SOURCE13} macros.python.in
