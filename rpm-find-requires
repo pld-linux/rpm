@@ -1,0 +1,104 @@
+#!/bin/sh
+
+cd `rpm --eval %{_builddir}`
+
+# note this works for both a.out and ELF executables
+# it also auto-generates requirment lines for shell scripts
+
+ulimit -c 0
+
+filelist=`sed "s/['\"]/\\\&/g"`
+for i in /examples/ /doc/; do
+filelist=`echo $filelist | sed "s!\<[^[:space:]]*$i[^[:space:]]*[[:space:]]*!!g"`
+done
+if [ -f __rpm_noautoreqfiles ] ; then
+	for i in `cat __rpm_noautoreqfiles`; do
+		filelist=`echo $filelist | sed "s![[:space:]]*$i[[:space:]]*!!g"`
+	done
+fi
+exelist=`echo $filelist | xargs -r file | grep ":.*executable" |grep -v ":.*script"| cut -d: -f1 `
+elfexelist=`echo $exelist | xargs -r file | egrep  ":.* ELF" | cut -d: -f1 `
+aoutexelist=`echo $exelist | xargs -r file | egrep  -v ":.* ELF" | cut -d: -f1 `
+scriptlist=`echo $filelist | xargs -r file | egrep ":.* (commands|script) .*executable" | cut -d: -f1 `
+liblist=`echo $filelist | xargs -r file | grep ":.*shared object" | cut -d : -f1 `
+elfliblist=`echo $liblist | xargs -r file | egrep  ":.* ELF" | cut -d: -f1 `
+aoutliblist=`echo $liblist | xargs -r file | egrep  -v ":.* ELF" | cut -d: -f1 `
+
+aoutexerequires=`for f in $aoutexelist; do
+    if [ -x $f ]; then
+	ldd $f | awk '/=>/ { print $1 }'
+    fi
+done | sort -u | sed "s/['\"]/\\\&/g" | xargs -r -n 1 basename | grep -v 'libNoVersion.so' | sort -u
+`
+
+elfexerequires=`for f in $elfexelist; do 
+    if [ -x $f ]; then
+	objdump -p $f|awk '/NEEDED/ {print $2}'
+    fi
+done | sed "s/['\"]/\\\&/g" | grep -v 'libNoVersion.so' | sort -u
+`
+		
+aoutlibrequires=`for f in $aoutliblist; do
+    ldd $f | awk '/=>/ { print $1 }'
+done | sort -u | sed "s/['\"]/\\\&/g" | xargs -r -n 1 basename | grep -v 'libNoVersion.so' | sort -u
+`
+
+elflibrequires=`for f in $elfliblist; do
+	objdump -p $f|awk '/NEEDED/ {print $2}'
+done | sed "s/['\"]/\\\&/g" | grep -v 'libNoVersion.so' | sort -u
+`
+
+for f in $scriptlist; do
+    if [ -x $f ]; then
+	head -1 $f | sed -ne '/^\#\!/p' | sed -e 's/^\#\![	]*//' | cut -d" " -f1
+    fi
+done | sort -u
+
+for f in $liblist $exelist ; do
+    objdump -p $f | awk '
+	BEGIN { START=0; LIBNAME=""; }
+	/Version References:/ { START=1; }
+	/required from/ && (START==1) {
+	    sub(/:/, "", $3);
+	    LIBNAME=$3;
+	}
+	(START==1) && (LIBNAME!="") && ($4~/^GLIBC_*/) { print LIBNAME "(" $4 ")"; }
+	/^$/ { START=0; }
+    '
+done | sort -u
+# Generate name of rpm package provides library
+
+allrequires="$aoutexerequires
+$elfexerequires
+$aoutlibrequires
+$elflibrequires"
+
+if [ -f __rpm_noautoreq ] ; then
+	for i in `cat __rpm_noautoreq`; do
+		allrequires=`echo $allrequires | sed "s!\<$i[[:space:]]*!!g"`
+	done
+fi
+
+# Delete all the provided stuff
+
+echo $filelist|/usr/lib/rpm/find-provides|awk '
+{
+	if (FNR!=1)
+		printf "&& "
+	printf "$0 !~ \"^" $0 "$\" "
+}
+END {
+	print "{ print $0 }"
+}' > .findreq_delprovs_$$
+notprovreqs=`echo "$allrequires"|awk -f .findreq_delprovs_$$`
+rm .findreq_delprovs_$$
+echo "$notprovreqs" | sort -u
+
+if [ -f __rpm_noautoreqdep ] ; then
+	for i in `cat __rpm_noautoreqdep`; do
+		notprovreqs=`echo $notprovreqs | sed "s!\<$i[[:space:]]*!!g"`
+	done
+fi
+
+echo "$notprovreqs" | LC_ALL=C xargs -r -- rpm -q --whatprovides --qf "%{NAME}\n"  2>/dev/null \
+	| grep -v "no package provides" | sort -u

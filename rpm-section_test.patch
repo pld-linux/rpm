@@ -1,0 +1,319 @@
+diff -ur rpm-4.0.2/build/build.c rpm-4.0.2-test/build/build.c
+--- rpm-4.0.2/build/build.c	Tue Jan 16 00:10:04 2001
++++ rpm-4.0.2-test/build/build.c	Fri May 24 20:46:26 2002
+@@ -81,6 +81,12 @@
+ 	mTemplate = "%{__spec_build_template}";
+ 	mPost = "%{__spec_build_post}";
+ 	break;
++      case RPMBUILD_TEST:
++	name = "%test";
++	sb = spec->test;
++	mTemplate = "%{__spec_build_template}";
++	mPost = "%{__spec_build_post}";
++	break;
+       case RPMBUILD_INSTALL:
+ 	name = "%install";
+ 	sb = spec->install;
+@@ -266,6 +272,10 @@
+ 	    (rc = doScript(spec, RPMBUILD_BUILD, NULL, NULL, test)))
+ 		goto exit;
+ 
++	if ((what & RPMBUILD_TEST) &&
++	    (rc = doScript(spec, RPMBUILD_TEST, NULL, NULL, test)))
++		goto exit;
++	
+ 	if ((what & RPMBUILD_INSTALL) &&
+ 	    (rc = doScript(spec, RPMBUILD_INSTALL, NULL, NULL, test)))
+ 		goto exit;
+diff -ur rpm-4.0.2/build/parseBuildInstallClean.c rpm-4.0.2-test/build/parseBuildInstallClean.c
+--- rpm-4.0.2/build/parseBuildInstallClean.c	Tue Jan 16 00:10:04 2001
++++ rpm-4.0.2-test/build/parseBuildInstallClean.c	Fri May 24 20:46:26 2002
+@@ -22,6 +22,9 @@
+     } else if (parsePart == PART_CLEAN) {
+ 	sbp = &(spec->clean);
+ 	name = "%clean";
++    } else if (parsePart == PART_TEST) {
++	sbp = &(spec->test);
++	name = "%test";
+     }
+     
+     if (*sbp != NULL) {
+diff -ur rpm-4.0.2/build/parsePreamble.c rpm-4.0.2-test/build/parsePreamble.c
+--- rpm-4.0.2/build/parsePreamble.c	Tue Jan 16 00:10:04 2001
++++ rpm-4.0.2-test/build/parsePreamble.c	Fri May 24 20:46:26 2002
+@@ -122,6 +122,7 @@
+     { "prep",		RPMSENSE_SCRIPT_PREP },
+     { "build",		RPMSENSE_SCRIPT_BUILD },
+     { "install",	RPMSENSE_SCRIPT_INSTALL },
++    { "test",		RPMSENSE_SCRIPT_TEST },
+     { "clean",		RPMSENSE_SCRIPT_CLEAN },
+     { NULL, 0 }
+ };
+diff -ur rpm-4.0.2/build/parseSpec.c rpm-4.0.2-test/build/parseSpec.c
+--- rpm-4.0.2/build/parseSpec.c	Fri May 24 20:47:45 2002
++++ rpm-4.0.2-test/build/parseSpec.c	Fri May 24 20:46:26 2002
+@@ -22,6 +22,7 @@
+     { PART_PREP,          0, "%prep"},
+     { PART_BUILD,         0, "%build"},
+     { PART_INSTALL,       0, "%install"},
++    { PART_TEST,          0, "%test"},
+     { PART_CLEAN,         0, "%clean"},
+     { PART_PREUN,         0, "%preun"},
+     { PART_POSTUN,        0, "%postun"},
+@@ -427,6 +428,7 @@
+ 	    break;
+ 	  case PART_BUILD:
+ 	  case PART_INSTALL:
++	  case PART_TEST:
+ 	  case PART_CLEAN:
+ 	    parsePart = parseBuildInstallClean(spec, parsePart);
+ 	    break;
+diff -ur rpm-4.0.2/build/rpmbuild.h rpm-4.0.2-test/build/rpmbuild.h
+--- rpm-4.0.2/build/rpmbuild.h	Fri May 24 20:47:45 2002
++++ rpm-4.0.2-test/build/rpmbuild.h	Fri May 24 20:46:26 2002
+@@ -21,15 +21,16 @@
+ typedef enum rpmBuildFlags_e {
+     RPMBUILD_PREP	= (1 << 0),	/*!< Execute %%prep. */
+     RPMBUILD_BUILD	= (1 << 1),	/*!< Execute %%build. */
+-    RPMBUILD_INSTALL	= (1 << 2),	/*!< Execute %%install. */
+-    RPMBUILD_CLEAN	= (1 << 3),	/*!< Execute %%clean. */
+-    RPMBUILD_FILECHECK	= (1 << 4),	/*!< Check %%files manifest. */
+-    RPMBUILD_PACKAGESOURCE = (1 << 5),	/*!< Create source package. */
+-    RPMBUILD_PACKAGEBINARY = (1 << 6),	/*!< Create binary package(s). */
+-    RPMBUILD_RMSOURCE	= (1 << 7),	/*!< Remove source(s) and patch(s). */
+-    RPMBUILD_RMBUILD	= (1 << 8),	/*!< Remove build sub-tree. */
+-    RPMBUILD_STRINGBUF	= (1 << 9),	/*!< only for doScript() */
+-    RPMBUILD_RMSPEC	= (1 << 10)	/*!< Remove spec file. */
++    RPMBUILD_TEST	= (1 << 2),	/*!< Execute %%test. */
++    RPMBUILD_INSTALL	= (1 << 3),	/*!< Execute %%install. */
++    RPMBUILD_CLEAN	= (1 << 4),	/*!< Execute %%clean. */
++    RPMBUILD_FILECHECK	= (1 << 5),	/*!< Check %%files manifest. */
++    RPMBUILD_PACKAGESOURCE = (1 << 6),	/*!< Create source package. */
++    RPMBUILD_PACKAGEBINARY = (1 << 7),	/*!< Create binary package(s). */
++    RPMBUILD_RMSOURCE	= (1 << 8),	/*!< Remove source(s) and patch(s). */
++    RPMBUILD_RMBUILD	= (1 << 9),	/*!< Remove build sub-tree. */
++    RPMBUILD_STRINGBUF	= (1 << 10),	/*!< only for doScript() */
++    RPMBUILD_RMSPEC	= (1 << 11)	/*!< Remove spec file. */
+ } rpmBuildFlags;
+ 
+ #include <ctype.h>
+@@ -49,21 +50,22 @@
+     PART_PREAMBLE	= 1,	/*!< */
+     PART_PREP		= 2,	/*!< */
+     PART_BUILD		= 3,	/*!< */
+-    PART_INSTALL	= 4,	/*!< */
+-    PART_CLEAN		= 5,	/*!< */
+-    PART_FILES		= 6,	/*!< */
+-    PART_PRE		= 7,	/*!< */
+-    PART_POST		= 8,	/*!< */
+-    PART_PREUN		= 9,	/*!< */
+-    PART_POSTUN		= 10,	/*!< */
+-    PART_DESCRIPTION	= 11,	/*!< */
+-    PART_CHANGELOG	= 12,	/*!< */
+-    PART_TRIGGERIN	= 13,	/*!< */
+-    PART_TRIGGERUN	= 14,	/*!< */
+-    PART_VERIFYSCRIPT	= 15,	/*!< */
+-    PART_BUILDARCHITECTURES= 16,/*!< */
+-    PART_TRIGGERPOSTUN	= 17,	/*!< */
+-    PART_LAST		= 18	/*!< */
++    PART_TEST		= 4,	/*!< */
++    PART_INSTALL	= 5,	/*!< */
++    PART_CLEAN		= 6,	/*!< */
++    PART_FILES		= 7,	/*!< */
++    PART_PRE		= 8,	/*!< */
++    PART_POST		= 9,	/*!< */
++    PART_PREUN		= 10,	/*!< */
++    PART_POSTUN	= 11,	/*!< */
++    PART_DESCRIPTION	= 12,	/*!< */
++    PART_CHANGELOG	= 13,	/*!< */
++    PART_TRIGGERIN	= 14,	/*!< */
++    PART_TRIGGERUN	= 15,	/*!< */
++    PART_VERIFYSCRIPT	= 16,	/*!< */
++    PART_BUILDARCHITECTURES= 17,/*!< */
++    PART_TRIGGERPOSTUN	= 18,	/*!< */
++    PART_LAST		= 19	/*!< */
+ } rpmParseState;
+ 
+ #define STRIP_NOTHING             0
+diff -ur rpm-4.0.2/build/rpmspec.h rpm-4.0.2-test/build/rpmspec.h
+--- rpm-4.0.2/build/rpmspec.h	Thu Jan 11 15:15:15 2001
++++ rpm-4.0.2-test/build/rpmspec.h	Fri May 24 20:46:26 2002
+@@ -131,6 +131,7 @@
+ /*@dependent@*/ struct MacroContext *macros;
+ 
+ /*@only@*/ StringBuf prep;		/*!< %prep scriptlet. */
++/*@only@*/ StringBuf test;		/*!< %test scriptlet. */
+ /*@only@*/ StringBuf build;		/*!< %build scriptlet. */
+ /*@only@*/ StringBuf install;		/*!< %install scriptlet. */
+ /*@only@*/ StringBuf clean;		/*!< %clean scriptlet. */
+diff -ur rpm-4.0.2/lib/poptBT.c rpm-4.0.2-test/lib/poptBT.c
+--- rpm-4.0.2/lib/poptBT.c	Wed Jan  3 20:29:11 2001
++++ rpm-4.0.2-test/lib/poptBT.c	Fri May 24 20:46:26 2002
+@@ -35,6 +35,7 @@
+ #define	POPT_BL			0x626c
+ #define	POPT_BP			0x6270
+ #define	POPT_BS			0x6273
++#define	POPT_BT			0x6274
+ #define	POPT_TA			0x7461
+ #define	POPT_TB			0x7462
+ #define	POPT_TC			0x7463
+@@ -42,6 +43,7 @@
+ #define	POPT_TL			0x746c
+ #define	POPT_TP			0x7470
+ #define	POPT_TS			0x7473
++#define	POPT_TT			0x7474
+ 
+ extern int _noDirTokens;
+ static int force = 0;
+@@ -67,12 +69,14 @@
+     case POPT_BL:
+     case POPT_BP:
+     case POPT_BS:
++    case POPT_BT:
+     case POPT_TA:
+     case POPT_TB:
+     case POPT_TC:
+     case POPT_TI:
+     case POPT_TL:
+     case POPT_TP:
++    case POPT_TT:
+     case POPT_TS:
+ 	if (rba->buildMode == ' ') {
+ 	    rba->buildMode = (opt->val >> 8) & 0xff;
+@@ -121,6 +125,9 @@
+  { "bc", 0, POPT_ARGFLAG_ONEDASH, 0, POPT_BC,
+ 	N_("build through %build (%prep, then compile) from <specfile>"),
+ 	N_("<specfile>") },
++ { "bt", 0, POPT_ARGFLAG_ONEDASH, 0, POPT_BT,
++	N_("build through %test (%prep, %build then test) from <specfile>"),
++	N_("<specfile>") },
+  { "bi", 0, POPT_ARGFLAG_ONEDASH, 0, POPT_BI,
+ 	N_("build through %install (%prep, %build, then install) from <specfile>"),
+ 	N_("<specfile>") },
+@@ -143,6 +150,9 @@
+  { "tc", 0, POPT_ARGFLAG_ONEDASH, 0, POPT_TC,
+ 	N_("build through %build (%prep, then compile) from <tarball>"),
+ 	N_("<tarball>") },
++ { "tt", 0, POPT_ARGFLAG_ONEDASH, 0, POPT_BT,
++	N_("build through %test (%prep, %build then test) from <tarball>"),
++	N_("<tarball>") },
+  { "ti", 0, POPT_ARGFLAG_ONEDASH, 0, POPT_TI,
+ 	N_("build through %install (%prep, %build, then install) from <tarball>"),
+ 	N_("<tarball>") },
+diff -ur rpm-4.0.2/lib/rpmlib.h rpm-4.0.2-test/lib/rpmlib.h
+--- rpm-4.0.2/lib/rpmlib.h	Fri May 24 20:47:45 2002
++++ rpm-4.0.2-test/lib/rpmlib.h	Fri May 24 20:46:26 2002
+@@ -356,10 +356,11 @@
+     RPMSENSE_MULTILIB	= (1 << 19),
+     RPMSENSE_SCRIPT_PREP = (1 << 20),	/*!< %prep build dependency. */
+     RPMSENSE_SCRIPT_BUILD = (1 << 21),	/*!< %build build dependency. */
+-    RPMSENSE_SCRIPT_INSTALL = (1 << 22),/*!< %install build dependency. */
+-    RPMSENSE_SCRIPT_CLEAN = (1 << 23),	/*!< %clean build dependency. */
+-    RPMSENSE_RPMLIB	= ((1 << 24) | RPMSENSE_PREREQ), /*!< rpmlib(feature) dependency. */
+-    RPMSENSE_TRIGGERPREIN = (1 << 25)	/*!< @todo Implement %triggerprein. */
++    RPMSENSE_SCRIPT_TEST = (1 << 22),	/*!< %test build dependency. */
++    RPMSENSE_SCRIPT_INSTALL = (1 << 23),/*!< %install build dependency. */
++    RPMSENSE_SCRIPT_CLEAN = (1 << 24),	/*!< %clean build dependency. */
++    RPMSENSE_RPMLIB	= ((1 << 25) | RPMSENSE_PREREQ), /*!< rpmlib(feature) dependency. */
++    RPMSENSE_TRIGGERPREIN = (1 << 26)	/*!< @todo Implement %triggerprein. */
+ 
+ } rpmsenseFlags;
+ 
+@@ -381,6 +382,7 @@
+     RPMSENSE_FIND_REQUIRES | \
+     RPMSENSE_SCRIPT_PREP | \
+     RPMSENSE_SCRIPT_BUILD | \
++    RPMSENSE_SCRIPT_TEST | \
+     RPMSENSE_SCRIPT_INSTALL | \
+     RPMSENSE_SCRIPT_CLEAN | \
+     RPMSENSE_RPMLIB )
+diff -ur rpm-4.0.2/rpmqv.c rpm-4.0.2-test/rpmqv.c
+--- rpm-4.0.2/rpmqv.c	Mon Mar 12 19:20:29 2001
++++ rpm-4.0.2-test/rpmqv.c	Fri May 24 20:46:26 2002
+@@ -1316,7 +1316,7 @@
+ 	if (!poptPeekArg(optCon))
+ 	    argerror(_("no packages files given for rebuild"));
+ 
+-	ba->buildAmount = RPMBUILD_PREP | RPMBUILD_BUILD | RPMBUILD_INSTALL;
++	ba->buildAmount = RPMBUILD_PREP | RPMBUILD_BUILD | RPMBUILD_TEST | RPMBUILD_INSTALL;
+ 	if (bigMode == MODE_REBUILD) {
+ 	    ba->buildAmount |= RPMBUILD_PACKAGEBINARY;
+ 	    ba->buildAmount |= RPMBUILD_RMSOURCE;
+@@ -1358,6 +1358,11 @@
+ 	    if ((ba->buildChar == 'i') && ba->shortCircuit)
+ 		break;
+ 	    /*@fallthrough@*/
++	  case 't':
++	    ba->buildAmount |= RPMBUILD_TEST;
++	    if ((ba->buildChar == 't') && ba->shortCircuit)
++		break;
++	    /*@fallthrough@*/
+ 	  case 'c':
+ 	    ba->buildAmount |= RPMBUILD_BUILD;
+ 	    if ((ba->buildChar == 'c') && ba->shortCircuit)
+--- rpm-4.0.2.new/build/spec.c~	Tue Jan 16 00:10:04 2001
++++ rpm-4.0.2.new/build/spec.c	Fri May 24 22:07:42 2002
+@@ -415,6 +415,7 @@
+     spec->rootURL = NULL;
+     spec->prep = NULL;
+     spec->build = NULL;
++    spec->test = NULL;
+     spec->install = NULL;
+     spec->clean = NULL;
+ 
+@@ -460,6 +461,7 @@
+ 
+     freeStringBuf(spec->prep);	spec->prep = NULL;
+     freeStringBuf(spec->build);	spec->build = NULL;
++    freeStringBuf(spec->test);	spec->test = NULL;
+     freeStringBuf(spec->install); spec->install = NULL;
+     freeStringBuf(spec->clean);	spec->clean = NULL;
+ 
+--- rpm-4.0.2.new/macros.in~	Fri May 24 21:10:35 2002
++++ rpm-4.0.2.new/macros.in	Fri May 24 22:11:11 2002
+@@ -408,6 +408,16 @@
+ #%{__spec_autodep_post}\
+ #%{nil}
+ 
++%__spec_test_shell	%{___build_shell}
++%__spec_test_args	%{___build_args}
++%__spec_test_cmd	%{___build_cmd}
++%__spec_test_pre	%{___build_pre}
++%__spec_test_body	%{___build_body}
++%__spec_test_post	%{___build_post}
++%__spec_test_template	#!%{__spec_test_shell}\
++%{__spec_test_pre}\
++%{nil}
++
+ %__spec_clean_shell	%{___build_shell}
+ %__spec_clean_args	%{___build_args}
+ %__spec_clean_cmd	%{___build_cmd}
+--- rpm-4.0.2.new/build.c~	Tue Jan 16 00:10:04 2001
++++ rpm-4.0.2.new/build.c	Fri May 24 22:02:03 2002
+@@ -235,7 +235,7 @@
+     
+     /* Parse the spec file */
+ #define	_anyarch(_f)	\
+-(((_f)&(RPMBUILD_PREP|RPMBUILD_BUILD|RPMBUILD_INSTALL|RPMBUILD_PACKAGEBINARY)) == 0)
++(((_f)&(RPMBUILD_PREP|RPMBUILD_BUILD|RPMBUILD_TEST|RPMBUILD_INSTALL|RPMBUILD_PACKAGEBINARY)) == 0)
+     if (parseSpec(&spec, specURL, ba->rootdir, buildRootURL, 0, passPhrase,
+ 		cookie, _anyarch(buildAmount), ba->force)) {
+ 	rc = 1;
+--- rpm-4.0.2/rpmpopt.in~	Fri May 24 21:16:31 2002
++++ rpm-4.0.2/rpmpopt.in	Fri May 24 22:19:33 2002
+@@ -133,6 +133,7 @@
+ rpm	exec --bl		rpmb -bl
+ rpm	exec --ba		rpmb -ba
+ rpm	exec --bb		rpmb -bb
++rpm	exec --bt		rpmb -bt
+ rpm	exec --bs		rpmb -bs
+ rpm	exec --tp		rpmb -tp
+ rpm	exec --tc		rpmb -tc
+@@ -140,6 +141,7 @@
+ rpm	exec --tl		rpmb -tl
+ rpm	exec --ta		rpmb -ta
+ rpm	exec --tb		rpmb -tb
++rpm	exec --tt		rpmb -tt
+ rpm	exec --ts		rpmb -ts
+ rpm	exec --rebuild		rpmb --rebuild
+ rpm	exec --recompile	rpmb --recompile

@@ -1,0 +1,12 @@
+diff -ur rpm-4.0.2/rpmqv.c rpm-4.0.2-test/rpmqv.c
+--- rpm-4.0.2/rpmqv.c	Mon Mar 12 19:20:29 2001
++++ rpm-4.0.2-test/rpmqv.c	Fri May 24 20:46:26 2002
+@@ -1358,6 +1358,8 @@
+ 	  case 'b':
+ 	    ba->buildAmount |= RPMBUILD_PACKAGEBINARY;
+ 	    ba->buildAmount |= RPMBUILD_CLEAN;
++	    if ((ba->buildChar == 'b') && ba->shortCircuit)
++		break;
+ 	    /*@fallthrough@*/
+ 	  case 'i':
+ 	    ba->buildAmount |= RPMBUILD_INSTALL;
