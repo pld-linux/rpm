@@ -6,7 +6,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.4
-Release:	0.70
+Release:	0.71
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -272,6 +272,53 @@ RPMs library.
 %description lib -l pl
 Biblioteki RPMa.
 
+%description -n beecrypt-static -l pl
+Statyczna wersja biblioteki kryptograficznej.
+
+%package build
+Summary:        Scripts for building binary RPM packages
+Summary(de):    Scripts fürs Bauen binärer RPM-Pakete
+Summary(pl):    Skrypty pomocnicze do budowania binarnych RPM-ów
+Summary(pt_BR): Scripts e programas executáveis usados para construir pacotes
+Group:          Applications/File
+Requires:       %{name} = %{version}
+Requires:       /bin/id
+Requires:       awk
+Requires:       binutils
+Requires:       diffutils
+Requires:       file >= 3.31
+Requires:       fileutils
+Requires:       findutils
+%ifarch athlon
+Requires:       gcc >= 3.0.3
+%else
+Requires:       gcc
+%endif
+Requires:       glibc-devel
+Requires:       grep
+Requires:       gzip
+Requires:       make
+Requires:       patch
+Requires:       popt >= 1.6.2-2
+Requires:       sed
+Requires:       sh-utils
+Requires:       tar
+Requires:       textutils
+Requires:       popt >= 1.6.4
+
+%description build
+Scripts for building binary RPM packages.
+
+%description build -l de
+Scripts fürs Bauen binärer RPM-Pakete.
+
+%description build -l pl
+Skrypty pomocnicze do budowania binarnych RPM-ów.
+
+%description build -l pt_BR
+Este pacote contém scripts e programas executáveis que são usados para
+construir pacotes usando o RPM.
+
 %package -n beecrypt
 Summary:	Crypto library
 Summary(pl):	Biblioteka kryptograficzna
@@ -313,50 +360,6 @@ Static version of crypto library.
 %description -n beecrypt-static -l pl
 Statyczna wersja biblioteki kryptograficznej.
 
-Python para manipular pacotes e bancos de dados RPM.
-
-%package build
-Summary:	Scripts for building binary RPM packages
-Summary(de):	Scripts fürs Bauen binärer RPM-Pakete
-Summary(pl):	Skrypty pomocnicze do budowania binarnych RPM-ów
-Summary(pt_BR):	Scripts e programas executáveis usados para construir pacotes
-Group:		Applications/File
-Requires:	%{name} = %{version}
-Requires:	/bin/id
-Requires:	awk
-Requires:	binutils
-Requires:	diffutils
-Requires:	file >= 3.31
-Requires:	fileutils
-Requires:	findutils
-%ifarch athlon
-Requires:	gcc >= 3.0.3
-%else
-Requires:	gcc
-Requires:	grep
-Requires:	glibc-devel
-Requires:	grep
-Requires:	gzip
-Requires:	make
-Requires:	patch
-Requires:	popt >= 1.6.2-2
-Requires:	sed
-Requires:	textutils
-Requires:	popt >= 1.6.4
-Requires:	tar
-Requires:	textutils
-
-%description build
-Scripts for building binary RPM packages.
-
-%description build -l de
-Scripts fürs Bauen binärer RPM-Pakete.
-
-%description build -l pl
-Skrypty pomocnicze do budowania binarnych RPM-ów.
-
-%description build -l pt_BR
-Este pacote contém scripts e programas executáveis que são usados para
 construir pacotes usando o RPM.
 
 %prep
