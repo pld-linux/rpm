@@ -491,7 +491,13 @@ fi; \
 # -n   - no show banner (overriden by -t)
 # -t   - show only, if RPM_SCRIPTVERBOSITY >= n
 %banner(a:n:t:)	\
-	[ -r /etc/sysconfig/rpm ] && . /etc/sysconfig/rpm || RPM_SCRIPTVERBOSITY=5; \
-	%{_bindir}/banner.sh %{!-t:%{!-n:-s}} %{-t:`[ $RPM_SCRIPTVERBOSITY -ge %{-t*} ] && echo "-s"`} %{!-a:-m}%{-a:-M} %1 << EOF\
+RPM_SCRIPTVERBOSITY=5 \
+[ -r /etc/sysconfig/rpm ] && . /etc/sysconfig/rpm \
+if [ -x /usr/bin/banner.sh ]; then \
+	CMD="/usr/bin/banner.sh %{!-t:%{!-n:-s}} %{-t:\`[ $RPM_SCRIPTVERBOSITY -ge %{-t*} ] && echo '-s'\`} %{!-a:-m}%{-a:-M} %1" \
+else \
+	CMD="cat" \
+fi \
+$CMD << EOF \
 %nil
 
