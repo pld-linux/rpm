@@ -1,0 +1,11 @@
+--- rpm-4.2/scripts/perl.req~	Sun May  4 11:57:53 2003
++++ rpm-4.2/scripts/perl.req	Sun May  4 11:58:53 2003
+@@ -57,7 +57,7 @@
+ foreach $module (sort keys %require) {
+   if (length($require{$module}) == 0) {
+      if ($module =~ /^[0-9._]+$/) {
+-       print "perl >= $module\n";
++       print "perl-base >= $module\n";
+      } else {
+          print "perl($module)\n";
+      }
