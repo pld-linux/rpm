@@ -27,7 +27,7 @@ Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
 Source1:	%{name}.groups
 Source2:	%{name}.macros
 Source3:	%{name}-install-tree
-Source4:	%{name}-find-%{name}-provides
+Source4:	%{name}-find-rpm-provides
 Source5:	%{name}-macros.perl
 Source6:	%{name}-find-perl-provides
 Source7:	%{name}-find-perl-requires
@@ -37,10 +37,10 @@ Source10:	%{name}-find-provides
 Source11:	%{name}-find-requires
 Source12:	%{name}-non-english-man-pages.tar.bz2
 Source13:	%{name}-macros.python
-Patch0:		%{name}-%{name}rc.patch
+Patch0:		%{name}-rpmrc.patch
 Patch1:		%{name}-macros.patch
 Patch2:		%{name}-arch.patch
-Patch3:		%{name}-%{name}popt.patch
+Patch3:		%{name}-rpmpopt.patch
 Patch4:		%{name}-perl-macros.patch
 Patch5:		%{name}-db3.patch
 Patch6:		%{name}-segv.patch
