@@ -320,3 +320,7 @@ fi \
 #%_noautoprov		%{nil}
 %_missing_doc_files_terminate_build	1%{nil}
 %_unpackaged_files_terminate_build	%{nil}
+# (X)emacs support
+%___emacs_lispdir_helper  -batch -q -eval '(while load-path (princ (concat (car load-path) "\\n")) (setq load-path (cdr load-path)))' 2> /dev/null|sed -n '/\\(.*\\/x\\?emacs\\/site-lisp\\)\\/$/{s,,\\1,p;q;}'
+%_emacs_lispdir %(emacs %___emacs_lispdir_helper)
+%_xemacs_lispdir %(xemacs %___emacs_lispdir_helper)
