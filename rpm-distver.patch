@@ -110,9 +110,9 @@
 +	const char * cdist; /* current package */
 +	const char * idist; /* installed package */
 +
-+/*	rc = rpmExpandNumeric("%{?_dont_compare_distversion}");
++	rc = rpmExpandNumeric("%{?_dont_compare_distversion}");
 +	if (rc == 1)
-+		return 0;*/
++		return 0;
 +
 +	if (!headerGetEntry(h, RPMTAG_DISTRIBUTION, NULL, (void **) &idist, NULL))
 +		return 0;
