@@ -31,6 +31,9 @@
 %rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}
 %rpmldflags	%{!?debug:-s}
 
+# kernel compiler
+%kgcc		egcs
+
 #-----------------------------------------------------------------
 %configure2_13 { \
  if [ -n "$LINGUAS" ]; then unset LINGUAS; fi; \
