@@ -1,0 +1,23 @@
+diff -Nur rpm-4.0.2.mis/lib/rpminstall.c rpm-4.0.2/lib/rpminstall.c
+--- rpm-4.0.2.mis/lib/rpminstall.c	Wed Oct 10 18:38:55 2001
++++ rpm-4.0.2/lib/rpminstall.c	Wed Oct 10 18:39:43 2001
+@@ -61,7 +61,8 @@
+ #ifdef FANCY_HASH
+            int i;
+            progressCurrent++;
+-           for (i = 1; i < hashesPrinted; i++) putchar ('#');
++           if (isatty(STDOUT_FILENO))
++               for (i = 1; i < hashesPrinted; i++) putchar ('#');
+            printf (" [%3d%%]\n", (int)(100 * (progressTotal ?
+                (((float) progressCurrent) / progressTotal) : 1)));
+ #else
+@@ -113,7 +114,8 @@
+ #ifdef FANCY_HASH
+                if (isatty (STDOUT_FILENO))
+                    fprintf(stdout, "%4d:%-23.23s", progressCurrent + 1, s);
+-              else
++               else
++                   fprintf(stdout, "%-28s", s);
+ #else
+                    fprintf(stdout, "%-28s", s);
+ #endif
