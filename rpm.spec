@@ -19,7 +19,7 @@
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.9
 %define	beecrypt_ver	3.0.0-0.20030610.1
-%define	rpm_macros_rev	1.162
+%define	rpm_macros_rev	1.164
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -30,7 +30,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.37%{?with_distver:+distver}
+Release:	0.%{snap}.38%{?with_distver:+distver}
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
