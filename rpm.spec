@@ -23,7 +23,6 @@ Source8:	%{name}-find-spec-bcond
 Source9:	%{name}-find-lang
 Source10:	%{name}-find-provides
 Source11:	%{name}-find-requires
-#Source12:	%{name}-non-english-man-pages.tar.bz2
 Source13:	%{name}-macros.python
 Source14:	%{name}-groups-po.awk
 Source15:	%{name}-compress-doc
@@ -37,9 +36,7 @@ Patch0:		%{name}-%{name}rc.patch
 Patch2:		%{name}-arch.patch
 Patch3:		%{name}-%{name}popt.patch
 Patch4:		%{name}-perl-macros.patch
-#Patch5:		%{name}-am_fix.patch
 Patch6:		%{name}-perl-req-perlfile.patch
-#Patch7:		%{name}-installplatform.patch
 Patch8:		%{name}-cache.patch
 Patch9:		%{name}-glob.patch
 Patch10:	%{name}-header_h.patch
@@ -47,22 +44,16 @@ Patch11:	%{name}-fast-alAddPackage.patch
 Patch12:	%{name}-byKey.patch
 Patch13:	%{name}-noexpand.patch
 Patch14:	%{name}-scripts-closefds.patch
-#Patch15:	%{name}-python-amfix.patch
-#Patch16:	%{name}-non-english-man-pages.patch
 Patch17:	%{name}-python-macros.patch
 Patch18:	%{name}-perlprov-regonly.patch
-#Patch19:	%{name}-acconfig.patch
 Patch20:	%{name}-db4.patch
 Patch21:	%{name}-pl.po.patch
 Patch22:	%{name}-drop-legacy-CLI.patch
 Patch23:	%{name}-perlprov-perl5.6.patch
-#Patch24:	%{name}-ac25x.patch
 Patch25:	%{name}-gettext-in-header.patch
 Patch26:	%{name}-compress-doc.patch
 Patch27:	%{name}-lt14d.patch
-#Patch28:	%{name}-check_files.patch
 Patch29:	%{name}-gettext0.11.patch
-#Patch30:	%{name}-choke-on-evil-doc.patch
 Patch31:	%{name}-build.patch
 Patch32:	%{name}-python-link.patch
 Patch33:	%{name}-system_libs.patch
@@ -392,17 +383,11 @@ Statyczna wersja biblioteki kryptograficznej.
 
 %prep
 %setup -q
-# already included
-#-a12
 %patch0 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-# obsolete
-#%patch5 -p1
 %patch6 -p1
-# applied
-#%patch7 -p1
 # not needed ? (break compilation)
 #%patch8 -p1
 %patch9 -p1
@@ -414,28 +399,16 @@ Statyczna wersja biblioteki kryptograficznej.
 #%patch12 -p0
 %patch13 -p1
 %patch14 -p1
-# applied
-#%patch15 -p1	
-# applied
-#%patch16 -p1
 %patch17 -p1
 %patch18 -p1
-# fixed
-#%patch19 -p1
 %patch20 -p1
 %patch21 -p1
 %patch22 -p1
 %patch23 -p1
-# fixed
-#%patch24 -p1
 %patch25 -p1
 %patch26 -p1
 %patch27 -p1
-# applied
-#%patch28 -p1
 %patch29 -p1
-# applied
-#%patch30 -p1
 %patch31 -p1
 %patch32 -p1
 %patch33 -p1
