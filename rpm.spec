@@ -78,8 +78,8 @@ graficznych mened¿erów pakietów oraz innych narzêdzi, które wymagaj±
 ferramentas que precisem de conhecimento profundo de pacotes RPM.
 
 Summary(pl):	Bibliteki statyczne rpm-a
-Group:		Libraries/Development
-Group(pl):	Biblioteki/Programowanie
+Summary(pl):	Biblioteki statyczne RPM-a
+Group(pl):	Programowanie/Biblioteki
 Summary(pt_BR):	Bibliotecas estáticas para o desenvolvimento de aplicações RPM
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
