@@ -46,19 +46,19 @@ function compare_ver(v1,v2) {
 				return 1
 			else if (v1a[i]>v2a[i])
 				return 0
-		} else if ((v1a[i]~"pre")||(v1a[i]~"beta")||(v1a[i]~"alpha"))
+		} else if ((v1a[i]~"pre")||(v1a[i]~"beta")||(v1a[i]~"alpha")||(v1a[i]~"rc"))
 			return 1
 		else
 			return 0
 	}
 	if ((count2==mincount)&&(count!=count2)) {
 		for (i=count2+1; i<=count; i++)
-			if ((v1a[i]~"pre")||(v1a[i]~"beta")||(v1a[i]~"alpha")) 
+			if ((v1a[i]~"pre")||(v1a[i]~"beta")||(v1a[i]~"alpha")||(v1a[i]~"rc")) 
 				return 1
 		return 0
 	} else if (count!=count2) {
 		for (i=count+1; i<=count2; i++)
-			if ((v2a[i]~"pre")||(v2a[i]~"beta")||(v2a[i]~"alpha"))
+			if ((v2a[i]~"pre")||(v2a[i]~"beta")||(v2a[i]~"alpha")||(v2a[i]~"rc"))
 				return 0
 		return 1
 	}
@@ -108,19 +108,19 @@ function compare_ver_dec(v1,v2) {
 				return 1
 			else if (v1a[i]>v2a[i])
 				return 0
-		} else if ((v1a[i]~"pre")||(v1a[i]~"beta")||(v1a[i]~"alpha"))
+		} else if ((v1a[i]~"pre")||(v1a[i]~"beta")||(v1a[i]~"alpha")||(v1a[i]~"rc"))
 			return 1
 		else
 			return 0
 	}
 	if ((count2==mincount)&&(count!=count2)) {
 		for (i=count2+1; i<=count; i++)
-			if ((v1a[i]~"pre")||(v1a[i]~"beta")||(v1a[i]~"alpha")) 
+			if ((v1a[i]~"pre")||(v1a[i]~"beta")||(v1a[i]~"alpha")||(v1a[i]~"rc")) 
 				return 1
 		return 0
 	} else if (count!=count2) {
 		for (i=count+1; i<=count2; i++)
-			if ((v2a[i]~"pre")||(v2a[i]~"beta")||(v2a[i]~"alpha"))
+			if ((v2a[i]~"pre")||(v2a[i]~"beta")||(v2a[i]~"alpha")||(v2a[i]~"rc"))
 				return 0
 		return 1
 	}
