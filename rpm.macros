@@ -336,10 +336,10 @@ echo "Compress kernel modules if any."; \
 # Requires/Provides automation
 # exceptions system by Jacek Konieczny <jajcus@pld.org.pl>
 #
-#%_noautoreqfiles	'%{_defaultdocdir}.*' '%{_examplesdir}.*'
+%_noautoreqfiles	%(sed -e s'/#.*//' /etc/rpm/noautoreqfiles)
+%_noautoprovfiles	%(sed -e s'/#.*//' /etc/rpm/noautoprovfiles)
 #%_noautoreq		%{nil}
 %_noautoreqdep		%(sed -e s'/#.*//' /etc/rpm/noautoreqdep)
-#%_noautoprovfiles	%{nil}
 #%_noautoprov		%{nil}
 #%_noautocompressdoc	%{nil}
 #

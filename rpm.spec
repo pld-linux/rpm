@@ -28,7 +28,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.2.2
+Release:	0.%{snap}.2.3
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -88,6 +88,7 @@ Patch40:	%{name}-makefile-no_myLDADD_deps.patch
 Patch41:	%{name}-libdir64.patch
 Patch42:	%{name}-libdir-links.patch
 Patch43:	%{name}-find_required_pkgs_on_build.patch
+Patch44:	%{name}-noautoreqprovfiles.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -579,6 +580,7 @@ cat %{SOURCE14} >> macros.in
 %patch41 -p1
 %patch42 -p1
 %patch43 -p1
+%patch44 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
@@ -673,15 +675,15 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 EOF
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF
-# global list of files (name regexps) which don't generate Provides
+# global list of files (shell patterns) which don't generate Provides
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov <<EOF
 # global list of capabilities (regexps) not to be used in Provides
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles <<EOF
-# global list of files (name regexps) which don't generate Requires
-/usr/src/examples/.*
-/usr/share/doc/.*
+# global list of files (shell patterns) which don't generate Requires
+/usr/src/examples/*
+/usr/share/doc/*
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq <<EOF
 # global list of capabilities (regexps) not to be used in Requires
