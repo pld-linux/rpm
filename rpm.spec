@@ -18,7 +18,7 @@
 %define	reqdb_ver	4.1.25-1
 %define	reqpopt_ver	1.9
 %define	beecrypt_ver	3.0.0-0.20030610.1
-%define rpm_macros_rev	1.123
+%define rpm_macros_rev	1.124
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -29,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-%define	rel	0.%{snap}.20.4
+%define	rel	0.%{snap}.20.5
 Release:	%{rel}
 License:	GPL
 Group:		Base
@@ -104,12 +104,12 @@ BuildRequires:	elfutils-devel
 #BuildRequires:	libmagic-devel
 BuildRequires:	libtool
 BuildRequires:	patch >= 2.2
+BuildRequires:	popt-devel >= %{reqpopt_ver}
 BuildRequires:	python-devel >= 2.2
 BuildRequires:	python-modules >= 2.2
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpm-pythonprov
 BuildRequires:	zlib-devel
-BuildRequires:	popt-devel >= %{reqpopt_ver}
 %if %{!?_without_static:1}0
 # Require static library only for static build
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
@@ -118,12 +118,12 @@ BuildRequires:	db-static >= %{reqdb_ver}
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	elfutils-static
 #BuildRequires:	libmagic-static
-BuildRequires:	zlib-static
 BuildRequires:	popt-static >= %{reqpopt_ver}
+BuildRequires:	zlib-static
 %endif
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Requires:	popt >= %{reqpopt_ver}
 Conflicts:	glibc < 2.2.92
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		__find_provides	%{SOURCE4}
 %define		_binary_payload	w9.gzdio
@@ -443,7 +443,6 @@ Summary(pt_BR):	Scripts e programas executАveis usados para construir pacotes
 Summary(ru):	Скрипты и утилиты, необходимые для сборки пакетов
 Summary(uk):	Скрипти та утил╕ти, необх╕дн╕ для побудови пакет╕в
 Group:		Applications/File
-Provides:	rpmbuild(macros) = %{rpm_macros_rev}
 Requires(pre):	findutils
 Requires:	%{name} = %{version}
 Requires:	%{name}-utils = %{version}
@@ -469,6 +468,7 @@ Requires:	sed
 Requires:	sh-utils
 Requires:	tar
 Requires:	textutils
+Provides:	rpmbuild(macros) = %{rpm_macros_rev}
 
 %description build
 Scripts for building binary RPM packages.
