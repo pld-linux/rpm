@@ -302,7 +302,7 @@ unset DISPLAY ||:\
 if [ -d "$RPM_BUILD_ROOT" ]; then \
 echo "Remove RPATH from executable binaries and shared object files."; \
 find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" %{?_noautochrpath:! -regex "%{_noautochrpath}"} | xargs -r file | \
-	awk '/ELF.*(executable|shared object)/ {print $1}' | cut -d: -f1 | \
+	awk '/ELF.*(executable.*dynamically linked|shared object)/ {print $1}' | cut -d: -f1 | \
 while read file ; do \
 	rpath= ; \
 	chmod u+w "$file"; \
