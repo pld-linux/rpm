@@ -133,7 +133,7 @@ echo "Compress man and info pages."; \
 %{!?no_install_post_strip: \
 	%{?verbose:set -x;} \
 	echo "Strip executable binaries and shared object files."; \
-	filelist=`find $RPM_BUILD_ROOT -type f`; \
+	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so$"`; \
 	elfexelist=`echo $filelist | xargs -r file | \
 		awk '/ELF.*executable/ {print $1}' | cut -d: -f1`; \
 	elfsharedlist=`echo $filelist | xargs -r file | \
