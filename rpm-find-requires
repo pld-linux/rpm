@@ -47,7 +47,7 @@ elflibrequires=`for f in $elfliblist; do
 	objdump -p $f|awk '/NEEDED/ {print $2}'
 done | sed "s/['\"]/\\\&/g" | grep -v 'libNoVersion.so' | sort -u
 `
-    
+
 for f in $scriptlist; do
     if [ -x $f ]; then
 	head -1 $f | sed -ne '/^\#\!/p' | sed -e 's/^\#\![	]*//' | cut -d" " -f1
@@ -79,14 +79,26 @@ if [ -f __rpm_noautoreq ] ; then
 	done
 fi
 
-echo "$allrequires" | sort -u
-
 if [ -f __rpm_noautoreqdep ] ; then
 	for i in `cat __rpm_noautoreqdep`; do
 		allrequires=`echo $allrequires | sed "s!\<$i[[:space:]]*!!g"`
 	done
 fi
 
-echo "$allrequires" | LC_ALL=C xargs -r -- rpm -q --whatprovides --qf "%{NAME}\n"  2>/dev/null \
-	| grep -v "no package provides" | sort -u
+# Delete all the provided stuff
 
+echo $filelist|/usr/lib/rpm/find-provides|awk '
+{
+	if (FNR!=1)
+		printf "&& "
+	printf "$0 !~ \"^" $0 "$\" "
+}
+END {
+	print "{ print $0 }"
+}' > .findreq_delprovs_$$
+notprovreqs=`echo "$allrequires"|awk -f .findreq_delprovs_$$`
+rm .findreq_delprovs_$$
+echo "$notprovreqs" | sort -u
+
+echo "$notprovreqs" | LC_ALL=C xargs -r -- rpm -q --whatprovides --qf "%{NAME}\n"  2>/dev/null \
+	| grep -v "no package provides" | sort -u
