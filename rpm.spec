@@ -6,7 +6,7 @@ Name:		rpm
 Version:	3.0.1
 Release:	7.%{date}
 Group:		Base
-Group(pl):	Bazowe
+Group(pl):	Podstawowe
 Copyright:	GPL
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-3.0.x/%{name}-%{version}.%{date}.tar.gz
 Source1:	rpm.groups
