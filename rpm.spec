@@ -47,10 +47,14 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644, root, root, 755)
 %doc RPM-PGP-KEY CHANGES groups docs/*
-/usr/lib/rpmrc
-/usr/lib/rpmpopt
 %attr(755, root, root) /bin/rpm
 %attr(755, root, root) /usr/bin/*
+%dir /usr/lib/rpm
+%attr(755, root, root) /usr/lib/rpm/find-*
+%attr(755, root, root) /usr/lib/rpm/freshen.sh
+%attr(755, root, root) /usr/lib/rpm/mkinstalldirs
+/usr/lib/rpm/rpmrc
+/usr/lib/rpm/rpmpopt
 %attr(644, root,  man) /usr/man/man8/*
 %attr(700, root, root) %dir /var/lib/rpm
 /usr/src/redhat
