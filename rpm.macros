@@ -199,6 +199,9 @@ unset DISPLAY ||:\
 # Location of KDE documentation
 %_kdedocdir  %{_defaultdocdir}/kde/HTML
 
+# unsermake script
+%__unsermake /usr/share/unsermake/unsermake
+
 # Current date
 %date 		%(LC_ALL="C" date +"%a %b %d %Y")
 
