@@ -52,7 +52,6 @@ Source12:	perl.prov
 Source30:	builder
 Source31:	adapter.awk
 Source32:	pldnotify.awk
-Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
 Patch3:		%{name}-rpmpopt.patch
@@ -85,17 +84,15 @@ Patch30:	%{name}-makefile-no_myLDADD_deps.patch
 Patch31:	%{name}-libdir64.patch
 Patch32:	%{name}-libdir-links.patch
 Patch33:	%{name}-context.patch
-Patch34:	%{name}-nls-fixes.patch
 Patch35:	%{name}-missing-prototypes.patch
 Patch36:	%{name}-pld-autodep.patch
 Patch37:	%{name}-rpmsq.patch
 Patch38:	%{name}-file-readelf.patch
-Patch39:	%{name}-pentiumX.patch
 Patch40:	%{name}-epoch0.patch
 Patch41:	%{name}-file-readelf-fix.patch
-Patch42:	%{name}-cpuid.patch
 Patch43:	%{name}-perl_req-INC_dirs.patch
 Patch44:	%{name}-debuginfo.patch
+Patch100:	%{name}-pl.po.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -594,24 +591,18 @@ cat %{SOURCE11} >> macros.in
 %patch30 -p1
 %patch31 -p1
 %patch32 -p1
-# DROP
-#%patch33 -p1
-# UPDATE
-#%patch34 -p1
+%patch33 -p1
 %patch35 -p1
 %patch36 -p1
 %patch37 -p1
 # STILL NOT FIXED IN RPM???
 #%patch38 -p1
-# OBSOLETE, merged upstream
-#%patch39 -p1
 %patch40 -p1
 # SAME AS patch38
 #%patch41 -p1
-# OBSOLETE, merged upstream
-#%patch42 -p1
 %patch43 -p0
 %patch44 -p1
+#%patch100 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
