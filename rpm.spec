@@ -88,7 +88,7 @@ Patch35:	%{name}-missing-prototypes.patch
 Patch36:	%{name}-pld-autodep.patch
 Patch37:	%{name}-rpmsq.patch
 Patch38:	%{name}-file-readelf.patch
-Patch39:	%{name}-pentium3.patch
+Patch39:	%{name}-pentiumX.patch
 Patch40:	%{name}-epoch0.patch
 Patch41:	%{name}-file-readelf-fix.patch
 URL:		http://www.rpm.org/
