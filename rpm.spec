@@ -47,7 +47,7 @@ BuildRequires:	gettext-devel >= 0.10.38-3
 BuildRequires:	libtool
 BuildRequires:	automake
 BuildRequires:	autoconf >= 2.13-8
-%if %{!?bcond_off_static:1}%{?bcond_off_static:0}
+BuildRequires:	python-modules >= 2.2.1
 BuildRequires:	zlib-devel >= 1.1.4
 # Require static library only for static build
 BuildRequires:	db3-static >= 3.1.17-9
@@ -254,7 +254,7 @@ mv -f lib/Makefile.in.new lib/Makefile.in
 	sed 's|@host_cpu@|%{_target_cpu}|' > macros.tmp
 	--enable-v1-packages
 %configure \
-%{__make} %{?bcond_off_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
+	--enable-v1-packages \
 	--with-python
 
 
