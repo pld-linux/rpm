@@ -12,5 +12,3 @@
 %define		perl_sitelib	%(eval "`%{__perl} -V:installsitelib`"; echo $installsitelib)
 %define		perl_sitearch	%(eval "`%{__perl} -V:installsitearch`"; echo $installsitearch)
 
-%define		perl_man3dir	%(eval "`%{__perl} -V:installman3dir`"; echo $installman3dir)
-
