@@ -751,6 +751,42 @@ libglide3.so.3
 libgtkmozembed.so
 libgtksuperwin.so
 libxpcom.so
+# xlibs
+libFS.so
+libI810XvMC.so
+libICE.so
+libSM.so
+libX11.so
+libXRes.so
+libXTrap.so
+libXaw.so
+libXaw.so
+libXcursor.so
+libXext.so
+libXfont.so
+libXfontcache.so
+libXft.so
+libXft.so
+libXi.so
+libXinerama.so
+libXmu.so
+libXmuu.so
+libXp.so
+libXpm.so
+libXrandr.so
+libXrender.so
+libXss.so
+libXt.so
+libXtst.so
+libXv.so
+libXvMC.so
+libXxf86dga.so
+libXxf86misc.so
+libXxf86rush.so
+libXxf86vm.so
+libfontenc.so
+libxkbfile.so
+libxkbui.so
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc <<EOF
 # global list of file masks not to be compressed in DOCDIR
