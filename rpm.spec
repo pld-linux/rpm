@@ -11,7 +11,6 @@
 #
 %include        /usr/lib/rpm/macros.python
 %define	beecrypt_ver	2.2.0
-%define	beecrypt_rel	2
 # versions of required libraries
 %define	reqdb_ver	4.1.25-1
 %define	reqpopt_ver	1.7
@@ -25,6 +24,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.1
 Release:	15.1
+%define	beecrypt_rel	%{version}.%{release}
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/%{name}-%{version}.tar.gz
