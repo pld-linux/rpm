@@ -6,8 +6,8 @@
 ulimit -c 0
 
 filelist=`sed "s/['\"]/\\\&/g"`
-for i in /usr/src/examples /usr/local/src/examples /usr/share/doc /usr/local/share/doc; do
-filelist=`echo $filelist | sed "s!\<$i[^[:space:]]*[[:space:]]*!!g"`
+for i in /examples/ /doc/; do
+filelist=`echo $filelist | sed "s!\<[^[:space:]]*$i[^[:space:]]*[[:space:]]*!!g"`
 done
 exelist=`echo $filelist | xargs -r file | grep ":.*executable" | cut -d: -f1 `
 elfexelist=`echo $exelist | xargs -r file | egrep  ":.* ELF" | cut -d: -f1 `
