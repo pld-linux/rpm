@@ -66,6 +66,7 @@ Patch30:	%{name}-choke-on-evil-doc.patch
 Patch31:	%{name}-build.patch
 Patch32:	%{name}-python-link.patch
 Patch33:	%{name}-system_libs.patch
+Patch34:	%{name}-bb-short-circuit.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -432,7 +433,8 @@ Statyczna wersja biblioteki kryptograficznej.
 #%patch30 -p1
 %patch31 -p1
 %patch32 -p1
-%patch33 -p1 -b .wiget
+%patch33 -p1
+%patch34 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
