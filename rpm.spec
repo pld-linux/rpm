@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0
-Release:	4
+Release:	5
 Group:		Base
 Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
@@ -272,7 +272,7 @@ fi
 if [ -L /var/db/rpm ]; then
 	rm -rf /var/db/rpm
 fi
-if [ ! -f /var/lib/rpm/packages.rpm ]; then
+if [ ! -f /var/lib/rpm/packages.rpm -a ! -f /var/lib/rpm/Packages  ]; then
 	/bin/rpm --initdb
 fi
 
