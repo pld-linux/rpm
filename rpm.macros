@@ -246,7 +246,7 @@ fi \
 %_kernel24		%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
 %_kernel_series		%{?_kernel24:2.4}%{!?_kernel24:2.2}
 %conflicts_kernel_ver	Conflicts: kernel < %{_kernel_ver}, kernel > %{_kernel_ver}
-%conflicts_kernel_series Conflicts: kernel %{?_kernel24:<}{^!?_kernel24:>=} 2.3.0
+%conflicts_kernel_series Conflicts: kernel %{?_kernel24:<} {!?_kernel24:>=} 2.3.0
 
 #-----------------------------------------------------------------
 # Macros commonly used in %{pre,post}{un,}
