@@ -25,9 +25,9 @@ bannercmd()
 		echo cat
 	else
 		if [ "$RPM_SCRIPTVERBOSITY" -lt 2 ]; then
-			echo "$BANNERCMD -s -M $1"
-		else
 			echo "$BANNERCMD -M $1"
+		else
+			echo "$BANNERCMD -s -M $1"
 		fi
 	fi
 }
