@@ -71,7 +71,7 @@ nombre, versión y descripción.
 RPM jest doskona³ym menad¿erem pakietów. Dziêki niemu bêdziesz móg³
 %description -l pl
 RPM jest doskona³ym mened¿erem pakietów. Dziêki niemu bêdziesz móg³
-wchodz±cych w sk³ad pakietu, zalezno¶ci od innych pakietów s±
+wchodz±cych w sk³ad pakietu, zale¿no¶ci od innych pakietów s±
 przechowywane s± w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
 wchodz±cych w sk³ad pakietu, zale¿no¶ci od innych pakietów, s±
 przechowywane w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
@@ -125,7 +125,7 @@ Biblioteki statyczne rpm-a.
 %description static -l pl
 Bibliotecas estáticas para desenvolvimento.
 
-Summary(pl):	Dodatkowe narzêdzia do zarz±dzanai baz± rpm-a i pakietami
+Summary(pl):	Dodatkowe narzêdzia do zarz±dzania baz± rpm-a i pakietami
 Summary(de):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
 Group(de):	Applikationen/Datei
 Group(pl):	Aplikacje/Pliki
@@ -135,7 +135,7 @@ Requires:	%{name} = %{version}
 
 %description utils
 %description -l pl utils
-Dodatkowe narzêdzia do zarz±dzanai baz± rpm-a i pakietami.
+Dodatkowe narzêdzia do zarz±dzania baz± rpm-a i pakietami.
 %description utils -l pl
 Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami.
 Summary:	Additional utilities for check perl provides/requires in rpm packages
@@ -146,7 +146,7 @@ Group(pl):	Aplikacje/Pliki
 Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w pakietach rpm
 Requires:	perl-modules
 Requires:	findutils
-Additional utilities for check perl provides/requires in rpm packages.
+Additional utilities for checking perl provides/requires in rpm packages.
 Additional utilities for checking perl provides/requires in rpm
 %description -l pl perlprov
 Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci dla skryptów perl w
