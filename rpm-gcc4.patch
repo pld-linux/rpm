@@ -1,0 +1,33 @@
+--- rpm/python/rpmmodule.c.orig	2004-11-18 15:04:50.000000000 +0100
++++ rpm/python/rpmmodule.c	2004-12-10 18:03:34.363140760 +0100
+@@ -289,7 +289,7 @@
+ 
+     while (extensions->name) {
+ 	if (extensions->type == HEADER_EXT_TAG) {
+-            (const struct headerSprintfExtension *) ext = extensions;
++            ext = (struct headerSprintfExtension_s*)(extensions);
+             PyDict_SetItemString(d, (char *) extensions->name, o=PyCObject_FromVoidPtr(ext, NULL));
+ 	    Py_DECREF(o);
+             PyDict_SetItem(dict, tag, o=PyString_FromString(ext->name + 7));
+--- rpm/python/header-py.c.orig	2004-11-18 15:04:49.000000000 +0100
++++ rpm/python/header-py.c	2004-12-10 18:04:45.933260448 +0100
+@@ -477,7 +477,7 @@
+ 	while (extensions->name) {
+ 	    if (extensions->type == HEADER_EXT_TAG
+ 		&& !xstrcasecmp(extensions->name + 7, str)) {
+-		(const struct headerSprintfExtension *) ext = extensions;
++		ext = (struct headerSprintfExtension*)extensions;
+ 	    }
+ 	    extensions++;
+ 	}
+--- rpm/python/rpmts-py.c.orig	2004-11-18 15:04:50.000000000 +0100
++++ rpm/python/rpmts-py.c	2004-12-10 18:09:43.472027680 +0100
+@@ -24,7 +24,7 @@
+ 
+ /*@unchecked@*/
+ /*@-shadow@*/
+-static int _rpmts_debug = 0;
++int _rpmts_debug = 0;
+ /*@=shadow@*/
+ 
+ /*@access alKey @*/
