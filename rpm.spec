@@ -28,7 +28,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.1
+Release:	0.%{snap}.2
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -89,6 +89,7 @@ Patch31:	%{name}-libdir64.patch
 Patch32:	%{name}-libdir-links.patch
 Patch33:	%{name}-find_required_pkgs_on_build.patch
 Patch34:	%{name}-noautoreqprovfiles.patch
+Patch35:	%{name}-context.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -581,6 +582,7 @@ cat %{SOURCE14} >> macros.in
 %patch32 -p1
 %patch33 -p1
 %patch34 -p1
+%patch35 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
