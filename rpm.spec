@@ -8,6 +8,7 @@
 %bcond_without	doc	# don't generate documentation with doxygen
 %bcond_without	python	# don't build python bindings
 %bcond_without	selinux # dont enable selinux support
+%bcond_with	distver # enable distversion patch
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
@@ -29,7 +30,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.36
+Release:	0.%{snap}.37%{?with_distver:+distver}
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -446,7 +447,7 @@ Summary(pl):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	db >= %{reqdb_ver}
 Requires:	popt >= %{reqpopt_ver}
-Provides:	rpm-lib(distver)
+%{?with_distver:Provides:	rpm-lib(distver)}
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
 
@@ -613,7 +614,7 @@ cat %{SOURCE11} >> macros.in
 %patch43 -p0
 %patch44 -p1
 %patch45 -p1
-%patch46 -p1
+%{?with_distver:%patch46 -p1}
 
 cd scripts;
 mv -f perl.req perl.req.in
