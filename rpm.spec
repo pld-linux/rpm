@@ -29,7 +29,7 @@ Name:		rpm
 %define	ver	4.4
 %define so_ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.0.1
+Release:	0.%{snap}.0.2
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
