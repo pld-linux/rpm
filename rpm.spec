@@ -369,7 +369,7 @@ construir pacotes usando o RPM.
 %patch36 -p1
 %patch37 -p1
 %patch38 -p1
-%patch39 -p1
+#%patch39 -p1
 %patch40 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
