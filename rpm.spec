@@ -106,7 +106,7 @@ BuildRequires:	popt-devel >= %{reqpopt_ver}
 BuildRequires:	bzip2-static >= 1.0.2-5
 BuildRequires:	db-static >= %{reqdb_ver}
 BuildRequires:	glibc-static >= 2.2.94
-BuildRequires:	libelf-static
+BuildRequires:	elfutils-static
 BuildRequires:	zlib-static
 BuildRequires:	popt-static >= %{reqpopt_ver}
 %endif
@@ -243,7 +243,7 @@ Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
 Requires:	bzip2-static
 Requires:	db-static
-Requires:	libelf-static
+Requires:	elfutils-static
 Requires:	popt-static >= 1.7
 Requires:	zlib-static
 
@@ -548,6 +548,7 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch28 -p1
 %patch29 -p1
 %patch30 -p1
+%patch31 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
