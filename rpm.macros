@@ -280,7 +280,7 @@ while read file ; do \
 	for dir in `chrpath -l "$file" | \
 		    awk '/RPATH=/ { gsub(/.*RPATH=/,""); gsub(/:/," "); print $0 }'` ; do \
 			case $dir in \
-			/home/* | /tmp/* | /usr/lib* | /lib* | /usr/local/lib* | /usr/X11R6/lib* ) \
+			/home/* | /tmp/* | /usr/lib | /usr/lib64 | /lib | /lib64 | /usr/local/lib | /usr/local/lib64 | /usr/X11R6/lib | /usr/X11R6/lib64 ) \
 				echo "remove-rpath: $dir in $file"; \
 				;; \
 			* ) \
