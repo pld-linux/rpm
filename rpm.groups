@@ -196,6 +196,10 @@ Development/Languages/Scheme
 	[de]:	Entwicklung/Sprachen/Scheme
 	[pl]:	Programowanie/Jêzyki/Scheme
 
+Development/Languages/Java
+	[de]:	Entwicklung/Sprachen/Java
+	[pl]:	Programowanie/Jêzyki/Java
+
 Development/Building
 	[de]:	Entwicklung/Bauen
 	[pl]:	Programowanie/Budowanie
@@ -213,6 +217,16 @@ Documentation
 	[de]:	Dokumentation
 	[es]:	Documentación
 	[pl]:	Dokumentacja
+
+Java
+   [pl]: Java
+
+Java/Networking/Daemons
+	[de]:	Java/Netzwerkwesen/Server
+	[pl]:	Java/Sieciowe/Serwery
+
+Java/Networking/Daemons/Additions
+	[pl]:	Java/Sieciowe/Serwery/Dodatki
 
 Libraries
 	[de]:		Libraries
