@@ -118,14 +118,17 @@
 # Location of desktop files
 %_desktopdir	/usr/X11R6/share/applications
 
-# Location pixmaps for applnk/desktop files
+# Location of pixmaps for applnk/desktop files
 %_pixmapsdir	/usr/X11R6/share/pixmaps
+
+# Location of themable icons for applnk/desktop files
+%_iconsdir	/usr/X11R6/share/icons
 
 # Location of fonts directories
 %_fontsdir	/usr/share/fonts
 
 # Location of Gtk and associated libraries documentation
-%_gtkdocdir  %{_defaultdocdir}/gtk-doc/html
+%_gtkdocdir	%{_defaultdocdir}/gtk-doc/html
 
 # Current date
 %date 		%(LC_ALL="C" date +"%a %b %d %Y")
@@ -139,6 +142,18 @@
 # The directory holding Linux kernel sources
 %_kernelsrcdir	/usr/src/linux
 
+# XMMS specific macros
+%xmms_prefix			%(echo `xmms-config --prefix`)
+%xmms_exec_prefix		%(echo `xmms-config --exec-prefix`)
+%xmms_version			%(echo `xmms-config --version`)
+%xmms_datadir			%(echo `xmms-config --data-dir`)
+%xmms_plugindir			%(echo `xmms-config --plugin-dir`)
+%xmms_visualization_plugindir	%(echo `xmms-config --visualization-plugin-dir`)
+%xmms_input_plugindir		%(echo `xmms-config --input-plugin-dir`)
+%xmms_output_plugindir		%(echo `xmms-config --output-plugin-dir`)
+%xmms_effect_plugindir		%(echo `xmms-config --effect-plugin-dir`)
+%xmms_general_plugindir		%(echo `xmms-config --general-plugin-dir`)
+
 # If non-empty "debug" macro defined, add "dbg" suffix to release number
 %_rpmfilename	%%{NAME}-%%{VERSION}-%%{RELEASE}%{?debug:dbg}.%%{ARCH}.rpm
 
@@ -147,6 +162,9 @@
 %requires_kernel_releq() 	%(LC_ALL="C" rpm -q --queryformat 'Prereq:kernel = %%{VERSION}-%%{RELEASE}' kernel-headers | grep -v "is not")
 %requires_releq_kernel_up() 	%(LC_ALL="C" rpm -q --queryformat 'Prereq:kernel-up = %%{VERSION}-%%{RELEASE}' kernel-headers | grep -v "is not")
 %requires_releq_kernel_smp() 	%(LC_ALL="C" rpm -q --queryformat 'Prereq:kernel-smp = %%{VERSION}-%%{RELEASE}' kernel-headers | grep -v "is not")
+%requires_eq_to %(LC_ALL="C" rpm -q --qf 'Requires: %1 = %%{epoch}:%%{version}\\n' %2 | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
+
+%apache_modules_api %(awk '/#define MODULE_MAGIC_NUMBER_MAJOR/ {print $3}' `apr-config --includedir`/ap_mmn.h)
 
 # kernel version-release handling
 %__kernel_ver    %(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
@@ -305,6 +323,7 @@ if [ "$_autoreqprov" = "y" ] ; then \
     fi \
 fi \
 %{?_noautocompressdoc:echo '%{_noautocompressdoc}' > %{_builddir}/__rpm_noautocompressdoc}\
+%{___build_pre}\
 %{nil}
 
 %__os_install_post \
@@ -362,17 +381,9 @@ fi; \
 %defined()	%{expand:%%{?%{1}:1}%%{!?%{1}:0}}
 %undefined()	%{expand:%%{?%{1}:0}%%{!?%{1}:1}}
 
-# Shorthand for %if %{defined ...}
-%ifdef()	%if %{expand:%%{?%{1}:1}%%{!?%{1}:0}}
-%ifndef()	%if %{expand:%%{?%{1}:0}%%{!?%{1}:1}}
-
 # Shorthand for %{defined with_...}
 %with()		%{expand:%%{?with_%{1}:1}%%{!?with_%{1}:0}}
 %without()	%{expand:%%{?with_%{1}:0}%%{!?with_%{1}:1}}
-
-# Shorthand for %if %{with ...}
-%ifwith()	%if %{expand:%%{?with_%{1}:1}%%{!?with_%{1}:0}}
-%ifwithout()	%if %{expand:%%{?with_%{1}:0}%%{!?with_%{1}:1}}
 
 # Handle conditional builds. %bcond_with is for case when feature is
 # default off and needs to be activated with --with ... command line 
