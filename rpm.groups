@@ -213,11 +213,11 @@ X11/Applications
 	[pl]:	X11/Aplikacje
 
 X11/Applications/Games
-	[de]:	X11/Aplikacje/Spiele
+	[de]:	X11/Applikationen/Spiele
 	[pl]:	X11/Aplikacje/Gry
 
 X11/Applications/Games/Strategy
-	[de]:	X11/Applications/Spiele/Strategie
+	[de]:	X11/Applikationen/Spiele/Strategie
 	[pl]:	X11/Aplikacje/Gry/Strategiczne
 
 X11/Applications/Graphics
