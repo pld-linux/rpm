@@ -71,7 +71,7 @@ Applications/Databases
 	[da]:		Programmer/Databaser
 	[de]:		Applikationen/Datenbanken
 	[es]:		Aplicaciones/Bases de Datos
-	[fr]:		Applications/Bases de Données
+#	[fr]:		Applications/Bases de Données
 	[id]:		Aplikasi/Database
 	[is]:		Forrit/Gagnagrunnar
 	[it]:		Applicazioni/Database
@@ -89,7 +89,7 @@ Applications/Databases/Interfaces
 	[da]:		Programmer/Databaser/Grænsefladen
 	[de]:		Applikationen/Datenbanken/Schnittstellen
 	[es]:		Aplicaciones/Bases de Datos/Interfaces
-	[fr]:		Applications/Bases de données/Interfaces
+#	[fr]:		Applications/Bases de données/Interfaces
 	[is]:		Forrit/Gagnagrunnar/Viðmót
 	[it]:		Applicazioni/Database/Interfacce
 	[no]:		Applikasjoner/Databaser/Grensesnitt
@@ -188,7 +188,7 @@ Applications/Emulators
 	[de]:		Applikationen/Emulatoren
 	[da]:		Programmer/Emulatorer
 	[es]:		Aplicaciones/Emuladores
-	[fr]:		Applications/Émulateurs
+#	[fr]:		Applications/Émulateurs
 	[is]:		Forrit/Hermar
 	[it]:		Applicazioni/Emulatori
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥¨¥ß¥å¥ì¡¼¥¿
@@ -205,7 +205,7 @@ Applications/Engineering
 	[da]:		Programmer/Ingeniørarbejde
 	[de]:		Applikationen/Technik
 	[es]:		Aplicaciones/Ingeniería
-	[fr]:		Applications/Ingénierie
+#	[fr]:		Applications/Ingénierie
 	[is]:		Forrit/Verkfræði
 	[it]:		Applicazioni/Engineering
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥¨¥ó¥¸¥Ë¥¢¥ê¥ó¥°
@@ -274,7 +274,7 @@ Applications/Networking
 	[da]:		Programmer/Netværks
 	[de]:		Applikationen/Netzwerkwesen
 	[es]:		Aplicaciones/Red
-	[fr]:		Applications/Réseau
+#	[fr]:		Applications/Réseau
 	[is]:		Forrit/Net
 	[it]:		Applicazioni/Rete
 	[no]:		Applikasjoner/Nettverk
@@ -307,7 +307,7 @@ Applications/Math
 	[da]:		Programmer/Matematik
 	[de]:		Applikationen/Mathematik
 	[es]:		Aplicaciones/Matemáticas
-	[fr]:		Applications/Mathématiques
+#	[fr]:		Applications/Mathématiques
 	[it]:		Applicazioni/Matematiche
 	[no]:		Applikasjoner/Matematiske
 	[pl]:		Aplikacje/Matematyczne
@@ -322,7 +322,7 @@ Applications/Multimedia
 	[da]:		Programmer/Multimedie
 	[de]:		Applikationen/Multimedien
 	[es]:		Aplicaciones/Multimedia
-	[fr]:		Applications/Multimédia
+#	[fr]:		Applications/Multimédia
 	[is]:		Forrit/Margmiðlun
 	[it]:		Applicazioni/Multimedia
 	[ja]:		¥ê¥±¡¼¥·¥ç¥ó/¥Þ¥ë¥Á¥á¥Ç¥£¥¢
@@ -492,7 +492,7 @@ Applications/Sound
 	[da]:		Programmer/Lyd
 	[de]:		Applikationen/Laut
 	[es]:		Aplicaciones/Sonido
-	[fr]:		Aplicações/Son
+#	[fr]:		Aplicações/Son
 	[is]:		Forrit/Hljóð
 	[it]:		Applicazioni/Audio
 	[no]:		Applikasjoner/Lyd
@@ -525,7 +525,7 @@ Applications/System
 	[da]:		Programmer/System
 	[de]:		Applikationen/System
 	[es]:		Aplicaciones/Sistema
-	[fr]:		Applications/Système
+#	[fr]:		Applications/Système
 	[is]:		Forrit/Kerfisforrit
 	[it]:		Applicazioni/Sistema
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥·¥¹¥Æ¥à
@@ -671,7 +671,7 @@ Development
 	[da]:		Udvikling
 	[de]:		Entwicklung
 	[es]:		Desarrollo
-	[fr]:		Développement
+#	[fr]:		Développement
 	[is]:		Þróunartól
 	[it]:		Sviluppo
 	[ja]:		³«È¯
@@ -689,7 +689,7 @@ Development/Building
 	[da]:		Udvikling/Bygge
 	[de]:		Entwicklung/Bauen
 	[es]:		Desarrollo/Construcción
-	[fr]:		Développement/Construction
+#	[fr]:		Développement/Construction
 	[it]:		Sviluppo/Sviluppo
 	[no]:		Utvikling/Bygge
 	[pl]:		Programowanie/Budowanie
@@ -703,7 +703,7 @@ Development/Debuggers
 	[da]:		Udvikling/Fejlfinding
 	[de]:		Entwicklung/Debugger
 	[es]:		Desarrollo/Depuradores
-	[fr]:		Développement/Débogueurs
+#	[fr]:		Développement/Débogueurs
 	[is]:		Þróunartól/Aflúsarar
 	[it]:		Sviluppo/Debugger
 	[ja]:		³«È¯/¥Ç¥Ð¥Ã¥¬
@@ -926,7 +926,7 @@ Development/Version Control
 	[da]:		Udvikling/Versionskontrol
 	[de]:		Entwicklung/Versionkontrolle
 	[es]:		Desarrollo/Control de Versiones
-	[fr]:		Development/Contrôle de version
+#	[fr]:		Development/Contrôle de version
 	[is]:		Þróunartól/Útgáfu Stýring
 	[it]:		Sviluppo/Controllo della versione
 	[no]:		Utvikling/Versjonskontroll
@@ -1012,7 +1012,7 @@ Networking
 	[da]:		Netværks
 	[de]:		Netzwerkwesen
 	[es]:		Red
-	[fr]:		Réseau
+#	[fr]:		Réseau
 	[is]:		Net
 	[it]:		Rete
 	[no]:		Nettverks
@@ -1029,7 +1029,7 @@ Networking/Admin
 	[da]:		Netværks/Administration
 	[de]:		Netzwerkwesen/Administration
 	[es]:		Red/Administración
-	[fr]:		Réseau/Administration
+#	[fr]:		Réseau/Administration
 	[is]:		Net/Stjórnar
 	[it]:		Rete/Amministrazione
 	[no]:		Nettverks/Administrasjon
@@ -1044,7 +1044,7 @@ Networking/Daemons
 	[da]:		Netværks/Dæmoner
 	[de]:		Netzwerkwesen/Server
 	[es]:		Red/Servidores
-	[fr]:		Réseau/Serveurs
+#	[fr]:		Réseau/Serveurs
 	[is]:		Net/Púkar
 	[it]:		Rete/Demoni
 	[no]:		Nettverks/Daemoner
@@ -1060,7 +1060,7 @@ Networking/Daemons/Java
 	[da]:		Netværks/Dæmoner/Java
 	[de]:		Netzwerkwesen/Server/Java
 	[es]:		Red/Servidores/Java
-	[fr]:		Réseau/Serveurs/Java
+#	[fr]:		Réseau/Serveurs/Java
 	[is]:		Net/Púkar/Java
 	[it]:		Rete/Demoni/Java
 	[no]:		Nettverks/Daemoner/Java
@@ -1076,7 +1076,7 @@ Networking/Daemons/Java/Extensions
 	[da]:		Netværks/Dæmoner/Java/Udvidelser
 	[de]:		Netzwerkwesen/Server/Java/Extensionen
 	[es]:		Red/Servidores/Java/Extensiones
-	[fr]:		Réseau/Serveurs/Java/Extensions
+#	[fr]:		Réseau/Serveurs/Java/Extensions
 	[it]:		Rete/Demoni/Java/Estensioni
 	[no]:		Nettverks/Daemoner/Java/Utvidelser
 	[pl]:		Sieciowe/Serwery/Java/Rozszerzenia
@@ -1094,7 +1094,7 @@ Networking/News
 	[da]:		Netværks/Nyheder
 	[de]:		Netzwerkwesen/News
 	[es]:		Red/Noticias
-	[fr]:		Réseau/Nouvelles
+#	[fr]:		Réseau/Nouvelles
 	[is]:		Net/Fréttir
 	[it]:		Rete/News
 	[no]:		Nettverks/News
@@ -1111,7 +1111,7 @@ Networking/Utilities
 	[da]:		Netværks/Værktøj
 	[de]:		Netzwerkwesen/Dienstprogramme
 	[es]:		Red/Utilitarios
-	[fr]:		Réseau/Utilitaires
+#	[fr]:		Réseau/Utilitaires
 	[is]:		Net/Tól
 	[it]:		Rete/Utility
 	[no]:		Nettverks/Verktøy
@@ -1128,7 +1128,7 @@ Themes
 	[da]:		Temaer
 	[de]:		Themen
 	[es]:		Temas
-	[fr]:		Thèmes
+#	[fr]:		Thèmes
 	[is]:		Þemur
 	[it]:		Temi
 	[no]:		Temaer
@@ -1143,7 +1143,7 @@ Themes/GTK+
 	[da]:		Temaer/GTK+
 	[de]:		Themen/GTK+
 	[es]:		Temas/GTK+
-	[fr]:		Thèmes/GTK+
+#	[fr]:		Thèmes/GTK+
 	[is]:		Þemur/GTK+
 	[it]:		Temi/GTK+
 	[no]:		Temaer/GTK+
@@ -1248,7 +1248,7 @@ X11/Applications/Games/Strategy
 	[da]:		X11/Programmer/Spil/Strategi
 	[de]:		X11/Applikationen/Spiele/Strategie
 	[es]:		X11/Aplicaciones/Juegos/Estratégico
-	[fr]:		X11/Applications/Jeux/Stratégique
+#	[fr]:		X11/Applications/Jeux/Stratégique
 	[it]:		X11/Applicazioni/Giochi/Strategico
 	[no]:		X11/Applikasjoner/Spill/Strategi
 	[pl]:		X11/Aplikacje/Gry/Strategiczne
@@ -1281,7 +1281,7 @@ X11/Applications/Multimedia
 	[da]:		X11/Programmer/Multimedie
 	[de]:		X11/Applikationen/Multimedien
 	[es]:		X11/Aplicaciones/Multimedia
-	[fr]:		X11/Applications/Multimédia
+#	[fr]:		X11/Applications/Multimédia
 	[is]:		X11/Forrit/Margmiðlun
 	[it]:		X11/Applicazioni/Multimedia
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Þ¥ë¥Á¥á¥Ç¥£¥¢
@@ -1298,7 +1298,7 @@ X11/Applications/Networking
 	[da]:		X11/Programmer/Netværks
 	[de]:		X11/Applikationen/Netzwerkwesen
 	[es]:		X11/Aplicaciones/Red
-	[fr]:		X11/Applications/Réseau
+#	[fr]:		X11/Applications/Réseau
 	[is]:		X11/Forrit/Net
 	[it]:		X11/Applicazioni/Rete
 	[no]:		X11/Applikasjoner/Nettverks
@@ -1345,7 +1345,7 @@ X11/Applications/Sound
 	[da]:		X11/Programmer/Lyd
 	[de]:		X11/Applikationen/Laut
 	[es]:		X11/Aplicaciones/Sonido
-	[fr]:		X11/Aplicações/Son
+#	[fr]:		X11/Aplicações/Son
 	[is]:		X11/Forrit/Hljóð
 	[it]:		X11/Applicazioni/Audio
 	[no]:		X11/Applikasjoner/Lyd
@@ -1431,7 +1431,7 @@ X11/Window Managers
 	[da]:		X11/Vindueshåndtererene
 	[de]:		X11/Fenstermanagern
 	[es]:		X11/Administradores de Ventanas
-	[fr]:		X11/Gestionnaires de fenêtres
+#	[fr]:		X11/Gestionnaires de fenêtres
 	[is]:		X11/Gluggastjórunum
 	[it]:		X11/Window manager
 	[no]:		X11/Vindushåndtererene
@@ -1447,7 +1447,7 @@ X11/Window Managers/Tools
 	[da]:		X11/Vindueshåndtererene/Værktøj
 	[de]:		X11/Fenstermanager/Tools
 	[es]:		X11/Administradores de Ventanas/Herramientas
-	[fr]:		X11/Gestionnaires de fenêtres/Outils
+#	[fr]:		X11/Gestionnaires de fenêtres/Outils
 	[is]:		X11/Gluggastjórunum/Tól
 	[it]:		X11/Window manager/Tool
 	[no]:		X11/Vindushåndtererene/Verktøy
