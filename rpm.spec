@@ -30,7 +30,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.41%{?with_distver:+distver}
+Release:	0.%{snap}.42%{?with_distver:+distver}
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -661,13 +661,15 @@ sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' \
 	-e 's|@host_cpu@|%{_target_cpu}|' macros.in > macros.tmp
 mv -f macros.tmp macros.in
 
-# pass CC and CXX too in case of building with some older configure macro
+# Pass CC and CXX too in case of building with some older configure macro.
+# Use internal glob due to change in glibc glob(): https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=126460.
 %configure \
 	CC="%{__cc}" \
 	CXX="%{__cxx}" \
 	CPP="%{__cpp}" \
 	--enable-shared \
 	--enable-static \
+	--with-glob \
 	%{?with_doc:--with-apidocs} \
 	%{?with_python:--with-python=auto} \
 	%{!?with_python:--without-python} \
