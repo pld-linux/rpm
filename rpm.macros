@@ -58,8 +58,21 @@ done \
   %{-C:cd ${_mydir}; unset _mydir}
 
 #-----------------------------------------------------------------
-%configure { CFLAGS="$CFLAGS $RPM_OPT_FLAGS" ; export CFLAGS \
-CXXFLAGS="$CXXFLAGS $RPM_OPT_FLAGS" ; export CXXFLAGS \
-FFLAGS="$FFLAGS $RPM_OPT_FLAGS" ; export FFLAGS \
-./configure %{_target_platform} --prefix=%{_prefix} --exec-prefix=%{_exec_prefix} --bindir=%{_bindir} --sbindir=%{_sbindir} --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} --includedir=%{_includedir} --libdir=%{_libdir} --libexecdir=%{_libexecdir} --localstatedir=%{_localstatedir} --sharedstatedir=%{_sharedstatedir} --mandir=%{_mandir} --infodir=%{_infodir} }
+%configure { CFLAGS="$CFLAGS $RPM_OPT_FLAGS" ; export CFLAGS ; \
+ CXXFLAGS="$CXXFLAGS $RPM_OPT_FLAGS" ; export CXXFLAGS ; \
+ FFLAGS="$FFLAGS $RPM_OPT_FLAGS" ; export FFLAGS ; \
+ ./configure %{_target_platform} \
+ 	--prefix=%{_prefix} \
+	--exec-prefix=%{_exec_prefix} \
+	--bindir=%{_bindir} \
+	--sbindir=%{_sbindir} \
+	--sysconfdir=%{_sysconfdir} \
+	--datadir=%{_datadir} \
+	--includedir=%{_includedir} \
+	--libdir=%{_libdir} \
+	--libexecdir=%{_libexecdir} \
+	--localstatedir=%{_localstatedir} \
+	--sharedstatedir=%{_sharedstatedir} \
+	--mandir=%{_mandir} \
+	--infodir=%{_infodir} }
   
