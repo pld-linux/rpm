@@ -1,9 +1,11 @@
-diff -urN rpm.org/rpmrc.in rpm/rpmrc.in
---- rpm.org/rpmrc.in	2004-11-21 09:55:09.099466860 +0100
-+++ rpm/rpmrc.in	2004-11-21 09:55:57.800033905 +0100
-@@ -11,63 +11,63 @@
- #############################################################
+--- rpm-4.4.1/rpmrc.in.orig	2005-01-09 18:48:19.000000000 +0100
++++ rpm-4.4.1/rpmrc.in	2005-02-18 12:23:10.000000000 +0100
+@@ -13,65 +13,65 @@
  # Values for RPM_OPT_FLAGS for various platforms
+ 
+ # "fat" binary with both archs, for Darwin
+-optflags: fat -O2 -g -arch i386 -arch ppc
++optflags: fat -O2 -arch i386 -arch ppc %{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_fat: %{specflags_fat}}}
  
 -optflags: i386 -O2 -g -march=i386 -mcpu=i686
 -optflags: i486 -O2 -g -march=i486
@@ -25,7 +27,7 @@ diff -urN rpm.org/rpmrc.in rpm/rpmrc.in
 -optflags: alphaev67 -O2 -g -mieee -mcpu=ev67
 -
 -optflags: sparc -O2 -g -m32 -mtune=ultrasparc
--optflags: sparcv8 -O2 -g -m32 -mcpu=ultrasparc -mv8
+-optflags: sparcv8 -O2 -g -m32 -mtune=ultrasparc -mv8
 -optflags: sparcv9 -O2 -g -m32 -mcpu=ultrasparc
 -optflags: sparc64 -O2 -g -m64 -mcpu=ultrasparc
 -
@@ -79,7 +81,7 @@ diff -urN rpm.org/rpmrc.in rpm/rpmrc.in
 +optflags: alphaev67 -O2 -mieee -mcpu=ev67%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_alpha: %{specflags_alpha}}%{?specflags_alphaev67: %{specflags_alphaev67}}}
 +
 +optflags: sparc -O2 -m32 -mtune=ultrasparc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}}
-+optflags: sparcv8 -O2 -m32 -mcpu=ultrasparc -mv8%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparcv8: %{specflags_sparcv8}}}
++optflags: sparcv8 -O2 -m32 -mtune=ultrasparc -mv8%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparcv8: %{specflags_sparcv8}}}
 +optflags: sparcv9 -O2 -m32 -mcpu=ultrasparc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparcv9: %{specflags_sparcv9}}}
 +optflags: sparc64 -O2 -m64 -mcpu=ultrasparc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparc64: %{specflags_sparc64}}}
 +
