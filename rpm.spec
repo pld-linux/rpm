@@ -602,7 +602,7 @@ cat %{SOURCE11} >> macros.in
 %patch41 -p1
 %patch43 -p0
 %patch44 -p1
-#%patch100 -p1
+%patch100 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
