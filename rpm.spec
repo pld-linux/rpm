@@ -84,11 +84,11 @@ Patch35:	%{name}-po.patch
 Patch36:	%{name}-amd64.patch
 Patch37:	%{name}-notsc.patch
 Patch38:	%{name}-hack-norpmlibdep.patch
-Patch40:	%{name}-makefile-no_myLDADD_deps.patch
-Patch41:	%{name}-libdir64.patch
-Patch42:	%{name}-libdir-links.patch
-Patch43:	%{name}-find_required_pkgs_on_build.patch
-Patch44:	%{name}-noautoreqprovfiles.patch
+Patch39:	%{name}-makefile-no_myLDADD_deps.patch
+Patch40:	%{name}-libdir64.patch
+Patch41:	%{name}-libdir-links.patch
+Patch42:	%{name}-find_required_pkgs_on_build.patch
+Patch43:	%{name}-noautoreqprovfiles.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -576,11 +576,11 @@ cat %{SOURCE14} >> macros.in
 %patch36 -p1
 %patch37 -p1
 %patch38 -p1
+%patch39 -p1
 %patch40 -p1
 %patch41 -p1
 %patch42 -p1
 %patch43 -p1
-%patch44 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
