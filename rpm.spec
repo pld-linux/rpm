@@ -52,29 +52,27 @@ Patch24:	%{name}-ac25x.patch
 Patch25:	%{name}-gettext-in-header.patch
 Patch26:	%{name}-compress-doc.patch
 Patch27:	%{name}-lt14d.patch
-Patch37:        %{name}-short_circuit.patch
-Patch38:        %{name}-section_test.patch
-BuildRequires:	autoconf >= 2.52
+URL:		http://www.rpm.org/
 Icon:		rpm.gif
-BuildRequires:	autoconf >= 2.50
+BuildRequires:	autoconf >= 2.52
+BuildRequires:	automake
+BuildRequires:	bzip2-devel >= 1.0.1
 BuildRequires:	db4-devel >= 4.0.14
 BuildRequires:	doxygen
-BuildRequires:	db1-devel >= 1.85
-BuildRequires:	db3-devel >= 3.1.17-9
 BuildRequires:	gettext-devel >= 0.10.38-3
+BuildRequires:	libtool
+BuildRequires:	patch >= 2.2
 BuildRequires:	python-devel >= 2.2
 BuildRequires:	python-modules >= 2.2
 BuildRequires:	zlib-devel
-BuildRequires:	python-modules >= 2.2.1
-BuildRequires:	zlib-devel >= 1.1.4
 %if %{!?_without_static:1}%{?_without_static:0}
+# Require static library only for static build
+BuildRequires:	bzip2-static >= 1.0.1
 BuildRequires:	db4-static >= 4.0.14-2
-BuildRequires:	db1-static >= 1.85
-BuildRequires:	zlib-static
 BuildRequires:	glibc-static >= 2.2.0
-BuildRequires:	zlib-static >= 1.1.4
+BuildRequires:	zlib-static
+%endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-Obsoletes:	rpm-libs
 Conflicts:	glibc < 2.2
 
 %define		__find_provides	%{SOURCE4}
@@ -83,8 +81,8 @@ Conflicts:	glibc < 2.2
 %define		py_ver		%(echo `python -c "import sys; print sys.version[:3]"`)
 %define		py_prefix	%(echo `python -c "import sys; print sys.prefix"`)
 %define		py_libdir	%{py_prefix}/lib/python%{py_ver}
+%define		py_sitedir	%{py_libdir}/site-packages
 %define		py_dyndir	%{py_libdir}/lib-dynload
-%define		pyrequires_eq() Requires:	%1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
 
 %description
 RPM is a powerful package manager, which can be used to build,
@@ -128,10 +126,10 @@ Summary(es):	Archivos de inclusión y bibliotecas para programas de manipulación 
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne
 Summary(pt_BR):	Arquivos de inclusão e bibliotecas para programas de manipulação de pacotes RPM
 Group:		Development/Libraries
-Requires:	beecrypt-devel
-Requires:	db4-devel
 Requires:	%{name} = %{version}
 Requires:	popt-devel
+Requires:	beecrypt-devel
+Requires:	db4-devel
 
 %description devel
 The RPM packaging system includes a C library that makes it easy to
@@ -187,9 +185,9 @@ Bibliotecas estáticas para desenvolvimento.
 Summary:	Additional utilities for managing rpm packages and database
 Summary(de):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
 Summary(pl):	Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami
-Requires:	popt >= 1.6.4
 Group:		Applications/File
 Requires:	%{name} = %{version}
+Requires:	popt >= 1.6.4
 
 %description utils
 Additional utilities for managing rpm packages and database.
@@ -205,8 +203,8 @@ Summary:	Additional utilities for checking perl provides/requires in rpm package
 Summary(de):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
 Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w pakietach rpm
 Group:		Applications/File
+Requires:	%{name} = %{version}
 Requires:	perl-modules
-Requires:	findutils
 
 %description perlprov
 Additional utilities for checking perl provides/requires in rpm
@@ -236,11 +234,11 @@ Pythonie.
 
 %package -n python-rpm
 Summary:	Python interface to RPM library
-Group:		Development/Languages/Python
+Summary(pl):	Pythonowy interfejs do biblioteki RPM-a
 Summary(pt_BR):	Módulo Python para aplicativos que manipulam pacotes RPM
-%requires_eq	python
+Group:		Development/Languages/Python
 Requires:	%{name} = %{version}
-%pyrequires_eq	python
+%requires_eq	python
 Obsoletes:	rpm-python
 
 %description -n python-rpm
@@ -264,6 +262,8 @@ escritas em Python utilizem a interface fornecida pelas bibliotecas
 RPM (RPM Package Manager).
 
 Esse pacote deve ser instalado se você quiser desenvolver programas em
+Python para manipular pacotes e bancos de dados RPM.
+
 %package lib
 Summary:	RPMs library
 Summary(pl):	Biblioteki RPMa
@@ -360,11 +360,9 @@ Static version of crypto library.
 %description -n beecrypt-static -l pl
 Statyczna wersja biblioteki kryptograficznej.
 
-construir pacotes usando o RPM.
-
 %prep
+%setup -q -a12
 %patch0 -p1
-%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
@@ -372,32 +370,30 @@ construir pacotes usando o RPM.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
+%patch10 -p1
 %patch11 -p1
 # too many rejects, Pawel please check if needed and rediff
 #%patch12 -p0
-%patch11 -p0
-%patch12 -p0
+%patch13 -p1
+%patch14 -p1
 %patch15 -p1
 %patch16 -p1
-%patch15 -p0
-%patch16 -p0
 %patch17 -p1
 %patch18 -p1
 %patch19 -p1
+%patch20 -p1
+%patch21 -p1
 %patch22 -p1
 %patch23 -p1
 %patch24 -p1
 %patch25 -p1
 %patch26 -p1
 %patch27 -p1
-%patch31 -p1
-%patch36 -p1
-%patch37 -p1
-%patch38 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
-install %{SOURCE9} scripts/find-lang.sh
+install %{SOURCE5} macros.perl.in
 install %{SOURCE13} macros.python.in
 install %{SOURCE6} scripts/find-perl-provides
 install %{SOURCE7} scripts/find-perl-requires
@@ -406,14 +402,18 @@ install %{SOURCE9} scripts/find-lang.sh
 (cd scripts;
 mv -f perl.req perl.req.in
 mv -f perl.prov perl.prov.in)
-# generate Group translations to *.po
-awk -f %{SOURCE14} %{SOURCE1}
+
+chmod +x %{SOURCE4}
 
 %build
 # generate Group translations to *.po
 awk -f %{SOURCE14} %{SOURCE1}
 
 cd popt
+rm -f missing
+libtoolize --force --copy
+aclocal
+autoheader
 autoconf
 automake -a -c -f
 cd ../beecrypt
@@ -423,37 +423,33 @@ aclocal
 autoheader
 autoconf
 automake -a -c -f
-aclocal
-autoheader
-automake -a -c -f
-%{__automake}
 cd ..
 
 rm -f missing
 libtoolize --force --copy
+gettextize --copy --force
+aclocal
+autoupdate
+autoheader || :
 autoconf
 automake -a -c -f
 
-sed -e 's#python1.5#python%{py_ver}#g' \
-	python/Makefile.in > python/Makefile.in.new
-sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|'  \
-	-e 's|@host_cpu@|%{_target_cpu}|'  macros.in  > macros.tmp
 # config.guess doesn't handle athlon, so we have to change it by hand.
 # rpm checks for CPU type at runtime, but it looks better
-sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' macros.in | \
-	sed 's|@host_cpu@|%{_target_cpu}|' > macros.tmp
+sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|'  \
+	-e 's|@host_cpu@|%{_target_cpu}|'  macros.in  > macros.tmp
+mv -f macros.tmp macros.in
+
+%configure \
+	--enable-shared \
 	--enable-static \
 	--with-apidocs \
 	--with-python \
 	--without-db
-%configure \
+
 %{__make} \
 	%{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"} \
 	myLDFLAGS="%{rpmldflags}"
-	--with-python
-
-
-%{__make} %{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -467,7 +463,7 @@ install macros.python $RPM_BUILD_ROOT%{_libdir}/rpm/macros.python
 
 install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
-install %{SOURCE15} $RPM_BUILD_ROOT%{_libdir}/rpm/compress-doc
+install %{SOURCE4} $RPM_BUILD_ROOT%{_libdir}/rpm/find-rpm-provides
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 install %{SOURCE10} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides
 install %{SOURCE11} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
@@ -485,24 +481,23 @@ EOF
 
 %find_lang %{name}
 
-# DON'T BREAK BUILD TREE!!!
-# rm -f doc/manual/Makefile*
+rm -f doc/manual/Makefile*
 
 gzip -9nf RPM-PGP-KEY CHANGES doc/manual/*
 
-%post   -n beecrypt -p /sbin/ldconfig
-%postun -n beecrypt -p /sbin/ldconfig
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post	-p /sbin/ldconfig
 %postun -p /sbin/ldconfig
+%post   -n beecrypt -p /sbin/ldconfig
+%postun -n beecrypt -p /sbin/ldconfig
 
+%files -f %{name}.lang
+%defattr(644,root,root,755)
+%doc RPM-PGP-KEY.gz CHANGES.gz doc/manual/*
 
-%attr(755,root,root) %{_libdir}/rpm/rpmq
-%attr(755,root,root) %{_libdir}/rpm/rpmk
-%attr(755,root,root) %{_libdir}/rpm/rpmv
-%attr(755,root,root) %{_libdir}/librpm*.so.*.*
+%attr(755,root,root) /bin/rpm
 
 %dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpm/macros
@@ -518,12 +513,12 @@ rm -rf $RPM_BUILD_ROOT
 %dir /var/lib/rpm
 %dir %{_libdir}/rpm
 
-%{_libdir}/rpm/noarch-*
+%doc %attr(755,root,root) %{_libdir}/rpm/convertrpmrc.sh
+
 %{_libdir}/rpm/rpmrc
 %{_libdir}/rpm/rpmpopt*
 %{_libdir}/rpm/macros
-%{_libdir}/rpm/noarch-linux
-%{_libdir}/rpm/noarch-pld-linux
+%{_libdir}/rpm/noarch-*
 %ifarch i386 i486 i586 i686 athlon
 %{_libdir}/rpm/i?86*
 %{_libdir}/rpm/athlon*
@@ -533,33 +528,38 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 %ifarch alpha
 %{_libdir}/rpm/alpha*
-%files lib
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/librpm*-*.so
 %endif
 %ifarch ppc
 %{_libdir}/rpm/ppc*
+%endif
+
+%files lib
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/librpm*-*.so
+
+%files build
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/rpm/compress-doc
 %attr(755,root,root) %{_libdir}/rpm/cross-build
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/rpmbuild
-%attr(755,root,root) %{_bindir}/rpme
-%attr(755,root,root) %{_bindir}/rpmi
-%attr(755,root,root) %{_bindir}/rpmu
 %attr(755,root,root) %{_libdir}/rpm/find-requires
 %attr(755,root,root) %{_libdir}/rpm/find-provides
 %attr(755,root,root) %{_libdir}/rpm/find-rpm-provides
 %attr(755,root,root) %{_libdir}/rpm/find-spec-bcond
 %attr(755,root,root) %{_libdir}/rpm/find-lang.sh
 %attr(755,root,root) %{_libdir}/rpm/mkinstalldirs
+%attr(755,root,root) %{_libdir}/rpm/config.*
 %attr(755,root,root) %{_libdir}/rpm/getpo.sh
 %attr(755,root,root) %{_libdir}/rpm/install-build-tree
 %attr(755,root,root) %{_libdir}/rpm/brp-*
-%attr(755,root,root) %{_libdir}/rpm/compress-doc
+%attr(755,root,root) %{_libdir}/rpm/check-prereqs
 %attr(755,root,root) %{_libdir}/rpm/cpanflute
 %attr(755,root,root) %{_libdir}/rpm/http.req
 %attr(755,root,root) %{_libdir}/rpm/magic.*
 %attr(755,root,root) %{_libdir}/rpm/u_pkg.sh
+%attr(755,root,root) %{_libdir}/rpm/vpkg-provides.sh
+%attr(755,root,root) %{_libdir}/rpm/vpkg-provides2.sh
+%attr(755,root,root) %{_libdir}/rpm/rpmb
+%attr(755,root,root) %{_libdir}/rpm/rpmt
 # not used yet ...
 %{_libdir}/rpm/sql.prov
 %{_libdir}/rpm/sql.req
@@ -572,10 +572,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %{_mandir}/man1/*
 %{_mandir}/man8/rpmbuild.8*
-%attr(755,root,root) %{_libdir}/rpm/rpmb
-%attr(755,root,root) %{_libdir}/rpm/rpmi
-%attr(755,root,root) %{_libdir}/rpm/rpmt
-%attr(755,root,root) %{_libdir}/rpm/rpme
+
+%files devel
+%defattr(644,root,root,755)
+%{_includedir}/rpm
 %attr(755,root,root) %{_libdir}/librpm.la
 %attr(755,root,root) %{_libdir}/librpm.so
 %attr(755,root,root) %{_libdir}/librpmio.la
@@ -584,13 +584,13 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/librpmdb.so
 %attr(755,root,root) %{_libdir}/librpmbuild.la
 %attr(755,root,root) %{_libdir}/librpmbuild.so
-%files devel
-%defattr(644,root,root,755)
-%{_includedir}/rpm
-%attr(755,root,root) %{_libdir}/librpm*.la
-%attr(755,root,root) %{_libdir}/librpm*.so
 
 %files static
+%defattr(644,root,root,755)
+%{_libdir}/librpm*.a
+
+%files utils
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rpm2cpio
 %attr(755,root,root) %{_libdir}/rpm/rpmdiff*
 # not here
@@ -598,13 +598,8 @@ rm -rf $RPM_BUILD_ROOT
 #%{_prefix}/lib/rpm/rpm.log
 #%{_prefix}/lib/rpm/rpm.xinetd
 %{_prefix}/lib/rpm/rpm2cpio.sh
-%files utils
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/javadeps
-%attr(755,root,root) %{_bindir}/rpm2cpio
 
 %{_mandir}/man8/rpm2cpio.8*
-%{_mandir}/man1/*
 %lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
 %lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
 %lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
@@ -620,6 +615,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/get_magic.pl
 
 %{_libdir}/rpm/macros.perl
+
+%files pythonprov
+%defattr(644,root,root,755)
+%{_libdir}/rpm/macros.python
+
 # this subpackage need fix
 #%files -n python-rpm
 #%defattr(644,root,root,755)
@@ -634,12 +634,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_prefix}/lib/libbeecrypt.so
 %attr(755,root,root) %{_prefix}/lib/libbeecrypt.la
 %{_includedir}/beecrypt
-%{_libdir}/rpm/macros.python
+
 %files -n beecrypt-static
 %defattr(644,root,root,755)
 %{_prefix}/lib/libbeecrypt.a
-
-
-%files -n python-rpm
-%defattr(755,root,root,755)
-%{py_sitedir}/*.so
