@@ -264,7 +264,6 @@ Summary:	RPMs library
 Summary(pl):	Biblioteki RPMa
 Group:		Libraries
 
-
 %description lib
 RPMs library.
 
@@ -433,8 +432,9 @@ sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' macros.in | \
 	--with-python \
 	--without-db
 %configure \
-	--enable-shared \
-	--enable-v1-packages \
+%{__make} \
+	%{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"} \
+	myLDFLAGS="%{rpmldflags}"
 	--with-python
 
 
@@ -483,7 +483,6 @@ rm -rf $RPM_BUILD_ROOT
 %postun -p /sbin/ldconfig
 
 
-%attr(755,root,root) %{_libdir}/rpm/rpmdb
 %attr(755,root,root) %{_libdir}/rpm/rpmq
 %attr(755,root,root) %{_libdir}/rpm/rpmk
 %attr(755,root,root) %{_libdir}/rpm/rpmv
@@ -539,7 +538,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/getpo.sh
 %attr(755,root,root) %{_libdir}/rpm/install-build-tree
 %attr(755,root,root) %{_libdir}/rpm/brp-*
-%attr(755,root,root) %{_libdir}/rpm/check-prereqs
 %attr(755,root,root) %{_libdir}/rpm/compress-doc
 %attr(755,root,root) %{_libdir}/rpm/cpanflute
 %attr(755,root,root) %{_libdir}/rpm/http.req
@@ -576,13 +574,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/librpm*.so
 
 %files static
-%attr(755,root,root) %{_bindir}/rpm[2qvseiu]*
-%attr(755,root,root) %{_bindir}/rpmdb
-%attr(755,root,root) %{_libdir}/rpm/rpm[edikqv]
+%attr(755,root,root) %{_bindir}/rpm2cpio
 %attr(755,root,root) %{_libdir}/rpm/rpmdiff*
-%{_prefix}/lib/rpm/rpm.daily
-%{_prefix}/lib/rpm/rpm.log
-%{_prefix}/lib/rpm/rpm.xinetd
+# not here
+#%{_prefix}/lib/rpm/rpm.daily
+#%{_prefix}/lib/rpm/rpm.log
+#%{_prefix}/lib/rpm/rpm.xinetd
 %{_prefix}/lib/rpm/rpm2cpio.sh
 %files utils
 %defattr(644,root,root,755)

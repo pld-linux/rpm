@@ -14,7 +14,7 @@
 %_sbindir        %{_exec_prefix}/sbin
 %_libexecdir     %{_exec_prefix}/lib
 %_datadir        %{_prefix}/share
-%_sharedstatedir %{_prefix}/com
+%_sharedstatedir /var/lib
 %_lib            lib
 %_libdir         %{_exec_prefix}/%{_lib}
 %_includedir     %{_prefix}/include
