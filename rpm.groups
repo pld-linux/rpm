@@ -6,7 +6,7 @@ Applications/Archiving
 	[de]:	Applikationen/Archivierung
 	[pl]:	Aplikacje/Archiwizacja
 
-Aplikacje/Console
+Applications/Console
 	[de]:	Applikationen/Konsole
 	[pl]:	Aplikacje/Konsola
 
@@ -48,7 +48,7 @@ Applications/Engineering
 	[de]:	Applikationen/Ingenieurwesen
 	[pl]:	Aplikacje/In¿ynierskie
 
-Aplikacje/File
+Applications/File
 	[de]:	Applikationen/Datei
 	[pl]:	Aplikacje/Pliki
 
@@ -81,7 +81,7 @@ Applications/News
 	[de]:	Applikationen/News
 	[pl]:	Aplikacje/News
 
-Aplikacje/Printing
+Applications/Printing
 	[de]:	Applikationen/Drucken
 	[pl]:	Aplikacje/Drukowanie
 
@@ -105,15 +105,15 @@ Applications/Spreadsheets
 	[de]:	Applikationen/Arbeitsblätter
 	[pl]:	Aplikacje/Arkusze kalkulacyjne
 
-Aplikacje/System
+Applications/System
 	[de]:	Applikationen/System
 	[pl]:	Aplikacje/System
 
-Aplikacje/Terminal
+Applications/Terminal
 	[de]:	Applikationen/Terminal
 	[pl]:	Aplikacje/Terminal
 
-Aplikacje/Text
+Applications/Text
 	[de]:	Applikationen/Text
 	[fr]:	Utilitaires/Texte
 	[pl]:	Aplikacje/Tekst
