@@ -6,9 +6,14 @@ fi
 
 filelist=`echo $@`
 for i in $filelist; do
-	j=`cat $i |egrep -i "^Class" |cut -f 2 -d " "`
-	if [ -n "$j" ]; then
-		echo "Provides:	pear($j)"
+	i=`echo $i | grep "\.php"`
+	if [ -n "$i" ]; then
+		j=`cat $i |egrep -i "^Class" |cut -f 2 -d " "`
+		if [ -n "$j" ]; then
+			for p in $j; do
+				echo "Provides:	pear($p)"
+			done
+			j=""
+		fi
 	fi
-	j=""
 done
