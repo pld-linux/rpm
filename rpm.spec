@@ -49,6 +49,7 @@ Source12:	perl.prov
 Source30:	builder
 Source31:	adapter.awk
 Source32:	pldnotify.awk
+Source33:	%{name}rc
 Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
@@ -688,6 +689,9 @@ install %{SOURCE32} $RPM_BUILD_ROOT%{_bindir}/pldnotify.awk
 install rpmio/ugid.h $RPM_BUILD_ROOT%{_includedir}/rpm
 
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm
+
+install %{SOURCE33} $RPM_BUILD_ROOT%{_sysconfdir}
+
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # customized rpm macros - global for host
 #
@@ -768,6 +772,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpm/macros
+
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpmrc
 
 %{_mandir}/man8/rpm.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
