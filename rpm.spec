@@ -311,7 +311,6 @@ rm -rf $RPM_BUILD_ROOT
 %ifarch i686
 %{_libdir}/rpm/i686-pld-linux
 %{_libdir}/rpm/noarch-linux
-%endif
 %{_libdir}/rpm/noarch-pld-linux
 %{_libdir}/rpm/sparc-pld-linux
 %endif
