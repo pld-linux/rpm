@@ -23,19 +23,3 @@ diff -Nru rpm-4.0/rpmpopt.in rpm-4.0.new/rpmpopt.in
  # Choose db interface:
  #	0	same as 1
  #	1	native db1 interface (e.g. linux glibc libdb1 routines).
---- rpm-4.1/po/pl.po.orig	Wed Oct 23 23:01:03 2002
-+++ rpm-4.1/po/pl.po	Wed Oct 23 23:11:20 2002
-@@ -3789,4 +3789,13 @@
- #: ../rpmpopt:410 ../rpmpopt:418
- msgid "DIRECTORY"
- msgstr "KATALOG"
-+
-+msgid "make all needed dirs for building binary rpms"
-+msgstr "utwórz wszystkie katalogi potrzebne do budowania pakietów RPM"
-+
-+msgid "build packages with debug informations"
-+msgstr "buduj pakiety z informacjami do odpluskwiania"
-+
-+msgid "find all --with/--without values"
-+msgstr "znajd¼ wszystkie u¿ywane --with/--without"
- 
