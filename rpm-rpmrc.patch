@@ -11,10 +11,4 @@ diff -Nru rpm-4.0.1/rpmrc.in rpm-4.0.1.new/rpmrc.in
 +#optflags: i386 -O2 -march=i386 -mcpu=i686
  optflags: i486 -O2 -march=i486
  optflags: i586 -O2 -march=i586
-@@ -289,5 +289,5 @@
- buildarch_compat: ia64: noarch
- buildarch_compat: s390: noarch
- 
--macrofiles:	@RPMCONFIGDIR@/macros:@RPMCONFIGDIR@/%{_target}/macros:@SYSCONFIGDIR@/macros.specspo:@SYSCONFIGDIR@/macros.db1:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/.rpmmacros
-+macrofiles:	@RPMCONFIGDIR@/macros:@RPMCONFIGDIR@/macros.pld:@RPMCONFIGDIR@/%{_target}/macros:@SYSCONFIGDIR@/macros.specspo:@SYSCONFIGDIR@/macros.db1:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/.rpmmacros
  
