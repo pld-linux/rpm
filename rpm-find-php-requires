@@ -25,7 +25,5 @@ if [ -f __rpm_noautoreqdep ] ; then
 	done
 fi
 
-requires_mod="`LC_ALL=C rpm -q --whatprovides --qf "%{NAME}\n"  $requires_php_t 2>/dev/null`"
 echo "$requires
-$requires_php
-$requires_mod"| grep -v "no package provides" | sort -u
+$requires_php"| grep -v "no package provides" | sort -u
