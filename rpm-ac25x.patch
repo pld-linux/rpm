@@ -1,5 +1,5 @@
---- rpm-4.0.2/configure.in.orig	Sat Mar 16 20:30:55 2002
-+++ rpm-4.0.2/configure.in	Sat Mar 16 20:32:13 2002
+--- rpm-4.0.4/configure.in.orig	Sat Mar 16 20:30:55 2002
++++ rpm-4.0.4/configure.in	Sat Mar 16 20:32:13 2002
 @@ -17,8 +17,6 @@
  dnl Set of available languages.
  ALL_LINGUAS="cs da de en_RN es eu_ES fi fr gl hu id is it ja ko no pl pt pt_BR ro ru sk sl sr sv tr uk wa zh zh_CN.GB2312"
@@ -32,11 +32,10 @@
  AC_FUNC_FNMATCH
  if test $ac_cv_func_fnmatch_works = no; then
 -   LIBOBJS="$LIBOBJS fnmatch.o"
--   AC_DEFINE_UNQUOTED(fnmatch, rpl_fnmatch)
 +   AC_LIBOBJ([fnmatch])
-+dnl   AC_DEFINE_UNQUOTED(fnmatch, rpl_fnmatch)
+ dnl XXX no expansion needed
+ dnl AC_DEFINE_UNQUOTED(fnmatch, rpl_fnmatch)
  fi
- 
 @@ -771,7 +769,7 @@
  dnl 
  dnl if test $rpm_cv_regex = yes; then
@@ -95,23 +94,3 @@
      INCPATH="-I\$(top_builddir)/misc $INCPATH"
  fi
  AC_SUBST(INCPATH)
---- rpm-4.0.2/acconfig.h.orig	Wed Mar 27 20:25:58 2002
-+++ rpm-4.0.2/acconfig.h	Wed Mar 27 20:33:00 2002
-@@ -12,7 +12,7 @@
-    a given entry is in the file.
- 
-    Leave the following blank line there!!  Autoheader needs it.  */
--^L
-+
- 
- /* Define to the name of the distribution.  */
- #undef PACKAGE
-@@ -162,7 +162,7 @@
- /* Build with dmalloc support? */
- #undef DMALLOC
- 
--^L
-+
- /* Leave that blank line there!!  Autoheader needs it.
-    If you're adding to this file, keep in mind:
-    The entries are in sort -df order: alphabetical, case insensitive,

@@ -1,24 +1,13 @@
---- rpm-4.0.2/scripts/Makefile.am.wiget	Tue Dec 12 17:47:59 2000
-+++ rpm-4.0.2/scripts/Makefile.am	Fri Aug 10 12:44:47 2001
-@@ -9,7 +9,8 @@
- 	find-prov.pl find-req.pl cpanflute find-provides.perl \
- 	find-requires.perl get_magic.pl getpo.sh http.req \
+--- rpm-4.1/scripts/Makefile.am.wiget	Thu Aug 22 19:31:42 2002
++++ rpm-4.1/scripts/Makefile.am	Wed Sep 18 23:52:19 2002
+@@ -31,4 +31,5 @@
  	magic.prov magic.req perl.prov perl.req rpmdiff rpmdiff.cgi \
--	trpm u_pkg.sh vpkg-provides.sh vpkg-provides2.sh
-+	trpm u_pkg.sh vpkg-provides.sh vpkg-provides2.sh \
-+	find-perl-requires find-perl-provides
- 
- installprefix = $(DESTDIR)
- 
-@@ -23,4 +24,5 @@
- 	find-prov.pl find-req.pl cpanflute find-provides.perl \
- 	find-requires.perl get_magic.pl getpo.sh http.req \
- 	magic.prov magic.req perl.prov perl.req rpmdiff rpmdiff.cgi u_pkg.sh \
--	vpkg-provides.sh vpkg-provides2.sh
-+	vpkg-provides.sh vpkg-provides2.sh \
-+	find-perl-requires find-perl-provides
---- rpm-4.0.2/scripts/perl.prov.wiget	Mon Jan 17 19:58:36 2000
-+++ rpm-4.0.2/scripts/perl.prov	Fri Aug 10 12:44:47 2001
+ 	rpm.daily rpm.log rpm.xinetd rpm2cpio.sh \
+ 	sql.prov sql.req tcl.req tgpg trpm u_pkg.sh \
++  	find-perl-requires find-perl-provides \
+ 	vpkg-provides.sh vpkg-provides2.sh
+--- rpm-4.1/scripts/perl.prov.wiget	Fri Feb  1 16:20:26 2002
++++ rpm-4.1/scripts/perl.prov	Wed Sep 18 23:50:15 2002
 @@ -47,7 +47,9 @@
  
  if ("@ARGV") {
@@ -41,11 +30,11 @@
    }
  }
  
---- rpm-4.0.2/scripts/perl.req.wiget	Mon Jan 17 19:58:36 2000
-+++ rpm-4.0.2/scripts/perl.req	Fri Aug 10 12:44:47 2001
+--- rpm-4.1/scripts/perl.req.wiget	Mon Jun  3 22:56:33 2002
++++ rpm-4.1/scripts/perl.req	Wed Sep 18 23:50:15 2002
 @@ -1,4 +1,4 @@
 -#!/usr/bin/perl
-+#!@PERL@
++#!@__PERL@
  
  # RPM (and it's source code) is covered under two separate licenses. 
  
@@ -87,13 +76,13 @@
    } else {
  
      # I am not using rpm3.0 so I do not want spaces arround my
-@@ -183,7 +195,31 @@
+@@ -209,7 +221,31 @@
        # will be included with the name sys/systeminfo.ph so only use the
        # basename of *.ph files
  
--      ($module  =~ m/\.ph$/) && ($module =~ s!.*/!!g );
+-      ($module  =~ m/\.ph$/) && next;
 +      # ($module  =~ m/\.ph$/) && ($module =~ s!.*/!!g );
-+
++ 
 +      # there is no need to generate dependencies for ph, pl or test files
 +      # so let's just skip them.
 +
@@ -118,39 +107,30 @@
 +
 +      $module =~ s/\(\s*\)$//;
  
- 
        $require{$module}=$version;
---- rpm-4.0.2/configure.in.wiget	Sun Feb 25 18:13:26 2001
-+++ rpm-4.0.2/configure.in	Fri Aug 10 12:48:21 2001
-@@ -186,6 +186,7 @@
-     AC_PATH_PROG(__MKDIR, mkdir, /bin/mkdir, $MYPATH)
-     AC_PATH_PROG(__MV, mv, /bin/mv, $MYPATH)
-     AC_PATH_PROG(__PATCH, patch, /usr/bin/patch, $MYPATH)
-+    AC_PATH_PROG(PERL, perl, /usr/bin/perl, $MYPATH)
-     AC_MSG_CHECKING(old version of patch)
-     PATCHVERSION=`patch --version 2>&1`
+       $line{$module}=$_;
+--- rpm-4.1/configure.ac.wiget	Thu Aug 22 19:01:34 2002
++++ rpm-4.1/configure.ac	Wed Sep 18 23:50:46 2002
+@@ -1194,6 +1194,7 @@
+ AC_CONFIG_SUBDIRS(popt beecrypt zlib libelf db3)
  
-@@ -1086,6 +1087,7 @@
- 
- AC_CONFIG_SUBDIRS(popt)
- AC_OUTPUT([Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec scripts/brp-redhat
-+ 	macros.perl scripts/perl.req scripts/perl.prov
- 	rpmio/Makefile lib/Makefile build/Makefile tools/Makefile
- 	scripts/Makefile
- 	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
---- rpm-4.0.2/macros.in.wiget	Fri Aug 10 12:44:47 2001
-+++ rpm-4.0.2/macros.in	Fri Aug 10 12:44:47 2001
-@@ -626,9 +626,11 @@
- #	%{perl_sitearch}/Image
+ AC_OUTPUT([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
++	macros.perl scripts/perl.req scripts/perl.prov
+ 	rpmio/Makefile rpmdb/Makefile lib/Makefile build/Makefile
+ 	scripts/Makefile scripts/brp-redhat
+ 	scripts/macros.perl scripts/macros.php scripts/macros.python
+--- rpm-4.1/macros.in.wiget	Sun Sep  1 00:30:19 2002
++++ rpm-4.1/macros.in	Wed Sep 18 23:50:46 2002
+@@ -1012,8 +1012,10 @@
  #	%dir %{perl_sitearch}/auto/Image
  #
+ %requires_eq()	%(LC_ALL="C" echo '%*' | xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
+-%perl_sitearch	%(eval "`perl -V:installsitearch`"; echo $installsitearch)
+-%perl_archlib	%(eval "`perl -V:installarchlib`"; echo $installarchlib)
 +#
 +# NOTE: %{perl_sitearch}, %{perl_archlib} and %{perl_sitelib} macros 
 +#	has been moved to macros.perl (see info in this file for details).
 +#
- %requires_eq()	%(LC_ALL="C" rpm -q --queryformat 'Requires:%%{NAME} = %%{VERSION}' %1| grep -v "is not")
--%perl_sitearch	%(eval "`perl -V:installsitearch`"; echo $installsitearch)
--%perl_archlib	%(eval "`perl -V:installarchlib`"; echo $installarchlib)
  
  #------------------------------------------------------------------------------
  # arch macro for all Intel i?86 compatibile processors

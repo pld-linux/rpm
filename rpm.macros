@@ -1,15 +1,20 @@
 # PLD rpm macros
 
-%_defaultdocdir  %{_usr}/share/doc
+%__id		@__ID@
+%__id_u		%{__id} -u 
+%__chown_Rhf           @__CHOWN_RHF@
+%__chgrp_Rhf           @__CHGRP_RHF@
+
 %_fixowner       [ `%{__id_u}` = '0' ] && %{__chown_Rhf} root.@ROOT_GROUP@
 %_fixgroup       true
+%_fixperms             %{__chmod} -Rf @FIXPERMS@
 %_topdir         %(echo $HOME)/rpm
 %_exec_prefix    %{_prefix}
 %_bindir         %{_exec_prefix}/bin
 %_sbindir        %{_exec_prefix}/sbin
 %_libexecdir     %{_exec_prefix}/lib
 %_datadir        %{_prefix}/share
-%_sharedstatedir %{_prefix}/com
+%_sharedstatedir /var/lib
 %_lib            lib
 %_libdir         %{_exec_prefix}/%{_lib}
 %_includedir     %{_prefix}/include
@@ -18,18 +23,18 @@
 %_localstatedir  /var
 %_infodir        /usr/share/info
 %_mandir         %{_prefix}/share/man
+%_defaultdocdir  %{_usr}/share/doc
 #-----------------------------------------------------------------
 # CFLAGS and LDFLAGS used to build
 
-%debugcflags	-O0 -g
+%debugcflags	-O0 -g -Wall
 %rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}
 %rpmldflags	%{!?debug:-s}
 
 # kernel compiler
-%kgcc		gcc
-%kgcc_package	gcc
+%kgcc		gcc2
+%kgcc_package	gcc2
 
-#-----------------------------------------------------------------
 # Build system path macros.
 #
 %__libtoolize           libtoolize --copy --force
@@ -47,7 +52,7 @@
  CPPFLAGS="${CPPFLAGS:-}" ; export CPPFLAGS ; \
  %{?__cc:CC=%{__cc} ; export CC ; } \
  %{?__cxx:CXX=%{__cxx} ; export CXX ; } \
- %{?configuredir:%{configuredir}}%{?!configuredir:.}/configure \
+ %{?configuredir:%{configuredir}}%{!?configuredir:.}/configure \
 	--host=%{_target_platform} \
  	--prefix=%{_prefix} \
 	--exec-prefix=%{_exec_prefix} \
@@ -120,13 +125,12 @@
 %_kernelsrcdir	/usr/src/linux
 
 # If non-empty "debug" macro defined, add "dbg" suffix to release number
-%_rpmfilename	%%{NAME}-%%{VERSION}-%%{RELEASE}%{?debug:dbg}.%%{ARCH}.rpm
+%_rpmfilename		%%{NAME}-%%{VERSION}-%%{RELEASE}%{?debug:dbg}.%%{ARCH}.rpm
 
-# requires name = version-release
-%requires_releq()		%(LC_ALL="C" rpm -q --queryformat 'Requires:%%{NAME} = %%{VERSION}-%%{RELEASE}' %1| grep -v "is not")
-%requires_kernel_releq() 	%(LC_ALL="C" rpm -q --queryformat 'Prereq:kernel = %%{VERSION}-%%{RELEASE}' kernel-headers | grep -v "is not")
-%requires_releq_kernel_up() 	%(LC_ALL="C" rpm -q --queryformat 'Prereq:kernel-up = %%{VERSION}-%%{RELEASE}' kernel-headers | grep -v "is not")
-%requires_releq_kernel_smp() 	%(LC_ALL="C" rpm -q --queryformat 'Prereq:kernel-smp = %%{VERSION}-%%{RELEASE}' kernel-headers | grep -v "is not")
+# Requires name = version-release
+%requires_releq()  		%(LC_ALL="C" echo '%*' | xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}-%%{release}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
+%requires_releq_kernel_up()  	%(LC_ALL="C" rpm -qf --qf 'Prereq: kernel-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -vE "(is not|no such)")
+%requires_releq_kernel_smp()  	%(LC_ALL="C" rpm -qf --qf 'Prereq: kernel-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -vE "(is not|no such)")
 
 # kernel version-release handling
 %__kernel_ver    %(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
@@ -180,38 +184,25 @@ echo "Compress man and info pages."; \
 %__spec_install_post_strip {%{!?debug: \
 %{!?no_install_post_strip: \
 	%{?verbose:set -x;} \
-	echo "Strip executable binaries and shared object files."; \
+	echo "Strip executable binaries, archives and shared object files."; \
 	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*"`; \
 	elfexelist=`echo $filelist | xargs -r file | \
 		awk '/ELF.*executable/ {print $1}' | cut -d: -f1`; \
 	elfsharedlist=`echo $filelist | xargs -r file | \
 		awk '/LF.*shared object/ {print $1}' | cut -d: -f1`; \
+	elfarchiveslist=`echo $filelist | xargs -r file | \
+		awk '/current ar archive/ {print $1}' | cut -d: -f1`; \
 	if [ -n "$elfexelist" ]; then \
 		strip --remove-section=.note  --remove-section=.comment $elfexelist; \
 	fi; \
 	if [ -n "$elfsharedlist" ]; then \
 		strip --strip-unneeded --remove-section=.note  --remove-section=.comment $elfsharedlist; \
+	fi; \
+	if [ -n "$elfarchiveslist" ]; then \
+		strip --strip-debug --remove-section=.note  --remove-section=.comment $elfarchiveslist; \
 	fi; } \
 } }
-#-----------------------------------------------------------------
-# remove all RPATH from executable binaries and shared object files
-#
-# Requires: find, awk, strip, cut, xargs
-#
-#%no_install_post_chrpath	1
-%__spec_install_post_chrpath {%{!?debug: \
-%{!?no_install_post_chrpath: \
-	%{?verbose:set -x;} \
-	echo "Remove RPATH from executable binaries and shared object files."; \
-	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*"`; \
-	elfexelist=`echo $filelist | xargs -r file | \
-		awk '/ELF.*executable/ {print $1}' | cut -d: -f1`; \
-	elfsharedlist=`echo $filelist | xargs -r file | \
-		awk '/LF.*shared object/ {print $1}' | cut -d: -f1`; \
-	if [ -n "$elfexelist$elfsharedlist" ]; then \
-		chrpath -d $elfexelist $elfsharedlist; \
-	fi; } \
-} }
+
 #-----------------------------------------------------------------
 # Find and gzip all kernel modules
 #
@@ -236,6 +227,7 @@ echo "Compress kernel modules if any."; \
 # - autodeps exceptions
 # - compress all man and info pages,
 # - strip all ELF executables and ELF shared objects if not %debug.
+# - compress kernel modules if any
 
 ###################################################################
 # Requires/Provides automation
@@ -268,7 +260,6 @@ fi \
 %{?_noautoprovfiles:for f in %{_noautoprovfiles} ; do echo %{?buildroot:%{buildroot}}$f >> %{_builddir}/__rpm_noautoprovfiles ; done }\
 %{?_noautoprov:for f in %{_noautoprov} ; do echo "$f" >> %{_builddir}/__rpm_noautoprov ; done }\
 %{__spec_install_post_strip}\
-%{__spec_install_post_chrpath}\
 %{__spec_install_post_compress_docs}\
 %{__spec_install_post_compress_modules}\
 %{__arch_install_post}\
@@ -294,3 +285,5 @@ fi \
 #%_noautoreqdep		%{nil}
 #%_noautoprovfiles	%{nil}
 #%_noautoprov		%{nil}
+%_missing_doc_files_terminate_build	1%{nil}
+%_unpackaged_files_terminate_build	%{nil}

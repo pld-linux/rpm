@@ -1,10 +1,9 @@
---- ./lib/header.c.org	Sun Feb 17 01:50:51 2002
-+++ ./lib/header.c	Sun Feb 17 01:52:01 2002
-@@ -1282,8 +1282,8 @@
- 
- 	}
+--- rpm-4.1/rpmdb/header.c.wiget2	Thu Sep 19 00:47:29 2002
++++ rpm-4.1/rpmdb/header.c	Thu Sep 19 00:52:10 2002
+@@ -1645,7 +1645,8 @@
      }
--
+ /*@=boundsread@*/
+ 
 -    return entry->data;
 +/* when everything fail, try gettext */
 +    return _(entry->data);
