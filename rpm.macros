@@ -52,7 +52,7 @@
  CPPFLAGS="${CPPFLAGS:-}" ; export CPPFLAGS ; \
  %{?__cc:CC=%{__cc} ; export CC ; } \
  %{?__cxx:CXX=%{__cxx} ; export CXX ; } \
- ./configure \
+ %{?configuredir:%{configuredir}}%{!?configuredir:.}/configure \
 	--host=%{_target_platform} \
  	--prefix=%{_prefix} \
 	--exec-prefix=%{_exec_prefix} \
