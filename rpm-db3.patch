@@ -1,33 +1,12 @@
-diff -ur rpm-3.0.5/configure.in rpm-3.0.5.bak/configure.in
---- rpm-3.0.5/configure.in	Wed Aug  2 19:54:12 2000
-+++ rpm-3.0.5.bak/configure.in	Wed Aug  2 16:48:45 2000
-@@ -301,7 +301,7 @@
- AC_CHECK_LIB(port, writev)
- 
- AC_CHECK_FUNC(dbopen, [],
--  AC_CHECK_LIB(db1, dbopen, [LIBS="$LIBS -ldb1"],
-+  AC_CHECK_LIB(db3, __db185_open, [LIBS="$LIBS -ldb3"],
-     AC_CHECK_LIB(db, dbopen, [LIBS="$LIBS -ldb"],
-        AC_MSG_ERROR([sorry rpm requires a db-1.85 API])))
-            )
-diff -ur rpm-3.0.5/lib/dbindex.h rpm-3.0.5.bak/lib/dbindex.h
---- rpm-3.0.5/lib/dbindex.h	Wed Jun 14 14:34:30 2000
-+++ rpm-3.0.5.bak/lib/dbindex.h	Wed Aug  2 19:53:32 2000
-@@ -1,6 +1,8 @@
- #ifndef H_DBINDEX
- #define H_DBINDEX
- 
-+#include <db_185.h>
-+/*
- #ifdef HAVE_DB1_DB_H
- #include <db1/db.h>
- #else
-@@ -10,7 +12,7 @@
- #include <db.h>
+diff -Nru rpm-4.0/lib/db3.c rpm-4.0.new/lib/db3.c
+--- rpm-4.0/lib/db3.c	Fri Aug  4 21:48:35 2000
++++ rpm-4.0.new/lib/db3.c	Wed Nov 15 19:32:53 2000
+@@ -9,7 +9,7 @@
+ typedef	int int32_t;
  #endif
- #endif
--
-+*/
- /* this will break if sizeof(int) != 4 */
  
- typedef /*@abstract@*/ struct {
+-#include <db3/db.h>
++#include <db.h>
+ 
+ #include <rpmlib.h>
+ #include <rpmmacro.h>
