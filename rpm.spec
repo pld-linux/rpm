@@ -106,7 +106,7 @@ przechowywane w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
 do pacote, permissões dos arquivos, etc.
 
 %package devel
-Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne	
+Summary(de):	Header-Dateien uns Libraries
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne
 Group(de):	Entwicklung/Libraries
 Group(es):	Desarrollo/Bibliotecas
