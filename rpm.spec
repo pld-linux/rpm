@@ -7,7 +7,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.2
-Release:	61
+Release:	62
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -60,6 +60,7 @@ Patch31:	%{name}-athlon-identify.patch
 Patch32:	%{name}-gettext-in-header.patch
 Patch33:	%{name}-perlprov-perl5.6.patch
 Patch34:	%{name}-ac25x.patch
+Patch35:        %{name}-signverify-fix.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 URL:		http://www.rpm.org/
@@ -356,6 +357,7 @@ construir pacotes usando o RPM.
 %endif
 
 %patch32 -p1
+%patch33 -p1
 %patch35 -p1
 %patch36 -p1
 %patch37 -p1
