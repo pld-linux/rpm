@@ -1,3 +1,5 @@
-%requires_pkg() %(LC_ALL="C" rpm -q --queryformat 'Requires: %%{NAME} = %%{VERSION}' %1|grep -v "is not")
+%requires_eq() %(LC_ALL="C" rpm -q --queryformat 'Requires: %%{NAME} = %%{VERSION}' %1|grep -v "is not")
 %perl_sitearch  %(eval "`perl -V:installsitearch`"; echo $installsitearch)
 %perl_archlib  %(eval "`perl -V:installarchlib`"; echo $installarchlib)
+# %%requires_pkg macro is obsoletes. Use %%requires_eq instead
+#%requires_pkg() %(LC_ALL="C" rpm -q --queryformat 'Requires: %%{NAME} = %%{VERSION}' %1|grep -v "is not")
