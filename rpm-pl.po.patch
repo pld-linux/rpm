@@ -1,5 +1,18 @@
 --- rpm-4.1/po/pl.po.orig	Tue Sep 17 21:38:05 2002
-+++ rpm-4.1/po/pl.po	Sun Oct 20 16:33:17 2002
++++ rpm-4.1/po/pl.po	Wed Oct 23 22:59:28 2002
+@@ -7,9 +7,9 @@
+ #
+ msgid ""
+ msgstr ""
+-"Project-Id-Version: rpm 4.0.3\n"
+-"POT-Creation-Date: 2002-09-17 11:18-0400\n"
+-"PO-Revision-Date: 1999-05-25 17:00+0100\n"
++"Project-Id-Version: rpm 4.1\n"
++"POT-Creation-Date: 2002-10-23 22:52+0200\n"
++"PO-Revision-Date: 2002-10-23 22:53+0200\n"
+ "Last-Translator: Pawe³ Dziekoñski <pdziekonski@mml.ch.pwr.wroc.pl>\n"
+ "Language-Team: Polish <pl@li.org>\n"
+ "MIME-Version: 1.0\n"
 @@ -17,45 +17,44 @@
  "Content-Transfer-Encoding: 8-bit\n"
  
@@ -116,7 +129,7 @@
  
  #: rpmqv.c:129 lib/poptALL.c:95
  #, c-format
-@@ -122,15 +120,14 @@
+@@ -122,15 +120,15 @@
  msgstr "RPM wersja %s\n"
  
  #: rpmqv.c:136
@@ -131,11 +144,12 @@
  "This program may be freely redistributed under the terms of the GNU GPL\n"
 -msgstr "Program mo¿e byæ swobodnie rozpowszechniany na warunkach licencji GNU"
 +msgstr ""
-+"Ten program mo¿e byæ swobodnie rozpowszechniany na warunkach licencji GNU GPL\n"
++"Ten program mo¿e byæ swobodnie rozpowszechniany na warunkach licencji GNU "
++"GPL\n"
  
  #: rpmqv.c:299
  #, c-format
-@@ -237,27 +234,28 @@
+@@ -237,27 +235,28 @@
  msgstr "--justdb mo¿na u¿yæ tylko w trakcie instalacji lub usuwania pakietów"
  
  #: rpmqv.c:490
@@ -155,8 +169,8 @@
  "and erasure"
 -msgstr "--justdb mo¿na u¿yæ tylko w trakcie instalacji lub usuwania pakietów"
 +msgstr ""
-+"opcje wy³±czaj±ce triggery mog± byæ podane tylko przy instalacji lub usuwaniu "
-+"pakietów"
++"opcje wy³±czaj±ce triggery mog± byæ podane tylko przy instalacji lub "
++"usuwaniu pakietów"
  
  #: rpmqv.c:499
 -#, fuzzy
@@ -166,12 +180,12 @@
  msgstr ""
 -"--nodeps mo¿na u¿yæ tylko w trakcie budowania, instalacji, usuwania lub "
 -"sprawdzania pakietów"
-+"--nodeps mo¿na u¿yæ tylko w trakcie budowania, przebudowywania, rekompilacji, "
-+"instalacji, usuwania lub sprawdzania pakietów"
++"--nodeps mo¿na u¿yæ tylko w trakcie budowania, przebudowywania, "
++"rekompilacji, instalacji, usuwania lub sprawdzania pakietów"
  
  #: rpmqv.c:504
  msgid ""
-@@ -280,7 +278,7 @@
+@@ -280,7 +279,7 @@
  
  #: rpmqv.c:545
  msgid "no files to sign\n"
@@ -180,7 +194,7 @@
  
  #: rpmqv.c:550
  #, c-format
-@@ -329,9 +327,8 @@
+@@ -329,9 +328,8 @@
  msgstr "nie podano nazw plików tar do budowania"
  
  #: rpmqv.c:737
@@ -191,7 +205,7 @@
  
  #: rpmqv.c:777
  msgid "no packages given for install"
-@@ -346,30 +343,28 @@
+@@ -346,30 +344,28 @@
  msgstr "nie podano argumentów dla sprawdzania"
  
  #: rpmqv.c:823
@@ -230,7 +244,7 @@
  
  #: build/build.c:333
  msgid ""
-@@ -377,67 +372,58 @@
+@@ -377,67 +373,58 @@
  "\n"
  "RPM build errors:\n"
  msgstr ""
@@ -313,7 +327,7 @@
  
  #: build/files.c:289
  #, c-format
-@@ -445,101 +431,101 @@
+@@ -445,101 +432,101 @@
  msgstr "TIMECHECK nie powiod³o siê: %s\n"
  
  #: build/files.c:353 build/files.c:553 build/files.c:749
@@ -452,7 +466,7 @@
  
  #: build/files.c:1634 build/files.c:2276 build/parsePrep.c:50
  #, c-format
-@@ -547,75 +533,75 @@
+@@ -547,75 +534,75 @@
  msgstr "B³êdny u¿ytkownik/grupa: %s\n"
  
  #: build/files.c:1647
@@ -556,7 +570,7 @@
  
  #: build/files.c:2793
  #, c-format
-@@ -623,35 +609,37 @@
+@@ -623,35 +610,37 @@
  "Installed (but unpackaged) file(s) found:\n"
  "%s"
  msgstr ""
@@ -602,7 +616,7 @@
  
  #: build/names.c:213
  #, c-format
-@@ -659,54 +647,54 @@
+@@ -659,54 +648,54 @@
  msgstr "Nie mo¿na rozwi±zaæ nazwy systemu: %s\n"
  
  #: build/pack.c:90
@@ -677,7 +691,7 @@
  
  #: build/pack.c:295
  #, c-format
-@@ -719,9 +707,9 @@
+@@ -719,9 +708,9 @@
  msgstr "readRPM: czytanie %s: %s\n"
  
  #: build/pack.c:314 build/pack.c:540
@@ -689,7 +703,7 @@
  
  #: build/pack.c:346
  #, c-format
-@@ -734,24 +722,20 @@
+@@ -734,24 +723,20 @@
  msgstr "readRPM: czytanie nag³ówka z %s\n"
  
  #: build/pack.c:482
@@ -718,7 +732,7 @@
  
  #: build/pack.c:567
  #, c-format
-@@ -759,44 +743,43 @@
+@@ -759,44 +744,43 @@
  msgstr "Generowanie sygnatury: %d\n"
  
  #: build/pack.c:585
@@ -778,7 +792,7 @@
  
  #: build/pack.c:710 lib/psm.c:2153
  #, c-format
-@@ -809,456 +792,444 @@
+@@ -809,456 +793,445 @@
  msgstr "Nie mo¿na wygenerowaæ wyj¶ciowej nazwy dla pakietu %s: %s\n"
  
  #: build/pack.c:796
@@ -1158,7 +1172,8 @@
  "line %d: Dependency tokens must begin with alpha-numeric, '_' or '/': %s\n"
  msgstr ""
 -"linia %d: Znaki musz± sie zaczynaæ od alfanumerycznych, '_' lub '/': %s"
-+"linia %d: Oznaczenia zale¿no¶ci musz± siê zaczynaæ od alfanumerycznych, '_' lub '/': %s\n"
++"linia %d: Oznaczenia zale¿no¶ci musz± siê zaczynaæ od alfanumerycznych, '_' "
++"lub '/': %s\n"
  
  #: build/parseReqs.c:113
 -#, fuzzy, c-format
@@ -1397,7 +1412,7 @@
  
  #: build/poptBT.c:211
  msgid "override build root"
-@@ -1270,52 +1241,46 @@
+@@ -1270,52 +1243,47 @@
  
  #: build/poptBT.c:215 rpmdb/poptDB.c:28
  msgid "generate headers compatible with rpm4 packaging"
@@ -1427,8 +1442,8 @@
  
  #: build/poptBT.c:225
  msgid "generate package header(s) compatible with (legacy) rpm[23] packaging"
--msgstr ""
-+msgstr "generuj nag³ówki pakietu kompatybilne z (wymiaraj±cymi) pakietami rpm[23]"
+ msgstr ""
++"generuj nag³ówki pakietu kompatybilne z (wymiaraj±cymi) pakietami rpm[23]"
  
  #: build/poptBT.c:229 lib/poptALL.c:216 lib/poptI.c:265 lib/poptI.c:272
  #: lib/poptQV.c:329 lib/poptQV.c:338 lib/poptQV.c:377
@@ -1459,7 +1474,7 @@
  
  #: build/poptBT.c:238
  msgid "remove sources when done"
-@@ -1338,19 +1303,18 @@
+@@ -1338,19 +1306,18 @@
  msgstr "wymu¶ platformê docelow±"
  
  #: build/poptBT.c:248
@@ -1484,7 +1499,7 @@
  
  #: build/spec.c:302
  #, c-format
-@@ -1379,13 +1343,12 @@
+@@ -1379,13 +1346,12 @@
  msgstr "Nieznany typ pliku"
  
  #: lib/cpio.c:234
@@ -1500,7 +1515,7 @@
  
  #: lib/cpio.c:236
  msgid "Internal error"
-@@ -1393,59 +1356,55 @@
+@@ -1393,59 +1359,55 @@
  
  #: lib/cpio.c:237
  msgid "Archive file not in header"
@@ -1573,12 +1588,12 @@
  
  #. T4. Scan for zeroes.
  #: lib/depends.c:1309
-@@ -1453,24 +1412,26 @@
+@@ -1453,24 +1415,26 @@
  "========== tsorting packages (order, #predecessors, #succesors, tree, "
  "depth)\n"
  msgstr ""
-+"========== tsortowanie pakietów (kolejno¶æ, #poprzedniki, #nastêpniki, drzewo, "
-+"g³êboko¶æ)\n"
++"========== tsortowanie pakietów (kolejno¶æ, #poprzedniki, #nastêpniki, "
++"drzewo, g³êboko¶æ)\n"
  
  #: lib/depends.c:1393
  msgid "========== successors only (presentation order)\n"
@@ -1604,7 +1619,7 @@
  
  #: lib/formats.c:34 lib/formats.c:60 lib/formats.c:95 lib/formats.c:386
  #: rpmdb/header.c:3236 rpmdb/header.c:3259 rpmdb/header.c:3283
-@@ -1478,192 +1439,186 @@
+@@ -1478,192 +1442,186 @@
  msgstr "(nie jest liczb±)"
  
  #: lib/formats.c:160
@@ -1849,7 +1864,7 @@
  
  #: lib/package.c:794 lib/rpmchecksig.c:237 lib/rpmchecksig.c:729
  #, c-format
-@@ -1671,118 +1626,112 @@
+@@ -1671,118 +1629,112 @@
  msgstr "%s: Sygnatura nie jest dostêpna\n"
  
  #: lib/package.c:841
@@ -1995,7 +2010,7 @@
  
  #: lib/poptI.c:57
  msgid "exclude paths must begin with a /"
-@@ -1790,7 +1739,7 @@
+@@ -1790,7 +1742,7 @@
  
  #: lib/poptI.c:71
  msgid "relocations must begin with a /"
@@ -2004,7 +2019,7 @@
  
  #: lib/poptI.c:74
  msgid "relocations must contain a ="
-@@ -1802,22 +1751,21 @@
+@@ -1802,22 +1754,21 @@
  
  #: lib/poptI.c:92
  msgid "rollback takes a time/date stamp argument"
@@ -2031,7 +2046,7 @@
  
  #: lib/poptI.c:160
  msgid ""
-@@ -1828,58 +1776,52 @@
+@@ -1828,58 +1779,52 @@
  "wy¶wietlany jest b³±d gdy <pakiet> opisuje wiele pakietów)"
  
  #: lib/poptI.c:166 lib/poptI.c:245 lib/poptI.c:248
@@ -2098,7 +2113,7 @@
  
  #: lib/poptI.c:201
  msgid "don't verify package architecture"
-@@ -1898,22 +1840,20 @@
+@@ -1898,22 +1843,20 @@
  msgstr "zainstaluj dokumentacjê"
  
  #: lib/poptI.c:214 lib/poptI.c:217
@@ -2124,7 +2139,7 @@
  
  #: lib/poptI.c:235
  msgid "do not reorder package installation to satisfy dependencies"
-@@ -1921,52 +1861,51 @@
+@@ -1921,52 +1864,51 @@
  
  #: lib/poptI.c:240
  msgid "do not suggest missing dependency resolution(s)"
@@ -2195,7 +2210,7 @@
  
  #: lib/poptI.c:296
  msgid ""
-@@ -1986,21 +1925,19 @@
+@@ -1986,21 +1928,19 @@
  
  #: lib/poptI.c:303
  msgid "<dir>"
@@ -2220,7 +2235,7 @@
  
  #: lib/poptI.c:312
  msgid "install even if the package replaces installed files"
-@@ -2012,70 +1949,59 @@
+@@ -2012,70 +1952,59 @@
  
  #: lib/poptI.c:317
  msgid "deinstall new, reinstall old, package(s), back to <date>"
@@ -2303,7 +2318,7 @@
  
  #: lib/poptQV.c:115
  msgid "query a spec file"
-@@ -2083,32 +2009,27 @@
+@@ -2083,32 +2012,27 @@
  
  #: lib/poptQV.c:115
  msgid "<spec>"
@@ -2342,7 +2357,7 @@
  
  #: lib/poptQV.c:226
  msgid "list all configuration files"
-@@ -2129,107 +2050,93 @@
+@@ -2129,107 +2053,93 @@
  #: lib/poptQV.c:239
  #, c-format
  msgid "skip %%ghost files"
@@ -2468,7 +2483,7 @@
  
  #: lib/psm.c:254 rpmdb/header_internal.c:164
  #, c-format
-@@ -2237,93 +2144,90 @@
+@@ -2237,93 +2147,90 @@
  msgstr "Typ danych %d nie jest obs³ugiwany\n"
  
  #: lib/psm.c:460
@@ -2588,7 +2603,7 @@
  
  #. @-boundswrite@
  #: lib/query.c:181
-@@ -2356,19 +2260,17 @@
+@@ -2356,19 +2263,17 @@
  msgstr "(nieznany %3d)"
  
  #: lib/query.c:279
@@ -2612,7 +2627,7 @@
  
  #: lib/query.c:569 lib/query.c:616 lib/rpminstall.c:123 lib/rpminstall.c:455
  #: lib/rpminstall.c:586 lib/rpminstall.c:995 lib/rpmts.c:441
-@@ -2387,9 +2289,9 @@
+@@ -2387,9 +2292,9 @@
  msgstr "pakiety w starym formacie nie mog± byæ odpytywane\n"
  
  #: lib/query.c:627 lib/rpminstall.c:599
@@ -2624,7 +2639,7 @@
  
  #: lib/query.c:671
  #, c-format
-@@ -2397,9 +2299,8 @@
+@@ -2397,9 +2302,8 @@
  msgstr "odpytywanie pliku spec %s nie powiod³o siê, nie mo¿na interpretowaæ\n"
  
  #: lib/query.c:692
@@ -2635,7 +2650,7 @@
  
  #: lib/query.c:712
  #, c-format
-@@ -2412,14 +2313,14 @@
+@@ -2412,14 +2316,14 @@
  msgstr "¿aden pakiet nie zahacza %s\n"
  
  #: lib/query.c:736 lib/query.c:758 lib/query.c:779 lib/query.c:814
@@ -2654,7 +2669,7 @@
  
  #: lib/query.c:830
  #, c-format
-@@ -2447,14 +2348,14 @@
+@@ -2447,14 +2351,14 @@
  msgstr "b³êdny numer pakietu: %s\n"
  
  #: lib/query.c:909
@@ -2673,7 +2688,7 @@
  
  #: lib/query.c:925 lib/rpminstall.c:771
  #, c-format
-@@ -2462,88 +2363,86 @@
+@@ -2462,88 +2366,86 @@
  msgstr "pakiet %s nie jest zainstalowany\n"
  
  #: lib/rpmal.c:693
@@ -2790,7 +2805,7 @@
  
  #: lib/rpmchecksig.c:972
  msgid "NOT OK"
-@@ -2570,13 +2469,12 @@
+@@ -2570,13 +2472,12 @@
  msgstr "OK"
  
  #: lib/rpmds.c:477 lib/rpmds.c:647
@@ -2806,7 +2821,7 @@
  
  #: lib/rpmds.c:613
  #, c-format
-@@ -2584,41 +2482,43 @@
+@@ -2584,41 +2485,43 @@
  "The \"B\" dependency needs an epoch (assuming same epoch as \"A\")\n"
  "\tA = \"%s\"\tB = \"%s\"\n"
  msgstr ""
@@ -2862,7 +2877,7 @@
  
  #: lib/rpmfi.c:756
  #, c-format
-@@ -2626,41 +2526,38 @@
+@@ -2626,41 +2529,38 @@
  msgstr "przesuwanie %s do %s\n"
  
  #: lib/rpmfi.c:835
@@ -2914,7 +2929,7 @@
  
  #: lib/rpminstall.c:402
  #, c-format
-@@ -2706,22 +2603,21 @@
+@@ -2706,22 +2606,21 @@
  
  #: lib/rpminstall.c:628 lib/rpminstall.c:799 lib/rpminstall.c:1215
  #: tools/rpmgraph.c:202
@@ -2941,7 +2956,7 @@
  
  #: lib/rpminstall.c:774
  #, c-format
-@@ -2729,9 +2625,9 @@
+@@ -2729,9 +2628,9 @@
  msgstr "\"%s\" okre¶la wiele pakietów\n"
  
  #: lib/rpminstall.c:836
@@ -2953,7 +2968,7 @@
  
  #: lib/rpminstall.c:842
  #, c-format
-@@ -2741,192 +2637,189 @@
+@@ -2741,192 +2640,191 @@
  #: lib/rpminstall.c:1209
  #, c-format
  msgid "Rollback packages (+%d/-%d) to %-24.24s (0x%08x):\n"
@@ -2974,8 +2989,8 @@
  
  #: lib/rpmlibprov.c:32
  msgid "file name(s) stored as (dirName,baseName,dirIndex) tuple, not as path."
--msgstr ""
-+msgstr "nazwy plików zapisano jako (dirName,baseName,dirIndex) a nie jako ¶cie¿ki."
+ msgstr ""
++"nazwy plików zapisano jako (dirName,baseName,dirIndex) a nie jako ¶cie¿ki."
  
  #: lib/rpmlibprov.c:35
  msgid "package payload is compressed using bzip2."
@@ -3080,8 +3095,8 @@
  #: lib/rpmps.c:258
  #, c-format
  msgid "package %s pre-transaction syscall(s): %s failed: %s"
--msgstr ""
-+msgstr "przed-transakcyjne wywo³anie systemowe pakietu %s: %s nie powiod³o siê: %s"
+ msgstr ""
++"przed-transakcyjne wywo³anie systemowe pakietu %s: %s nie powiod³o siê: %s"
  
  #: lib/rpmps.c:262
 -#, fuzzy, c-format
@@ -3211,7 +3226,7 @@
  
  #: lib/rpmrc.c:1530
  #, c-format
-@@ -2935,119 +2828,117 @@
+@@ -2935,119 +2833,117 @@
  
  #: lib/rpmrc.c:1531
  msgid "Please contact rpm-list@redhat.com\n"
@@ -3363,7 +3378,7 @@
  
  #: lib/signature.c:475
  #, c-format
-@@ -3056,26 +2947,23 @@
+@@ -3056,26 +2952,23 @@
  
  #. @=boundswrite@
  #: lib/signature.c:493 lib/signature.c:608
@@ -3394,7 +3409,7 @@
  
  #: lib/signature.c:590
  #, c-format
-@@ -3085,65 +2973,61 @@
+@@ -3085,65 +2978,61 @@
  #: lib/signature.c:613
  #, c-format
  msgid "Got %d bytes of GPG sig\n"
@@ -3477,7 +3492,7 @@
  
  #: lib/transaction.c:107
  #, c-format
-@@ -3152,9 +3036,9 @@
+@@ -3152,9 +3041,9 @@
  
  #. @innercontinue@
  #: lib/transaction.c:912
@@ -3489,7 +3504,7 @@
  
  #. ===============================================
  #. * For packages being installed:
-@@ -3167,7 +3051,7 @@
+@@ -3167,7 +3056,7 @@
  #: lib/transaction.c:1021
  #, c-format
  msgid "sanity checking %d elments\n"
@@ -3498,7 +3513,7 @@
  
  #. ===============================================
  #. * Initialize transaction element file info for package:
-@@ -3180,102 +3064,102 @@
+@@ -3180,102 +3069,102 @@
  #: lib/transaction.c:1104
  #, c-format
  msgid "computing %d file fingerprints\n"
@@ -3631,7 +3646,7 @@
  
  #. @-observertrans -readonlytrans@
  #: rpmdb/header.c:2408
-@@ -3349,176 +3233,172 @@
+@@ -3349,176 +3238,173 @@
  
  #: rpmdb/poptDB.c:18
  msgid "initialize database"
@@ -3642,7 +3657,8 @@
 -#, fuzzy
  msgid "rebuild database inverted lists from installed package headers"
 -msgstr "przebuduj istniej±c± bazê"
-+msgstr "przebuduj odwrotne listy w bazie danych z nag³ówków zainstalowanych nag³ówków"
++msgstr ""
++"przebuduj odwrotne listy w bazie danych z nag³ówków zainstalowanych nag³ówków"
  
  #: rpmdb/poptDB.c:23
 -#, fuzzy
@@ -3865,7 +3881,7 @@
  msgid "failed to rebuild database: original database remains in place\n"
  msgstr "przebudowanie bazy nie powiod³o siê; stara pozosta³a na miejscu\n"
  
-@@ -3527,14 +3407,14 @@
+@@ -3527,14 +3413,14 @@
  msgstr "zamiana starej bazy na now± nie powiod³a siê!\n"
  
  #: rpmdb/rpmdb.c:3829
@@ -3884,7 +3900,7 @@
  
  #: rpmdb/rpmdb.c:3841
  #, c-format
-@@ -3558,80 +3438,79 @@
+@@ -3558,80 +3444,79 @@
  msgstr "%3d<%*s(pusty)\n"
  
  #: rpmio/macro.c:654
@@ -3994,7 +4010,7 @@
  
  #: rpmio/rpmio.c:664
  msgid "Success"
-@@ -3642,9 +3521,8 @@
+@@ -3642,9 +3527,8 @@
  msgstr "B³êdna odpowied¼ serwera"
  
  #: rpmio/rpmio.c:670
@@ -4005,7 +4021,7 @@
  
  #: rpmio/rpmio.c:673
  msgid "Server timeout"
-@@ -3667,9 +3545,8 @@
+@@ -3667,9 +3551,8 @@
  msgstr "Otwarcie transmisji danych z serwera nie powiod³o siê"
  
  #: rpmio/rpmio.c:688
@@ -4016,7 +4032,7 @@
  
  #: rpmio/rpmio.c:691
  msgid "Error setting remote server to passive mode"
-@@ -3693,9 +3570,8 @@
+@@ -3693,9 +3576,8 @@
  msgstr "logowanie do %s jako %s, has³o %s\n"
  
  #: rpmio/rpmlog.c:59
@@ -4027,7 +4043,7 @@
  
  #. !< RPMLOG_EMERG
  #: rpmio/rpmlog.c:130 rpmio/rpmlog.c:131 rpmio/rpmlog.c:132
-@@ -3715,22 +3591,22 @@
+@@ -3715,22 +3597,22 @@
  #: rpmio/rpmmalloc.c:15
  #, c-format
  msgid "memory alloc (%u bytes) returned NULL.\n"
@@ -4054,7 +4070,7 @@
  
  #: rpmio/url.c:267
  #, c-format
-@@ -3748,1778 +3624,154 @@
+@@ -3748,1778 +3630,162 @@
  
  #. XXX Fstrerror
  #: rpmio/url.c:543
@@ -4201,12 +4217,21 @@
 -msgstr ""
 +msgstr "wypisz wszystkie pliki z ka¿dego pakietu"
  
- #: ../rpmpopt:90 ../rpmpopt:93
+-#: ../rpmpopt:90 ../rpmpopt:93
++#: ../rpmpopt:90
  msgid ""
  "find package name that contains a provided capability (needs rpmdb-redhat "
  "package installed)"
  msgstr ""
 +"znajd¼ nazwê pakietu, który dostarcza w³asno¶æ (wymaga zainstalowanego "
++"pakietu rpmdb-redhat)"
++
++#: ../rpmpopt:93
++msgid ""
++"find package name that contains a required capability (needs rpmdb-redhat "
++"package installed)"
++msgstr ""
++"znajd¼ nazwê pakietu, który wymaga w³asno¶ci (wymaga zainstalowanego "
 +"pakietu rpmdb-redhat)"
  
  #: ../rpmpopt:103

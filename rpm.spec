@@ -1,6 +1,6 @@
 %include        /usr/lib/rpm/macros.python
 %define	beecrypt_ver	2.2.0
-%define	beecrypt_rel	0.91
+%define	beecrypt_rel	0.92
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -8,7 +8,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.1
-Release:	1
+Release:	1.1
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/%{name}-%{version}.tar.gz
@@ -32,7 +32,8 @@ Source18:	%{name}-php-requires
 Source19:	%{name}-find-php-provides
 Source20:	%{name}-find-php-requires
 Source21:	%{name}-macros.php
-Patch0:		%{name}-%{name}rc.patch
+Patch0:		%{name}-pl.po.patch
+Patch1:		%{name}-%{name}rc.patch
 Patch2:		%{name}-arch.patch
 Patch3:		%{name}-%{name}popt.patch
 Patch4:		%{name}-perl-macros.patch
@@ -47,7 +48,6 @@ Patch14:	%{name}-scripts-closefds.patch
 Patch17:	%{name}-python-macros.patch
 Patch18:	%{name}-perlprov-regonly.patch
 Patch20:	%{name}-db4.patch
-Patch21:	%{name}-pl.po.patch
 Patch22:	%{name}-drop-legacy-CLI.patch
 Patch23:	%{name}-perlprov-perl5.6.patch
 Patch25:	%{name}-gettext-in-header.patch
@@ -384,6 +384,7 @@ Statyczna wersja biblioteki kryptograficznej.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
@@ -402,7 +403,6 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch17 -p1
 %patch18 -p1
 %patch20 -p1
-%patch21 -p1
 %patch22 -p1
 %patch23 -p1
 %patch25 -p1
