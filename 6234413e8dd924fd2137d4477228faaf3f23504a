@@ -1,0 +1,2 @@
+- don't strip dynamic linker. This caused serious problems.
+- release 8
