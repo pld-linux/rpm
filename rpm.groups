@@ -194,9 +194,13 @@ Development/Languages/Fortran
 	[de]:	Entwicklung/Sprachen/Fortran
 	[pl]:	Programowanie/Jêzyki/Fortran
 
-Development/Languages/Tcl
-	[de]:	Entwicklung/Sprachen/Tcl
-	[pl]:	Programowanie/Jêzyki/Tcl
+Development/Languages/Java
+	[de]:	Entwicklung/Sprachen/Java
+	[pl]:	Programowanie/Jêzyki/Java
+
+Development/Languages/Modula3
+	[de]:	Entwicklung/Sprachen/Modula3
+	[pl]:	Programowanie/Jêzyki/Modula3
 
 Development/Languages/Perl
 	[de]:	Entwicklung/Sprachen/Perl
@@ -210,9 +214,9 @@ Development/Languages/Scheme
 	[de]:	Entwicklung/Sprachen/Scheme
 	[pl]:	Programowanie/Jêzyki/Scheme
 
-Development/Languages/Java
-	[de]:	Entwicklung/Sprachen/Java
-	[pl]:	Programowanie/Jêzyki/Java
+Development/Languages/Tcl
+	[de]:	Entwicklung/Sprachen/Tcl
+	[pl]:	Programowanie/Jêzyki/Tcl
 
 Development/Building
 	[de]:	Entwicklung/Bauen
