@@ -1,5 +1,5 @@
---- rpm-4.2/scripts/perl.req~	Sun May  4 11:57:53 2003
-+++ rpm-4.2/scripts/perl.req	Sun May  4 11:58:53 2003
+--- rpm-4.2/scripts/perl.req~	Fri Jul 11 11:54:15 2003
++++ rpm-4.2/scripts/perl.req	Sat Jul 12 14:48:40 2003
 @@ -57,7 +57,7 @@
  foreach $module (sort keys %require) {
    if (length($require{$module}) == 0) {
@@ -9,3 +9,17 @@
       } else {
           print "perl($module)\n";
       }
+@@ -243,11 +243,11 @@
+       # to mean that a particular version of perl is specified
+ 
+       if ($module =~ /5.00/) {
+-        print "perl >= 0:$module\n";
++        print "perl-base >= 0:$module\n";
+         next;
+       }
+       else {
+-        print "perl >= 1:$module\n";
++        print "perl-base >= 1:$module\n";
+         next;
+       }
+ 
