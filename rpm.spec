@@ -6,12 +6,14 @@
 # - use system libmagic not internal libfmagic
 #
 # Conditional build:
-# _without_static	- build shared /bin/rpm (doesn't work at the moment)
-# _without_docs		- don't generate documentation with doxygen
+%bcond_without	static	# - build shared /bin/rpm (doesn't work at the moment)
+%bcond_without	docs	# - don't generate documentation with doxygen
+%bcond_without	python	# - don't build python bindings
+
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
-#
+
 %include        /usr/lib/rpm/macros.python
 %define snap	20030610
 # versions of required libraries
@@ -95,6 +97,8 @@ Patch36:	%{name}-amd64.patch
 Patch37:	%{name}-notsc.patch
 Patch38:	%{name}-hack-norpmlibdep.patch
 Patch39:	%{name}-db42.patch
+Patch40:	%{name}-makefile-no_myLDADD_deps.patch
+Patch41:	%{name}-libdir64.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -102,19 +106,19 @@ BuildRequires:	automake
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.1
 BuildRequires:	db-devel >= %{reqdb_ver}
-%{!?_without_docs:BuildRequires:	doxygen}
+%{?_with_docs:BuildRequires:	doxygen}
 BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	elfutils-devel
 #BuildRequires:	libmagic-devel
 BuildRequires:	libtool
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
-BuildRequires:	python-devel >= 2.2
+%{?with_python:BuildRequires:	python-devel >= 2.2}
 BuildRequires:	python-modules >= 2.2
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpm-pythonprov
 BuildRequires:	zlib-devel
-%if %{!?_without_static:1}0
+%if %{?_with_static:1}0
 # Require static library only for static build
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
 BuildRequires:	bzip2-static >= 1.0.2-5
@@ -587,6 +591,8 @@ cat %{SOURCE14} >> macros.in
 %patch37 -p1
 %patch38 -p1
 %patch39 -p1
+%patch40 -p1
+%patch41 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
@@ -635,7 +641,8 @@ mv -f macros.tmp macros.in
 	--enable-shared \
 	--enable-static \
 	%{!?_without_docs:--with-apidocs} \
-	--with-python=auto \
+	%{?_with_python:--with-python=auto} \
+	%{?!_with_python:--without-python} \
 	--without-db
 
 %{__make} \
@@ -644,7 +651,7 @@ mv -f macros.tmp macros.in
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/lib
+install -d $RPM_BUILD_ROOT/%{_lib}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -718,8 +725,8 @@ install -d $RPM_BUILD_ROOT/var/spool/repackage
 
 # move libs to /lib
 for a in librpm-%{ver}.so librpmdb-%{ver}.so librpmio-%{ver}.so ; do
-	mv -f $RPM_BUILD_ROOT%{_libdir}/$a $RPM_BUILD_ROOT/lib
-	ln -s /lib/$a $RPM_BUILD_ROOT%{_libdir}/$a
+	mv -f $RPM_BUILD_ROOT%{_libdir}/$a $RPM_BUILD_ROOT/%{_lib}
+	ln -s /%{_lib}/$a $RPM_BUILD_ROOT%{_libdir}/$a
 done
 
 for f in $RPM_BUILD_ROOT%{_datadir}/locale/{en_RN,eu_ES,gl,hu,ro,wa,zh,zh_CN.GB2312}/LC_MESSAGES/rpm.mo ; do
@@ -776,7 +783,7 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 
 %files lib
 %defattr(644,root,root,755)
-%attr(755,root,root) /lib/librpm*-*.so
+%attr(755,root,root) /%{_lib}/librpm*-*.so
 %attr(755,root,root) %{_libdir}/librpm*-*.so
 
 %files build
@@ -914,11 +921,13 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_libdir}/rpm/php*
 %attr(755,root,root) %{_libdir}/rpm/find-php*
 
+%if %{with python}
 %files -n python-rpm
 %defattr(644,root,root,755)
 %attr(755,root,root) %{py_sitedir}/*.so
 %attr(755,root,root) %{py_sitedir}/rpmdb/*.so
 %{py_sitedir}/rpmdb/*.py*
+%endif
 
 %files build-tools
 %defattr(644,root,root,755)
