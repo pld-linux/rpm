@@ -625,8 +625,7 @@ cat %{SOURCE11} >> macros.in
 %patch46 -p1
 %{?with_distver:%patch47 -p1}
 %patch48 -p1
-# NEEDS UPDATE
-#%patch100 -p1
+%patch100 -p1
 %patch3 -p1
 
 cd scripts;
