@@ -1,11 +1,11 @@
---- rpm-4.2/rpmio/Makefile.am.wiget	Thu Mar 27 23:16:15 2003
-+++ rpm-4.2/rpmio/Makefile.am	Thu Mar 27 23:16:15 2003
+--- rpm-4.3/rpmio/Makefile.am.wiget	Fri May 16 00:16:34 2003
++++ rpm-4.3/rpmio/Makefile.am	Fri May 16 00:18:17 2003
 @@ -70,34 +70,34 @@
  	$(LINT) $(DEFS) $(INCLUDES) $(librpmio_la_SOURCES)
  
  tdigest_SOURCES = tdigest.c
--tdigest_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
-+tdigest_LDADD = librpmio.la -lpopt
+-tdigest_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la -lgcrypt
++tdigest_LDADD = librpmio.la -lpopt -lgcrypt
  
  tdir_SOURCES = tdir.c
  tdir_LDFLAGS = -all-static
@@ -41,12 +41,33 @@
 -trpmio_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
 +trpmio_LDADD = librpmio.la -lpopt
  
- dumpasn1_SOURCES = dumpasn1.c
+ tsw_SOURCES = tsw.c
+ tsw_LDFLAGS = librpmio.la
+--- rpm-4.3/rpmdb/Makefile.am.wiget	Tue Mar 25 13:49:44 2003
++++ rpm-4.3/rpmdb/Makefile.am	Fri May 16 00:16:34 2003
+@@ -49,7 +49,7 @@
+ 	tagname.c tagtbl.c
+ librpmdb_la_LDFLAGS = -release @VERSION@ $(LDFLAGS) \
+ 	$(top_builddir)/rpmio/librpmio.la \
+-	$(top_builddir)/popt/libpopt.la \
++	@WITH_POPT_LIB@ \
+ 	@WITH_LIBELF_LIB@ \
+ 	@libdb3@
+ librpmdb_la_LIBADD = $(DBLIBOBJS) $(DB3LOBJS)
+--- rpm-4.3/lib/Makefile.am.wiget	Tue Apr  8 18:38:08 2003
++++ rpm-4.3/lib/Makefile.am	Fri May 16 00:16:34 2003
+@@ -39,7 +39,7 @@
+ librpm_la_LDFLAGS = -release @VERSION@ $(LDFLAGS) \
+ 	$(top_builddir)/rpmdb/librpmdb.la \
+ 	$(top_builddir)/rpmio/librpmio.la \
+-	$(top_builddir)/popt/libpopt.la
++	@WITH_POPT_LIB@
  
-
---- rpm-4.2/tools/Makefile.am.wiget	Fri Mar  7 19:21:19 2003
-+++ rpm-4.2/tools/Makefile.am	Thu Mar 27 23:23:19 2003
-@@ -37,7 +37,7 @@
+ getdate.c: getdate.y
+ 	@echo expect 10 shift/reduce conflicts
+--- rpm-4.3/tools/Makefile.am.wiget	Thu Apr 17 18:45:19 2003
++++ rpm-4.3/tools/Makefile.am	Fri May 16 00:16:34 2003
+@@ -39,7 +39,7 @@
  
  debugedit_SOURCES =	debugedit.c hashtab.c
  debugedit_LDADD =	@LDFLAGS_STATIC@ @WITH_LIBELF_LIB@ \
@@ -55,9 +76,9 @@
  
  javadeps_SOURCES =	javadeps.c
  
---- rpm-4.2/configure.ac.wiget	Thu Mar 27 23:16:15 2003
-+++ rpm-4.2/configure.ac	Thu Mar 27 23:58:46 2003
-@@ -407,6 +407,17 @@
+--- rpm-4.3/configure.ac.wiget	Fri May 16 00:16:34 2003
++++ rpm-4.3/configure.ac	Fri May 16 00:16:44 2003
+@@ -410,6 +410,17 @@
  ])
  AC_SUBST(WITH_LIBDWARF_INCLUDE)
  
@@ -75,7 +96,7 @@
  AC_CHECK_FUNC(setreuid, [], [
      AC_CHECK_LIB(ucb, setreuid, [if echo $LIBS | grep -- -lucb >/dev/null ;then :; else LIBS="$LIBS -lc -lucb" USEUCB=y;fi])
  ])
-@@ -465,6 +474,7 @@
+@@ -470,6 +481,7 @@
  
  dnl Check for Berkeley db3 API.
  AC_CHECK_FUNC(db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"],
@@ -83,7 +104,7 @@
    AC_CHECK_LIB(db-3.2, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.2"],
      AC_CHECK_LIB(db-3.1, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.1"],
        AC_CHECK_LIB(db-3.0, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.0"],
-@@ -473,6 +483,7 @@
+@@ -478,6 +490,7 @@
        )
      )
    )
@@ -91,7 +112,7 @@
  )
  
  if test X"$DBLIBSRCS" = X; then
-@@ -1226,7 +1237,7 @@
+@@ -1236,7 +1249,7 @@
  dnl # XXX Propagate -lucb to popt ...
  dnl export LIBS INCPATH CONFIG_SITE
  
@@ -99,18 +120,18 @@
 +AC_CONFIG_SUBDIRS(beecrypt file)
  
  AC_OUTPUT([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
- 	macros.perl scripts/perl.req scripts/perl.prov
-@@ -1248,7 +1259,7 @@
- 	python/Makefile
- 	python/rpmdb/Makefile
- 	python/test/Makefile
+ 	scripts/perl.req scripts/perl.prov
+@@ -1260,7 +1273,7 @@
+ 	python/rpmdb/test/Makefile
+ 	python/mpw/Makefile
+ 	python/mpw/test/Makefile
 -  ], [	echo timestamp > popt/stamp-h.in
 +  ], [	
  	echo timestamp > beecrypt/stamp-h.in
  	echo timestamp > stamp-h.in
    ]
---- rpm-4.2/Makefile.am.wiget	Mon Mar 10 20:35:20 2003
-+++ rpm-4.2/Makefile.am	Thu Mar 27 23:50:55 2003
+--- rpm-4.3/Makefile.am.wiget	Mon May  5 10:44:39 2003
++++ rpm-4.3/Makefile.am	Fri May 16 00:16:34 2003
 @@ -14,7 +14,7 @@
  	po/*.in po/*.po po/rpm.pot \
  	rpm.magic rpmpopt-$(VERSION) rpmqv.c rpm.c
@@ -137,25 +158,3 @@
  		$(DEFS) $(INCLUDES) rpmqv.c $(rpmb_SOURCES)
  
  .PHONY:	lint
---- rpm-4.2/rpmdb/Makefile.am.syslib	Fri Mar 28 00:45:58 2003
-+++ rpm-4.2/rpmdb/Makefile.am	Fri Mar 28 00:48:00 2003
-@@ -49,7 +49,7 @@
- 	tagname.c tagtbl.c
- librpmdb_la_LDFLAGS = -release @VERSION@ \
- 	$(top_builddir)/rpmio/librpmio.la \
--	$(top_builddir)/popt/libpopt.la \
-+	@WITH_POPT_LIB@ \
- 	@WITH_LIBELF_LIB@ \
- 	@libdb3@
- librpmdb_la_LIBADD = $(DBLIBOBJS) $(DB3LOBJS)
---- rpm-4.2/lib/Makefile.am.wiget	Fri Mar 28 01:31:52 2003
-+++ rpm-4.2/lib/Makefile.am	Fri Mar 28 01:32:37 2003
-@@ -39,7 +39,7 @@
- librpm_la_LDFLAGS = -release @VERSION@ \
- 	$(top_builddir)/rpmdb/librpmdb.la \
- 	$(top_builddir)/rpmio/librpmio.la \
--	$(top_builddir)/popt/libpopt.la
-+	@WITH_POPT_LIB@
- 
- getdate.c: getdate.y
- 	@echo expect 10 shift/reduce conflicts
