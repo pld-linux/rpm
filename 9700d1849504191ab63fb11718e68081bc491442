@@ -1,0 +1,3 @@
+- rpm-lfind patch replaced by  rpm-alAddPackage.patch
+  It speed up wuch even more then lfind-ptach, and lave API 100% compatybile
+  with orginal rpm api.
