@@ -7,7 +7,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.2
-Release:	76
+Release:	77
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -371,7 +371,7 @@ construir pacotes usando o RPM.
 %patch37 -p1
 %patch38 -p1
 %patch39 -p1
-%patch40 -p1
+#%patch40 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
@@ -451,7 +451,7 @@ install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 install %{SOURCE10} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides
 install %{SOURCE11} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
 install %{SOURCE15} $RPM_BUILD_ROOT%{_libdir}/rpm/compress-doc
-install %{SOURCE16} $RPM_BUILD_ROOT%{_libdir}/rpm/check-files
+#install %{SOURCE16} $RPM_BUILD_ROOT%{_libdir}/rpm/check-files
 
 install rpmio/ugid.h $RPM_BUILD_ROOT%{_includedir}/rpm
 
@@ -539,7 +539,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/install-build-tree
 %attr(755,root,root) %{_libdir}/rpm/brp-*
 %attr(755,root,root) %{_libdir}/rpm/check-prereqs
-%attr(755,root,root) %{_libdir}/rpm/check-files
+#%attr(755,root,root) %{_libdir}/rpm/check-files
 %attr(755,root,root) %{_libdir}/rpm/compress-doc
 %attr(755,root,root) %{_libdir}/rpm/cpanflute
 %attr(755,root,root) %{_libdir}/rpm/http.req
