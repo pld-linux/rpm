@@ -11,13 +11,21 @@ if [ -f __rpm_noautoprovfiles ] ; then
 	done
 fi
 
+case `uname -m` in
+    alpha*)       mark64="" ;;
+    *)            mark64="()(64bit)" ;;
+esac
+    
 allprovides=`for f in $filelist; do
-    soname=$(objdump -p $f | awk '/SONAME/ {print $2}')
+    soname=$(objdump -p $f 2> /dev/null | awk '/SONAME/ {print $2}')
 
+    lib64=`if file -L $f 2>/dev/null | \
+    	grep "ELF 64-bit" >/dev/null; then echo "$mark64"; fi`
+	
     if [ "$soname" != "" ]; then
         if [ ! -L $f ]; then
-            echo $soname
-	    objdump -p $f | awk '
+            echo $soname$lib64
+	    objdump -p $f 2> /dev/null | awk '
 		BEGIN { START=0 ; }
 		/Version definitions:/ { START=1; }
 		/^[0-9]/ && (START==1) { print $4; }
@@ -25,11 +33,11 @@ allprovides=`for f in $filelist; do
 	    ' | \
 		grep -v $soname | \
 		while read symbol ; do
-		    echo "$soname($symbol)"
+		    echo "$soname($symbol)`echo $lib64 | sed 's/()//'`"
 		done
 	fi
     else
-	echo ${f##*/}
+	echo ${f##*/}$lib64
     fi
 done | sort -u`
 
