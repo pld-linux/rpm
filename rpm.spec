@@ -119,6 +119,7 @@ BuildRequires:	python-modules >= 2.2
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpm-pythonprov
 BuildRequires:	zlib-devel
+BuildRequires:  libselinux-devel
 %if %{with static}
 # Require static library only for static build
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
@@ -129,7 +130,6 @@ BuildRequires:	elfutils-static
 #BuildRequires:	libmagic-static
 BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
-BuildRequires:	libselinux-devel
 %endif
 Requires:	popt >= %{reqpopt_ver}
 Requires:	%{name}-lib = %{version}-%{release}
