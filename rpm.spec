@@ -1,26 +1,22 @@
 Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
-Version:	3.0.2
-Release:	3
+Version:	3.0.3
+Release:	7
 Group:		Base
 Group(pl):	Podstawowe
 Copyright:	GPL
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-3.0.x/%{name}-%{version}.tar.gz
 Source1:	rpm.groups
-Source2:	rpm.8pl
 Source3:	rpm.macros
-Source4:	rpm.pl.po
 Source5:	rpm-install-tree
 Patch0:		rpm-rpmrc.patch
-Patch1:		rpm-i18n.patch
-Patch2:		rpm-find-requires.patch
-Patch3:		rpm-macros.patch
-Patch4:		rpm-po.patch
-Patch5:		rpm-moredoc.patch
-Patch6:		rpm-arch.patch
-Patch7:		rpm-pld.patch
-Patch8:		rpm-rpmpopt.patch
+Patch1:		rpm-find-requires.patch
+Patch2:		rpm-macros.patch
+Patch3:		rpm-arch.patch
+Patch4:		rpm-pld.patch
+Patch5:		rpm-rpmpopt.patch
+Patch6:		rpm-findlangs.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	bzip2-static
@@ -100,19 +96,29 @@ Requires:	%{name} = %{version}
 %description -l pl utils
 Dodatkowe narzêdzia do zarz±dzanai baz± rpm-a i pakietami.
 %description utils -l pl
+Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami.
+Summary:	Additional utilities for check perl provides/requires in rpm packages
+Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci dla skryptów perl w pakietach rpm
+Group:		Utilities/File
+Group(pl):	Narzêdzia/Pliki
+Requires:	perl-modules
+Requires:	findutils
+Additional utilities for check perl provides/requires in rpm packages.
+Additional utilities for checking perl provides/requires in rpm
+%description -l pl perlprov
+Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci dla skryptów perl 
+w pakietach rpm.
+Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w
 construir pacotes usando o RPM.
 %setup  -q
 %patch0 -p0
-%patch1 -p1
-%patch2 -p0
+%patch1 -p0
+%patch2 -p1 
 %patch1 -p1
 %patch4 -p1 
 %patch5 -p1
-%patch6 -p1 
-%patch7 -p1 
-%patch8 -p1 
+%patch6 -p1
 %patch31 -p1
-install %{SOURCE4} po/pl.po
 install %{SOURCE3} macros.pld.in
 install %{SOURCE13} macros.python.in
 mv -f perl.prov perl.prov.in)
@@ -146,18 +152,20 @@ make DESTDIR="$RPM_BUILD_ROOT" pkgbindir="%{_bindir}" install
 install macros.pld $RPM_BUILD_ROOT%{_libdir}/rpm/macros.pld
 install -m755 %{SOURCE5} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
 	pkgbindir="%{_bindir}"
-install rpm.8ru $RPM_BUILD_ROOT%{_mandir}/ru/man8/rpm.8
-install rpm2cpio.8ru $RPM_BUILD_ROOT%{_mandir}/ru/man8/rpm2cpio.8
-install %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/pl/man8/rpm.8
+#install rpm.8ru $RPM_BUILD_ROOT%{_mandir}/ru/man8/rpm.8
+#install rpm2cpio.8ru $RPM_BUILD_ROOT%{_mandir}/ru/man8/rpm2cpio.8
+#install %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/pl/man8/rpm.8
 
-install %{SOURCE1} docs/groups
+
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*
 
 #%%_install_langs pl_PL:en_US
 %%distribution PLD
+EOF
+
 gzip -9fn $RPM_BUILD_ROOT%{_mandir}/{{ru,pl}/man8/*,man8/*} \
-	RPM-PGP-KEY CHANGES docs/*
+	RPM-PGP-KEY CHANGES doc/manual/*
 
 %pre
 if [ -L /var/state/rpm ]; then
@@ -199,13 +207,13 @@ rm -rf $RPM_BUILD_ROOT
 
 rm -rf $RPM_BUILD_ROOT
 
-%doc RPM-PGP-KEY.gz CHANGES.gz docs/*
+%post	-p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
 %attr(755,root,root) %{_libdir}/rpm/rpmdb
-%{_mandir}/man8/*
-%lang(ru) %{_mandir}/ru/man8/*
-%lang(pl) %{_mandir}/pl/man8/*
+%attr(755,root,root) %{_libdir}/librpm*.so.*.*
+%{_mandir}/man8/rpm.8*
+%lang(pl) %{_mandir}/pl/man8/rpm.8*
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
 %attr(755,root,root) %dir /var/db/rpm
 
@@ -216,6 +224,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/find-provides
 %attr(755,root,root) %{_libdir}/rpm/find-rpm-provides
 %attr(755,root,root) %{_libdir}/rpm/find-spec-bcond
+%attr(755,root,root) %{_libdir}/rpm/convertrpmrc.sh
 
 %{_libdir}/rpm/rpm*
 %{_libdir}/rpm/macros*
@@ -227,14 +236,24 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/librpm*.so
 %files devel
 %files libs
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/librpm*.so.*.*
 
 %defattr(644,root,root,755)
-%attr(644,root,root) %{_libdir}/librpm*.a
+%{_includedir}/rpm
+%attr(755,root,root) %{_libdir}/librpm*.la
 %attr(755,root,root) %{_libdir}/librpm*.so
 
+%files static
 %attr(755,root,root) %{_bindir}/*
 %files utils
+%defattr(644,root,root,755)
+%{_mandir}/man8/rpm2cpio.8*
+%{_mandir}/man1/*
+%lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
+%lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
+%lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
+
 
 %files -n python-rpm
 * %{date} PLD Team <pld-list@pld.org.pl>
