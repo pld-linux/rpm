@@ -138,6 +138,12 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/librpm*.a
 %files utils
 %files -n python-rpm
+* Mon Apr 19 1999 Artur Frysiak <wiget@pld.org.pl>
+  [3.0-7]
+- upgraded to 3.0
+- added polish man page
+- added macros for PLD
+
 * Wed Mar 10 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
   [2.5.6-5]
 - added rpm-find-requires.patch with beter finding list packages containing
