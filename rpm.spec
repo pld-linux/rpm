@@ -1,6 +1,6 @@
 %include        /usr/lib/rpm/macros.python
 %define	beecrypt_ver	2.2.0
-%define	beecrypt_rel	0.93
+%define	beecrypt_rel	1.4
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -8,7 +8,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.1
-Release:	1.3
+Release:	1.4
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/%{name}-%{version}.tar.gz
@@ -47,7 +47,7 @@ Patch11:	%{name}-noexpand.patch
 Patch12:	%{name}-scripts-closefds.patch
 Patch13:	%{name}-python-macros.patch
 Patch14:	%{name}-perlprov-regonly.patch
-Patch15:	%{name}-db4.patch
+Patch15:	%{name}-4.1-branch.patch
 Patch16:	%{name}-drop-legacy-CLI.patch
 Patch17:	%{name}-perlprov-perl5.6.patch
 Patch18:	%{name}-gettext-in-header.patch
@@ -58,7 +58,6 @@ Patch22:	%{name}-build.patch
 Patch23:	%{name}-python-link.patch
 Patch24:	%{name}-system_libs.patch
 Patch25:	%{name}-bb-and-short-circuit.patch
-Patch26:	%{name}-SIGCHLD.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -417,7 +416,6 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch23 -p1
 %patch24 -p1
 %patch25 -p1
-%patch26 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
@@ -459,10 +457,7 @@ cd ..
 
 rm -f missing
 %{__libtoolize}
-%{__gettextize} --intl
-if [ ! -f po/Makevars -a -f po/Makevars.template ] ; then
-	cp po/Makevars.template po/Makevars
-fi
+%{__gettextize}
 %{__aclocal}
 autoupdate
 %{__autoheader} || :
