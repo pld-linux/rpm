@@ -1,13 +1,7 @@
-diff -Nru rpm-3.0.5/rpmrc.in rpm-3.0.5.new/rpmrc.in
---- rpm-3.0.5/rpmrc.in	Sun Jul  9 17:35:56 2000
-+++ rpm-3.0.5.new/rpmrc.in	Tue Jul 25 10:16:43 2000
-@@ -2,12 +2,12 @@
- 
- #############################################################
- 
--# Please send new entries to rpm-list@redhat.com
-+# Please send new entries to pld-list@pld.org.pl
- 
+diff -Nru rpm-3.0.6/rpmrc.in rpm-3.0.6.new/rpmrc.in
+--- rpm-3.0.6/rpmrc.in	Wed Sep 13 19:55:15 2000
++++ rpm-3.0.6.new/rpmrc.in	Thu Oct 12 15:49:35 2000
+@@ -8,7 +8,7 @@
  #############################################################
  # Values for RPM_OPT_FLAGS for various platforms
  
@@ -16,7 +10,7 @@ diff -Nru rpm-3.0.5/rpmrc.in rpm-3.0.5.new/rpmrc.in
  optflags: i486 -O2 -march=i486
  optflags: i586 -O2 -march=i586
  optflags: i686 -O2 -march=i686
-@@ -260,5 +260,5 @@
+@@ -289,5 +289,5 @@
  buildarch_compat: ia64: noarch
  buildarch_compat: s390: noarch
  
