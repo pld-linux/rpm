@@ -27,3 +27,34 @@
  .PP
  \fI/var/tmp/rpm*\fR
  .SH "SEE ALSO"
+--- rpm-4.3/doc/rpmbuild.8.orig	2003-02-06 19:03:43.000000000 +0100
++++ rpm-4.3/doc/rpmbuild.8	2003-06-15 14:50:20.000000000 +0200
+@@ -82,7 +82,7 @@
+ Only the first file in the list must exist, and tildes will be
+ expanded to the value of \fB$HOME\fR.
+ The default \fIFILELIST\fR is
+-\fI/usr/lib/rpm/rpmrc\fR:\fI/usr/lib/rpm/redhat/rpmrc\fR:\fI~/.rpmrc\fR.
++\fI/usr/lib/rpm/rpmrc\fR:\fI/usr/lib/rpm/redhat/rpmrc\fR:\fI/etc/rpmrc\fR:\fI~/.rpmrc\fR.
+ .TP
+ \fB--pipe \fICMD\fB\fR
+ Pipes the output of \fBrpm\fR to the command \fICMD\fR.
+@@ -249,7 +249,7 @@
+ \fI/var/lib/rpm/Sigmd5\fR
+ \fI/var/lib/rpm/Triggername\fR
+ .fi
+-.SS "Temporaray"
++.SS "Temporary"
+ .PP
+ \fI/var/tmp/rpm*\fR
+ .SH "SEE ALSO"
+--- rpm-4.3/doc/rpmgraph.8.orig	2002-07-01 00:47:32.000000000 +0200
++++ rpm-4.3/doc/rpmgraph.8	2003-06-15 19:16:08.000000000 +0200
+@@ -24,7 +24,7 @@
+ Nodes in the dependency graph are package names, and edges in the
+ directed graph point to the parent of each node. The parent node
+ is defined as the last predecessor of a package when partially ordered
+-using the package depndencies as a relation. That means that the
++using the package dependencies as a relation. That means that the
+ parent of a given package is the package's last prerequisite.
+ .PP
+ The output is in \fBdot\fR(1) directed graph format,

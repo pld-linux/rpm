@@ -37,16 +37,16 @@ Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
 Source4:	%{name}-find-rpm-provides
-Source8:	%{name}-find-spec-bcond
-Source9:	%{name}-find-lang
-Source10:	%{name}-find-provides
-Source11:	%{name}-find-requires
-Source14:	%{name}-groups-po.awk
-Source15:	%{name}-compress-doc
-Source16:	%{name}-check-files
-Source17:	%{name}-php-provides
-Source18:	%{name}-php-requires
-Source20:	%{name}.macros
+Source5:	%{name}-find-spec-bcond
+Source6:	%{name}-find-lang
+Source7:	%{name}-find-provides
+Source8:	%{name}-find-requires
+Source9:	%{name}-groups-po.awk
+Source10:	%{name}-compress-doc
+Source11:	%{name}-check-files
+Source12:	%{name}-php-provides
+Source13:	%{name}-php-requires
+Source14:	%{name}.macros
 Source30:	builder
 Source31:	adapter.awk
 Source32:	pldnotify.awk
@@ -57,30 +57,31 @@ Patch2:		%{name}-arch.patch
 Patch3:		%{name}-rpmpopt.patch
 Patch4:		%{name}-perl-macros.patch
 Patch5:		%{name}-perl-req-perlfile.patch
-Patch7:		%{name}-glob.patch
-Patch11:	%{name}-noexpand.patch
-Patch12:	%{name}-scripts-closefds.patch
-Patch13:	%{name}-python-macros.patch
-#Patch16:	%{name}-drop-legacy-CLI.patch
-Patch18:	%{name}-gettext-in-header.patch
-Patch19:	%{name}-compress-doc.patch
-Patch21:	%{name}-gettext0.11.patch
-Patch22:	%{name}-build.patch
-Patch24:	%{name}-system_libs.patch
-Patch25:	%{name}-bb-and-short-circuit.patch
-Patch30:	%{name}-etc_dir.patch
-Patch31:	%{name}-system_libs-more.patch
-Patch32:	%{name}-php-deps.patch
-Patch33:	%{name}-python-fix.patch
-Patch34:	%{name}-spec-prep-pre.patch
-Patch35:	%{name}-perl_req.patch
-Patch36:	%{name}-system_libs_more.patch
-Patch37:	%{name}-python_2_3.patch
-Patch38:	%{name}-no-bin-env.patch
-Patch39:	%{name}-specflags.patch
-Patch40:	%{name}-magic-usesystem.patch
-Patch41:	%{name}-dontneedutils.patch
-Patch42:	%{name}-python-beecrypt.patch
+Patch6:		%{name}-glob.patch
+Patch7:		%{name}-noexpand.patch
+Patch8:		%{name}-scripts-closefds.patch
+Patch9:		%{name}-python-macros.patch
+Patch10:	%{name}-gettext-in-header.patch
+Patch11:	%{name}-compress-doc.patch
+Patch12:	%{name}-gettext0.11.patch
+Patch13:	%{name}-build.patch
+Patch14:	%{name}-system_libs.patch
+Patch15:	%{name}-bb-and-short-circuit.patch
+Patch16:	%{name}-etc_dir.patch
+Patch17:	%{name}-system_libs-more.patch
+Patch18:	%{name}-php-deps.patch
+Patch19:	%{name}-python-fix.patch
+Patch20:	%{name}-spec-prep-pre.patch
+Patch21:	%{name}-perl_req.patch
+Patch22:	%{name}-system_libs_more.patch
+Patch23:	%{name}-python_2_3.patch
+Patch24:	%{name}-no-bin-env.patch
+Patch25:	%{name}-specflags.patch
+Patch26:	%{name}-magic-usesystem.patch
+Patch27:	%{name}-dontneedutils.patch
+Patch28:	%{name}-python-beecrypt.patch
+Patch29:	%{name}-man-typos.patch
+Patch30:	%{name}-man-pl.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -501,41 +502,43 @@ construir pacotes usando o RPM.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 %patch7 -p1
+%patch8 -p1
+%patch9 -p1
+%patch10 -p1
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
+%patch14 -p1
+%patch15 -p1
+%patch16 -p1
+%patch17 -p1
 %patch18 -p1
 %patch19 -p1
+# patch20 -- look down
 %patch21 -p1
 %patch22 -p1
+%patch23 -p1
 %patch24 -p1
-%patch25 -p1
-%patch30 -p1
-%patch31 -p1
-%patch32 -p1
-%patch33 -p1
-# patch34 -- look down
-%patch35 -p1
-%patch36 -p1
-%patch37 -p1
-%patch38 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
 echo '# obsoleted file' > macros.perl
 echo '# obsoleted file' > macros.python
 echo '# obsoleted file' > macros.php
-install %{SOURCE9} scripts/find-lang.sh
-install %{SOURCE17} scripts/php.prov.in
-install %{SOURCE18} scripts/php.req.in
+install %{SOURCE6} scripts/find-lang.sh
+install %{SOURCE12} scripts/php.prov.in
+install %{SOURCE13} scripts/php.req.in
 install %{SOURCE33} scripts/perl.prov
-cat %{SOURCE20} >> macros.in
-%patch34 -p1
-%patch39 -p1
-%patch40 -p1
-%patch41 -p1
-%patch42 -p1
+cat %{SOURCE14} >> macros.in
+%patch20 -p1
+%patch25 -p1
+%patch26 -p1
+%patch27 -p1
+%patch28 -p1
+%patch29 -p1
+%patch30 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
@@ -546,7 +549,13 @@ chmod +x %{SOURCE4}
 rm -rf zlib libelf db db3 popt rpmdb/db.h
 
 # generate Group translations to *.po
-awk -f %{SOURCE14} %{SOURCE1}
+awk -f %{SOURCE9} %{SOURCE1}
+
+# update macros paths
+for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
+	sed -e 's@lib/rpm/redhat@lib/rpm/pld@g' $f > ${f}.tmp
+	mv -f ${f}.tmp $f
+done
 
 %build
 cd file
@@ -600,11 +609,11 @@ install macros.php	$RPM_BUILD_ROOT%{_libdir}/rpm/macros.php
 install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
 install %{SOURCE4} $RPM_BUILD_ROOT%{_libdir}/rpm/find-rpm-provides
-install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
-install %{SOURCE10} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides
-install %{SOURCE11} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
-install %{SOURCE15} $RPM_BUILD_ROOT%{_libdir}/rpm/compress-doc
-install %{SOURCE16} $RPM_BUILD_ROOT%{_libdir}/rpm/check-files
+install %{SOURCE5} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
+install %{SOURCE7} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides
+install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
+install %{SOURCE10} $RPM_BUILD_ROOT%{_libdir}/rpm/compress-doc
+install %{SOURCE11} $RPM_BUILD_ROOT%{_libdir}/rpm/check-files
 install scripts/find-php*	$RPM_BUILD_ROOT%{_libdir}/rpm
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_libdir}/rpm
 
@@ -739,7 +748,9 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 
 %{_mandir}/man1/gendiff.1*
 %{_mandir}/man8/rpmbuild.8*
-%{_mandir}/ja/man8/rpmbuild.8*
+%lang(ja) %{_mandir}/ja/man8/rpmbuild.8*
+%lang(pl) %{_mandir}/pl/man1/gendiff.1*
+%lang(pl) %{_mandir}/pl/man8/rpmbuild.8*
 
 %files devel
 %defattr(644,root,root,755)
@@ -782,6 +793,9 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 %lang(ja) %{_mandir}/ja/man8/rpmgraph.8*
 %lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
 %lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
+%lang(pl) %{_mandir}/pl/man8/rpmdeps.8*
+%lang(pl) %{_mandir}/pl/man8/rpmcache.8*
+%lang(pl) %{_mandir}/pl/man8/rpmgraph.8*
 %lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
 
 %files utils-static
