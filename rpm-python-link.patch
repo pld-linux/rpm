@@ -1,0 +1,19 @@
+--- rpm-4.1/python/Makefile.am.wrlink	Thu Sep 19 01:54:42 2002
++++ rpm-4.1/python/Makefile.am	Thu Sep 19 01:55:08 2002
+@@ -52,13 +52,13 @@
+ 	rpmrc-py.c rpmte-py.c rpmts-py.c
+ 
+ rpmmodule.so$(EXEEXT): $(librpmmodule_la_OBJECTS)
+-	$(CC) -o $@ $(librpmmodule_la_OBJECTS) $(rpmmodule_so_LDFLAGS)
++	$(LINK) -o $@ $(librpmmodule_la_OBJECTS) $(rpmmodule_so_LDFLAGS)
+ 
+ _rpmdb.so$(EXEEXT): $(_rpmdb_so_OBJECTS)
+-	$(CC) -o $@ $(_rpmdb_so_OBJECTS) $(_rpmdb_so_LDFLAGS)
++	$(LINK) -o $@ $(_rpmdb_so_OBJECTS) $(_rpmdb_so_LDFLAGS)
+ 
+ poptmodule.so$(EXEEXT): $(poptmodule_so_OBJECTS)
+-	$(CC) -o $@ $(poptmodule_so_OBJECTS) $(poptmodule_so_LDFLAGS)
++	$(LINK) -o $@ $(poptmodule_so_OBJECTS) $(poptmodule_so_LDFLAGS)
+ 
+ # rpmmodule.c hash.c upgrade.c header-py.c \
+ # 	rpmal-py.c rpmds-py.c rpmdb-py.c rpmfd-py.c rpmfi-py.c rpmmi-py.c \
