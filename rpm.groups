@@ -260,7 +260,7 @@ Applications/Networking
 	[de]:		Applikationen/Netzwerkwesen
 	[es]:		Aplicaciones/Red
 	[fr]:		Applications/Réseau
-	[is]:		Forrit/Verkfræði
+	[is]:		Forrit/Net
 	[it]:		Applicazioni/Rete
 	[no]:		Applikasjoner/Nettverk
 	[pl]:		Aplikacje/Sieciowe
@@ -903,7 +903,7 @@ Networking
 	[de]:		Netzwerkwesen
 	[es]:		Red
 	[fr]:		Réseau
-	[is]:		Verkfræði
+	[is]:		Net
 	[it]:		Rete
 	[no]:		Nettverks
 	[pl]:		Sieciowe
@@ -919,7 +919,7 @@ Networking/Admin
 	[de]:		Netzwerkwesen/Administration
 	[es]:		Red/Administración
 	[fr]:		Réseau/Administration
-	[is]:		Verkfræði/Stjórnar
+	[is]:		Net/Stjórnar
 	[it]:		Rete/Amministrazione
 	[no]:		Nettverks/Administrasjon
 	[pl]:		Sieciowe/Administracyjne
@@ -933,7 +933,7 @@ Networking/Daemons
 	[de]:		Netzwerkwesen/Server
 	[es]:		Red/Servidores
 	[fr]:		Réseau/Serveurs
-	[is]:		Verkfræði/Púkar
+	[is]:		Net/Púkar
 	[it]:		Rete/Demoni
 	[no]:		Nettverks/Daemoner
 	[pl]:		Sieciowe/Serwery
@@ -948,7 +948,7 @@ Networking/Daemons/Java
 	[de]:		Netzwerkwesen/Server/Java
 	[es]:		Red/Servidores/Java
 	[fr]:		Réseau/Serveurs/Java
-	[is]:		Verkfræði/Púkar/Java
+	[is]:		Net/Púkar/Java
 	[it]:		Rete/Demoni/Java
 	[no]:		Nettverks/Daemoner/Java
 	[pl]:		Sieciowe/Serwery/Java
@@ -980,7 +980,7 @@ Networking/News
 	[de]:		Netzwerkwesen/News
 	[es]:		Red/Noticias
 	[fr]:		Réseau/Nouvelles
-	[is]:		Verkfræði/Fréttir
+	[is]:		Net/Fréttir
 	[it]:		Rete/News
 	[no]:		Nettverks/News
 	[pl]:		Sieciowe/News
@@ -996,7 +996,7 @@ Networking/Utilities
 	[de]:		Netzwerkwesen/Dienstprogramme
 	[es]:		Red/Utilitarios
 	[fr]:		Réseau/Utilitaires
-	[is]:		Verkfræði/Tól
+	[is]:		Net/Tól
 	[it]:		Rete/Utility
 	[no]:		Nettverks/Verktøy
 	[pl]:		Sieciowe/Narzêdzia
@@ -1173,7 +1173,7 @@ X11/Applications/Networking
 	[de]:		X11/Applikationen/Netzwerkwesen
 	[es]:		X11/Aplicaciones/Red
 	[fr]:		X11/Applications/Réseau
-	[is]:		X11/Forrit/Verkfræði
+	[is]:		X11/Forrit/Net
 	[it]:		X11/Applicazioni/Rete
 	[no]:		X11/Applikasjoner/Nettverks
 	[pl]:		X11/Aplikacje/Sieciowe
