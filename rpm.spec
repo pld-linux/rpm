@@ -97,6 +97,7 @@ Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
 Patch38:	%{name}-distver.patch
 Patch39:	%{name}-gcc4.patch
+Patch40:	%{name}-pythondeps.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -632,6 +633,7 @@ cat %{SOURCE11} >> macros.in
 %patch37 -p1
 %{?with_distver:%patch38 -p1}
 %patch39 -p1
+%patch40 -p1
 %patch0 -p1
 %patch3 -p1
 
