@@ -1,0 +1,1 @@
+- added patch %%{name}-noexpand, which disable expanding of macros in %changelog and %description sections
