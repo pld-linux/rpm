@@ -196,21 +196,32 @@ echo "Compress man and info pages."; \
 #-----------------------------------------------------------------
 # remove all RPATH from executable binaries and shared object files
 #
-# Requires: find, awk, strip, cut, xargs
+# Requires: find, awk, cut, xargs, chrpath
 #
 #%no_install_post_chrpath	1
 %__spec_install_post_chrpath {%{!?debug: \
 %{!?no_install_post_chrpath: \
 	%{?verbose:set -x;} \
-	echo "Remove RPATH from executable binaries and shared object files."; \
-	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*"`; \
-	elfexelist=`echo $filelist | xargs -r file | \
-		awk '/ELF.*executable/ {print $1}' | cut -d: -f1`; \
-	elfsharedlist=`echo $filelist | xargs -r file | \
-		awk '/LF.*shared object/ {print $1}' | cut -d: -f1`; \
-	if [ -n "$elfexelist$elfsharedlist" ]; then \
-		chrpath -d $elfexelist $elfsharedlist; \
-	fi; } \
+echo "Remove RPATH from executable binaries and shared object files."; \
+find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" | xargs -r file | \
+	awk '/ELF.*(executable|shared object)/ {print $1}' | cut -d: -f1 | \
+while read file ; do \
+	rpath= ; \
+	for dir in `chrpath -l "$file" | \
+		    awk '/RPATH=/ { gsub(/.*RPATH=/,""); gsub(/:/," "); print $0 }'` ; do \
+			case $dir in \
+			/home/* | /tmp/* | /usr/lib | /lib | /usr/local/lib | /usr/X11R6/lib ) \
+				echo "remove-rpath: $dir in $file"; \
+				;; \
+			* ) \
+				if [ "$rpath" = "" ] ; then rpath="$dir" ; \
+				else rpath="$rpath:$dir" ; fi ; \
+				;; \
+			esac ; \
+	done ; \
+	if [ "$rpath" = "" ] ; then chrpath -d "$file" > /dev/null ; \
+	else chrpath -r "$rpath" "$file" > /dev/null ; fi ; \
+done; } \
 } }
 #-----------------------------------------------------------------
 # Find and gzip all kernel modules
