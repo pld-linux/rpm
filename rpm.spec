@@ -45,9 +45,10 @@ Patch20:	%{name}-db4.patch
 Patch21:	%{name}-pl.po.patch
 Patch22:	%{name}-drop-legacy-CLI.patch
 Patch23:	%{name}-perlprov-perl5.6.patch
+Patch24:	%{name}-ac25x.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
-URL:		http://www.rpm.org/
+BuildRequires:	autoconf >= 2.52
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	db4-devel >= 4.0.14
@@ -371,6 +372,7 @@ construir pacotes usando o RPM.
 %patch19 -p1
 %patch22 -p1 -b .wiget
 %patch23 -p1
+%patch24 -p1
 %patch31 -p1
 %patch36 -p1
 %patch37 -p1
