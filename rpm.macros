@@ -101,17 +101,9 @@
 %defined()	%{expand:%%{?%{1}:1}%%{!?%{1}:0}}
 %undefined()	%{expand:%%{?%{1}:0}%%{!?%{1}:1}}
 
-# Shorthand for %if %{defined ...}
-%ifdef()	%if %{expand:%%{?%{1}:1}%%{!?%{1}:0}}
-%ifndef()	%if %{expand:%%{?%{1}:0}%%{!?%{1}:1}}
-
 # Shorthand for %{defined with_...}
 %with()		%{expand:%%{?with_%{1}:1}%%{!?with_%{1}:0}}
 %without()	%{expand:%%{?with_%{1}:0}%%{!?with_%{1}:1}}
-
-# Shorthand for %if %{with ...}
-%ifwith()	%if %{expand:%%{?with_%{1}:1}%%{!?with_%{1}:0}}
-%ifwithout()	%if %{expand:%%{?with_%{1}:0}%%{!?with_%{1}:1}}
 
 # Handle conditional builds. %bcond_with is for case when feature is
 # default off and needs to be activated with --with ... command line 
@@ -126,10 +118,10 @@
 #
 # %bcond_with extra_fonts
 # %bcond_without static
-# %ifdef with_extra_fonts
+# %if %{with extra_fonts}
 # ...
 # %endif
-# %ifdef with_static
+# %ifdef %{with static}
 # ...
 # %endif
 # %{?with_static: ... }
