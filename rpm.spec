@@ -351,36 +351,36 @@ RPMs library.
 Biblioteki RPMa.
 
 %package build
-Summary:        Scripts for building binary RPM packages
-Summary(de):    Scripts fürs Bauen binärer RPM-Pakete
-Summary(pl):    Skrypty pomocnicze do budowania binarnych RPM-ów
-Summary(pt_BR): Scripts e programas executáveis usados para construir pacotes
+Summary:	Scripts for building binary RPM packages
+Summary(de):	Scripts fürs Bauen binärer RPM-Pakete
+Summary(pl):	Skrypty pomocnicze do budowania binarnych RPM-ów
+Summary(pt_BR):	Scripts e programas executáveis usados para construir pacotes
 Summary(ru):	óËÒÉÐÔÙ É ÕÔÉÌÉÔÙ, ÎÅÏÂÈÏÄÉÍÙÅ ÄÌÑ ÓÂÏÒËÉ ÐÁËÅÔÏ×
 Summary(uk):	óËÒÉÐÔÉ ÔÁ ÕÔÉÌ¦ÔÉ, ÎÅÏÂÈ¦ÄÎ¦ ÄÌÑ ÐÏÂÕÄÏ×É ÐÁËÅÔ¦×
-Group:          Applications/File
-Requires:       %{name} = %{version}
-Requires:       /bin/id
-Requires:       awk
-Requires:       binutils
-Requires:       diffutils
-Requires:       file >= 3.31
-Requires:       fileutils
-Requires:       findutils
+Group:		Applications/File
+Requires:	%{name} = %{version}
+Requires:	/bin/id
+Requires:	awk
+Requires:	binutils
+Requires:	diffutils
+Requires:	file >= 3.31
+Requires:	fileutils
+Requires:	findutils
 %ifarch athlon
-Requires:       gcc >= 3.0.3
+Requires:	gcc >= 3.0.3
 %else
-Requires:       gcc
+Requires:	gcc
 %endif
-Requires:       glibc-devel
-Requires:       grep
-Requires:       gzip
-Requires:       make
-Requires:       patch
-Requires:       popt >= 1.7
-Requires:       sed
-Requires:       sh-utils
-Requires:       tar
-Requires:       textutils
+Requires:	glibc-devel
+Requires:	grep
+Requires:	gzip
+Requires:	make
+Requires:	patch
+Requires:	popt >= 1.7
+Requires:	sed
+Requires:	sh-utils
+Requires:	tar
+Requires:	textutils
 
 %description build
 Scripts for building binary RPM packages.
@@ -739,10 +739,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/striptofile
 %attr(755,root,root) %{_bindir}/unstripfile
 # not here
-#%{_prefix}/lib/rpm/rpm.daily
-#%{_prefix}/lib/rpm/rpm.log
-#%{_prefix}/lib/rpm/rpm.xinetd
-%{_prefix}/lib/rpm/rpm2cpio.sh
+#%{_libdir}/rpm/rpm.daily
+#%{_libdir}/rpm/rpm.log
+#%{_libdir}/rpm/rpm.xinetd
+%{_libdir}/rpm/rpm2cpio.sh
 
 %{_mandir}/man8/rpm2cpio.8*
 %lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
@@ -791,10 +791,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n beecrypt-devel
 %defattr(644,root,root,755)
-%{_prefix}/lib/libbeecrypt.so
-%{_prefix}/lib/libbeecrypt.la
+%{_libdir}/libbeecrypt.so
+%{_libdir}/libbeecrypt.la
 %{_includedir}/beecrypt
 
 %files -n beecrypt-static
 %defattr(644,root,root,755)
-%{_prefix}/lib/libbeecrypt.a
+%{_libdir}/libbeecrypt.a
