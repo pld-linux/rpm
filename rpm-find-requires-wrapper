@@ -9,8 +9,8 @@
 
 ulimit -c 0
 
-PERLOPT="--define=__perl_requires /bin/true"
-PHPOPT="--define=__php_requires /bin/true"
+PERLOPT="--define=__perl_requires /bin/sh -c 'cat >/dev/null'"
+PHPOPT="--define=__php_requires /bin/sh -c 'cat >/dev/null'"
 PROVARG=""
 NOPROVFILES=""
 NOPROV=""

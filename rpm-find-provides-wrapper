@@ -9,8 +9,8 @@
 
 ulimit -c 0
 
-PERLOPT="--define=__perl_provides /bin/true"
-PHPOPT="--define=__php_provides /bin/true"
+PERLOPT="--define=__perl_provides /bin/sh -c 'cat >/dev/null'"
+PHPOPT="--define=__php_provides /bin/sh -c 'cat >/dev/null'"
 noprovfiles=''
 noprov=''
 buildroot=''
