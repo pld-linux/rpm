@@ -335,7 +335,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/find-lang.sh
 %attr(755,root,root) %{_libdir}/rpm/mkinstalldirs
 %attr(755,root,root) %{_libdir}/rpm/getpo.sh
-%attr(755,root,root) %{_libdir}/rpm/getpo.sh
 %attr(755,root,root) %{_libdir}/rpm/install-build-tree
 %attr(755,root,root) %{_libdir}/rpm/brp-*
 %attr(755,root,root) %{_libdir}/rpm/check-prereqs
