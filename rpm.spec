@@ -94,7 +94,6 @@ Patch37:	%{name}-rpmsq.patch
 Patch40:	%{name}-epoch0.patch
 Patch43:	%{name}-perl_req-INC_dirs.patch
 Patch44:	%{name}-debuginfo.patch
-Patch45:	%{name}-beecrypt4.patch
 Patch46:	%{name}-doxygen_hack.patch
 Patch47:	%{name}-distver.patch
 Patch48:	%{name}-gcc4.patch
@@ -558,20 +557,18 @@ construir pacotes usando o RPM.
 Р╕зноман╕тн╕ допом╕жн╕ скрипти та утил╕ти, як╕ використовуються для
 побудови RPM'╕в.
 
-%if %{with apidocs}
-%package	apidocs
-Summary:	rpm API documentation and guides
-Summary(pl):	Documentacja API rpm i przewodniki.
+%package apidocs
+Summary:	RPM API documentation and guides
+Summary(pl):	Documentacja API RPM-a i przewodniki
 Group:		Documentation	
 
 %description apidocs
-Documentation for rpm API and guides in html format generated
+Documentation for RPM API and guides in HTML format generated
 from rpm sources by doxygen.
 
 %description apidocs -l pl
-Dokumentacja API rpm oraz przewodniki w formacie html generowana
-ze ╪rodeЁ rpm przez doxygen.
-%endif
+Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane
+ze ╪rodeЁ RPM-a przez doxygen.
 
 %prep
 %setup -q -n %{name}
@@ -625,10 +622,7 @@ cat %{SOURCE11} >> macros.in
 %patch40 -p1
 %patch43 -p0
 %patch44 -p1
-# OBSOLETE
-#%patch45 -p1
-# NEEDS UPDATE
-# %patch46 -p1
+%patch46 -p1
 %{?with_distver:%patch47 -p1}
 %patch48 -p1
 # NEEDS UPDATE
