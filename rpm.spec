@@ -28,7 +28,7 @@ BuildRequires:	automake
 BuildRequires:	autoconf >= 2.13-8
 BuildRequires:	gettext-devel
 Requires:	glibc >= 2.1
-BuildRoot:	/tmp/%{name}-%{version}-root
+BuildRequires:	zlib-static >= 1.1.4
 Obsoletes:	rpm-libs
 %define		pyrequires_eq() Requires:	%1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
 RPM is a powerful package manager, which can be used to build, install, 
@@ -120,10 +120,8 @@ Summary(pt_BR):	Scripts e programas executáveis usados para construir pacotes
 Requires:	tar
 Requires:	textutils
 %description build
-
 %description -l pl build
 %description build -l pl
-
 construir pacotes usando o RPM.
 %setup  -q
 %prep
@@ -284,7 +282,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/find-perl-*
 %attr(755,root,root) %{_libdir}/rpm/find-*.perl
 %attr(755,root,root) %{_libdir}/rpm/find-prov.pl
-
 
 %files -n python-rpm
 * %{date} PLD Team <pld-list@pld.org.pl>
