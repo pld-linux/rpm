@@ -3,7 +3,7 @@ Summary(de):	Red Hat (und jetzt auch PLD) Packet-Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0.2
-Release:	28
+Release:	31
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -210,7 +210,7 @@ construir pacotes usando o RPM.
 %setup -q -a12
 %patch0 -p1
 %patch1 -p1
-%patch4 -p1 
+%patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
@@ -227,7 +227,7 @@ construir pacotes usando o RPM.
 %patch16 -p0
 %patch17 -p1
 %patch31 -p1
-install %{SOURCE2} macros.pld.in
+%patch36 -p1
 %patch38 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
@@ -263,7 +263,7 @@ automake -a -c
 sed -e 's#cpio.c depends.c#cpio.c $(DBLIBOBJS) depends.c#g' \
 	lib/Makefile.in > lib/Makefile.in.new
 mv -f lib/Makefile.in.new lib/Makefile.in
-%configure2_13 \
+sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' macros.in | \
 	sed 's|@host_cpu@|%{_target_cpu}|' > macros.tmp
 	--enable-v1-packages
 %configure \
@@ -276,7 +276,6 @@ mv -f lib/Makefile.in.new lib/Makefile.in
 	DESTDIR="$RPM_BUILD_ROOT" \
 rm -rf $RPM_BUILD_ROOT
 
-install macros.pld $RPM_BUILD_ROOT%{_libdir}/rpm/macros.pld
 %{__make} install \
 	pkgbindir="%{_bindir}"
 
@@ -336,29 +335,35 @@ rm -rf $RPM_BUILD_ROOT
 %dir /var/lib/rpm
 %dir %{_libdir}/rpm
 
-%{_libdir}/rpm/macros.pld
 %{_libdir}/rpm/noarch-linux
 %{_libdir}/rpm/noarch-pld-linux
 %ifarch i386 i486 i586 i686
 %{_libdir}/rpm/i386-pld-linux
+%{_libdir}/rpm/i386-linux
 %endif
 %ifarch i486 i586 i686
 %{_libdir}/rpm/i486-pld-linux
+%{_libdir}/rpm/i486-linux
 %endif
 %ifarch i586 i686
 %{_libdir}/rpm/i586-pld-linux
+%{_libdir}/rpm/i586-linux
 %endif
 %ifarch i686
 %{_libdir}/rpm/i686-pld-linux
+%{_libdir}/rpm/i686-linux
 %{_libdir}/rpm/noarch-linux
 %{_libdir}/rpm/noarch-pld-linux
 %{_libdir}/rpm/sparc-pld-linux
+%{_libdir}/rpm/sparc-linux
 %endif
 %ifarch sparc64
 %{_libdir}/rpm/sparc64-pld-linux
+%{_libdir}/rpm/sparc64-linux
 %{_libdir}/rpm/i?86*
 %{_libdir}/rpm/athlon*
 %{_libdir}/rpm/alpha-pld-linux
+%{_libdir}/rpm/alpha-linux
 %ifarch sparc sparc64
 %endif
 %ifarch ppc
