@@ -25,7 +25,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.2
 Version:	%{ver}
-%define	rel	0.%{snap}.4
+%define	rel	0.%{snap}.5
 Release:	%{rel}
 %define	beecrypt_rel	%{ver}_%{rel}
 License:	GPL
@@ -58,13 +58,11 @@ Patch4:		%{name}-perl-macros.patch
 Patch5:		%{name}-perl-req-perlfile.patch
 Patch6:		%{name}-cache.patch
 Patch7:		%{name}-glob.patch
-Patch8:		%{name}-header_h.patch
 Patch9:		%{name}-fast-alAddPackage.patch
 Patch10:	%{name}-byKey.patch
 Patch11:	%{name}-noexpand.patch
 Patch12:	%{name}-scripts-closefds.patch
 Patch13:	%{name}-python-macros.patch
-#Patch14:	%{name}-perlprov-regonly.patch
 Patch16:	%{name}-drop-legacy-CLI.patch
 Patch15:	%{name}-4.1-branch.patch
 Patch18:	%{name}-gettext-in-header.patch
@@ -72,16 +70,13 @@ Patch19:	%{name}-compress-doc.patch
 Patch20:	%{name}-lt14d.patch
 Patch21:	%{name}-gettext0.11.patch
 Patch22:	%{name}-build.patch
-Patch23:	%{name}-python-link.patch
 Patch24:	%{name}-system_libs.patch
 Patch25:	%{name}-bb-and-short-circuit.patch
-Patch26:	%{name}-4.1-branch-po-updates.patch
-Patch27:	%{name}-link.patch
 Patch28:	%{name}-beecrypt-opt.patch
-Patch29:	%{name}-python-pic.patch
 Patch30:	%{name}-home_etc.patch
 Patch31:	%{name}-system_libs-more.patch
 Patch32:	%{name}-php-deps.patch
+Patch33:	%{name}-python-fix.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -527,8 +522,6 @@ Statyczna wersja biblioteki kryptograficznej.
 # not needed ? (break compilation)
 #%patch6 -p1
 %patch7 -p1
-# needed ?
-#%patch8 -p1
 # rejected (needed ?)
 #%patch9 -p1
 # too many rejects, Pawel please check if needed and rediff
@@ -536,27 +529,19 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
-# outdated
-#%%patch14 -p1
 %patch16 -p1
 %patch18 -p1
 %patch19 -p1
 %patch20 -p1
 %patch21 -p1
 %patch22 -p1
-# need review
-#%%patch23 -p1
 %patch24 -p1
 %patch25 -p1
-# need review
-#%%patch26 -p1
-# obsoleted ?
-#%%patch27 -p1
 %patch28 -p1
-%patch29 -p1
 %patch30 -p1
 %patch31 -p1
 %patch32 -p1
+%patch33 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
