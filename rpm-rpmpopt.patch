@@ -1,8 +1,8 @@
-diff -ru rpm-3.0.2.old/rpmpopt rpm-3.0.2/rpmpopt
---- rpm-3.0.2.old/rpmpopt	Fri Jun 18 16:32:25 1999
-+++ rpm-3.0.2/rpmpopt	Tue Jul 20 13:09:55 1999
-@@ -66,3 +66,4 @@
- rpm alias --filesbypkg --qf '[%-25{=NAME} %{FILENAMES}\n]'
- rpm exec --freshen freshen.sh
- rpm alias -F --freshen
+--- rpm-3.0.3/rpmpopt.wiget	Fri Sep 24 03:50:04 1999
++++ rpm-3.0.3/rpmpopt	Tue Oct 19 16:56:16 1999
+@@ -72,3 +72,5 @@
+ 
+ rpm alias --redhatprovides -q --define '_dbpath /usr/lib/rpmdb/%{_arch}-%{_vendor}-%{_os}/redhat' --whatprovides
+ rpm alias --redhatrequires -q --define '_dbpath /usr/lib/rpmdb/%{_arch}-%{_vendor}-%{_os}/redhat' --whatrequires
++
 +rpm exec --install-build-tree install-build-tree

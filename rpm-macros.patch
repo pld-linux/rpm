@@ -1,19 +1,17 @@
-diff -ur rpm-3.0.1.old/configure.in rpm-3.0.1/configure.in
---- rpm-3.0.1.old/configure.in	Fri Jun  4 18:21:31 1999
-+++ rpm-3.0.1/configure.in	Fri Jun  4 18:22:00 1999
-@@ -781,7 +781,7 @@
- export LIBS INCPATH
+--- rpm-3.0.3/configure.in.wiget	Thu Sep 30 23:25:29 1999
++++ rpm-3.0.3/configure.in	Tue Oct 19 16:33:48 1999
+@@ -903,7 +903,7 @@
+ export LIBS INCPATH CONFIG_SITE
  
  AC_CONFIG_SUBDIRS(popt)
 -AC_OUTPUT([Makefile rpmrc macros lib/Makefile
 +AC_OUTPUT([Makefile rpmrc macros macros.pld lib/Makefile
  	build/Makefile tools/Makefile scripts/Makefile
  	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
- 	misc/Makefile po/Makefile.in intl/Makefile],
-
---- rpm-3.0.2/macros.in.macros	Fri May 14 20:59:43 1999
-+++ rpm-3.0.2/macros.in	Tue Jul 20 12:44:52 1999
-@@ -60,12 +60,12 @@
+ 	misc/Makefile po/Makefile.in intl/Makefile
+--- rpm-3.0.3/macros.in.wiget	Thu Sep 30 01:29:57 1999
++++ rpm-3.0.3/macros.in	Tue Oct 19 16:38:08 1999
+@@ -60,8 +60,8 @@
  %_builddir		%{_topdir}/BUILD
  %_buildshell		/bin/sh
  %_bzip2bin		@BZIP2BIN@
@@ -22,15 +20,20 @@ diff -ur rpm-3.0.1.old/configure.in rpm-3.0.1/configure.in
 +%_dbpath		%{_var}/state/rpm
 +%_defaultdocdir		%{_usr}/share/doc
  #
+ %__find_provides	@FINDPROVIDES@
+ %__find_requires	@FINDREQUIRES@
+@@ -70,8 +70,8 @@
+ #%__find_obsoletes	???
+ #
  # XXX fixowner, fixgroup, and fixperms are run at the end of hardcoded setup
--%_fixowner		[ `%{__id} -u` = '0' ] && %{__chown} -Rf root
--%_fixgroup		[ `%{__id} -u` = '0' ] && %{__chgrp} -Rf @ROOT_GROUP@
-+%_fixowner		[ `%{__id} -u` = '0' ] && %{__chown} -Rf root.@ROOT_GROUP@
-+#%_fixgroup		[ `%{__id} -u` = '0' ] && %{__chgrp} -Rf @ROOT_GROUP@
+-%_fixowner		[ `%{__id} -u` = '0' ] && %{__chown} -Rhf root
+-%_fixgroup		[ `%{__id} -u` = '0' ] && %{__chgrp} -Rhf @ROOT_GROUP@
++%_fixowner		[ `%{__id} -u` = '0' ] && %{__chown} -Rhf root.@ROOT_GROUP@
++#%_fixgroup		[ `%{__id} -u` = '0' ] && %{__chgrp} -Rhf @ROOT_GROUP@
  %_fixperms		%{__chmod} -Rf @FIXPERMS@
  #
  %_gzipbin		@GZIPBIN@
-@@ -74,13 +74,13 @@
+@@ -80,13 +80,13 @@
  %_rpmdir		%{_topdir}/RPMS
  #
  # XXX Note escaped %% for use in headerSprintf
@@ -46,7 +49,7 @@ diff -ur rpm-3.0.1.old/configure.in rpm-3.0.1/configure.in
  #
  #==============================================================================
  # ---- Optional rpmrc macros.
-@@ -153,14 +153,14 @@
+@@ -160,14 +160,14 @@
  %_sbindir		%{_exec_prefix}/sbin
  %_libexecdir		%{_exec_prefix}/libexec
  %_datadir		%{_prefix}/share
@@ -57,9 +60,8 @@ diff -ur rpm-3.0.1.old/configure.in rpm-3.0.1/configure.in
  %_libdir		%{_exec_prefix}/lib
  %_includedir		%{_prefix}/include
  %_oldincludedir		/usr/include
--%_infodir		%{_prefix}/include
+ %_infodir		%{_prefix}/info
 -%_mandir		%{_prefix}/man
-+%_infodir		/usr/share/info
 +%_mandir		%{_prefix}/share/man
  
  #==============================================================================
