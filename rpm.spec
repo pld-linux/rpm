@@ -11,7 +11,7 @@
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
-%include        /usr/lib/rpm/macros.python
+#%include        /usr/lib/rpm/macros.python
 %define snap	20040107
 # versions of required libraries
 %define	reqdb_ver	4.2.50-1
@@ -537,7 +537,6 @@ construir pacotes usando o RPM.
 
 %prep
 %setup -q
-%patch36 -p1
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -585,6 +584,7 @@ cat %{SOURCE11} >> macros.in
 %patch34 -p1
 %patch35 -p1
 %patch36 -p1
+%patch37 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
@@ -638,6 +638,7 @@ mv -f macros.tmp macros.in
 
 %{__make} \
 	%{!?with_static:rpm_LDFLAGS="\$(myLDFLAGS)"} \
+	pylibdir=%{py_libdir} \
 	myLDFLAGS="%{rpmldflags}"
 
 %install
@@ -646,6 +647,7 @@ install -d $RPM_BUILD_ROOT/%{_lib}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
+	pylibdir=%{py_libdir} \
 	pkgbindir="%{_bindir}"
 
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/vpkg-provides*
