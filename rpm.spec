@@ -36,6 +36,7 @@ Patch15:	%{name}-perl-req-perlfile.patch
 Patch16:	%{name}-installplatform.patch
 Patch17:	%{name}-cache.patch
 Patch18:	%{name}-suggestions.patch
+Patch19:	%{name}-rh-lame.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	gettext-devel
@@ -204,6 +205,7 @@ construir pacotes usando o RPM.
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
+%patch19 -p0
 %patch31 -p1
 install %{SOURCE2} macros.pld.in
 %patch38 -p1
