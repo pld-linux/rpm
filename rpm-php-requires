@@ -10,7 +10,7 @@ for i in `echo $@`; do
 		j=`cat $i |grep -i ^require_once|egrep -v "^ \*"|sed -e "s/['|\"]//" |cut -f 2 -d " "|sed -e "s/\//_/"|cut -f 1 -d "."`
 		if [ -n "$j" ]; then
 			for p in $j; do
-				echo "Requires:	pear($p)"
+				echo "pear($p)"
 			done
 			j=""
 		fi
