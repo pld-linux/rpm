@@ -11,7 +11,7 @@
  -P|--provides)
      shift
 -    grep "/usr/bin/python\*\$" >& /dev/null && echo "python(abi) = ${PYVER}"
-+    grep -q "/usr/bin/python\*\$" && echo "python(abi) = ${PYVER}"
++    grep -q "/usr/lib[^/]*/libpython2\..*\.so.*\$" && echo "python(abi) = ${PYVER}"
      exit 0
      ;;
  -R|--requires)
