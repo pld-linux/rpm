@@ -1,6 +1,7 @@
---- rpm-3.0.1.old/rpmrc.in	Mon May 17 19:46:25 1999
-+++ rpm-3.0.1/rpmrc.in	Mon May 17 20:12:06 1999
-@@ -96,12 +96,12 @@
+diff -ru rpm-3.0.2.old/rpmrc.in rpm-3.0.2/rpmrc.in
+--- rpm-3.0.2.old/rpmrc.in	Thu Sep  9 22:08:24 1999
++++ rpm-3.0.2/rpmrc.in	Thu Sep  9 22:11:31 1999
+@@ -118,12 +118,12 @@
  buildarchtranslate: osfmach3_i486: i386
  buildarchtranslate: osfmach3_i386: i386
  
@@ -19,3 +20,13 @@
  buildarchtranslate: i386: i386
  
  buildarchtranslate: osfmach3_ppc: ppc
+@@ -133,7 +133,8 @@
+ buildarchtranslate: sun4c: sparc
+ buildarchtranslate: sun4d: sparc
+ buildarchtranslate: sun4m: sparc
+-buildarchtranslate: sun4u: sparc64
++buildarchtranslate: sun4u: sparc
++buildarchtranslate: sparc64: sparc
+ 
+ buildarchtranslate: atarist: m68kmint
+ buildarchtranslate: atariste: m68kmint
