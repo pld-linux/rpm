@@ -77,8 +77,11 @@ DEF_NICE_LEVEL=0
 
 FAIL_IF_NO_SOURCES="yes"
 
-GETURI="wget --passive-ftp -c -nd -t$WGET_RETRIES --inet"
-GETURI2="wget -c -nd -t$WGET_RETRIES --inet"
+wget --help 2>&1 | grep -q ' \-\-inet ' && WGET_OPTS="$WGET_OPTS --inet"
+wget --help 2>&1 | grep -q ' \-\-retry\-connrefused ' && WGET_OPTS="$WGET_OPTS --retry-connrefused"
+
+GETURI="wget --passive-ftp -c -nd -t$WGET_RETRIES $WGET_OPTS"
+GETURI2="wget -c -nd -t$WGET_RETRIES $WGET_OPTS"
 GETLOCAL="cp -a"
 
 if (rpm --version 2>&1 | grep -q '4.0.[0-2]'); then
