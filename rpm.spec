@@ -870,6 +870,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %doc %attr(755,root,root) %{_rpmlibdir}/convertrpmrc.sh
 %attr(755,root,root) %{_rpmlibdir}/user_group.sh
 
+%attr(755,root,root) %{_bindir}/banner.sh
+
 %{_rpmlibdir}/rpmrc
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/macros
