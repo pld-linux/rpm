@@ -12,7 +12,7 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
 %include        /usr/lib/rpm/macros.python
-%define snap	20040107
+%define snap	20040329
 # versions of required libraries
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.9
@@ -28,12 +28,12 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.12
+Release:	0.%{snap}.0.1
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
 Source0:	ftp://distfiles.pld-linux.org/src/%{name}-%{version}.%{snap}.tar.bz2
-# Source0-md5:	c1bc4a2ae441fbd4da8dd90149bab2f2
+# Source0-md5:	56d2bba2b39e2fe7d67a96e33cdfc272
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -136,6 +136,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # don't require very fresh rpm.macros to build
 %define		__gettextize gettextize --copy --force --intl ; cp -f po/Makevars{.template,}
+%define		ix86 i386 i486 i586 i686 athlon pentium3 pentium4
 
 # stabilize new build environment
 %define		__cc %{?force_cc}%{!?force_cc:%{_target_cpu}-pld-linux-gcc}
@@ -585,14 +586,17 @@ cat %{SOURCE11} >> macros.in
 %patch31 -p1
 %patch32 -p1
 %patch33 -p1
-%patch34 -p1
+#applied mainstream
+#patch34 -p1
 %patch35 -p1
 %patch36 -p1
 %patch37 -p1
-%patch38 -p1
+# need porting
+#patch38 -p1
 %patch39 -p1
 %patch40 -p1
-%patch41 -p1
+# need porting (and maybe join with patch38 ?)
+#patch41 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
