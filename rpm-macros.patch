@@ -1,18 +1,18 @@
-diff -urN rpm-3.0.5.orig/configure.in rpm-3.0.5/configure.in
---- rpm-3.0.5.orig/configure.in	Sun Jul 16 21:02:26 2000
-+++ rpm-3.0.5/configure.in	Sat Jul 29 23:58:18 2000
-@@ -913,7 +913,7 @@
+diff -Nru rpm-4.0/configure.in rpm-4.0.new/configure.in
+--- rpm-4.0/configure.in	Tue Aug 29 22:55:50 2000
++++ rpm-4.0.new/configure.in	Wed Nov 15 19:15:17 2000
+@@ -951,7 +951,7 @@
  dnl export LIBS INCPATH CONFIG_SITE
  
  AC_CONFIG_SUBDIRS(popt)
 -AC_OUTPUT([Doxyfile Makefile rpmrc macros platform rpmpopt scripts/brp-redhat
 +AC_OUTPUT([Doxyfile Makefile rpmrc macros macros.pld platform rpmpopt scripts/brp-redhat
- 	lib/Makefile build/Makefile tools/Makefile scripts/Makefile
+ 	rpmio/Makefile lib/Makefile build/Makefile tools/Makefile
+ 	scripts/Makefile
  	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
- 	misc/Makefile po/Makefile.in intl/Makefile
-diff -Nru rpm-3.0.6/macros.in rpm-3.0.6.new/macros.in
---- rpm-3.0.6/macros.in	Mon Nov  6 20:36:09 2000
-+++ rpm-3.0.6.new/macros.in	Mon Nov  6 20:37:24 2000
+diff -Nru rpm-4.0/macros.in rpm-4.0.new/macros.in
+--- rpm-4.0/macros.in	Mon Aug 28 17:24:45 2000
++++ rpm-4.0.new/macros.in	Wed Nov 15 19:12:09 2000
 @@ -88,7 +88,7 @@
  %_bzip2bin		@BZIP2BIN@
  %_dbpath		%{_var}/lib/rpm
@@ -49,7 +49,7 @@ diff -Nru rpm-3.0.6/macros.in rpm-3.0.6.new/macros.in
  
  #==============================================================================
  # ---- Optional rpmrc macros.
-@@ -407,15 +407,15 @@
+@@ -455,15 +455,15 @@
  %_sbindir		%{_exec_prefix}/sbin
  %_libexecdir		%{_exec_prefix}/libexec
  %_datadir		%{_prefix}/share

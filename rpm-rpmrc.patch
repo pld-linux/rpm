@@ -1,16 +1,16 @@
-diff -Nru rpm-3.0.6/rpmrc.in rpm-3.0.6.new/rpmrc.in
---- rpm-3.0.6/rpmrc.in	Wed Sep 13 19:55:15 2000
-+++ rpm-3.0.6.new/rpmrc.in	Thu Oct 12 15:49:35 2000
-@@ -8,7 +8,7 @@
- #############################################################
+diff -Nru rpm-4.0/rpmrc.in rpm-4.0.new/rpmrc.in
+--- rpm-4.0/rpmrc.in	Wed Sep 13 20:03:46 2000
++++ rpm-4.0.new/rpmrc.in	Wed Nov 15 19:11:00 2000
+@@ -9,7 +9,7 @@
  # Values for RPM_OPT_FLAGS for various platforms
  
--optflags: i386 -O2 -m486 -fno-strength-reduce
-+optflags: i386 -O2 -march=i386
+ # XXX this is the i386 optflags that rpm has traditionally used in the past.
+-#optflags: i386 -O2 -m486 -fno-strength-reduce
++#optflags: i386 -O2 -march=i386
+ optflags: i386 -O2 -march=i386 -mcpu=i686
  optflags: i486 -O2 -march=i486
  optflags: i586 -O2 -march=i586
- optflags: i686 -O2 -march=i686
-@@ -289,5 +289,5 @@
+@@ -291,5 +291,5 @@
  buildarch_compat: ia64: noarch
  buildarch_compat: s390: noarch
  

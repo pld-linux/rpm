@@ -1,10 +1,10 @@
---- rpm-3.0.4/rpmpopt.in.wiget	Wed Feb 23 23:40:53 2000
-+++ rpm-3.0.4/rpmpopt.in	Wed Mar 22 17:39:52 2000
-@@ -81,3 +81,12 @@
- 
+diff -Nru rpm-4.0/rpmpopt.in rpm-4.0.new/rpmpopt.in
+--- rpm-4.0/rpmpopt.in	Wed Nov 15 19:18:35 2000
++++ rpm-4.0.new/rpmpopt.in	Wed Nov 15 19:18:15 2000
+@@ -80,6 +80,14 @@
  # Build policies enabled from command line. Last policy applies.
- rpm alias --buildpolicy --define '__spec_install_post @RPMCONFIGDIR@/brp-!#:+'
-+
+ rpm alias --buildpolicy --define '__os_install_post @RPMCONFIGDIR@/brp-!#:+'
+ 
 +# Make RPM build tree
 +rpm exec --install-build-tree install-build-tree
 +
@@ -12,5 +12,7 @@
 +rpm alias --debug --define 'debug 1'
 +
 +# Don't remove $BUILDROOT if --noclean
-+rpm alias --noclean --define '__spec_clean_pre exit 0'
-\ No newline at end of file
++
+ # Choose db interface:
+ #	0	same as 1
+ #	1	native db1 interface (e.g. linux glibc libdb1 routines).
