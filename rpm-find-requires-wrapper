@@ -10,7 +10,9 @@
 ulimit -c 0
 
 PERLOPT="--define=__perl_requires /bin/sh -c 'cat >/dev/null'"
+PERLOPT2="--define=__perl_provides /bin/sh -c 'cat >/dev/null'"
 PHPOPT="--define=__php_requires /bin/sh -c 'cat >/dev/null'"
+PHPOPT2="--define=__php_provides /bin/sh -c 'cat >/dev/null'"
 PROVARG=""
 NOPROVFILES=""
 NOPROV=""
@@ -21,10 +23,12 @@ while [ $# -gt 0 ]; do
 	case "$1" in
 	  --with-perl)
 		PERLOPT=""
+		PERLOPT2=""
 		PROVARG="$PROVARG --with-perl"
 		;;
 	  --with-php)
 		PHPOPT=""
+		PHPOPT2=""
 		PROVARG="$PROVARG --with-php"
 		;;
 	  --buildroot=*)
@@ -84,7 +88,8 @@ tee ${FILES} | \
 
 # rpmdeps output seems sorted, but resort it in case of long list split
 grep -v -e "^\(${noreqfiles}\)\$" ${FILES} | tr '\n' '\0' | \
-	xargs -r -0 /usr/bin/rpmdeps "${PERLOPT}" "${PHPOPT}" --requires | \
+	xargs -r -0 /usr/bin/rpmdeps "${PERLOPT}" "${PERLOPT2}" \
+		"${PHPOPT}" "${PHPOPT2}" --requires | \
 	LC_ALL=C sort -u | grep -v -e "^\(${noreq}\)\$" | \
 	LC_ALL=C comm -2 -3 - ${PROVS} | tee ${REQS}
 
