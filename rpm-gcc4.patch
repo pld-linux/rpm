@@ -20,14 +20,3 @@
  	    }
  	    extensions++;
  	}
---- rpm/python/rpmts-py.c.orig	2004-11-18 15:04:50.000000000 +0100
-+++ rpm/python/rpmts-py.c	2004-12-10 18:09:43.472027680 +0100
-@@ -24,7 +24,7 @@
- 
- /*@unchecked@*/
- /*@-shadow@*/
--static int _rpmts_debug = 0;
-+int _rpmts_debug = 0;
- /*@=shadow@*/
- 
- /*@access alKey @*/
