@@ -1,8 +1,4 @@
 #
-# TODO:
-# - consider using system libmagic not internal libfmagic
-#   (but internal has different method of passing output)
-#
 # Conditional build:
 %bcond_with	static	# build static rpmi (not supported at the moment)
 %bcond_without	doc	# don't generate documentation with doxygen
@@ -30,7 +26,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.44%{?with_distver:+distver}
+Release:	0.%{snap}.45%{?with_distver:+distver}
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
