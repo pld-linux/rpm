@@ -1,0 +1,116 @@
+--- rpm-4.0.2/build/files.c	Sun May 26 13:40:43 2002
++++ rpm-4.0.2-filon/build/files.c	Sun May 26 13:39:44 2002
+@@ -1987,7 +1987,7 @@
+  */
+ static int generateDepends(Spec spec, Package pkg,
+ 			   struct cpioFileMapping *cpioList, int cpioCount,
+-			   int multiLib)
++			   int multiLib, StringBuf fileList, int *fileListLen)
+ {
+     StringBuf writeBuf;
+     int writeBytes;
+@@ -2013,7 +2013,9 @@
+ 	}
+ 
+ 	writeBytes += strlen(cpioList->fsPath) + 1;
++	*fileListLen += strlen(cpioList->fsPath) + 1;
+ 	appendLineStringBuf(writeBuf, cpioList->fsPath);
++	appendLineStringBuf(fileList, cpioList->fsPath);
+     }
+ 
+     for (dm = depMsgs; dm->msg != NULL; dm++) {
+@@ -2190,10 +2192,54 @@
+     FREE(versions);
+ }
+ 
++int checkFiles(StringBuf fileList, int fileListLen)
++{
++    StringBuf readBuf = NULL;
++    char* myargv[3] = {NULL, NULL, NULL};
++    int rc = 0;
++    char *buf;
++    
++    myargv[0] = rpmExpand("%{__check_files}", NULL);
++    if (!(myargv[0] && *myargv[0] != '%')) {
++        rc = -1;
++        goto exit;
++    }    
++    myargv[1] = rpmExpand("%{buildroot}", NULL);
++    if (!(myargv[1] && *myargv[1] != '%')) {
++        rc = -1;
++        goto exit;
++    }
++    
++    rpmMessage(RPMMESS_NORMAL, _("Searching for omited files: (using %s)...\n"),
++               myargv[0]);
++		    
++    readBuf = getOutputFrom(NULL, myargv, getStringBuf(fileList), fileListLen, 0);
++    
++    if (readBuf) {
++        buf = getStringBuf(readBuf);
++        if ((*buf != '\0') & (*buf != '\n'))
++            rpmMessage(RPMMESS_WARNING, \
++	                _("found installed files not placed in any package:\n---\n%s---\n"),
++                       buf);
++    }
++    
++exit:
++    
++    freeStringBuf(readBuf);
++    FREE(myargv[0]);
++    FREE(myargv[1]);
++
++    return rc;
++}
++
+ int processBinaryFiles(Spec spec, int installSpecialDoc, int test)
+ {
+     Package pkg;
+     int res = 0;
++    StringBuf fileList;
++    int fileListLen = 0;
++    
++    fileList = newStringBuf();
+     
+     for (pkg = spec->packages; pkg != NULL; pkg = pkg->next) {
+ 	const char *n, *v, *r;
+@@ -2213,13 +2260,23 @@
+      * XXX existence (rather than value) that will need to change as well.
+      */
+ 	if (headerGetEntry(pkg->header, RPMTAG_MULTILIBS, NULL, NULL, NULL)) {
+-	    generateDepends(spec, pkg, pkg->cpioList, pkg->cpioCount, 1);
+-	    generateDepends(spec, pkg, pkg->cpioList, pkg->cpioCount, 2);
++	    generateDepends(spec, pkg, pkg->cpioList, pkg->cpioCount, 1, fileList, &fileListLen);
++	    generateDepends(spec, pkg, pkg->cpioList, pkg->cpioCount, 2, fileList, &fileListLen);
+ 	} else
+-	    generateDepends(spec, pkg, pkg->cpioList, pkg->cpioCount, 0);
++	    generateDepends(spec, pkg, pkg->cpioList, pkg->cpioCount, 0, fileList, &fileListLen);
+ 	printDeps(pkg->header);
+ 	
+     }
+ 
++    /* Now we have in fileList list of files from all packages.
++     * We pass it to a script which do the work of finding missing
++     * and duplicated files.
++     */
++    
++    if (res == 0) 
++        checkFiles(fileList, fileListLen);
++    
++    freeStringBuf(fileList);
++    
+     return res;
+ }
+--- rpm-4.0.2/platform.in	Sun May 26 13:40:43 2002
++++ rpm-4.0.2-filon/platform.in	Sun May 26 12:11:26 2002
+@@ -38,6 +38,10 @@
+ #	Expanded at end of %install
+ #
+ 
++# Gets file list on input and buildroot as first parameter
++# and returns list of files not found in any package
++%__check_files		@prefix@/lib/rpm/check-files
++
+ %__arch_install_post   @ARCH_INSTALL_POST@
+ 
+ %__os_install_post    \
