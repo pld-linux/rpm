@@ -18,7 +18,7 @@
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.9
 %define	beecrypt_ver	3.0.0-0.20030610.1
-%define	rpm_macros_rev	1.153
+%define	rpm_macros_rev	1.159
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -29,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.23
+Release:	0.%{snap}.30
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -47,6 +47,8 @@ Source9:	%{name}-php-provides
 Source10:	%{name}-php-requires
 Source11:	%{name}.macros
 Source12:	perl.prov
+Source13:	%{name}-user_group.sh
+Source14:	%{name}.sysconfig
 Source30:	builder
 Source31:	adapter.awk
 Source32:	pldnotify.awk
@@ -95,6 +97,7 @@ Patch41:	%{name}-file-readelf-fix.patch
 Patch42:	%{name}-cpuid.patch
 Patch43:	%{name}-perl_req-INC_dirs.patch
 Patch44:	%{name}-debuginfo.patch
+Patch45:	%{name}-no_version_check_in_obsoletes.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -103,8 +106,9 @@ BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.1
 BuildRequires:	db-devel >= %{reqdb_ver}
 %{?with_doc:BuildRequires:	doxygen}
-BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	elfutils-devel
+BuildRequires:	findutils
+BuildRequires:	gettext-devel >= 0.11.4-2
 #BuildRequires:	libmagic-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
@@ -463,6 +467,7 @@ Requires:	/bin/id
 Requires:	awk
 Requires:	binutils
 Requires:	chrpath >= 0.10-4
+Requires:	cpio
 Requires:	diffutils
 Requires:	file >= 4.01
 Requires:	fileutils
@@ -602,6 +607,7 @@ cat %{SOURCE11} >> macros.in
 %patch42 -p1
 %patch43 -p0
 %patch44 -p1
+%patch45 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
@@ -621,6 +627,10 @@ for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
 	sed -e 's@lib/rpm/redhat@lib/rpm/pld@g' $f > ${f}.tmp
 	mv -f ${f}.tmp $f
 done
+
+# ... and make some cleanings
+rm -fr $(find ./ -type d -name CVS )
+rm -f  $(find ./ -type f -name ".cvsignore" )
 
 %build
 cd file
@@ -668,7 +678,7 @@ mv -f macros.tmp macros.in
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/%{_lib}
+install -d $RPM_BUILD_ROOT/{%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -688,16 +698,16 @@ install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
 install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
 install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
 install %{SOURCE8} $RPM_BUILD_ROOT%{_rpmlibdir}/check-files
+install %{SOURCE13} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
 install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
+install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
 install %{SOURCE30} $RPM_BUILD_ROOT%{_bindir}/builder
 install %{SOURCE31} $RPM_BUILD_ROOT%{_bindir}/adapter.awk
 install %{SOURCE32} $RPM_BUILD_ROOT%{_bindir}/pldnotify.awk
 
 install rpmio/ugid.h $RPM_BUILD_ROOT%{_includedir}/rpm
-
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm
 
 %ifarch %{ix86}
 ix86re=$(echo "(%{ix86})"|sed 's/ /|/g')
@@ -785,6 +795,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpm/macros
+%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/rpm
 
 %{_mandir}/man8/rpm.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
@@ -804,6 +815,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_rpmlibdir}/rpm[qv]
 
 %doc %attr(755,root,root) %{_rpmlibdir}/convertrpmrc.sh
+%attr(755,root,root) %{_rpmlibdir}/user_group.sh
 
 %{_rpmlibdir}/rpmrc
 %{_rpmlibdir}/rpmpopt*

@@ -1,7 +1,7 @@
 # PLD rpm macros
 
 # other macros
-%_enable_debug_packages 1
+%_enable_debug_packages 0
 
 %__id		@__ID@
 %__id_u		%{__id} -u 
@@ -15,10 +15,10 @@
 #-----------------------------------------------------------------
 # CFLAGS and LDFLAGS used to build
 
-#%debuginfocflags        -ggdb
+%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -ggdb}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
 
 %debugcflags	-O0 -g -Wall
-%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags: %debuginfocflags}
+%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
 %rpmldflags	%{nil}
 
 # kernel compiler
@@ -445,3 +445,22 @@ fi; \
 %xmms_general_plugindir       %(xmms-config --general-plugin-dir)
 
 %_target_base_arch	%(echo %{_target_cpu} | sed 's/i.86/i386/;s/athlon/i386/;s/pentium./i386/;s/amd64/x86_64/')
+
+# user/group checking macros
+#
+# Usage:
+#	%userremove myuser
+#
+%userremove	/usr/lib/rpm/user_group.sh user del
+%groupremove	/usr/lib/rpm/user_group.sh group del
+#
+# Usage:
+#	if %usertestrm myuser; then
+#		/usr/sbin/userdel -r myuser
+# Note:
+#	use these macros only if you need to call userdel/groupdel with
+#	a non-standard option or take an extra action; otherwise use the
+#	%userremove/%groupremove macros
+#
+%usertestrm	/usr/lib/rpm/user_group.sh user testrm
+%grouptestrm	/usr/lib/rpm/user_group.sh group testrm
