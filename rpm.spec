@@ -89,7 +89,7 @@ Installation, Anfrage, Verifizierung, Aktualisierung und
 Uninstallation individueller Softwarepakete. Ein Paket besteht aus
 einem Archiv Dateien und Paketinformation, inklusive Name, Version und
 nombre, versión y descripción.
-RPM jest doskona³ym menad¿erem pakietów. Dziêki niemu bêdziesz móg³
+
 %description -l pl
 RPM jest doskona³ym mened¿erem pakietów. Dziêki niemu bêdziesz móg³
 przebudowaæ, zainstalowaæ czy zweryfikowaæ dowolny pakiet. Informacje
