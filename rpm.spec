@@ -3,7 +3,7 @@ Summary(de):	Red Hat (und jetzt auch PLD) Packet-Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0.2
-Release:	42
+Release:	43
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -23,6 +23,7 @@ Source9:	%{name}-find-lang
 Source10:	%{name}-find-provides
 Source11:	%{name}-find-requires
 Source12:	%{name}-non-english-man-pages.tar.bz2
+Source13:	%{name}-macros.python
 Patch0:		%{name}-rpmrc.patch
 Patch1:		%{name}-macros.patch
 Patch2:		%{name}-arch.patch
@@ -49,6 +50,7 @@ Patch22:	%{name}-python-amfix.patch
 Patch23:	%{name}-non-english-man-pages.patch
 Patch24:	%{name}-progress-nontty.patch
 Patch25:	%{name}-am_ac.patch
+Patch26:	%{name}-python-macros.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	gettext-devel >= 0.10.38-3
@@ -195,6 +197,21 @@ Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen.
 Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci dla skryptów perl w
 %description perlprov -l pl
 Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w
+pakietach rpm.
+
+%package pythonprov
+Summary:	Python macros, which simplifies creation of rpm packages with Python software
+Group(de):	Applikationen/Datei
+Group(pl):	Aplikacje/Pliki
+Summary(pl):	Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w Pythonie
+Requires:	python
+Requires:	%{name} = %{version}
+Requires:	python-modules
+Python macros, which simplifies creation of rpm packages with Python software.
+Python macros, which simplifies creation of rpm packages with Python
+software.
+Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w Pythonie.
+Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w
 %package python
 
 Group:		Development/Languages/Python
@@ -270,10 +287,12 @@ construir pacotes usando o RPM.
 %patch23 -p1
 %patch24 -p1
 %patch25 -p1
+%patch26 -p0
 %patch31 -p1
 %patch36 -p1
 %patch37 -p1
 %patch38 -p1
+
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
 install %{SOURCE9} scripts/find-lang.sh
@@ -327,6 +346,7 @@ sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' macros.in | \
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT \
 	pkgbindir="%{_bindir}"
 
 install macros.perl $RPM_BUILD_ROOT%{_libdir}/rpm/macros.perl
@@ -387,6 +407,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir /var/lib/rpm
 %dir %{_libdir}/rpm
 
+%{_libdir}/rpm/macros.python
 %{_libdir}/rpm/noarch-linux
 %{_libdir}/rpm/noarch-pld-linux
 %ifarch i386 i486 i586 i686
@@ -457,6 +478,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/find-perl-*
 %attr(755,root,root) %{_libdir}/rpm/find-*.perl
 %attr(755,root,root) %{_libdir}/rpm/find-prov.pl
+%attr(755,root,root) %{_libdir}/rpm/find-req.pl
+%attr(755,root,root) %{_libdir}/rpm/get_magic.pl
+
+%{_libdir}/rpm/macros.perl
 %files python
 %defattr(644,root,root,755)
 %{python_sitedir}/*.so
