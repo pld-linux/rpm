@@ -271,7 +271,6 @@ echo "Compress man and info pages."; \
 %{!?no_install_post_chrpath: \
 	%{?verbose:set -x;} \
 echo "Remove RPATH from executable binaries and shared object files."; \
-if [ "$(uname -m)" != alpha ] ; then \
 find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" | xargs -r file | \
 	awk '/ELF.*(executable|shared object)/ {print $1}' | cut -d: -f1 | \
 while read file ; do \
@@ -291,7 +290,7 @@ while read file ; do \
 	done ; \
 	if [ "$rpath" = "" ] ; then chrpath -d "$file" > /dev/null ; \
 	else chrpath -r "$rpath" "$file" > /dev/null ; fi ; \
-done; fi; } \
+done; } \
 } }
 #-----------------------------------------------------------------
 # Find and gzip all kernel modules
