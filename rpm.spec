@@ -13,6 +13,7 @@ Source3:	rpm.macros
 Patch0:		rpm-rpmrc.patch
 Patch1:		rpm-i18n.patch
 Patch2:		rpm-find-requires.patch
+Patch3:		rpm-macros.patch
 Patch37:        %{name}-short_circuit.patch
 Icon:		rpm.gif
 #BuildPrereq:	bzip2-static
@@ -54,6 +55,7 @@ construir pacotes usando o RPM.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 install %{SOURCE13} macros.python.in
 mv -f perl.prov perl.prov.in)
 autoconf
