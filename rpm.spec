@@ -261,6 +261,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/rpmq
 %attr(755,root,root) %{_libdir}/rpm/rpmk
 %attr(755,root,root) %{_libdir}/rpm/rpmv
+%attr(755,root,root) %{_libdir}/librpm*.so.*.*
 %attr(755,root,root) %{_libdir}/rpm/rpmdb
 %attr(755,root,root) %{_libdir}/librpm*.so.*.*
 %{_mandir}/man8/rpm.8*
@@ -326,7 +327,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/u_pkg.sh
 %attr(755,root,root) %{_libdir}/rpm/rpme
 %attr(755,root,root) %{_libdir}/rpm/rpmu
-%attr(755,root,root) %{_libdir}/librpm*.so.*.*
 %attr(755,root,root) %{_libdir}/rpm/rpmb
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmt
