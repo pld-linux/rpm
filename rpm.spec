@@ -10,7 +10,7 @@ Summary(ru):	Менеджер пакетов от Red Hat
 Summary(uk):	Менеджер пакет╕в в╕д Red Hat
 Name:		rpm
 Version:	4.1
-Release:	9
+Release:	10
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/%{name}-%{version}.tar.gz
@@ -358,6 +358,7 @@ Summary(pt_BR):	Scripts e programas executАveis usados para construir pacotes
 Summary(ru):	Скрипты и утилиты, необходимые для сборки пакетов
 Summary(uk):	Скрипти та утил╕ти, необх╕дн╕ для побудови пакет╕в
 Group:		Applications/File
+Requires(pre):	findutils
 Requires:	%{name} = %{version}
 Requires:	/bin/id
 Requires:	awk
@@ -629,6 +630,9 @@ rm -rf $RPM_BUILD_ROOT
 %post   -n beecrypt -p /sbin/ldconfig
 %postun -n beecrypt -p /sbin/ldconfig
 
+%pre build
+find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
+
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc RPM-PGP-KEY CHANGES doc/manual/*
@@ -654,20 +658,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/rpm/rpmrc
 %{_libdir}/rpm/rpmpopt*
 %{_libdir}/rpm/macros
-%{_libdir}/rpm/noarch-*
-%ifarch i386 i486 i586 i686 athlon
-%{_libdir}/rpm/i?86*
-%{_libdir}/rpm/athlon*
-%endif
-%ifarch sparc sparc64
-%{_libdir}/rpm/sparc*
-%endif
-%ifarch alpha
-%{_libdir}/rpm/alpha*
-%endif
-%ifarch ppc
-%{_libdir}/rpm/ppc*
-%endif
 
 %files lib
 %defattr(644,root,root,755)
@@ -699,6 +689,20 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/vpkg-provides2.sh
 %attr(755,root,root) %{_libdir}/rpm/rpmb
 %attr(755,root,root) %{_libdir}/rpm/rpmt
+%{_libdir}/rpm/noarch-*
+%ifarch i386 i486 i586 i686 athlon
+%{_libdir}/rpm/i?86*
+%{_libdir}/rpm/athlon*
+%endif
+%ifarch sparc sparc64
+%{_libdir}/rpm/sparc*
+%endif
+%ifarch alpha
+%{_libdir}/rpm/alpha*
+%endif
+%ifarch ppc
+%{_libdir}/rpm/ppc*
+%endif
 # not used yet ...
 %{_libdir}/rpm/sql.prov
 %{_libdir}/rpm/sql.req
