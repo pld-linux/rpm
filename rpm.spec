@@ -1,7 +1,7 @@
 #
 # TODO:
-# - fix perl.req and perl.prov to support _noauto macros
 # - use system libmagic not internal libfmagic
+# - when really needed: _noauto{req,prov} for non-helper-generated deps
 #
 # Conditional build:
 %bcond_without	static	# build shared rpmi (doesn't work at the moment)
@@ -11,7 +11,7 @@
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
-#%include        /usr/lib/rpm/macros.python
+%include        /usr/lib/rpm/macros.python
 %define snap	20040107
 # versions of required libraries
 %define	reqdb_ver	4.2.50-1
@@ -28,7 +28,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.3
+Release:	0.%{snap}.4
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -84,13 +84,10 @@ Patch29:	%{name}-hack-norpmlibdep.patch
 Patch30:	%{name}-makefile-no_myLDADD_deps.patch
 Patch31:	%{name}-libdir64.patch
 Patch32:	%{name}-libdir-links.patch
-Patch33:	%{name}-find_required_pkgs_on_build.patch
-Patch34:	%{name}-noautoreqprovfiles.patch
-Patch35:	%{name}-context.patch
-Patch36:	%{name}-nls-fixes.patch
-Patch37:	%{name}-missing-prototypes.patch
-# this one not wholly ported yet (_noauto{prov,req}, _{perl,php}_deps)
-#Patch37:	%{name}-userpmdepswrappers.patch
+Patch33:	%{name}-context.patch
+Patch34:	%{name}-nls-fixes.patch
+Patch35:	%{name}-missing-prototypes.patch
+Patch36:	%{name}-pld-autodep.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -561,9 +558,11 @@ construir pacotes usando o RPM.
 %patch21 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
-echo '%%define	_perl_deps	1' > macros.perl
+echo '%%define	__perl_provides	/usr/lib/rpm/perl.prov' > macros.perl
+echo '%%define	__perl_requires	/usr/lib/rpm/perl.req' >> macros.perl
 echo '# obsoleted file' > macros.python
-echo '%%define	_php_deps	1' > macros.php
+echo '%%define	__php_provides	/usr/lib/rpm/php.prov' > macros.php
+echo '%%define	__php_requires	/usr/lib/rpm/php.req' >> macros.php
 install %{SOURCE5} scripts/find-lang.sh
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
@@ -584,7 +583,6 @@ cat %{SOURCE11} >> macros.in
 %patch34 -p1
 %patch35 -p1
 %patch36 -p1
-%patch37 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
@@ -681,21 +679,21 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 EOF
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF
-# global list of files (shell patterns) which don't generate Provides
+# global list of files (regexps) which don't generate Provides
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov <<EOF
-# global list of capabilities (regexps) not to be used in Provides
+# global list of script capabilities (regexps) not to be used in Provides
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles <<EOF
-# global list of files (shell patterns) which don't generate Requires
-/usr/src/examples/*
-/usr/share/doc/*
+# global list of files (regexps) which don't generate Requires
+/usr/src/examples/.*
+/usr/share/doc/.*
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq <<EOF
-# global list of capabilities (regexps) not to be used in Requires
+# global list of script capabilities (regexps) not to be used in Requires
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep <<EOF
-# global list of capabilities (SONAME, perl(module), php(module) shell patterns)
+# global list of capabilities (SONAME, perl(module), php(module) regexps)
 # which don't generate dependencies on package NAMES
 libGL.so.1
 libGLU.so.1
