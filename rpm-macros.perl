@@ -5,8 +5,10 @@
 %define		__find_requires	@RPMCONFIGDIR@/find-perl-requires
 %define		__find_provides	@RPMCONFIGDIR@/find-perl-provides
 
-%define		perl_sitelib	%(eval "`perl -V:installsitelib`"; echo $installsitelib)
-%define		perl_sitearch	%(eval "`perl -V:installsitearch`"; echo $installsitearch)
-%define		perl_archlib	%(eval "`perl -V:installarchlib`"; echo $installarchlib)
-%define		perl_privlib	%(eval "`perl -V:installprivlib`"; echo $installprivlib)
+%define		perl_privlib	%(eval "`%{__perl} -V:installprivlib`"; echo $installprivlib)
+%define		perl_archlib	%(eval "`%{__perl} -V:installarchlib`"; echo $installarchlib)
+%define		perl_vendorlib	%(eval "`%{__perl} -V:installvendorlib`"; echo $installvendorlib)
+%define		perl_vendorarch	%(eval "`%{__perl} -V:installvendorarch`"; echo $installvendorarch)
+%define		perl_sitelib	%(eval "`%{__perl} -V:installsitelib`"; echo $installsitelib)
+%define		perl_sitearch	%(eval "`%{__perl} -V:installsitearch`"; echo $installsitearch)
 
