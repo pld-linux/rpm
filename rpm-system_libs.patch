@@ -137,7 +137,7 @@
  	rpm.magic rpmpopt-$(VERSION) rpmqv.c rpm.c
  
 -SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ popt @WITH_BEECRYPT_SUBDIR@  rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
-+SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ @WITH_FILE_SUBDIR@ @WITH_DB_SUBDIR@ @WITH_POPT_SUBDIR@ @WITH_BEECRYPT_SUBDIR@  rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
++SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ @WITH_POPT_SUBDIR@ @WITH_BEECRYPT_SUBDIR@  rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
  
  INCLUDES = \
  	-I$(top_srcdir)/build \
