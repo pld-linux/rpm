@@ -164,8 +164,23 @@ echo "Compress man and info pages."; \
 ###################################################################
 # Requires/Provides automation
 # exceptions system by Jacek Konieczny <jajcus@pld.org.pl>
-%__spec_install_pre	%{___build_pre}\
-rm -f %{_builddir}/__rpm_*\
+%__spec_prep_pre \
+_autoreqprov=n \
+%{?_noautoreqfiles:_autoreqprov=y}\
+%{?_noautoreq:_autoreqprov=y}\
+%{?_noautoreqdep:_autoreqprov=y}\
+%{?_noautoprovfiles:_autoreqprov=y}\
+%{?_noautoprov:_autoreqprov=y}\
+if [ "$_autoreqprov" = "y" ] ; then \
+    if [ -f %{_builddir}/__rpm_lock ] ; then \
+	echo "Some package using \%_noauto*  macros is already being built" >&2 \
+	echo "If it is not true delete %{_builddir}/__rpm_lock" >&2 \
+	exit 1 \
+    else \
+	rm -f %{_builddir}/__rpm_*\
+    	touch %{_builddir}/__rpm_lock \
+    fi \
+fi \
 %{nil}
 
 %__spec_install_post \
@@ -181,7 +196,16 @@ rm -f %{_builddir}/__rpm_*\
 %{nil}
 
 %__spec_clean_pre	%{___build_pre}\
-rm -f %{_builddir}/__rpm_*\
+_autoreqprov=n \
+%{?_noautoreqfiles:_autoreqprov=y}\
+%{?_noautoreq:_autoreqprov=y}\
+%{?_noautoreqdep:_autoreqprov=y}\
+%{?_noautoprovfiles:_autoreqprov=y}\
+%{?_noautoprov:_autoreqprov=y}\
+%{?_noautoreqfiles:_autoreqprov=y}\
+if [ "$_autoreqprov" = "y" ] ; then \
+	rm -f %{_builddir}/__rpm_* \
+fi \
 %{nil}
 
 
