@@ -7,7 +7,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.2
-Release:	79
+Release:	80
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -400,8 +400,8 @@ install %{SOURCE21} macros.php.in
 install %{SOURCE6} scripts/find-perl-provides
 install %{SOURCE7} scripts/find-perl-requires
 install %{SOURCE9} scripts/find-lang.sh
-install %{SOURCE17} scripts/php.req.in
-install %{SOURCE18} scripts/php.prov.in
+install %{SOURCE17} scripts/php.prov.in
+install %{SOURCE18} scripts/php.req.in
 install %{SOURCE19} scripts/find-php-provides
 install %{SOURCE20} scripts/find-php-requires
 
