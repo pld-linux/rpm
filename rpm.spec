@@ -27,7 +27,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-%define	rel	0.%{snap}.13
+%define	rel	0.%{snap}.14
 Release:	%{rel}
 License:	GPL
 Group:		Base
