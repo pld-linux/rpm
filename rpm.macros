@@ -1,7 +1,7 @@
 #-----------------------------------------------------------------
 %configure { \
  if [ -n "$LINGUAS" ]; then unset LINGUAS; fi; \
- LDFLAGS="${LDFLAGS}%{!?debug: -s}" ; export LDFLAGS ; \
+ LDFLAGS="${LDFLAGS:-%{!?debug: -s}}" ; export LDFLAGS ; \
  CFLAGS="${CFLAGS:-%optflags}%{?debug: -g -O}" ; export CFLAGS ; \
  CXXFLAGS="${CXXFLAGS:-%optflags}%{?debug: -g -O}" ; export CXXFLAGS ; \
  FFLAGS="${FFLAGS:-%optflags}%{?debug: -g -O}" ; export FFLAGS ; \
