@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.6
-Release:	1
+Release:	2
 Group:		Base
 Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
@@ -38,7 +38,7 @@ BuildRequires:	libtool
 BuildRequires:	automake
 BuildRequires:	autoconf >= 2.13-8
 BuildRequires:	gettext-devel
-BuildRequires:	db3-static >= 3.1.14
+BuildRequires:	db3-static >= 3.1.17
 BuildRequires:	zlib-static >= 1.1.4
 Obsoletes:	rpm-libs
 %define __find_provides %{SOURCE4}
