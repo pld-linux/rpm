@@ -78,7 +78,7 @@
      
      for (pkg = spec->packages; pkg != NULL; pkg = pkg->next) {
  	const char *n, *v, *r;
-@@ -2213,13 +2260,22 @@
+@@ -2213,13 +2260,23 @@
       * XXX existence (rather than value) that will need to change as well.
       */
  	if (headerGetEntry(pkg->header, RPMTAG_MULTILIBS, NULL, NULL, NULL)) {
@@ -98,7 +98,8 @@
 +     * and duplicated files.
 +     */
 +    
-+    checkFiles(fileList, fileListLen);
++    if (res == 0) 
++        checkFiles(fileList, fileListLen);
 +    
 +    freeStringBuf(fileList);
 +    
