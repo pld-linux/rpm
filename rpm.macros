@@ -505,6 +505,6 @@ diff -u -r1.158.4.8 rpm.macros
 # -t   - show only, if RPM_SCRIPTVERBOSITY >= n
 %banner(a:n:t:)	\
 	[ -r /etc/sysconfig/rpm ] && . /etc/sysconfig/rpm || RPM_SCRIPTVERBOSITY=5; \
-	banner.sh %{!-t:%{!-n:-s}} %{-t:`[ $RPM_SCRIPTVERBOSITY -ge %{-t*} ] && echo "-s"`} %{!-a:-m}%{-a:-M} %1 << EOF\
+	%{_bindir}/banner.sh %{!-t:%{!-n:-s}} %{-t:`[ $RPM_SCRIPTVERBOSITY -ge %{-t*} ] && echo "-s"`} %{!-a:-m}%{-a:-M} %1 << EOF\
 %nil
 
