@@ -26,9 +26,9 @@ Patch3:		%{name}-rpmpopt.patch
 Patch4:		%{name}-perl-macros.patch
 Patch5:		%{name}-db3.patch
 Patch6:		%{name}-segv.patch
-Patch7:	%{name}-am_fix.patch
-Patch8:	%{name}-perl-req-perlfile.patch
-Patch9:	%{name}-installplatform.patch
+Patch7:		%{name}-am_fix.patch
+Patch8:		%{name}-perl-req-perlfile.patch
+Patch9:		%{name}-installplatform.patch
 Patch10:	%{name}-cache.patch
 Patch11:	%{name}-suggestions.patch
 Patch12:	%{name}-rh-lame.patch
@@ -250,8 +250,8 @@ install macros.pld $RPM_BUILD_ROOT%{_libdir}/rpm/macros.pld
 install macros.perl $RPM_BUILD_ROOT%{_libdir}/rpm/macros.perl
 install macros.python $RPM_BUILD_ROOT%{_libdir}/rpm/macros.python
 
-install %{SOURCE10} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
-install %{SOURCE11} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides
+install %{SOURCE1} doc/manual/groups
+install %{SOURCE3} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 install %{SOURCE10} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides
 install %{SOURCE11} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires

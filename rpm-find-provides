@@ -33,8 +33,8 @@ allprovides=`for f in $filelist; do
     fi
 done | sort -u`
 
-if [ -f __rpm_noautoprovdep ] ; then
-	for i in `cat __rpm_noautoprovdep`; do
+if [ -f __rpm_noautoprov ] ; then
+	for i in `cat __rpm_noautoprov`; do
 		allprovides=`echo $allprovides | sed "s!\<$i[[:space:]]*!!g"`
 	done
 fi
