@@ -25,7 +25,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.2
 Version:	%{ver}
-%define	rel	0.3
+%define	rel	0.4
 Release:	%{rel}
 %define	beecrypt_rel	%{ver}_%{rel}
 License:	GPL
@@ -79,6 +79,7 @@ Patch32:	%{name}-php-deps.patch
 Patch33:	%{name}-python-fix.patch
 Patch34:	%{name}-spec-prep-pre.patch
 Patch35:	%{name}-perl_req.patch
+Patch36:	%{name}-python_2_3.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -547,6 +548,7 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch32 -p1
 %patch33 -p1
 %patch35 -p1
+%patch36 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
