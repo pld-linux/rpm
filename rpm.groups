@@ -64,6 +64,10 @@ Applications/Graphics
 	[de]:	Applikationen/Grafik
 	[pl]:	Aplikacje/Grafika
 
+Applications/Games
+	[de]:	Applikationen/Spiele
+	[pl]:	Aplikacje/Gry
+
 Applications/Networking
 	[de]:	Applikationen/Netzwerkwesen
 	[pl]:	Aplikacje/Sieciowe
@@ -200,6 +204,14 @@ X11/Applications
 	[de]:	X11/Applikationen
 	[pl]:	X11/Aplikacje
 
+X11/Applications/Games
+	[de]:	X11/Aplikacje/Spiele
+	[pl]:	X11/Aplikacje/Gry
+
+X11/Applications/Games/Strategy
+	[de]:	X11/Applications/Spiele/Strategie
+	[pl]:	X11/Aplikacje/Gry/Strategiczne
+
 X11/Applications/Graphics
 	[de]:	X11/Applikationen/Grafik
 	[pl]:	X11/Aplikacje/Grafika
@@ -276,18 +288,6 @@ X11/KDE/utilities
 X11/KDE/Libraries
 	[de]:	X11/KDE/Libraries
 	[pl]:	X11/KDE/Biblioteki
-
-X11/Games
-	[de]:	X11/KDE/Spiele
-	[pl]:	X11/Gry
-
-X11/Games/Strategy
-	[de]:	X11/KDE/Spiele/Strategie
-	[pl]:	X11/Gry/Strategiczne
-
-X11/Games/Video
-	[de]:	X11/KDE/Spiele/Video
-	[pl]:	X11/Gry/Wideo
 
 X11/Amusements
 	[de]:	X11/Unterhaltung
@@ -377,10 +377,6 @@ Development/Tools
 Shells
 	[de]:	Shells
 	[pl]:	Pow³oki
-
-Games
-	[de]:	Spiele
-	[pl]:	Gry
 
 Themes
 	[de]:	Themen
