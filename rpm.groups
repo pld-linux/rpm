@@ -278,41 +278,14 @@ X11/Development/Libraries
 	[de]:	X11/Entwicklung/Libraries
 	[pl]:	X11/Programowanie/Biblioteki
 
+X11/Development/Tools
+	[de]:	X11/Entwicklung/Werkzeuge
+	[fr]:	X11/Development/Outils
+	[pl]:	X11/Programowanie/Narzêdzia
+
 X11/Fonts
 	[de]:	X11/Fonts
 	[pl]:	X11/Fonty
-
-X11/KDE
-	[de]:	X11/KDE
-	[pl]:	X11/KDE
-
-X11/KDE/Applications
-	[de]:	X11/KDE/Applikationen
-	[pl]:	X11/KDE/Aplikacje
-
-X11/KDE/Graphics
-	[de]:	X11/KDE/Grafik
-	[pl]:	X11/KDE/Grafika
-
-X11/KDE/Development
-	[de]:	X11/KDE/Entwicklung
-	[pl]:	X11/KDE/Programowanie
-
-X11/KDE/Development/Libraries
-	[de]:	X11/KDE/Entwicklung/Libraries
-	[pl]:	X11/KDE/Programowanie/Biblioteki
-
-X11/KDE/Games
-	[de]:	X11/KDE/Spiele
-	[pl]:	X11/KDE/Gry
-
-X11/KDE/utilities
-	[de]:	X11/KDE/Werkzeuge
-	[pl]:	X11/KDE/Narzêdzia
-
-X11/KDE/Libraries
-	[de]:	X11/KDE/Libraries
-	[pl]:	X11/KDE/Biblioteki
 
 X11/Amusements
 	[de]:	X11/Unterhaltung
