@@ -4,7 +4,7 @@
 # - when really needed: _noauto{req,prov} for non-helper-generated deps
 #
 # Conditional build:
-%bcond_without	static	# build shared rpmi (doesn't work at the moment)
+%bcond_with	static	# build static rpmi (not supported at the moment)
 %bcond_without	docs	# don't generate documentation with doxygen
 %bcond_without	python	# don't build python bindings
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
@@ -28,7 +28,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.5
+Release:	0.%{snap}.6
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -46,8 +46,6 @@ Source9:	%{name}-php-provides
 Source10:	%{name}-php-requires
 Source11:	%{name}.macros
 Source12:	perl.prov
-#Source15:	%{name}-find-provides-wrapper
-#Source16:	%{name}-find-requires-wrapper
 Source30:	builder
 Source31:	adapter.awk
 Source32:	pldnotify.awk
@@ -99,6 +97,7 @@ BuildRequires:	db-devel >= %{reqdb_ver}
 BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	elfutils-devel
 #BuildRequires:	libmagic-devel
+BuildRequires:	libselinux-devel
 BuildRequires:	libtool
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
@@ -107,7 +106,6 @@ BuildRequires:	python-modules >= 2.2
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpm-pythonprov
 BuildRequires:	zlib-devel
-BuildRequires:  libselinux-devel
 %if %{with static}
 # Require static library only for static build
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
@@ -116,18 +114,20 @@ BuildRequires:	db-static >= %{reqdb_ver}
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	elfutils-static
 #BuildRequires:	libmagic-static
+BuildRequires:	libselinux-static
 BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
 %endif
 Requires:	popt >= %{reqpopt_ver}
 Requires:	%{name}-lib = %{version}-%{release}
+%{!?with_static:Obsoletes:	rpm-utils-static}
 Conflicts:	glibc < 2.2.92
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_binary_payload	w9.gzdio
-%define		_noPayloadPrefix 1
+%define		_binary_payload		w9.gzdio
+%define		_noPayloadPrefix	1
 
 # don't require very fresh rpm.macros to build
 %define		__gettextize gettextize --copy --force --intl ; cp -f po/Makevars{.template,}
@@ -589,6 +589,9 @@ mv -f perl.req perl.req.in
 mv -f perl.prov perl.prov.in
 cd ..
 
+mv -f po/{no,nb}.po
+mv -f po/{sr,sr@Latn}.po
+
 rm -rf zlib libelf db db3 popt rpmdb/db.h
 
 # generate Group translations to *.po
@@ -602,7 +605,6 @@ done
 
 %build
 cd file
-rm -f missing
 %{__libtoolize}
 %{__aclocal}
 %{__autoheader}
@@ -610,7 +612,6 @@ rm -f missing
 %{__automake}
 cd ..
 
-rm -f missing
 %{__libtoolize}
 %{__gettextize}
 %{__aclocal}
@@ -626,7 +627,9 @@ mv -f macros.tmp macros.in
 
 # pass CC and CXX too in case of building with some older configure macro
 %configure \
-	CC="%{__cc}" CXX="%{__cxx}" CPP="%{__cpp}" \
+	CC="%{__cc}" \
+	CXX="%{__cxx}" \
+	CPP="%{__cpp}" \
 	--enable-shared \
 	--enable-static \
 	%{?with_docs:--with-apidocs} \
@@ -634,10 +637,14 @@ mv -f macros.tmp macros.in
 	%{!?with_python:--without-python} \
 	--without-db
 
+# file_LDFLAGS, debugedit_LDADD - no need to link "file" and "debugedit" statically
 %{__make} \
-	%{!?with_static:rpm_LDFLAGS="\$(myLDFLAGS)"} \
 	pylibdir=%{py_libdir} \
-	myLDFLAGS="%{rpmldflags}"
+	myLDFLAGS="%{rpmldflags}" \
+	file_LDFLAGS= \
+	debugedit_LDADD="\$(WITH_LIBELF_LIB) -lpopt"
+
+#	%{!?with_static:rpm_LDFLAGS="\$(myLDFLAGS)"} \
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -760,6 +767,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %dir %{_rpmlibdir}
 #%attr(755,root,root) %{_rpmlibdir}/rpmd
+#%{!?with_static:%attr(755,root,root) %{_rpmlibdir}/rpm[eiu]}
 #%attr(755,root,root) %{_rpmlibdir}/rpmk
 #%attr(755,root,root) %{_rpmlibdir}/rpm[qv]
 
@@ -889,10 +897,12 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %lang(pl) %{_mandir}/pl/man8/rpmgraph.8*
 %lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
 
+%if %{with static}
 %files utils-static
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rpm[ieu]
 %attr(755,root,root) %{_rpmlibdir}/rpm[ieu]
+%endif
 
 %files perlprov
 %defattr(644,root,root,755)
