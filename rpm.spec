@@ -235,6 +235,8 @@ install macros.perl $RPM_BUILD_ROOT%{_libdir}/rpm/macros.perl
 install macros.python $RPM_BUILD_ROOT%{_libdir}/rpm/macros.python
 
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
+install %{SOURCE10} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides
+install %{SOURCE11} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
 #%%_install_langs pl_PL:en_US
 %%distribution PLD
 EOF
