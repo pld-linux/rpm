@@ -700,7 +700,7 @@ mv -f macros.tmp macros.in
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm}
+install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
