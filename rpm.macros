@@ -242,7 +242,8 @@ echo "Compress man and info pages."; \
 #%no_install_post_strip	1
 %__spec_install_post_strip {%{!?debug: \
 %{!?no_install_post_strip: \
-	%{?verbose:set -x;} \
+    %{?verbose:set -x;} \
+    if [ -d "$RPM_BUILD_ROOT" ]; then \
 	echo "Strip executable binaries, archives and shared object files."; \
 	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" %{?_noautostrip:! -regex "%{_noautostrip}"}`; \
 	elfexelist=`echo $filelist | xargs -r file | \
@@ -259,7 +260,8 @@ echo "Compress man and info pages."; \
 	fi; \
 	if [ -n "$elfarchiveslist" ]; then \
 		%{__strip} --strip-debug --remove-section=.note  --remove-section=.comment $elfarchiveslist; \
-	fi; } \
+	fi; \
+    fi; } \
 } }
 #-----------------------------------------------------------------
 # remove all RPATH from executable binaries and shared object files
@@ -270,6 +272,7 @@ echo "Compress man and info pages."; \
 %__spec_install_post_chrpath {%{!?debug: \
 %{!?no_install_post_chrpath: \
 	%{?verbose:set -x;} \
+if [ -d "$RPM_BUILD_ROOT" ]; then \
 echo "Remove RPATH from executable binaries and shared object files."; \
 find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" %{?_noautochrpath:! -regex "%{_noautochrpath}"} | xargs -r file | \
 	awk '/ELF.*(executable|shared object)/ {print $1}' | cut -d: -f1 | \
@@ -290,7 +293,8 @@ while read file ; do \
 	done ; \
 	if [ "$rpath" = "" ] ; then chrpath -d "$file" > /dev/null ; \
 	else chrpath -r "$rpath" "$file" > /dev/null ; fi ; \
-done; } \
+done; \
+fi; } \
 } }
 #-----------------------------------------------------------------
 # Find and gzip all kernel modules
@@ -300,13 +304,15 @@ done; } \
 #%no_install_post_compress_modules  1
 %__spec_install_post_compress_modules { \
 %{!?no_install_post_compress_modules: \
-echo "Compress kernel modules if any."; \
     %{?verbose:set -x;} \
+    if [ -d "$RPM_BUILD_ROOT" ]; then \
+echo "Compress kernel modules if any."; \
     if test -d $RPM_BUILD_ROOT/lib/modules ; then \
        find $RPM_BUILD_ROOT/lib/modules -name \*o -type f -print | \
        xargs -r %{__gzip} -9nf; \
 	   find $RPM_BUILD_ROOT/lib/modules -name \*o -type l -printf "%p %l\n" | \
 	   while read a b; do ln -sf $b.gz $a.gz; rm -f $a; done; \
+    fi; \
     fi; \
 } }
 
