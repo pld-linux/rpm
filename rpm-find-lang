@@ -43,6 +43,7 @@ to \$3.
 Additional options:
   --with-gnome		find GNOME help files
   --with-kde		find KDE help files (not implemented yet)
+  --all-name		support for KDE
   --without-mo		not find locales files
 EOF
 exit 1
