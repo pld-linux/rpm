@@ -29,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.27
+Release:	0.%{snap}.28
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -464,6 +464,7 @@ Requires:	/bin/id
 Requires:	awk
 Requires:	binutils
 Requires:	chrpath >= 0.10-4
+Requires:	cpio
 Requires:	diffutils
 Requires:	file >= 4.01
 Requires:	fileutils
