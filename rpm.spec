@@ -91,6 +91,7 @@ Patch31:	%{name}-fdClose-typo.patch
 Patch32:	%{name}-userpmdepswrappers.patch
 Patch33:	%{name}-provides-dont-obsolete.patch
 Patch34:	%{name}-examplesaredoc.patch
+Patch35:	%{name}-po.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -572,6 +573,7 @@ cat %{SOURCE14} >> macros.in
 %patch32 -p1
 %patch33 -p1
 %patch34 -p1
+%patch35 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
