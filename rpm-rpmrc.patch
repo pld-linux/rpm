@@ -19,7 +19,7 @@ diff -Nur rpm-2.5.6/lib-rpmrc.in rpm-2.5.6.pld/lib-rpmrc.in
  # Values for RPM_OPT_FLAGS for various platforms
  
 -optflags: i386 -O2 -m486 -fno-strength-reduce
-+optflags: i386 -O6 -mpentium -fomit-frame-pointer
++optflags: i386 -O2 -mpentium -fomit-frame-pointer
  optflags: alpha -O2
  optflags: sparc -O2
  optflags: sparc64 -O2
