@@ -3,7 +3,7 @@
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
-Summary(pl):	Aplikacja do zarz±dzania pakietami
+Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.2
@@ -296,6 +296,7 @@ Requires:	make
 Requires:	patch
 Requires:	popt >= 1.6.2-2
 Requires:	sed
+Requires:	sh-utils
 Requires:	tar
 Requires:	textutils
 
