@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.4
-Release:	3
+Release:	4
 Group:		Base
 Group(pl):	Podstawowe
 License:	GPL
@@ -17,6 +17,7 @@ Patch3:		rpm-arch.patch
 Patch4:		rpm-rpmpopt.patch
 Patch5:		rpm-find-provides.patch
 Patch6:		rpm-perl-macros.patch
+Patch7:		rpm-find-lang-all-name.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	bzip2-static
@@ -135,6 +136,7 @@ construir pacotes usando o RPM.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1 
+%patch7 -p1 
 %patch31 -p1
 install %{SOURCE3} macros.pld.in
 install %{SOURCE13} macros.python.in
@@ -170,9 +172,9 @@ install -d $RPM_BUILD_ROOT/var/state/rpm \
 
 make DESTDIR="$RPM_BUILD_ROOT" pkgbindir="%{_bindir}" install
 
-install macros.pld	 $RPM_BUILD_ROOT%{_libdir}/rpm/macros.pld
-install macros.perl	 $RPM_BUILD_ROOT%{_libdir}/rpm/macros.perl
-install -m755 %{SOURCE5} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
+install macros.pld $RPM_BUILD_ROOT%{_libdir}/rpm/macros.pld
+%{__make} install \
+install %{SOURCE5} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
 	pkgbindir="%{_bindir}"
 
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
