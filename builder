@@ -27,6 +27,7 @@ V 0.11 (C) 1999-2004 Free Penguins".
 PATH="/bin:/usr/bin:/usr/sbin:/sbin:/usr/X11R6/bin"
 
 COMMAND="build"
+TARGET=""
 
 SPECFILE=""
 BE_VERBOSE=""
@@ -254,6 +255,8 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
                       %_without_<feature> macro switch.  You may now use
                       --with feat1 feat2 feat3 --without feat4 feat5 --with feat6
                       constructions. Set GROUP_BCONDS to yes to make use of it.
+--target <platform>
+		    - build for platform <platform>.
 "
 }
 
@@ -809,7 +812,11 @@ build_package()
 		fi
 	fi
 	cd "$SPECS_DIR"
-
+	
+	if [ -n "$TARGET" ]; then 
+		TARGET_SWITCH="--target $TARGET"
+	fi
+	
 	case "$COMMAND" in
 		build )
 			BUILD_SWITCH="-ba" ;;
@@ -831,7 +838,7 @@ build_package()
 			echo "LASTLOG=$LOG" > $LASTLOG_FILE
 		fi
 		RES_FILE=~/tmp/$RPMBUILD-exit-status.$RANDOM
-		(time nice -n ${DEF_NICE_LEVEL} $RPMBUILD $BUILD_SWITCH -v $QUIET $CLEAN $RPMOPTS $BCOND $SPECFILE; echo $? > $RES_FILE) 2>&1 |tee $LOG
+		(time nice -n ${DEF_NICE_LEVEL} $RPMBUILD $BUILD_SWITCH $TARGET_SWITCH -v $QUIET $CLEAN $RPMOPTS $BCOND $SPECFILE; echo $? > $RES_FILE) 2>&1 |tee $LOG
 		RETVAL=`cat $RES_FILE`
 		rm $RES_FILE
 		if [ -n "$LOGDIROK" ] && [ -n "$LOGDIRFAIL" ]; then
@@ -842,7 +849,7 @@ build_package()
 			fi
 		fi
 	else
-		eval nice -n ${DEF_NICE_LEVEL} $RPMBUILD $BUILD_SWITCH -v $QUIET $CLEAN $RPMOPTS $BCOND $SPECFILE
+		eval nice -n ${DEF_NICE_LEVEL} $RPMBUILD $BUILD_SWITCH $TARGET_SWITCH -v $QUIET $CLEAN $RPMOPTS $BCOND $SPECFILE
 		RETVAL=$?
 	fi
 	if [ "$RETVAL" -ne "0" ]; then
@@ -853,6 +860,7 @@ build_package()
 		Exit_error err_build_fail;
 	fi
 	unset BUILD_SWITCH
+	unset TARGET_SWITCH
 }
 
 nourl()
@@ -1282,6 +1290,8 @@ do
 					BCOND="$BCOND $1 $2" ; shift 2 ;;
 			esac
 			;;
+		--target )
+			shift; TARGET="${1}"; shift ;;
 		-q | --quiet )
 			QUIET="--quiet"; shift ;;
 		--date )
