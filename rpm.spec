@@ -861,17 +861,20 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/pentium*
 %{_rpmlibdir}/athlon*
 %endif
-%ifarch amd64
-%{_rpmlibdir}/amd64*
-%endif
-%ifarch sparc sparc64
-%{_rpmlibdir}/sparc*
-%endif
 %ifarch alpha
 %{_rpmlibdir}/alpha*
 %endif
+%ifarch amd64
+%{_rpmlibdir}/amd64*
+%endif
+%ifarch ia64
+%{_rpmlibdir}/ia64*
+%endif
 %ifarch ppc
 %{_rpmlibdir}/ppc*
+%endif
+%ifarch sparc sparc64
+%{_rpmlibdir}/sparc*
 %endif
 # must be here for "Requires: rpm-*prov" to work
 %{_rpmlibdir}/macros.perl
