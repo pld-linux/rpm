@@ -124,7 +124,6 @@ BuildRequires:	popt-devel >= %{reqpopt_ver}
 BuildRequires:	python-modules >= 2.2
 BuildRequires:	readline-devel
 BuildRequires:	rpm-perlprov
-BuildRequires:	rpm-pythonprov
 BuildRequires:	zlib-devel
 %if %{with static}
 # Require static library only for static build
