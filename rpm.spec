@@ -25,6 +25,7 @@ Patch9:		%{name}-find-lang-name-matching.patch
 Patch10:	%{name}-exclude-examples-doc.patch
 Patch11:	%{name}-db3.patch
 Patch12:	%{name}-rpm-v1.patch
+Patch13:	%{name}-rpmlibprov.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 Requires:	glibc >= 2.1
@@ -171,6 +172,7 @@ construir pacotes usando o RPM.
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
+%patch13 -p1
 %patch31 -p1
 install %{SOURCE2} macros.pld.in
 install %{SOURCE13} macros.python.in
