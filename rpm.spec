@@ -15,6 +15,7 @@
 %include        /usr/lib/rpm/macros.python
 %define snap	20030610
 # versions of required libraries
+#define	reqdb_ver	4.2.50-1  -- when? now?
 %define	reqdb_ver	4.1.25-1
 %define	reqpopt_ver	1.9
 %define	beecrypt_ver	3.0.0-0.20030610.1
@@ -94,6 +95,7 @@ Patch35:	%{name}-po.patch
 Patch36:	%{name}-amd64.patch
 Patch37:	%{name}-notsc.patch
 Patch38:	%{name}-hack-norpmlibdep.patch
+Patch39:	%{name}-db42.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -580,6 +582,7 @@ cat %{SOURCE14} >> macros.in
 %patch36 -p1
 %patch37 -p1
 %patch38 -p1
+%patch39 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
