@@ -511,7 +511,7 @@ Group:		Applications/File
 Requires:	%{name}-build = %{version}-%{release}
 # these are optional
 #Requires:	cvs
-#Requires:	wget
+Requires:	wget
 
 %description build-tools
 Scripts for managing .spec files and building RPM packages.
