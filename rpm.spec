@@ -1,8 +1,8 @@
 Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
-Version:	3.0.3
-Release:	27
+Version:	3.0.4
+Release:	1
 Group:		Base
 Group(pl):	Podstawowe
 Copyright:	GPL
@@ -14,12 +14,9 @@ Patch0:		rpm-rpmrc.patch
 Patch1:		rpm-find-requires.patch
 Patch2:		rpm-macros.patch
 Patch3:		rpm-arch.patch
-Patch4:		rpm-pld.patch
-Patch5:		rpm-rpmpopt.patch
-Patch6:		rpm-findlangs.patch
-Patch7:		rpm-perl-macros.patch
-Patch8:		rpm-nodeps.patch
-Patch9:		rpm-find-provides.patch
+Patch4:		rpm-rpmpopt.patch
+Patch5:		rpm-find-provides.patch
+Patch6:		rpm-perl-macros.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	bzip2-static
@@ -114,18 +111,28 @@ Additional utilities for checking perl provides/requires in rpm
 Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci dla skryptów perl 
 w pakietach rpm.
 Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w
+Python para manipular pacotes e bancos de dados RPM.
+Summary:	Scripts to build binary RPMs
+Summary(pl):	Skrypty pomocnicze do budowania binarnych RPMów
+Group:		Utilities/File
+Group(pl):	Narzêdzia/Pliki
+Summary(pt_BR):	Scripts e programas executáveis usados para construir pacotes
+Requires:	tar
+Requires:	textutils
+%description build
+
+%description -l pl build
+%description build -l pl
+
 construir pacotes usando o RPM.
 %setup  -q
-%patch0 -p0
+%prep
 %patch1 -p1
 %patch0 -p1
 %patch1 -p1
-%patch4 -p1 
+%patch4 -p1
 %patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
+%patch6 -p1 
 %patch31 -p1
 install %{SOURCE3} macros.pld.in
 install %{SOURCE13} macros.python.in
@@ -225,10 +232,21 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/librpm*.so.*.*
 %{_mandir}/man8/rpm.8*
 %lang(pl) %{_mandir}/pl/man8/rpm.8*
-%lang(ru) %{_mandir}/ru/man8/rpm.8*
-%attr(755,root,root) %dir /var/state/rpm
-
+%lang(ja) %{_mandir}/ja/man8/rpm.8*
+%lang(ja) %{_mandir}/ja/man8/rpm.8*
+%dir /var/state/rpm
 %dir /usr/lib/rpm
+%lang(ru) %{_mandir}/ru/man8/rpm.8*
+# przenie¶æ do %%doc
+#%attr(755,root,root) %{_libdir}/rpm/convertrpmrc.sh
+
+%dir /var/lib/rpm
+%{_libdir}/rpm/rpmpopt
+
+%{_libdir}/rpm/macros.pld
+
+%ifarch ppc
+%{_libdir}/rpm/ppc*
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rpmbuild
 %attr(755,root,root) %{_bindir}/rpmu
@@ -237,11 +255,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/find-provides
 %attr(755,root,root) %{_libdir}/rpm/find-rpm-provides
 %attr(755,root,root) %{_libdir}/rpm/find-spec-bcond
-%attr(755,root,root) %{_libdir}/rpm/convertrpmrc.sh
-
-%{_libdir}/rpm/rpm*
-%{_libdir}/rpm/macros
-%{_libdir}/rpm/macros.pld
 %attr(755,root,root) %{_libdir}/rpm/rpmb
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmt
