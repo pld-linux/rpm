@@ -1,3 +1,14 @@
+--- rpm/build/rpmfc.c.orig	2004-11-22 11:39:55.000000000 +0100
++++ rpm/build/rpmfc.c	2004-11-22 18:09:14.400710096 +0100
+@@ -1432,7 +1432,7 @@
+     size_t slen;
+     int fcolor;
+     int xx;
+-    static const char * magicfile = "/usr/lib/rpm/magic";
++    static const char * magicfile = "/usr/share/file/magic";
+     int msflags = MAGIC_COMPRESS|MAGIC_CHECK;	/* XXX what MAGIC_FOO flags? */
+     magic_t ms = NULL;
+ 
 diff -ur rpm.org/file/doc/Makefile.am rpm/file/doc/Makefile.am
 --- rpm.org/file/doc/Makefile.am	2004-11-18 15:04:33.000000000 +0100
 +++ rpm/file/doc/Makefile.am	2004-11-22 01:02:30.114807597 +0100
