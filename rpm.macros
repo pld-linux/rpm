@@ -244,7 +244,7 @@ echo "Compress man and info pages."; \
 %{!?no_install_post_strip: \
 	%{?verbose:set -x;} \
 	echo "Strip executable binaries, archives and shared object files."; \
-	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*"`; \
+	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" %{?_noautostrip:! -regex "%{_noautostrip}"}`; \
 	elfexelist=`echo $filelist | xargs -r file | \
 		awk '/ELF.*executable/ {print $1}' | cut -d: -f1`; \
 	elfsharedlist=`echo $filelist | xargs -r file | \
@@ -252,13 +252,13 @@ echo "Compress man and info pages."; \
 	elfarchiveslist=`echo $filelist | xargs -r file | \
 		awk '/current ar archive/ {print $1}' | cut -d: -f1`; \
 	if [ -n "$elfexelist" ]; then \
-		strip --remove-section=.note  --remove-section=.comment $elfexelist; \
+		%{__strip} --remove-section=.note  --remove-section=.comment $elfexelist; \
 	fi; \
 	if [ -n "$elfsharedlist" ]; then \
-		strip --strip-unneeded --remove-section=.note  --remove-section=.comment $elfsharedlist; \
+		%{__strip} --strip-unneeded --remove-section=.note  --remove-section=.comment $elfsharedlist; \
 	fi; \
 	if [ -n "$elfarchiveslist" ]; then \
-		strip --strip-debug --remove-section=.note  --remove-section=.comment $elfarchiveslist; \
+		%{__strip} --strip-debug --remove-section=.note  --remove-section=.comment $elfarchiveslist; \
 	fi; } \
 } }
 #-----------------------------------------------------------------
@@ -271,7 +271,7 @@ echo "Compress man and info pages."; \
 %{!?no_install_post_chrpath: \
 	%{?verbose:set -x;} \
 echo "Remove RPATH from executable binaries and shared object files."; \
-find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" | xargs -r file | \
+find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" %{?_noautochrpath:! -regex "%{_noautochrpath}"} | xargs -r file | \
 	awk '/ELF.*(executable|shared object)/ {print $1}' | cut -d: -f1 | \
 while read file ; do \
 	rpath= ; \
