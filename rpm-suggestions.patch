@@ -1,11 +1,10 @@
-diff -Nur rpm-4.0.2/lib/depends.c rpm-4.0.2-patched/lib/depends.c
---- rpm-4.0.2/lib/depends.c	Sat Mar 17 23:18:31 2001
-+++ rpm-4.0.2-patched/lib/depends.c	Sat Mar 17 23:20:15 2001
+--- ./lib/depends.c.org	Sun Mar 25 12:55:25 2001
++++ ./lib/depends.c	Sun Mar 25 12:57:15 2001
 @@ -894,27 +894,22 @@
  	free((void *)conflicts[i].byRelease);
  	free((void *)conflicts[i].needsName);
  	free((void *)conflicts[i].needsVersion);
-+	/* TODO: suggestedPackage_s_ */
++	if(conflicts[i].suggestedPackages) free(conflicts[i].suggestedPackages);
      }
  
      free(conflicts);
@@ -38,6 +37,8 @@ diff -Nur rpm-4.0.2/lib/depends.c rpm-4.0.2-patched/lib/depends.c
      dirNeedle.dirNameLen = strlen(dirName);
      dirMatch = bsearch(&dirNeedle, al->dirs, al->numDirs,
  		       sizeof(dirNeedle), dirInfoCompare);
+-    free((void *)dirName);
+-    if (!dirMatch) return NULL;
 +    if (!dirMatch){
 +    	    free((void *)dirName);
 +	    return NULL;
@@ -46,9 +47,6 @@ diff -Nur rpm-4.0.2/lib/depends.c rpm-4.0.2-patched/lib/depends.c
 +    /* rewind to the first match */
 +    while(dirMatch > al->dirs && dirInfoCompare(dirMatch-1,&dirNeedle)==0)
 +	    dirMatch--;
-+    
-     free((void *)dirName);
--    if (!dirMatch) return NULL;
  
      baseName = strrchr(fileName, '/') + 1;
  
@@ -57,15 +55,15 @@ diff -Nur rpm-4.0.2/lib/depends.c rpm-4.0.2-patched/lib/depends.c
      /* XXX FIXME: these file lists should be sorted and bsearched */
 -    for (i = 0; i < dirMatch->numFiles; i++) {
 -	if (!strcmp(dirMatch->files[i].baseName, baseName)) {
-+    	for (i = 0; i < dirMatch->numFiles; i++) {
-+	    if (!strcmp(dirMatch->files[i].baseName, baseName)) {
- 
+-
 -	    /* If a file dependency would be satisfied by a file
 -	       we are not going to install, skip it. */
 -	    if (al->list[dirMatch->files[i].pkgNum].multiLib &&
 -		!isFileMULTILIB(dirMatch->files[i].fileFlags))
 -		continue;
--
++    	for (i = 0; i < dirMatch->numFiles; i++) {
++	    if (!strcmp(dirMatch->files[i].baseName, baseName)) {
+ 
 -	    if (keyType)
 -		rpmMessage(RPMMESS_DEBUG, _("%s: %-45s YES (added files)\n"),
 -			    keyType, fileName);
@@ -89,6 +87,8 @@ diff -Nur rpm-4.0.2/lib/depends.c rpm-4.0.2-patched/lib/depends.c
      }
 -
 -    return NULL;
++    
++    free((void *)dirName);
 +    if(ret)
 +	    ret[found]=NULL;
 +    return ret;
@@ -150,8 +150,8 @@ diff -Nur rpm-4.0.2/lib/depends.c rpm-4.0.2-patched/lib/depends.c
 +    while( match > al->index.index && indexcmp(match-1,&needle) == 0 )
 +	    match--;
 +
-+    for(ret=NULL, found=0; indexcmp(match,&needle) == 0 &&
-+		    match <= al->index.index + al->index.size;
++    for(ret=NULL, found=0; match <= al->index.index + al->index.size &&
++		    indexcmp(match,&needle) == 0;
 +		    match++){
      p = match->package;
      rc = 0;
@@ -312,9 +312,8 @@ diff -Nur rpm-4.0.2/lib/depends.c rpm-4.0.2-patched/lib/depends.c
  
  	    psp->num++;
  	    break;
-diff -Nur rpm-4.0.2/lib/rpmlib.h rpm-4.0.2-patched/lib/rpmlib.h
---- rpm-4.0.2/lib/rpmlib.h	Tue Jan 16 00:10:04 2001
-+++ rpm-4.0.2-patched/lib/rpmlib.h	Sat Mar 17 23:17:42 2001
+--- ./lib/rpmlib.h.org	Sun Mar 25 12:55:35 2001
++++ ./lib/rpmlib.h	Sun Mar 25 12:55:38 2001
 @@ -771,6 +771,8 @@
      const char * needsVersion;
      int needsFlags;
