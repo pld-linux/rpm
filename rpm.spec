@@ -965,15 +965,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/rpm2cpio.sh
 %attr(755,root,root) %{_rpmlibdir}/tgpg
 %attr(755,root,root) %{_rpmlibdir}/rpmdb_loadcvt
-
-%files utils-perl
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_rpmlibdir}/rpmdiff*
-# not here
-#%%{_rpmlibdir}/rpm.daily
-#%%{_rpmlibdir}/rpm.log
-#%%{_rpmlibdir}/rpm.xinetd
-
 %{_mandir}/man8/rpm2cpio.8*
 %{_mandir}/man8/rpmdeps.8*
 %{_mandir}/man8/rpmcache.8*
@@ -987,6 +978,15 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %lang(pl) %{_mandir}/pl/man8/rpmcache.8*
 %lang(pl) %{_mandir}/pl/man8/rpmgraph.8*
 %lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
+
+%files utils-perl
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_rpmlibdir}/rpmdiff*
+# not here
+#%%{_rpmlibdir}/rpm.daily
+#%%{_rpmlibdir}/rpm.log
+#%%{_rpmlibdir}/rpm.xinetd
+
 
 %if %{with static}
 %files utils-static
