@@ -80,6 +80,7 @@ Summary:	RPM shared libraries
 Summary(pl):	Biblioteki wspó³dzielone rpm-a
 Group:		Libraries
 Group(de):	Libraries
+Group(es):	Bibliotecas
 Group(fr):	Librairies
 Group(pl):	Biblioteki
 Requires:	%{name} = %{version}
@@ -147,7 +148,8 @@ Group(pl):	Aplikacje/Pliki
 Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w pakietach rpm
 Requires:	perl-modules
 Requires:	findutils
-Additional utilities for checking perl provides/requires in rpm packages.
+
+%description perlprov
 Additional utilities for checking perl provides/requires in rpm
 %description -l pl perlprov
 Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci dla skryptów perl w
@@ -225,18 +227,18 @@ autoconf
 # ugly workaround for automake
 sed -e 's#cpio.c $(DBLIBOBJS) depends.c#cpio.c depends.c#g' \
 	lib/Makefile.am > lib/Makefile.am.new
-mv lib/Makefile.am.new lib/Makefile.am
+mv -f lib/Makefile.am.new lib/Makefile.am
 automake -a -c
 sed -e 's#cpio.c depends.c#cpio.c $(DBLIBOBJS) depends.c#g' \
 	lib/Makefile.in > lib/Makefile.in.new
-mv lib/Makefile.in.new lib/Makefile.in
+mv -f lib/Makefile.in.new lib/Makefile.in
 %configure \
 	sed 's|@host_cpu@|%{_target_cpu}|' > macros.tmp
 	--enable-v1-packages
 %configure \
 %{__make} %{?bcond_off_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
 sed -e 's/#include <rpmio\.h>/#include <rpm\/rpmio\.h>/g' lib/header.h > lib/header.h.new
-mv lib/header.h.new lib/header.h
+mv -f lib/header.h.new lib/header.h
 	--with-python
 
 
@@ -316,7 +318,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/rpm/alpha-pld-linux
 %ifarch sparc sparc64
 %endif
-
 %ifarch ppc
 %{_libdir}/rpm/ppc*
 %defattr(644,root,root,755)
