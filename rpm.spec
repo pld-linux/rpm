@@ -185,7 +185,7 @@ Summary(pt_BR):	Arquivos de inclusЦo e bibliotecas para programas de manipulaГЦo
 Summary(ru):	Хедеры и библиотеки для программ, работающих с rpm-пакетами
 Summary(uk):	Хедери та б╕бл╕отеки для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name}-lib = %{version}
 Requires:	bzip2-devel
 Requires:	db-devel
 Requires:	elfutils-devel
