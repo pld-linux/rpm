@@ -7,7 +7,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.2
-Release:	85
+Release:	86
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -422,7 +422,7 @@ awk -f %{SOURCE14} %{SOURCE1}
 
 cd popt
 rm -f missing
-libtoolize --force --copy
+%{__libtoolize}
 aclocal
 autoheader
 %{__autoconf}
@@ -430,7 +430,7 @@ autoheader
 cd ..
 
 rm -f missing
-libtoolize --force --copy
+%{__libtoolize}
 %{__gettextize}
 aclocal
 autoupdate
@@ -459,7 +459,6 @@ mv -f macros.tmp macros.in
 	--enable-shared \
 	--enable-v1-packages \
 	--with-python
-
 
 %{__make} %{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
 
@@ -552,7 +551,6 @@ rm -rf $RPM_BUILD_ROOT
 %ifarch ppc
 %{_libdir}/rpm/ppc*
 %endif
-
 
 %files build
 %defattr(644,root,root,755)
