@@ -1,4 +1,11 @@
 #!/bin/sh
+
+. /etc/sysconfig/rpm
+
+if [ ${RPM_CRON_RPMQA_CACHE:-no} != "yes" ]; then
+   exit 0
+fi
+
 umask 022
 export LC_ALL=C
 
