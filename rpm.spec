@@ -155,7 +155,17 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/librpm*.a
 %{_libdir}/librpm*.la
 %files utils
+
 %files -n python-rpm
+* %{date} PLD Team <pld-list@pld.org.pl>
+All below listed persons can be reached on <cvs_login>@pld.org.pl
+
+$Log: rpm.spec,v $
+Revision 1.44  1999-07-12 23:06:14  kloczek
+
+- added using CVS keywords in %changelog (for automating them).
+
+
 * Thu May 20 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
   [3.0.1-6.19990519]
 - spec based on version from dist tar ball (partially rewrited by me),
@@ -163,7 +173,6 @@ rm -rf $RPM_BUILD_ROOT
 - rewrited by Artur Frysiak <wiget@pld.org.pl>,
 - patches with fixes maked by Artur Frysiak and Marcin Dalecki
   <dalecki@cs.net.pl>.
-
 Revision 1.79  2000/02/17 03:42:17  kloczek
 - release 25,
 - added "Conflicts: /usr/bin/id" and rebuilded in enviroment with id in
