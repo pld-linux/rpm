@@ -1,0 +1,11 @@
+--- rpm-4.2/Makefile.am.nofile	Thu Mar 27 16:56:58 2003
++++ rpm-4.2/Makefile.am	Thu Mar 27 16:57:04 2003
+@@ -128,8 +128,6 @@
+ 
+ install-data-local:
+ 	@$(mkinstalldirs) $(DESTDIR)$(varprefix)/lib/rpm
+-	@$(INSTALL_DATA) file/magic $(DESTDIR)$(pkglibdir)/magic
+-	@$(INSTALL_DATA) file/magic.mgc $(DESTDIR)$(pkglibdir)/magic.mgc
+ 	@rm -f $(DESTDIR)$(libdir)/rpmrc
+ 	@@LN_S@ rpm/rpmrc $(DESTDIR)$(libdir)/rpmrc
+ 	@rm -f $(DESTDIR)$(libdir)/rpmpopt
