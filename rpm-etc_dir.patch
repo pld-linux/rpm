@@ -1,7 +1,7 @@
 diff -Nru rpm-4.1/lib/rpmrc.c rpm-4.1.new/lib/rpmrc.c
 --- rpm-4.1/lib/rpmrc.c	Tue Aug 20 16:53:44 2002
 +++ rpm-4.1.new/lib/rpmrc.c	Tue Mar 11 18:41:48 2003
-@@ -1756,27 +1756,40 @@
+@@ -1756,27 +1756,39 @@
  	/* Expand ~/ to $HOME/ */
  	fn[0] = '\0';
  	if (r[0] == '~' && r[1] == '/') {
@@ -18,7 +18,6 @@ diff -Nru rpm-4.1/lib/rpmrc.c rpm-4.1.new/lib/rpmrc.c
 +				strncat(fn, "/", sizeof(fn) - strlen(fn));				
 +	  	  r+=2;
 +		
-+				if (r[0] == '.') r++;
 +			} else {
 +	    	if (home == NULL) {
  	    /* XXX Only /usr/lib/rpm/rpmrc must exist in default rcfiles list */
@@ -63,7 +62,7 @@ diff -Nru rpm-4.1/lib/rpmrc.c rpm-4.1.new/lib/rpmrc.c
 diff -Nru rpm-4.1/rpmio/macro.c rpm-4.1.new/rpmio/macro.c
 --- rpm-4.1/rpmio/macro.c	Tue Sep 17 14:58:23 2002
 +++ rpm-4.1.new/rpmio/macro.c	Tue Mar 11 18:21:59 2003
-@@ -1614,15 +1614,23 @@
+@@ -1614,15 +1614,22 @@
  	buf[0] = '\0';
  	if (mfile[0] == '~' && mfile[1] == '/') {
  	    char *home;
@@ -75,7 +74,6 @@ diff -Nru rpm-4.1/rpmio/macro.c rpm-4.1.new/rpmio/macro.c
 +
 +			if (etc_dir) {
 +				mfile += 2;
-+				if (mfile[0] == '.') mfile++;
 +				strncpy(buf, etc_dir, sizeof(buf));
 +				strncat(buf, "/", sizeof(buf) - strlen(buf));				
 +			} else {

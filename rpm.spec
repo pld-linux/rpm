@@ -26,7 +26,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-%define	rel	0.%{snap}.9
+%define	rel	0.%{snap}.10
 Release:	%{rel}
 License:	GPL
 Group:		Base
@@ -82,6 +82,7 @@ Patch27:	%{name}-dontneedutils.patch
 Patch28:	%{name}-python-beecrypt.patch
 Patch29:	%{name}-man-typos.patch
 Patch30:	%{name}-man-pl.patch
+Patch31:	%{name}-fdClose-typo.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -539,6 +540,7 @@ cat %{SOURCE14} >> macros.in
 %patch28 -p1
 %patch29 -p1
 %patch30 -p1
+%patch31 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
