@@ -15,6 +15,7 @@
 %debugcflags	-O0 -g -Wall
 %rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}
 # %rpmldflags	%{!?debug:-s}
+%rpmldflags	%{nil}
 
 # kernel compiler
 %kgcc		gcc
