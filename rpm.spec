@@ -1,7 +1,8 @@
 #
 # TODO:
 # - detected Requires lists are not printed at the end of build (Provides etc. are)
-# - fix pythondeps detection (*.py[co] should belong to python class; autodetect P(abi))
+# - python(abi) cap is not provided automatically (because /usr/bin/python matches
+#   ELF first; it should be provided by python-libs not binary anyway)
 # - consider using system libmagic not internal libfmagic
 #   (but internal has different method of passing output)
 # - after ac drop amd64 patch and make x86_64 generic arch + subarchs amd64 and ia32e
@@ -398,7 +399,7 @@ Requires:	chrpath >= 0.10-4
 Requires:	cpio
 Requires:	diffutils
 Requires:	elfutils
-Requires:	file >= 4.01
+Requires:	file >= 4.13-2
 Requires:	fileutils
 Requires:	findutils
 %ifarch athlon
