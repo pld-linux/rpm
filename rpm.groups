@@ -241,26 +241,6 @@ X11/Fonts
 	[de]	X11/Fonts
 	[pl]:	X11/Fonty
 
-X11/GNOME
-	[de]:	X11/GNOME
-	[pl]:	X11/GNOME
-
-X11/GNOME/Applications
-	[de]:	X11/GNOME/Applikationen
-	[pl]:	X11/GNOME/Aplikacje
-
-X11/GNOME/Libraries
-	[de]:	X11/GNOME/Libraries
-	[pl]:	X11/GNOME/Biblioteki
-
-X11/GNOME/Development/Libraries
-	[de]:	X11/GNOME/Entwicklung/Libraries
-	[pl]:	X11/GNOME/Programowanie/Biblioteki
-
-X11/GNOME/Development
-	[de]:	X11/GNOME/Entwicklung
-	[pl]:	X11/GNOME/Programowanie
-
 X11/KDE
 	[de]:	X11/KDE
 	[pl]:	X11/KDE
