@@ -127,7 +127,7 @@ s:'"$TOP_DIR"'::
 s:^\([^%].*\)::
 s:%lang(C) ::' >> $MO_NAME
 
-if [ "$(cat $MO_NAME | egrep -v '(^%defattr|^$)' | wc -w)" -le 0  ]; then
+if [ "$(cat $MO_NAME | egrep -v '(^%defattr|^$)' | wc -l)" -le 0  ]; then
         echo 'Error: international files not found !'
         exit 1
 fi
