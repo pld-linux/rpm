@@ -338,7 +338,7 @@ echo "Compress kernel modules if any."; \
 #
 #%_noautoreqfiles	'%{_defaultdocdir}.*' '%{_examplesdir}.*'
 #%_noautoreq		%{nil}
-#%_noautoreqdep		%{nil}
+%_noautoreqdep		%(sed -e s'/#.*//' /etc/rpm/noautoreqdep)
 #%_noautoprovfiles	%{nil}
 #%_noautoprov		%{nil}
 #%_noautocompressdoc	%{nil}

@@ -28,7 +28,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.2.1
+Release:	0.%{snap}.2.2
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -687,7 +687,7 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq <<EOF
 # global list of capabilities (regexps) not to be used in Requires
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep <<EOF
-# global list of capabilities (SONAME, perl(module), php(module) regexps)
+# global list of capabilities (SONAME, perl(module), php(module) shell patterns)
 # which don't generate dependencies on package NAMES
 libGL.so.1
 libGLU.so.1

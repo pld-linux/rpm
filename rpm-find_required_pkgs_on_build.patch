@@ -1,6 +1,6 @@
 diff -durN rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
 --- rpm-4.3.orig/build/rpmfc.c	2004-01-04 13:53:29.000000000 +0100
-+++ rpm-4.3/build/rpmfc.c	2004-01-04 13:54:54.860259000 +0100
++++ rpm-4.3/build/rpmfc.c	2004-01-04 15:13:18.227262716 +0100
 @@ -9,6 +9,8 @@
  #define	_RPMDS_INTERNAL
  #include <rpmds.h>
@@ -10,7 +10,7 @@ diff -durN rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
  
  #if HAVE_GELF_H
  #include <gelf.h>
-@@ -1058,6 +1060,97 @@
+@@ -1058,6 +1060,116 @@
      { NULL, 0 }
  };
  
@@ -30,12 +30,22 @@ diff -durN rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
 +    int dix;
 +    int ix;
 +    int i;
++    int j;
 +    int xx;
 +    int r;
 +    const char * hname;
 +    rpmdbMatchIterator it;
 +    Header hdr;
++    ARGV_t noautoreqdep=NULL;
++    int noautoreqdep_c;
 +
++    s=rpmExpand("%{_noautoreqdep}",NULL);
++    if (s) {
++    	poptParseArgvString(s,&noautoreqdep_c,(const char ***)&noautoreqdep);
++	    s = _free(s);
++    }
++    if (noautoreqdep==NULL) noautoreqdep_c=0;
++    
 +    ts = rpmtsCreate(); /* XXX ts created in main() should be used */
 +    
 +    rpmMessage(RPMMESS_NORMAL, "Searching for required packages....\n");
@@ -67,6 +77,14 @@ diff -durN rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
 +            rpmMessage(RPMMESS_DEBUG, "skipping #%i require\n");
 +            continue;
 +        }
++        for(j=0;j<noautoreqdep_c;j++) 
++            if (fnmatch(noautoreqdep[j],N,0)==0) {
++                rpmMessage(RPMMESS_NORMAL, 
++                        "skipping %s requirement processing (matches noautoreqdep pattern: %s)\n",
++                        N,noautoreqdep[j]);
++                break;
++            }
++        if (j<noautoreqdep_c) continue;
 +        if (N[0]=='/') {
 +            rpmMessage(RPMMESS_DEBUG, "skipping #%i require (is file requirement)\n");
 +            continue;
@@ -101,6 +119,7 @@ diff -durN rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
 +        rpmdbFreeIterator(it);
 +    }
 +
++    noautoreqdep=_free(noautoreqdep);
 +    ts = rpmtsFree(ts);
 +    return 0;
 +}
@@ -108,7 +127,7 @@ diff -durN rpm-4.3.orig/build/rpmfc.c rpm-4.3/build/rpmfc.c
  int rpmfcApply(rpmfc fc)
  {
      rpmfcApplyTbl fcat;
-@@ -1086,6 +1179,8 @@
+@@ -1086,6 +1198,8 @@
  	}
      }
  
