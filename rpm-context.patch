@@ -61,3 +61,17 @@ diff -u -u -r2.6 rpmsx.c
  	return -1;
      }
  
+--- rpm-4.3/po/pl.po.orig	2004-02-01 20:33:57.000000000 +0100
++++ rpm-4.3/po/pl.po	2004-02-01 20:51:30.760959200 +0100
+@@ -2887,6 +2887,11 @@
+ msgid "Unable to open %s for reading: %s.\n"
+ msgstr "Nie mo¿na otworzyæ %s do odczytu: %s.\n"
+ 
++#: lib/rpmsx.c:320
++#, c-format
++msgid "Parsing SELinux file contexts skipped: %s: %s\n"
++msgstr "Pominiêto analizê kontekstów plików SELinuksa: %s: %s\n"
++
+ #: lib/rpmsx.c:343
+ #, c-format
+ msgid "%s:  no newline on line number %d (only read %s)\n"
