@@ -92,7 +92,7 @@ BuildRequires:	bzip2-devel >= 1.0.1
 BuildRequires:	db-devel >= %{reqdb_ver}
 BuildRequires:	doxygen
 BuildRequires:	gettext-devel >= 0.11.4-2
-BuildRequires:	libelf-devel
+BuildRequires:	elfutils-devel
 BuildRequires:	libtool
 BuildRequires:	patch >= 2.2
 BuildRequires:	python-devel >= 2.2
