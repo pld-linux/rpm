@@ -9,7 +9,7 @@ Summary(ru):	Менеджер пакетов от Red Hat
 Summary(uk):	Менеджер пакет╕в в╕д Red Hat
 Name:		rpm
 Version:	4.0.2
-Release:	96
+Release:	97
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -361,6 +361,7 @@ Requires:	%{name} = %{version}
 Requires:	/bin/id
 Requires:	awk
 Requires:	binutils
+Requires:	chrpath
 Requires:	diffutils
 Requires:	file >= 3.31
 Requires:	fileutils
