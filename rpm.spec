@@ -13,7 +13,6 @@
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
-%include	/usr/lib/rpm/macros.python
 %define	snap	20040614
 # versions of required libraries
 %define	reqdb_ver	4.2.50-1
