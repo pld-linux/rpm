@@ -843,6 +843,9 @@ for a in librpm-%{sover}.so librpmdb-%{sover}.so librpmio-%{sover}.so ; do
 	ln -s /%{_lib}/$a $RPM_BUILD_ROOT%{_libdir}/$a
 done
 
+%py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
+%py_comp $RPM_BUILD_ROOT%{py_sitedir}
+
 for f in $RPM_BUILD_ROOT%{_datadir}/locale/{en_RN,eu_ES,gl,hu,ro,wa,zh,zh_CN.GB2312}/LC_MESSAGES/rpm.mo ; do
 	[ "`file $f | sed -e 's/.*,//' -e 's/message.*//'`" -le 1 ] && rm -f $f
 done
@@ -1062,6 +1065,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files -n python-rpm
 %defattr(644,root,root,755)
 %attr(755,root,root) %{py_sitedir}/*.so
+%attr(755,root,root) %{py_sitedir}/rpm/*.so
+%attr(755,root,root) %{py_sitedir}/rpm/*.py[co]
 %attr(755,root,root) %{py_sitedir}/rpmdb/*.so
 %{py_sitedir}/rpmdb/*.py*
 %endif
