@@ -5,22 +5,9 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.4
-Release:	0.32
+Release:	0.50
 License:	GPL
 Group:		Base
-Group(cs):	Základ
-Group(da):	Basal
-Group(de):	Gründsätzlich
-Group(es):	Base
-Group(fr):	Base
-Group(it):	Base
-Group(ja):	¥Ù¡¼¥¹
-Group(no):	Basis
-Group(pl):	Podstawowe
-Group(pt):	Base
-Group(pt_BR):	Base
-Group(ru):	âÁÚÏ×ÙÊ ÎÁÂÏÒ
-Group(sv):	Bas
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
 Source1:	%{name}.groups
 Source2:	%{name}.macros
@@ -132,20 +119,6 @@ Summary:	Header files and libraries
 Summary(de):	Header-Dateien uns Libraries
 Summary(es):	Archivos de inclusión y bibliotecas para programas de manipulación de paquetes rpm
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne
-Group(cs):	Vývojové prostøedky/Knihovny
-Group(da):	Udvikling/Biblioteker
-Group(de):	Entwicklung/Bibliotheken
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(it):	Sviluppo/Librerie
-Group(ja):	³«È¯/¥é¥¤¥Ö¥é¥ê
-Group(no):	Utvikling/Bibliotek
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(pt):	Desenvolvimento/Bibliotecas
-Group(ru):	òÁÚÒÁÂÏÔËÁ/âÉÂÌÉÏÔÅËÉ
-Group(sv):	Utveckling/Bibliotek
-Group(uk):	òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 Summary(pt_BR):	Arquivos de inclusão e bibliotecas para programas de manipulação de pacotes RPM
 Group:		Development/Libraries
 Requires:	beecrypt-devel
@@ -187,20 +160,6 @@ ferramentas que precisem de conhecimento profundo de pacotes RPM.
 Summary:	RPM static libraries
 Summary(de):	RPMs statische Libraries
 Summary(pl):	Biblioteki statyczne RPM-a
-Group(cs):	Vývojové prostøedky/Knihovny
-Group(da):	Udvikling/Biblioteker
-Group(de):	Entwicklung/Bibliotheken
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(it):	Sviluppo/Librerie
-Group(ja):	³«È¯/¥é¥¤¥Ö¥é¥ê
-Group(no):	Utvikling/Bibliotek
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(pt):	Desenvolvimento/Bibliotecas
-Group(ru):	òÁÚÒÁÂÏÔËÁ/âÉÂÌÉÏÔÅËÉ
-Group(sv):	Utveckling/Bibliotek
-Group(uk):	òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 Summary(pt_BR):	Bibliotecas estáticas para o desenvolvimento de aplicações RPM
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
@@ -220,19 +179,6 @@ Bibliotecas estáticas para desenvolvimento.
 %package utils
 Summary:	Additional utilities for managing rpm packages and database
 Summary(de):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
-Group(cs):	Aplikace/Práce se soubory
-Group(da):	Programmer/Filer
-Group(de):	Applikationen/Datei
-Group(es):	Aplicaciones/Archivos
-Group(fr):	Applications/Fichiers
-Group(it):	Applicazioni/File
-Group(ja):	¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Õ¥¡¥¤¥ë
-Group(no):	Applikasjoner/Fil
-Group(pl):	Aplikacje/Pliki
-Group(pt):	Aplicações/Ficheiros
-Group(pt_BR):	Aplicações/Arquivos
-Group(ru):	ðÒÉÌÏÖÅÎÉÑ/òÁÂÏÔÁ Ó ÆÁÊÌÁÍÉ
-Group(sv):	Tillämpningar/Fil
 Summary(pl):	Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{version}
@@ -249,19 +195,6 @@ Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami.
 %package perlprov
 Summary:	Additional utilities for checking perl provides/requires in rpm packages
 Summary(de):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
-Group(cs):	Aplikace/Práce se soubory
-Group(da):	Programmer/Filer
-Group(de):	Applikationen/Datei
-Group(es):	Aplicaciones/Archivos
-Group(fr):	Applications/Fichiers
-Group(it):	Applicazioni/File
-Group(ja):	¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Õ¥¡¥¤¥ë
-Group(no):	Applikasjoner/Fil
-Group(pl):	Aplikacje/Pliki
-Group(pt):	Aplicações/Ficheiros
-Group(pt_BR):	Aplicações/Arquivos
-Group(ru):	ðÒÉÌÏÖÅÎÉÑ/òÁÂÏÔÁ Ó ÆÁÊÌÁÍÉ
-Group(sv):	Tillämpningar/Fil
 Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w pakietach rpm
 Group:		Applications/File
 Requires:	perl-modules
@@ -280,19 +213,6 @@ pakietach rpm.
 
 %package pythonprov
 Summary:	Python macros, which simplifies creation of rpm packages with Python software
-Group(cs):	Aplikace/Práce se soubory
-Group(da):	Programmer/Filer
-Group(de):	Applikationen/Datei
-Group(es):	Aplicaciones/Archivos
-Group(fr):	Applications/Fichiers
-Group(it):	Applicazioni/File
-Group(ja):	¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Õ¥¡¥¤¥ë
-Group(no):	Applikasjoner/Fil
-Group(pl):	Aplikacje/Pliki
-Group(pt):	Aplicações/Ficheiros
-Group(pt_BR):	Aplicações/Arquivos
-Group(ru):	ðÒÉÌÏÖÅÎÉÑ/òÁÂÏÔÁ Ó ÆÁÊÌÁÍÉ
-Group(sv):	Tillämpningar/Fil
 Summary(pl):	Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w Pythonie
 Group:		Applications/File
 Requires:	%{name} = %{version}
@@ -309,18 +229,6 @@ Pythonie.
 %package -n python-rpm
 Summary:	Python interface to RPM library
 Group:		Development/Languages/Python
-Group(cs):	Vývojové prostøedky/Programovací jazyky/Python
-Group(da):	Udvikling/Sprog/Python
-Group(de):	Entwicklung/Sprachen/Python
-Group(es):	Desarrollo/Lenguages/Python
-Group(fr):	Development/Langues/Python
-Group(it):	Sviluppo/Linguaggi/Python
-Group(ja):	³«È¯/¸À¸ì/Python
-Group(no):	Utvikling/Programmeringsspråk/Python
-Group(pl):	Programowanie/Jêzyki/Python
-Group(pt):	Desenvolvimento/Línguas/Python
-Group(ru):	òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ/Python
-Group(sv):	Utveckling/Språk/Python
 Summary(pt_BR):	Módulo Python para aplicativos que manipulam pacotes RPM
 %requires_eq	python
 Requires:	%{name} = %{version}
@@ -350,50 +258,50 @@ RPM (RPM Package Manager).
 Esse pacote deve ser instalado se você quiser desenvolver programas em
 %package lib
 Summary:	RPMs library
+Summary(pl):	Biblioteki RPMa
 Group:		Libraries
-Group(de):	Bibliotheken
-Group(es):	Bibliotecas
-Group(fr):	Librairies
-Group(pl):	Biblioteki
-Group(pt):	Bibliotecas
-Group(pt_BR):	Bibliotecas
-Group(ru):	âÉÂÌÉÏÔÅËÉ
-Group(uk):	â¦ÂÌ¦ÏÔÅËÉ
 
 
 %description lib
-RPMs library
+RPMs library.
+
+%description lib -l pl
+Biblioteki RPMa.
 
 %package -n beecrypt
 Summary:	Crypto library
+Summary(pl):	Biblioteka kryptograficzna
 Group:		Libraries
-Group(de):	Bibliotheken
-Group(es):	Bibliotecas
-Group(fr):	Librairies
-Group(pl):	Biblioteki
-Group(pt):	Bibliotecas
-Group(pt_BR):	Bibliotecas
-Group(ru):	âÉÂÌÉÏÔÅËÉ
-Group(uk):	â¦ÂÌ¦ÏÔÅËÉ
 
 %description -n beecrypt
 Crypto library
 
+%description -n beecrypt -l pl
+Biblioteka kryptograficzna.
+
 %package -n beecrypt-devel
 Summary:	Crypto library - development files
+Summary(pl):	Biblioteka kryptograficzna - pliki developerskie.
 Group:		Development/Libraries
-Group(de):	Entwicklung/Bibliotheken
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(pl):	Programowanie/Biblioteki
-Group(pt):	Desenvolvimento/Bibliotecas
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(ru):	òÁÚÒÁÂÏÔËÁ/âÉÂÌÉÏÔÅËÉ
-Group(uk):	òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 
 
 %description -n beecrypt-devel
-Crypto library - development files
+Crypto library - development files.
+
+%description -n beecrypt-devel -l pl
+Biblioteka kryptograficzna - pliki developerskie.
+
+%package -n beecrypt-static
+Summary:	Crypto library - static version
+Summary(pl):	Statyczna biblioteka kryptograficzna
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}
+
+%description -n beecrypt-static
+Static version of crypto library.
+
+%description -n beecrypt-static -l pl
+Statyczna wersja biblioteki kryptograficznej.
 
 Python para manipular pacotes e bancos de dados RPM.
 
@@ -401,19 +309,6 @@ Python para manipular pacotes e bancos de dados RPM.
 Summary:	Scripts for building binary RPM packages
 Summary(de):	Scripts fürs Bauen binärer RPM-Pakete
 Summary(pl):	Skrypty pomocnicze do budowania binarnych RPM-ów
-Group(cs):	Aplikace/Práce se soubory
-Group(da):	Programmer/Filer
-Group(de):	Applikationen/Datei
-Group(es):	Aplicaciones/Archivos
-Group(fr):	Applications/Fichiers
-Group(it):	Applicazioni/File
-Group(ja):	¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Õ¥¡¥¤¥ë
-Group(no):	Applikasjoner/Fil
-Group(pl):	Aplikacje/Pliki
-Group(pt):	Aplicações/Ficheiros
-Group(pt_BR):	Aplicações/Arquivos
-Group(ru):	ðÒÉÌÏÖÅÎÉÑ/òÁÂÏÔÁ Ó ÆÁÊÌÁÍÉ
-Group(sv):	Tillämpningar/Fil
 Summary(pt_BR):	Scripts e programas executáveis usados para construir pacotes
 Group:		Applications/File
 Requires:	%{name} = %{version}
@@ -525,6 +420,7 @@ sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|'  \
 # rpm checks for CPU type at runtime, but it looks better
 sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' macros.in | \
 	sed 's|@host_cpu@|%{_target_cpu}|' > macros.tmp
+	--enable-static \
 	--with-apidocs \
 	--with-python \
 	--without-db
@@ -715,6 +611,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_prefix}/lib/libbeecrypt.la
 %{_includedir}/beecrypt
 %{_libdir}/rpm/macros.python
+%files -n beecrypt-static
+%defattr(644,root,root,755)
+%{_prefix}/lib/libbeecrypt.a
+
 
 %files -n python-rpm
 %defattr(755,root,root,755)
