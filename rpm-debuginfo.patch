@@ -1,6 +1,6 @@
 diff -urN rpm-4.3.org/macros.in rpm-4.3/macros.in
---- rpm-4.3.org/macros.in	2004-05-20 22:09:48.582353920 +0200
-+++ rpm-4.3/macros.in	2004-05-20 22:40:19.156064416 +0200
+--- rpm-4.3.org/macros.in	2004-05-31 17:16:23.251095072 +0200
++++ rpm-4.3/macros.in	2004-05-31 17:35:47.653079064 +0200
 @@ -118,15 +118,20 @@
  %debug_package \
  %ifnarch noarch\
@@ -25,7 +25,19 @@ diff -urN rpm-4.3.org/macros.in rpm-4.3/macros.in
  %defattr(-,root,root)\
  %endif\
  %{nil}
-@@ -1247,7 +1252,12 @@
+@@ -844,7 +849,11 @@
+ %__spec_install_pre	%{___build_pre}
+ %__spec_install_body	%{___build_body}
+ %__spec_install_post\
++%if %{?_enable_debug_packages:1}%{!?_enable_debug_packages:0}\
++%if %{_enable_debug_packages}\
+ %{?__debug_package:%{__debug_install_post}}\
++%endif\
++%endif\
+ %{__arch_install_post}\
+ %{__os_install_post}\
+ %{nil}
+@@ -1250,7 +1259,12 @@
  unset DISPLAY ||:\
  %{nil}
  
@@ -39,7 +51,7 @@ diff -urN rpm-4.3.org/macros.in rpm-4.3/macros.in
  %%install\
  LANG=C\
  export LANG\
-@@ -1404,7 +1414,7 @@
+@@ -1407,7 +1421,7 @@
      %{?verbose:set -x;} \
      if [ -d "$RPM_BUILD_ROOT" ]; then \
  	echo "Strip executable binaries, archives and shared object files."; \
@@ -49,8 +61,8 @@ diff -urN rpm-4.3.org/macros.in rpm-4.3/macros.in
  		awk '/ELF.*executable/ {print $1}' | cut -d: -f1`; \
  	elfsharedlist=`echo $filelist | xargs -r file | \
 diff -urN rpm-4.3.org/scripts/find-debuginfo.sh rpm-4.3/scripts/find-debuginfo.sh
---- rpm-4.3.org/scripts/find-debuginfo.sh	2004-05-20 22:09:25.767822256 +0200
-+++ rpm-4.3/scripts/find-debuginfo.sh	2004-05-20 23:12:43.367499352 +0200
+--- rpm-4.3.org/scripts/find-debuginfo.sh	2004-05-31 17:16:16.146175184 +0200
++++ rpm-4.3/scripts/find-debuginfo.sh	2004-05-31 17:16:51.153853208 +0200
 @@ -26,12 +26,14 @@
  
  	mkdir -p "${debugdn}"
