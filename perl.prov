@@ -1,0 +1,119 @@
+#!/usr/bin/perl
+use Safe;
+use strict;
+
+# perl.prov - find information about perl modules for RPM
+# $Id$
+
+# It's questionable if we should provide perl(Foo::Bar) for modules
+# from outside @INC (possibly shipped with some applications).
+# I think we should not, and provide them only for the perl.req script,
+# while it scans files in that particular application.
+
+# This shoud be provided as a library -- the same functionality is
+# needed by the perl.req script.
+
+my %provide;
+my @inc = sort { length $b cmp length $a } grep m#^/.+#, @INC;
+my $safe = new Safe;
+
+# process @ARGV or STDIN
+foreach ( @ARGV ? @ARGV : <> ) {
+	chomp;
+	next if !-f || -l;                # skip non-files and symlinks
+	next if m#/usr/(?:doc|src)/#;     # lot of false alarms; warning: we ignore ^ here
+	next if !m#\.p[ml]$#;             # we only care about *.pm and *.pl files
+	process_file($_) if -f;
+}
+
+# print out what we found
+for ( sort keys %provide ) {
+	print "perl($_)" . ( length $provide{$_} ? " = $provide{$_}" : '' ) . "\n";
+#	warn  "perl($_)" . ( length $provide{$_} ? " = $provide{$_}" : '' ) . "\n";
+}
+
+############################################################
+#####   functions                                      #####
+############################################################
+
+sub process_file {
+	my $file = shift;
+	my ( $package, $version );
+
+	# if the file lives under @INC, we can
+	# obtain the package name from it's path
+	for (@inc) {
+		if ( $file =~ m#\Q$_\E/?(.+)$# ) { # warning: we ignore ^ here
+			$package = $1;
+
+			if ( $package !~ s/\.pm$// ) {    # it's a *.pl
+				# $package =~ m#([^/]+)$#;
+				# $provide{$1} = '';
+				return 1;
+			}
+
+			$package =~ s#/#::#g;
+			last;
+		}
+	}
+
+	# it can be a *.pl oustide @INC
+	return if /\.pl$/;
+
+	open FILE, $file or die "$0: cannot open file `$file': $!";
+
+	while (<FILE>) {
+
+		# skip the documentation
+		next
+		  if m/^=(?:head1|head2|pod|item|begin|for|over)\b/
+		     ... ( m/^=(?:cut|end)\b/ || $. == 1 );
+
+		# skip the data section
+		last if m/^__(?:DATA|END)__$/;
+
+		# search for the package name
+		if (
+			!defined $package
+			&& ( my ($pack) = m/^\s*(?:\{\s*)?package\s+([_:a-zA-Z0-9]+?):*\s*;/ )
+			&& $1 ne 'main'
+			&& match_the_path( $file, $1 )
+		  )
+		{
+			$package = $pack;
+		}
+
+		if ( !defined $version && /([\$*])(([\w\:\']*)\bVERSION)\b.*\=/ ) {
+			( $version = $safe->reval($_) ) =~ s/^\s+|alpha|beta|\s+$//g;
+			if ( defined $version
+				&& length $version
+				&& $version =~ /[^\d\._abcdefgh]/ )
+			{
+				warn "$0: weird version number in $file: [$version]\n";
+				$version = '';
+			}
+		}
+	}
+
+	unless ( defined $package ) {
+		warn "$0: weird, cannot determine the package name for `$file'\n";
+		return 0;
+	}
+
+	$provide{$package} = $version;
+
+	close FILE or die "$0: cannot close file `$file': $!";
+
+	1;
+}
+
+
+# Returns true if the package name matches the patch,
+# so you can use() it.  False otherwise.
+sub match_the_path {
+	my ( $file, $pack ) = @_;
+	$pack =~ s#::#/#g;
+	$file =~ /\Q$pack\E(?:\.pm)?$/;
+}
+
+# vim: ts=4 sw=4 noet noai nosi cin
