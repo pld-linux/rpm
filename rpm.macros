@@ -29,7 +29,7 @@
 
 %debugcflags	-O0 -g
 %rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}
-%rpmldflags	""
+%rpmldflags	%{nil}
 
 # kernel compiler
 %kgcc		gcc2
