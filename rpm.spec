@@ -59,6 +59,7 @@ Patch25:	%{name}-gettext-in-header.patch
 Patch26:	%{name}-compress-doc.patch
 Patch27:	%{name}-lt14d.patch
 Patch28:	%{name}-check_files.patch
+Patch29:	%{name}-gettext0.11.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -412,6 +413,7 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch26 -p1
 %patch27 -p1
 %patch28 -p1
+%patch29 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
@@ -439,6 +441,10 @@ awk -f %{SOURCE14} %{SOURCE1}
 cd popt
 rm -f missing
 %{__libtoolize}
+%{__gettextize}
+if [ ! -f po/Makevars -a -f po/Makevars.template ] ; then
+	cp po/Makevars.template po/Makevars
+fi
 aclocal
 autoheader
 %{__autoconf}
@@ -455,6 +461,9 @@ cd ..
 rm -f missing
 %{__libtoolize}
 %{__gettextize}
+if [ ! -f po/Makevars -a -f po/Makevars.template ] ; then
+	cp po/Makevars.template po/Makevars
+fi
 aclocal
 autoupdate
 autoheader || :
@@ -585,6 +594,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/check-files
 %attr(755,root,root) %{_libdir}/rpm/check-prereqs
 %attr(755,root,root) %{_libdir}/rpm/cpanflute
+%attr(755,root,root) %{_libdir}/rpm/cpanflute2
+%attr(755,root,root) %{_libdir}/rpm/Specfile.pm
 %attr(755,root,root) %{_libdir}/rpm/http.req
 %attr(755,root,root) %{_libdir}/rpm/magic.*
 %attr(755,root,root) %{_libdir}/rpm/u_pkg.sh
