@@ -8,7 +8,7 @@ Applications
 	[is]:		Forrit
 	[it]:		Applicazioni
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó
-	[no]:		Applikasjoner
+	[nb]:		Applikasjoner
 	[pl]:		Aplikacje
 	[pt]:		Aplicações
 	[pt_BR]:	Aplicações
@@ -26,7 +26,7 @@ Applications/Archiving
 	[is]:		Forrit/Şjöppun
 	[it]:		Applicazioni/Archiviazione
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥¢¡¼¥«¥¤¥Ö
-	[no]:		Applikasjoner/Arkivering
+	[nb]:		Applikasjoner/Arkivering
 	[pl]:		Aplikacje/Archiwizacja
 	[pt]:		Aplicações/Arquivos
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/áÒÈÉ×ÁÃÉÑ
@@ -43,7 +43,7 @@ Applications/Communications
 	[is]:		Forrit/Samskipti
 	[it]:		Applicazioni/Comunicazioni
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/ÄÌ¿®
-	[no]:		Applikasjoner/Kommunikasjon
+	[nb]:		Applikasjoner/Kommunikasjon
 	[pl]:		Aplikacje/Komunikacja
 	[pt]:		Aplicações/Comunicações
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/ëÏÍÍÕÎÉËÁÃÉÉ
@@ -59,7 +59,7 @@ Applications/Console
 	[fr]:		Applications/Console
 	[is]:		Forrit/Stjórnskjá
 	[it]:		Applicazioni/Console
-	[no]:		Applikasjoner/Konsollet
+	[nb]:		Applikasjoner/Konsollet
 	[pl]:		Aplikacje/Konsola
 	[pt]:		Aplicações/Console
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/ëÏÎÓÏÌØ
@@ -76,7 +76,7 @@ Applications/Databases
 	[is]:		Forrit/Gagnagrunnar
 	[it]:		Applicazioni/Database
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Ç¡¼¥¿¥Ù¡¼¥¹
-	[no]:		Applikasjoner/Databaser
+	[nb]:		Applikasjoner/Databaser
 	[pl]:		Aplikacje/Bazy Danych
 	[pt]:		Aplicações/Bases de Dados
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/âÁÚÙ ÄÁÎÎÙÈ
@@ -92,7 +92,7 @@ Applications/Databases/Interfaces
 	[fr]:		Applications/Bases de donnÃ©es/Interfaces
 	[is]:		Forrit/Gagnagrunnar/Viğmót
 	[it]:		Applicazioni/Database/Interfacce
-	[no]:		Applikasjoner/Databaser/Grensesnitt
+	[nb]:		Applikasjoner/Databaser/Grensesnitt
 	[pl]:		Aplikacje/Bazy Danych/Interfejsy
 	[pt]:		Aplicações/Bases de Dados/Interfaces
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/âÁÚÙ ÄÁÎÎÙÈ/éÎÔÅÒÆÅÊÓÙ
@@ -108,7 +108,7 @@ Applications/Dictionaries
 	[fr]:		Applications/Dictionaires
 	[is]:		Forrit/Orğabókum
 	[it]:		Applicazioni/Dizionari
-	[no]:		Applikasjoner/Ordbøker
+	[nb]:		Applikasjoner/Ordbøker
 	[pl]:		Aplikacje/S³owniki
 	[pt]:		Aplicações/Dicionários
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/óÌÏ×ÁÒÉ
@@ -125,7 +125,7 @@ Applications/Editors
 	[is]:		Forrit/Ritlar
 	[it]:		Applicazioni/Editor
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥¨¥Ç¥£¥¿
-	[no]:		Applikasjoner/Editorer
+	[nb]:		Applikasjoner/Editorer
 	[pl]:		Aplikacje/Edytory
 	[pt]:		Aplicações/Editores
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/òÅÄÁËÔÏÒÙ
@@ -142,7 +142,7 @@ Applications/Editors/Emacs
 	[is]:		Forrit/Ritlar/Emacs
 	[it]:		Applicazioni/Editor/Emacs
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥¨¥Ç¥£¥¿/Emacs
-	[no]:		Applikasjoner/Editorer/Emacs
+	[nb]:		Applikasjoner/Editorer/Emacs
 	[pl]:		Aplikacje/Edytory/Emacs
 	[pt]:		Aplicações/Editores/Emacs
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/òÅÄÁËÔÏÒÙ/Emacs
@@ -159,7 +159,7 @@ Applications/Editors/Vim
 	[is]:		Forrit/Ritlar/Vim
 	[it]:		Applicazioni/Editor/Vim
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥¨¥Ç¥£¥¿/Vim
-	[no]:		Applikasjoner/Editorer/Vim
+	[nb]:		Applikasjoner/Editorer/Vim
 	[pl]:		Aplikacje/Edytory/Vim
 	[pt]:		Aplicações/Editores/Vim
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/òÅÄÁËÔÏÒÙ/Vim
@@ -176,7 +176,7 @@ Applications/Editors/XEmacs
 	[is]:		Forrit/Ritlar/XEmacs
 	[it]:		Applicazioni/Editor/XEmacs
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥¨¥Ç¥£¥¿/XEmacs
-	[no]:		Applikasjoner/Editorer/XEmacs
+	[nb]:		Applikasjoner/Editorer/XEmacs
 	[pl]:		Aplikacje/Edytory/XEmacs
 	[pt]:		Aplicações/Editores/XEmacs
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/òÅÄÁËÔÏÒÙ/XEmacs
@@ -192,7 +192,7 @@ Applications/Emulators
 	[is]:		Forrit/Hermar
 	[it]:		Applicazioni/Emulatori
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥¨¥ß¥å¥ì¡¼¥¿
-	[no]:		Applikasjoner/Emulatorer
+	[nb]:		Applikasjoner/Emulatorer
 	[pl]:		Aplikacje/Emulatory
 	[pt]:		Aplicações/Emuladores
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/üÍÕÌÑÔÏÒÙ
@@ -209,7 +209,7 @@ Applications/Engineering
 	[is]:		Forrit/Verkfræği
 	[it]:		Applicazioni/Engineering
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥¨¥ó¥¸¥Ë¥¢¥ê¥ó¥°
-	[no]:		Applikasjoner/Teknisk
+	[nb]:		Applikasjoner/Teknisk
 	[pl]:		Aplikacje/In¿ynierskie
 	[pt]:		Aplicações/Engenharia
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/éÎÖÅÎÅÒÎÙÅ ĞÒÉÌÏÖÅÎÉÑ
@@ -225,7 +225,7 @@ Applications/File
 	[is]:		Forrit/Skráatól
 	[it]:		Applicazioni/File
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Õ¥¡¥¤¥ë
-	[no]:		Applikasjoner/Fil
+	[nb]:		Applikasjoner/Fil
 	[pl]:		Aplikacje/Pliki
 	[pt]:		Aplicações/Ficheiros
 	[pt_BR]:	Aplicações/Arquivos
@@ -244,7 +244,7 @@ Applications/Graphics
 	[is]:		Forrit/Myndvinnsla
 	[it]:		Applicazioni/Immagini
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥°¥é¥Õ¥£¥Ã¥¯¥¹
-	[no]:		Applikasjoner/Grafikk
+	[nb]:		Applikasjoner/Grafikk
 	[pl]:		Aplikacje/Grafika
 	[pt]:		Aplicações/Gráficos
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/çÒÁÆÉËÁ
@@ -261,7 +261,7 @@ Applications/Games
 	[is]:		Forrit/Leikir
 	[it]:		Applicazioni/Giochi
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥²¡¼¥à
-	[no]:		Applikasjoner/Spill
+	[nb]:		Applikasjoner/Spill
 	[pl]:		Aplikacje/Gry
 	[pt]:		Aplicações/Jogos
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/éÇÒÙ
@@ -277,7 +277,7 @@ Applications/Networking
 	[fr]:		Applications/RÃ©seau
 	[is]:		Forrit/Net
 	[it]:		Applicazioni/Rete
-	[no]:		Applikasjoner/Nettverk
+	[nb]:		Applikasjoner/Nettverk
 	[pl]:		Aplikacje/Sieciowe
 	[pt]:		Aplicações/Rede
 	[pt_BR]:	Aplicações/Rede
@@ -294,7 +294,7 @@ Applications/Mail
 	[fr]:		Applications/Courrier
 	[is]:		Forrit/Póst
 	[it]:		Applicazioni/Posta
-	[no]:		Applikasjoner/Epost
+	[nb]:		Applikasjoner/Epost
 	[pl]:		Aplikacje/Poczta
 	[pt]:		Aplicações/Correio Eletrônico
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/üÌÅËÔÒÏÎÎÁÑ ĞÏŞÔÁ
@@ -309,7 +309,7 @@ Applications/Math
 	[es]:		Aplicaciones/Matemáticas
 	[fr]:		Applications/MathÃ©matiques
 	[it]:		Applicazioni/Matematiche
-	[no]:		Applikasjoner/Matematiske
+	[nb]:		Applikasjoner/Matematiske
 	[pl]:		Aplikacje/Matematyczne
 	[pt]:		Aplicações/Matemática
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/íÁÔÅÍÁÔÉŞÅÓËÉÅ
@@ -326,7 +326,7 @@ Applications/Multimedia
 	[is]:		Forrit/Margmiğlun
 	[it]:		Applicazioni/Multimedia
 	[ja]:		¥ê¥±¡¼¥·¥ç¥ó/¥Ş¥ë¥Á¥á¥Ç¥£¥¢
-	[no]:		Programmer/Multimedia
+	[nb]:		Programmer/Multimedia
 	[pl]:		Aplikacje/Multimedia
 	[pt]:		Aplicações/Multimédia
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/íÕÌØÔÉÍÅÄÉÁ
@@ -342,7 +342,7 @@ Applications/News
 	[fr]:		Applications/Nouvelles
 	[is]:		Forrit/Fréttir
 	[it]:		Applicazioni/News
-	[no]:		Applikasjoner/News
+	[nb]:		Applikasjoner/News
 	[pl]:		Aplikacje/News
 	[pt]:		Aplicações/News
 	[pt_BR]:	Aplicações/News
@@ -359,7 +359,7 @@ Applications/Printing
 	[fr]:		Applications/Impression
 	[is]:		Forrit/Şróağ
 	[it]:		Applicazioni/Stampa
-	[no]:		Applikasjoner/Utskrift
+	[nb]:		Applikasjoner/Utskrift
 	[pl]:		Aplikacje/Drukowanie
 	[pt]:		Aplicações/Impressão
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/ğÅŞÁÔØ
@@ -376,7 +376,7 @@ Applications/Publishing
 	[is]:		Forrit/Umbrot
 	[it]:		Applicazioni/Publishing
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Ñ¥Ö¥ê¥Ã¥·¥ó¥°
-	[no]:		Applikasjoner/Publisering
+	[nb]:		Applikasjoner/Publisering
 	[pl]:		Aplikacje/Publikowanie
 	[pt]:		Aplicações/Publicação
 	[pt_BR]:	Aplicações/Editoração
@@ -394,7 +394,7 @@ Applications/Publishing/SGML
 	[is]:		Forrit/Umbrot/SGML
 	[it]:		Applicazioni/Publishing/SGML
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Ñ¥Ö¥ê¥Ã¥·¥ó¥°/SGML
-	[no]:		Applikasjoner/Publisering/SGML
+	[nb]:		Applikasjoner/Publisering/SGML
 	[pl]:		Aplikacje/Publikowanie/SGML
 	[pt]:		Aplicações/Publicação/SGML
 	[pt_BR]:	Aplicações/Editoração/SGML
@@ -412,7 +412,7 @@ Applications/Publishing/TeX
 	[is]:		Forrit/Umbrot/TeX
 	[it]:		Applicazioni/Publishing/TeX
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Ñ¥Ö¥ê¥Ã¥·¥ó¥°/TeX
-	[no]:		Applikasjoner/Publisering/TeX
+	[nb]:		Applikasjoner/Publisering/TeX
 	[pl]:		Aplikacje/Publikowanie/TeX
 	[pt]:		Aplicações/Publicação/TeX
 	[pt_BR]:	Aplicações/Editoração/TeX
@@ -430,7 +430,7 @@ Applications/Publishing/XML
 	[is]:		Forrit/Umbrot/XML
 	[it]:		Applicazioni/Publishing/XML
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Ñ¥Ö¥ê¥Ã¥·¥ó¥°/XML
-	[no]:		Applikasjoner/Publisering/XML
+	[nb]:		Applikasjoner/Publisering/XML
 	[pl]:		Aplikacje/Publikowanie/XML
 	[pt]:		Aplicações/Publicação/XML
 	[pt_BR]:	Aplicações/Editoração/XML
@@ -448,7 +448,7 @@ Applications/Publishing/XML/Java
 	[is]:		Forrit/Umbrot/XML/Java
 	[it]:		Applicazioni/Publishing/XML/Java
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Ñ¥Ö¥ê¥Ã¥·¥ó¥°/XML/Java
-	[no]:		Applikasjoner/Publisering/XML/Java
+	[nb]:		Applikasjoner/Publisering/XML/Java
 	[pl]:		Aplikacje/Publikowanie/XML/Java
 	[pt]:		Aplicações/Publicação/XML/Java
 	[pt_BR]:	Aplicações/Editoração/XML/Java
@@ -478,7 +478,7 @@ Applications/Shells
 	[is]:		Forrit/Skeljar
 	[it]:		Applicazioni/Shell
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥·¥§¥ë
-	[no]:		Applikasjoner/Skall
+	[nb]:		Applikasjoner/Skall
 	[pl]:		Aplikacje/Pow³oki
 	[pt]:		Aplicações/Shells
 	[pt_BR]:	Aplicações/Shells
@@ -495,7 +495,7 @@ Applications/Sound
 	[fr]:		Aplications/Son
 	[is]:		Forrit/Hljóğ
 	[it]:		Applicazioni/Audio
-	[no]:		Applikasjoner/Lyd
+	[nb]:		Applikasjoner/Lyd
 	[pl]:		Aplikacje/D¼wiêk
 	[pt]:		Aplicações/Som
 	[pt_BR]:	Aplicações/Som
@@ -512,7 +512,7 @@ Applications/Spreadsheets
 	[fr]:		Applications/Tableurs
 	[is]:		Forrit/Töflureikni
 	[it]:		Applicazioni/Fogli di calcolo
-	[no]:		Applikasjoner/Regneark
+	[nb]:		Applikasjoner/Regneark
 	[pl]:		Aplikacje/Arkusze kalkulacyjne
 	[pt]:		Aplicações/Folhas de Cálculo
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/üÌÅËÔÒÏÎÎÙÅ ÔÁÂÌÉÃÙ
@@ -529,7 +529,7 @@ Applications/System
 	[is]:		Forrit/Kerfisforrit
 	[it]:		Applicazioni/Sistema
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥·¥¹¥Æ¥à
-	[no]:		Applikasjoner/System
+	[nb]:		Applikasjoner/System
 	[pl]:		Aplikacje/System
 	[pt]:		Aplicações/Sistema
 	[pt_BR]:	Aplicações/Sistema
@@ -546,7 +546,7 @@ Applications/Terminal
 	[fr]:		Applications/Terminal
 	[is]:		Forrit/Textaskilum
 	[it]:		Applicazioni/Terminale
-	[no]:		Applikasjoner/Terminal
+	[nb]:		Applikasjoner/Terminal
 	[pl]:		Aplikacje/Terminal
 	[pt]:		Aplicações/Terminal
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/ôÅÒÍÉÎÁÌ
@@ -563,7 +563,7 @@ Applications/Text
 	[is]:		Forrit/Texti
 	[it]:		Applicazioni/Testo
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Æ¥­¥¹¥È
-	[no]:		Applikasjoner/Tekst
+	[nb]:		Applikasjoner/Tekst
 	[pl]:		Aplikacje/Tekst
 	[pt]:		Aplicações/Texto
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/ôÅËÓÔÏ×ÙÅ ÕÔÉÌÉÔÙ
@@ -578,7 +578,7 @@ Applications/WWW
 	[es]:		Aplicaciones/WWW
 	[fr]:		Applications/WWW
 	[is]:		Forrit/WWW
-	[no]:		Applikasjoner/WWW
+	[nb]:		Applikasjoner/WWW
 	[pl]:		Aplikacje/WWW
 	[pt]:		Aplicações/WWW
 	[sl]:		Programi/WWW
@@ -593,7 +593,7 @@ Base
 	[is]:		Grunnforrit
 	[it]:		Base
 	[ja]:		¥Ù¡¼¥¹
-	[no]:		Basis
+	[nb]:		Basis
 	[pl]:		Podstawowe
 	[pt]:		Base
 	[pt_BR]:	Base
@@ -611,7 +611,7 @@ Base/Kernel
 	[is]:		Grunnforrit/Kjarninn
 	[it]:		Base/Kernel
 	[ja]:		¥Ù¡¼¥¹/¥«¡¼¥Í¥ë
-	[no]:		Basis/Kjerne
+	[nb]:		Basis/Kjerne
 	[pl]:		Podstawowe/J±dro
 	[pt]:		Base/Núcleo
 	[ru]:		âÁÚÁ/ñÄÒÏ
@@ -640,7 +640,7 @@ Base/Utilities
 	[fr]:		Base/Utilitaires
 	[is]:		Grunnforrit/Tól
 	[it]:		Base/Utility
-	[no]:		Basis/Verktøy
+	[nb]:		Basis/Verktøy
 	[pl]:		Podstawowe/Narzêdzia
 	[pt]:		Base/Utilidades
 	[pt_BR]:	Base/Utilitários
@@ -658,7 +658,7 @@ Daemons
 	[is]:		Púkar
 	[it]:		Demoni
 	[ja]:		¥Ç¡¼¥â¥ó
-	[no]:		Daemoner
+	[nb]:		Daemoner
 	[pl]:		Serwery
 	[pt]:		Servidores
 	[ru]:		äÅÍÏÎÙ
@@ -675,7 +675,7 @@ Development
 	[is]:		Şróunartól
 	[it]:		Sviluppo
 	[ja]:		³«È¯
-	[no]:		Utvikling
+	[nb]:		Utvikling
 	[pl]:		Programowanie
 	[pt]:		Desenvolvimento
 	[pt_BR]:	Desenvolvimento
@@ -691,7 +691,7 @@ Development/Building
 	[es]:		Desarrollo/Construcción
 	[fr]:		DÃ©veloppement/Construction
 	[it]:		Sviluppo/Sviluppo
-	[no]:		Utvikling/Bygge
+	[nb]:		Utvikling/Bygge
 	[pl]:		Programowanie/Budowanie
 	[pt]:		Desenvolvimento/Criação
 	[ru]:		òÁÚÒÁÂÏÔËÁ/óÔÒÏÅÎÉÅ
@@ -707,7 +707,7 @@ Development/Debuggers
 	[is]:		Şróunartól/Aflúsarar
 	[it]:		Sviluppo/Debugger
 	[ja]:		³«È¯/¥Ç¥Ğ¥Ã¥¬
-	[no]:		Utvikling/Debuggere
+	[nb]:		Utvikling/Debuggere
 	[pl]:		Programowanie/Odpluskwiacze
 	[pt]:		Desenvolvimento/Depuradores
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ïÔÌÁÄŞÉËÉ
@@ -724,7 +724,7 @@ Development/Languages
 	[is]:		Şróunartól/Forritunarmál
 	[it]:		Sviluppo/Linguaggi
 	[ja]:		³«È¯/¸À¸ì
-	[no]:		Utvikling/Programmeringsspråk
+	[nb]:		Utvikling/Programmeringsspråk
 	[pl]:		Programowanie/Jêzyki
 	[pt]:		Desenvolvimento/Linguagens
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ
@@ -741,7 +741,7 @@ Development/Languages/Fortran
 	[is]:		Şróunartól/Forritunarmál/Fortran
 	[it]:		Sviluppo/Linguaggi/Fortran
 	[ja]:		³«È¯/¸À¸ì/Fortran
-	[no]:		Utvikling/Programmeringsspråk/Fortran
+	[nb]:		Utvikling/Programmeringsspråk/Fortran
 	[pl]:		Programowanie/Jêzyki/Fortran
 	[pt]:		Desenvolvimento/Linguagens/Fortran
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ/Fortran
@@ -758,7 +758,7 @@ Development/Languages/Java
 	[is]:		Şróunartól/Forritunarmál/Java
 	[it]:		Sviluppo/Linguaggi/Java
 	[ja]:		³«È¯/¸À¸ì/Java
-	[no]:		Utvikling/Programmeringsspråk/Java
+	[nb]:		Utvikling/Programmeringsspråk/Java
 	[pl]:		Programowanie/Jêzyki/Java
 	[pt]:		Desenvolvimento/Linguagens/Java
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ/Java
@@ -775,7 +775,7 @@ Development/Languages/Modula3
 	[is]:		Şróunartól/Forritunarmál/Modula3
 	[it]:		Sviluppo/Linguaggi/Modula3
 	[ja]:		³«È¯/¸À¸ì/Modula3
-	[no]:		Utvikling/Programmeringsspråk/Modula3
+	[nb]:		Utvikling/Programmeringsspråk/Modula3
 	[pl]:		Programowanie/Jêzyki/Modula3
 	[pt]:		Desenvolvimento/Linguagens/Modula3
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ/Modula3
@@ -792,7 +792,7 @@ Development/Languages/PHP
 	[is]:		Şróunartól/Forritunarmál/PHP
 	[it]:		Sviluppo/Linguaggi/PHP
 	[ja]:		³«È¯/¸À¸ì/PHP
-	[no]:		Utvikling/Programmeringsspråk/PHP
+	[nb]:		Utvikling/Programmeringsspråk/PHP
 	[pl]:		Programowanie/Jêzyki/PHP
 	[pt]:		Desenvolvimento/Linguagens/PHP
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ/PHP
@@ -809,7 +809,7 @@ Development/Languages/Perl
 	[is]:		Şróunartól/Forritunarmál/Perl
 	[it]:		Sviluppo/Linguaggi/Perl
 	[ja]:		³«È¯/¸À¸ì/Perl
-	[no]:		Utvikling/Programmeringsspråk/Perl
+	[nb]:		Utvikling/Programmeringsspråk/Perl
 	[pl]:		Programowanie/Jêzyki/Perl
 	[pt]:		Desenvolvimento/Linguagens/Perl
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ/Perl
@@ -826,7 +826,7 @@ Development/Languages/Python
 	[is]:		Şróunartól/Forritunarmál/Python
 	[it]:		Sviluppo/Linguaggi/Python
 	[ja]:		³«È¯/¸À¸ì/Python
-	[no]:		Utvikling/Programmeringsspråk/Python
+	[nb]:		Utvikling/Programmeringsspråk/Python
 	[pl]:		Programowanie/Jêzyki/Python
 	[pt]:		Desenvolvimento/Linguagens/Python
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ/Python
@@ -843,7 +843,7 @@ Development/Languages/Scheme
 	[is]:		Şróunartól/Forritunarmál/Scheme
 	[it]:		Sviluppo/Linguaggi/Scheme
 	[ja]:		³«È¯/¸À¸ì/Scheme
-	[no]:		Utvikling/Programmeringsspråk/Scheme
+	[nb]:		Utvikling/Programmeringsspråk/Scheme
 	[pl]:		Programowanie/Jêzyki/Scheme
 	[pt]:		Desenvolvimento/Linguagens/Scheme
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ/Scheme
@@ -860,7 +860,7 @@ Development/Languages/Tcl
 	[is]:		Şróunartól/Forritunarmál/Tcl
 	[it]:		Sviluppo/Linguaggi/Tcl
 	[ja]:		³«È¯/¸À¸ì/Tcl
-	[no]:		Utvikling/Programmeringsspråk/Tcl
+	[nb]:		Utvikling/Programmeringsspråk/Tcl
 	[pl]:		Programowanie/Jêzyki/Tcl
 	[pt]:		Desenvolvimento/Linguagens/Tcl
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ/Tcl
@@ -877,7 +877,7 @@ Development/Libraries
 	[is]:		Şróunartól/Ağgerğasöfn
 	[it]:		Sviluppo/Librerie
 	[ja]:		³«È¯/¥é¥¤¥Ö¥é¥ê
-	[no]:		Utvikling/Bibliotek
+	[nb]:		Utvikling/Bibliotek
 	[pl]:		Programowanie/Biblioteki
 	[pt]:		Desenvolvimento/Bibliotecas
 	[pt_BR]:	Desenvolvimento/Bibliotecas
@@ -895,7 +895,7 @@ Development/Libraries/Libc
 	[is]:		Şróunartól/Ağgerğasöfn/Libc
 	[it]:		Sviluppo/Librerie/Libc
 	[ja]:		³«È¯/¥é¥¤¥Ö¥é¥ê/Libc
-	[no]:		Utvikling/Bibliotek/Libc
+	[nb]:		Utvikling/Bibliotek/Libc
 	[pl]:		Programowanie/Biblioteki/Libc
 	[pt]:		Desenvolvimento/Bibliotecas/Libc
 	[pt_BR]:	Desenvolvimento/Bibliotecas/Libc
@@ -913,7 +913,7 @@ Development/Tools
 	[is]:		Şróunartól/Tól
 	[it]:		Sviluppo/Tool
 	[ja]:		³«È¯/¥Ä¡¼¥ë
-	[no]:		Utvikling/Verktøy
+	[nb]:		Utvikling/Verktøy
 	[pl]:		Programowanie/Narzêdzia
 	[pt]:		Desenvolvimento/Ferramentas
 	[ru]:		òÁÚÒÁÂÏÔËÁ/éÎÓÔÒÕÍÅÎÔÙ
@@ -929,7 +929,7 @@ Development/Version Control
 	[fr]:		DÃ©veloppement/ContrÃ´le de version
 	[is]:		Şróunartól/Útgáfu Stıring
 	[it]:		Sviluppo/Controllo della versione
-	[no]:		Utvikling/Versjonskontroll
+	[nb]:		Utvikling/Versjonskontroll
 	[pl]:		Programowanie/Zarz±dzanie wersjami
 	[pt]:		Desenvolvimento/Controlo de Versões
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ëÏÎÔÒÏÌØ ×ÅÒÓÉÊ
@@ -945,7 +945,7 @@ Documentation
 	[fr]:		Documentacion
 	[is]:		Skjölun
 	[it]:		Documentazione
-	[no]:		Dokumentasjonen
+	[nb]:		Dokumentasjonen
 	[pl]:		Dokumentacja
 	[pt]:		Documentação
 	[ru]:		äÏËÕÍÅÎÔÁÃÉÑ
@@ -961,7 +961,7 @@ Fonts
 	[fr]:		Polices
 	[is]:		Leturgerğir
 	[it]:		Font
-	[no]:		Skrifttyper
+	[nb]:		Skrifttyper
 	[pl]:		Fonty
 	[pt]:		Tipos de Letra
 	[ru]:		ûÒÉÆÔÙ
@@ -978,7 +978,7 @@ Libraries
 	[is]:		Ağgerğasöfn
 	[it]:		Librerie
 	[ja]:		¥é¥¤¥Ö¥é¥ê
-	[no]:		Biblioteker
+	[nb]:		Biblioteker
 	[pl]:		Biblioteki
 	[pt]:		Bibliotecas
 	[pt_BR]:	Bibliotecas
@@ -996,7 +996,7 @@ Libraries/Python
 	[is]:		Ağgerğasöfn/Python
 	[it]:		Librerie/Python
 	[ja]:		¥é¥¤¥Ö¥é¥ê/Python
-	[no]:		Biblioteker/Python
+	[nb]:		Biblioteker/Python
 	[pl]:		Biblioteki/Python
 	[pt]:		Bibliotecas/Python
 	[pt_BR]:	Bibliotecas/Python
@@ -1014,7 +1014,7 @@ Libraries/XML
 	[is]:		Ağgerğasöfn/XML
 	[it]:		Librerie/XML
 	[ja]:		¥é¥¤¥Ö¥é¥ê/XML
-	[no]:		Biblioteker/XML
+	[nb]:		Biblioteker/XML
 	[pl]:		Biblioteki/XML
 	[pt]:		Bibliotecas/XML
 	[pt_BR]:	Bibliotecas/XML
@@ -1031,7 +1031,7 @@ Networking
 	[fr]:		RÃ©seau
 	[is]:		Net
 	[it]:		Rete
-	[no]:		Nettverks
+	[nb]:		Nettverks
 	[pl]:		Sieciowe
 	[pt]:		Rede
 	[pt_BR]:	Rede
@@ -1048,7 +1048,7 @@ Networking/Admin
 	[fr]:		RÃ©seau/Administration
 	[is]:		Net/Stjórnar
 	[it]:		Rete/Amministrazione
-	[no]:		Nettverks/Administrasjon
+	[nb]:		Nettverks/Administrasjon
 	[pl]:		Sieciowe/Administracyjne
 	[pt]:		Rede/Administração
 	[ru]:		óÅÔØ/õĞÒÁ×ÌÅÎÉÅ
@@ -1063,7 +1063,7 @@ Networking/Daemons
 	[fr]:		RÃ©seau/Serveurs
 	[is]:		Net/Púkar
 	[it]:		Rete/Demoni
-	[no]:		Nettverks/Daemoner
+	[nb]:		Nettverks/Daemoner
 	[pl]:		Sieciowe/Serwery
 	[pt]:		Rede/Servidores
 	[ru]:		óÅÔØ/äÅÍÏÎÙ
@@ -1079,7 +1079,7 @@ Networking/Daemons/Java
 	[fr]:		RÃ©seau/Serveurs/Java
 	[is]:		Net/Púkar/Java
 	[it]:		Rete/Demoni/Java
-	[no]:		Nettverks/Daemoner/Java
+	[nb]:		Nettverks/Daemoner/Java
 	[pl]:		Sieciowe/Serwery/Java
 	[pt]:		Rede/Servidores/Java
 	[ru]:		óÅÔØ/äÅÍÏÎÙ/Java
@@ -1094,7 +1094,7 @@ Networking/Daemons/Java/Extensions
 	[es]:		Red/Servidores/Java/Extensiones
 	[fr]:		RÃ©seau/Serveurs/Java/Extensions
 	[it]:		Rete/Demoni/Java/Estensioni
-	[no]:		Nettverks/Daemoner/Java/Utvidelser
+	[nb]:		Nettverks/Daemoner/Java/Utvidelser
 	[pl]:		Sieciowe/Serwery/Java/Rozszerzenia
 	[pt]:		Rede/Servidores/Java/Extensões
 	[ru]:		óÅÔØ/äÅÍÏÎÙ/Java/òÁÓÛÉÒÅÎÉÑ
@@ -1113,7 +1113,7 @@ Networking/News
 	[fr]:		RÃ©seau/Nouvelles
 	[is]:		Net/Fréttir
 	[it]:		Rete/News
-	[no]:		Nettverks/News
+	[nb]:		Nettverks/News
 	[pl]:		Sieciowe/News
 	[pt]:		Rede/News
 	[pt_BR]:	Rede/News
@@ -1130,7 +1130,7 @@ Networking/Utilities
 	[fr]:		RÃ©seau/Utilitaires
 	[is]:		Net/Tól
 	[it]:		Rete/Utility
-	[no]:		Nettverks/Verktøy
+	[nb]:		Nettverks/Verktøy
 	[pl]:		Sieciowe/Narzêdzia
 	[pt]:		Rede/Utilidades
 	[pt_BR]:	Rede/Utilitários
@@ -1147,7 +1147,7 @@ Themes
 	[fr]:		ThÃ¨mes
 	[is]:		Şemur
 	[it]:		Temi
-	[no]:		Temaer
+	[nb]:		Temaer
 	[pl]:		Motywy
 	[pt]:		Temas
 	[ru]:		ôÅÍÙ
@@ -1162,7 +1162,7 @@ Themes/GTK+
 	[fr]:		ThÃ¨mes/GTK+
 	[is]:		Şemur/GTK+
 	[it]:		Temi/GTK+
-	[no]:		Temaer/GTK+
+	[nb]:		Temaer/GTK+
 	[pl]:		Motywy/GTK+
 	[pt]:		Temas/GTK+
 	[ru]:		ôÅÍÙ/GTK+
@@ -1179,7 +1179,7 @@ X11
 	[is]:		X11
 	[it]:		X11
 	[ja]:		X11
-	[no]:		X11
+	[nb]:		X11
 	[pl]:		X11
 	[pt]:		X11
 	[pt_BR]:	X11
@@ -1198,7 +1198,7 @@ X11/Amusements
 	[is]:		X11/Skemmtun
 	[it]:		X11/Divertimenti
 	[ja]:		X11/¥¢¥ß¥å¡¼¥º¥á¥ó¥È
-	[no]:		X11/Fornøyelse
+	[nb]:		X11/Fornøyelse
 	[pl]:		X11/Rozrywka
 	[pt]:		X11/Divertimentos
 	[ru]:		X11/òÁÚ×ÌÅŞÅÎÉÑ
@@ -1216,7 +1216,7 @@ X11/Applications
 	[is]:		X11/Forrit
 	[it]:		X11/Applicazioni
 	[ja]:		X11/¥¢¥×¥ê¥±¡¼¥·¥ç¥ó
-	[no]:		X11/Applikasjoner
+	[nb]:		X11/Applikasjoner
 	[pl]:		X11/Aplikacje
 	[pt]:		X11/Aplicações
 	[pt_BR]:	X11/Aplicações
@@ -1234,7 +1234,7 @@ X11/Applications/Editors
 	[is]:		X11/Forrit/Ritlar
 	[it]:		X11/Applicazioni/Editor
 	[ja]:		X11/¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥¨¥Ç¥£¥¿
-	[no]:		X11/Applikasjoner/Editorer
+	[nb]:		X11/Applikasjoner/Editorer
 	[pl]:		X11/Aplikacje/Edytory
 	[pt]:		X11/Aplicações/Editores
 	[ru]:		X11/ğÒÉÌÏÖÅÎÉÑ/òÅÄÁËÔÏÒÙ
@@ -1251,7 +1251,7 @@ X11/Applications/Games
 	[is]:		X11/Forrit/Leikir
 	[it]:		X11/Applicazioni/Giochi
 	[ja]:		X11/¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥²¡¼¥à
-	[no]:		X11/Applikasjoner/Spill
+	[nb]:		X11/Applikasjoner/Spill
 	[pl]:		X11/Aplikacje/Gry
 	[pt]:		X11/Aplicações/Jogos
 	[ru]:		X11/ğÒÉÌÏÖÅÎÉÑ/éÇÒÙ
@@ -1266,7 +1266,7 @@ X11/Applications/Games/Strategy
 	[es]:		X11/Aplicaciones/Juegos/Estratégico
 	[fr]:		X11/Applications/Jeux/StratÃ©gique
 	[it]:		X11/Applicazioni/Giochi/Strategico
-	[no]:		X11/Applikasjoner/Spill/Strategi
+	[nb]:		X11/Applikasjoner/Spill/Strategi
 	[pl]:		X11/Aplikacje/Gry/Strategiczne
 	[pt]:		X11/Aplicações/Jogos/Estratégico
 	[ru]:		X11/ğÒÉÌÏÖÅÎÉÑ/éÇÒÙ/óÔÒÁÔÅÇÉŞÅÓËÉÅ
@@ -1284,7 +1284,7 @@ X11/Applications/Graphics
 	[is]:		X11/Forrit/Myndvinnsla
 	[it]:		X11/Applicazioni/Immagini
 	[ja]:		X11/¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥°¥é¥Õ¥£¥Ã¥¯¥¹
-	[no]:		X11/Applikasjoner/Grafikk
+	[nb]:		X11/Applikasjoner/Grafikk
 	[pl]:		X11/Aplikacje/Grafika
 	[pt]:		X11/Aplicações/Gráficos
 	[ru]:		X11/ğÒÉÌÏÖÅÎÉÑ/çÒÁÆÉËÁ
@@ -1301,7 +1301,7 @@ X11/Applications/Multimedia
 	[is]:		X11/Forrit/Margmiğlun
 	[it]:		X11/Applicazioni/Multimedia
 	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Ş¥ë¥Á¥á¥Ç¥£¥¢
-	[no]:		X11/Programmer/Multimedia
+	[nb]:		X11/Programmer/Multimedia
 	[pl]:		X11/Aplikacje/Multimedia
 	[pt]:		X11/Aplicações/Multimédia
 	[ru]:		X11/ğÒÉÌÏÖÅÎÉÑ/íÕÌØÔÉÍÅÄÉÁ
@@ -1317,7 +1317,7 @@ X11/Applications/Networking
 	[fr]:		X11/Applications/RÃ©seau
 	[is]:		X11/Forrit/Net
 	[it]:		X11/Applicazioni/Rete
-	[no]:		X11/Applikasjoner/Nettverks
+	[nb]:		X11/Applikasjoner/Nettverks
 	[pl]:		X11/Aplikacje/Sieciowe
 	[pt]:		X11/Aplicações/Rede
 	[pt_BR]:	X11/Aplicações/Rede
@@ -1335,7 +1335,7 @@ X11/Applications/Publishing
 	[is]:		X11/Forrit/Umbrot
 	[it]:		X11/Applicazioni/Publishing
 	[ja]:		X11/¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Ñ¥Ö¥ê¥Ã¥·¥ó¥°
-	[no]:		X11/Applikasjoner/Publisering
+	[nb]:		X11/Applikasjoner/Publisering
 	[pl]:		X11/Aplikacje/Publikowanie
 	[pt]:		X11/Aplicações/Publicação
 	[pt_BR]:	X11/Aplicações/Editoração
@@ -1364,7 +1364,7 @@ X11/Applications/Sound
 	[fr]:		X11/AplicaÃ§Ãµes/Son
 	[is]:		X11/Forrit/Hljóğ
 	[it]:		X11/Applicazioni/Audio
-	[no]:		X11/Applikasjoner/Lyd
+	[nb]:		X11/Applikasjoner/Lyd
 	[pl]:		X11/Aplikacje/D¼wiêk
 	[pt]:		X11/Aplicações/Som
 	[pt_BR]:	X11/Aplicações/Som
@@ -1382,7 +1382,7 @@ X11/Development/Libraries
 	[is]:		X11/Şróunartól/Ağgerğasöfn
 	[it]:		X11/Sviluppo/Librerie
 	[ja]:		X11/³«È¯/¥é¥¤¥Ö¥é¥ê
-	[no]:		X11/Applikasjoner/Biblioteker
+	[nb]:		X11/Applikasjoner/Biblioteker
 	[pl]:		X11/Programowanie/Biblioteki
 	[pt]:		X11/Desenvolvimento/Bibliotecas
 	[pt_BR]:	X11/Desenvolvimento/Bibliotecas
@@ -1400,7 +1400,7 @@ X11/Development/Tools
 	[is]:		X11/Şróunartól/Tól
 	[it]:		X11/Sviluppo/Tool
 	[ja]:		X11/³«È¯/¥Ä¡¼¥ë
-	[no]:		X11/Applikasjoner/Verktøy
+	[nb]:		X11/Applikasjoner/Verktøy
 	[pl]:		X11/Programowanie/Narzêdzia
 	[pt]:		X11/Desenvolvimento/Ferramentas
 	[ru]:		X11/òÁÚÒÁÂÏÔËÁ/éÎÓÔÒÕÍÅÎÔÙ
@@ -1417,7 +1417,7 @@ X11/Libraries
 	[is]:		X11/Ağgerğasöfn
 	[it]:		X11/Librerie
 	[ja]:		X11/¥é¥¤¥Ö¥é¥ê
-	[no]:		X11/Biblioteker
+	[nb]:		X11/Biblioteker
 	[pl]:		X11/Biblioteki
 	[pt]:		X11/Bibliotecas
 	[pt_BR]:	X11/Bibliotecas
@@ -1425,6 +1425,22 @@ X11/Libraries
 	[sl]:		X11/Knji¾nice
 	[sv]:		X11/Bibliotek
 	[uk]:		X11/â¦ÂÌ¦ÏÔÅËÉ
+
+X11/Servers
+	[cs]:		X11/Servery
+	[da]:		X11/Tjenere
+	[de]:		X11/Server
+	[es]:		X11/Servidores
+	[fr]:		X11/Serveurs
+	[is]:		X11/Şjóna
+	[it]:		X11/Server
+	[nb]:		X11/Tjenere
+	[pl]:		X11/Serwery
+	[pt]:		X11/Servidores
+	[ru]:		X11/óÅÒ×ÅÒÙ
+	[sl]:		X11/Stre¾niki
+	[sv]:		X11/Servrar
+	[uk]:		X11/óÅÒ×ÅÒÉ
 
 X11/Window Managers
 	[cs]:		X11/Okenní mana¾ery
@@ -1434,7 +1450,7 @@ X11/Window Managers
 	[fr]:		X11/Gestionnaires de fenÃªtres
 	[is]:		X11/Gluggastjórunum
 	[it]:		X11/Window manager
-	[no]:		X11/Vindushåndtererene
+	[nb]:		X11/Vindushåndtererene
 	[pl]:		X11/Zarz±dcy okien
 	[pt]:		X11/Gestores de Janelas
 	[ru]:		X11/ïËÏÎÎÙÅ ÍÅÎÅÄÖÅÒÙ
@@ -1450,45 +1466,10 @@ X11/Window Managers/Tools
 	[fr]:		X11/Gestionnaires de fenÃªtres/Outils
 	[is]:		X11/Gluggastjórunum/Tól
 	[it]:		X11/Window manager/Tool
-	[no]:		X11/Vindushåndtererene/Verktøy
+	[nb]:		X11/Vindushåndtererene/Verktøy
 	[pl]:		X11/Zarz±dcy okien/Narzêdzia
 	[pt]:		X11/Gestores de Janelas/Ferramentas
 	[ru]:		X11/ïËÏÎÎÙÅ ÍÅÎÅÄÖÅÒÙ/éÎÓÔÒÕÍÅÎÔÙ
 	[sl]:		X11/Upravljalniki/Orodja
 	[sv]:		X11/Fönsterhanterarna/Verktyg
 	[uk]:		X11/÷¦ËÏÎÎ¦ ÍÅÎÅÄÖÅÒÉ/¶ÎÓÔÒÕÍÅÎÔÉ
-
-X11/XFree86
-	[cs]:		X11/XFree86
-	[da]:		X11/XFree86
-	[de]:		X11/XFree86
-	[es]:		X11/XFree86
-	[fr]:		X11/XFree86
-	[id]:		X11/XFree86
-	[is]:		X11/XFree86
-	[it]:		X11/XFree86
-	[ja]:		X11/XFree86
-	[no]:		X11/XFree86
-	[pl]:		X11/XFree86
-	[pt]:		X11/XFree86
-	[pt_BR]:	X11/XFree86
-	[ru]:		X11/XFree86
-	[sl]:		X11/XFree86
-	[sv]:		X11/XFree86
-	[uk]:		X11/XFree86
-
-X11/XFree86/Servers
-	[cs]:		X11/XFree86/Servery
-	[da]:		X11/XFree86/Tjenere
-	[de]:		X11/XFree86/Server
-	[es]:		X11/XFree86/Servidores
-	[fr]:		X11/XFree86/Serveurs
-	[is]:		X11/XFree86/Şjóna
-	[it]:		X11/XFree86/Server
-	[no]:		X11/XFree86/Tjenere
-	[pl]:		X11/XFree86/Serwery
-	[pt]:		X11/XFree86/Servidores
-	[ru]:		X11/XFree86/óÅÒ×ÅÒÙ
-	[sl]:		X11/XFree86/Stre¾niki
-	[sv]:		X11/XFree86/Servrar
-	[uk]:		X11/XFree86/óÅÒ×ÅÒÉ
