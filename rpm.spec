@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.3
-Release:	7
+Release:	8
 Group:		Base
 Group(pl):	Podstawowe
 Copyright:	GPL
@@ -17,6 +17,7 @@ Patch3:		rpm-arch.patch
 Patch4:		rpm-pld.patch
 Patch5:		rpm-rpmpopt.patch
 Patch6:		rpm-findlangs.patch
+Patch7:		rpm-perl-macros.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	bzip2-static
@@ -118,6 +119,7 @@ construir pacotes usando o RPM.
 %patch4 -p1 
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 %patch31 -p1
 install %{SOURCE3} macros.pld.in
 install %{SOURCE13} macros.python.in
@@ -149,7 +151,8 @@ install -d $RPM_BUILD_ROOT/var/db/rpm \
 
 make DESTDIR="$RPM_BUILD_ROOT" pkgbindir="%{_bindir}" install
 
-install macros.pld $RPM_BUILD_ROOT%{_libdir}/rpm/macros.pld
+install macros.pld	 $RPM_BUILD_ROOT%{_libdir}/rpm/macros.pld
+install macros.perl	 $RPM_BUILD_ROOT%{_libdir}/rpm/macros.perl
 install -m755 %{SOURCE5} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
 	pkgbindir="%{_bindir}"
 #install rpm.8ru $RPM_BUILD_ROOT%{_mandir}/ru/man8/rpm.8
@@ -218,7 +221,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %dir /var/db/rpm
 
 %dir /usr/lib/rpm
-%attr(755,root,root) %{_libdir}/rpm/find-*
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/rpmbuild
+%attr(755,root,root) %{_bindir}/rpmu
 %attr(755,root,root) %{_libdir}/rpm/freshen.sh
 %attr(755,root,root) %{_libdir}/rpm/find-requires
 %attr(755,root,root) %{_libdir}/rpm/find-provides
@@ -227,7 +232,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/convertrpmrc.sh
 
 %{_libdir}/rpm/rpm*
-%{_libdir}/rpm/macros*
+%{_libdir}/rpm/macros
+%{_libdir}/rpm/macros.pld
 %attr(755,root,root) %{_libdir}/rpm/rpmb
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmt
@@ -253,6 +259,10 @@ rm -rf $RPM_BUILD_ROOT
 %lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
 %lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
 %lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
+%lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
+%attr(755,root,root) %{_libdir}/rpm/find-perl-*
+%attr(755,root,root) %{_libdir}/rpm/find-*.perl
+%attr(755,root,root) %{_libdir}/rpm/find-prov.pl
 
 
 %files -n python-rpm
