@@ -58,46 +58,46 @@ Source31:	adapter.awk
 Source32:	pldnotify.awk
 # http://svn.pld-linux.org/banner.sh/
 Source33:	banner.sh
+Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
 Patch3:		%{name}-rpmpopt.patch
 Patch4:		%{name}-perl-macros.patch
 Patch5:		%{name}-perl-req-perlfile.patch
-Patch7:		%{name}-noexpand.patch
-Patch8:		%{name}-scripts-closefds.patch
-Patch9:		%{name}-python-macros.patch
-Patch10:	%{name}-gettext-in-header.patch
-Patch11:	%{name}-compress-doc.patch
-Patch12:	%{name}-build.patch
-Patch13:	%{name}-system_libs.patch
-Patch14:	%{name}-bb-and-short-circuit.patch
-Patch15:	%{name}-etc_dir.patch
-Patch16:	%{name}-system_libs-more.patch
-Patch17:	%{name}-php-deps.patch
-Patch19:	%{name}-ldconfig-always.patch
-Patch20:	%{name}-perl_req.patch
-Patch21:	%{name}-no-bin-env.patch
-Patch22:	%{name}-magic-usesystem.patch
-Patch23:	%{name}-dontneedutils.patch
-Patch24:	%{name}-provides-dont-obsolete.patch
-Patch25:	%{name}-examplesaredoc.patch
-Patch26:	%{name}-po.patch
-Patch27:	%{name}-amd64.patch
-Patch28:	%{name}-notsc.patch
-Patch29:	%{name}-hack-norpmlibdep.patch
-Patch30:	%{name}-makefile-no_myLDADD_deps.patch
-Patch31:	%{name}-libdir64.patch
-Patch32:	%{name}-libdir-links.patch
-Patch35:	%{name}-missing-prototypes.patch
-Patch36:	%{name}-pld-autodep.patch
-Patch37:	%{name}-rpmsq.patch
-Patch40:	%{name}-epoch0.patch
-Patch43:	%{name}-perl_req-INC_dirs.patch
-Patch44:	%{name}-debuginfo.patch
-Patch46:	%{name}-doxygen_hack.patch
-Patch47:	%{name}-distver.patch
-Patch48:	%{name}-gcc4.patch
-Patch100:	%{name}-pl.po.patch
+Patch6:		%{name}-noexpand.patch
+Patch7:		%{name}-scripts-closefds.patch
+Patch8:		%{name}-python-macros.patch
+Patch9:		%{name}-gettext-in-header.patch
+Patch10:	%{name}-compress-doc.patch
+Patch11:	%{name}-build.patch
+Patch12:	%{name}-system_libs.patch
+Patch13:	%{name}-bb-and-short-circuit.patch
+Patch14:	%{name}-etc_dir.patch
+Patch15:	%{name}-system_libs-more.patch
+Patch16:	%{name}-php-deps.patch
+Patch17:	%{name}-ldconfig-always.patch
+Patch18:	%{name}-perl_req.patch
+Patch19:	%{name}-no-bin-env.patch
+Patch20:	%{name}-magic-usesystem.patch
+Patch21:	%{name}-dontneedutils.patch
+Patch22:	%{name}-provides-dont-obsolete.patch
+Patch23:	%{name}-examplesaredoc.patch
+Patch24:	%{name}-po.patch
+Patch25:	%{name}-amd64.patch
+Patch26:	%{name}-notsc.patch
+Patch27:	%{name}-hack-norpmlibdep.patch
+Patch28:	%{name}-makefile-no_myLDADD_deps.patch
+Patch29:	%{name}-libdir64.patch
+Patch30:	%{name}-libdir-links.patch
+Patch31:	%{name}-missing-prototypes.patch
+Patch32:	%{name}-pld-autodep.patch
+Patch33:	%{name}-rpmsq.patch
+Patch34:	%{name}-epoch0.patch
+Patch35:	%{name}-perl_req-INC_dirs.patch
+Patch36:	%{name}-debuginfo.patch
+Patch37:	%{name}-doxygen_hack.patch
+Patch38:	%{name}-distver.patch
+Patch39:	%{name}-gcc4.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -574,10 +574,11 @@ ze ¼rode³ RPM-a przez doxygen.
 %setup -q -n %{name}
 %patch1 -p1
 %patch2 -p1
-# temporarily moved after patch100 - messes too much in pl.po
+# temporarily moved after patch0 - messes too much in pl.po
 #%patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
@@ -585,14 +586,13 @@ ze ¼rode³ RPM-a przez doxygen.
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
-%patch14 -p1
 # home-etc FIXME
-#%patch15 -p1
+#%patch14 -p1
+%patch15 -p1
 %patch16 -p1
 %patch17 -p1
+%patch18 -p1
 %patch19 -p1
-%patch20 -p1
-%patch21 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
@@ -605,6 +605,8 @@ install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
 cat %{SOURCE11} >> macros.in
+%patch20 -p1
+%patch21 -p1
 %patch22 -p1
 %patch23 -p1
 %patch24 -p1
@@ -616,16 +618,14 @@ cat %{SOURCE11} >> macros.in
 %patch30 -p1
 %patch31 -p1
 %patch32 -p1
-%patch35 -p1
+%patch33 -p1
+%patch34 -p1
+%patch35 -p0
 %patch36 -p1
 %patch37 -p1
-%patch40 -p1
-%patch43 -p0
-%patch44 -p1
-%patch46 -p1
-%{?with_distver:%patch47 -p1}
-%patch48 -p1
-%patch100 -p1
+%{?with_distver:%patch38 -p1}
+%patch39 -p1
+%patch0 -p1
 %patch3 -p1
 
 cd scripts;
