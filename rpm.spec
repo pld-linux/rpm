@@ -188,7 +188,7 @@ Group:		Development/Libraries
 Requires:	%{name} = %{version}
 Requires:	bzip2-devel
 Requires:	db-devel
-Requires:	libelf-devel
+Requires:	elfutils-devel
 Requires:	popt-devel >= 1.7
 Requires:	zlib-devel
 
