@@ -1,12 +1,14 @@
+%define	date	19990503
+
 Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.1
-Release:	4
+Release:	5.%{date}
 Group:		Base
 Group(pl):	Bazowe
 Copyright:	GPL
-Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-3.0.x/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-3.0.x/%{name}-%{version}-%{date}.tar.gz
 Source1:	rpm.groups
 Source2:	rpm.8pl
 Source3:	rpm.macros
@@ -16,7 +18,6 @@ Patch1:		rpm-i18n.patch
 Patch2:		rpm-find-requires.patch
 Patch3:		rpm-macros.patch
 Patch4:		rpm-po.patch
-Patch5:		rpm-GNUconfigure.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildPrereq:	bzip2-static
@@ -65,7 +66,6 @@ construir pacotes usando o RPM.
 %patch2 -p1
 %patch1 -p1
 %patch4 -p1 
-%patch5 -p1
 %patch31 -p1
 install %{SOURCE4} po/pl.po
 install %{SOURCE13} macros.python.in
@@ -76,7 +76,7 @@ LDFLAGS="-s"; export LDFLAGS
 %GNUconfigure
 )
 
-%GNUconfigure -- --disable-shared 
+%GNUconfigure 
 %configure \
 make
 	--with-python
@@ -87,7 +87,7 @@ install -d $RPM_BUILD_ROOT/var/lib/rpm \
 	$RPM_BUILD_ROOT/usr/man/{ru,pl}/man8 \
 	$RPM_BUILD_ROOT/etc/skel/C/rpm/{SRPMS,RPMS,SOURCES,SPECS,BUILD}
 
-make DESTDIR="$RPM_BUILD_ROOT" install
+make DESTDIR="$RPM_BUILD_ROOT" pkgbindir="/usr/bin" install
 
 install %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/rpm/macros.pld
 	pkgbindir="%{_bindir}"
@@ -97,7 +97,7 @@ install %{SOURCE2} $RPM_BUILD_ROOT/usr/man/pl/man8/rpm.8
 
 install %{SOURCE1} docs/groups
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
-strip  $RPM_BUILD_ROOT/bin/rpm
+strip  $RPM_BUILD_ROOT/{bin/rpm,usr/bin/*} || :
 
 gzip -9fn $RPM_BUILD_ROOT/usr/man/{{ru,pl}/man8/*,man8/*} \
 	RPM-PGP-KEY CHANGES docs/*
@@ -113,8 +113,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc RPM-PGP-KEY.gz CHANGES.gz docs/*
 %postun -p /sbin/ldconfig
 
-%attr(755,root,root) /usr/bin/gendiff
-%attr(755,root,root) /usr/bin/rpm2cpio
+%attr(755,root,root) /usr/bin/*
 %attr(755,root,root) %{_libdir}/rpm/rpmdb
 /usr/man/man8/*
 %lang(ru) /usr/man/ru/man8/*
@@ -150,6 +149,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/rpmt
 /usr/include/rpm
 /usr/lib/librpm*.a
+/usr/lib/librpm*.la
 %files utils
 %files -n python-rpm
 * Fri Apr 30 1999 Artur Frysiak <wiget@pld.org.pl>
