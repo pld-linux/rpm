@@ -43,7 +43,7 @@ zainstalowaæ czy zweryfikowaæ dowolny pakiet. Informacje dotycz±ce ka¿dego
 pakietu s± przechowywane w bazie danych i dostêpne tylko dla administratora 
 systemu.
 przechowywane w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
-%package	devel
+do pacote, permissões dos arquivos, etc.
 Summary:	Header files and libraries 
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne	
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne
