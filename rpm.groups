@@ -317,6 +317,23 @@ Applications/Math
 	[sv]:		TillДmpningar/Matemataisk
 	[uk]:		Прикладн╕ Програми/Математика
 
+Applications/Multimedia
+	[cs]:		Aplikace/MultimИdia
+	[da]:		Programmer/Multimedie
+	[de]:		Applikationen/Multimedien
+	[es]:		Aplicaciones/Multimedia
+	[fr]:		Applications/MultimИdia
+	[is]:		Forrit/MargmiПlun
+	[it]:		Applicazioni/Multimedia
+	[ja]:		╔Й╔╠║╪╔╥╔Г╔С/╔ч╔К╔а╔А╔г╔ё╔╒
+	[no]:		Programmer/Multimedia
+	[pl]:		Aplikacje/Multimedia
+	[pt]:		AplicaГУes/MultimИdia
+	[ru]:		Приложения/Мультимедиа
+	[sl]:		Programi/VeХpredstavnost
+	[sv]:		TillДmpningar/Multimedia
+	[uk]:		Прикладн╕ Програми/Мультимед╕а
+
 Applications/News
 	[cs]:		Aplikace/News
 	[da]:		Programmer/Nyheder
@@ -1268,6 +1285,24 @@ X11/Applications/Networking
 	[sv]:		X11/TillДmpningar/NДtverk
 	[uk]:		X11/Прикладн╕ Програми/Мережа
 
+X11/Applications/Publishing
+	[cs]:		X11/Aplikace/PublikovАnМ
+	[da]:		X11/Programmer/Udgivelse
+	[de]:		X11/Applikationen/Publizieren
+	[es]:		X11/Aplicaciones/EdiciСn
+	[fr]:		X11/Applications/Edition
+	[is]:		X11/Forrit/Umbrot
+	[it]:		X11/Applicazioni/Publishing
+	[ja]:		X11/╔╒╔в╔Й╔╠║╪╔╥╔Г╔С/╔я╔ж╔Й╔ц╔╥╔С╔╟
+	[no]:		X11/Applikasjoner/Publisering
+	[pl]:		X11/Aplikacje/Publikowanie
+	[pt]:		X11/AplicaГУes/PublicaГЦo
+	[pt_BR]:	X11/AplicaГУes/EditoraГЦo
+	[ru]:		X11/Приложения/Типография
+	[sl]:		X11/Programi/Zalo╬ni╧tvo
+	[sv]:		X11/TillДmpningar/Publicering
+	[uk]:		X11/Прикладн╕ Програми/Типограф╕я
+
 X11/Applications/Science
 	[cs]:		X11/Aplikace/VЛdeckИ
 	[de]:		X11/Applikationen/Wissenschaft
@@ -1279,6 +1314,23 @@ X11/Applications/Science
 	[ru]:		X11/Приложения/Наука
 	[sv]:		X11/TillДmpningar/Vetenskaplig
 	[uk]:		X11/Прикладн╕ Програми/Наука
+
+X11/Applications/Sound
+	[cs]:		X11/Aplikace/Zvuk
+	[da]:		X11/Programmer/Lyd
+	[de]:		X11/Applikationen/Laut
+	[es]:		X11/Aplicaciones/Sonido
+	[fr]:		X11/AplicaГУes/Son
+	[is]:		X11/Forrit/HljСП
+	[it]:		X11/Applicazioni/Audio
+	[no]:		X11/Applikasjoner/Lyd
+	[pl]:		X11/Aplikacje/D╪wiЙk
+	[pt]:		X11/AplicaГУes/Som
+	[pt_BR]:	X11/AplicaГУes/Som
+	[ru]:		X11/Приложения/Звук
+	[sl]:		X11/Programi/Zvok
+	[sv]:		X11/TillДmpningar/Ljud
+	[uk]:		X11/Прикладн╕ Програми/Звук
 
 X11/Development/Libraries
 	[cs]:		X11/VЩvojovИ prostЬedky/Knihovny
