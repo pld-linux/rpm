@@ -1,8 +1,13 @@
 # PLD rpm macros
 
-%_defaultdocdir  %{_usr}/share/doc
+%__id		@__ID@
+%__id_u		%{__id} -u 
+%__chown_Rhf           @__CHOWN_RHF@
+%__chgrp_Rhf           @__CHGRP_RHF@
+
 %_fixowner       [ `%{__id_u}` = '0' ] && %{__chown_Rhf} root.@ROOT_GROUP@
 %_fixgroup       true
+%_fixperms             %{__chmod} -Rf @FIXPERMS@
 %_topdir         %(echo $HOME)/rpm
 %_exec_prefix    %{_prefix}
 %_bindir         %{_exec_prefix}/bin
@@ -18,8 +23,7 @@
 %_localstatedir  /var
 %_infodir        /usr/share/info
 %_mandir         %{_prefix}/share/man
-%__id		@__ID@
-%__id_u		%{__id} -u 
+%_defaultdocdir  %{_usr}/share/doc
 #-----------------------------------------------------------------
 # CFLAGS and LDFLAGS used to build
 
