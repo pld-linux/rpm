@@ -2,7 +2,7 @@ Summary:	Red Hat (and now also PLD) Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0.2
-Release:	2
+Release:	3
 Group:		Base
 Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
@@ -17,15 +17,17 @@ Source6:	%{name}-find-perl-provides
 Source7:	%{name}-find-perl-requires
 Source8:	%{name}-find-spec-bcond
 Source9:	%{name}-find-lang
+Source10:	%{name}-find-provides
+Source11:	%{name}-find-requires
 Patch0:		%{name}-rpmrc.patch
-Patch1:		%{name}-find-requires.patch
+#Patch1:		%{name}-find-requires.patch
 Patch2:		%{name}-macros.patch
 Patch3:		%{name}-arch.patch
 Patch4:		%{name}-rpmpopt.patch
-Patch5:		%{name}-find-provides.patch
+#Patch5:		%{name}-find-provides.patch
 Patch6:		%{name}-perl-macros.patch
-Patch7:		%{name}-file3.31.patch
-Patch8:		%{name}-exclude-examples-doc.patch
+#Patch7:		%{name}-file3.31.patch
+#Patch8:		%{name}-exclude-examples-doc.patch
 Patch9:		%{name}-db3.patch
 Patch10:	%{name}-rpm-v1.patch
 #Patch11:	%{name}-rpmlibprov.patch
@@ -187,14 +189,14 @@ Skrypty pomocnicze do budowania binarnych RPMów.
 construir pacotes usando o RPM.
 %setup  -q
 %prep
-%patch1 -p1
+#%patch1 -p1
 %patch0 -p1
 %patch1 -p1
 %patch4 -p1
-%patch5 -p1
+#%patch5 -p1
 %patch6 -p1 
-%patch7 -p1 
-%patch8 -p1
+#%patch7 -p1 
+#%patch8 -p1
 %patch7 -p1
 #%patch10 -p1
 #%patch11 -p1
@@ -262,6 +264,8 @@ install macros.pld $RPM_BUILD_ROOT%{_libdir}/rpm/macros.pld
 install macros.perl $RPM_BUILD_ROOT%{_libdir}/rpm/macros.perl
 install macros.python $RPM_BUILD_ROOT%{_libdir}/rpm/macros.python
 
+install %{SOURCE10} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
+install %{SOURCE11} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 install %{SOURCE10} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides
 install %{SOURCE11} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
