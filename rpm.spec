@@ -794,8 +794,13 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep <<EOF
 ^libXRes.so
 ^libXTrap.so
 ^libXaw.so
+^libXcomposite.so
 ^libXcursor.so
+^libXdamage.so
+^libXdmcp.so
+^libXevie.so
 ^libXext.so
+^libXfixes.so
 ^libXfont.so
 ^libXfontcache.so
 ^libXft.so
