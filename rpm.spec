@@ -9,7 +9,7 @@ Summary(ru):	Менеджер пакетов от Red Hat
 Summary(uk):	Менеджер пакет╕в в╕д Red Hat
 Name:		rpm
 Version:	4.0.2
-Release:	92
+Release:	93
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -34,6 +34,9 @@ Source18:	%{name}-php-requires
 Source19:	%{name}-find-php-provides
 Source20:	%{name}-find-php-requires
 Source21:	%{name}-macros.php
+Source30:	builder
+Source31:	adapter.awk
+Source32:	pldnotify.awk
 Patch0:		%{name}-rpmrc.patch
 Patch1:		%{name}-macros.patch
 Patch2:		%{name}-arch.patch
@@ -399,6 +402,40 @@ construir pacotes usando o RPM.
 Р╕зноман╕тн╕ допом╕жн╕ скрипти та утил╕ти, як╕ використовуються для
 побудови RPM'╕в.
 
+%package build-tools
+Summary:	Scripts for managing .spec files and building RPM packages
+Summary(de):	Scripts fЭrs Bauen binДrer RPM-Pakete
+Summary(pl):	Skrypty pomocnicze do zarz╠dznia plikami .spec i budowania RPM-Сw
+Summary(pt_BR):	Scripts e programas executАveis usados para construir pacotes
+Summary(ru):	Скрипты и утилиты, необходимые для сборки пакетов
+Summary(uk):	Скрипти та утил╕ти, необх╕дн╕ для побудови пакет╕в
+Group:		Applications/File
+Requires:	%{name}-build = %{version}
+# these are optional
+#Requires:	cvs
+#Requires:	wget
+
+%description build-tools
+Scripts for managing .spec files and building RPM packages.
+
+%description build-tools -l de
+Scripts fЭrs Bauen RPM-Pakete.
+
+%description build-tools -l pl
+Skrypty pomocnicze do zarz╠dznia plikami .spec i do budowania RPM-Сw.
+
+%description build-tools -l pt_BR
+Este pacote contИm scripts e programas executАveis que sЦo usados para
+construir pacotes usando o RPM.
+
+%description build-tools -l ru
+Различные вспомогательные скрипты и исполняемые программы, которые
+используются для сборки RPM'ов.
+
+%description build-tools -l uk
+Р╕зноман╕тн╕ допом╕жн╕ скрипти та утил╕ти, як╕ використовуються для
+побудови RPM'╕в.
+
 %prep
 %setup -q -a12
 %patch0 -p1
@@ -537,6 +574,10 @@ install %{SOURCE16} $RPM_BUILD_ROOT%{_libdir}/rpm/check-files
 install scripts/find-php*	$RPM_BUILD_ROOT%{_libdir}/rpm/
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_libdir}/rpm/
 
+install %{SOURCE30} $RPM_BUILD_ROOT%{_bindir}/builder
+install %{SOURCE31} $RPM_BUILD_ROOT%{_bindir}/adapter.awk
+install %{SOURCE32} $RPM_BUILD_ROOT%{_bindir}/pldnotify.awk
+
 install rpmio/ugid.h $RPM_BUILD_ROOT%{_includedir}/rpm
 
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm
@@ -636,6 +677,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/rpmt
 %attr(755,root,root) %{_libdir}/rpm/rpme
 %attr(755,root,root) %{_libdir}/rpm/rpmu
+
+%files build-tools
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/builder
+%attr(755,root,root) %{_bindir}/adapter.awk
+%attr(755,root,root) %{_bindir}/pldnotify.awk
 
 %files devel
 %defattr(644,root,root,755)
