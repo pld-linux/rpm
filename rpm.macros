@@ -1,1 +1,1 @@
-%requires_pkg() %(rpm -q --queryformat 'Requires: %%{NAME} = %%{VERSION}' %1)
+%requires_pkg() %(LC_ALL="C" rpm -q --queryformat 'Requires: %%{NAME} = %%{VERSION}' %1|grep -v "is not")
