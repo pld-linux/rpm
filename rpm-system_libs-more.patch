@@ -1,193 +1,39 @@
---- rpm-4.2/xmlspec/Makefile.wiget	Fri Oct 11 00:51:15 2002
-+++ rpm-4.2/xmlspec/Makefile	Thu Mar 27 16:01:27 2003
-@@ -22,8 +22,8 @@
+--- rpm-4.2/rpmdb/Makefile.am.wiget	Fri Mar 28 00:48:52 2003
++++ rpm-4.2/rpmdb/Makefile.am	Fri Mar 28 01:06:18 2003
+@@ -26,11 +26,16 @@
+ noinst_HEADERS = fprint.h header_internal.h legacy.h
  
- LIBS          = $(XMLLIB) $(RPMDIR)/build/.libs/librpmbuild.a \
- 		$(RPMDIR)/lib/.libs/librpm.a $(RPMDIR)/rpmdb/.libs/librpmdb.a \
--		$(RPMDIR)/rpmio/.libs/librpmio.a $(RPMDIR)/popt/.libs/libpopt.a \
--		$(RPMDIR)/libelf/lib/.libs/libelf.a \
-+		$(RPMDIR)/rpmio/.libs/librpmio.a -lpopt \
-+		-lelf -ldb\
- 		-lz -lexpat -lbz2
- LIBDIR        = -L. -L$(RPMDIR)/.libs -L/usr/lib
+ pkgbindir = @RPMCONFIGDIR@
++if WITHOUT_INTERNAL_DB
++pkgbin_PROGRAMS =
++noinst_PROGRAMS =
++else
+ pkgbin_PROGRAMS = \
+ 	rpmdb_deadlock rpmdb_dump rpmdb_load rpmdb_svc rpmdb_stat rpmdb_verify
+ noinst_PROGRAMS = \
+ 	rpmdb_archive rpmdb_checkpoint rpmdb_printlog rpmdb_recover \
+ 	rpmdb_upgrade
++endif
  
---- rpm-4.2/python/Makefile.am.wiget	Thu Mar 27 16:01:27 2003
-+++ rpm-4.2/python/Makefile.am	Thu Mar 27 16:01:27 2003
-@@ -22,44 +22,36 @@
- 	upgrade.h
+ mylibs = librpmdb.la
  
- mylibs= \
--	$(top_builddir)/lib/.libs/librpm.so \
--	$(top_builddir)/rpmdb/.libs/librpmdb.so \
--	$(top_builddir)/rpmio/.libs/librpmio.so \
-+	$(top_builddir)/lib/librpm.la \
-+	$(top_builddir)/rpmdb/librpmdb.la \
-+	$(top_builddir)/rpmio/librpmio.la \
- 	-lpopt
+--- rpm-4.2/configure.ac.wiget	Fri Mar 28 01:06:49 2003
++++ rpm-4.2/configure.ac	Fri Mar 28 01:11:34 2003
+@@ -500,6 +497,7 @@
+ 	[libdb3="$libdb3 $libthread"; AC_MSG_RESULT(yes)])
+    LIBS="$saveLIBS"
+ fi
++without_internal_db=yes
  
- LDADD =
- CFLAGS = @CFLAGS@ -fPIC
+ else
+ dnl ------------------ with    internal db
+@@ -510,7 +508,9 @@
+   libdb3="# \$(top_builddir)/db3/libdb.la"
+   libdb3a="\$(top_builddir)/db3/libdb.a"
+ dnl  INCPATH="-I\$(top_builddir)/$(WITH_DB_SUBDIR) $INCPATH"
++  without_internal_db=no
+ fi
++AM_CONDITIONAL(WITHOUT_INTERNAL_DB, test x$without_internal_db = xyes)
  
- pythondir = $(prefix)/lib/python${PYVER}/site-packages
--python_PROGRAMS = rpmmodule.so
-+python_LTLIBRARIES = rpmmodule.la
- 
- rpmdbdir = $(prefix)/lib/python${PYVER}/site-packages/rpmdb
--rpmdb_PROGRAMS = _rpmdb.so
-+rpmdb_LTLIBRARIES = _rpmdb.la
- 
--noinst_PROGRAMS = poptmodule.so
- 
--rpmmodule_so_SOURCES =
--rpmmodule_so_LDFLAGS = $(mylibs) $(LIBS) -shared -Wl,-soname,rpmmodule.so
-+rpmmodule_la_SOURCES =
-+rpmmodule_la_LDFLAGS = $(LIBS) -avoid-version -module
-+rpmmodule_la_LIBADD = $(mylibs) $(top_builddir)/python/librpmmodule.la
- 
--_rpmdb_so_SOURCES = _rpmdb.c
--_rpmdb_so_LDFLAGS = $(mylibs) $(LIBS) -shared -Wl,-soname,_rpmdb.so
-+_rpmdb_la_SOURCES = _rpmdb.c
-+_rpmdb_la_LDFLAGS = $(mylibs) $(LIBS) -avoid-version -module
- 
--poptmodule_so_SOURCES = poptmodule.c
--poptmodule_so_LDFLAGS = $(mylibs) $(LIBS) -shared -Wl,-soname,poptmodule.so
-+poptmodule_la_SOURCES = poptmodule.c
-+poptmodule_la_LDFLAGS = $(mylibs) $(LIBS) -avoid-version -module
- 
--noinst_LTLIBRARIES = librpmmodule.la
-+noinst_LTLIBRARIES = librpmmodule.la poptmodule.la
- librpmmodule_la_SOURCES = rpmmodule.c hash.c upgrade.c header-py.c \
- 	rpmal-py.c rpmds-py.c rpmdb-py.c rpmfd-py.c rpmfi-py.c rpmmi-py.c \
- 	rpmrc-py.c rpmte-py.c rpmts-py.c
- 
--rpmmodule.so$(EXEEXT): $(librpmmodule_la_OBJECTS)
--	$(CC) -o $@ $(librpmmodule_la_OBJECTS) $(rpmmodule_so_LDFLAGS)
--
--_rpmdb.so$(EXEEXT): _rpmdb.lo
--	$(CC) -o $@ _rpmdb.lo $(_rpmdb_so_LDFLAGS)
--
--poptmodule.so$(EXEEXT): poptmodule.lo
--	$(CC) -o $@ poptmodule.lo $(poptmodule_so_LDFLAGS)
- 
- # rpmmodule.c hash.c upgrade.c header-py.c \
- # 	rpmal-py.c rpmds-py.c rpmdb-py.c rpmfd-py.c rpmfi-py.c rpmmi-py.c \
---- rpm-4.2/tools/striptofile.c.wiget	Wed Oct  9 21:09:51 2002
-+++ rpm-4.2/tools/striptofile.c	Thu Mar 27 16:01:27 2003
-@@ -1,8 +1,13 @@
- #include "system.h"
- 
- #include <elf.h>
-+#ifdef HAVE_GELF_H 
-+#include <libelf.h>
-+#include <gelf.h>
-+#else
- #include <libelf/libelf.h>
- #include <libelf/gelf.h>
-+#endif
- #include <popt.h>
- 
- #include "sections.h"
---- rpm-4.2/tools/sections.h.wiget	Thu Aug 22 19:55:31 2002
-+++ rpm-4.2/tools/sections.h	Thu Mar 27 16:01:27 2003
-@@ -1,7 +1,11 @@
- #ifndef SECTIONS_H
- #define SECTIONS_H
- 
-+#ifdef HAVE_GELF_H
-+#include <gelf.h>
-+#else
- #include <libelf/gelf.h>
-+#endif
- 
- typedef struct {
-   GElf_Word debug_section; /* Section index in debug file. */
---- rpm-4.2/tools/unstripfile.c.wiget	Sun Oct  6 07:42:58 2002
-+++ rpm-4.2/tools/unstripfile.c	Thu Mar 27 16:01:27 2003
-@@ -1,8 +1,13 @@
- #include "system.h"
- 
- #include <elf.h>
-+#ifdef HAVE_GELF_H
-+#include <gelf.h>
-+#include <libelf.h>
-+#else
- #include <libelf/libelf.h>
- #include <libelf/gelf.h>
-+#endif
- 
- #include "sections.h"
- #include "utils.h"
---- rpm-4.2/configure.ac.wiget	Thu Mar 27 16:01:26 2003
-+++ rpm-4.2/configure.ac	Thu Mar 27 16:26:51 2003
-@@ -367,6 +367,11 @@
- WITH_LIBELF_INCLUDE=
- WITH_LIBELF_LIB=
- WITH_LIBELF_ARCHIVE=
-+AC_CHECK_LIB(elf, gelf_getehdr,[
-+	WITH_LIBELF_LIB="-lelf"
-+	WITH_LIBELF_ARCHIVE="-lelf"
-+	AC_CHECK_HEADERS([gelf.h libelf.h libelf/gelf.h libelf/libelf.h])
-+	],[
- 	if test -d elfutils/libelf ; then
- 	    AC_DEFINE(HAVE_GELF_H, 1, [Define to 1 if you have the <gelf.h> header file.])
- 	    AC_DEFINE(HAVE_LIBELF, 1, [Define to 1 if you have the `elf' library (-lelf).])
-@@ -374,7 +379,7 @@
- 	    WITH_LIBELF_INCLUDE="-I\${top_srcdir}/${WITH_LIBELF_SUBDIR}"
- 	    WITH_LIBELF_LIB="\${top_builddir}/${WITH_LIBELF_SUBDIR}/libelf.la"
- 	    WITH_LIBELF_ARCHIVE="\${top_builddir}/${WITH_LIBELF_SUBDIR}/.libs/libelf.a"
--	fi
-+	fi])
- AC_SUBST(WITH_LIBELF_SUBDIR)
- AC_SUBST(WITH_LIBELF_INCLUDE)
- AC_SUBST(WITH_LIBELF_LIB)
-@@ -384,6 +389,11 @@
- WITH_LIBDWARF_INCLUDE=
- WITH_LIBDWARF_LIB=
- WITH_LIBDWARF_ARCHIVE=
-+AC_CHECK_LIB(dwarf, dwarf_init,[
-+	WITH_LIBDWARF_LIB="-ldwarf"
-+	WITH_LIBDWARF_ARCHIVE="-ldwarf"
-+	AC_CHECK_HEADERS([dwarf.h])
-+	],[
- 	if test -d elfutils/libdwarf ; then
- 	    AC_DEFINE(HAVE_DWARF_H, 1, [Define to 1 if you have the <dwarf.h> header file.])
- 	    AC_DEFINE(HAVE_LIBDWARF, 1, [Define to 1 if you have the `dwarf' library (-ldwarf).])
-@@ -391,7 +401,7 @@
- 	    WITH_LIBDWARF_INCLUDE="-I\${top_srcdir}/${WITH_LIBDWARF_SUBDIR}"
- 	    WITH_LIBDWARF_LIB="\${top_builddir}/${WITH_LIBDWARF_SUBDIR}/libdwarf.la"
- 	    WITH_LIBDWARF_ARCHIVE="\${top_builddir}/${WITH_LIBDWARF_SUBDIR}/.libs/libdwarf.a"
--	fi
-+	fi])
- AC_SUBST(WITH_LIBDWARF_SUBDIR)
- AC_SUBST(WITH_LIBDWARF_INCLUDE)
- AC_SUBST(WITH_LIBDWARF_LIB)
-@@ -451,10 +461,11 @@
- if test $withval = no ; then
- dnl ------------------ without internal db
- 
--AC_CHECK_HEADERS(db3/db.h)
-+AC_CHECK_HEADERS([db3/db.h db.h])
- 
- dnl Check for Berkeley db3 API.
- AC_CHECK_FUNC(db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"],
-+  AC_CHECK_LIB(db-4.1, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-4.1"],
-   AC_CHECK_LIB(db-3.2, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.2"],
-     AC_CHECK_LIB(db-3.1, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.1"],
-       AC_CHECK_LIB(db-3.0, db_create, [DBLIBSRCS="$DBLIBSRCS db3.c"; libdb3="-ldb-3.0"],
-@@ -463,6 +474,7 @@
-       )
-     )
-   )
-+  )
- )
- 
- if test X"$DBLIBSRCS" = X; then
-@@ -1228,7 +1240,7 @@
- 	python/Makefile
- 	python/rpmdb/Makefile
- 	python/test/Makefile
--  ], [	echo timestamp > popt/stamp-h.in
-+  ], [	
- 	echo timestamp > beecrypt/stamp-h.in
- 	echo timestamp > stamp-h.in
-   ]
+ AC_SUBST(WITH_DB_SUBDIR)
+ AC_SUBST(WITH_INTERNAL_DB)
