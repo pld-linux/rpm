@@ -737,6 +737,7 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 
 %{_mandir}/man1/gendiff.1*
 %{_mandir}/man8/rpmbuild.8*
+%{_mandir}/ja/man8/rpmbuild.8*
 
 %files devel
 %defattr(644,root,root,755)
@@ -771,13 +772,15 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 #%%{_libdir}/rpm/rpm.xinetd
 
 %{_mandir}/man8/rpm2cpio.8*
-%lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
-%lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
-%lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
-%lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
 %{_mandir}/man8/rpmdeps.8*
 %{_mandir}/man8/rpmcache.8*
 %{_mandir}/man8/rpmgraph.8*
+%lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
+%lang(ja) %{_mandir}/ja/man8/rpmcache.8*
+%lang(ja) %{_mandir}/ja/man8/rpmgraph.8*
+%lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
+%lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
+%lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
 
 %files utils-static
 %defattr(644,root,root,755)
