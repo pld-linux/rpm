@@ -1,0 +1,3 @@
+%requires_pkg() %(LC_ALL="C" rpm -q --queryformat 'Requires: %%{NAME} = %%{VERSION}' %1|grep -v "is not")
+%perl_sitearch  %(eval "`perl -V:installsitearch`"; echo $installsitearch)
+%perl_archlib  %(eval "`perl -V:installarchlib`"; echo $installarchlib)

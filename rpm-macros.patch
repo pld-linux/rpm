@@ -1,35 +1,27 @@
---- rpm-2.92/macros.in.old	Sun Mar 14 01:34:58 1999
-+++ rpm-2.92/macros.in	Sun Mar 28 17:18:20 1999
-@@ -38,19 +38,19 @@
- #	These are the default values that will be overridden by any
- #	explicit values found in /usr/lib/rpm/rpmrc or /etc/rpmrc.
+--- rpm-2.93/macros.in.macros	Thu Apr  8 17:51:13 1999
++++ rpm-2.93/macros.in	Thu Apr  8 18:02:34 1999
+@@ -66,13 +66,13 @@
+ %_rpmdir		%{_topdir}/RPMS
  #
--%_builddir		%{_topdir}/BUILD
--%_bzip2bin		@BZIP2BIN@
--%_dbpath		%{_var}/lib/rpm
--%_defaultdocdir		/usr/doc
--%_fixperms		@FIXPERMS@
--%_gzipbin		@GZIPBIN@
--%_rpmdir		%{_topdir}/RPMS
--%_rpmfilename		%{ARCH}/%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}.rpm
--%_sourcedir		%{_topdir}/SOURCES
--%_specdir		%{_topdir}/SPECS
--%_srcrpmdir		%{_topdir}/SRPMS
--%_tmppath		%{_var}/tmp
+ # XXX Note escaped %% for use in headerSprintf
+-%_rpmfilename		%%{ARCH}/%%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm
++%_rpmfilename		%%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm
+ %_signature		none
+ %_sourcedir		%{_topdir}/SOURCES
+ %_specdir		%{_topdir}/SPECS
+ %_srcrpmdir		%{_topdir}/SRPMS
+ %_tmppath		%{_var}/tmp
 -%_topdir		%{_usrsrc}/redhat
-+#%_builddir		%{_topdir}/BUILD
-+#%_bzip2bin		@BZIP2BIN@
-+#%_dbpath		%{_var}/lib/rpm
-+#%_defaultdocdir		/usr/doc
-+#%_fixperms		@FIXPERMS@
-+#%_gzipbin		@GZIPBIN@
-+#%_rpmdir		%{_topdir}/RPMS
-+#%_rpmfilename		%{ARCH}/%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}.rpm
-+#%_sourcedir		%{_topdir}/SOURCES
-+#%_specdir		%{_topdir}/SPECS
-+#%_srcrpmdir		%{_topdir}/SRPMS
-+#%_tmppath		%{_var}/tmp
-+#%_topdir		%{_usrsrc}/redhat
++%_topdir		%(echo $HOME)/rpm
+ #
+ #==============================================================================
+ # ---- Optional rpmrc macros.
+@@ -96,7 +96,7 @@
+ #%_pgp_path
+ #%_provides
+ #%_timecheck
+-#%vendor
++%vendor			PLD
  
  #==============================================================================
  # ---- per-platform macros.
