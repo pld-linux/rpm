@@ -31,7 +31,7 @@ Name:		rpm
 %define	ver	4.4
 %define	sover	4.3
 Version:	%{ver}
-Release:	0.%{snap}.0.2
+Release:	0.%{snap}.0.3
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
@@ -847,9 +847,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_rpmlibdir}/cpanflute
 #%attr(755,root,root) %{_rpmlibdir}/cpanflute2
 #%attr(755,root,root) %{_rpmlibdir}/Specfile.pm
-%attr(755,root,root) %{_rpmlibdir}/http.req
-%attr(755,root,root) %{_rpmlibdir}/magic.prov
-%attr(755,root,root) %{_rpmlibdir}/magic.req
 %attr(755,root,root) %{_rpmlibdir}/u_pkg.sh
 #%attr(755,root,root) %{_rpmlibdir}/vpkg-provides.sh
 #%attr(755,root,root) %{_rpmlibdir}/vpkg-provides2.sh
@@ -879,10 +876,13 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 # must be here for "Requires: rpm-*prov" to work
 %{_rpmlibdir}/macros.perl
 %{_rpmlibdir}/macros.php
-# not used yet ...
-%{_rpmlibdir}/sql.prov
-%{_rpmlibdir}/sql.req
-%{_rpmlibdir}/tcl.req
+# not used yet ... these six depend on perl
+#%attr(755,root,root) %{_rpmlibdir}/http.req
+#%attr(755,root,root) %{_rpmlibdir}/magic.prov
+#%attr(755,root,root) %{_rpmlibdir}/magic.req
+#%{_rpmlibdir}/sql.prov
+#%{_rpmlibdir}/sql.req
+#%{_rpmlibdir}/tcl.req
 %{_rpmlibdir}/trpm
 
 %attr(755,root,root) %{_bindir}/javadeps
