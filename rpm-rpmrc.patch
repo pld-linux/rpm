@@ -26,7 +26,7 @@ diff -urN rpm.org/rpmrc.in rpm/rpmrc.in
 +optflags: sparc -O2 -m32 -mtune=ultrasparc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}}
 +optflags: sparcv8 -O2 -m32 -mcpu=ultrasparc -mv8%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparcv8: %{specflags_sparcv8}}}
 +optflags: sparcv9 -O2 -m32 -mcpu=ultrasparc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparcv9: %{specflags_sparcv9}}}
-+optflags: sparc64 -O2 -m64 -mcpu=ultrasparc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparc64: %{specflags_sparc64}}}
++optflags: sparc64 -O2 -m64 -mcpu=ultrasparc -Wcast-align%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparc64: %{specflags_sparc64}}}
 +
 +optflags: m68k -O2 -fomit-frame-pointer%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_m68k: %{specflags_m68k}}}
 +
