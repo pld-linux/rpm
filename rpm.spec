@@ -18,7 +18,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.1
-Release:	13
+Release:	14
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/%{name}-%{version}.tar.gz
@@ -226,6 +226,11 @@ Summary(ru):	Статическая библиотека для программ, работающих с rpm-пакетами
 Summary(uk):	Статична б╕бл╕отека для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
+Requires:	bzip2-static
+Requires:	db-static
+Requires:	libelf-static
+Requires:	popt-static >= 1.7
+Requires:	zlib-static
 
 %description static
 RPM static libraries.
