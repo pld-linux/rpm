@@ -443,3 +443,4 @@ fi; \
 %xmms_effect_plugindir        %(xmms-config --effect-plugin-dir)
 %xmms_general_plugindir       %(xmms-config --general-plugin-dir)
 
+%_target_base_arch	%(echo %{_target_cpu} | sed 's/i.86/i386/;s/athlon/i386/;s/pentium./i386/;s/amd64/x86_64/')
