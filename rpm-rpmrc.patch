@@ -1,6 +1,6 @@
-diff -Nru rpm-4.0/rpmrc.in rpm-4.0.new/rpmrc.in
---- rpm-4.0/rpmrc.in	Wed Sep 13 20:03:46 2000
-+++ rpm-4.0.new/rpmrc.in	Wed Nov 15 19:11:00 2000
+diff -Nru rpm-4.0.1/rpmrc.in rpm-4.0.1.new/rpmrc.in
+--- rpm-4.0.1/rpmrc.in	Wed Jan 31 13:19:02 2001
++++ rpm-4.0.1.new/rpmrc.in	Wed Jan 31 13:20:51 2001
 @@ -9,7 +9,7 @@
  # Values for RPM_OPT_FLAGS for various platforms
  
@@ -10,10 +10,10 @@ diff -Nru rpm-4.0/rpmrc.in rpm-4.0.new/rpmrc.in
  optflags: i386 -O2 -march=i386 -mcpu=i686
  optflags: i486 -O2 -march=i486
  optflags: i586 -O2 -march=i586
-@@ -291,5 +291,5 @@
+@@ -289,5 +289,5 @@
  buildarch_compat: ia64: noarch
  buildarch_compat: s390: noarch
  
--macrofiles:	@RPMCONFIGDIR@/macros:@RPMCONFIGDIR@/%{_target}/macros:@SYSCONFIGDIR@/macros.specspo:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/.rpmmacros
-+macrofiles:	@RPMCONFIGDIR@/macros:@RPMCONFIGDIR@/macros.pld:@RPMCONFIGDIR@/%{_target}/macros:@SYSCONFIGDIR@/macros.specspo:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/.rpmmacros
+-macrofiles:	@RPMCONFIGDIR@/macros:@RPMCONFIGDIR@/%{_target}/macros:@SYSCONFIGDIR@/macros.specspo:@SYSCONFIGDIR@/macros.db1:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/.rpmmacros
++macrofiles:	@RPMCONFIGDIR@/macros:@RPMCONFIGDIR@/macros.pld:@RPMCONFIGDIR@/%{_target}/macros:@SYSCONFIGDIR@/macros.specspo:@SYSCONFIGDIR@/macros.db1:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/.rpmmacros
  

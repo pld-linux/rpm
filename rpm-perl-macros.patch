@@ -1,24 +1,62 @@
---- rpm-4.0/scripts/Makefile.am.wiget	Wed Jul  5 14:26:37 2000
-+++ rpm-4.0/scripts/Makefile.am	Wed Nov 15 21:31:03 2000
-@@ -8,7 +8,8 @@
+diff -Nru rpm-4.0.1/configure.in rpm-4.0.1.new/configure.in
+--- rpm-4.0.1/configure.in	Wed Jan 31 13:37:21 2001
++++ rpm-4.0.1.new/configure.in	Wed Jan 31 13:49:25 2001
+@@ -185,6 +185,7 @@
+     AC_PATH_PROG(__MKDIR, mkdir, /bin/mkdir, $MYPATH)
+     AC_PATH_PROG(__MV, mv, /bin/mv, $MYPATH)
+     AC_PATH_PROG(__PATCH, patch, /usr/bin/patch, $MYPATH)
++    AC_PATH_PROG(PERL, perl, /usr/bin/perl, $MYPATH)
+     AC_MSG_CHECKING(old version of patch)
+     PATCHVERSION=`patch --version 2>&1`
+ 
+@@ -1043,6 +1044,7 @@
+ 
+ AC_CONFIG_SUBDIRS(popt)
+ AC_OUTPUT([Doxyfile Makefile rpmrc macros macros.pld platform rpmpopt rpm.spec scripts/brp-redhat
++	macros.perl scripts/perl.req scripts/perl.prov
+ 	rpmio/Makefile lib/Makefile build/Makefile tools/Makefile
+ 	scripts/Makefile
+ 	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
+diff -Nru rpm-4.0.1/macros.in rpm-4.0.1.new/macros.in
+--- rpm-4.0.1/macros.in	Wed Jan 31 13:37:21 2001
++++ rpm-4.0.1.new/macros.in	Wed Jan 31 13:38:04 2001
+@@ -629,9 +629,11 @@
+ #	%{perl_sitearch}/Image
+ #	%dir %{perl_sitearch}/auto/Image
+ #
++#
++# NOTE: %{perl_sitearch}, %{perl_archlib} and %{perl_sitelib} macros 
++#	has been moved to macros.perl (see info in this file for details).
++#
+ %requires_eq()	%(LC_ALL="C" rpm -q --queryformat 'Requires:%%{NAME} = %%{VERSION}' %1| grep -v "is not")
+-%perl_sitearch	%(eval "`perl -V:installsitearch`"; echo $installsitearch)
+-%perl_archlib	%(eval "`perl -V:installarchlib`"; echo $installarchlib)
+ 
+ #------------------------------------------------------------------------------
+ # arch macro for all Intel i?86 compatibile processors
+diff -Nru rpm-4.0.1/scripts/Makefile.am rpm-4.0.1.new/scripts/Makefile.am
+--- rpm-4.0.1/scripts/Makefile.am	Wed Jan 31 13:37:21 2001
++++ rpm-4.0.1.new/scripts/Makefile.am	Wed Jan 31 14:27:28 2001
+@@ -9,7 +9,8 @@
  	find-prov.pl find-req.pl cpanflute find-provides.perl \
  	find-requires.perl get_magic.pl getpo.sh http.req \
- 	magic.prov magic.req perl.prov perl.req rpmdiff rpmdiff.cgi u_pkg.sh \
--	vpkg-provides.sh vpkg-provides2.sh
-+	vpkg-provides.sh vpkg-provides2.sh \
+ 	magic.prov magic.req perl.prov perl.req rpmdiff rpmdiff.cgi \
+-	trpm u_pkg.sh vpkg-provides.sh vpkg-provides2.sh
++	trpm u_pkg.sh vpkg-provides.sh vpkg-provides2.sh \
 +	find-perl-requires find-perl-provides
  
  installprefix = $(DESTDIR)
  
-@@ -21,4 +22,5 @@
+@@ -23,4 +24,5 @@
  	find-prov.pl find-req.pl cpanflute find-provides.perl \
  	find-requires.perl get_magic.pl getpo.sh http.req \
  	magic.prov magic.req perl.prov perl.req rpmdiff rpmdiff.cgi u_pkg.sh \
 -	vpkg-provides.sh vpkg-provides2.sh
 +	vpkg-provides.sh vpkg-provides2.sh \
 +	find-perl-requires find-perl-provides
---- rpm-4.0/scripts/perl.prov.wiget	Mon Jan 17 19:58:36 2000
-+++ rpm-4.0/scripts/perl.prov	Wed Nov 15 21:31:03 2000
+diff -Nru rpm-4.0.1/scripts/perl.prov rpm-4.0.1.new/scripts/perl.prov
+--- rpm-4.0.1/scripts/perl.prov	Wed Jan 31 13:37:21 2001
++++ rpm-4.0.1.new/scripts/perl.prov	Wed Jan 31 13:38:04 2001
 @@ -47,7 +47,9 @@
  
  if ("@ARGV") {
@@ -41,8 +79,9 @@
    }
  }
  
---- rpm-4.0/scripts/perl.req.wiget	Mon Jan 17 19:58:36 2000
-+++ rpm-4.0/scripts/perl.req	Wed Nov 15 21:31:03 2000
+diff -Nru rpm-4.0.1/scripts/perl.req rpm-4.0.1.new/scripts/perl.req
+--- rpm-4.0.1/scripts/perl.req	Wed Jan 31 13:37:21 2001
++++ rpm-4.0.1.new/scripts/perl.req	Wed Jan 31 13:38:04 2001
 @@ -1,4 +1,4 @@
 -#!/usr/bin/perl
 +#!@PERL@
@@ -120,37 +159,3 @@
  
  
        $require{$module}=$version;
---- rpm-4.0/configure.in.wiget	Wed Nov 15 21:31:03 2000
-+++ rpm-4.0/configure.in	Wed Nov 15 21:34:55 2000
-@@ -181,6 +181,7 @@
-     AC_PATH_PROG(__MKDIR, mkdir, /bin/mkdir, $MYPATH)
-     AC_PATH_PROG(__MV, mv, /bin/mv, $MYPATH)
-     AC_PATH_PROG(__PATCH, patch, /usr/bin/patch, $MYPATH)
-+    AC_PATH_PROG(PERL, perl, /usr/bin/perl, $MYPATH)
-     AC_MSG_CHECKING(old version of patch)
-     PATCHVERSION=`patch --version 2>&1`
- 
-@@ -952,6 +953,7 @@
- 
- AC_CONFIG_SUBDIRS(popt)
- AC_OUTPUT([Doxyfile Makefile rpmrc macros macros.pld platform rpmpopt scripts/brp-redhat
-+	macros.perl scripts/perl.req scripts/perl.prov
- 	rpmio/Makefile lib/Makefile build/Makefile tools/Makefile
- 	scripts/Makefile
- 	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
---- rpm-4.0/macros.in.wiget	Wed Nov 15 21:31:03 2000
-+++ rpm-4.0/macros.in	Wed Nov 15 21:31:03 2000
-@@ -623,9 +623,11 @@
- #	%{perl_sitearch}/Image
- #	%dir %{perl_sitearch}/auto/Image
- #
-+#
-+# NOTE: %{perl_sitearch}, %{perl_archlib} and %{perl_sitelib} macros 
-+#	has been moved to macros.perl (see info in this file for details).
-+#
- %requires_eq()	%(LC_ALL="C" rpm -q --queryformat 'Requires:%%{NAME} = %%{VERSION}' %1| grep -v "is not")
--%perl_sitearch	%(eval "`perl -V:installsitearch`"; echo $installsitearch)
--%perl_archlib	%(eval "`perl -V:installarchlib`"; echo $installarchlib)
- 
- #------------------------------------------------------------------------------
- # arch macro for all Intel i?86 compatibile processors

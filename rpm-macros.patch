@@ -1,19 +1,19 @@
-diff -Nru rpm-4.0/configure.in rpm-4.0.new/configure.in
---- rpm-4.0/configure.in	Tue Aug 29 22:55:50 2000
-+++ rpm-4.0.new/configure.in	Wed Nov 15 19:15:17 2000
-@@ -951,7 +951,7 @@
+diff -Nru rpm-4.0.1/configure.in rpm-4.0.1.new/configure.in
+--- rpm-4.0.1/configure.in	Wed Jan 31 13:22:16 2001
++++ rpm-4.0.1.new/configure.in	Wed Jan 31 13:23:24 2001
+@@ -1042,7 +1042,7 @@
  dnl export LIBS INCPATH CONFIG_SITE
  
  AC_CONFIG_SUBDIRS(popt)
--AC_OUTPUT([Doxyfile Makefile rpmrc macros platform rpmpopt scripts/brp-redhat
-+AC_OUTPUT([Doxyfile Makefile rpmrc macros macros.pld platform rpmpopt scripts/brp-redhat
+-AC_OUTPUT([Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec scripts/brp-redhat
++AC_OUTPUT([Doxyfile Makefile rpmrc macros macros.pld platform rpmpopt rpm.spec scripts/brp-redhat
  	rpmio/Makefile lib/Makefile build/Makefile tools/Makefile
  	scripts/Makefile
  	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
-diff -Nru rpm-4.0/macros.in rpm-4.0.new/macros.in
---- rpm-4.0/macros.in	Mon Aug 28 17:24:45 2000
-+++ rpm-4.0.new/macros.in	Wed Nov 15 19:12:09 2000
-@@ -88,7 +88,7 @@
+diff -Nru rpm-4.0.1/macros.in rpm-4.0.1.new/macros.in
+--- rpm-4.0.1/macros.in	Wed Jan 31 13:22:16 2001
++++ rpm-4.0.1.new/macros.in	Wed Jan 31 13:24:31 2001
+@@ -90,7 +90,7 @@
  %_bzip2bin		@BZIP2BIN@
  %_dbpath		%{_var}/lib/rpm
  %_dbpath_rebuild	%{_dbpath}
@@ -22,7 +22,7 @@ diff -Nru rpm-4.0/macros.in rpm-4.0.new/macros.in
  #
  %__find_provides	@FINDPROVIDES@
  %__find_requires	@FINDREQUIRES@
-@@ -100,8 +100,8 @@
+@@ -102,8 +102,8 @@
  %__id_u			@__ID_U@
  %__chown_Rhf		@__CHOWN_RHF@
  %__chgrp_Rhf		@__CHGRP_RHF@
@@ -33,7 +33,7 @@ diff -Nru rpm-4.0/macros.in rpm-4.0.new/macros.in
  %_fixperms		%{__chmod} -Rf @FIXPERMS@
  #
  %_gzipbin		@GZIPBIN@
-@@ -110,13 +110,13 @@
+@@ -112,13 +112,13 @@
  %_rpmdir		%{_topdir}/RPMS
  #
  # XXX Note escaped %% for use in headerSprintf
@@ -46,10 +46,10 @@ diff -Nru rpm-4.0/macros.in rpm-4.0.new/macros.in
  %_tmppath		%{_var}/tmp
 -%_topdir		%{_usrsrc}/redhat
 +%_topdir		%(echo $HOME)/rpm
+ %_unzipbin		@UNZIPBIN@
  
  #==============================================================================
- # ---- Optional rpmrc macros.
-@@ -455,15 +455,15 @@
+@@ -461,15 +461,15 @@
  %_sbindir		%{_exec_prefix}/sbin
  %_libexecdir		%{_exec_prefix}/libexec
  %_datadir		%{_prefix}/share
