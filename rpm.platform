@@ -17,6 +17,7 @@
 
 %__os_install_post \
 %{__spec_install_post_strip}\
+%{__spec_install_post_chrpath}\
 %{__spec_install_post_compress_docs}\
 %{__spec_install_post_compress_modules}\
 %{__arch_install_post}\
