@@ -21,7 +21,6 @@ Patch4:		rpm-po.patch
 Patch5:		rpm-moredoc.patch
 Patch6:		rpm-arch.patch
 Patch7:		rpm-pld.patch
-Patch8:		rpm-find-lang.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildPrereq:	bzip2-static
@@ -73,7 +72,6 @@ construir pacotes usando o RPM.
 %patch5 -p1
 %patch6 -p1 
 %patch7 -p1 
-%patch8 -p1 
 %patch31 -p1
 install %{SOURCE4} po/pl.po
 install %{SOURCE3} macros.pld.in
