@@ -30,6 +30,13 @@
 %kgcc_package	gcc
 
 #-----------------------------------------------------------------
+# Build system path macros.
+#
+%__libtoolize           libtoolize --copy --force
+%__automake             automake -a -c -f --foreing %{!?debug:-Wall}
+%__autoconf             autoconf %{!?debug:-Wall}
+
+#-----------------------------------------------------------------
 %configure2_13 { \
  if [ -n "$LINGUAS" ]; then unset LINGUAS; fi; \
  LDFLAGS="${LDFLAGS:-%rpmldflags}" ; export LDFLAGS ; \
