@@ -15,7 +15,7 @@
 #-----------------------------------------------------------------
 # CFLAGS and LDFLAGS used to build
 
-%debuginfocflags        %{expand:%%define dic_%{_enable_debug_packages} %{_enable_debug_packages}}%{?dic_0:}%{?dic_1:-ggdb}%{expand:%%undefine dic_%{_enable_debug_packages}}
+%debuginfocflags        %{expand:%%define dic_%{_enable_debug_packages} %{_enable_debug_packages}}%{?dic_1:-ggdb}%{expand:%%undefine dic_%{_enable_debug_packages}}
 
 %debugcflags	-O0 -g -Wall
 %rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags: %debuginfocflags}
