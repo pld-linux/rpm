@@ -7,7 +7,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.2
-Release:	60
+Release:	61
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -24,6 +24,7 @@ Source10:	%{name}-find-provides
 Source11:	%{name}-find-requires
 Source12:	%{name}-non-english-man-pages.tar.bz2
 Source13:	%{name}-macros.python
+Source14:	%{name}-groups-po.awk
 Patch0:		%{name}-rpmrc.patch
 Patch1:		%{name}-macros.patch
 Patch2:		%{name}-arch.patch
@@ -58,8 +59,7 @@ Patch30:	%{name}-athlon.patch
 Patch31:	%{name}-athlon-identify.patch
 Patch32:	%{name}-gettext-in-header.patch
 Patch33:	%{name}-perlprov-perl5.6.patch
-Patch34:	%{name}-groups-po.patch
-Patch35:	%{name}-ac25x.patch
+Patch34:	%{name}-ac25x.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 URL:		http://www.rpm.org/
@@ -356,7 +356,6 @@ construir pacotes usando o RPM.
 
 %patch32 -p1
 %patch35 -p1
-%patch35 -p1
 %patch36 -p1
 %patch37 -p1
 %patch38 -p1
@@ -372,6 +371,9 @@ install %{SOURCE9} scripts/find-lang.sh
 (cd scripts;
 mv -f perl.req perl.req.in
 mv -f perl.prov perl.prov.in)
+
+chmod +x %{SOURCE4}
+
 %build
 # generate Group translations to *.po
 awk -f %{SOURCE14} %{SOURCE1}
