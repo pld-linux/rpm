@@ -1,0 +1,33 @@
+diff -ur rpm-4.0.2/installplatform rpm-4.0.2-new/installplatform
+--- rpm-4.0.2/installplatform	Thu Jan 24 09:50:29 2002
++++ rpm-4.0.2-new/installplatform	Thu Jan 24 11:25:42 2002
+@@ -20,7 +20,7 @@
+ 
+ RPM="./rpm --rcfile $TEMPRC"
+ 
+-CHARCH='s_i.86_i386_;s_sparc[^-]*_sparc_;s_alpha[^-]*_alpha_'
++CHARCH='s_i.86_i386_;s_athlon_i386_;s_sparc[^-]*_sparc_;s_alpha[^-]*_alpha_'
+ arch="`$RPM --eval '%{_arch}' | sed -e $CHARCH`"
+ VENDOR="`$RPM --eval '%{_vendor}'`"
+ OS="`$RPM --eval '%{_os}'`"
+@@ -34,7 +34,7 @@
+ ln -s ${arch}-${VENDOR}-${OS} ${DESTDIR}/${pkglibdir}/noarch-${OS}
+ 
+ case "$arch" in
+-  i[3456]86) SUBSTS='s_i386_i386_ s_i386_i486_ s_i386_i586_ s_i386_i686_' ;;
++  i[3456]86) SUBSTS='s_i386_i386_ s_i386_i486_ s_i386_i586_ s_i386_i686_ s_i386_athlon_' ;;
+   alpha*) SUBSTS='s_alpha_alpha_ s_alpha_alphaev5_ s_alpha_alphaev56_ s_alpha_alphapca56_ s_alpha_alphaev6_ s_alpha_alphaev67_' ;;
+   sparc*) SUBSTS='s_sparc\(64\|v9\)_sparc_ s_sparc64_sparcv9_;s_sparc\([^v]\|$\)_sparcv9\1_ s_sparcv9_sparc64_;s_sparc\([^6]\|$\)_sparc64\1_' ;;
+   *) SUBSTS=y___ ;;
+diff -ur rpm-4.0.2/macros.in rpm-4.0.2-new/macros.in
+--- rpm-4.0.2/macros.in	Thu Jan 24 09:50:29 2002
++++ rpm-4.0.2-new/macros.in	Thu Jan 24 11:26:29 2002
+@@ -638,7 +638,7 @@
+ #   rpm can use regular expressions against target platforms in macro
+ #   conditionals. This change will be introduced after rpm-3.0.4).
+ #
+-%ix86   i386 i486 i586 i686 i786 i886 i986
++%ix86   i386 i486 i586 i686 i786 i886 i986 athlon
+ 
+ #------------------------------------------------------------------------
+ # Use in %install to generate locale specific file lists. For example,

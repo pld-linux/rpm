@@ -10,21 +10,3 @@ diff -Nur --exclude *~ rpm-4.0.2/lib/header.h rpm-4.0.2.new/lib/header.h
  
  #ifdef __cplusplus
  extern "C" {
-@@ -702,7 +702,7 @@
- {
-     if (data) {
- 	/*@-branchstate@*/
--	if (type == -1 ||
-+	if ((int)type == -1 ||
- 	    type == RPM_STRING_ARRAY_TYPE ||
- 	    type == RPM_I18NSTRING_TYPE ||
- 	    type == RPM_BIN_TYPE)
-@@ -713,7 +713,7 @@
- }
- 
- #if !defined(__HEADER_PROTOTYPES__)
--#include <hdrinline.h>
-+#include "hdrinline.h"
- #endif
- 
- #ifdef __cplusplus

@@ -1,0 +1,20 @@
+--- rpm-4.0.2/macros.in	Thu Jan 24 11:34:24 2002
++++ rpm-4.0.2/macros.new.in	Thu Jan 24 11:33:49 2002
+@@ -64,6 +64,7 @@
+ %__ar			@AR@
+ %__cc			@CC@
+ %__cpp			@CPP@
++%__cxx			@CXX@
+ %__ld			@__LD@
+ %__nm			@__NM@
+ %__objcopy		@__OBJCOPY@
+--- rpm-4.0.2/configure.in	Thu Jan 24 11:34:24 2002
++++ rpm-4.0.2/configure.new.in	Thu Jan 24 11:33:49 2002
+@@ -27,6 +27,7 @@
+ fi
+ 
+ AC_PROG_CPP
++AC_PROG_CXX
+ AC_PROG_GCC_TRADITIONAL
+ AC_PROG_INSTALL
+ 
