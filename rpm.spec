@@ -2,10 +2,11 @@ Summary:     Red Hat Package Manager
 Summary(pl): Aplikacja do zarz±dzania pakietami
 Name:        rpm
 Version:     2.5.5
-Release:     1
+Release:     2
 Group:       Utilities/System
 Source:      ftp://ftp.rpm.org/pub/rpm/dist/rpm-2.5.x/%{name}-%{version}.tar.gz
 Patch0:      rpm.patch
+Patch1:      rpm-no_vrfy_symlinks.patch
 Copyright:   GPL
 BuildRoot:   /tmp/%{name}-%{version}-root
 Conflicts:   patch < 2.5
@@ -42,6 +43,7 @@ graficznych mened¿erów pakietów oraz innych narzêdzi, które wymagaj±
 construir pacotes usando o RPM.
 %setup -q
 %patch0 -p1
+%patch1 -p1
 install %{SOURCE13} macros.python.in
 mv -f perl.prov perl.prov.in)
 CFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=/usr
