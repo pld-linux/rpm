@@ -338,32 +338,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/rpm/noarch-linux
 %{_libdir}/rpm/noarch-pld-linux
 %ifarch i386 i486 i586 i686
-%{_libdir}/rpm/i386-pld-linux
-%{_libdir}/rpm/i386-linux
-%endif
-%ifarch i486 i586 i686
-%{_libdir}/rpm/i486-pld-linux
-%{_libdir}/rpm/i486-linux
-%endif
-%ifarch i586 i686
-%{_libdir}/rpm/i586-pld-linux
-%{_libdir}/rpm/i586-linux
-%endif
-%ifarch i686
-%{_libdir}/rpm/i686-pld-linux
-%{_libdir}/rpm/i686-linux
+%{_libdir}/rpm/rpmpopt*
 %{_libdir}/rpm/noarch-linux
 %{_libdir}/rpm/noarch-pld-linux
-%{_libdir}/rpm/sparc-pld-linux
-%{_libdir}/rpm/sparc-linux
-%endif
-%ifarch sparc64
-%{_libdir}/rpm/sparc64-pld-linux
-%{_libdir}/rpm/sparc64-linux
+%ifarch i386 i486 i586 i686 athlon
 %{_libdir}/rpm/i?86*
 %{_libdir}/rpm/athlon*
-%{_libdir}/rpm/alpha-pld-linux
-%{_libdir}/rpm/alpha-linux
+%endif
 %ifarch sparc sparc64
 %endif
 %ifarch ppc
