@@ -116,10 +116,16 @@
 %_rpmfilename		%%{NAME}-%%{VERSION}-%%{RELEASE}%{?debug:dbg}.%%{ARCH}.rpm
 
 # Requires name = version-release
-%requires_releq()  %(LC_ALL="C" echo '%*' | xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}-%%{release}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
-%requires_kernel_releq()  %(LC_ALL="C" rpm -q --qf 'Prereq: kernel = %%{epoch}:%%{version}-%%{release}\\n' kernel-headers | grep -v "is not")
-%requires_releq_kernel_up()  %(LC_ALL="C" rpm -q --qf 'Prereq: kernel-up = %%{epoch}:%%{version}-%%{release}\\n' kernel-headers | grep -v "is not")
-%requires_releq_kernel_smp()  %(LC_ALL="C" rpm -q --qf 'Prereq: kernel-smp = %%{epoch}:%%{version}-%%{release}\\n' kernel-headers | grep -v "is not")
+%requires_releq()  		%(LC_ALL="C" echo '%*' | xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}-%%{release}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
+%requires_kernel_releq()  	%(LC_ALL="C" rpm -q --qf 'Prereq: kernel = %%{epoch}:%%{version}-%%{release}\\n' kernel-headers | grep -v "is not")
+%requires_releq_kernel_up()  	%(LC_ALL="C" rpm -q --qf 'Prereq: kernel-up = %%{epoch}:%%{version}-%%{release}\\n' kernel-headers | grep -v "is not")
+%requires_releq_kernel_smp()  	%(LC_ALL="C" rpm -q --qf 'Prereq: kernel-smp = %%{epoch}:%%{version}-%%{release}\\n' kernel-headers | grep -v "is not")
+
+# kernel version-release handling
+%__kernel_ver    %(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
+%__kernel_rel    %(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/version.h --queryformat "%{RELEASE}" | grep -v "is not")
+%_kernel_ver     %(echo %{__kernel_ver}%{!?_without_dist_kernel:-%{__kernel_rel}})
+%_kernel_ver_str %(echo %{_kernel_ver} | sed s/-/_/g)
 
 #-----------------------------------------------------------------
 # find and gzip all files in %{_mandir} and %{infodir}
