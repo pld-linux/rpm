@@ -368,11 +368,11 @@ echo "Compress kernel modules if any."; \
 # Requires/Provides automation
 # exceptions system by Jacek Konieczny <jajcus@pld.org.pl>
 #
-%_noautoreqfiles	%(sed -e s'/#.*//' /etc/rpm/noautoreqfiles)
-%_noautoprovfiles	%(sed -e s'/#.*//' /etc/rpm/noautoprovfiles)
-%_noautoreq		%(sed -e s'/#.*//' /etc/rpm/noautoreq)
-%_noautoreqdep		%(sed -e s'/#.*//' /etc/rpm/noautoreqdep)
-%_noautoprov		%(sed -e s'/#.*//' /etc/rpm/noautoprov)
+%__noautoreqfiles	%(sed -e s'/#.*//' /etc/rpm/noautoreqfiles)%{?_noautoreqfiles: %{_noautoreqfiles}}
+%__noautoprovfiles	%(sed -e s'/#.*//' /etc/rpm/noautoprovfiles)%{?_noautoprovfiles: %{_noautoprovfiles}}
+%__noautoreq		%(sed -e s'/#.*//' /etc/rpm/noautoreq)%{?_noautoreq: %{_noautoreq}}
+%__noautoreqdep		%(sed -e s'/#.*//' /etc/rpm/noautoreqdep)%{?_noautoreqdep: %{_noautoreqdep}}
+%__noautoprov		%(sed -e s'/#.*//' /etc/rpm/noautoprov)%{?_noautoprov: %{_noautoprov}}
 #%_noautocompressdoc	%{nil}
 #
 %_missing_doc_files_terminate_build	1%{nil}
