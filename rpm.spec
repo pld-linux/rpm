@@ -98,6 +98,7 @@ Group(de):	Entwicklung/Libraries
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name}-libs = %{version}
+Group:		Development/Libraries
 Requires:	%{name} = %{version}
 Requires:	popt-devel
 
