@@ -146,3 +146,6 @@ done; \
 %{__spec_install_post_strip} \
 %{__spec_install_post_compress_docs} \
 }
+
+%_source_payload        w9.gzdio
+%_binary_payload        w9.bzdio
