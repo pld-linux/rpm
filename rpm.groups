@@ -545,7 +545,7 @@ Applications/Text
 Base
 	[cs]:		Základ
 	[da]:		Basal
-	[de]:		Basis
+	[de]:		Grundsätzlich
 	[es]:		Base
 	[fr]:		Base
 	[is]:		Grunnforrit
@@ -1220,7 +1220,7 @@ X11/Applications/Graphics
 X11/Applications/Multimedia
 	[cs]:		X11/Aplikace/Multimédia
 	[da]:		X11/Programmer/Multimedie
-	[de]:		X11/Applikationen/Multimedia
+	[de]:		X11/Applikationen/Multimedien
 	[es]:		X11/Aplicaciones/Multimedia
 	[fr]:		X11/Applications/Multimédia
 	[is]:		X11/Forrit/Margmiðlun
@@ -1335,7 +1335,7 @@ X11/Libraries
 X11/Window Managers
 	[cs]:		X11/Okenní mana¾ery
 	[da]:		X11/Vindueshåndtererene
-	[de]:		X11/Fenstermanager
+	[de]:		X11/Fenstermanagern
 	[es]:		X11/Administradores de Ventanas
 	[fr]:		X11/Gestionnaires de fenêtres
 	[is]:		X11/Gluggastjórunum
