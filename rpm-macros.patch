@@ -1,6 +1,6 @@
-diff -ru rpm-3.0.1.old/macros.in rpm-3.0.1/macros.in
---- rpm-3.0.1.old/macros.in	Tue Apr 27 21:46:45 1999
-+++ rpm-3.0.1/macros.in	Fri May  7 03:24:13 1999
+diff -Nur rpm-3.0.1/macros.in rpm-3.0.1.pld/macros.in
+--- rpm-3.0.1/macros.in	Tue May 11 11:24:08 1999
++++ rpm-3.0.1.pld/macros.in	Mon May 17 20:07:52 1999
 @@ -55,8 +55,8 @@
  %_builddir		%{_topdir}/BUILD
  %_buildshell		/bin/sh
@@ -28,6 +28,15 @@ diff -ru rpm-3.0.1.old/macros.in rpm-3.0.1/macros.in
  #
  #==============================================================================
  # ---- Optional rpmrc macros.
+@@ -107,7 +107,7 @@
+ #	will be used if the per-platform macro file does not exist..
+ #
+ %_arch			@RPMCANONARCH@
+-%_vendor		@RPMCANONVENDOR@
++%_vendor		pld
+ %_os			@RPMCANONOS@
+ %_target_platform	%{_target_cpu}-%{_vendor}-%{_target_os}
+ #
 @@ -154,8 +154,8 @@
  %_libdir		%{_exec_prefix}/lib
  %_includedir		%{_prefix}/include
@@ -39,4 +48,3 @@ diff -ru rpm-3.0.1.old/macros.in rpm-3.0.1/macros.in
  
  #==============================================================================
  # ---- config.guess platform macros.
-Only in rpm-3.0.1: macros.in~
