@@ -5,7 +5,7 @@ diff -ur rpm.org/file/src/readelf.c rpm/file/src/readelf.c
  			    getu32(fm, ph32.p_align) : 4) \
  			 : (off_t) (ph64.p_align ?	\
  			    getu64(fm, ph64.p_align) : 4)))
-+#define ph_filesz	(fms->cls == ELFCLASS32            \
++#define ph_filesz	(fm->cls == ELFCLASS32            \
 +			? getu32(fm, ph32.p_filesz)  \
 +			: getu64(fm, ph64.p_filesz))
  #define nh_size		(fm->cls == ELFCLASS32		\
