@@ -10,7 +10,7 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 #
 %include        /usr/lib/rpm/macros.python
-%define snap	20030322
+#%define snap	20030322
 %define	beecrypt_ver	2.2.0
 # versions of required libraries
 %define	reqdb_ver	4.1.25-1
@@ -25,12 +25,12 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.2
 Version:	%{ver}
-%define	rel	0.%{snap}.10
+%define	rel	0.1
 Release:	%{rel}
 %define	beecrypt_rel	%{ver}_%{rel}
 License:	GPL
 Group:		Base
-Source0:	ftp://ftp.rpm.org/pub/rpm/test-4.2/%{name}-%{version}.%{snap}.tar.gz
+Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.tar.gz
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
