@@ -243,10 +243,10 @@ echo "Compress kernel modules if any."; \
 #
 # Requires: GConf2
 #
-%gconf_schema_install { \
-    GCONF_CONFIG_SOURCE="xml:readwrite:/etc/X11/GNOME2/gconf/gconf.xml.defaults" \
-    /usr/X11R6/bin/gconftool-2 --makefile-install-rule \
-    /etc/X11/GNOME2/gconf/schemas/*.schemas > /dev/null \
+%gconf_schema_install { umask 022; \
+    GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" \
+    /usr/bin/gconftool-2 --makefile-install-rule \
+    /etc/gconf/schemas/*.schemas > /dev/null \
 }
 
 #-----------------------------------------------------------------
