@@ -8,7 +8,7 @@
 +AC_RUN_IFELSE([AC_LANG_SOURCE([[
 +#include <python2.4/Python.h>
 +main() {
-+  exit(strncmp("2.3", PY_VERSION, 3));
++  exit(strncmp("2.4", PY_VERSION, 3));
 +} ]])],[withval=yes],[withval=no],[withval=yes])
 +  AC_MSG_RESULT($withval)
 +  if test $withval = yes ; then
