@@ -1,7 +1,7 @@
 Applications
 	[cs]:		Aplikace
 	[da]:		Programmer
-	[de]:		Anwendungen
+	[de]:		Applikationen
 	[es]:		Aplicaciones
 	[fr]:		Applications
 	[it]:		Applicazioni
@@ -16,7 +16,7 @@ Applications
 Applications/Archiving
 	[cs]:		Aplikace/Archivování
 	[da]:		Programmer/Arkivering
-	[de]:		Anwendungen/Archivierung
+	[de]:		Applikationen/Archivierung
 	[es]:		Aplicaciones/Archivar
 	[fr]:		Applications/Archivage
 	[it]:		Applicazioni/Archiviazione
@@ -30,7 +30,7 @@ Applications/Archiving
 Applications/Communications
 	[cs]:		Aplikace/Komunikace
 	[da]:		Programmer/Kommunikation
-	[de]:		Anwendungen/Kommunikation
+	[de]:		Applikationen/Kommunikation
 	[es]:		Aplicaciones/Comunicaciones
 	[fr]:		Applications/Transmissions
 	[it]:		Applicazioni/Comunicazioni
@@ -44,7 +44,7 @@ Applications/Communications
 Applications/Console
 	[cs]:		Aplikace/Konzole
 	[da]:		Programmer/Konsol
-	[de]:		Anwendungen/Konsole
+	[de]:		Applikationen/Konsole
 	[es]:		Aplicaciones/Consola
 	[fr]:		Applications/Console
 	[it]:		Applicazioni/Console
@@ -57,7 +57,7 @@ Applications/Console
 Applications/Databases
 	[cs]:		Aplikace/Databáze
 	[da]:		Programmer/Databaser
-	[de]:		Anwendungen/Datenbanken
+	[de]:		Applikationen/Datenbanken
 	[es]:		Aplicaciones/Bases de Datos
 	[fr]:		Applications/Bases de Données
 	[it]:		Applicazioni/Database
@@ -71,7 +71,7 @@ Applications/Databases
 Applications/Databases/Interfaces
 	[cs]:		Aplikace/Databáze/Rozhraní
 	[da]:		Programmer/Databaser/Grænsefladen
-	[de]:		Anwendungen/Datenbanken/Schnittstellen
+	[de]:		Applikationen/Datenbanken/Schnittstellen
 	[es]:		Aplicaciones/Bases de Datos/Interfaces
 	[fr]:		Applications/Bases de données/Interfaces
 	[it]:		Applicazioni/Database/Interfacce
@@ -84,7 +84,7 @@ Applications/Databases/Interfaces
 Applications/Dictionaries
 	[cs]:		Aplikace/Slovníky
 	[da]:		Programmer/Ordbøger
-	[de]:		Anwendungen/Wörterbücher
+	[de]:		Applikationen/Wörterbücher
 	[es]:		Aplicaciones/Diccionarios
 	[fr]:		Applications/Dictionaires
 	[it]:		Applicazioni/Dizionari
@@ -97,7 +97,7 @@ Applications/Dictionaries
 Applications/Editors
 	[cs]:		Aplikace/Editory
 	[da]:		Programmer/Tekstbehandlere
-	[de]:		Anwendungen/Editoren
+	[de]:		Applikationen/Editoren
 	[es]:		Aplicaciones/Editores
 	[fr]:		Applications/Editeurs
 	[it]:		Applicazioni/Editor
@@ -111,7 +111,7 @@ Applications/Editors
 Applications/Editors/Emacs
 	[cs]:		Aplikace/Editory/Emacs
 	[da]:		Programmer/Tekstbehandlere/Emacs
-	[de]:		Anwendungen/Editoren/Emacs
+	[de]:		Applikationen/Editoren/Emacs
 	[es]:		Aplicaciones/Editores/Emacs
 	[fr]:		Applications/Editeurs/Emacs
 	[it]:		Applicazioni/Editor/Emacs
@@ -125,7 +125,7 @@ Applications/Editors/Emacs
 Applications/Editors/Vim
 	[cs]:		Aplikace/Editory/Vim
 	[da]:		Programmer/Tekstbehandlere/Vim
-	[de]:		Anwendungen/Editoren/Vim
+	[de]:		Applikationen/Editoren/Vim
 	[es]:		Aplicaciones/Editores/Vim
 	[fr]:		Applications/Editeurs/Vim
 	[it]:		Applicazioni/Editor/Vim
@@ -139,7 +139,7 @@ Applications/Editors/Vim
 Applications/Editors/XEmacs
 	[cs]:		Aplikace/Editory/XEmacs
 	[da]:		Programmer/Tekstbehandlere/XEmacs
-	[de]:		Anwendungen/Editoren/XEmacs
+	[de]:		Applikationen/Editoren/XEmacs
 	[es]:		Aplicaciones/Editores/XEmacs
 	[fr]:		Applications/Editeurs/XEmacs
 	[it]:		Applicazioni/Editor/XEmacs
@@ -151,7 +151,7 @@ Applications/Editors/XEmacs
 	[sv]:		Tillämpningar/Editorer/XEmacs
 
 Applications/Emulators
-	[de]:		Anwendungen/Emulatoren
+	[de]:		Applikationen/Emulatoren
 	[da]:		Programmer/Emulatorer
 	[es]:		Aplicaciones/Emuladores
 	[fr]:		Applications/Émulateurs
@@ -166,7 +166,7 @@ Applications/Emulators
 Applications/Engineering
 	[cs]:		Aplikace/In¾enýrské
 	[da]:		Programmer/Ingeniørarbejde
-	[de]:		Anwendungen/Technik
+	[de]:		Applikationen/Technik
 	[es]:		Aplicaciones/Ingeniería
 	[fr]:		Applications/Ingénierie
 	[it]:		Applicazioni/Engineering
@@ -180,7 +180,7 @@ Applications/Engineering
 Applications/File
 	[cs]:		Aplikace/Práce se soubory
 	[da]:		Programmer/Filer
-	[de]:		Anwendungen/Datei
+	[de]:		Applikationen/Datei
 	[es]:		Aplicaciones/Archivos
 	[fr]:		Applications/Fichiers
 	[it]:		Applicazioni/File
@@ -195,7 +195,7 @@ Applications/File
 Applications/Graphics
 	[cs]:		Aplikace/Grafika
 	[da]:		Programmer/Grafik
-	[de]:		Anwendungen/Graphiken
+	[de]:		Applikationen/Graphiken
 	[es]:		Aplicaciones/Gráficos
 	[fr]:		Applications/Graphiques
 	[it]:		Applicazioni/Immagini
@@ -209,7 +209,7 @@ Applications/Graphics
 Applications/Games
 	[cs]:		Aplikace/Hry
 	[da]:		Programmer/Spil
-	[de]:		Anwendungen/Spiele
+	[de]:		Applikationen/Spiele
 	[es]:		Aplicaciones/Juegos
 	[fr]:		Applications/Jeux
 	[it]:		Applicazioni/Giochi
@@ -223,7 +223,7 @@ Applications/Games
 Applications/Networking
 	[cs]:		Aplikace/Sí»ové
 	[da]:		Programmer/Netværks
-	[de]:		Anwendungen/Netzwerkwesen
+	[de]:		Applikationen/Netzwerkwesen
 	[es]:		Aplicaciones/Red
 	[fr]:		Applications/Réseau
 	[it]:		Applicazioni/Rete
@@ -237,7 +237,7 @@ Applications/Networking
 Applications/Mail
 	[cs]:		Aplikace/Po¹ta
 	[da]:		Programmer/Post
-	[de]:		Anwendungen/Post
+	[de]:		Applikationen/Post
 	[es]:		Aplicaciones/Correo Electrónico
 	[fr]:		Applications/Courrier
 	[it]:		Applicazioni/Posta
@@ -250,7 +250,7 @@ Applications/Mail
 Applications/Math
 	[cs]:		Aplikace/Matematické
 	[da]:		Programmer/Matematik
-	[de]:		Anwendungen/Mathematik
+	[de]:		Applikationen/Mathematik
 	[es]:		Aplicaciones/Matemáticas
 	[fr]:		Applications/Mathématiques
 	[it]:		Applicazioni/Matematiche
@@ -263,7 +263,7 @@ Applications/Math
 Applications/News
 	[cs]:		Aplikace/News
 	[da]:		Programmer/Nyheder
-	[de]:		Anwendungen/News
+	[de]:		Applikationen/News
 	[es]:		Aplicaciones/Noticias
 	[fr]:		Applications/Nouvelles
 	[it]:		Applicazioni/News
@@ -277,7 +277,7 @@ Applications/News
 Applications/Printing
 	[cs]:		Aplikace/Tisk
 	[da]:		Programmer/Udskrift
-	[de]:		Anwendungen/Drucken
+	[de]:		Applikationen/Drucken
 	[es]:		Aplicaciones/Impresión
 	[fr]:		Applications/Impression
 	[it]:		Applicazioni/Stampa
@@ -290,7 +290,7 @@ Applications/Printing
 Applications/Publishing
 	[cs]:		Aplikace/Publikování
 	[da]:		Programmer/Udgivelse
-	[de]:		Anwendungen/Publizieren
+	[de]:		Applikationen/Publizieren
 	[es]:		Aplicaciones/Edición
 	[fr]:		Applications/Edition
 	[it]:		Applicazioni/Publishing
@@ -305,7 +305,7 @@ Applications/Publishing
 Applications/Publishing/SGML
 	[cs]:		Aplikace/Publikování/SGML
 	[da]:		Programmer/Udgivelse/SGML
-	[de]:		Anwendungen/Publizieren/SGML
+	[de]:		Applikationen/Publizieren/SGML
 	[es]:		Aplicaciones/Edición/SGML
 	[fr]:		Applications/Edition/SGML
 	[it]:		Applicazioni/Publishing/SGML
@@ -320,7 +320,7 @@ Applications/Publishing/SGML
 Applications/Publishing/TeX
 	[cs]:		Aplikace/Publikování/TeX
 	[da]:		Programmer/Udgivelse/TeX
-	[de]:		Anwendungen/Publizieren/TeX
+	[de]:		Applikationen/Publizieren/TeX
 	[es]:		Aplicaciones/Edición/TeX
 	[fr]:		Applications/Edition/TeX
 	[it]:		Applicazioni/Publishing/TeX
@@ -335,7 +335,7 @@ Applications/Publishing/TeX
 Applications/Publishing/XML
 	[cs]:		Aplikace/Publikování/XML
 	[da]:		Programmer/Udgivelse/XML
-	[de]:		Anwendungen/Publizieren/XML
+	[de]:		Applikationen/Publizieren/XML
 	[es]:		Aplicaciones/Edición/XML
 	[fr]:		Applications/Edition/XML
 	[it]:		Applicazioni/Publishing/XML
@@ -350,7 +350,7 @@ Applications/Publishing/XML
 Applications/Publishing/XML/Java
 	[cs]:		Aplikace/Publikování/XML/Java
 	[da]:		Programmer/Udgivelse/XML/Java
-	[de]:		Anwendungen/Publizieren/XML/Java
+	[de]:		Applikationen/Publizieren/XML/Java
 	[es]:		Aplicaciones/Edición/XML/Java
 	[fr]:		Applications/Edition/XML/Java
 	[it]:		Applicazioni/Publishing/XML/Java
@@ -365,7 +365,7 @@ Applications/Publishing/XML/Java
 Applications/Shells
 	[cs]:		Aplikace/Shelly
 	[da]:		Programmer/Skaller
-	[de]:		Anwendungen/Shells
+	[de]:		Applikationen/Shells
 	[es]:		Aplicaciones/Shells
 	[fr]:		Applications/Shells
 	[it]:		Applicazioni/Shell
@@ -380,7 +380,7 @@ Applications/Shells
 Applications/Sound
 	[cs]:		Aplikace/Zvuk
 	[da]:		Programmer/Lyd
-	[de]:		Anwendungen/Laut
+	[de]:		Applikationen/Laut
 	[es]:		Aplicaciones/Sonido
 	[fr]:		Aplicações/Son
 	[it]:		Applicazioni/Audio
@@ -394,7 +394,7 @@ Applications/Sound
 Applications/Spreadsheets
 	[cs]:		Aplikace/Tabulkove procesorý
 	[da]:		Programmer/Regneark
-	[de]:		Anwendungen/Arbeitsblätter
+	[de]:		Applikationen/Arbeitsblätter
 	[es]:		Aplicaciones/Hojas de Cálculo
 	[fr]:		Applications/Tableurs
 	[it]:		Applicazioni/Fogli di calcolo
@@ -407,7 +407,7 @@ Applications/Spreadsheets
 Applications/System
 	[cs]:		Aplikace/Systém
 	[da]:		Programmer/System
-	[de]:		Anwendungen/System
+	[de]:		Applikationen/System
 	[es]:		Aplicaciones/Sistema
 	[fr]:		Applications/Système
 	[it]:		Applicazioni/Sistema
@@ -422,7 +422,7 @@ Applications/System
 Applications/Terminal
 	[cs]:		Aplikace/Terminál
 	[da]:		Programmer/Terminal
-	[de]:		Anwendungen/Terminal
+	[de]:		Applikationen/Terminal
 	[es]:		Aplicaciones/Terminal
 	[fr]:		Applications/Terminal
 	[it]:		Applicazioni/Terminale
@@ -435,7 +435,7 @@ Applications/Terminal
 Applications/Text
 	[cs]:		Aplikace/Text
 	[da]:		Programmer/Tekst
-	[de]:		Anwendungen/Text
+	[de]:		Applikationen/Text
 	[es]:		Aplicaciones/Texto
 	[fr]:		Applications/Texte
 	[it]:		Applicazioni/Testo
@@ -943,7 +943,7 @@ X11/Amusements
 X11/Applications
 	[cs]:		X11/Aplikace
 	[da]:		X11/Programmer
-	[de]:		X11/Anwendungen
+	[de]:		X11/Applikationen
 	[es]:		X11/Aplicaciones
 	[fr]:		X11/Applications
 	[it]:		X11/Applicazioni
@@ -958,7 +958,7 @@ X11/Applications
 X11/Applications/Editors
 	[cs]:		X11/Aplikace/Editory
 	[da]:		X11/Programmer/Tekstbehandlere
-	[de]:		X11/Anwendungen/Editoren
+	[de]:		X11/Applikationen/Editoren
 	[es]:		X11/Aplicaciones/Editores
 	[fr]:		X11/Applications/Editeurs
 	[it]:		X11/Applicazioni/Editor
@@ -972,7 +972,7 @@ X11/Applications/Editors
 X11/Applications/Games
 	[cs]:		X11/Aplikace/Hry
 	[da]:		X11/Programmer/Spil
-	[de]:		X11/Anwendungen/Spiele
+	[de]:		X11/Applikationen/Spiele
 	[es]:		X11/Aplicaciones/Juegos
 	[it]:		X11/Applicazioni/Giochi
 	[ja]:		X11/¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥²¡¼¥à
@@ -986,7 +986,7 @@ X11/Applications/Games
 X11/Applications/Games/Strategy
 	[cs]:		X11/Aplikace/Hry/Strategické
 	[da]:		X11/Programmer/Spil/Strategi
-	[de]:		X11/Anwendungen/Spiele/Strategie
+	[de]:		X11/Applikationen/Spiele/Strategie
 	[es]:		X11/Aplicaciones/Juegos/Estratégico
 	[fr]:		X11/Applications/Jeux/Stratégique
 	[it]:		X11/Applicazioni/Giochi/Strategico
@@ -999,7 +999,7 @@ X11/Applications/Games/Strategy
 X11/Applications/Graphics
 	[cs]:		X11/Aplikace/Grafika
 	[da]:		X11/Programmer/Grafik
-	[de]:		X11/Anwendungen/Grafik
+	[de]:		X11/Applikationen/Grafik
 	[es]:		X11/Aplicaciones/Gráficos
 	[fr]:		X11/Applications/Graphiques
 	[it]:		X11/Applicazioni/Immagini
@@ -1013,7 +1013,7 @@ X11/Applications/Graphics
 X11/Applications/Multimedia
 	[cs]:		X11/Aplikace/Multimédia
 	[da]:		X11/Programmer/Multimedie
-	[de]:		X11/Anwendungen/Multimedia
+	[de]:		X11/Applikationen/Multimedia
 	[es]:		X11/Aplicaciones/Multimedia
 	[fr]:		X11/Applications/Multimédia
 	[it]:		X11/Applicazioni/Multimedia
@@ -1027,7 +1027,7 @@ X11/Applications/Multimedia
 X11/Applications/Networking
 	[cs]:		X11/Aplikace/Sí»ové
 	[da]:		X11/Programmer/Netværks
-	[de]:		X11/Anwendungen/Netzwerkwesen
+	[de]:		X11/Applikationen/Netzwerkwesen
 	[es]:		X11/Aplicaciones/Red
 	[fr]:		X11/Applications/Réseau
 	[it]:		X11/Applicazioni/Rete
@@ -1040,7 +1040,7 @@ X11/Applications/Networking
 
 X11/Applications/Science
 	[cs]:		X11/Aplikace/Vìdecké
-	[de]:		X11/Anwendungen/Wissenschaft
+	[de]:		X11/Applikationen/Wissenschaft
 	[es]:		X11/Aplicaciones/Ciencia
 	[fr]:		X11/Applications/Science
 	[it]:		X11/Applicazioni/Sciencia
