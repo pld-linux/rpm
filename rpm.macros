@@ -114,6 +114,8 @@
 # Requires name = version-release
 %requires_releq()  %(LC_ALL="C" echo '%*' | xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}-%%{release}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
 %requires_kernel_releq()  %(LC_ALL="C" rpm -q --qf 'Prereq: kernel = %%{epoch}:%%{version}-%%{release}\\n' kernel-headers | grep -v "is not")
+%requires_releq_kernel_up()  %(LC_ALL="C" rpm -q --qf 'Prereq: kernel-up = %%{epoch}:%%{version}-%%{release}\\n' kernel-headers | grep -v "is not")
+%requires_releq_kernel_smp()  %(LC_ALL="C" rpm -q --qf 'Prereq: kernel-smp = %%{epoch}:%%{version}-%%{release}\\n' kernel-headers | grep -v "is not")
 
 #-----------------------------------------------------------------
 # find and gzip all files in %{_mandir} and %{infodir}
