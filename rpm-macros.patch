@@ -1,6 +1,7 @@
---- rpm-3.0.4/configure.in.wiget	Wed Mar 15 13:29:09 2000
-+++ rpm-3.0.4/configure.in	Wed Mar 22 17:30:33 2000
-@@ -932,7 +932,7 @@
+diff -urN rpm-3.0.5.orig/configure.in rpm-3.0.5/configure.in
+--- rpm-3.0.5.orig/configure.in	Sun Jul 16 21:02:26 2000
++++ rpm-3.0.5/configure.in	Sat Jul 29 23:58:18 2000
+@@ -913,7 +913,7 @@
  dnl export LIBS INCPATH CONFIG_SITE
  
  AC_CONFIG_SUBDIRS(popt)
@@ -9,15 +10,13 @@
  	lib/Makefile build/Makefile tools/Makefile scripts/Makefile
  	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
  	misc/Makefile po/Makefile.in intl/Makefile
---- rpm-3.0.4/macros.in.wiget	Thu Mar  9 19:13:03 2000
-+++ rpm-3.0.4/macros.in	Wed Mar 22 17:33:43 2000
-@@ -80,9 +80,9 @@
- %_builddir		%{_topdir}/BUILD
- %_buildshell		/bin/sh
+diff -urN rpm-3.0.5.orig/macros.in rpm-3.0.5/macros.in
+--- rpm-3.0.5.orig/macros.in	Sun Jul  9 17:35:56 2000
++++ rpm-3.0.5/macros.in	Sat Jul 29 23:59:21 2000
+@@ -82,7 +82,7 @@
  %_bzip2bin		@BZIP2BIN@
--%_dbpath		%{_var}/lib/rpm
-+%_dbpath		%{_var}/lib/rpm
- %_rebuilddbpath		%{_dbpath}
+ %_dbpath		%{_var}/lib/rpm
+ %_dbpath_rebuild	%{_dbpath}
 -%_defaultdocdir		%{_usr}/doc
 +%_defaultdocdir		%{_usr}/share/doc
  #
@@ -50,7 +49,7 @@
  
  #==============================================================================
  # ---- Optional rpmrc macros.
-@@ -384,14 +384,14 @@
+@@ -401,15 +401,15 @@
  %_sbindir		%{_exec_prefix}/sbin
  %_libexecdir		%{_exec_prefix}/libexec
  %_datadir		%{_prefix}/share
@@ -58,7 +57,8 @@
 +%_sysconfdir		/etc
  %_sharedstatedir	%{_prefix}/com
  %_localstatedir		%{_prefix}/var
- %_libdir		%{_exec_prefix}/lib
+ %_lib			lib
+ %_libdir		%{_exec_prefix}/%{_lib}
  %_includedir		%{_prefix}/include
  %_oldincludedir		/usr/include
 -%_infodir		%{_prefix}/info

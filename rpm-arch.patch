@@ -1,25 +1,22 @@
---- rpm-3.0.3/rpmrc.in.wiget	Tue Oct 19 16:43:30 1999
-+++ rpm-3.0.3/rpmrc.in	Tue Oct 19 16:49:17 1999
-@@ -120,12 +120,12 @@
- buildarchtranslate: osfmach3_i486: i386
- buildarchtranslate: osfmach3_i386: i386
+diff -urN rpm-3.0.5.orig/rpmrc.in rpm-3.0.5/rpmrc.in
+--- rpm-3.0.5.orig/rpmrc.in	Sat Jul 29 23:56:53 2000
++++ rpm-3.0.5/rpmrc.in	Sun Jul 30 00:03:28 2000
+@@ -120,10 +120,10 @@
  
--buildarchtranslate: i986: i386
--buildarchtranslate: i886: i386
--buildarchtranslate: i786: i386
+ buildarchtranslate: ia64: ia64
+ 
+-buildarchtranslate: athlon: i386
 -buildarchtranslate: i686: i386
 -buildarchtranslate: i586: i386
 -buildarchtranslate: i486: i386
-+buildarchtranslate: i986: i686
-+buildarchtranslate: i886: i686
-+buildarchtranslate: i786: i686
++buildarchtranslate: athlon: i686
 +buildarchtranslate: i686: i686
 +buildarchtranslate: i586: i586
 +buildarchtranslate: i486: i486
  buildarchtranslate: i386: i386
  
  buildarchtranslate: osfmach3_ppc: ppc
-@@ -136,7 +136,8 @@
+@@ -134,7 +134,8 @@
  buildarchtranslate: sun4d: sparc
  buildarchtranslate: sun4m: sparc
  buildarchtranslate: sparcv9: sparc
