@@ -25,7 +25,7 @@ DEBUG=""
 NOURLS=""
 NOCVS=""
 NOCVSSPEC=""
-ALLWAYS_CVSUP="yes"
+ALLWAYS_CVSUP=${ALLWAYS_CVSUP:-"yes"}
 if [ -s CVS/Root ]; then
     CVSROOT=$(cat CVS/Root)
 else
@@ -81,8 +81,8 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
 	[{-B|--branch} <branch>] [{-d|--cvsroot} <cvsroot>] [-g|--get]
 	[-h|--help] [{-l,--logtofile} <logfile>] [-m|--mr-proper]
 	[-q|--quiet] [-r <cvstag>] [{-T--tag <cvstag>]
-	[-Tvs|--tag-version-stable] [-Tvd|--tag-version-devel]
-	[-Ts|--tag-stable] [-Td|--tag-devel] [-Tv|--tag-version]
+	[-Tvs|--tag-version-stable] [-Tvn|--tag-version-nest]
+	[-Ts|--tag-stable] [-Tn|--tag-nest] [-Tv|--tag-version]
 	[-nu|--no-urls] [-v|--verbose] [--opts <rpm opts>]
 	[--with/--without <feature>] [--define <macro> <value>] <package>.spec
 
@@ -131,12 +131,12 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
 			- add cvs tag <cvstag> for files,
 	-Tvs, --tag-version-stable
 			- add cvs tags STABLE and NAME-VERSION-RELESE for files,
-	-Tvd, --tag-version-devel
-			- add cvs tags DEVEL and NAME-VERSION-RELESE for files,
+	-Tvn, --tag-version-nest
+			- add cvs tags NEST and NAME-VERSION-RELESE for files,
 	-Ts, --tag-stable
 			- add cvs tag STABLE for files,
-	-Td, --tag-devel
-			- add cvs tag DEVEL for files,
+	-Tn, --tag-nest
+			- add cvs tag NEST for files,
 	-Tv, --tag-version
 			- add cvs tag NAME-VERSION-RELESE for files,
 	-v, --verbose	- be verbose,
@@ -209,7 +209,7 @@ Exit_error()
 	echo "Error: some source, patch or icon files not stored in CVS repo. ($2)";
 	exit 4 ;;
     "err_build_fail" )
-	echo "Error: package build failed.";
+	echo "Error: package build failed. (${2:-no more info})";
 	exit 5 ;;
     esac
 }
@@ -362,8 +362,13 @@ tag_files()
     if [ -n "$1$2$3$4$5$6$7$8$9${10}" ]; then
 	echo $PACKAGE_VERSION
 	echo $PACKAGE_RELEASE
-	TAG=$PACKAGE_NAME-`echo $PACKAGE_VERSION | sed -e "s/\./\_/g"`-`echo $PACKAGE_RELEASE | sed -e "s/\./\_/g"`
-	echo "CVS tag: $TAG"
+	TAGVER=$PACKAGE_NAME-`echo $PACKAGE_VERSION | sed -e "s/\./\_/g"`-`echo $PACKAGE_RELEASE | sed -e "s/\./\_/g"`
+	if [ "$TAG_VERSION" = "yes" ]; then
+	    echo "CVS tag: $TAGVER"
+	fi
+	if [ -n "$TAG" ]; then
+	    echo "CVS tag: $TAG"
+	fi
 
 	OPTIONS="tag -F"
 	if [ -n "$CVSROOT" ]; then
@@ -373,16 +378,24 @@ tag_files()
 	cd $SOURCE_DIR
 	for i in $TAG_FILES; do
 	    if [ -f `nourl $i` ]; then
-		cvs $OPTIONS $TAG `nourl $i`
-		cvs $OPTIONS STABLE `nourl $i`
+		if [ "$TAG_VERSION" = "yes" ]; then
+		    cvs $OPTIONS $TAGVER `nourl $i`
+		fi
+		if [ -n "$TAG" ]; then
+		    cvs $OPTIONS $TAG `nourl $i`
+		fi
 	    else
 		Exit_error err_no_source_in_repo $i
 	    fi
 	done
 
 	cd $SPECS_DIR
-	cvs $OPTIONS $TAG $SPECFILE
-	cvs $OPTIONS STABLE $SPECFILE
+	if [ "$TAG_VERSION" = "yes" ]; then
+	    cvs $OPTIONS $TAGVER $SPECFILE
+	fi
+	if [ -n "$TAG" ]; then
+	    cvs $OPTIONS $TAG $SPECFILE
+	fi
 
 	unset OPTIONS
     fi
@@ -557,9 +570,9 @@ while test $# -gt 0 ; do
 	    TAG="STABLE"
 	    TAG_VERSION="yes"
 	    shift;;
-	-Tvd | --tag-version-devel )
+	-Tvn | --tag-version-nest )
 	    COMMAND="tag";
-	    TAG="DEVEL"
+	    TAG="NEST"
 	    TAG_VERSION="yes"
 	    shift;;
 	-Ts | --tag-stable )
@@ -567,13 +580,14 @@ while test $# -gt 0 ; do
 	    TAG="STABLE"
 	    TAG_VERSION="no"
 	    shift;;
-	-Td | --tag-devel )
+	-Tn | --tag-nest )
 	    COMMAND="tag";
-	    TAG="DEVEL"
+	    TAG="NEST"
 	    TAG_VERSION="no"
 	    shift;;
 	-Tv | --tag-version )
 	    COMMAND="tag";
+	    TAG=""
 	    TAG_VERSION="yes"
 	    shift;;
 	-T | --tag )
@@ -609,6 +623,17 @@ case "$COMMAND" in
 	if [ -n "$SPECFILE" ]; then
 	    get_spec;
 	    parse_spec;
+
+	    if [ -n "$FAIL_IF_CHANGED_BUT_NOT_BUMPED" ]; then
+		TAGVER=$PACKAGE_NAME-`echo $PACKAGE_VERSION | sed -e "s/\./\_/g"`-`echo $PACKAGE_RELEASE | sed -e "s/\./\_/g"`
+		CURTAGREL=$(cvs status $SPECFILE | grep "Working revision:" | awk '{ print $3 }')
+		TAGREL=$(cvs status -v $SPECFILE | grep -E "^[[:space:]]*${TAGVER}[[[:space:]]" | sed -e 's#.*(revision: ##g' -e 's#).*##g')
+
+		if [ -n "$TAGREL" -a "$TAGREL" != "$CURTAGREL" ]; then
+		    Exit_error err_build_fail "not bumped ver-rel - was already used in rev $TAGREL"
+		fi
+	    fi
+
 	    if [ -n "$ICONS" ]; then
 	    	get_files $ICONS;
 	    	parse_spec;
