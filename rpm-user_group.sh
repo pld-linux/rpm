@@ -31,6 +31,14 @@ elif [ "$1" = del ]; then
 		[ "$RPM_SCRIPTVERBOSITY" -lt 2 ] || echo "Removing $MODE $2"
 		/usr/sbin/${MODE}del $2 || :
 	fi
+elif [ "$MODE" = "user" -a "$1" = "addtogroup" ]; then
+	USER=$2
+	GROUP=$3
+	GROUPS=`id -n -G $USER | sed -e's/^[^ ]* //;s/ /,/g'`
+	if ! echo ",$GROUPS," | grep -q ",$GROUP," ; then
+	    [ "$RPM_SCRIPTVERBOSITY" -lt 2 ] || echo "Adding user $USER to group $GROUP"
+	    usermod -G "$GROUPS,$GROUP" $USER
+	fi
 else
 	echo ERROR
 	exit 2
