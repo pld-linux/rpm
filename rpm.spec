@@ -9,11 +9,10 @@
 %bcond_without	static	# - build shared /bin/rpm (doesn't work at the moment)
 %bcond_without	docs	# - don't generate documentation with doxygen
 %bcond_without	python	# - don't build python bindings
-
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
-
+#
 %include        /usr/lib/rpm/macros.python
 %define snap	20030610
 # versions of required libraries
@@ -106,7 +105,7 @@ BuildRequires:	automake
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.1
 BuildRequires:	db-devel >= %{reqdb_ver}
-%{?_with_docs:BuildRequires:	doxygen}
+%{?with_docs:BuildRequires:	doxygen}
 BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	elfutils-devel
 #BuildRequires:	libmagic-devel
@@ -118,7 +117,7 @@ BuildRequires:	python-modules >= 2.2
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpm-pythonprov
 BuildRequires:	zlib-devel
-%if %{?_with_static:1}0
+%if %{with static}
 # Require static library only for static build
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
 BuildRequires:	bzip2-static >= 1.0.2-5
@@ -640,13 +639,13 @@ mv -f macros.tmp macros.in
 	CC="%{__cc}" CXX="%{__cxx}" CPP="%{__cpp}" \
 	--enable-shared \
 	--enable-static \
-	%{!?_without_docs:--with-apidocs} \
-	%{?_with_python:--with-python=auto} \
-	%{?!_with_python:--without-python} \
+	%{?with_docs:--with-apidocs} \
+	%{?with_python:--with-python=auto} \
+	%{!?with_python:--without-python} \
 	--without-db
 
 %{__make} \
-	%{?_without_static:rpm_LDFLAGS="\$(myLDFLAGS)"} \
+	%{!?with_static:rpm_LDFLAGS="\$(myLDFLAGS)"} \
 	myLDFLAGS="%{rpmldflags}"
 
 %install
