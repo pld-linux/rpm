@@ -155,7 +155,7 @@ Summary(de):	Header-Dateien uns Libraries
 Summary(es):	Archivos de inclusiСn y bibliotecas para programas de manipulaciСn de paquetes rpm
 Summary(pl):	Pliki nagЁСwkowe i biblioteki statyczne
 Summary(pt_BR):	Arquivos de inclusЦo e bibliotecas para programas de manipulaГЦo de pacotes RPM
-Summary(ru):	Хедеры и библиотеки для программ, работающих с rpm-пакетами.
+Summary(ru):	Хедеры и библиотеки для программ, работающих с rpm-пакетами
 Summary(uk):	Хедери та б╕бл╕отеки для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name} = %{version}
@@ -214,7 +214,7 @@ Summary:	RPM static libraries
 Summary(de):	RPMs statische Libraries
 Summary(pl):	Biblioteki statyczne RPM-a
 Summary(pt_BR):	Bibliotecas estАticas para o desenvolvimento de aplicaГУes RPM
-Summary(ru):	Статическая библиотека для программ, работающих с rpm-пакетами.
+Summary(ru):	Статическая библиотека для программ, работающих с rpm-пакетами
 Summary(uk):	Статична б╕бл╕отека для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
