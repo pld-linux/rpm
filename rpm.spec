@@ -11,6 +11,7 @@ Source1:	rpm.groups
 Source2:	rpm.8pl
 Source3:	rpm.macros
 Source4:	rpm.pl.po
+Source5:	rpm-install-tree
 Patch0:		rpm-rpmrc.patch
 Patch1:		rpm-i18n.patch
 Patch2:		rpm-find-requires.patch
@@ -19,6 +20,7 @@ Patch4:		rpm-po.patch
 Patch5:		rpm-moredoc.patch
 Patch6:		rpm-arch.patch
 Patch7:		rpm-pld.patch
+Patch8:		rpm-rpmpopt.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildPrereq:	bzip2-static
@@ -70,6 +72,7 @@ construir pacotes usando o RPM.
 %patch5 -p1
 %patch6 -p1 
 %patch7 -p1 
+%patch8 -p1 
 %patch31 -p1
 install %{SOURCE4} po/pl.po
 install %{SOURCE3} macros.pld.in
@@ -92,7 +95,8 @@ install -d $RPM_BUILD_ROOT/var/db/rpm \
 
 make DESTDIR="$RPM_BUILD_ROOT" pkgbindir="%{_bindir}" install
 
-install macros.pld $RPM_BUILD_ROOT%{_prefix}/lib/rpm/macros.pld
+install macros.pld $RPM_BUILD_ROOT%{_libdir}/rpm/macros.pld
+install -m755 %{SOURCE5} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
 	pkgbindir="%{_bindir}"
 install rpm.8ru $RPM_BUILD_ROOT%{_mandir}/ru/man8/rpm.8
 install rpm2cpio.8ru $RPM_BUILD_ROOT%{_mandir}/ru/man8/rpm2cpio.8
@@ -145,6 +149,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/find-requires
 %attr(755,root,root) %{_libdir}/rpm/find-provides
 %attr(755,root,root) %{_libdir}/rpm/find-rpm-provides
+%attr(755,root,root) %{_libdir}/rpm/find-spec-bcond
 
 %{_libdir}/rpm/rpm*
 %{_libdir}/rpm/macros*
@@ -159,21 +164,3 @@ rm -rf $RPM_BUILD_ROOT
 %files -n python-rpm
 * %{date} PLD Team <pld-list@pld.org.pl>
 All below listed persons can be reached on <cvs_login>@pld.org.pl
-
-$Log: rpm.spec,v $
-Revision 1.44  1999-07-12 23:06:14  kloczek
-
-- added using CVS keywords in %changelog (for automating them).
-
-
-* Thu May 20 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
-  [3.0.1-6.19990519]
-- spec based on version from dist tar ball (partially rewrited by me),
-- pl translation by Wojtek ¦lusarczyk <wojtek@shadow.eu.org>,
-- rewrited by Artur Frysiak <wiget@pld.org.pl>,
-- patches with fixes maked by Artur Frysiak and Marcin Dalecki
-  <dalecki@cs.net.pl>.
-Revision 1.79  2000/02/17 03:42:17  kloczek
-- release 25,
-- added "Conflicts: /usr/bin/id" and rebuilded in enviroment with id in
-  /bin.
