@@ -108,8 +108,8 @@
 --- rpm-4.3.orig/macros.in	Mon Apr 28 16:04:32 2003
 +++ rpm-4.3/macros.in	Thu May  1 18:08:53 2003
 @@ -1505,3 +1505,46 @@
- # unchanged
- %pyrequires_eq() Requires:       %1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
+ %xmms_effect_plugin_dir        %(echo `xmms-config --effect-plugin-dir`)
+ %xmms_general_plugin_dir       %(echo `xmms-config --general-plugin-dir`)
  
 +# don't define as empty (some autoconf issues when CFLAGS end with multiple spaces)
 +#%specflags		%{nil}
