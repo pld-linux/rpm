@@ -149,6 +149,14 @@ Daemons
 	[de]:	Server
 	[pl]:	Serwery
 
+Development
+        [de]:   Entwicklung
+        [pl]:   Programowanie
+
+Development/Debuggers
+	[de]:	Entwicklung/Debugger
+	[pl]:	Programowanie/Odpluskwiacze
+
 Development/Libraries
 	[de]:	Entwicklung/Libraries
 	[fr]:	Development/Librairies
@@ -205,6 +213,34 @@ Libraries
 	[es]:	Bibliotecas
 	[fr]:	Librairies
 	[pl]:	Biblioteki
+
+Networking
+	[de]:	Netzwerkwesen
+	[pl]:	Sieciowe
+
+Networking/Admin
+	[de]:	Netzwerkwesen/Administration
+	[pl]:	Sieciowe/Administacyjne
+
+Networking/Daemons
+	[de]:	Netzwerkwesen/Server
+	[pl]:	Sieciowe/Serwery
+
+Networking/News
+	[de]:	Netzwerkwesen/News
+	[pl]:	Sieciowe/News
+
+Networking/Utilities
+	[de]:	Netzwerkwesen/Werkzeuge
+	[pl]:	Sieciowe/Narzêdzia
+
+Themes
+	[de]:	Themen
+	[pl]:	Motywy
+
+Themes/Gtk
+	[de]:	Themen/Gtk
+	[pl]:	Motywy/Gtk
 
 X11
 	[de]:	X11
@@ -307,71 +343,3 @@ X11/XFree86/Servers
 	[de]:	X11/XFree86/Server
 	[pl]:	X11/XFree86/Serwery
 
-Libraries
-	[pl]:	Biblioteki
-
-Networking
-	[de]:	Netzwerkwesen
-	[pl]:	Sieciowe
-
-Networking/Admin
-	[de]:	Netzwerkwesen/Administration
-	[pl]:	Sieciowe/Administacyjne
-
-Networking/Daemons
-	[de]:	Netzwerkwesen/Server
-	[pl]:	Sieciowe/Serwery
-
-Networking/News
-	[de]:	Netzwerkwesen/News
-	[pl]:	Sieciowe/News
-
-Networking/Utilities
-	[de]:	Netzwerkwesen/Werkzeuge
-	[pl]:	Sieciowe/Narzêdzia
-
-Development
-	[de]:	Entwicklung
-	[pl]:	Programowanie
-
-Development/Debuggers
-	[de]:	Entwicklung/Debugger
-	[pl]:	Programowanie/Odpluskwiacze
-
-Development/Libraries
-	[pl]:	Programowanie/Biblioteki
-
-Development/Libraries/Libc
-	[pl]:	Programowanie/Biblioteki/Libc
-
-Development/Languages
-	[pl]:	Programowanie/Jêzyki
-
-Development/Languages/Fortran
-	[pl]:	Programowanie/Jêzyki/Fortran
-
-Development/Languages/Tcl
-	[pl]:	Programowanie/Jêzyki/Tcl
-
-Development/Languages/Perl
-	[pl]:	Programowanie/Jêzyki/Perl
-
-Development/Languages/Python
-	[pl]:	Programowanie/Jêzyki/Python
-
-Development/Building
-	[pl]:	Programowanie/Budowanie
-
-Development/Version Control
-	[pl]:	Programowanie/Zarz±dzanie wersjami
-
-Development/Tools
-	[pl]:	Programowanie/Narzêdzia
-
-Themes
-	[de]:	Themen
-	[pl]:	Motywy
-
-Themes/Gtk
-	[de]:	Themen/Gtk
-	[pl]:	Motywy/Gtk
