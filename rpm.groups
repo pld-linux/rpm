@@ -105,6 +105,10 @@ Applications/Publishing/XML
 	[de]:	Applikationen/Publizieren/XML
 	[pl]:	Aplikacje/Publikowanie/XML
 
+Applications/Shells
+	[de]:	Applikationen/Shells
+	[pl]:	Aplikacje/Pow³oki
+
 Applications/Spreadsheets
 	[de]:	Applikationen/Arbeitsblätter
 	[pl]:	Aplikacje/Arkusze kalkulacyjne
@@ -373,10 +377,6 @@ Development/Version Control
 
 Development/Tools
 	[pl]:	Programowanie/Narzêdzia
-
-Shells
-	[de]:	Shells
-	[pl]:	Pow³oki
 
 Themes
 	[de]:	Themen
