@@ -134,6 +134,24 @@
 %_kernel_ver     %(echo %{__kernel_ver}%{!?_without_dist_kernel:-%{__kernel_rel}})
 %_kernel_ver_str %(echo %{_kernel_ver} | sed s/-/_/g)
 
+# sgml macros
+%xmlcat_add()            /usr/bin/xmlcatalog --noout --add nextCatalog \"\" %1 /etc/xml/catalog
+%xmlcat_del()            /usr/bin/xmlcatalog --noout --del %1 /etc/xml/catalog
+%xmlcat_add_rewrite      /usr/bin/xmlcatalog --noout --add rewriteSystem
+%xmlcat_create()          /usr/bin/xmlcatalog --noout --create %1
+%sgmlcat_add()           /usr/bin/install-catalog --add %1 %2 > /dev/null
+%sgmlcat_del()           /usr/bin/install-catalog --remove %1 %2 > /dev/null
+%docbook_sgmlcat_fix() { for l in \
+'' \
+'  -- default decl --' \
+'DTDDECL "-//OASIS//DTD DocBook XML V%2//EN" "../../xml.dcl"' \
+'  -- hacks for opensp --' \
+'SYSTEM "file://%{_datadir}/sgml/docbook/xml-dtd-%2/docbookx.dtd" "%{_datadir}/sgml/docbook/xml-dtd-%2/docbookx.dtd"' \
+'SYSTEM "http://www.oasis-open.org/docbook/xml/%2/docbookx.dtd"                  "%{_datadir}/sgml/docbook/xml-dtd-%2/docbookx.dtd"' \
+'' \
+; do echo $l; done >> %1 \
+}
+
 #-----------------------------------------------------------------
 # find and gzip all files in %{_mandir} and %{infodir}
 #
