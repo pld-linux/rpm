@@ -184,10 +184,10 @@ RPM - ÃÅ ÐÏÔÕÖÎÉÊ ÍÅÎÅÄÖÅÒ ÐÁËÅÔ¦×, ÝÏ ÍÏÖÅ ÂÕÔÉ ×ÉËÏÒÉÓÔÁÎÉÊ ÄÌÑ
 ¦ÎÆÏÒÍÁÃ¦À ÐÒÏ ÐÁËÅÔ.
 
 %package devel
-Summary:	Header files and libraries
-Summary(de):	Header-Dateien uns Libraries
+Summary:	Header files for rpm libraries
+Summary(de):	Header-Dateien für rpm Libraries
 Summary(es):	Archivos de inclusión y bibliotecas para programas de manipulación de paquetes rpm
-Summary(pl):	Pliki nag³ówkowe i biblioteki
+Summary(pl):	Pliki nag³ówkowe bibliotek rpm
 Summary(pt_BR):	Arquivos de inclusão e bibliotecas para programas de manipulação de pacotes RPM
 Summary(ru):	èÅÄÅÒÙ É ÂÉÂÌÉÏÔÅËÉ ÄÌÑ ÐÒÏÇÒÁÍÍ, ÒÁÂÏÔÁÀÝÉÈ Ó rpm-ÐÁËÅÔÁÍÉ
 Summary(uk):	èÅÄÅÒÉ ÔÁ Â¦ÂÌ¦ÏÔÅËÉ ÄÌÑ ÐÒÏÇÒÁÍ, ÝÏ ÐÒÁÃÀÀÔØ Ú ÐÁËÅÔÁÍÉ rpm
@@ -201,10 +201,11 @@ Requires:	popt-devel >= %{reqpopt_ver}
 Requires:	zlib-devel
 
 %description devel
-The RPM packaging system includes a C library that makes it easy to
-manipulate RPM packages and databases. It is intended to ease the
+The RPM packaging system includes C libraries that make it easy to
+manipulate RPM packages and databases. They are intended to ease the
 creation of graphical package managers and other tools that need
-intimate knowledge of RPM packages.
+intimate knowledge of RPM packages. This package contains header files
+for these libraries.
 
 %description devel -l de
 Der RPM-Packensystem enthält eine C-Library, die macht es einfach
@@ -219,10 +220,11 @@ facilitar la creación de administradores gráficos de paquetes y otras
 herramientas que necesiten un conocimiento profundo de paquetes RPM.
 
 %description devel -l pl
-System RPM zawiera bibliotekê C, która u³atwia manipulowanie pakietami
-RPM oraz bazami danych. W zamiarze ma to upro¶ciæ tworzenie
+System RPM zawiera biblioteki C, które u³atwiaj± manipulowanie
+pakietami RPM oraz bazami danych. W zamiarze ma to upro¶ciæ tworzenie
 graficznych programów zarz±dzaj±cych pakietami oraz innych narzêdzi,
-które wymagaj± szczegó³owej wiedzy na temat pakietów RPM.
+które wymagaj± szczegó³owej wiedzy na temat pakietów RPM. Ten pakiet
+zawiera pliki nag³ówkowe wspomnianych bibliotek.
 
 %description devel -l pt_BR
 O sistema de empacotamento RPM inclui uma biblioteca C que torna fácil
