@@ -505,7 +505,7 @@ install %{SOURCE19} scripts/find-php-provides
 install %{SOURCE20} scripts/find-php-requires
 install %{SOURCE33} scripts/perl.prov
 
-cd scripts;
+cd scripts
 mv -f perl.req perl.req.in
 mv -f perl.prov perl.prov.in
 cd ..
@@ -517,7 +517,6 @@ chmod +x %{SOURCE4}
 awk -f %{SOURCE14} %{SOURCE1}
 
 cd popt
-rm -f missing
 %{__libtoolize}
 %{__aclocal}
 %{__autoheader}
@@ -525,7 +524,6 @@ rm -f missing
 %{__automake}
 cd ..
 
-rm -f missing
 %{__libtoolize}
 %{__gettextize}
 %{__aclocal}
