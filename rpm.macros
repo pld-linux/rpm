@@ -1,81 +1,188 @@
-diff -urN rpm-4.0.2.org/configure.in rpm-4.0.2/configure.in
---- rpm-4.0.2.org/configure.in	Mon Apr  2 10:12:52 2001
-+++ rpm-4.0.2/configure.in	Mon Apr  2 10:29:49 2001
-@@ -1085,7 +1085,7 @@
- dnl export LIBS INCPATH CONFIG_SITE
- 
- AC_CONFIG_SUBDIRS(popt)
--AC_OUTPUT([Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec scripts/brp-redhat
-+AC_OUTPUT([Doxyfile Makefile rpmrc macros macros.pld platform rpmpopt rpm.spec scripts/brp-redhat
- 	rpmio/Makefile lib/Makefile build/Makefile tools/Makefile
- 	scripts/Makefile
- 	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
-diff -urN rpm-4.0.2.org/macros.in rpm-4.0.2/macros.in
---- rpm-4.0.2.org/macros.in	Mon Apr  2 10:12:52 2001
-+++ rpm-4.0.2/macros.in	Mon Apr  2 10:30:19 2001
-@@ -90,7 +90,7 @@
- %_bzip2bin		@BZIP2BIN@
- %_dbpath		%{_var}/lib/rpm
- %_dbpath_rebuild	%{_dbpath}
--%_defaultdocdir		%{_usr}/doc
-+%_defaultdocdir		%{_usr}/share/doc
- #
- %__find_provides	@FINDPROVIDES@
- %__find_requires	@FINDREQUIRES@
-@@ -102,8 +102,8 @@
- %__id_u			@__ID_U@
- %__chown_Rhf		@__CHOWN_RHF@
- %__chgrp_Rhf		@__CHGRP_RHF@
--%_fixowner		[ `%{__id_u}` = '0' ] && %{__chown_Rhf} root
--%_fixgroup		[ `%{__id_u}` = '0' ] && %{__chgrp_Rhf} @ROOT_GROUP@
-+%_fixowner		[ `%{__id_u}` = '0' ] && %{__chown_Rhf} root.@ROOT_GROUP@
-+#%_fixgroup		[ `%{__id_u}` = '0' ] && %{__chgrp_Rhf} @ROOT_GROUP@
- %_fixperms		%{__chmod} -Rf @FIXPERMS@
- #
- %_gzipbin		@GZIPBIN@
-@@ -112,13 +112,13 @@
- %_rpmdir		%{_topdir}/RPMS
- #
- # XXX Note escaped %% for use in headerSprintf
--%_rpmfilename		%%{ARCH}/%%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm
-+%_rpmfilename		%%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm
- %_signature		none
- %_sourcedir		%{_topdir}/SOURCES
- %_specdir		%{_topdir}/SPECS
- %_srcrpmdir		%{_topdir}/SRPMS
- %_tmppath		%{_var}/tmp
--%_topdir		%{_usrsrc}/redhat
-+%_topdir		%(echo $HOME)/rpm
- %_unzipbin		@UNZIPBIN@
- 
- #==============================================================================
-@@ -461,15 +461,15 @@
- %_sbindir		%{_exec_prefix}/sbin
- %_libexecdir		%{_exec_prefix}/libexec
- %_datadir		%{_prefix}/share
--%_sysconfdir		%{_prefix}/etc
-+%_sysconfdir		/etc
- %_sharedstatedir	%{_prefix}/com
--%_localstatedir		%{_prefix}/var
-+%_localstatedir		/var
- %_lib			lib
- %_libdir		%{_exec_prefix}/%{_lib}
- %_includedir		%{_prefix}/include
- %_oldincludedir		/usr/include
--%_infodir		%{_prefix}/info
--%_mandir		%{_prefix}/man
-+%_infodir		/usr/share/info
-+%_mandir		%{_prefix}/share/man
- 
- #==============================================================================
- # ---- config.guess platform macros.
-@@ -518,7 +518,8 @@
- CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; \
- FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
- %{?__libtoolize:[ -f configure.in ] && %{__libtoolize} --copy --force} ; \
--./configure %{_target_platform} \\\
-+./configure \\\
-+	--host=%{_host} \\\
-  	--prefix=%{_prefix} \\\
- 	--exec-prefix=%{_exec_prefix} \\\
- 	--bindir=%{_bindir} \\\
+#-----------------------------------------------------------------
+# CFLAGS and LDFLAGS used to build
+
+%debugcflags	-O0 -g
+%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}
+%rpmldflags	%{!?debug:-s}
+
+#-----------------------------------------------------------------
+%configure { \
+ if [ -n "$LINGUAS" ]; then unset LINGUAS; fi; \
+ LDFLAGS="${LDFLAGS:-%rpmldflags}" ; export LDFLAGS ; \
+ CFLAGS="${CFLAGS:-%rpmcflags}" ; export CFLAGS ; \
+ CXXFLAGS="${CXXFLAGS:-%rpmcflags}" ; export CXXFLAGS ; \
+ FFLAGS="${FFLAGS:-%rpmcflags}" ; export FFLAGS ; \
+ ./configure \
+ 	--host=%{_host} \
+ 	--prefix=%{_prefix} \
+	--exec-prefix=%{_exec_prefix} \
+	--bindir=%{_bindir} \
+	--sbindir=%{_sbindir} \
+	--sysconfdir=%{_sysconfdir} \
+	--datadir=%{_datadir} \
+	--includedir=%{_includedir} \
+	--libdir=%{_libdir} \
+	--libexecdir=%{_libexecdir} \
+	--localstatedir=%{_localstatedir} \
+	--sharedstatedir=%{_sharedstatedir} \
+	--mandir=%{_mandir} \
+	--infodir=%{_infodir} \
+}
+
+#------------------------------------------------------------------------------
+# The GNUconfigure macro does the following:
+#       update config.guess and config.sub.
+#       regenerate all autoconf/automake files
+#       optionally change to a directory (make the directory if requested).
+#       run configure with correct prefix, platform, and CFLAGS.
+#       optionally restore current directory.
+#
+# Based on autogen.sh from GNOME and orginal GNUconfigure
+#
+%GNUconfigure(MCs:)      \
+  %{-C:_mydir="`pwd`"; %{-M: %{__mkdir} -p %{-C*};} cd %{-C*}} \
+  dirs="`find ${_mydir} -name configure.in -print`"; export dirs; \
+    for coin in `echo ${dirs}` \
+do \
+  dr=`dirname ${coin}`; \
+if test -f ${dr}/NO-AUTO-GEN; then \
+ : \
+else \
+     macrodirs=`sed -n -e 's,AM_ACLOCAL_INCLUDE(\(.*\)),\1,gp' < ${coin}`; \
+    ( cd ${dr}; \
+      aclocalinclude="${ACLOCAL_FLAGS}"; \
+      for k in ${macrodirs}; do \
+        if test -d ${k}; then \
+          aclocalinclude="${aclocalinclude} -I ${k}"; \
+        ##else \
+        ##  echo "**Warning**: No such directory \`${k}'.  Ignored." \
+        fi \
+      done \
+      if grep "^AM_GNU_GETTEXT" configure.in >/dev/null; then \
+        if grep "sed.*POTFILES" configure.in >/dev/null; then \
+          : do nothing -- we still have an old unmodified configure.in \
+        else \
+          test -r ${dr}/aclocal.m4 || touch ${dr}/aclocal.m4; \
+          echo "no" | gettextize --force --copy; \
+          test -r ${dr}/aclocal.m4 && %{__chmod} u+w ${dr}/aclocal.m4; \
+        fi \
+      fi \
+      if grep "^AM_PROG_LIBTOOL" configure.in >/dev/null; then \
+        %{__libtoolize} --force --copy; \
+      fi \
+      aclocal ${aclocalinclude}; \
+      if grep "^AM_CONFIG_HEADER" configure.in >/dev/null; then \
+        %{__autoheader}; \
+      fi \
+      echo "Running automake --gnu ${am_opt} ..."; \
+      %{__automake} --add-missing --gnu ${am_opt}; \
+      %{__autoconf}; \
+    ); \
+  fi \
+done \
+  %{-C:${_mydir}}%{!-C:.}/%{configure} \
+  %{-C:cd ${_mydir}; unset _mydir}
+
+# Location of autoconf macros
+%_aclocaldir	%(aclocal --print-ac-dir)
+
+# Location of top applink dir
+%_applnkdir      /usr/X11R6/share/applnk
+
+# Location pixmaps for applnk/desktop files
+%_pixmapsdir	/usr/X11R6/share/pixmaps
+
+# Current date
+%date 		%(LC_ALL="C" date +"%a %b %d %Y")
+
+# tmp directory
+%tmpdir		%(echo "${TMPDIR:-/tmp}")
+
+# Example files, programs, scripts...
+%_examplesdir	/usr/src/examples
+
+# If non-empty "debug" macro defined, add "dbg" suffix to release number
+%_rpmfilename		%%{NAME}-%%{VERSION}-%%{RELEASE}%{?debug:dbg}.%%{ARCH}.rpm
+
+#-----------------------------------------------------------------
+# find and gzip all files in %{_mandir} and %{infodir}
+#
+# Requires: xargs, find
+#
+#%no_install_post_compress_docs	1
+%__spec_install_post_compress_docs { \
+echo "Compress man and info pages."; \
+%{!?no_install_post_compress_docs: \
+	%{?verbose:set -x;} \
+	for i in /usr/share/man /usr/X11R6/man /usr/share/info; do \
+		if [ -d "$RPM_BUILD_ROOT$i" ]; then \
+			find "$RPM_BUILD_ROOT$i" -name \*.bz2 -print | xargs -r %{__bzip2} -df; \
+			find "$RPM_BUILD_ROOT$i" -name \*.gz -print | xargs -r %{__gzip} -dnf; \
+			find "$RPM_BUILD_ROOT$i" -type f -print | xargs -r %{__gzip} -9nf; \
+		fi; \
+	done; \
+} }
+
+#-----------------------------------------------------------------
+# Strip executable binaries and shared object files
+#
+# Requires: find, awk, strip, cut, xargs
+#
+#%no_install_post_strip	1
+%__spec_install_post_strip {%{!?debug: \
+%{!?no_install_post_strip: \
+	%{?verbose:set -x;} \
+	echo "Strip executable binaries and shared object files."; \
+	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*"`; \
+	elfexelist=`echo $filelist | xargs -r file | \
+		awk '/ELF.*executable/ {print $1}' | cut -d: -f1`; \
+	elfsharedlist=`echo $filelist | xargs -r file | \
+		awk '/LF.*shared object/ {print $1}' | cut -d: -f1`; \
+	if [ -n "$elfexelist" ]; then \
+		strip --remove-section=.note  --remove-section=.comment $elfexelist; \
+	fi; \
+	if [ -n "$elfsharedlist" ]; then \
+		strip --strip-unneeded --remove-section=.note  --remove-section=.comment $elfsharedlist; \
+	fi; } \
+} }
+
+%_source_payload        w9.gzdio
+%_binary_payload        w9.bzdio
+
+#-----------------------------------------------------------------
+# post %install sequence:
+# - autodeps exceptions
+# - compress all man and info pages,
+# - strip all ELF executables and ELF shared objects if not %debug.
+
+###################################################################
+# Requires/Provides automation
+# exceptions system by Jacek Konieczny <jajcus@pld.org.pl>
+%__spec_install_pre	%{___build_pre}\
+rm -f %{_builddir}/__rpm_*\
+%{nil}
+
+%__spec_install_post \
+%{?_noautoreqfiles:for f in %{_noautoreqfiles} ; do echo %{?buildroot:%{buildroot}}$f >> %{_builddir}/__rpm_noautoreqfiles ; done }\
+%{?_noautoreq:for f in %{_noautoreq} ; do echo "$f" >> %{_builddir}/__rpm_noautoreq ; done }\
+%{?_noautoreqdep:for f in %{_noautoreqdep} ; do echo "$f" >> %{_builddir}/__rpm_noautoreqdep ; done }\
+%{?_noautoprovfiles:for f in %{_noautoprovfiles} ; do echo %{?buildroot:%{buildroot}}$f >> %{_builddir}/__rpm_noautoprovfiles ; done }\
+%{?_noautoprov:for f in %{_noautoprov} ; do echo "$f" >> %{_builddir}/__rpm_noautoprov ; done }\
+%{__spec_install_post_strip}\
+%{__spec_install_post_compress_docs}\
+%{__arch_install_post}\
+%{__os_install_post}\
+%{nil}
+
+%__spec_clean_pre	%{___build_pre}\
+rm -f %{_builddir}/__rpm_*\
+%{nil}
+
+
+#%_noautoreqfiles	"%{_defaultdocdir}.*" "%{_examplesdir}.*"
+#%_noautoreq		%{nil}
+#%_noautoreqdep		%{nil}
+#%_noautoprovfiles	%{nil}
+#%_noautoprov		%{nil}
+
+

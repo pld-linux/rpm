@@ -1,7 +1,7 @@
-diff -Nru rpm-4.0.1/configure.in rpm-4.0.1.new/configure.in
---- rpm-4.0.1/configure.in	Wed Jan 31 13:22:16 2001
-+++ rpm-4.0.1.new/configure.in	Wed Jan 31 13:23:24 2001
-@@ -1042,7 +1042,7 @@
+diff -urN rpm-4.0.2.org/configure.in rpm-4.0.2/configure.in
+--- rpm-4.0.2.org/configure.in	Mon Apr  2 10:12:52 2001
++++ rpm-4.0.2/configure.in	Mon Apr  2 10:29:49 2001
+@@ -1085,7 +1085,7 @@
  dnl export LIBS INCPATH CONFIG_SITE
  
  AC_CONFIG_SUBDIRS(popt)
@@ -10,9 +10,9 @@ diff -Nru rpm-4.0.1/configure.in rpm-4.0.1.new/configure.in
  	rpmio/Makefile lib/Makefile build/Makefile tools/Makefile
  	scripts/Makefile
  	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
-diff -Nru rpm-4.0.1/macros.in rpm-4.0.1.new/macros.in
---- rpm-4.0.1/macros.in	Wed Jan 31 13:22:16 2001
-+++ rpm-4.0.1.new/macros.in	Wed Jan 31 13:24:31 2001
+diff -urN rpm-4.0.2.org/macros.in rpm-4.0.2/macros.in
+--- rpm-4.0.2.org/macros.in	Mon Apr  2 10:12:52 2001
++++ rpm-4.0.2/macros.in	Mon Apr  2 10:30:19 2001
 @@ -90,7 +90,7 @@
  %_bzip2bin		@BZIP2BIN@
  %_dbpath		%{_var}/lib/rpm
@@ -69,3 +69,13 @@ diff -Nru rpm-4.0.1/macros.in rpm-4.0.1.new/macros.in
  
  #==============================================================================
  # ---- config.guess platform macros.
+@@ -518,7 +518,8 @@
+ CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; \
+ FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
+ %{?__libtoolize:[ -f configure.in ] && %{__libtoolize} --copy --force} ; \
+-./configure %{_target_platform} \\\
++./configure \\\
++	--host=%{_host} \\\
+  	--prefix=%{_prefix} \\\
+ 	--exec-prefix=%{_exec_prefix} \\\
+ 	--bindir=%{_bindir} \\\
