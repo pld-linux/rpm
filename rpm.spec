@@ -1,5 +1,4 @@
 # to build for athlon you need release at least 49
-
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -531,6 +530,13 @@ rm -f missing
 autoupdate
 %{__autoheader} || :
 %{__autoconf}
+sed -e 's#python1.5#python%{py_ver}#g' \
+	python/Makefile.am > python/Makefile.am.new
+mv -f python/Makefile.am.new python/Makefile.am
+# python in SUBDIRS is conditional
+sed -e 's#python1.5#python%{py_ver}#g' \
+	python/Makefile.in > python/Makefile.in.new
+mv -f python/Makefile.in.new python/Makefile.in
 # ugly workaround for automake
 sed -e 's#cpio.c $(DBLIBOBJS) depends.c#cpio.c depends.c#g' \
 	lib/Makefile.am > lib/Makefile.am.new
@@ -539,10 +545,6 @@ mv -f lib/Makefile.am.new lib/Makefile.am
 sed -e 's#cpio.c depends.c#cpio.c $(DBLIBOBJS) depends.c#g' \
 	lib/Makefile.in > lib/Makefile.in.new
 mv -f lib/Makefile.in.new lib/Makefile.in
-
-sed -e 's#python1.5#python%{py_ver}#g' \
-	python/Makefile.in > python/Makefile.in.new
-mv -f python/Makefile.in.new python/Makefile.in
 
 # config.guess doesn't handle athlon, so we have to change it by hand.
 # rpm checks for CPU type at runtime, but it looks better
