@@ -7,7 +7,7 @@ Group:		Base
 Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
 License:	GPL
-Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-3.0.x/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
 Source1:	%{name}.groups
 Source2:	%{name}.macros
 Source3:	%{name}-install-tree
@@ -16,42 +16,43 @@ Source5:	%{name}-macros.perl
 Source6:	%{name}-find-perl-provides
 Source7:	%{name}-find-perl-requires
 Source8:	%{name}-find-spec-bcond
-Patch0:		%{name}-%{name}rc.patch
+Patch0:		%{name}-rpmrc.patch
 Patch1:		%{name}-find-requires.patch
 Patch2:		%{name}-macros.patch
 Patch3:		%{name}-arch.patch
-Patch4:		%{name}-%{name}popt.patch
+Patch4:		%{name}-rpmpopt.patch
 Patch5:		%{name}-find-provides.patch
 Patch6:		%{name}-perl-macros.patch
-Patch7:		%{name}-find-lang-all-name.patch
 Patch8:		%{name}-file3.31.patch
-Patch9:		%{name}-find-lang-name-matching.patch
-Patch10:	%{name}-exclude-examples-doc.patch
-Patch11:	%{name}-db3.patch
-Patch12:	%{name}-rpm-v1.patch
-Patch13:	%{name}-rpmlibprov.patch
-Patch14:	%{name}-getrpmlibprov.patch
-Patch15:        %{name}-rpmlibprov-order.patch
-Patch16:	%{name}-find-KDE.patch
-Patch17:	%{name}-bash2.patch
-Patch18:	%{name}-perl-req-perlfile.patch
-Patch19:	%{name}-brp-strip.patch
+Patch9:		%{name}-exclude-examples-doc.patch
+Patch10:	%{name}-db3.patch
+Patch11:	%{name}-rpm-v1.patch
+Patch12:	%{name}-rpmlibprov.patch
+Patch13:	%{name}-getrpmlibprov.patch
+Patch14:        %{name}-rpmlibprov-order.patch
+Patch15:	%{name}-bash2.patch
+Patch16:	%{name}-perl-req-perlfile.patch
+Patch17:	%{name}-brp-strip.patch
+Patch18:	%{name}-find-lang.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	gettext-devel
 BuildRequires:	automake
-%{!?bcond_off_static:BuildRequires:	db3-static >= 3.1.17}
-%{!?bcond_off_static:BuildRequires:	bzip2-static >= 1.0.1}
-%{!?bcond_off_static:BuildRequires:	gdbm-static}
-%{!?bcond_off_static:BuildRequires:	zlib-static}
-%{?bcond_off_static:BuildRequires:	db3-devel >= 3.1.17}
-%{?bcond_off_static:BuildRequires:	bzip2-devel >= 1.0.1}
-%{?bcond_off_static:BuildRequires:	gdbm-devel}
-%{?bcond_off_static:BuildRequires:	zlib-devel}
+BuildRequires:	db3-devel >= 3.1.17
+BuildRequires:	bzip2-devel >= 1.0.1
+BuildRequires:	gdbm-devel
+BuildRequires:	zlib-devel
 BuildRequires:	gettext-devel >= 0.10.38-3
 BuildRequires:	libtool
 BuildRequires:	automake
 BuildRequires:	autoconf >= 2.13-8
+%if %{!?bcond_off_static:1}%{?bcond_off_static:0}
+BuildRequires:	zlib-devel >= 1.1.4
+BuildRequires:	db3-static >= 3.1.17
+BuildRequires:	bzip2-static >= 1.0.1
+BuildRequires:	gdbm-static
+BuildRequires:	zlib-static
+%endif
 BuildRequires:	zlib-static >= 1.1.4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	rpm-libs
@@ -185,8 +186,8 @@ construir pacotes usando o RPM.
 %patch8 -p1
 %patch7 -p1
 %patch10 -p1
-%patch11 -p1
-#%patch12 -p1
+#%patch11 -p1
+%patch12 -p1
 %patch13 -p1
 %patch14 -p1
 %patch15 -p1
