@@ -205,7 +205,7 @@ fi
 if [ -L /var/db/rpm ]; then
 	rm -rf /var/db/rpm
 fi
-if [ ! -f /var/state/rpm ]; then
+if [ ! -f /var/state/rpm/packages.rpm ]; then
 	/bin/rpm --initdb
 fi
 
