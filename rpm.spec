@@ -5,7 +5,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.4
-Release:	0.29.5
+Release:	0.3
 License:	GPL
 Group:		Base
 Group(cs):	Základ
@@ -58,6 +58,7 @@ Patch19:	%{name}-acconfig.patch
 Patch20:	%{name}-db4.patch
 Patch21:	%{name}-pl.po.patch
 Patch22:	%{name}-drop-legacy-CLI.patch
+Patch23:	%{name}-perlprov-perl5.6.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 URL:		http://www.rpm.org/
@@ -476,6 +477,7 @@ construir pacotes usando o RPM.
 %patch18 -p1
 %patch19 -p1
 %patch22 -p1 -b .wiget
+%patch23 -p1
 %patch31 -p1
 %patch36 -p1
 %patch37 -p1
