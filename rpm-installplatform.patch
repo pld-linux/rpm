@@ -6,14 +6,14 @@
  
 -arch="`$RPM --eval '%{_arch}'`"
 +canonarch_sed='s_i.86_i386_;s_athlon_i386_;s_sparc[^-]*_sparc_;s_alpha[^-]*_alpha_;s_\(powerpc\|ppc\)[^-]*_ppc_'
-+arch="`$RPM --eval '%{_arch}'|sed -e $canonarch_sed`"
++arch="`$RPM --eval '%{_arch}'|sed -e "$canonarch_sed"`"
  VENDOR="`$RPM --eval '%{_vendor}'`"
  OS="`$RPM --eval '%{_os}'`"
  RPMRC_GNU="`$RPM --eval '%{_gnu}'`"
 -target_platform="`$RPM --eval '%{?_gnu:%undefine _gnu}%{_target_platform}'`"
 -target="`$RPM --eval '%{_target}'`"
-+target_platform="`$RPM --eval '%{?_gnu:%undefine _gnu}%{_target_platform}'|sed -e $canonarch_sed`"
-+target="`$RPM --eval '%{_target}'|sed -e $canonarch_sed`"
++target_platform="`$RPM --eval '%{?_gnu:%undefine _gnu}%{_target_platform}'|sed -e "$canonarch_sed"`"
++target="`$RPM --eval '%{_target}'|sed -e "$canonarch_sed"`"
  
  rm -f ${DESTDIR}/${pkglibdir}/noarch-${VENDOR}-${OS}
  ln -s ${arch}-${VENDOR}-${OS} ${DESTDIR}/${pkglibdir}/noarch-${VENDOR}-${OS}
@@ -36,7 +36,7 @@
    case $VENDOR in
    pld)
      VENDORSED='-e s,^@pld@,,'
-+    RPMRC_OPTFLAGS="`echo $RPMRC_OPTFLAGS | sed -e s/ -g/ /`"
++    RPMRC_OPTFLAGS="`echo $RPMRC_OPTFLAGS | sed -e "s/ -g/ /"`"
      ;;
    mandrake)
      VENDORSED='-e s,^@mandrake@,,'
