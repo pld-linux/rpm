@@ -19,15 +19,14 @@
      }
  
      for (dm = depMsgs; dm->msg != NULL; dm++) {
-@@ -2190,10 +2192,58 @@
+@@ -2190,10 +2192,54 @@
      FREE(versions);
  }
  
 +int checkFiles(StringBuf fileList, int fileListLen)
 +{
 +    StringBuf readBuf = NULL;
-+    char* myargv[3];
-+    int bufLen;
++    char* myargv[3] = {NULL, NULL, NULL};
 +    int rc = 0;
 +    char *buf;
 +    
@@ -41,21 +40,18 @@
 +        rc = -1;
 +        goto exit;
 +    }
-+    myargv[2] = NULL;
 +    
 +    rpmMessage(RPMMESS_NORMAL, _("Searching for omited files: (using %s)...\n"),
 +               myargv[0]);
 +		    
-+    /* bufLen =  (fileList->tail - fileList->buf) + 1; */
-+    bufLen = fileListLen;
-+    readBuf = getOutputFrom(NULL, myargv, getStringBuf(fileList), bufLen, 0);
++    readBuf = getOutputFrom(NULL, myargv, getStringBuf(fileList), fileListLen, 0);
 +    
 +    if (readBuf) {
 +        buf = getStringBuf(readBuf);
 +        if ((*buf != '\0') & (*buf != '\n'))
 +            rpmMessage(RPMMESS_WARNING, \
 +	                _("found installed files not placed in any package:\n---\n%s---\n"),
-+                       getStringBuf(readBuf));
++                       buf);
 +    }
 +    
 +exit:
@@ -93,7 +89,7 @@
  	
      }
  
-+    /* Now we have in fileList lits of files from all packages.
++    /* Now we have in fileList list of files from all packages.
 +     * We pass it to a script which do the work of finding missing
 +     * and duplicated files.
 +     */
