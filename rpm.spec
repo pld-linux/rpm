@@ -5,9 +5,11 @@ Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
 Summary(pl):	Aplikacja do zarz╠dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
+Summary(ru):	Менеджер пакетов от Red Hat
+Summary(uk):	Менеджер пакет╕в в╕д Red Hat
 Name:		rpm
 Version:	4.0.2
-Release:	91
+Release:	92
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -67,13 +69,13 @@ Patch31:	%{name}-athlon-identify.patch
 Patch32:	%{name}-gettext-in-header.patch
 Patch33:	%{name}-perlprov-perl5.6.patch
 Patch34:	%{name}-ac25x.patch
-Patch35:        %{name}-signverify-fix.patch
-Patch36:        %{name}-compress-doc.patch
-Patch37:        %{name}-short_circuit.patch
-Patch38:        %{name}-test_stage.patch
-Patch39:        %{name}-exclude.patch
-Patch40:        %{name}-check_files.patch
-Patch41:        %{name}-choke-on-evil-doc.patch
+Patch35:	%{name}-signverify-fix.patch
+Patch36:	%{name}-compress-doc.patch
+Patch37:	%{name}-short_circuit.patch
+Patch38:	%{name}-test_stage.patch
+Patch39:	%{name}-exclude.patch
+Patch40:	%{name}-check_files.patch
+Patch41:	%{name}-choke-on-evil-doc.patch
 Patch42:	%{name}-rpmlog-fix.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
@@ -146,12 +148,28 @@ pacotes individuais de software. Um pacote consiste de um conjunto de
 arquivos e informaГУes adicionais, incluindo nome, versЦo e descriГЦo
 do pacote, permissУes dos arquivos, etc.
 
+%description -l ru
+RPM - это мощный менеджер пакетов, который может быть использован для
+создания, инсталляции, запросов (query), проверки, обновления и
+удаления программных пакетов. Пакет состоит из файлового архива и
+служебной информации, включающей название, версию, описание и другие
+данные о пакете.
+
+%description -l uk
+RPM - це потужний менеджер пакет╕в, що може бути використаний для
+створення, ╕нсталяц╕╖, запит╕в (query), перев╕рки, поновлення та
+видалення програмних пакет╕в. Пакет склада╓ться з файлового арх╕ву та
+службово╖ ╕нформац╕╖, що м╕стить назву, верс╕ю, опис та ╕ншу
+╕нформац╕ю про пакет.
+
 %package devel
 Summary:	Header files and libraries
 Summary(de):	Header-Dateien uns Libraries
 Summary(es):	Archivos de inclusiСn y bibliotecas para programas de manipulaciСn de paquetes rpm
 Summary(pl):	Pliki nagЁСwkowe i biblioteki statyczne
 Summary(pt_BR):	Arquivos de inclusЦo e bibliotecas para programas de manipulaГЦo de pacotes RPM
+Summary(ru):	Хедеры и библиотеки для программ, работающих с rpm-пакетами.
+Summary(uk):	Хедери та б╕бл╕отеки для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name} = %{version}
 Requires:	popt-devel
@@ -186,11 +204,26 @@ a manipulaГЦo de pacotes e bases de dados RPM. Seu objetivo И
 facilitar a criaГЦo de gerenciadores grАficos de pacotes e outras
 ferramentas que precisem de conhecimento profundo de pacotes RPM.
 
+%description devel -l ru
+Система управления пакетами RPM содержит библиотеку C, которая
+упрощает манипуляцию пакетами RPM и соответствующими базами данных.
+Эта библиотека предназначена для облегчения создания графических
+пакетных менеджеров и других утилит, которым необходимо работать с
+пакетами RPM.
+
+%description devel -l uk
+Система керування пакетами RPM м╕стить б╕бл╕отеку C, котра спрощу╓
+роботу з пакетами RPM та в╕дпов╕дними базами даних. Ця б╕бл╕отека
+призначена для полегшення створення граф╕чних пакетних менеджер╕в та
+╕нших утил╕т, що працюють з пакетами RPM.
+
 %package static
 Summary:	RPM static libraries
 Summary(de):	RPMs statische Libraries
 Summary(pl):	Biblioteki statyczne RPM-a
 Summary(pt_BR):	Bibliotecas estАticas para o desenvolvimento de aplicaГУes RPM
+Summary(ru):	Статическая библиотека для программ, работающих с rpm-пакетами.
+Summary(uk):	Статична б╕бл╕отека для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
 
@@ -205,6 +238,16 @@ Biblioteki statyczne RPM-a.
 
 %description static -l pt_BR
 Bibliotecas estАticas para desenvolvimento.
+
+%description static -l ru
+Система управления пакетами RPM содержит библиотеку C, которая
+упрощает манипуляцию пакетами RPM и соответствующими базами данных.
+Это статическая библиотека RPM.
+
+%description static -l uk
+Система керування пакетами RPM м╕стить б╕бл╕отеку C, котра спрощу╓
+роботу з пакетами RPM та в╕дпов╕дними базами даних. Це статична
+б╕бл╕отека RPM.
 
 %package utils
 Summary:	Additional utilities for managing rpm packages and database
@@ -308,6 +351,8 @@ Summary:	Scripts for building binary RPM packages
 Summary(de):	Scripts fЭrs Bauen binДrer RPM-Pakete
 Summary(pl):	Skrypty pomocnicze do budowania binarnych RPM-Сw
 Summary(pt_BR):	Scripts e programas executАveis usados para construir pacotes
+Summary(ru):	Скрипты и утилиты, необходимые для сборки пакетов
+Summary(uk):	Скрипти та утил╕ти, необх╕дн╕ для побудови пакет╕в
 Group:		Applications/File
 Requires:	%{name} = %{version}
 Requires:	/bin/id
@@ -345,6 +390,14 @@ Skrypty pomocnicze do budowania binarnych RPM-Сw.
 %description build -l pt_BR
 Este pacote contИm scripts e programas executАveis que sЦo usados para
 construir pacotes usando o RPM.
+
+%description build -l ru
+Различные вспомогательные скрипты и исполняемые программы, которые
+используются для сборки RPM'ов.
+
+%description build -l uk
+Р╕зноман╕тн╕ допом╕жн╕ скрипти та утил╕ти, як╕ використовуються для
+побудови RPM'╕в.
 
 %prep
 %setup -q -a12
@@ -629,5 +682,5 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/rpm/macros.php
 
 %files -n python-rpm
-%defattr(755,root,root,755)
-%{py_sitedir}/*.so
+%defattr(644,root,root,755)
+%attr(755,root,root) %{py_sitedir}/*.so
