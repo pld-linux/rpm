@@ -9,8 +9,7 @@ License:	GPL
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-3.0.x/%{name}-%{version}.tar.gz
 Source1:	rpm.groups
 Source2:	rpm.macros
-Source3:	rpm-find-requires-pre
-Source4:	rpm-find-requires-post
+Source3:	rpm-find-requires
 Source5:	rpm-install-tree
 Patch0:		rpm-rpmrc.patch
 Patch1:		rpm-find-requires.patch
@@ -180,8 +179,7 @@ install %{SOURCE5} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
 	pkgbindir="%{_bindir}"
 
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
-install %{SOURCE3} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires-pre
-install %{SOURCE4} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires-post
+install %{SOURCE3} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
 
 strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*
 
