@@ -24,7 +24,7 @@ diff -urN rpm.org/configure.ac rpm/configure.ac
  dnl # XXX Propagate -lucb to popt ...
  dnl export LIBS INCPATH CONFIG_SITE
  
--AC_CONFIG_SUBDIRS(popt file db3)
+-AC_CONFIG_SUBDIRS(popt zlib file sqlite db3)
 +AC_CONFIG_SUBDIRS(file)
  
  AC_CONFIG_FILES([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
@@ -42,14 +42,14 @@ diff -urN rpm.org/lib/Makefile.am rpm/lib/Makefile.am
 --- rpm.org/lib/Makefile.am	2004-06-14 11:46:08.925289496 +0200
 +++ rpm/lib/Makefile.am	2004-06-14 11:47:13.502472272 +0200
 @@ -40,7 +40,7 @@
- librpm_la_LDFLAGS = -release 4.3 $(LDFLAGS) \
+ librpm_la_LDFLAGS = -release 4.4 $(LDFLAGS) \
  	$(top_builddir)/rpmdb/librpmdb.la \
  	$(top_builddir)/rpmio/librpmio.la \
 -	$(top_builddir)/popt/libpopt.la \
 +	-lpopt \
- 	@WITH_SELINUX_LIB@
+ 	@WITH_SELINUX_LIB@ \
+ 	@INTLLIBS@
  
- getdate.c: getdate.y
 diff -urN rpm.org/Makefile.am rpm/Makefile.am
 --- rpm.org/Makefile.am	2004-06-14 11:46:04.409975928 +0200
 +++ rpm/Makefile.am	2004-06-14 11:48:04.236759488 +0200
@@ -67,9 +67,9 @@ diff -urN rpm.org/Makefile.am rpm/Makefile.am
  	-I$(top_srcdir)/rpmio \
  	@WITH_BEECRYPT_INCLUDE@ \
 -	-I$(top_srcdir)/popt \
+ 	-I$(top_srcdir)/misc \
  	@WITH_LIBELF_INCLUDE@ \
  	@INCPATH@
- 
 @@ -34,7 +33,7 @@
  	$(top_builddir)/lib/librpm.la \
  	$(top_builddir)/rpmdb/librpmdb.la \
@@ -106,18 +106,18 @@ diff -urN rpm.org/rpmdb/Makefile.am rpm/rpmdb/Makefile.am
  	-I$(top_srcdir)/rpmio \
  	@WITH_BEECRYPT_INCLUDE@ \
 -	-I$(top_srcdir)/popt \
+ 	-I$(top_srcdir)/misc \
  	@WITH_LIBELF_INCLUDE@ \
  	@INCPATH@
- 
 @@ -51,7 +50,7 @@
  	tagname.c tagtbl.c
- librpmdb_la_LDFLAGS = -release 4.3 \
+ librpmdb_la_LDFLAGS = -release 4.4 \
  	$(top_builddir)/rpmio/librpmio.la \
 -	$(top_builddir)/popt/libpopt.la \
 +	@WITH_POPT_LIB@ \
+ 	@WITH_SQLITE3_LIB@ \
  	@WITH_LIBELF_LIB@
  librpmdb_la_LIBADD = $(DBLIBOBJS) $(libdb_la)
- librpmdb_la_DEPENDENCIES = $(DBLIBOBJS) $(libdb_la)
 --- rpm.org/rpmio/Makefile.am.org	2004-11-18 17:42:53.756263795 +0100
 +++ rpm.org/rpmio/Makefile.am	2004-11-18 17:43:09.526885309 +0100
 @@ -12,7 +12,6 @@
@@ -125,10 +125,10 @@ diff -urN rpm.org/rpmdb/Makefile.am rpm/rpmdb/Makefile.am
  	@WITH_BEECRYPT_INCLUDE@ \
  	@WITH_LUA_INCLUDE@ \
 -	-I$(top_srcdir)/popt \
+ 	-I$(top_srcdir)/misc \
  	@INCPATH@
  
- pkgincdir = $(pkgincludedir)
-@@ -70,43 +69,43 @@
+@@ -71,47 +71,47 @@
  tax_LDADD = librpmio.la
  
  tdigest_SOURCES = tdigest.c
@@ -136,43 +136,48 @@ diff -urN rpm.org/rpmdb/Makefile.am rpm/rpmdb/Makefile.am
 +tdigest_LDADD = librpmio.la -lpopt -lgcrypt
  
  tdir_SOURCES = tdir.c
- tdir_LDFLAGS = -all-static
+ tdir_LDFLAGS = @LDFLAGS_STATIC@
 -tdir_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
 +tdir_LDADD = librpmio.la -lpopt
  
  tfts_SOURCES = tfts.c
- tfts_LDFLAGS = -all-static
+ tfts_LDFLAGS = @LDFLAGS_STATIC@
 -tfts_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
 +tfts_LDADD = librpmio.la -lpopt
  
  tget_SOURCES = tget.c
- tget_LDFLAGS = -all-static
+ tget_LDFLAGS = @LDFLAGS_STATIC@
 -tget_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
 +tget_LDADD = librpmio.la -lpopt
  
+ thkp_SOURCES = thkp.c
+ thkp_LDFLAGS = @LDFLAGS_STATIC@
+-thkp_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++thkp_LDADD = librpmio.la -lpopt
+ 
  tput_SOURCES = tput.c
- tput_LDFLAGS = -all-static
+ tput_LDFLAGS = @LDFLAGS_STATIC@
 -tput_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
 +tput_LDADD = librpmio.la -lpopt
  
  
  tglob_SOURCES = tglob.c
- tglob_LDFLAGS = -all-static
+ tglob_LDFLAGS = @LDFLAGS_STATIC@
 -tglob_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
 +tglob_LDADD = librpmio.la -lpopt
  
  tinv_SOURCES = tinv.c
- tinv_LDFLAGS = -all-static
+ tinv_LDFLAGS = @LDFLAGS_STATIC@
 -tinv_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
 +tinv_LDADD = librpmio.la -lpopt
  
  tkey_SOURCES = tkey.c
- tkey_LDFLAGS = -all-static
+ tkey_LDFLAGS = @LDFLAGS_STATIC@
 -tkey_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
 +tkey_LDADD = librpmio.la -lpopt
  
  tring_SOURCES = tring.c
- tring_LDFLAGS = -all-static
+ tring_LDFLAGS = @LDFLAGS_STATIC@
 -tring_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
 +tring_LDADD = librpmio.la -lpopt
  
@@ -209,7 +214,7 @@ diff -urN rpm.org/tools/Makefile.am rpm/tools/Makefile.am
  	-I$(top_srcdir)/rpmio \
  	@WITH_BEECRYPT_INCLUDE@ \
 -	-I$(top_srcdir)/popt \
- 	-I$(top_srcdir)/build \
+ 	-I$(top_srcdir)/misc \
  	-I$(pyincdir) \
  	@WITH_LIBELF_INCLUDE@ \
 @@ -31,7 +30,7 @@
