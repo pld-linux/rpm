@@ -12,7 +12,7 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
 %include        /usr/lib/rpm/macros.python
-%define snap	20031227
+%define snap	20040107
 # versions of required libraries
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.9
@@ -28,12 +28,12 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	ver	4.3
 Version:	%{ver}
-Release:	0.%{snap}.2.3
+Release:	0.%{snap}.1
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
-Source0:	ftp://distfiles.pld-linux.org/src/%{name}-%{version}.%{snap}.tar.gz
-# Source0-md5:	dcfe5575c62531838be5a0bebdaf0d1e
+Source0:	ftp://distfiles.pld-linux.org/src/%{name}-%{version}.%{snap}.tar.bz2
+# Source0-md5:	c1bc4a2ae441fbd4da8dd90149bab2f2
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
