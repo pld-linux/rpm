@@ -1,21 +1,27 @@
 Applications
-	[de]:		Applikationen
+	[cs]:		Aplikace
+	[de]:		Anwendungen
 	[es]:		Aplicaciones
 	[fr]:		Applications
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó
 	[pl]:		Aplikacje
 	[pt]:		Aplicações
 	[pt_BR]:	Aplicações
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ
 
 Applications/Archiving
-	[de]:		Applikationen/Archivierung
+	[cs]:		Aplikace/Archivování
+	[de]:		Anwendungen/Archivierung
 	[es]:		Aplicaciones/Archivar
 	[fr]:		Applications/Archivage
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥¢¡¼¥«¥¤¥Ö
 	[pl]:		Aplikacje/Archiwizacja
+	[pt]:		Aplicações/Arquivos
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/áÒÈÉ×ÉÒÏ×ÁÎÉÅ
 
 Applications/Console
-	[de]:		Applikationen/Konsole
+	[cs]:		Aplikace/Konzole
+	[de]:		Anwendungen/Konsole
 	[es]:		Aplicaciones/Consola
 	[fr]:		Applications/Console
 	[pl]:		Aplikacje/Konsola
@@ -23,31 +29,37 @@ Applications/Console
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/ëÏÎÓÏÌØ
 
 Applications/Communications
-	[de]:		Applikationen/Kommunikation
+	[cs]:		Aplikace/Komunikace
+	[de]:		Anwendungen/Kommunikation
 	[es]:		Aplicaciones/Comunicaciones
 	[fr]:		Applications/Transmissions
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/ÄÌ¿®
 	[pl]:		Aplikacje/Komunikacja
 	[pt]:		Aplicações/Comunicações
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/ó×ÑÚØ
 
 Applications/Databases
-	[de]:		Applikationen/Datenbanken
+	[cs]:		Aplikace/Databáze
+	[de]:		Anwendungen/Datenbanken
 	[es]:		Aplicaciones/Bases de Datos
 	[fr]:		Applications/Bases de Données
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Ç¡¼¥¿¥Ù¡¼¥¹
 	[pl]:		Aplikacje/Bazy Danych
 	[pt]:		Aplicações/Bases de Dados
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/âÁÚÙ ÄÁÎÎÙÈ
 
 Applications/Databases/Interfaces
-	[de]:		Applikationen/Datenbanken/Schnittstellen
+	[cs]:		Aplikace/Databáze/Rozhraní
+	[de]:		Anwendungen/Datenbanken/Schnittstellen
 	[es]:		Aplicaciones/Bases de Datos/Interfaces
-	[fr]:		Applications/Bases de Données/Interfaces
+	[fr]:		Applications/Bases de données/Interfaces
 	[pl]:		Aplikacje/Bazy danych/Interfejsy
 	[pt]:		Aplicações/Bases de Dados/Interfaces
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/âÁÚÙ ÄÁÎÎÙÈ/éÎÔÅÒÆÅÊÓÙ
 
 Applications/Dictionaries
-	[de]:		Applikationen/Wörterbücher
+	[cs]:		Aplikace/Slovníky
+	[de]:		Anwendungen/Wörterbücher
 	[es]:		Aplicaciones/Diccionarios
 	[fr]:		Applications/Dictionaires
 	[pl]:		Aplikacje/S³owniki
@@ -55,80 +67,98 @@ Applications/Dictionaries
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/óÌÏ×ÁÒÉ
 
 Applications/Editors
-	[de]:		Applikationen/Editors
+	[cs]:		Aplikace/Editory
+	[de]:		Anwendungen/Editoren
 	[es]:		Aplicaciones/Editores
 	[fr]:		Applications/Editeurs
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥¨¥Ç¥£¥¿
 	[pl]:		Aplikacje/Edytory
 	[pt]:		Aplicações/Editores
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/òÅÄÁËÔÏÒÙ
 
 Applications/Editors/Emacs
-	[de]:		Applikationen/Editors/Emacs
+	[cs]:		Aplikace/Editory/Emacs
+	[de]:		Anwendungen/Editoren/Emacs
 	[es]:		Aplicaciones/Editores/Emacs
 	[fr]:		Applications/Editeurs/Emacs
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥¨¥Ç¥£¥¿/Emacs
 	[pl]:		Aplikacje/Edytory/Emacs
 	[pt]:		Aplicações/Editores/Emacs
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/òÅÄÁËÔÏÒÙ/Emacs
 
 Applications/Editors/XEmacs
-	[de]:		Applikationen/Editors/XEmacs
+	[cs]:		Aplikace/Editory/XEmacs
+	[de]:		Anwendungen/Editoren/XEmacs
 	[es]:		Aplicaciones/Editores/XEmacs
 	[fr]:		Applications/Editeurs/XEmacs
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥¨¥Ç¥£¥¿/XEmacs
 	[pl]:		Aplikacje/Edytory/XEmacs
 	[pt]:		Aplicações/Editores/XEmacs
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/òÅÄÁËÔÏÒÙ/XEmacs
 
 Applications/Editors/Vim
-	[de]:		Applikationen/Editors/Vim
+	[cs]:		Aplikace/Editory/Vim
+	[de]:		Anwendungen/Editoren/Vim
 	[es]:		Aplicaciones/Editores/Vim
 	[fr]:		Applications/Editeurs/Vim
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥¨¥Ç¥£¥¿/Vim
 	[pl]:		Aplikacje/Edytory/Vim
 	[pt]:		Aplicações/Editores/Vim
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/òÅÄÁËÔÏÒÙ/Vim
 
 Applications/Emulators
-	[de]:		Applikationen/Emulators
+	[de]:		Anwendungen/Emulatoren
 	[es]:		Aplicaciones/Emuladores
 	[fr]:		Applications/Émulateurs
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥¨¥ß¥å¥ì¡¼¥¿
 	[pl]:		Aplikacje/Emulatory
 	[pt]:		Aplicações/Emuladores
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/òÅÄÁËÔÏÒÙ
 
 Applications/Engineering
-	[de]:		Applikationen/Ingenieurwesen
+	[cs]:		Aplikace/In¾enırské
+	[de]:		Anwendungen/Technik
 	[es]:		Aplicaciones/Ingeniería
 	[fr]:		Applications/Ingénierie
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥¨¥ó¥¸¥Ë¥¢¥ê¥ó¥°
 	[pl]:		Aplikacje/In¿ynierskie
 	[pt]:		Aplicações/Engenharia
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/éÎÖÅÎÅÒÎÙÅ ĞÒÉÌÏÖÅÎÉÑ
 
-Applications/Filez
-	[de]:		Applikationen/Datei
+Applications/File
+	[cs]:		Aplikace/Práce se soubory
+	[de]:		Anwendungen/Datei
 	[es]:		Aplicaciones/Archivos
 	[fr]:		Applications/Fichiers
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Õ¥¡¥¤¥ë
 	[pl]:		Aplikacje/Pliki
 	[pt]:		Aplicações/Ficheiros
 	[pt_BR]:	Aplicações/Arquivos
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/òÁÂÏÔÁ Ó ÆÁÊÌÁÍÉ
 
 Applications/Graphics
-	[de]:		Applikationen/Graphiken
+	[cs]:		Aplikace/Grafika
+	[de]:		Anwendungen/Graphiken
 	[es]:		Aplicaciones/Gráficos
 	[fr]:		Applications/Graphiques
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥°¥é¥Õ¥£¥Ã¥¯¥¹
 	[pl]:		Aplikacje/Grafika
 	[pt]:		Aplicações/Gráficos
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/çÒÁÆÉËÁ
 
 Applications/Games
-	[de]:		Applikationen/Spiele
+	[cs]:		Aplikace/Hry
+	[de]:		Anwendungen/Spiele
 	[es]:		Aplicaciones/Juegos
 	[fr]:		Applications/Jeux
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥²¡¼¥à
 	[pl]:		Aplikacje/Gry
 	[pt]:		Aplicações/Jogos
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/éÇÒÙ
 
 Applications/Networking
-	[de]:		Applikationen/Netzwerkwesen
+	[cs]:		Aplikace/Sí»ové
+	[de]:		Anwendungen/Netzwerkwesen
 	[es]:		Aplicaciones/Red
 	[fr]:		Applications/Réseau
 	[pl]:		Aplikacje/Sieciowe
@@ -137,7 +167,8 @@ Applications/Networking
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/óÅÔÅ×ÙÅ
 
 Applications/Mail
-	[de]:		Applikationen/Post
+	[cs]:		Aplikace/Po¹ta
+	[de]:		Anwendungen/Post
 	[es]:		Aplicaciones/Correo Electrónico
 	[fr]:		Applications/Courrier
 	[pl]:		Aplikacje/Poczta
@@ -145,7 +176,8 @@ Applications/Mail
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/üÌÅËÔÒÏÎÎÁÑ ĞÏŞÔÁ
 
 Applications/Math
-	[de]:		Applikationen/Mathematik
+	[cs]:		Aplikace/Matematické
+	[de]:		Anwendungen/Mathematik
 	[es]:		Aplicaciones/Matemáticas
 	[fr]:		Applications/Mathématiques
 	[pl]:		Aplikacje/Matematyczne
@@ -153,15 +185,18 @@ Applications/Math
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/íÁÔÅÍÁÔÉŞÅÓËÉÅ
 
 Applications/News
-	[de]:		Applikationen/News
-	[es]:		Aplicaciones/News
-	[fr]:		Applications/News
+	[cs]:		Aplikace/News
+	[de]:		Anwendungen/News
+	[es]:		Aplicaciones/Noticias
+	[fr]:		Applications/Nouvelles
 	[pl]:		Aplikacje/News
 	[pt]:		Aplicações/News
+	[pt_BR]:	Aplicações/News
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/îÏ×ÏÓÔÉ
 
 Applications/Printing
-	[de]:		Applikationen/Drucken
+	[cs]:		Aplikace/Tisk
+	[de]:		Anwendungen/Drucken
 	[es]:		Aplicaciones/Impresión
 	[fr]:		Applications/Impression
 	[pl]:		Aplikacje/Drukowanie
@@ -169,156 +204,207 @@ Applications/Printing
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/ğÅŞÁÔØ
 
 Applications/Publishing
-	[de]:		Applikationen/Publizieren
-	[es]:		Aplicaciones/Editoración
-	[fr]:		Aplicaciones/Édition
+	[cs]:		Aplikace/Publikování
+	[de]:		Anwendungen/Publizieren
+	[es]:		Aplicaciones/Edición
+	[fr]:		Applications/Edition
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Ñ¥Ö¥ê¥Ã¥·¥ó¥°
 	[pl]:		Aplikacje/Publikowanie
+	[pt]:		Aplicações/Publicação
 	[pt_BR]:	Aplicações/Editoração
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/éÚÄÁÔÅÌØÓÔ×Ï
 
-Applications/Publishing/TeX
-	[de]:		Applikationen/Publizieren/TeX
-	[es]:		Aplicaciones/Editoración/TeX
-	[fr]:		Aplicaciones/Édition/TeX
-	[pl]:		Aplikacje/Publikowanie/TeX
-	[pt_BR]:	Aplicações/Editoração/TeX
-	[ru]:		ğÒÉÌÏÖÅÎÉÑ/éÚÄÁÔÅÌØÓÔ×Ï/TeX
-
 Applications/Publishing/SGML
-	[de]:		Applikationen/Publizieren/SGML
-	[es]:		Aplicaciones/Editoración/SGML
-	[fr]:		Aplicaciones/Édition/SGML
+	[cs]:		Aplikace/Publikování/SGML
+	[de]:		Anwendungen/Publizieren/SGML
+	[es]:		Aplicaciones/Edición/SGML
+	[fr]:		Applications/Edition/SGML
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Ñ¥Ö¥ê¥Ã¥·¥ó¥°/SGML
 	[pl]:		Aplikacje/Publikowanie/SGML
+	[pt]:		Aplicações/Publicação/SGML
 	[pt_BR]:	Aplicações/Editoração/SGML
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/éÚÄÁÔÅÌØÓÔ×Ï/SGML
 
+Applications/Publishing/TeX
+	[cs]:		Aplikace/Publikování/TeX
+	[de]:		Anwendungen/Publizieren/TeX
+	[es]:		Aplicaciones/Edición/TeX
+	[fr]:		Applications/Edition/TeX
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Ñ¥Ö¥ê¥Ã¥·¥ó¥°/TeX
+	[pl]:		Aplikacje/Publikowanie/TeX
+	[pt]:		Aplicações/Publicação/TeX
+	[pt_BR]:	Aplicações/Editoração/TeX
+	[ru]:		ğÒÉÌÏÖÅÎÉÑ/éÚÄÁÔÅÌØÓÔ×Ï/TeX
+
 Applications/Publishing/XML
-	[de]:		Applikationen/Publizieren/XML
-	[es]:		Aplicaciones/Editoración/XML
-	[fr]:		Aplicaciones/Édition/XML
+	[cs]:		Aplikace/Publikování/XML
+	[de]:		Anwendungen/Publizieren/XML
+	[es]:		Aplicaciones/Edición/XML
+	[fr]:		Applications/Edition/XML
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Ñ¥Ö¥ê¥Ã¥·¥ó¥°/XML
 	[pl]:		Aplikacje/Publikowanie/XML
+	[pt]:		Aplicações/Publicação/XML
 	[pt_BR]:	Aplicações/Editoração/XML
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/éÚÄÁÔÅÌØÓÔ×Ï/XML
 
 Applications/Publishing/XML/Java
-	[de]:		Applikationen/Publizieren/XML/Java
-	[es]:		Aplicaciones/Editoración/XML/Java
-	[fr]:		Aplicaciones/Édition/XML/Java
+	[cs]:		Aplikace/Publikování/XML/Java
+	[de]:		Anwendungen/Publizieren/XML/Java
+	[es]:		Aplicaciones/Edición/XML/Java
+	[fr]:		Applications/Edition/XML/Java
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Ñ¥Ö¥ê¥Ã¥·¥ó¥°/XML/Java
 	[pl]:		Aplikacje/Publikowanie/XML/Java
+	[pt]:		Aplicações/Publicação/XML/Java
 	[pt_BR]:	Aplicações/Editoração/XML/Java
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/éÚÄÁÔÅÌØÓÔ×Ï/XML/Java
 
 Applications/Shells
-	[de]:		Applikationen/Shells
+	[cs]:		Aplikace/Shelly
+	[de]:		Anwendungen/Shells
 	[es]:		Aplicaciones/Shells
-	[fr]:		Aplicaciones/Interpréteurs de commandes
+	[fr]:		Applications/Shells
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥·¥§¥ë
 	[pl]:		Aplikacje/Pow³oki
 	[pt]:		Aplicações/Shells
 	[pt_BR]:	Aplicações/Shells
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/ïÂÏÌÏŞËÉ
 
+Applications/Sound
+	[cs]:		Aplikace/Zvuky
+	[de]:		Anwendungen/Laut
+	[es]:		Aplicaciones/Sonido
+	[fr]:		Aplicações/Son
+	[pl]:		Aplikacje/D¼wiêk
+	[pt]:		Aplicações/Som
+	[pt_BR]:	Aplicações/Som
+	[ru]:		ğÒÉÌÏÖÅÎÉÑ/ú×ÕË
+
 Applications/Spreadsheets
-	[de]:		Applikationen/Arbeitsblätter
+	[cs]:		Aplikace/Tabulkove procesorı
+	[de]:		Anwendungen/Arbeitsblätter
+	[es]:		Aplicaciones/Hojas de Cálculo
+	[fr]:		Applications/Tableurs
 	[pl]:		Aplikacje/Arkusze kalkulacyjne
+	[pt]:		Aplicações/Folhas de Cálculo
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/ÜÌÅËÔÒÏÎÎÙÑ ÔÁÂÌÉÃÙ
 
 Applications/System
-	[de]:		Applikationen/System
+	[cs]:		Aplikace/Systém
+	[de]:		Anwendungen/System
 	[es]:		Aplicaciones/Sistema
-	[fr]:		Aplicaciones/Système
+	[fr]:		Applications/Système
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥·¥¹¥Æ¥à
 	[pl]:		Aplikacje/System
 	[pt]:		Aplicações/Sistema
 	[pt_BR]:	Aplicações/Sistema
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/óÉÓÔÅÍÁ
 
 Applications/Terminal
-	[de]:		Applikationen/Terminal
+	[cs]:		Aplikace/Terminál
+	[de]:		Anwendungen/Terminal
 	[es]:		Aplicaciones/Terminal
-	[fr]:		Aplicaciones/Terminal
+	[fr]:		Applications/Terminal
 	[pl]:		Aplikacje/Terminal
 	[pt]:		Aplicações/Terminal
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/ôÅÒÍÉÎÁÌ
 
 Applications/Text
-	[de]:		Applikationen/Text
+	[cs]:		Aplikace/Text
+	[de]:		Anwendungen/Text
 	[es]:		Aplicaciones/Texto
-	[fr]:		Aplicaciones/Texte
+	[fr]:		Applications/Texte
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Æ¥­¥¹¥È
 	[pl]:		Aplikacje/Tekst
 	[pt]:		Aplicações/Texto
 	[ru]:		ğÒÉÌÏÖÅÎÉÑ/òÁÂÏÔÁ Ó ÔÅËÓÔÁÍÉ
 
-Applications/Sound
-	[de]:		Applikationen/Laut
-	[es]:		Aplicaciones/Sonido
-	[fr]:		Aplicações/Bruit
-	[pl]:		Aplikacje/D¼wiêk
-	[pt]:		Aplicações/Som
-	[pt_BR]:	Aplicações/Som
-	[ru]:		ğÒÉÌÏÖÅÎÉÑ/ú×ÕË
-
 Base
-	[de]:		Gründsätzlich
+	[cs]:		Základ
+	[de]:		Basis
 	[es]:		Base
 	[fr]:		Base
+	[ja]:		¥Ù¡¼¥¹
 	[pl]:		Podstawowe
 	[pt]:		Base
 	[pt_BR]:	Base
 	[ru]:		âÁÚÏ×ÙÊ ÎÁÂÏÒ
 
 Base/Kernel
+	[cs]:		Základ/Jádro
 	[de]:		Grundsätzlich/Kern
 	[es]:		Base/Núcleo
-	[fr]:		Base/Grain
+	[fr]:		Base/Noyau
+	[ja]:		¥Ù¡¼¥¹/¥«¡¼¥Í¥ë
 	[pl]:		Podstawowe/J±dro
-	[pt]:		Base/Semente
+	[pt]:		Base/Núcleo
 	[ru]:		âÁÚÏ×ÙÊ ÎÁÂÏÒ/ñÄÒÏ
 
 Base/Authentication and Authorization
+	[cs]:		Základ/Autentizace a autorizace
 	[de]:		Grundsätzlich/Authentisierung und Ermächtigung
-	[es]:		Base/Autentificación y Autorización
-	[fr]:		Base/Authentification et Autorisation
+	[es]:		Base/Autenticación y Autorización
+	[fr]:		Base/Authentification et autorisation
 	[pl]:		Podstawowe/Autentykacja i autoryzacja
-	[pt]:		Base/Authentication e Autorizaçãoa
+	[pt]:		Base/Autenticação e Autorização
 	[ru]:		âÁÚÏ×ÙÊ ÎÁÂÏÒ/áÕÔÅÎÔÉÆÉËÁÃÉÑ É Á×ÔÏÒÉÚÁÃÉÑ
 
 Base/Utilities
-	[de]:		Gründsätzlich/Werkzeuge
+	[cs]:		Základ/Utility
+	[de]:		Gründsätzlich/Dienstprogramme
 	[es]:		Base/Utilitarios
 	[fr]:		Base/Utilitaires
 	[pl]:		Podstawowe/Narzêdzia
 	[pt]:		Base/Utilidades
-	[pt_BR]:	Base/tilitários
+	[pt_BR]:	Base/Utilitários
 	[ru]:		âÁÚÏ×ÙÊ ÎÁÂÏÒ/ğÒÉÌÏÖÅÎÉÑ
 
 Daemons
+	[cs]:		Démoni
 	[de]:		Server
 	[es]:		Servidores
 	[fr]:		Serveurs
+	[ja]:		¥Ç¡¼¥â¥ó
 	[pl]:		Serwery
-	[pt]:		Server
+	[pt]:		Servidores
 	[ru]:		äÅÍÏÎÙ
 
 Development
-        [de]:   	Entwicklung
+	[cs]:		Vıvojové prostøedky
+	[de]:		Entwicklung
 	[es]:		Desarrollo
 	[fr]:		Développement
-        [pl]:   	Programowanie
+	[ja]:		³«È¯
+	[pl]:		Programowanie
 	[pt]:		Desenvolvimento
 	[pt_BR]:	Desenvolvimento
 	[ru]:		òÁÚÒÁÂÏÔËÁ
 	[uk]:		òÏÚÒÏÂËÁ
 
+Development/Building
+	[cs]:		Základ/Vıvoj
+	[de]:		Entwicklung/Bauen
+	[es]:		Desarrollo/Construcción
+	[fr]:		Développement/Construction
+	[pl]:		Programowanie/Budowanie
+	[pt]:		Desenvolvimento/Criação
+	[ru]:		òÁÚÒÁÂÏÔËÁ/óÂÏÒËÁ
+
 Development/Debuggers
+	[cs]:		Vıvojové prostøedky/Debuggery
 	[de]:		Entwicklung/Debugger
 	[es]:		Desarrollo/Depuradores
-	[fr]:		Développement/Debuggers
+	[fr]:		Développement/Débogueurs
+	[ja]:		³«È¯/¥Ç¥Ğ¥Ã¥¬
 	[pl]:		Programowanie/Odpluskwiacze
+	[pt]:		Desenvolvimento/Depuradores
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ïÔÌÁÄŞÉËÉ
 
 Development/Libraries
+	[cs]:		Vıvojové prostøedky/Knihovny
 	[de]:		Entwicklung/Bibliotheken
 	[es]:		Desarrollo/Bibliotecas
 	[fr]:		Development/Librairies
+	[ja]:		³«È¯/¥é¥¤¥Ö¥é¥ê
 	[pl]:		Programowanie/Biblioteki
 	[pt]:		Desenvolvimento/Bibliotecas
 	[pt_BR]:	Desenvolvimento/Bibliotecas
@@ -326,9 +412,11 @@ Development/Libraries
 	[uk]:		òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 
 Development/Libraries/Libc
+	[cs]:		Vıvojové prostøedky/Knihovny/Libc
 	[de]:		Entwicklung/Bibliotheken/Libc
 	[es]:		Desarrollo/Bibliotecas/Libc
 	[fr]:		Development/Librairies/Libc
+	[ja]:		³«È¯/¥é¥¤¥Ö¥é¥ê/Libc
 	[pl]:		Programowanie/Biblioteki/Libc
 	[pt]:		Desenvolvimento/Bibliotecas/Libc
 	[pt_BR]:	Desenvolvimento/Bibliotecas/Libc
@@ -336,96 +424,116 @@ Development/Libraries/Libc
 	[uk]:		òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ/Libc
 
 Development/Languages
+	[cs]:		Vıvojové prostøedky/Programovací jazyky
 	[de]:		Entwicklung/Sprachen
-	[es]:		Desarrollo/Lenguages
+	[es]:		Desarrollo/Lenguajes
 	[fr]:		Development/Langues
+	[ja]:		³«È¯/¸À¸ì
 	[pl]:		Programowanie/Jêzyki
-	[pt]:		Desenvolvimento/Línguas
+	[pt]:		Desenvolvimento/Linguagens
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ
 
 Development/Languages/Fortran
+	[cs]:		Vıvojové prostøedky/Programovací jazyky/Fortran
 	[de]:		Entwicklung/Sprachen/Fortran
-	[es]:		Desarrollo/Lenguages/Fortran
+	[es]:		Desarrollo/Lenguajes/Fortran
 	[fr]:		Development/Langues/Fortran
+	[ja]:		³«È¯/¸À¸ì/Fortran
 	[pl]:		Programowanie/Jêzyki/Fortran
-	[pt]:		Desenvolvimento/Línguas/Fortran
+	[pt]:		Desenvolvimento/Linguagens/Fortran
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ/Fortran
 
 Development/Languages/Java
+	[cs]:		Vıvojové prostøedky/Programovací jazyky/Java
 	[de]:		Entwicklung/Sprachen/Java
-	[es]:		Desarrollo/Lenguages/Java
+	[es]:		Desarrollo/Lenguajes/Java
 	[fr]:		Development/Langues/Java
+	[ja]:		³«È¯/¸À¸ì/Java
 	[pl]:		Programowanie/Jêzyki/Java
-	[pt]:		Desenvolvimento/Línguas/Java
+	[pt]:		Desenvolvimento/Linguagens/Java
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ/Java
 
 Development/Languages/Modula3
+	[cs]:		Vıvojové prostøedky/Programovací jazyky/Modula3
 	[de]:		Entwicklung/Sprachen/Modula3
-	[es]:		Desarrollo/Lenguages/Modula3
+	[es]:		Desarrollo/Lenguajes/Modula3
 	[fr]:		Development/Langues/Modula3
+	[ja]:		³«È¯/¸À¸ì/Modula3
 	[pl]:		Programowanie/Jêzyki/Modula3
-	[pt]:		Desenvolvimento/Línguas/Modula3
+	[pt]:		Desenvolvimento/Linguagens/Modula3
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ/Modula3
 
 Development/Languages/PHP
+	[cs]:		Vıvojové prostøedky/Programovací jazyky/PHP
 	[de]:		Entwicklung/Sprachen/PHP
-	[es]:		Desarrollo/Lenguages/PHP
+	[es]:		Desarrollo/Lenguajes/PHP
 	[fr]:		Development/Langues/PHP
+	[ja]:		³«È¯/¸À¸ì/PHP
 	[pl]:		Programowanie/Jêzyki/PHP
-	[pt]:		Desenvolvimento/Línguas/PHP
+	[pt]:		Desenvolvimento/Linguagens/PHP
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ/PHP
 
 Development/Languages/Perl
+	[cs]:		Vıvojové prostøedky/Programovací jazyky/Perl
 	[de]:		Entwicklung/Sprachen/Perl
-	[es]:		Desarrollo/Lenguages/Perl
+	[es]:		Desarrollo/Lenguajes/Perl
 	[fr]:		Development/Langues/Perl
+	[ja]:		³«È¯/¸À¸ì/Perl
 	[pl]:		Programowanie/Jêzyki/Perl
-	[pt]:		Desenvolvimento/Línguas/Perl
+	[pt]:		Desenvolvimento/Linguagens/Perl
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ/Perl
 
 Development/Languages/Python
+	[cs]:		Vıvojové prostøedky/Programovací jazyky/Python
 	[de]:		Entwicklung/Sprachen/Python
-	[es]:		Desarrollo/Lenguages/Python
+	[es]:		Desarrollo/Lenguajes/Python
 	[fr]:		Development/Langues/Python
+	[ja]:		³«È¯/¸À¸ì/Python
 	[pl]:		Programowanie/Jêzyki/Python
-	[pt]:		Desenvolvimento/Línguas/Python
+	[pt]:		Desenvolvimento/Linguagens/Python
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ/Python
 
 Development/Languages/Scheme
+	[cs]:		Vıvojové prostøedky/Programovací jazyky/Scheme
 	[de]:		Entwicklung/Sprachen/Scheme
-	[es]:		Desarrollo/Lenguages/Scheme
+	[es]:		Desarrollo/Lenguajes/Scheme
 	[fr]:		Development/Langues/Scheme
+	[ja]:		³«È¯/¸À¸ì/Scheme
 	[pl]:		Programowanie/Jêzyki/Scheme
-	[pt]:		Desenvolvimento/Línguas/Scheme
+	[pt]:		Desenvolvimento/Linguagens/Scheme
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ/Scheme
 
 Development/Languages/Tcl
+	[cs]:		Vıvojové prostøedky/Programovací jazyky/Tcl
 	[de]:		Entwicklung/Sprachen/Tcl
-	[es]:		Desarrollo/Lenguages/Tcl
+	[es]:		Desarrollo/Lenguajes/Tcl
 	[fr]:		Development/Langues/Tcl
+	[ja]:		³«È¯/¸À¸ì/Tcl
 	[pl]:		Programowanie/Jêzyki/Tcl
-	[pt]:		Desenvolvimento/Línguas/Tcl
+	[pt]:		Desenvolvimento/Linguagens/Tcl
 	[ru]:		òÁÚÒÁÂÏÔËÁ/ñÚÙËÉ/Tcl
 
-Development/Building
-	[de]:		Entwicklung/Bauen
-	[pl]:		Programowanie/Budowanie
-	[ru]:		òÁÚÒÁÂÏÔËÁ/óÂÏÒËÁ
-
-Development/Version Control
-	[de]:		Entwicklung/Versionkontrolle
-	[pl]:		Programowanie/Zarz±dzanie wersjami
-	[ru]:		òÁÚÒÁÂÏÔËÁ/ëÏÎÔÒÏÌØ ×ÅÒÓÉÊ
-
 Development/Tools
-	[de]:		Entwicklung/Werkzeuge
+	[cs]:		Vıvojové prostøedky/Nástroje
+	[de]:		Entwicklung/Tools
 	[es]:		Desarrollo/Herramientas
 	[fr]:		Development/Outils
+	[ja]:		³«È¯/¥Ä¡¼¥ë
 	[pl]:		Programowanie/Narzêdzia
 	[pt]:		Desenvolvimento/Ferramentas
 	[ru]:		òÁÚÒÁÂÏÔËÁ/éÎÓÔÒÕÍÅÎÔÙ
 
+Development/Version Control
+	[cs]:		Vıvojové prostøedky/Správ verzí
+	[de]:		Entwicklung/Versionkontrolle
+	[es]:		Desarrollo/Control de Versiones
+	[fr]:		Development/Contrôle de version
+	[pl]:		Programowanie/Zarz±dzanie wersjami
+	[pt]:		Desenvolvimento/Controlo de Versões
+	[ru]:		òÁÚÒÁÂÏÔËÁ/ëÏÎÔÒÏÌØ ×ÅÒÓÉÊ
+
 Documentation
+	[cs]:		Dokumentace
 	[de]:		Dokumentation
 	[es]:		Documentación
 	[fr]:		Documentacion
@@ -434,9 +542,11 @@ Documentation
 	[ru]:		äÏËÕÍÅÎÔÁÃÉÑ
 
 Libraries
+	[cs]:		Knihovny
 	[de]:		Bibliotheken
 	[es]:		Bibliotecas
 	[fr]:		Librairies
+	[ja]:		¥é¥¤¥Ö¥é¥ê
 	[pl]:		Biblioteki
 	[pt]:		Bibliotecas
 	[pt_BR]:	Bibliotecas
@@ -444,9 +554,11 @@ Libraries
 	[uk]:		â¦ÂÌ¦ÏÔÅËÉ
 
 Libraries/XML
+	[cs]:		Knihovny/XML
 	[de]:		Bibliotheken/XML
 	[es]:		Bibliotecas/XML
 	[fr]:		Librairies/XML
+	[ja]:		¥é¥¤¥Ö¥é¥ê/XML
 	[pl]:		Biblioteki/XML
 	[pt]:		Bibliotecas/XML
 	[pt_BR]:	Bibliotecas/XML
@@ -454,6 +566,7 @@ Libraries/XML
 	[uk]:		â¦ÂÌ¦ÏÔÅËÉ/XML
 
 Networking
+	[cs]:		Sí»ové
 	[de]:		Netzwerkwesen
 	[es]:		Red
 	[fr]:		Réseau
@@ -463,6 +576,7 @@ Networking
 	[ru]:		óÅÔÅ×ÙÅ
 
 Networking/Admin
+	[cs]:		Sí»ové/Administrace
 	[de]:		Netzwerkwesen/Administration
 	[es]:		Red/Administración
 	[fr]:		Réseau/Administration
@@ -471,43 +585,48 @@ Networking/Admin
 	[ru]:		óÅÔÅ×ÙÅ/õĞÒÁ×ÌÅÎÉÅ
 
 Networking/Daemons
+	[cs]:		Sí»ové/Démoni
 	[de]:		Netzwerkwesen/Server
 	[es]:		Red/Servidores
 	[fr]:		Réseau/Serveurs
 	[pl]:		Sieciowe/Serwery
-	[pt]:		Rede/Server
+	[pt]:		Rede/Servidores
 	[ru]:		óÅÔÅ×ÙÅ/äÅÍÏÎÙ
 
 Networking/Daemons/Java
+	[cs]:		Sí»ové/Démoni/Java
 	[de]:		Netzwerkwesen/Server/Java
 	[es]:		Red/Servidores/Java
 	[fr]:		Réseau/Serveurs/Java
 	[pl]:		Sieciowe/Serwery/Java
-	[pt]:		Rede/Server/Java
+	[pt]:		Rede/Servidores/Java
 	[ru]:		óÅÔÅ×ÙÅ/äÅÍÏÎÙ/Java
 
 Networking/Daemons/Java/Extensions
+	[cs]:		Sí»ové/Démoni/Java/Roz¹íøení
 	[de]:		Netzwerkwesen/Server/Java/Extensionen
 	[es]:		Red/Servidores/Java/Extensiones
 	[fr]:		Réseau/Serveurs/Java/Extensions
 	[pl]:		Sieciowe/Serwery/Java/Rozszerzenia
-	[pt]:		Rede/Server/Java/Extensões
+	[pt]:		Rede/Servidores/Java/Extensões
 	[ru]:		óÅÔÅ×ÙÅ/äÅÍÏÎÙ/Java/òÁÓÛÉÒÅÎÉÑ
 
 Networking/Daemons/Java/Servlets
 	[pl]:		Sieciowe/Serwery/Java/Servlety
 
 Networking/News
+	[cs]:		Sí»ové/News
 	[de]:		Netzwerkwesen/News
-	[es]:		Red/News
-	[fr]:		Réseau/News
+	[es]:		Red/Noticias
+	[fr]:		Réseau/Nouvelles
 	[pl]:		Sieciowe/News
 	[pt]:		Rede/News
 	[pt_BR]:	Rede/News
 	[ru]:		óÅÔÅ×ÙÅ/îÏ×ÏÓÔÉ
 
 Networking/Utilities
-	[de]:		Netzwerkwesen/Werkzeuge
+	[cs]:		Sí»ové/Utility
+	[de]:		Netzwerkwesen/Dienstprogramme
 	[es]:		Red/Utilitarios
 	[fr]:		Réseau/Utilitaires
 	[pl]:		Sieciowe/Narzêdzia
@@ -516,6 +635,7 @@ Networking/Utilities
 	[ru]:		óÅÔÅ×ÙÅ/ğÒÉÌÏÖÅÎÉÑ
 
 Themes
+	[cs]:		Témata
 	[de]:		Themen
 	[es]:		Temas
 	[fr]:		Thèmes
@@ -524,6 +644,7 @@ Themes
 	[ru]:		ôÅÍÙ
 
 Themes/Gtk
+	[cs]:		Témata/Gtk
 	[de]:		Themen/Gtk
 	[es]:		Temas/Gtk
 	[fr]:		Thèmes/Gtk
@@ -532,35 +653,61 @@ Themes/Gtk
 	[ru]:		ôÅÍÙ/Gtk
 
 X11
+	[cs]:		X11
 	[de]:		X11
 	[es]:		X11
 	[fr]:		X11
+	[ja]:		X11
 	[pl]:		X11
 	[pt]:		X11
 	[pt_BR]:	X11
 	[ru]:		X11
 	[uk]:		X11
 
+X11/Amusements
+	[cs]:		X11/Zábava
+	[de]:		X11/Unterhaltung
+	[es]:		X11/Diversiones
+	[fr]:		X11/Divertissements
+	[ja]:		X11/¥¢¥ß¥å¡¼¥º¥á¥ó¥È
+	[pl]:		X11/Rozrywka
+	[pt]:		X11/Divertimentos
+	[ru]:		X11/òÁÚ×ÌÅŞÅÎÉÑ
+
 X11/Applications
-	[de]:		X11/Applikationen
+	[cs]:		X11/Aplikace
+	[de]:		X11/Anwendungen
 	[es]:		X11/Aplicaciones
 	[fr]:		X11/Applications
+	[ja]:		X11/¥¢¥×¥ê¥±¡¼¥·¥ç¥ó
 	[pl]:		X11/Aplikacje
 	[pt]:		X11/Aplicações
 	[pt_BR]:	X11/Aplicações
 	[ru]:		X11/ğÒÉÌÏÖÅÎÉÑ
 
+X11/Applications/Editors
+	[cs]:		X11/Aplikace/Editory
+	[de]:		X11/Anwendungen/Editoren
+	[es]:		X11/Aplicaciones/Editores
+	[fr]:		X11/Applications/Editeurs
+	[ja]:		X11/¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥¨¥Ç¥£¥¿
+	[pl]:		X11/Aplikacje/Edytory
+	[pt]:		X11/Aplicações/Editores
+	[ru]:		X11/ğÒÉÌÏÖÅÎÉÑ/òÅÄÁËÔÏÒÙ
+
 X11/Applications/Games
-	[de]:		X11/Applikationen/Spiele
-	[de]:		X11/Applikationen/Spiele
+	[cs]:		X11/Aplikace/Hry
+	[de]:		X11/Anwendungen/Spiele
 	[es]:		X11/Aplicaciones/Juegos
+	[ja]:		X11/¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥²¡¼¥à
 	[fr]:		X11/Applications/Jeux
 	[pl]:		X11/Aplikacje/Gry
 	[pt]:		X11/Aplicações/Jogos
 	[ru]:		X11/ğÒÉÌÏÖÅÎÉÑ/éÇÒÙ
 
 X11/Applications/Games/Strategy
-	[de]:		X11/Applikationen/Spiele/Strategie
+	[cs]:		X11/Aplikace/Hry/Strategické
+	[de]:		X11/Anwendungen/Spiele/Strategie
 	[es]:		X11/Aplicaciones/Juegos/Estratégico
 	[fr]:		X11/Applications/Jeux/Stratégique
 	[pl]:		X11/Aplikacje/Gry/Strategiczne
@@ -568,23 +715,28 @@ X11/Applications/Games/Strategy
 	[ru]:		X11/ğÒÉÌÏÖÅÎÉÑ/éÇÒÙ/óÔÒÁÔÅÇÉŞÅÓËÉÅ
 
 X11/Applications/Graphics
-	[de]:		X11/Applikationen/Grafik
+	[cs]:		X11/Aplikace/Grafika
+	[de]:		X11/Anwendungen/Grafik
 	[es]:		X11/Aplicaciones/Gráficos
 	[fr]:		X11/Applications/Graphiques
+	[ja]:		X11/¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥°¥é¥Õ¥£¥Ã¥¯¥¹
 	[pl]:		X11/Aplikacje/Grafika
 	[pt]:		X11/Aplicações/Gráficos
 	[ru]:		X11/ğÒÉÌÏÖÅÎÉÑ/çÒÁÆÉËÁ
 
 X11/Applications/Multimedia
-	[de]:		X11/Applikationen/Multimedia
+	[cs]:		X11/Aplikace/Multimédia
+	[de]:		X11/Anwendungen/Multimedia
 	[es]:		X11/Aplicaciones/Multimedia
 	[fr]:		X11/Applications/Multimédia
+	[ja]:		¥¢¥×¥ê¥±¡¼¥·¥ç¥ó/¥Ş¥ë¥Á¥á¥Ç¥£¥¢
 	[pl]:		X11/Aplikacje/Multimedia
-	[pt]:		X11/Aplicações/Multimedia
+	[pt]:		X11/Aplicações/Multimédia
 	[ru]:		X11/ğÒÉÌÏÖÅÎÉÑ/íÕÌØÔÉÍÅÄÉÁ
 
 X11/Applications/Networking
-	[de]:		X11/Applikationen/Netzwerkwesen
+	[cs]:		X11/Aplikace/Sí»ové
+	[de]:		X11/Anwendungen/Netzwerkwesen
 	[es]:		X11/Aplicaciones/Red
 	[fr]:		X11/Applications/Réseau
 	[pl]:		X11/Aplikacje/Sieciowe
@@ -593,57 +745,51 @@ X11/Applications/Networking
 	[ru]:		X11/ğÒÉÌÏÖÅÎÉÑ/óÅÔÅ×ÙÅ
 
 X11/Applications/Science
-	[de]:		X11/Applikationen/Wissenschaft
+	[cs]:		X11/Aplikace/Vìdecké
+	[de]:		X11/Anwendungen/Wissenschaft
 	[es]:		X11/Aplicaciones/Ciencia
 	[fr]:		X11/Applications/Science
 	[pl]:		X11/Aplikacje/Nauka
 	[pt]:		X11/Aplicações/Ciência
 	[ru]:		X11/ğÒÉÌÏÖÅÎÉÑ/îÁÕËÁ
 
-X11/Applications/Editors
-	[de]:		X11/Applikationen/Editors
-	[es]:		X11/Aplicaciones/Editores
-	[fr]:		X11/Applications/Editeurs
-	[pl]:		X11/Aplikacje/Edytory
-	[pt]:		X11/Aplicações/Editores
-	[ru]:		X11/ğÒÉÌÏÖÅÎÉÑ/òÅÄÁËÔÏÒÙ
-
 X11/Development/Libraries
+	[cs]:		X11/Vıvojové prostøedky/Knihovny
 	[de]:		X11/Entwicklung/Bibliotheken
 	[es]:		X11/Desarrollo/Bibliotecas
 	[fr]:		X11/Development/Librairies
+	[ja]:		X11/³«È¯/¥é¥¤¥Ö¥é¥ê
 	[pl]:		X11/Programowanie/Biblioteki
+	[pt]:		X11/Desenvolvimento/Bibliotecas
 	[pt_BR]:	X11/Desenvolvimento/Bibliotecas
 	[ru]:		X11/òÁÚÒÁÂÏÔËÁ/âÉÂÌÉÏÔÅËÉ
 	[uk]:		X11/òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 
 X11/Development/Tools
-	[de]:		X11/Entwicklung/Werkzeuge
+	[cs]:		X11/Vıvojové prostøedky/Nástroje
+	[de]:		X11/Entwicklung/Tools
 	[es]:		X11/Desarrollo/Herramientas
 	[fr]:		X11/Development/Outils
+	[ja]:		X11/³«È¯/¥Ä¡¼¥ë
 	[pl]:		X11/Programowanie/Narzêdzia
 	[pt]:		X11/Desenvolvimento/Ferramentas
 	[ru]:		X11/òÁÚÒÁÂÏÔËÁ/éÎÓÔÒÕÍÅÎÔÙ
 
 X11/Fonts
-	[de]:		X11/Fonts
-	[es]:		X11/Tipos de Letra
+	[cs]:		X11/Fonty
+	[de]:		X11/Zeichensätze
+	[es]:		X11/Fuentes
+	[fr]:		X11/Polices
 	[pl]:		X11/Fonty
-	[pt]:		X11/Fontes
+	[pt]:		X11/Tipos de Letra
 	[ru]:		X11/ûÒÉÆÔÙ
 
-X11/Amusements
-	[de]:		X11/Unterhaltung
-	[es]:		X11/Diversiones
-	[fr]:		X11/Amusements
-	[pl]:		X11/Rozrywka
-	[pt]:		X11/Divertimentos
-	[ru]:		X11/òÁÚ×ÌÅŞÅÎÉÑ
-
 X11/Libraries
+	[cs]:		X11/Knihovny
 	[de]:		X11/Bibliotheken
 	[es]:		X11/Bibliotecas
 	[fr]:		X11/Librairies
+	[ja]:		X11/¥é¥¤¥Ö¥é¥ê
 	[pl]:		X11/Biblioteki
 	[pt]:		X11/Bibliotecas
 	[pt_BR]:	X11/Bibliotecas
@@ -651,23 +797,29 @@ X11/Libraries
 	[uk]:		X11/â¦ÂÌ¦ÏÔÅËÉ
 
 X11/Window Managers
+	[cs]:		X11/Okenní mana¾ery
 	[de]:		X11/Fenstermanager
-	[es]:		X11/Administraadores de Ventanas
-	[fr]:		X11/Gestionnaires de Fenêtres
+	[es]:		X11/Administradores de Ventanas
+	[fr]:		X11/Gestionnaires de fenêtres
 	[pl]:		X11/Zarz±dcy okien
+	[pt]:		X11/Gestores de Janelas
 	[ru]:		X11/ïËÏÎÎÙÅ ÍÅÎÅÄÖÅÒÙ
 
 X11/Window Managers/Tools
-	[de]:		X11/Fenstermanager/Werkzeuge
-	[es]:		X11/Administraadores de Ventanas/Herramientas
-	[fr]:		X11/Gestionnaires de Fenêtres/Outils
+	[cs]:		X11/Okenní mana¾ery/Nástroje
+	[de]:		X11/Fenstermanager/Tools
+	[es]:		X11/Administradores de Ventanas/Herramientas
+	[fr]:		X11/Gestionnaires de fenêtres/Outils
 	[pl]:		X11/Zarz±dcy okien/Narzêdzia
+	[pt]:		X11/Gestores de Janelas/Ferramentas
 	[ru]:		X11/ïËÏÎÎÙÅ ÍÅÎÅÄÖÅÒÙ/éÎÓÔÒÕÍÅÎÔÙ
 
 X11/XFree86
+	[cs]:		X11/XFree86
 	[de]:		X11/XFree86
 	[es]:		X11/XFree86
 	[fr]:		X11/XFree86
+	[ja]:		X11/XFree86
 	[pl]:		X11/XFree86
 	[pt]:		X11/XFree86
 	[pt_BR]:	X11/XFree86
@@ -675,9 +827,10 @@ X11/XFree86
 	[uk]:		X11/XFree86
 
 X11/XFree86/Servers
+	[cs]:		X11/XFree86/Servery
 	[de]:		X11/XFree86/Server
 	[es]:		X11/XFree86/Servidores
 	[fr]:		X11/XFree86/Serveurs
 	[pl]:		X11/XFree86/Serwery
-	[pt]:		X11/XFree86/Server
+	[pt]:		X11/XFree86/Servidores
 	[ru]:		X11/XFree86/óÅÒ×ÅÒÙ
