@@ -1,0 +1,42 @@
+#!/bin/sh
+cd `rpm --eval %{_builddir}`
+
+# _noauto* wrapper for builtin rpm Provides generator
+# requires:		/bin/sh, /usr/bin/rpmdeps, coreutils, findutils
+# input (stdin):	filenames (one per line)
+# output (stdout):	Provides list (one per line)
+
+# note that no large list is stored in shell variable - this was VERY slow
+
+ulimit -c 0
+
+noprovfiles=''
+if [ -r __rpm_noautoprovfiles ]; then
+	for i in `cat __rpm_noautoprovfiles`; do
+		noprovfiles="${noprovfiles}\|${i}"
+	done
+fi
+if [ -r /etc/rpm/noautoprovfiles ]; then
+	for i in `cat /etc/rpm/noautoprovfiles | grep -v '^#'`; do
+		noprovfiles="${noprovfiles}\|${i}"
+	done
+fi
+
+noprov=''
+if [ -r __rpm_noautoprov ]; then
+	for i in `cat __rpm_noautoprov`; do
+		noprov="${noprov}\|${i}"
+	done
+fi
+if [ -r /etc/rpm/noautoprov ]; then
+	for i in `cat /etc/rpm/noautoprov | grep -v '^#'`; do
+		noprov="${noprov}\|${i}"
+	done
+fi
+
+# rpmdeps output seems sorted, but resort it in case of long list split
+grep -v -e "^\(${noprovfiles}\)\$" | tr '\n' '\0' | \
+	xargs -r -0 /usr/bin/rpmdeps --provides | LC_ALL=C sort -u | \
+	grep -v -e "^\(${noprov}\)\$"
+
+exit 0

@@ -1,0 +1,70 @@
+#!/bin/sh
+cd `rpm --eval %{_builddir}`
+
+# _noauto* wrapper for builtin rpm Requires generator
+# requires:		/bin/sh, /usr/bin/rpmdeps, rpm, coreutils, findutils. mktemp
+# input (stdin):	filenames (one per line)
+# output (stdout):	Requires list (one per line)
+
+# note that no large list is stored in shell variable - this was VERY slow
+
+ulimit -c 0
+
+noreqfiles=''
+if [ -r __rpm_noautoreqfiles ]; then
+	for i in `cat __rpm_noautoreqfiles`; do
+		noreqfiles="${noreqfiles}\|${i}"
+	done
+fi
+if [ -r /etc/rpm/noautoreqfiles ]; then
+	for i in `cat /etc/rpm/noautoreqfiles | grep -v '^#'`; do
+		noreqfiles="${noreqfiles}\|${i}"
+	done
+fi
+
+noreq=''
+if [ -r __rpm_noautoreq ]; then
+	for i in `cat __rpm_noautoreq`; do
+		noreq="${noreq}\|${i}"
+	done
+fi
+if [ -r /etc/rpm/noautoreq ]; then
+	for i in `cat /etc/rpm/noautoreq | grep -v '^#'`; do
+		noreq="${noreq}\|${i}"
+	done
+fi
+
+noreqdep=''
+if [ -r __rpm_noautoreqdep ]; then
+	for i in `cat __rpm_noautoreqdep`; do
+		noreqdep="${noreqdep}\|${i}"
+	done
+fi
+if [ -r /etc/rpm/noautoreqdep ]; then
+	for i in `cat /etc/rpm/noautoreqdep | grep -v '^#'`; do
+		noreqdep="${noreqdep}\|${i}"
+	done
+fi
+
+FILES=`mktemp ${TMPDIR:-/tmp}/.rpmfilesXXXXXX`
+PROVS=`mktemp ${TMPDIR:-/tmp}/.rpmprovsXXXXXX`
+REQS=`mktemp ${TMPDIR:-/tmp}/.rpmreqsXXXXXX`
+
+# we must duplicate file list here (to remove Provides list from Requires)
+tee ${FILES} | /usr/lib/rpm/find-provides-wrapper > ${PROVS}
+
+# rpmdeps output seems sorted, but resort it in case of long list split
+grep -v -e "^\(${noreqfiles}\)\$" ${FILES} | tr '\n' '\0' | \
+	xargs -r -0 /usr/bin/rpmdeps --requires | LC_ALL=C sort -u | \
+	grep -v -e "^\(${noreq}\)\$" | \
+	LC_ALL=C comm -2 -3 - ${PROVS} | tee ${REQS}
+
+# package names only for SONAMES, perl(module) and pear(module)
+grep -e '.\+\.so\|perl(.\+)\|pear(.\+)' ${REQS} | \
+	grep -v -e "^\(${noreqdep}\)\$" | tr '\n' '\0' | \
+	LC_ALL=C xargs -r -0 -- rpm -q --whatprovides --qf '%{NAME}\n' 2>/dev/null | \
+	grep -v "no package provides" | LC_ALL=C sort -u
+
+rm -f ${FILES} ${PROVS} ${REQS}
+
+exit 0
