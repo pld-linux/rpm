@@ -53,7 +53,7 @@ Patch15:	%{name}-fast-alAddPackage.patch
 Patch16:	%{name}-byKey.patch
 Patch17:	%{name}-perlprov.patch
 Patch18:	%{name}-noperldir.patch
-Patch19:	popt-cvs20010530.patch
+Patch19:	%{name}-popt-cvs20010530.patch
 Patch20:	%{name}-noexpand.patch
 Patch21:	%{name}-scripts-closefds.patch
 Patch22:	%{name}-python-amfix.patch
