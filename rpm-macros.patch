@@ -19,7 +19,7 @@ diff -ur rpm-3.0.1.old/configure.in rpm-3.0.1/configure.in
  %_bzip2bin		@BZIP2BIN@
 -%_dbpath		%{_var}/lib/rpm
 -%_defaultdocdir		%{_usr}/doc
-+%_dbpath		%{_var}/db/rpm
++%_dbpath		%{_var}/state/rpm
 +%_defaultdocdir		%{_usr}/share/doc
  #
  # XXX fixowner, fixgroup, and fixperms are run at the end of hardcoded setup
