@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	2.5.6
-Release:	3d
+Release:	4d
 Group:		Base
 Group(pl):	Bazowe
 URL:		ftp://ftp.rpm.org/pub/rpm/dist/rpm-2.5.x
@@ -11,6 +11,7 @@ Patch0:		%{name}-config.patch
 Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-glibc.patch
 Patch3:		%{name}-groups.patch
+Patch4:		%{name}-%{version}-i18n.patch
 Copyright:	GPL
 BuildRoot:	/tmp/%{name}-%{version}-root
 Obsoletes:	rpm-libs
@@ -48,6 +49,7 @@ construir pacotes usando o RPM.
 %patch1 -p1
 %patch2 -p1
 %patch1 -p1
+%patch4 -p1
 install %{SOURCE13} macros.python.in
 mv -f perl.prov perl.prov.in)
 autoconf
@@ -120,6 +122,10 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/lib*.a
 %files utils
 %files -n python-rpm
+* Fri Feb 19 1999 Marcin Dalecki <dalecki@cs.net.pl>
+  [2.5.6-4d]
+- fixed ignorance about international character sets.
+
 * Fri Jan 15 1999 Wojtek ¦lusarczyk <wojtek@shadow.eu.org>
   [2.5.6-1d]
 - updated to latest stable version,
