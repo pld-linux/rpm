@@ -18,7 +18,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.1
-Release:	14
+Release:	15
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/%{name}-%{version}.tar.gz
@@ -75,6 +75,7 @@ Patch26:	%{name}-4.1-branch-po-updates.patch
 Patch27:	%{name}-link.patch
 Patch28:	%{name}-beecrypt-opt.patch
 Patch29:	%{name}-python-pic.patch
+Patch30:	%{name}-home_etc.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -532,6 +533,7 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch27 -p1
 %patch28 -p1
 %patch29 -p1
+%patch30 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
