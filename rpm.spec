@@ -23,14 +23,14 @@ Patch7:		rpm-pld.patch
 Patch8:		rpm-rpmpopt.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
-BuildPrereq:	bzip2-static
-BuildPrereq:	gdbm-static
-BuildPrereq:	zlib-static
-BuildPrereq:	patch >= 2.2
-BuildPrereq:	libtool
-BuildPrereq:	automake
-BuildPrereq:	autoconf >= 2.13-8
-BuildPrereq:	gettext
+BuildRequires:	bzip2-static
+BuildRequires:	gdbm-static
+BuildRequires:	zlib-static
+BuildRequires:	gettext-devel >= 0.10.38-3
+BuildRequires:	libtool
+BuildRequires:	automake
+BuildRequires:	autoconf >= 2.13-8
+BuildRequires:	gettext
 Requires:	glibc >= 2.1
 BuildRoot:	/tmp/%{name}-%{version}-root
 Obsoletes:	rpm-libs
