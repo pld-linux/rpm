@@ -1426,6 +1426,22 @@ X11/Libraries
 	[sv]:		X11/Bibliotek
 	[uk]:		X11/â¦ÂÌ¦ÏÔÅËÉ
 
+X11/Servers
+	[cs]:		X11/Servery
+	[da]:		X11/Tjenere
+	[de]:		X11/Server
+	[es]:		X11/Servidores
+	[fr]:		X11/Serveurs
+	[is]:		X11/Şjóna
+	[it]:		X11/Server
+	[nb]:		X11/Tjenere
+	[pl]:		X11/Serwery
+	[pt]:		X11/Servidores
+	[ru]:		X11/óÅÒ×ÅÒÙ
+	[sl]:		X11/Stre¾niki
+	[sv]:		X11/Servrar
+	[uk]:		X11/óÅÒ×ÅÒÉ
+
 X11/Window Managers
 	[cs]:		X11/Okenní mana¾ery
 	[da]:		X11/Vindueshåndtererene
@@ -1457,38 +1473,3 @@ X11/Window Managers/Tools
 	[sl]:		X11/Upravljalniki/Orodja
 	[sv]:		X11/Fönsterhanterarna/Verktyg
 	[uk]:		X11/÷¦ËÏÎÎ¦ ÍÅÎÅÄÖÅÒÉ/¶ÎÓÔÒÕÍÅÎÔÉ
-
-X11/XFree86
-	[cs]:		X11/XFree86
-	[da]:		X11/XFree86
-	[de]:		X11/XFree86
-	[es]:		X11/XFree86
-	[fr]:		X11/XFree86
-	[id]:		X11/XFree86
-	[is]:		X11/XFree86
-	[it]:		X11/XFree86
-	[ja]:		X11/XFree86
-	[nb]:		X11/XFree86
-	[pl]:		X11/XFree86
-	[pt]:		X11/XFree86
-	[pt_BR]:	X11/XFree86
-	[ru]:		X11/XFree86
-	[sl]:		X11/XFree86
-	[sv]:		X11/XFree86
-	[uk]:		X11/XFree86
-
-X11/XFree86/Servers
-	[cs]:		X11/XFree86/Servery
-	[da]:		X11/XFree86/Tjenere
-	[de]:		X11/XFree86/Server
-	[es]:		X11/XFree86/Servidores
-	[fr]:		X11/XFree86/Serveurs
-	[is]:		X11/XFree86/Şjóna
-	[it]:		X11/XFree86/Server
-	[nb]:		X11/XFree86/Tjenere
-	[pl]:		X11/XFree86/Serwery
-	[pt]:		X11/XFree86/Servidores
-	[ru]:		X11/XFree86/óÅÒ×ÅÒÙ
-	[sl]:		X11/XFree86/Stre¾niki
-	[sv]:		X11/XFree86/Servrar
-	[uk]:		X11/XFree86/óÅÒ×ÅÒÉ
