@@ -3,7 +3,7 @@ Summary(de):	Red Hat (und jetzt auch PLD) Packet-Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0.2
-Release:	32
+Release:	33
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -67,6 +67,12 @@ Obsoletes:	rpm-libs
 %define __find_provides %{SOURCE4}
 %define _binary_payload w9.gzdio
 %define		__find_provides	%{SOURCE4}
+%define python_prefix      %(echo `python -c "import sys; print sys.prefix"`)
+%define python_version     %(echo `python -c "import sys; print sys.version[:3]"`)
+%define python_includedir  %{_includedir}/python%{python_version}
+%define python_libdir      %{python_prefix}/lib/python%{python_version}
+%define python_sitedir     %{python_libdir}/site-packages
+%define		py_dyndir	%{py_libdir}/lib-dynload
 %define		pyrequires_eq() Requires:	%1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
 
 %description
@@ -172,6 +178,21 @@ Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen.
 Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci dla skryptów perl w
 %description perlprov -l pl
 Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w
+%package python
+
+Group:		Development/Languages/Python
+Group(de):	Entwicklung/Sprachen/Python
+Group(pl):	Programowanie/Jêzyki/Python
+Summary(pt_BR):	Módulo Python para aplicativos que manipulam pacotes RPM
+%pyrequires_eq	python
+%description python
+
+%description -n python-rpm
+The rpm-python package contains a module which permits applications
+written in the Python programming language to use the interface
+supplied by RPM (RPM Package Manager) libraries.
+
+This package should be installed if you want to develop Python
 Python para manipular pacotes e bancos de dados RPM.
 
 %package build
@@ -206,6 +227,7 @@ Requires:	textutils
 Skrypty pomocnicze do budowania binarnych RPMów.
 %description build -l pl
 construir pacotes usando o RPM.
+%setup -q
 %prep
 %setup -q -a12
 %patch0 -p1
@@ -264,9 +286,15 @@ automake -a -c
 sed -e 's#cpio.c depends.c#cpio.c $(DBLIBOBJS) depends.c#g' \
 	lib/Makefile.in > lib/Makefile.in.new
 mv -f lib/Makefile.in.new lib/Makefile.in
+
+sed -e 's#python1.5#python%{python_version}#g' \
+	python/Makefile.in > python/Makefile.in.new
+mv -f python/Makefile.in.new python/Makefile.in
+
 sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' macros.in | \
 	sed 's|@host_cpu@|%{_target_cpu}|' > macros.tmp
-	--enable-v1-packages
+	--enable-v1-packages \
+	--with-python
 %configure \
 	--enable-v1-packages \
 	--with-python
@@ -404,6 +432,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/find-perl-*
 %attr(755,root,root) %{_libdir}/rpm/find-*.perl
 %attr(755,root,root) %{_libdir}/rpm/find-prov.pl
+%files python
+%defattr(644,root,root,755)
+%{python_sitedir}/*.so
+%{_libdir}/rpm/macros.python
 
 %files -n python-rpm
 * %{date} PLD Team <pld-list@pld.org.pl>
