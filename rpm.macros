@@ -239,4 +239,67 @@ fi \
 #%_noautoprovfiles	%{nil}
 #%_noautoprov		%{nil}
 
+#-----------------------------------------------------------------
+# Kernel version related stuff
+#
+%_kernel_ver		%(grep UTS_RELEASE /usr/src/linux/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
+%_kernel24		%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
+%_kernel_series		%{?_kernel24:2.4}%{!?_kernel24:2.2}
+%conflicts_kernel_ver	Conflicts: kernel < %{_kernel_ver}, kernel > %{_kernel_ver}
+%conflicts_kernel_series Conflicts: kernel %{?_kernel24:<}{^!?_kernel24:>=} 2.3.0
 
+#-----------------------------------------------------------------
+# Macros commonly used in %{pre,post}{un,}
+#
+# Usage:
+# NAME=lircd; %chkconfig_post
+# NAME=lircd; %chkconfig_preun
+# %fix_info_dir (in %post)
+# GID=51; GROUP=http; %groupadd (in %pre)
+# UID=51; USER=http; GROUP=http; COMMENT="HTTP User"; HOMEDIR=/home/httpd
+#	[SHELL=/bin/false;] %useradd (in %pre)
+# GROUP=http; %groupdel (in %postun)
+# USER=http; %userdel (in %postun)
+#
+%chkconfig_post /sbin/chkconfig --add $NAME \
+if [ -f /var/lock/subsys/$NAME ]; then \
+        /etc/rc.d/init.d/$NAME restart >&2 \
+else \
+        echo "Run \\"/etc/rc.d/init.d/$NAME start\\" to start $NAME." >&2 \
+fi
+
+%chkconfig_preun if [ "$1" = "0" ]; then \
+        if [ -f /var/lock/subsys/$NAME ]; then \
+                /etc/rc.d/init.d/$NAME stop >&2 \
+        fi \
+        /sbin/chkconfig --del $NAME \
+fi
+
+%fix_info_dir	[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} > /dev/null 2>&1
+
+%groupadd if [ -n "`getgid $GROUP`" ]; then \
+        if [ "`getgid $GROUP`" != "$GID" ]; then \
+                echo "Warning: group $GROUP doesn't have gid=$GID. Correct this before installing %{name}" 1>&2 \
+                exit 1 \
+        fi \
+else \
+        /usr/sbin/groupadd -g $GID -r -f $GROUP \
+fi
+
+%useradd if [ -n "`id -u $USER 2>/dev/null`" ]; then \
+        if [ "`id -u $USER`" != "$UID" ]; then \
+                echo "Warning: user $USER doesn't have uid=$UID. Correct this before installing %{name}" 1>&2 \
+                exit 1 \
+        fi \
+else \
+	test -z "$SHELL" && SHELL=/bin/false \
+        /usr/sbin/useradd -u $UID -r -d "$HOMEDIR" -s $SHELL -c "$COMMENT" -g $GROUP $USER 1>&2 \
+fi
+
+%groupdel if [ "$1" = "0" ]; then \
+        /usr/sbin/groupdel $GROUP \
+fi
+
+%userdel if [ "$1" = "0" ]; then \
+        /usr/sbin/userdel $USER \
+fi
