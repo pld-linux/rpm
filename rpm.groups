@@ -294,8 +294,14 @@ X11/Applications/Editors
 	[pt]:	X11/AplicaГУes/Editores
 
 X11/Development/Libraries
-	[de]:	X11/Entwicklung/Libraries
-	[pl]:	X11/Programowanie/Biblioteki
+	[de]:		X11/Entwicklung/Libraries
+	[pl]:		X11/Programowanie/Biblioteki
+	[fr]:		X11/Development/Librairies
+	[pt_BR]:	X11/Desenvolvimento/Bibliotecas
+	[es]:		X11/Desarrollo/Bibliotecas
+	[uk]:		X11/Розробка/Б╕бл╕отеки
+	[ru]:		X11/Разработка/Библиотеки
+								
 
 X11/Development/Tools
 	[de]:	X11/Entwicklung/Werkzeuge
