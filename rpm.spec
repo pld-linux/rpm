@@ -2,27 +2,27 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.5
-Release:	11
+Release:	11.9
 Group:		Base
+Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
 License:	GPL
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-3.0.x/%{name}-%{version}.tar.gz
-Source1:	rpm.groups
-Source2:	rpm.macros
-Source3:	rpm-remove-unneeded-elf-sections
-Source5:	rpm-install-tree
-Patch0:		rpm-rpmrc.patch
-Patch1:		rpm-find-requires.patch
-Patch2:		rpm-macros.patch
-Patch3:		rpm-arch.patch
-Patch4:		rpm-rpmpopt.patch
-Patch5:		rpm-find-provides.patch
-Patch6:		rpm-perl-macros.patch
-Patch7:		rpm-find-lang-all-name.patch
-Patch8:		rpm-file3.31.patch
-Patch9:		rpm-find-lang-name-matching.patch
-Patch10:	rpm-exclude-examples-doc.patch
-Patch11:	rpm-db3.patch
+Source1:	%{name}.groups
+Source2:	%{name}.macros
+Source3:	%{name}-install-tree
+Patch0:		%{name}-%{name}rc.patch
+Patch1:		%{name}-find-requires.patch
+Patch2:		%{name}-macros.patch
+Patch3:		%{name}-arch.patch
+Patch4:		%{name}-%{name}popt.patch
+Patch5:		%{name}-find-provides.patch
+Patch6:		%{name}-perl-macros.patch
+Patch7:		%{name}-find-lang-all-name.patch
+Patch8:		%{name}-file3.31.patch
+Patch9:		%{name}-find-lang-name-matching.patch
+Patch10:	%{name}-exclude-examples-doc.patch
+Patch11:	%{name}-db3.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 Provides:	rpmlib(VersionedDependencies) = 3.0.3-1
@@ -39,23 +39,25 @@ BuildRequires:	db3-static >= 3.1.14
 BuildRequires:	zlib-static >= 1.1.4
 Obsoletes:	rpm-libs
 %define		pyrequires_eq() Requires:	%1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
-RPM is a powerful package manager, which can be used to build, install, 
-query, verify, update, and uninstall individual software packages. A 
-package consists of an archive of files, and package information, including 
-name, version, and description.
+
+%description
+RPM is a powerful package manager, which can be used to build,
+install, query, verify, update, and uninstall individual software
 packages. A package consists of an archive of files, and package
 nombre, versión y descripción.
-RPM jest doskona³ym menad¿erem pakietów. Dziêki niemu bêdziesz móg³ przebudowaæ,
-zainstalowaæ czy zweryfikowaæ dowolny pakiet. 
-Informacje dotycz±ce ka¿dego pakietu, takie jak jego opis, lista plików
-wchodz±cych w sk³ad pakietu, zalezno¶ci od innych pakietów
-s± przechowywane s± w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
+RPM jest doskona³ym menad¿erem pakietów. Dziêki niemu bêdziesz móg³
+%description -l pl
+RPM jest doskona³ym mened¿erem pakietów. Dziêki niemu bêdziesz móg³
+wchodz±cych w sk³ad pakietu, zalezno¶ci od innych pakietów s±
+przechowywane s± w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
 wchodz±cych w sk³ad pakietu, zale¿no¶ci od innych pakietów, s±
 przechowywane w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
 %package libs
 Summary:	RPM shared libraries
 Summary(pl):	Biblioteki wspó³dzielone rpm-a
 Group:		Libraries
+Group(de):	Libraries
+Group(fr):	Librairies
 Group(pl):	Biblioteki
 Requires:	%{name} = %{version}
 
@@ -69,6 +71,8 @@ do pacote, permissões dos arquivos, etc.
 Summary:	Header files and libraries 
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne	
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne
+Group(de):	Entwicklung/Libraries
+Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name}-libs = %{version}
 Requires:	%{name} = %{version}
@@ -85,6 +89,8 @@ ferramentas que precisem de conhecimento profundo de pacotes RPM.
 
 Summary(pl):	Biblioteki statyczne rpm-a
 Summary(pl):	Biblioteki statyczne RPM-a
+Group(de):	Entwicklung/Libraries
+Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Summary(pt_BR):	Bibliotecas estáticas para o desenvolvimento de aplicações RPM
 Group:		Development/Libraries
@@ -97,8 +103,9 @@ Biblioteki statyczne rpm-a.
 Bibliotecas estáticas para desenvolvimento.
 
 Summary(pl):	Dodatkowe narzêdzia do zarz±dzanai baz± rpm-a i pakietami
-Group:		Utilities/File
-Group(pl):	Narzêdzia/Pliki
+Summary(de):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
+Group(de):	Applikationen/Datei
+Group(pl):	Aplikacje/Pliki
 Summary(pl):	Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{version}
@@ -110,22 +117,24 @@ Dodatkowe narzêdzia do zarz±dzanai baz± rpm-a i pakietami.
 Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami.
 Summary:	Additional utilities for check perl provides/requires in rpm packages
 Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci dla skryptów perl w pakietach rpm
-Group:		Utilities/File
-Group(pl):	Narzêdzia/Pliki
+Summary(de):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
+Group(de):	Applikationen/Datei
+Group(pl):	Aplikacje/Pliki
 Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w pakietach rpm
 Requires:	perl-modules
 Requires:	findutils
 Additional utilities for check perl provides/requires in rpm packages.
 Additional utilities for checking perl provides/requires in rpm
 %description -l pl perlprov
-Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci dla skryptów perl 
-w pakietach rpm.
+Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci dla skryptów perl w
+%description perlprov -l pl
 Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w
 Python para manipular pacotes e bancos de dados RPM.
 
 Summary(pl):	Skrypty pomocnicze do budowania binarnych RPMów
-Group:		Utilities/File
-Group(pl):	Narzêdzia/Pliki
+Summary(pl):	Skrypty pomocnicze do budowania binarnych RPM-ów
+Group(de):	Applikationen/Datei
+Group(pl):	Aplikacje/Pliki
 Summary(pt_BR):	Scripts e programas executáveis usados para construir pacotes
 Group:		Applications/File
 Requires:	sh-utils
@@ -161,11 +170,10 @@ construir pacotes usando o RPM.
 install %{SOURCE2} macros.pld.in
 install %{SOURCE13} macros.python.in
 (cd scripts; 
-mv perl.req perl.req.in
-mv perl.prov perl.prov.in)
+install %{SOURCE7} scripts/find-perl-requires
+install %{SOURCE9} scripts/find-lang.sh
 
 mv -f perl.prov perl.prov.in)
-LDFLAGS="-s"; export LDFLAGS
 
 (cd popt;
  libtoolize --force --copy
@@ -187,17 +195,15 @@ autoconf
 
 
 %{__make} %{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
-install -d $RPM_BUILD_ROOT/var/lib/rpm \
-	$RPM_BUILD_ROOT%{_mandir}/{ru,pl}/man8
 
-%{__make} DESTDIR="$RPM_BUILD_ROOT" pkgbindir="%{_bindir}" install
+	DESTDIR="$RPM_BUILD_ROOT" \
+rm -rf $RPM_BUILD_ROOT
 
 install macros.pld $RPM_BUILD_ROOT%{_libdir}/rpm/macros.pld
 %{__make} install \
-install %{SOURCE3} $RPM_BUILD_ROOT%{_libdir}/rpm/remove-unneeded-elf-sections
-install %{SOURCE5} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
 	pkgbindir="%{_bindir}"
 
+install macros.perl $RPM_BUILD_ROOT%{_libdir}/rpm/macros.perl
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*
 
@@ -205,12 +211,12 @@ strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*
 %%distribution PLD
 EOF
 
-gzip -9fn $RPM_BUILD_ROOT%{_mandir}/{{ja,ru,pl}/man8/*,man8/*} \
+gzip -9nf $RPM_BUILD_ROOT%{_mandir}/{{ja,ru,pl}/man8/*,man8/*} \
 	RPM-PGP-KEY CHANGES doc/manual/*
 
 %pre
 if [ -L /var/lib/rpm ]; then
-	echo "WARNING: upgrade cannot be done because /var/state/rpm is symlink"
+	echo "WARNING:upgrade cannot be done because /var/state/rpm is symlink"
 	exit 1
 fi
 if [ ! -d /var/lib/rpm ]; then 
@@ -263,7 +269,7 @@ rm -rf $RPM_BUILD_ROOT
 %lang(ja) %{_mandir}/ja/man8/rpm.8*
 %lang(ja) %{_mandir}/ja/man8/rpm.8*
 %lang(ko) %{_mandir}/ko/man8/rpm.8*
-%dir /usr/lib/rpm
+%lang(pl) %{_mandir}/pl/man8/rpm.8*
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
 %lang(sk) %{_mandir}/sk/man8/rpm.8*
 
