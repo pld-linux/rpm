@@ -1,0 +1,2 @@
+- added illegal_char patch which makes '-' legal in pkg release field (for kernel modules)
+- release 35
