@@ -17,14 +17,14 @@ Patch3:		rpm-macros.patch
 Patch4:		rpm-po.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
-#BuildPrereq:	bzip2-static
-#BuildPrereq:	gdbm-static
-#BuildPrereq:	zlib-static
-#BuildPrereq:	patch >= 2.2
-#BuildPrereq:	libtool
-#BuildPrereq:	automake
-#BuildPrereq:	autoconf
-#BuildPrereq:	gettext
+BuildPrereq:	bzip2-static
+BuildPrereq:	gdbm-static
+BuildPrereq:	zlib-static
+BuildPrereq:	patch >= 2.2
+BuildPrereq:	libtool
+BuildPrereq:	automake
+BuildPrereq:	autoconf
+BuildPrereq:	gettext
 Requires:	glibc >= 2.1
 BuildRoot:	/tmp/%{name}-%{version}-root
 Obsoletes:	rpm-libs
