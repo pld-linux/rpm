@@ -44,9 +44,11 @@ name, version, and description.
 packages. A package consists of an archive of files, and package
 nombre, versión y descripción.
 RPM jest doskona³ym menad¿erem pakietów. Dziêki niemu bêdziesz móg³ przebudowaæ,
-zainstalowaæ czy zweryfikowaæ dowolny pakiet. Informacje dotycz±ce ka¿dego 
-pakietu s± przechowywane w bazie danych i dostêpne tylko dla administratora 
-systemu.
+zainstalowaæ czy zweryfikowaæ dowolny pakiet. 
+Informacje dotycz±ce ka¿dego pakietu, takie jak jego opis, lista plików
+wchodz±cych w sk³ad pakietu, zalezno¶ci od innych pakietów
+s± przechowywane s± w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
+wchodz±cych w sk³ad pakietu, zale¿no¶ci od innych pakietów, s±
 przechowywane w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
 %package libs
 Summary:	RPM shared libraries
