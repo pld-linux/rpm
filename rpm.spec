@@ -240,16 +240,18 @@ install %{SOURCE9} scripts/find-lang.sh
 mv -f perl.req perl.req.in
 mv -f perl.prov perl.prov.in)
 
-(cd popt
+%build
 awk -f %{SOURCE14} %{SOURCE1}
 
 cd popt
 autoconf
-automake -a -c)
+automake -a -c
+aclocal
 autoheader
 %{__automake}
 cd ..
 
+rm -f missing
 libtoolize --force --copy
 autoconf
 # ugly workaround for automake
