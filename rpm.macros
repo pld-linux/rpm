@@ -86,11 +86,17 @@ done \
 # Location of autoconf macros
 %_aclocaldir	%(aclocal --print-ac-dir)
 
+# Location of pkgconfig files
+%_pkgcondigdir	/usr/lib/pkgconfig
+
 # Location of top applink dir
 %_applnkdir      /usr/X11R6/share/applnk
 
 # Location pixmaps for applnk/desktop files
 %_pixmapsdir	/usr/X11R6/share/pixmaps
+
+# Location of fonts directories
+%_fontsdir	/usr/share/fonts
 
 # Current date
 %date 		%(LC_ALL="C" date +"%a %b %d %Y")
