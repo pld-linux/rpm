@@ -30,7 +30,7 @@ BuildRequires:	gettext-devel >= 0.10.38-3
 BuildRequires:	libtool
 BuildRequires:	automake
 BuildRequires:	autoconf >= 2.13-8
-BuildRequires:	gettext
+BuildRequires:	gettext-devel
 Requires:	glibc >= 2.1
 BuildRoot:	/tmp/%{name}-%{version}-root
 Obsoletes:	rpm-libs
