@@ -92,14 +92,14 @@
  	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
  	misc/Makefile po/Makefile.in intl/Makefile
  	doc/Makefile doc/manual/Makefile doc/pl/Makefile doc/ru/Makefile
---- rpm-3.0.3/scripts/perl.req.pld	Sat Oct 30 17:00:59 1999
-+++ rpm-3.0.3/scripts/perl.req	Sat Oct 30 17:01:08 1999
+--- rpm-3.0.3/scripts/perl.req.pius	Sat Jun  5 22:52:31 1999
++++ rpm-3.0.3/scripts/perl.req	Sun Dec  5 02:38:42 1999
 @@ -1,4 +1,4 @@
 -#!/usr/bin/perl
 +#!@PERL@
- 
+
  # a simple makedepends like script for perl.
- 
+
 @@ -12,7 +12,11 @@
  
  if ("@ARGV") {
@@ -113,7 +113,7 @@
    }
  } else {
    
-@@ -20,22 +24,30 @@
+@@ -20,22 +24,24 @@
    # contents of the file.
    
    foreach (<>) {
@@ -136,28 +136,37 @@
 +        print "perl($module)\n";
 +    }
    } else {
- 
+-
 -    print "perl($module)>=$require{$module}\n";
-+    print "perl($module) >= $require{$module}\n";
- 
-     # we need to print it without the version number until the
-     # requires syntax accepts version numbers correctly.
- 
+-
+-    # we need to print it without the version number until the
+-    # requires syntax accepts version numbers correctly.
+-
 -    print "perl($module)\n";
-+#    print "perl($module)\n";
++    print "perl($module) >= $require{$module}\n";
    }
  }
  
-@@ -54,7 +66,7 @@
+@@ -49,12 +55,16 @@
+   chomp $file;
+   
+   open(FILE, "<$file")||
+-    die("Could not open file: '$file' : $!\n");
++    die("$0: Could not open file: '$file' : $!\n");
+   
    while (<FILE>) {
      
      # skip the documentation
 -    if ( (m/^=(head1|head2|pod)/) .. (m/^=(cut)/) ) {
 +    if ( (m/^=(head1|head2|pod|item)/) .. (m/^=(cut)/) ) {
++      next;
++    }
++
++    if ( (m/^=(over)/) .. (m/^=(back)/) ) {
        next;
      }
  
-@@ -108,8 +120,28 @@
+@@ -108,13 +118,38 @@
        # will be included with the name sys/systeminfo.ph so only use the
        # basename of *.ph files
  
@@ -165,36 +174,47 @@
 +      # ($module  =~ m/\.ph$/) && ($module =~ s!.*/!!g );
 +
 +      # there is no need to generate dependencies for ph and pl files
-+      # so let's just skip them
-+
++      # so let's just skip them.
+ 
 +      ($module =~ m/\.(ph|pl)$/) && next;
 +
-+      # skip all modules for oparating systems other than linux
++      # skip all modules for platforms other than linux.
 +
 +      ($module =~ m/Mac|OS2|MSDOS|Win32|VMS|vmsish/) && next;
 +
-+      # if the module name starts in a dot it is not a module name
++      # if the module name starts in a dot it is not a module name.
 +
 +      ($module =~ m/^\./) && next;
 +
-+      # if the module ends with .pm strip it to leave only basename
++      # if the module ends with .pm strip it to leave only basename.
 +
-+      ($module =~ m/\.pm$/) && ($module =~ s/\.pm//g);
++      $module =~ s/\.pm$//;
 +
-+      # strip () from module name ( ex. Carp() )
-
-+      ($module =~m/\(\)$/) && ($module =~ s/\(\)//g);
++      # trim off trailing parenthesis if any.  Sometimes people pass
++      # the module an empty list.
++
++      $module =~ s/\(\s*\)$//;
  
        $require{$module}=$version;
        $line{$module}=$_;
---- rpm-3.0.3/scripts/perl.prov.pld	Sat Jun  5 22:52:31 1999
-+++ rpm-3.0.3/scripts/perl.prov	Sun Oct 31 02:17:45 1999
+     }
+     
+   }
+- 
++
++  close(FILE)||
++    die("$0: Could not close file: '$file' : $!\n");
++
++  return ; 
+ }
+--- rpm-3.0.3/scripts/perl.prov.pius	Sat Jun  5 22:52:31 1999
++++ rpm-3.0.3/scripts/perl.prov	Sun Dec  5 02:31:33 1999
 @@ -1,4 +1,4 @@
 -#!/usr/bin/perl
 +#!@PERL@
- 
+
  # a simple script to print the proper name for perl libraries.
- 
+
 @@ -13,7 +13,9 @@
  
  if ("@ARGV") {
@@ -217,18 +237,57 @@
    }
  }
  
-@@ -30,12 +34,12 @@
+@@ -30,12 +34,7 @@
    if (length($require{$module}) == 0) {
      print "perl($module)\n";
    } else {
 -    print "perl($module)=$require{$module}\n";
-+    print "perl($module) = $require{$module}\n";
- 
-     # we need to print it without the version number until the
-     # requires syntax accepts version numbers correctly.
- 
+-
+-    # we need to print it without the version number until the
+-    # requires syntax accepts version numbers correctly.
+-
 -    print "perl($module)\n";
-+#    print "perl($module)\n";
++    print "perl($module) = $require{$module}\n";
    }
  }
  
+@@ -49,14 +48,18 @@
+   chomp $file;
+   
+   open(FILE, "<$file")||
+-    die("Could not open file: '$file' : $!\n");
++    die("$0: Could not open file: '$file' : $!\n");
+ 
+   my ($package, $version) = ();
+ 
+   while (<FILE>) {
+     
+     # skip the documentation
+-    if ( (m/^=(head1|head2|pod)/) .. (m/^=(cut)/) ) {
++    if ( (m/^=(head1|head2|pod|item)/) .. (m/^=(cut)/) ) {
++      next;
++    }
++
++    if ( (m/^=(over)/) .. (m/^=(back)/) ) {
+       next;
+     }
+     
+@@ -88,7 +91,7 @@
+ 
+     if ( 
+ 	($package) && 
+-	(m/^\s*\$VERSION\s+=\s+/)
++	(m/^\s*\$VERSION\s*=\s+/)
+        ) {
+ 
+       # first see if the version string contains the string
+@@ -107,6 +110,9 @@
+     }
+     
+   }
++
++  close(FILE)||
++    die("$0: Could not close file: '$file' : $!\n");
+ 
+   return ;
+ }
