@@ -779,15 +779,15 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep <<EOF
 # global list of capabilities (SONAME, perl(module), php(module) regexps)
 # which don't generate dependencies on package NAMES
 # -- OpenGL implementation
-^libGL.so.1$
-^libGLU.so.1$
+^libGL.so.1
+^libGLU.so.1
 ^libOSMesa.so
 # -- Glide
-^libglide3.so.3$
+^libglide3.so.3
 # -- mozilla
-^libgtkmozembed.so$
-^libgtksuperwin.so$
-^libxpcom.so$
+^libgtkmozembed.so
+^libgtksuperwin.so
+^libxpcom.so
 # -- X11 implementation
 ^libFS.so
 ^libI810XvMC.so
