@@ -6,7 +6,7 @@ Applications/Communications
 
 Applications/Editors
 	[pl]:	Aplikacje/Edytory
-	[pt]:	X11/Aplicações/Editores
+	[pt]:	Aplicações/Editores
 
 Applications/Editors/Emacs
 	[pl]:	Aplikacje/Edytory/Emacs
@@ -200,7 +200,7 @@ X11/KDE/Development/Libraries
 X11/KDE/Games
 	[pl]:	X11/KDE/Gry
 
-X11/KDE/utilities
+X11/KDE/Utilities
 	[pl]:	X11/KDE/Narzêdzia
 
 X11/KDE/Libraries
