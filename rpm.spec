@@ -1,6 +1,5 @@
 #
 # TODO:
-# - detected Requires lists are not printed at the end of build (Provides etc. are)
 # - python(abi) cap is not provided automatically (because /usr/bin/python matches
 #   ELF first; it should be provided by python-libs not binary anyway)
 # - consider using system libmagic not internal libfmagic
@@ -101,6 +100,7 @@ Patch37:	%{name}-doxygen_hack.patch
 Patch38:	%{name}-distver.patch
 Patch39:	%{name}-gcc4.patch
 Patch40:	%{name}-pythondeps.patch
+Patch41:	%{name}-print-requires.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -636,6 +636,7 @@ cat %{SOURCE11} >> macros.in
 %{?with_distver:%patch38 -p1}
 %patch39 -p1
 %patch40 -p1
+%patch41 -p1
 %patch0 -p1
 %patch3 -p1
 
