@@ -58,9 +58,11 @@ done \
   %{-C:cd ${_mydir}; unset _mydir}
 
 #-----------------------------------------------------------------
-%configure { CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; \
- CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; \
- FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
+%configure { \
+ LDFLAGS="${LDFLAGS}%{!?debug: -s}" ; export LDFLAGS ; \
+ CFLAGS="${CFLAGS:-%optflags}%{?debug: -g -O}" ; export CFLAGS ; \
+ CXXFLAGS="${CXXFLAGS:-%optflags}%{?debug: -g -O}" ; export CXXFLAGS ; \
+ FFLAGS="${FFLAGS:-%optflags}%{?debug: -g -O}" ; export FFLAGS ; \
  unset LINGUAS || : ; \
  ./configure %{_target_platform} \
  	--prefix=%{_prefix} \
@@ -100,3 +102,5 @@ done \
 #%__find_requires_post	/usr/lib/rpm/find-requires-post
 #%__find_requires	%{__find_requires_pre} | %{__find_requires_core} | %{__find_requires_post}
 
+# If non-empty "debug" macro defined, add "dbg" suffix to release number
+%_rpmfilename		%%{NAME}-%%{VERSION}-%%{RELEASE}%{?debug:dbg}.%%{ARCH}.rpm
