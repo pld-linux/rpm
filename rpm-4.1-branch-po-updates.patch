@@ -1,0 +1,36 @@
+diff -Nur rpm-4.1/po.orig/pl.po rpm-4.1/po/pl.po
+--- rpm-4.1/po.orig/pl.po	Sun Nov 24 18:56:42 2002
++++ rpm-4.1/po/pl.po	Sun Nov 24 18:58:25 2002
+@@ -3055,7 +3055,7 @@
+ #.
+ #: lib/transaction.c:1021
+ #, c-format
+-msgid "sanity checking %d elments\n"
++msgid "sanity checking %d elements\n"
+ msgstr "sprawdzanie poprawno∂ci %d elementÛw\n"
+ 
+ #. ===============================================
+diff -Nur rpm-4.1/po.orig/ru.po rpm-4.1/po/ru.po
+--- rpm-4.1/po.orig/ru.po	Tue Sep 17 21:38:06 2002
++++ rpm-4.1/po/ru.po	Sun Nov 24 18:58:34 2002
+@@ -3065,7 +3065,7 @@
+ #.
+ #: lib/transaction.c:1021
+ #, c-format
+-msgid "sanity checking %d elments\n"
++msgid "sanity checking %d elements\n"
+ msgstr "–“œ◊e“—≈‘”— %d ‹Ã≈Õ≈Œ‘œ◊\n"
+ 
+ #. ===============================================
+diff -Nur rpm-4.1/po.orig/sv.po rpm-4.1/po/sv.po
+--- rpm-4.1/po.orig/sv.po	Tue Sep 17 21:38:08 2002
++++ rpm-4.1/po/sv.po	Sun Nov 24 18:58:42 2002
+@@ -3048,7 +3048,7 @@
+ #.
+ #: lib/transaction.c:1021
+ #, c-format
+-msgid "sanity checking %d elments\n"
++msgid "sanity checking %d elements\n"
+ msgstr "rimlighetskontrollerar %d element\n"
+ 
+ #. ===============================================

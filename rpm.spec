@@ -1,6 +1,6 @@
 %include        /usr/lib/rpm/macros.python
 %define	beecrypt_ver	2.2.0
-%define	beecrypt_rel	1.5
+%define	beecrypt_rel	2
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -8,7 +8,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.1
-Release:	4
+Release:	5
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/%{name}-%{version}.tar.gz
@@ -58,6 +58,9 @@ Patch22:	%{name}-build.patch
 Patch23:	%{name}-python-link.patch
 Patch24:	%{name}-system_libs.patch
 Patch25:	%{name}-bb-and-short-circuit.patch
+Patch26:	%{name}-4.1-branch-po-updates.patch
+Patch27:	%{name}-link.patch
+Patch28:	%{name}-beecrypt-opt.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -88,6 +91,9 @@ Conflicts:	glibc < 2.2.92
 
 %define		__find_provides	%{SOURCE4}
 %define		_binary_payload	w9.gzdio
+
+# don't require very fresh rpm.macros to build
+%define		__gettextize gettextize --copy --force --intl ; cp -f po/Makevars{.template,}
 
 %description
 RPM is a powerful package manager, which can be used to build,
@@ -416,6 +422,9 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch23 -p1
 %patch24 -p1
 %patch25 -p1
+%patch26 -p1
+%patch27 -p1
+%patch28 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
@@ -459,8 +468,7 @@ rm -f missing
 %{__libtoolize}
 %{__gettextize}
 %{__aclocal}
-autoupdate
-%{__autoheader} || :
+%{__autoheader}
 %{__autoconf}
 %{__automake}
 
