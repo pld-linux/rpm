@@ -253,6 +253,9 @@ Networking/Daemons/Java/Extensions
 	[de]:	Netzwerkwesen/Server/Java/Extensionen
 	[pl]:	Sieciowe/Serwery/Java/Rozszerzenia
 
+Networking/Daemons/Java/Servlets
+	[pl]:	Sieciowe/Serwery/Java/Servlety
+
 Networking/News
 	[de]:	Netzwerkwesen/News
 	[pl]:	Sieciowe/News
