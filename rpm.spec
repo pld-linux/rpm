@@ -354,7 +354,7 @@ sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' macros.in | \
 
 %{__make} %{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
 
-	DESTDIR"$RPM_BUILD_ROOT \
+	DESTDIR="$RPM_BUILD_ROOT" \
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
