@@ -6,7 +6,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.4
-Release:	0.78
+Release:	0.79
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -60,6 +60,8 @@ Patch26:	%{name}-compress-doc.patch
 Patch27:	%{name}-lt14d.patch
 Patch28:	%{name}-check_files.patch
 Patch29:	%{name}-gettext0.11.patch
+Patch30:	%{name}-choke-on-evil-doc.patch
+Patch31:	%{name}-build.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -414,6 +416,8 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch27 -p1
 %patch28 -p1
 %patch29 -p1
+%patch30 -p1
+%patch31 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
