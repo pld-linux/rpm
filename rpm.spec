@@ -73,7 +73,7 @@ install rpm.8ru $RPM_BUILD_ROOT/usr/man/ru/man8/rpm.8
 install rpm2cpio.8ru $RPM_BUILD_ROOT/usr/man/ru/man8/rpm2cpio.8
 install %{SOURCE2} $RPM_BUILD_ROOT/usr/man/pl/man8/rpm.8
 
-install %{SOURCE1} doc/groups
+install %{SOURCE1} docs/groups
 
 gzip -9fn $RPM_BUILD_ROOT/usr/man/{ru/man8/*,man8/*} \
 	RPM-PGP-KEY CHANGES docs/*
@@ -94,6 +94,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/rpmdb
 /usr/man/man8/*
 %lang(ru) /usr/man/ru/man8/*
+%lang(pl) /usr/man/pl/man8/*
 
 %attr(750,root,root) %dir /var/lib/rpm
 
