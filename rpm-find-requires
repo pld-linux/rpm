@@ -74,14 +74,17 @@ allrequires="$aoutexerequires
 $elfexerequires
 $aoutlibrequires
 $elflibrequires
-$scriptrequires
 $elflibverrequires"
 
 if [ -f __rpm_noautoreq ] ; then
 	for i in `cat __rpm_noautoreq`; do
+		scriptrequires=`echo $scriptrequires | sed "s!\<$i[[:space:]]*!!g"`
 		allrequires=`echo $allrequires | sed "s!\<$i[[:space:]]*!!g"`
 	done
 fi
+
+# omit autoreqdep for scriptrequires
+echo "$scriptrequires"
 
 # Delete all the provided stuff
 
