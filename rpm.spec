@@ -3,7 +3,7 @@ Summary(de):	Red Hat (und jetzt auch PLD) Packet-Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0.2
-Release:	15
+Release:	16
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -34,6 +34,7 @@ Patch10:	%{name}-cache.patch
 Patch11:	%{name}-suggestions.patch
 Patch12:	%{name}-rh-lame.patch
 Patch13:	%{name}-glob.patch
+Patch14:	%{name}-header_h.patch	
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	gettext-devel
@@ -213,6 +214,7 @@ construir pacotes usando o RPM.
 %patch11 -p0
 %patch12 -p0
 %patch11 -p0
+%patch12 -p0
 %patch31 -p1
 install %{SOURCE2} macros.pld.in
 %patch38 -p1
@@ -253,8 +255,6 @@ mv -f lib/Makefile.in.new lib/Makefile.in
 	--enable-v1-packages
 %configure \
 %{__make} %{?bcond_off_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
-sed -e 's/#include <rpmio\.h>/#include <rpmio\/rpmio\.h>/g' lib/header.h > lib/header.h.new
-mv -f lib/header.h.new lib/header.h
 	--with-python
 
 
