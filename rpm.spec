@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0
-Release:	12
+Release:	13
 Group:		Base
 Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
@@ -34,6 +34,7 @@ Patch14:	%{name}-bash2.patch
 Patch15:	%{name}-perl-req-perlfile.patch
 Patch16:	%{name}-installplatform.patch
 Patch17:	%{name}-find-lang.patch
+Patch18:	%{name}-cache.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 BuildRequires:	gettext-devel
@@ -194,6 +195,7 @@ construir pacotes usando o RPM.
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
+%patch18 -p1
 %patch31 -p1
 install %{SOURCE2} macros.pld.in
 %patch38 -p1
