@@ -380,7 +380,8 @@ rm -rf $RPM_BUILD_ROOT
 %lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
 %lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
 
-%attr(755,root,root) %{_libdir}/rpm/find-{prov,req}.pl
+%files perlprov
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/rpm/perl*
 %attr(755,root,root) %{_libdir}/rpm/find-perl-*
 %attr(755,root,root) %{_libdir}/rpm/find-*.perl
