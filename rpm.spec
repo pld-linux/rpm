@@ -22,14 +22,14 @@ Summary(pt_BR):	Gerenciador de pacotes RPM
 Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
-%define	ver	4.1
+%define	ver	4.2
 Version:	%{ver}
-%define	rel	15.1
+%define	rel	0.1
 Release:	%{rel}
 %define	beecrypt_rel	%{ver}_%{rel}
 License:	GPL
 Group:		Base
-Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.rpm.org/pub/rpm/test-4.2/%{name}-%{version}.tar.gz
 Source1:	%{name}.groups
 Source2:	%{name}.macros
 Source3:	%{name}-install-tree
@@ -69,8 +69,8 @@ Patch11:	%{name}-noexpand.patch
 Patch12:	%{name}-scripts-closefds.patch
 Patch13:	%{name}-python-macros.patch
 Patch14:	%{name}-perlprov-regonly.patch
-Patch15:	%{name}-4.1-branch.patch
 Patch16:	%{name}-drop-legacy-CLI.patch
+Patch15:	%{name}-4.1-branch.patch
 Patch18:	%{name}-gettext-in-header.patch
 Patch19:	%{name}-compress-doc.patch
 Patch20:	%{name}-lt14d.patch
@@ -84,6 +84,8 @@ Patch27:	%{name}-link.patch
 Patch28:	%{name}-beecrypt-opt.patch
 Patch29:	%{name}-python-pic.patch
 Patch30:	%{name}-home_etc.patch
+Patch31:	%{name}-system_libs-more.patch
+Patch32:	%{name}-nofile.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -92,7 +94,8 @@ BuildRequires:	bzip2-devel >= 1.0.1
 BuildRequires:	db-devel >= %{reqdb_ver}
 BuildRequires:	doxygen
 BuildRequires:	gettext-devel >= 0.11.4-2
-BuildRequires:	libelf-devel
+BuildRequires:	elfutils-devel
+BuildRequires:	libmagic-devel
 BuildRequires:	libtool
 BuildRequires:	patch >= 2.2
 BuildRequires:	python-devel >= 2.2
@@ -105,7 +108,8 @@ BuildRequires:	popt-devel >= %{reqpopt_ver}
 BuildRequires:	bzip2-static >= 1.0.2-5
 BuildRequires:	db-static >= %{reqdb_ver}
 BuildRequires:	glibc-static >= 2.2.94
-BuildRequires:	libelf-static
+BuildRequires:	elfutils-static
+BuildRequires:	libmagic-devel
 BuildRequires:	zlib-static
 BuildRequires:	popt-static >= %{reqpopt_ver}
 %endif
@@ -513,9 +517,12 @@ Statyczna wersja biblioteki kryptograficznej.
 
 %prep
 %setup -q
-%patch0 -p1
+# need update
+#%%patch0 -p1
 %patch1 -p1
 %patch2 -p1
+# find-spec-bcond need update
+# po/pl.po need update
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
@@ -532,21 +539,24 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch12 -p1
 %patch13 -p1
 %patch14 -p1
-%patch15 -p1
 %patch16 -p1
 %patch18 -p1
 %patch19 -p1
 %patch20 -p1
 %patch21 -p1
 %patch22 -p1
-%patch23 -p1
+# need review
+#%%patch23 -p1
 %patch24 -p1
 %patch25 -p1
-%patch26 -p1
+# need review
+#%%patch26 -p1
 %patch27 -p1
 %patch28 -p1
 %patch29 -p1
 %patch30 -p1
+%patch31 -p1
+%patch32 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
@@ -586,6 +596,7 @@ rm -f missing
 %{__autoconf}
 %{__automake}
 cd ..
+
 
 rm -f missing
 %{__libtoolize}
@@ -770,25 +781,33 @@ find /usr/lib/rpm -name '*-linux' -type l | xargs rm -f
 
 %files utils
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/debugedit
 %attr(755,root,root) %{_bindir}/rpm2cpio
-%attr(755,root,root) %{_libdir}/rpm/rpmdiff*
-%attr(755,root,root) %{_libdir}/rpm/tgpg
-%attr(755,root,root) %{_libdir}/rpm/find-debuginfo.sh
-%attr(755,root,root) %{_bindir}/rpmgraph
 %attr(755,root,root) %{_bindir}/rpmcache
+%attr(755,root,root) %{_bindir}/rpmdeps
+%attr(755,root,root) %{_bindir}/rpmgraph
 %attr(755,root,root) %{_bindir}/striptofile
 %attr(755,root,root) %{_bindir}/unstripfile
+%attr(755,root,root) %{_libdir}/rpm/find-debuginfo.sh
+%attr(755,root,root) %{_libdir}/rpm/rpm2cpio.sh
+%attr(755,root,root) %{_libdir}/rpm/rpmd
+%attr(755,root,root) %{_libdir}/rpm/rpmdiff*
+%attr(755,root,root) %{_libdir}/rpm/rpmi
+%attr(755,root,root) %{_libdir}/rpm/rpmk
+%attr(755,root,root) %{_libdir}/rpm/rpmq
+%attr(755,root,root) %{_libdir}/rpm/tgpg
+
 # not here
 #%%{_libdir}/rpm/rpm.daily
 #%%{_libdir}/rpm/rpm.log
 #%%{_libdir}/rpm/rpm.xinetd
-%{_libdir}/rpm/rpm2cpio.sh
 
 %{_mandir}/man8/rpm2cpio.8*
 %lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
 %lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
 %lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
 %lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
+%{_mandir}/man8/rpmdeps.8*
 %{_mandir}/man8/rpmcache.8*
 %{_mandir}/man8/rpmgraph.8*
 
