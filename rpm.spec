@@ -66,6 +66,7 @@ Patch25:	%{name}-bb-and-short-circuit.patch
 Patch26:	%{name}-4.1-branch-po-updates.patch
 Patch27:	%{name}-link.patch
 Patch28:	%{name}-beecrypt-opt.patch
+Patch29:	%{name}-python-pic.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -515,6 +516,7 @@ Statyczna wersja biblioteki kryptograficznej.
 %patch26 -p1
 %patch27 -p1
 %patch28 -p1
+%patch29 -p1
 
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
