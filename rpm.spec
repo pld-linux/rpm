@@ -240,16 +240,13 @@ install %{SOURCE9} scripts/find-lang.sh
 mv -f perl.req perl.req.in
 mv -f perl.prov perl.prov.in)
 
-cd popt
-autoupdate
+(cd popt
 awk -f %{SOURCE14} %{SOURCE1}
 
 cd popt
 autoconf
-automake -a -c
-cd ..
+automake -a -c)
 autoheader
-autoupdate
 %{__automake}
 cd ..
 
