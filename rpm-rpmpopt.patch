@@ -1,0 +1,8 @@
+diff -ru rpm-3.0.2.old/rpmpopt rpm-3.0.2/rpmpopt
+--- rpm-3.0.2.old/rpmpopt	Fri Jun 18 16:32:25 1999
++++ rpm-3.0.2/rpmpopt	Tue Jul 20 13:09:55 1999
+@@ -66,3 +66,4 @@
+ rpm alias --filesbypkg --qf '[%-25{=NAME} %{FILENAMES}\n]'
+ rpm exec --freshen freshen.sh
+ rpm alias -F --freshen
++rpm exec --install-build-tree install-build-tree
