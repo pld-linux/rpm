@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	3.0.3
-Release:	21
+Release:	22
 Group:		Base
 Group(pl):	Podstawowe
 Copyright:	GPL
@@ -152,7 +152,7 @@ make
 
 
 %{__make} %{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
-install -d $RPM_BUILD_ROOT/var/db/rpm \
+install -d $RPM_BUILD_ROOT/var/state/rpm \
 	$RPM_BUILD_ROOT%{_mandir}/{ru,pl}/man8
 
 make DESTDIR="$RPM_BUILD_ROOT" pkgbindir="%{_bindir}" install
@@ -161,10 +161,6 @@ install macros.pld	 $RPM_BUILD_ROOT%{_libdir}/rpm/macros.pld
 install macros.perl	 $RPM_BUILD_ROOT%{_libdir}/rpm/macros.perl
 install -m755 %{SOURCE5} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
 	pkgbindir="%{_bindir}"
-#install rpm.8ru $RPM_BUILD_ROOT%{_mandir}/ru/man8/rpm.8
-#install rpm2cpio.8ru $RPM_BUILD_ROOT%{_mandir}/ru/man8/rpm2cpio.8
-#install %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/pl/man8/rpm.8
-
 
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*
@@ -209,7 +205,9 @@ fi
 if [ -L /var/db/rpm ]; then
 	rm -rf /var/db/rpm
 fi
-/bin/rpm --initdb
+if [ ! -f /var/state/rpm ]; then
+	/bin/rpm --initdb
+fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -224,7 +222,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/rpm.8*
 %lang(pl) %{_mandir}/pl/man8/rpm.8*
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
-%attr(755,root,root) %dir /var/db/rpm
+%attr(755,root,root) %dir /var/state/rpm
 
 %dir /usr/lib/rpm
 %defattr(644,root,root,755)
