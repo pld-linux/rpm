@@ -11,7 +11,7 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 #
 %include        /usr/lib/rpm/macros.python
-%define snap	20030515
+%define snap	20030610
 # versions of required libraries
 %define	reqdb_ver	4.1.25-1
 %define	reqpopt_ver	1.9
@@ -31,8 +31,8 @@ Release:	%{rel}
 License:	GPL
 Group:		Base
 #Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.2.x/%{name}-%{version}.%{snap}.tar.gz
-# Source0-md5:	b7a16114143a0465aa65daf7a0234cf4
-Source0:	http://recesja.icm.edu.pl/~psk/%{name}-%{version}.%{snap}.tar.gz
+Source0:	ftp://distfiles.pld-linux.org/src/%{name}-%{version}.%{snap}.tar.gz
+# Source0-md5:	f923fe5ca8f0803868ae7bcc0fabe9bb
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -64,7 +64,6 @@ Patch13:	%{name}-python-macros.patch
 #Patch16:	%{name}-drop-legacy-CLI.patch
 Patch18:	%{name}-gettext-in-header.patch
 Patch19:	%{name}-compress-doc.patch
-Patch20:	%{name}-lt14d.patch
 Patch21:	%{name}-gettext0.11.patch
 Patch22:	%{name}-build.patch
 Patch24:	%{name}-system_libs.patch
@@ -507,7 +506,6 @@ construir pacotes usando o RPM.
 %patch13 -p1
 %patch18 -p1
 %patch19 -p1
-%patch20 -p1
 %patch21 -p1
 %patch22 -p1
 %patch24 -p1
