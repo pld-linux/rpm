@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0
-Release:	5
+Release:	6
 Group:		Base
 Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
@@ -240,43 +240,6 @@ install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 EOF
 
 %find_lang %{name}
-
-%pre
-if [ -L /var/lib/rpm ]; then
-	echo "WARNING:upgrade cannot be done because /var/state/rpm is symlink"
-	exit 1
-fi
-if [ ! -d /var/lib/rpm ]; then 
-	if [ -e /var/state/rpm ] && [ ! -L /var/state/rpm ]; then
-		mkdir -p /var/lib/rpm
-		cp -ap /var/state/rpm/* /var/lib/rpm
-		rm -rf /var/state/rpm
-		ln -sf /var/lib/rpm /var/state/rpm
-		echo "RPM Database moved from /var/state/rpm to /var/lib/rpm" 1>&2
-		echo "Run second time upgradeing rpm package for complete operation" 1>&2
-		exit 1
-	fi
-	if [ -e /var/db/rpm ] && [ ! -L /var/db/rpm ]; then
-		mkdir -p /var/lib/rpm
-		cp -ap /var/db/rpm/* /var/lib/rpm
-		rm -rf /var/db/rpm
-		ln -sf /var/lib/rpm /var/db/rpm
-		echo "RPM Database moved from /var/db/rpm to /var/lib/rpm" 1>&2
-		echo "Run second time upgradeing rpm package for complete operation" 1>&2
-		exit 1
-	fi
-fi
-
-%post
-if [ -L /var/lib/rpm ]; then
-	rm -rf /var/lib/rpm
-fi
-if [ -L /var/db/rpm ]; then
-	rm -rf /var/db/rpm
-fi
-if [ ! -f /var/lib/rpm/packages.rpm -a ! -f /var/lib/rpm/Packages  ]; then
-	/bin/rpm --initdb
-fi
 
 %post   libs -p /sbin/ldconfig
 %postun libs -p /sbin/ldconfig
