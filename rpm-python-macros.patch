@@ -1,0 +1,10 @@
+--- configure.in	Sun Nov 11 16:16:04 2001
++++ configure.in.new	Sun Nov 11 16:14:58 2001
+@@ -1087,6 +1087,7 @@
+ AC_CONFIG_SUBDIRS(popt)
+ AC_OUTPUT([Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec scripts/brp-redhat
+  	macros.perl scripts/perl.req scripts/perl.prov
++    macros.python
+ 	rpmio/Makefile lib/Makefile build/Makefile tools/Makefile
+ 	scripts/Makefile
+ 	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
