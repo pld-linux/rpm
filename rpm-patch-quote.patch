@@ -1,0 +1,20 @@
+--- ./build/parsePrep.c~	2003-11-16 14:47:23.000000000 +0200
++++ ./build/parsePrep.c	2005-03-28 16:56:38.000000000 +0300
+@@ -131,7 +131,7 @@
+ 
+ 	sprintf(buf,
+ 		"echo \"Patch #%d (%s):\"\n"
+-		"%s -d < %s | patch -p%d %s -s\n"
++		"%s -d < %s | patch -p%d '%s' -s\n"
+ 		"STATUS=$?\n"
+ 		"if [ $STATUS -ne 0 ]; then\n"
+ 		"  exit $STATUS\n"
+@@ -143,7 +143,7 @@
+     } else {
+ 	sprintf(buf,
+ 		"echo \"Patch #%d (%s):\"\n"
+-		"patch -p%d %s -s < %s", c, (const char *) basename(fn),
++		"patch -p%d %s -s < '%s'", c, (const char *) basename(fn),
+ 		strip, args, fn);
+     }
+ 
