@@ -159,6 +159,7 @@ Summary(de):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
 Group(de):	Applikationen/Datei
 Group(pl):	Aplikacje/Pliki
 Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w pakietach rpm
+Group:		Applications/File
 Requires:	perl-modules
 Requires:	findutils
 
