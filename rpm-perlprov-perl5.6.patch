@@ -1,6 +1,6 @@
-diff -urN rpm-4.0.2/scripts/perl.prov rpm-4.0.2-grabba/scripts/perl.prov
---- rpm-4.0.2/scripts/perl.prov	Wed Mar  6 16:30:05 2002
-+++ rpm-4.0.2-grabba/scripts/perl.prov	Wed Mar  6 16:31:52 2002
+diff -urN rpm-4.0.4.org/scripts/perl.prov.in rpm-4.0.4/scripts/perl.prov.in
+--- rpm-4.0.4.org/scripts/perl.prov.in	Mon Mar 11 10:43:59 2002
++++ rpm-4.0.4/scripts/perl.prov.in	Mon Mar 11 10:45:12 2002
 @@ -47,7 +47,7 @@
  
  if ("@ARGV") {
@@ -19,7 +19,7 @@ diff -urN rpm-4.0.2/scripts/perl.prov rpm-4.0.2-grabba/scripts/perl.prov
        process_file($_) if -f "$_";
      }
    }
-@@ -116,7 +116,7 @@
+@@ -128,7 +128,7 @@
      # package name so we report all namespaces as if they were
      # provided packages (really ugly).
  
@@ -28,7 +28,7 @@ diff -urN rpm-4.0.2/scripts/perl.prov rpm-4.0.2-grabba/scripts/perl.prov
        $package=$1;
        undef $version;
        $require{$package}=undef;
-@@ -132,10 +132,15 @@
+@@ -144,10 +144,15 @@
      #ExtUtils/Install.pm:$VERSION = substr q$Revision$, 10;
      #CGI/Apache.pm:$VERSION = (qw$Revision$)[1];
      #DynaLoader.pm:$VERSION = $VERSION = "1.03";     # avoid typo warning
