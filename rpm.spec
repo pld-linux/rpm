@@ -11,8 +11,6 @@ Source1:	rpm.groups
 Source2:	rpm.8pl
 Source3:	rpm.macros
 Source4:	rpm.pl.po
-Source5:	rpm-backup
-Source6:	rpm-backup.sh
 Patch0:		rpm-rpmrc.patch
 Patch1:		rpm-i18n.patch
 Patch2:		rpm-find-requires.patch
@@ -90,10 +88,8 @@ make
 
 
 %{__make} %{?_without_static:rpm_LDFLAGS="\\$(myLDFLAGS)"}
-install -d $RPM_BUILD_ROOT/var/db/{rpm,backups/rpm} \
-	$RPM_BUILD_ROOT/etc/{cron.daily,sysconfig} \
-	$RPM_BUILD_ROOT%{_mandir}/{ru,pl}/man8 \
-	$RPM_BUILD_ROOT/etc/skel/C/rpm/{SRPMS,RPMS,SOURCES,SPECS,BUILD}
+install -d $RPM_BUILD_ROOT/var/db/rpm \
+	$RPM_BUILD_ROOT%{_mandir}/{ru,pl}/man8
 
 make DESTDIR="$RPM_BUILD_ROOT" pkgbindir="%{_bindir}" install
 
@@ -104,8 +100,6 @@ install rpm2cpio.8ru $RPM_BUILD_ROOT%{_mandir}/ru/man8/rpm2cpio.8
 install %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/pl/man8/rpm.8
 
 install %{SOURCE1} docs/groups
-install %{SOURCE5} $RPM_BUILD_ROOT/etc/sysconfig
-install %{SOURCE6} $RPM_BUILD_ROOT/etc/cron.daily
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 strip  $RPM_BUILD_ROOT/{bin/rpm,%{_bindir}/*} || :
 
@@ -145,21 +139,16 @@ rm -rf $RPM_BUILD_ROOT
 %lang(pl) %{_mandir}/pl/man8/*
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
 %attr(755,root,root) %dir /var/db/rpm
-%attr(755,root,root) %dir /var/db/backups/rpm
-%attr(750,root,root) /etc/cron.daily/rpm-backup.sh
-%attr(640,root,root) /etc/sysconfig/rpm-backup
 
 %dir /usr/lib/rpm
-%attr(755,root,root) %{_prefix}/lib/rpm/find-*
-%attr(755,root,root) %{_prefix}/lib/rpm/freshen.sh
-%attr(755,root,root) %{_prefix}/lib/rpm/mkinstalldirs
-%attr(755,root,root) %{_prefix}/lib/rpm/config.*
-%attr(755,root,root) %{_prefix}/lib/rpm/getpo.sh
+%attr(755,root,root) %{_libdir}/rpm/find-*
+%attr(755,root,root) %{_libdir}/rpm/freshen.sh
+%attr(755,root,root) %{_libdir}/rpm/find-requires
+%attr(755,root,root) %{_libdir}/rpm/find-provides
+%attr(755,root,root) %{_libdir}/rpm/find-rpm-provides
 
-%{_prefix}/lib/rpm/rpm*
-%{_prefix}/lib/rpm/macros*
-
-/etc/skel/C/rpm
+%{_libdir}/rpm/rpm*
+%{_libdir}/rpm/macros*
 %attr(755,root,root) %{_libdir}/rpm/rpmb
 %attr(755,root,root) %{_libdir}/rpm/rpmi
 %attr(755,root,root) %{_libdir}/rpm/rpmt
@@ -175,7 +164,6 @@ rm -rf $RPM_BUILD_ROOT
 - rewrited by Artur Frysiak <wiget@pld.org.pl>,
 - patches with fixes maked by Artur Frysiak and Marcin Dalecki
   <dalecki@cs.net.pl>.
-
 Revision 1.79  2000/02/17 03:42:17  kloczek
 - release 25,
 - added "Conflicts: /usr/bin/id" and rebuilded in enviroment with id in
