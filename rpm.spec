@@ -216,7 +216,6 @@ Requires:	binutils
 Requires:	gcc >= 3.0.3
 Requires:	gcc
 Requires:	diffutils
-Requires:	libtool
 Requires:	glibc-devel
 Requires:	sed
 Requires:	sed
