@@ -1,0 +1,4 @@
+- use lfind instaead of bsearch and a lot of qsort for adding available
+  packages to transactions. It's faster especilly in big transactions (like 2500
+  packages when installinkg PLD).
+- rel: 18
