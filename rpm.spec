@@ -22,9 +22,11 @@ Summary(pt_BR):	Gerenciador de pacotes RPM
 Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
-Version:	4.1
-Release:	15.1
-%define	beecrypt_rel	%{version}.%{release}
+%define	ver	4.1
+Version:	%{ver}
+%define	rel	15.1
+Release:	%{rel}
+%define	beecrypt_rel	%{ver}_%{rel}
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/%{name}-%{version}.tar.gz
