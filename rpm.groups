@@ -243,8 +243,10 @@ Networking/News
 	[pl]:	Sieciowe/News
 
 Networking/Utilities
-	[de]:	Netzwerkwesen/Werkzeuge
-	[pl]:	Sieciowe/Narzêdzia
+	[de]:		Netzwerkwesen/Werkzeuge
+	[pl]:		Sieciowe/Narzêdzia
+	[pt_BR]:	Rede/Utilitários
+	[es]:		Red/Utilitarios
 
 Themes
 	[de]:	Themen
