@@ -12,7 +12,9 @@ License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
 Group(es):	Base
+Group(fr):	Base
 Group(pl):	Podstawowe
+Group(pt):	Base
 Group(pt_BR):	Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
 Source1:	%{name}.groups
@@ -70,7 +72,7 @@ BuildRequires:	db3-devel >= 3.1.17-9
 BuildRequires:	db1-devel >= 1.85
 BuildRequires:	db3-devel >= 3.1.17-9
 BuildRequires:	gettext-devel >= 0.10.38-3
-BuildRequires:	python-devel
+BuildRequires:	python-devel >= 2.2
 BuildRequires:	zlib-devel
 BuildRequires:	python-modules >= 2.2.1
 BuildRequires:	zlib-devel >= 1.1.4
@@ -135,11 +137,12 @@ Summary:	Header files and libraries
 Summary(de):	Header-Dateien uns Libraries
 Summary(es):	Archivos de inclusión y bibliotecas para programas de manipulación de paquetes rpm
 Summary(pl):	Pliki nag³ówkowe i biblioteki statyczne
-Group(de):	Entwicklung/Libraries
+Group(de):	Entwicklung/Bibliotheken
 Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(pt):	Desenvolvimento/Bibliotecas
 Group(ru):	òÁÚÒÁÂÏÔËÁ/âÉÂÌÉÏÔÅËÉ
 Group(uk):	òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 Summary(pt_BR):	Arquivos de inclusão e bibliotecas para programas de manipulação de pacotes RPM
@@ -181,11 +184,12 @@ ferramentas que precisem de conhecimento profundo de pacotes RPM.
 Summary:	RPM static libraries
 Summary(de):	RPMs statische Libraries
 Summary(pl):	Biblioteki statyczne RPM-a
-Group(de):	Entwicklung/Libraries
+Group(de):	Entwicklung/Bibliotheken
 Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(pt):	Desenvolvimento/Bibliotecas
 Group(ru):	òÁÚÒÁÂÏÔËÁ/âÉÂÌÉÏÔÅËÉ
 Group(uk):	òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 Summary(pt_BR):	Bibliotecas estáticas para o desenvolvimento de aplicações RPM
@@ -208,7 +212,11 @@ Bibliotecas estáticas para desenvolvimento.
 Summary:	Additional utilities for managing rpm packages and database
 Summary(de):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
 Group(de):	Applikationen/Datei
+Group(es):	Aplicaciones/Archivos
+Group(fr):	Applications/Fichiers
 Group(pl):	Aplikacje/Pliki
+Group(pt):	Aplicações/Ficheiros
+Group(pt_BR):	Aplicações/Arquivos
 Summary(pl):	Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{version}
@@ -226,7 +234,11 @@ Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami.
 Summary:	Additional utilities for checking perl provides/requires in rpm packages
 Summary(de):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
 Group(de):	Applikationen/Datei
+Group(es):	Aplicaciones/Archivos
+Group(fr):	Applications/Fichiers
 Group(pl):	Aplikacje/Pliki
+Group(pt):	Aplicações/Ficheiros
+Group(pt_BR):	Aplicações/Arquivos
 Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w pakietach rpm
 Group:		Applications/File
 Requires:	perl-modules
@@ -246,9 +258,13 @@ pakietach rpm.
 %package pythonprov
 Summary:	Python macros, which simplifies creation of rpm packages with Python software
 Group(de):	Applikationen/Datei
+Group(es):	Aplicaciones/Archivos
+Group(fr):	Applications/Fichiers
 Group(pl):	Aplikacje/Pliki
+Group(pt):	Aplicações/Ficheiros
+Group(pt_BR):	Aplicações/Arquivos
 Summary(pl):	Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w Pythonie
-Requires:	python
+%requires_eq	python
 Requires:	%{name} = %{version}
 Requires:	python-modules
 
@@ -264,7 +280,10 @@ Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w
 Summary:	Python interface to RPM library
 Group:		Development/Languages/Python
 Group(de):	Entwicklung/Sprachen/Python
+Group(es):	Desarrollo/Lenguages/Python
+Group(fr):	Development/Langues/Python
 Group(pl):	Programowanie/Jêzyki/Python
+Group(pt):	Desenvolvimento/Línguas/Python
 Summary(pt_BR):	Módulo Python para aplicativos que manipulam pacotes RPM
 %pyrequires_eq	python
 %description python
@@ -297,7 +316,11 @@ Summary:	Scripts for building binary RPM packages
 Summary(de):	Scripts fürs Bauen binärer RPM-Pakete
 Summary(pl):	Skrypty pomocnicze do budowania binarnych RPM-ów
 Group(de):	Applikationen/Datei
+Group(es):	Aplicaciones/Archivos
+Group(fr):	Applications/Fichiers
 Group(pl):	Aplikacje/Pliki
+Group(pt):	Aplicações/Ficheiros
+Group(pt_BR):	Aplicações/Arquivos
 Summary(pt_BR):	Scripts e programas executáveis usados para construir pacotes
 Group:		Applications/File
 Requires:	%{name} = %{version}
