@@ -66,7 +66,6 @@ Patch8:		%{name}-scripts-closefds.patch
 Patch9:		%{name}-python-macros.patch
 Patch10:	%{name}-gettext-in-header.patch
 Patch11:	%{name}-compress-doc.patch
-Patch12:	%{name}-gettext0.11.patch
 Patch13:	%{name}-build.patch
 Patch14:	%{name}-system_libs.patch
 Patch15:	%{name}-bb-and-short-circuit.patch
@@ -76,28 +75,18 @@ Patch18:	%{name}-php-deps.patch
 Patch19:	%{name}-python-fix.patch
 Patch20:	%{name}-ldconfig-always.patch
 Patch21:	%{name}-perl_req.patch
-Patch22:	%{name}-system_libs_more.patch
-Patch23:	%{name}-python_2_3.patch
 Patch24:	%{name}-no-bin-env.patch
-Patch25:	%{name}-specflags.patch
 Patch26:	%{name}-magic-usesystem.patch
 Patch27:	%{name}-dontneedutils.patch
-Patch28:	%{name}-python-beecrypt.patch
-Patch29:	%{name}-man-typos.patch
-Patch30:	%{name}-man-pl.patch
-Patch31:	%{name}-fdClose-typo.patch
-#Patch32:	%{name}-userpmdepswrappers.patch
 Patch33:	%{name}-provides-dont-obsolete.patch
 Patch34:	%{name}-examplesaredoc.patch
 Patch35:	%{name}-po.patch
 Patch36:	%{name}-amd64.patch
 Patch37:	%{name}-notsc.patch
 Patch38:	%{name}-hack-norpmlibdep.patch
-Patch39:	%{name}-db42.patch
 Patch40:	%{name}-makefile-no_myLDADD_deps.patch
 Patch41:	%{name}-libdir64.patch
 Patch42:	%{name}-libdir-links.patch
-Patch43:	%{name}-python-libdir.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -557,8 +546,6 @@ construir pacotes usando o RPM.
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
-# OBSOLETE (C)
-#%patch12 -p1
 %patch13 -p1
 %patch14 -p1
 %patch15 -p1
@@ -568,10 +555,6 @@ construir pacotes usando o RPM.
 %patch19 -p1
 %patch20 -p1
 %patch21 -p1
-# 1x1h MERGE WITH 14, no - OBSOLETE
-#%patch22 -p1
-# 3x1h OBSOLETE (already handled in quite well way)
-#%patch23 -p1
 %patch24 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
@@ -583,31 +566,17 @@ install %{SOURCE12} scripts/php.prov.in
 install %{SOURCE13} scripts/php.req.in
 install %{SOURCE33} scripts/perl.prov
 cat %{SOURCE14} >> macros.in
-#%patch25 -p1
 %patch26 -p1
 %patch27 -p1
-# obsolete?
-#%patch28 -p1
-# OBSOLETE
-#%patch29 -p1
-# OBSOLETE
-#%patch30 -p1
-# OBSOLETE
-#%patch31 -p1
-#%patch32 -p1
 %patch33 -p1
 %patch34 -p1
 %patch35 -p1
 %patch36 -p1
 %patch37 -p1
 %patch38 -p1
-# OBSOLETE
-#%patch39 -p1
 %patch40 -p1
 %patch41 -p1
 %patch42 -p1
-# OBSOLETE
-#%patch43 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
