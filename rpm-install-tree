@@ -1,3 +1,5 @@
+#!/bin/sh
+
 DUMB_SPEC_FILE=`mktemp -q ${TMPDIR:-/tmp}/bilder.XXXXXX || ( echo "mktemp falied." ; exit 1)`
 echo "\
 Summary:        -
