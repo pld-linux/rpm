@@ -251,7 +251,7 @@ if [ ! -f /var/lib/rpm/packages.rpm ]; then
 	/bin/rpm --initdb
 fi
 
-%post libs -p /sbin/ldconfig
+%post   libs -p /sbin/ldconfig
 %postun libs -p /sbin/ldconfig
 %clean
 %clean
