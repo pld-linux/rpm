@@ -1,0 +1,135 @@
+diff -uNr rpm-4.3.orig/installplatform rpm-4.3/installplatform
+--- rpm-4.3.orig/installplatform	2004-02-25 23:42:56.000000000 +0100
++++ rpm-4.3/installplatform	2004-02-25 23:45:26.022172264 +0100
+@@ -21,7 +21,7 @@
+ 
+ RPM="./rpm --rcfile $TEMPRC"
+ 
+-canonarch_sed='s_i.86_i386_;s_athlon_i386_;s_sparc[^-]*_sparc_;s_alpha[^-]*_alpha_;s_\(powerpc\|ppc\)[^-]*_ppc_'
++canonarch_sed='s_i.86_i386_;s_pentium3_i386_;s_athlon_i386_;s_sparc[^-]*_sparc_;s_alpha[^-]*_alpha_;s_\(powerpc\|ppc\)[^-]*_ppc_'
+ arch="`$RPM --eval '%{_arch}'|sed -e "$canonarch_sed"`"
+ VENDOR="`$RPM --eval '%{_vendor}'`"
+ OS="`$RPM --eval '%{_os}'`"
+@@ -30,7 +30,7 @@
+ target="`$RPM --eval '%{_target}'|sed -e "$canonarch_sed"`"
+ 
+ case "$arch" in
+-  i[3456]86|athlon) SUBSTS='s_i386_i386_ s_i386_i486_ s_i386_i586_ s_i386_i686_ s_i386_athlon_' ;;
++  i[3456]86|pentium3|athlon) SUBSTS='s_i386_i386_ s_i386_i486_ s_i386_i586_ s_i386_i686_ s_i386_pentium3_ s_i386_athlon_' ;;
+   x86_64*|amd64*) SUBSTS="s/${arch}/x86_64/ s/${arch}/amd64/" ;;
+   alpha*) SUBSTS='s_alpha_alpha_ s_alpha_alphaev5_ s_alpha_alphaev56_ s_alpha_alphapca56_ s_alpha_alphaev6_ s_alpha_alphaev67_' ;;
+   sparc*) SUBSTS='s_sparc\(64\|v9\)_sparc_ s_sparc64_sparcv9_;s_sparc\([^v]\|$\)_sparcv9\1_ s_sparcv9_sparc64_;s_sparc\([^6]\|$\)_sparc64\1_' ;;
+@@ -66,7 +66,7 @@
+     s390x-linux) LIB=lib64; MULTILIBNO=2 ;;
+     ppc-linux) MULTILIBNO=1 ;;
+     ppc64-linux) LIB=lib64; MULTILIBNO=2 ;;
+-    i?86-linux|athlon-linux) MULTILIBNO=1 ;;
++    i?86-linux|pentium3-linux|athlon-linux) MULTILIBNO=1 ;;
+     x86_64-linux|amd64-linux) LIB=lib64; MULTILIBNO=2 ;;
+   esac
+ 
+diff -uNr rpm-4.3.orig/lib/rpmrc.c rpm-4.3/lib/rpmrc.c
+--- rpm-4.3.orig/lib/rpmrc.c	2004-02-25 23:42:56.000000000 +0100
++++ rpm-4.3/lib/rpmrc.c	2004-02-25 23:45:31.767298872 +0100
+@@ -1038,6 +1038,25 @@
+ 	return 1;
+ }
+ 
++static int is_pentium3()
++{
++    unsigned int eax, ebx, ecx, edx, family, model;
++    char vendor[16];
++    cpuid(0, &eax, &ebx, &ecx, &edx);
++    memset(vendor, 0, sizeof(vendor));
++    *((unsigned int *)&vendor[0]) = ebx;
++    *((unsigned int *)&vendor[4]) = edx;
++    *((unsigned int *)&vendor[8]) = ecx;
++    if (strncmp(vendor, "GenuineIntel", 12) != 0)
++	return 0;
++    cpuid(1, &eax, &ebx, &ecx, &edx);
++    family = (eax >> 8) & 0x0f;
++    model = (eax >> 4) & 0x0f;
++    if ((family == 6) && ((model >= 7) && (model <= 11)))
++	return 1;
++    return 0;
++}
++
+ #endif
+ 
+ #if defined(__linux__) && defined(__powerpc__)
+@@ -1274,6 +1293,8 @@
+ 
+ 	    if ((class == '6' && is_athlon()) || class == '7')
+ 	    	strcpy(un.machine, "athlon");
++	    else if (is_pentium3())
++		strcpy(un.machine, "pentium3");
+ 	    else if (strchr("3456", un.machine[1]) && un.machine[1] != class)
+ 		un.machine[1] = class;
+ 	}
+diff -uNr rpm-4.3.orig/lib/rpmts.c rpm-4.3/lib/rpmts.c
+--- rpm-4.3.orig/lib/rpmts.c	2004-01-07 01:39:05.000000000 +0100
++++ rpm-4.3/lib/rpmts.c	2004-02-25 23:45:52.566136968 +0100
+@@ -194,7 +194,7 @@
+ /*@-nullassign@*/
+     /*@observer@*/
+     static const char *arches[] = {
+-	"i386", "i486", "i586", "i686", "athlon", "x86_64",
++	"i386", "i486", "i586", "i686", "pentium3", "athlon", "x86_64",
+ 	"alpha", "alphaev5", "alphaev56", "alphapca56", "alphaev6", "alphaev67",
+ 	"sparc", "sun4", "sun4m", "sun4c", "sun4d", "sparcv9",
+ 	"sparc64", "sun4u",
+diff -uNr rpm-4.3.orig/macros.in rpm-4.3/macros.in
+--- rpm-4.3.orig/macros.in	2004-02-25 23:42:55.000000000 +0100
++++ rpm-4.3/macros.in	2004-02-25 23:45:31.773297960 +0100
+@@ -1116,7 +1116,7 @@
+ #   rpm can use regular expressions against target platforms in macro
+ #   conditionals.
+ #
+-%ix86   i386 i486 i586 i686 athlon
++%ix86   i386 i486 i586 i686 pentium3 athlon
+ 
+ #------------------------------------------------------------------------
+ # Use in %install to generate locale specific file lists. For example,
+diff -uNr rpm-4.3.orig/rpmrc.in rpm-4.3/rpmrc.in
+--- rpm-4.3.orig/rpmrc.in	2004-02-25 23:42:56.000000000 +0100
++++ rpm-4.3/rpmrc.in	2004-02-25 23:45:31.775297656 +0100
+@@ -16,6 +16,7 @@
+ optflags: i486 -O2 -march=i486%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i486: %{specflags_i486}}}
+ optflags: i586 -O2 -march=i586%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i586: %{specflags_i586}}}
+ optflags: i686 -O2 -march=i686%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i686: %{specflags_i686}}}
++optflags: pentium3 -O2 -march=pentium3%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_pentium3: %{specflags_pentium3}}}
+ optflags: athlon -O2 -march=athlon%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_athlon: %{specflags_athlon}}}
+ optflags: ia64 -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia64: %{specflags_ia64}}}
+ optflags: x86_64 -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_x86_64: %{specflags_x86_64}} %{?specflags_amd64: %{specflags_amd64}} }
+@@ -68,6 +69,7 @@
+ # Canonical arch names and numbers
+ 
+ arch_canon:	athlon:	athlon	1
++arch_canon:	pentium3:	pentium3	1
+ arch_canon:	i686:	i686	1
+ arch_canon:	i586:	i586	1
+ arch_canon:	i486:	i486	1
+@@ -167,6 +169,7 @@
+ buildarchtranslate: osfmach3_i386: i386
+ 
+ buildarchtranslate: athlon: athlon
++buildarchtranslate: pentium3: pentium3
+ buildarchtranslate: i686: i686
+ buildarchtranslate: i586: i586
+ buildarchtranslate: i486: i486
+@@ -218,6 +221,7 @@
+ arch_compat: alpha: axp noarch
+ 
+ arch_compat: athlon: i686
++arch_compat: pentium3: i686
+ arch_compat: i686: i586
+ arch_compat: i586: i486
+ arch_compat: i486: i386
+@@ -307,6 +311,7 @@
+ buildarch_compat: ia64: noarch
+ 
+ buildarch_compat: athlon: i686
++buildarch_compat: pentium3: i686
+ buildarch_compat: i686: i586
+ buildarch_compat: i586: i486
+ buildarch_compat: i486: i386
