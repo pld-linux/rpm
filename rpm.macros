@@ -39,7 +39,7 @@
 #
 %__libtoolize           libtoolize --copy --force
 %__gettextize { \
-    if gettextize --version | grep -q '0\.11\.' ; then \
+    if ! gettextize --version | grep -q '0\.10\.' ; then \
        if [ -f po/Makevars ]; then \
            gettextize --copy --force --no-changelog; \
        else \
