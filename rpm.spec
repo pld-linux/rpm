@@ -70,7 +70,7 @@ BuildRequires:	automake
 BuildRequires:	bzip2-devel >= 1.0.1
 BuildRequires:	db4-devel >= 4.0.14
 BuildRequires:	doxygen
-BuildRequires:	gettext-devel >= 0.11.2
+BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	libtool
 BuildRequires:	patch >= 2.2
 BuildRequires:	python-devel >= 2.2
@@ -441,7 +441,7 @@ awk -f %{SOURCE14} %{SOURCE1}
 cd popt
 rm -f missing
 %{__libtoolize}
-%{__gettextize}
+%{__gettextize} --intl
 if [ ! -f po/Makevars -a -f po/Makevars.template ] ; then
 	cp po/Makevars.template po/Makevars
 fi
@@ -460,7 +460,7 @@ cd ..
 
 rm -f missing
 %{__libtoolize}
-%{__gettextize}
+%{__gettextize} --intl
 if [ ! -f po/Makevars -a -f po/Makevars.template ] ; then
 	cp po/Makevars.template po/Makevars
 fi

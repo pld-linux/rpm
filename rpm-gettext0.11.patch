@@ -1,21 +1,3 @@
---- rpm-4.0.4/configure.in.wiget	Tue Jul  9 15:02:48 2002
-+++ rpm-4.0.4/configure.in	Tue Jul  9 15:08:14 2002
-@@ -1164,13 +1164,13 @@
- 
- AC_CONFIG_SUBDIRS(popt beecrypt zlib $WITH_DB_SUBDIR)
- 
--AC_OUTPUT([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
-+AC_OUTPUT([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec m4/Makefile 
- 	macros.perl scripts/perl.req scripts/perl.prov
- 	macros.python macros.php scripts/php.req scripts/php.prov
- 	rpmio/Makefile rpmdb/Makefile lib/Makefile build/Makefile
- 	scripts/Makefile scripts/brp-redhat tools/Makefile
- 	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
--	misc/Makefile po/Makefile.in intl/Makefile
-+	misc/Makefile po/Makefile.in 
- 	doc/Makefile doc/manual/Makefile
- 	doc/fr/Makefile doc/ja/Makefile doc/ko/Makefile
- 	doc/pl/Makefile doc/ru/Makefile doc/sk/Makefile
 --- rpm-4.0.4/Makefile.am.wiget	Mon Feb  4 20:12:44 2002
 +++ rpm-4.0.4/Makefile.am	Tue Jul  9 15:06:53 2002
 @@ -2,14 +2,14 @@
@@ -31,7 +13,7 @@
  	rpm.magic rpmpopt-$(VERSION) rpmqv.c rpm.c
  
 -SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_DB_SUBDIR@ popt beecrypt rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
-+SUBDIRS = m4  po @WITH_ZLIB_SUBDIR@ @WITH_DB_SUBDIR@ popt beecrypt rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
++SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_DB_SUBDIR@ popt beecrypt rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
  
  INCLUDES = \
  	-I$(top_srcdir)/build \
@@ -420,7 +402,7 @@
  	popt.ps
  
 -SUBDIRS = intl po
-+SUBDIRS = m4  po
++SUBDIRS = intl po
  
  INCLUDES = -I$(top_srcdir)
  
@@ -430,16 +412,6 @@
  	doxygen
 +
 +ACLOCAL_AMFLAGS = -I m4
---- rpm-4.0.4/popt/configure.in.wiget2	Tue Jul  9 16:32:42 2002
-+++ rpm-4.0.4/popt/configure.in	Tue Jul  9 16:32:13 2002
-@@ -82,5 +82,5 @@
- AC_DEFINE_UNQUOTED(POPT_SOURCE_PATH, "$POPT_SOURCE_PATH")
- AC_SUBST(POPT_SOURCE_PATH)
- 
--AC_OUTPUT([Doxyfile Makefile intl/Makefile po/Makefile.in],
--	[sed -e "/POTFILES =/r po/POTFILES" po/Makefile.in > po/Makefile])
-+AC_OUTPUT([Doxyfile Makefile po/Makefile.in m4/Makefile ],
-+	[])
 --- rpm-4.0.4/popt/po/de.po.wi2	Tue Jul  9 16:37:18 2002
 +++ rpm-4.0.4/popt/po/de.po	Tue Jul  9 16:38:19 2002
 @@ -2,17 +2,16 @@
