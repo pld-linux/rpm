@@ -540,7 +540,7 @@ install %{SOURCE17} scripts/php.prov.in
 install %{SOURCE18} scripts/php.req.in
 install %{SOURCE19} scripts/find-php-provides
 install %{SOURCE20} scripts/find-php-requires
-install %{SOURCE32} scripts/perl.prov
+install %{SOURCE33} scripts/perl.prov
 
 cd scripts;
 mv -f perl.req perl.req.in
