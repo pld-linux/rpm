@@ -186,7 +186,7 @@ make
 install -d $RPM_BUILD_ROOT/var/lib/rpm \
 	$RPM_BUILD_ROOT%{_mandir}/{ru,pl}/man8
 
-make DESTDIR="$RPM_BUILD_ROOT" pkgbindir="%{_bindir}" install
+%{__make} DESTDIR="$RPM_BUILD_ROOT" pkgbindir="%{_bindir}" install
 
 install macros.pld $RPM_BUILD_ROOT%{_libdir}/rpm/macros.pld
 %{__make} install \
