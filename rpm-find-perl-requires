@@ -17,7 +17,7 @@ if [ -f __rpm_noautoreq ] ; then
 	done
 fi
 
-require_perl_t="$requires_perl"
+requires_perl_t="$requires_perl"
 if [ -f __rpm_noautoreqdep ] ; then
 	for i in `cat __rpm_noautoreqdep`; do
 		requires_perl_t=`echo $requires_perl_t | sed "s!\<$i[[:space:]]*!!g"`
