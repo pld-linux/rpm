@@ -83,7 +83,7 @@ BuildRequires:	rpm-pythonprov
 BuildRequires:	zlib-devel
 %if %{!?_without_static:1}%{?_without_static:0}
 # Require static library only for static build
-BuildRequires:	bzip2-static >= 1.0.1
+BuildRequires:	bzip2-static >= 1.0.2-5
 BuildRequires:	db4-static >= 4.0.14-2
 BuildRequires:	glibc-static >= 2.2.0
 BuildRequires:	zlib-static
