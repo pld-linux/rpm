@@ -195,9 +195,10 @@ Applications/Emulators
 	[no]:		Applikasjoner/Emulatorer
 	[pl]:		Aplikacje/Emulatory
 	[pt]:		AplicaГУes/Emuladores
-	[ru]:		Приложения/Редакторы
+	[ru]:		Приложения/Эмуляторы
 	[sl]:		Programi/Emulatorji
 	[sv]:		TillДmpningar/Emulatorer
+	[uk]:		Прикладн╕ Програми/Емулятори
 
 Applications/Engineering
 	[cs]:		Aplikace/In╬enЩrskИ
@@ -331,6 +332,7 @@ Applications/News
 	[ru]:		Приложения/Новости
 	[sl]:		Programi/NoviХarske
 	[sv]:		TillДmpningar/Nyheter
+	[uk]:		Прикладн╕ Програми/Новини
 
 Applications/Printing
 	[cs]:		Aplikace/Tisk
@@ -650,8 +652,9 @@ Development/Building
 	[no]:		Utvikling/Bygge
 	[pl]:		Programowanie/Budowanie
 	[pt]:		Desenvolvimento/CriaГЦo
-	[ru]:		Разработка/Сборка
+	[ru]:		Разработка/Строение
 	[sv]:		Utveckling/Bygga
+	[uk]:		Розробка/Будова
 
 Development/Debuggers
 	[cs]:		VЩvojovИ prostЬedky/Debuggery
@@ -1041,6 +1044,7 @@ Networking/News
 	[ru]:		Сеть/Новости
 	[sl]:		Omre╬ni/NoviХarske
 	[sv]:		NДtverk/Nyheter
+	[uk]:		Мережа/Новини
 
 Networking/Utilities
 	[cs]:		SМ╩ovИ/Utility
@@ -1193,6 +1197,7 @@ X11/Applications/Games/Strategy
 	[ru]:		X11/Приложения/Игры/Стратегические
 	[sl]:		X11/Programi/Igre/Strate╧ke
 	[sv]:		X11/TillДmpningar/Spel/Strategi
+	[uk]:		X11/Прикладн╕ Програми/╤гри/Стратег╕я
 
 X11/Applications/Graphics
 	[cs]:		X11/Aplikace/Grafika
