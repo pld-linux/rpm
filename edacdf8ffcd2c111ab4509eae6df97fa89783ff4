@@ -1,0 +1,4 @@
+- added libs (shared rpm libraries), static (static rpm libraries) and utils
+  subpackages (additional rpm utilities linked with shared libraries),
+- removed using %%GNUconfigure macros (now we use only %%configure),
+- new %pre with two phase moving rpm database to /var/state/rpm.
