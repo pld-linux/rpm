@@ -508,5 +508,5 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/rpm/macros.python
 
 %files -n python-rpm
-* %{date} PLD Team <pld-list@pld.org.pl>
+%defattr(755,root,root,755)
 %{py_sitedir}/*.so
