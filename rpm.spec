@@ -2,7 +2,7 @@ Summary:	Red Hat & PLD Package Manager
 Summary(pl):	Aplikacja do zarz±dzania pakietami
 Name:		rpm
 Version:	4.0
-Release:	10
+Release:	11
 Group:		Base
 Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
@@ -32,7 +32,7 @@ Patch13:	%{name}-getrpmlibprov.patch
 Patch14:        %{name}-rpmlibprov-order.patch
 Patch15:	%{name}-bash2.patch
 Patch16:	%{name}-perl-req-perlfile.patch
-Patch17:	%{name}-brp-strip.patch
+Patch17:	%{name}-installplatform.patch
 Patch18:	%{name}-find-lang.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
@@ -48,6 +48,7 @@ BuildRequires:	automake
 BuildRequires:	autoconf >= 2.13-8
 %if %{!?bcond_off_static:1}%{?bcond_off_static:0}
 BuildRequires:	zlib-devel >= 1.1.4
+# Require static library only for static build
 BuildRequires:	db3-static >= 3.1.17
 BuildRequires:	bzip2-static >= 1.0.1
 BuildRequires:	gdbm-static
