@@ -104,7 +104,7 @@ rm -rf $RPM_BUILD_ROOT
 %lang(ru) /usr/man/ru/man8/*
 %lang(pl) /usr/man/pl/man8/*
 
-%attr(750,root,root) %dir /var/lib/rpm
+%attr(755,root,root) %dir /var/lib/rpm
 
 %dir /usr/lib/rpm
 %attr(755,root,root) /usr/lib/rpm/find-*
