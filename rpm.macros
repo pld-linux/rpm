@@ -32,8 +32,8 @@
 %rpmldflags	%{!?debug:-s}
 
 # kernel compiler
-%kgcc		gcc2
-%kgcc_package	gcc2
+%kgcc		gcc
+%kgcc_package	gcc
 
 # Build system path macros.
 #
