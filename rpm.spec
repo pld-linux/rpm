@@ -483,7 +483,12 @@ Requires:	findutils
 %ifarch athlon
 Requires:	gcc >= 3.0.3
 %else
+%ifarch i686
+# because of -mtune in rpmrc
+Requires:	gcc >= 5:3.4
+%else
 Requires:	gcc
+%endif
 %endif
 Requires:	glibc-devel
 Requires:	grep
@@ -497,6 +502,8 @@ Requires:	tar
 Requires:	textutils
 Provides:	rpmbuild(macros) = %{rpm_macros_rev}
 Provides:	rpmbuild(noauto) = 3
+# because of -fvisibility-inlines-hidden in rpm.macros
+Conflicts:	gcc-c++ < 5:3.4
 %ifarch amd64
 Conflicts:	automake < 1:1.7.9-2
 Conflicts:	libtool < 2:1.5-13
