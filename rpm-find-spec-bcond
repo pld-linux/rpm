@@ -26,7 +26,13 @@ bconds=`awk -F"\n" 'BEGIN { chlog=0 }
 		/_with(out)?_[_a-z0-9]+/ && chlog == 0 {
 			match($0, /_with(out)?_[_a-z0-9]+/);
 	       		print substr($0, RSTART, RLENGTH)                       
-	    	}' $SPEC | sort -u`
+	    	}
+		/^%bcond_with/ && chlog == 0 {
+			match($0, /bcond_with(out)?[ 	]+[_a-z0-9]+/);
+				 bcond = substr($0, RSTART +5 , RLENGTH -5);
+				 gsub(/ /,"_",bcond);
+				 print bcond
+			}' $SPEC | sort -u`
 
 for c in $bconds; do
     echo -n "$c"
