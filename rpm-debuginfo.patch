@@ -25,33 +25,28 @@ diff -urN rpm-4.3.org/macros.in rpm-4.3/macros.in
  %defattr(-,root,root)\
  %endif\
  %{nil}
-@@ -844,7 +849,11 @@
+@@ -844,7 +849,7 @@
  %__spec_install_pre	%{___build_pre}
  %__spec_install_body	%{___build_body}
  %__spec_install_post\
-+%if %{?_enable_debug_packages:1}%{!?_enable_debug_packages:0}\
-+%if %{_enable_debug_packages}\
- %{?__debug_package:%{__debug_install_post}}\
-+%endif\
-+%endif\
+-%{?__debug_package:%{__debug_install_post}}\
++%{expand:%%define __sip_%{?_enable_debug_packages} 1}%{?__sip_1:%{?__debug_package:%{__debug_install_post}}}%{expand:%%undefine __sip_%{?_enable_debug_packages}}\
  %{__arch_install_post}\
  %{__os_install_post}\
  %{nil}
-@@ -1250,7 +1259,12 @@
+@@ -1250,7 +1250,10 @@
  unset DISPLAY ||:\
  %{nil}
  
 -%install %{?_enable_debug_packages:%{?buildsubdir:%{debug_package}}}\
 +%install \
-+%if %{?_enable_debug_packages:1}%{!?_enable_debug_packages:0}\
-+%if %{_enable_debug_packages}\
++%if 0%{?_enable_debug_packages}\
 +%{?buildsubdir:%{debug_package}}\
-+%endif\
 +%endif\
  %%install\
  LANG=C\
  export LANG\
-@@ -1407,7 +1421,7 @@
+@@ -1407,7 +1410,7 @@
      %{?verbose:set -x;} \
      if [ -d "$RPM_BUILD_ROOT" ]; then \
  	echo "Strip executable binaries, archives and shared object files."; \
@@ -81,3 +76,14 @@ diff -urN rpm-4.3.org/scripts/find-debuginfo.sh rpm-4.3/scripts/find-debuginfo.s
  		chmod u-w "$f"
  	fi
  done
+--- rpm-4.3/platform.in.orig	2004-07-28 21:35:25.000000000 +0200
++++ rpm-4.3/platform.in	2004-07-28 21:37:22.000000000 +0200
+@@ -60,7 +60,7 @@
+ %{nil}
+ 
+ %__spec_install_post\
+-    %{?__debug_package:%{__debug_install_post}}\
++    %{expand:%%define __sip_%{?_enable_debug_packages} 1}%{?__sip_1:%{?__debug_package:%{__debug_install_post}}}%{expand:%%undefine __sip_%{?_enable_debug_packages}}\
+     %{__arch_install_post}\
+     %{__os_install_post}\
+ %{nil}
