@@ -379,7 +379,7 @@ echo "Compress kernel modules if any."; \
 
 # Software written in Python language require Python with main version
 # unchanged
-%pyrequires_eq() Requires:       %1 >= %py_ver %1 < %(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
+%pyrequires_eq() Requires:       %1 >= 1:%py_ver %1 < 1:%(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
 
 # depmod macro
 %depmod() { \
