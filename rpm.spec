@@ -332,7 +332,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/rpm/find-provides
 %attr(755,root,root) %{_libdir}/rpm/find-rpm-provides
 %attr(755,root,root) %{_libdir}/rpm/find-spec-bcond
-%attr(755,root,root) %{_libdir}/rpm/brb-*
+%attr(755,root,root) %{_libdir}/rpm/find-lang.sh
 %attr(755,root,root) %{_libdir}/rpm/mkinstalldirs
 %attr(755,root,root) %{_libdir}/rpm/getpo.sh
 %attr(755,root,root) %{_libdir}/rpm/getpo.sh
