@@ -32,8 +32,8 @@
 %rpmldflags	""
 
 # kernel compiler
-%kgcc		kgcc
-%kgcc_package	egcs
+%kgcc		gcc2
+%kgcc_package	gcc2
 
 #-----------------------------------------------------------------
 %configure2_13 { \
