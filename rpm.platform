@@ -1,0 +1,16 @@
+# PLD rpm macros
+%_exec_prefix    %{_prefix}
+%_bindir         %{_exec_prefix}/bin
+%_sbindir        %{_exec_prefix}/sbin
+%_datadir        %{_prefix}/share
+%_sharedstatedir /var/lib
+%_lib            @LIB@
+%_libdir         %{_exec_prefix}/%{_lib}
+%_libexecdir     %{_exec_prefix}/%{_lib}
+%_includedir     %{_prefix}/include
+%_oldincludedir  /usr/include
+%_sysconfdir     /etc
+%_localstatedir  /var
+%_infodir        /usr/share/info
+%_mandir         %{_prefix}/share/man
+%_defaultdocdir  /usr/share/doc
