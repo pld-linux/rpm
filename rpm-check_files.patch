@@ -1,32 +1,36 @@
-diff -Nur rpm-4.0.4.orig/build/files.c rpm-4.0.4/build/files.c
---- rpm-4.0.4.orig/build/files.c	Sun Jun 30 00:07:54 2002
-+++ rpm-4.0.4/build/files.c	Sun Jun 30 00:13:08 2002
-@@ -2412,7 +2412,8 @@
+diff -urN rpm-4.0.4.org/build/files.c rpm-4.0.4/build/files.c
+--- rpm-4.0.4.org/build/files.c	Sun Jul 28 00:22:46 2002
++++ rpm-4.0.4/build/files.c	Sun Jul 28 00:23:54 2002
+@@ -90,6 +90,10 @@
+ /*@unchecked@*/
+ static int multiLib = 0;	/* MULTILIB */
  
++/* list of files */
++static StringBuf check_fileList = NULL;
++static int check_fileListLen = 0;
++
  /**
+  * Package file tree walk data.
   */
--static int generateDepends(Spec spec, Package pkg, TFI_t cpioList, int multiLib)
-+static int generateDepends(Spec spec, Package pkg, TFI_t cpioList, int multiLib,
-+		StringBuf fileList, int *fileListLen)
- 	/*@globals rpmGlobalMacroContext,
- 		fileSystem, internalState @*/
- 	/*@modifies cpioList, rpmGlobalMacroContext,
-@@ -2450,6 +2451,10 @@
- 	writeBytes += strlen(fi->dnl[fi->dil[i]]);
- 	appendLineStringBuf(writeBuf, fi->bnl[i]);
- 	writeBytes += strlen(fi->bnl[i]) + 1;
-+	appendStringBuf(fileList, fi->dnl[fi->dil[i]]);
-+	*fileListLen += strlen(fi->dnl[fi->dil[i]]);
-+	appendLineStringBuf(fileList, fi->bnl[i]);
-+	*fileListLen += strlen(fi->bnl[i]) + 1;
-     }
+@@ -1593,6 +1597,13 @@
+ 	(unsigned)fileMode, fileUname, fileGname, fileURL);
+ #endif
  
-     for (dm = depMsgs; dm->msg != NULL; dm++) {
-@@ -2655,10 +2660,54 @@
++    /* S_XXX macro must be consistent with type in find call at check-files script */
++    if (S_ISREG(fileMode)) {
++      appendStringBuf(check_fileList, diskURL);
++      appendStringBuf(check_fileList, "\n");
++      check_fileListLen += strlen(diskURL) + 1;
++    }
++
+     /* Add to the file list */
+     if (fl->fileListRecsUsed == fl->fileListRecsAlloced) {
+ 	fl->fileListRecsAlloced += 128;
+@@ -2655,11 +2671,54 @@
      versions = hfd(versions, dvt);
  }
  
-+int checkFiles(StringBuf fileList, int fileListLen)
++static int checkFiles(StringBuf fileList, int fileListLen)
 +{
 +    StringBuf readBuf = NULL;
 +    char* myargv[3] = {NULL, NULL, NULL};
@@ -70,26 +74,14 @@ diff -Nur rpm-4.0.4.orig/build/files.c rpm-4.0.4/build/files.c
  {
      Package pkg;
      int res = 0;
-+    StringBuf fileList;
-+    int fileListLen = 0;
-+    
-+    fileList = newStringBuf();
      
++    check_fileList = newStringBuf();
++    check_fileListLen = 0;
++    
      for (pkg = spec->packages; pkg != NULL; pkg = pkg->next) {
  	const char *n, *v, *r;
-@@ -2678,14 +2727,24 @@
-      * XXX existence (rather than value) that will need to change as well.
-      */
- 	if (headerIsEntry(pkg->header, RPMTAG_MULTILIBS)) {
--	    (void) generateDepends(spec, pkg, pkg->cpioList, 1);
--	    (void) generateDepends(spec, pkg, pkg->cpioList, 2);
-+	    (void) generateDepends(spec, pkg, pkg->cpioList, 1, fileList, &fileListLen);
-+	    (void) generateDepends(spec, pkg, pkg->cpioList, 2, fileList, &fileListLen);
- 	} else
--	    (void) generateDepends(spec, pkg, pkg->cpioList, 0);
-+	    (void) generateDepends(spec, pkg, pkg->cpioList, 0, fileList, &fileListLen);
- 	/*@-noeffect@*/
- 	printDeps(pkg->header);
+ 	int rc;
+@@ -2687,5 +2746,15 @@
  	/*@=noeffect@*/
      }
  
@@ -99,23 +91,9 @@ diff -Nur rpm-4.0.4.orig/build/files.c rpm-4.0.4/build/files.c
 +     */
 +    
 +    if (res == 0) 
-+        checkFiles(fileList, fileListLen);
++        checkFiles(check_fileList, check_fileListLen);
 +    
-+    freeStringBuf(fileList);
++    freeStringBuf(check_fileList);
 +    
      return res;
  }
-diff -Nur rpm-4.0.4.orig/platform.in rpm-4.0.4/platform.in
---- rpm-4.0.4.orig/platform.in	Sun Jun 30 00:07:54 2002
-+++ rpm-4.0.4/platform.in	Sun Jun 30 00:13:45 2002
-@@ -89,6 +89,10 @@
- #	Expanded at end of %install scriptlet.
- #
- 
-+# Gets file list on input and buildroot as first parameter
-+# and returns list of files not found in any package
-+%__check_files		@prefix@/lib/rpm/check-files
-+
- %__arch_install_post   @ARCH_INSTALL_POST@
- 
- %__os_install_post    \
