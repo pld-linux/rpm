@@ -1,0 +1,34 @@
+diff -x '*~' -durN rpm-4.3.orig/configure.ac rpm-4.3/configure.ac
+--- rpm-4.3.orig/configure.ac	2004-12-19 08:52:05.000000000 +0100
++++ rpm-4.3/configure.ac	2004-12-19 09:24:03.466542416 +0100
+@@ -1178,9 +1178,6 @@
+ 
+ dnl XXX Choose /usr/lib or /usr/lib64 for library installs.
+ MARK64=
+-case "${target_cpu}" in
+-x86_64*|ppc64*|powerpc64*|sparc64*|s390x*)	MARK64=64 ;;
+-esac
+ AC_SUBST(MARK64)
+ 
+ dnl Determine the canonical arch-vendor-os for the build machine
+@@ -1234,7 +1231,7 @@
+ AC_SUBST(LOCALEDIR)
+ LIBDIR="`echo $libdir | sed 's-/lib$-/%{_lib}-'`"
+ AC_SUBST(LIBDIR)
+-RPMCONFIGDIR="`echo ${usrprefix}/lib/rpm`"
++RPMCONFIGDIR="`echo ${libdir}/rpm`"
+ AC_DEFINE_UNQUOTED(RPMCONFIGDIR, "$RPMCONFIGDIR",
+ 	[Full path to rpm global configuration directory (usually /usr/lib/rpm)])
+ AC_SUBST(RPMCONFIGDIR)
+diff -x '*~' -durN rpm-4.3.orig/scripts/Makefile.am rpm-4.3/scripts/Makefile.am
+--- rpm-4.3.orig/scripts/Makefile.am	2003-03-25 13:49:47.000000000 +0100
++++ rpm-4.3/scripts/Makefile.am	2004-12-19 09:24:37.808321672 +0100
+@@ -21,7 +21,7 @@
+ 
+ all:
+ 
+-configdir = ${prefix}/lib/rpm
++configdir = @RPMCONFIGDIR@
+ config_SCRIPTS = \
+ 	brp-compress brp-redhat brp-strip brp-strip-comment-note \
+ 	brp-strip-shared brp-strip-static-archive brp-sparc64-linux \
