@@ -7,7 +7,7 @@ Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
 Summary(pt_BR):	Gerenciador de pacotes RPM
 Name:		rpm
 Version:	4.0.2
-Release:	67
+Release:	68
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/%{name}-%{version}.tar.gz
@@ -25,6 +25,7 @@ Source11:	%{name}-find-requires
 Source12:	%{name}-non-english-man-pages.tar.bz2
 Source13:	%{name}-macros.python
 Source14:	%{name}-groups-po.awk
+Source15:	%{name}-compress-doc
 Patch0:		%{name}-rpmrc.patch
 Patch1:		%{name}-macros.patch
 Patch2:		%{name}-arch.patch
@@ -61,6 +62,7 @@ Patch32:	%{name}-gettext-in-header.patch
 Patch33:	%{name}-perlprov-perl5.6.patch
 Patch34:	%{name}-ac25x.patch
 Patch35:        %{name}-signverify-fix.patch
+Patch36:        %{name}-compress-doc.patch
 Patch37:        %{name}-short_circuit.patch
 Patch38:        %{name}-section_test.patch
 URL:		http://www.rpm.org/
@@ -359,6 +361,7 @@ construir pacotes usando o RPM.
 
 %patch32 -p1
 %patch33 -p1
+%patch34 -p1
 %patch35 -p1
 %patch36 -p1
 %patch37 -p1
@@ -437,6 +440,7 @@ install macros.python $RPM_BUILD_ROOT%{_libdir}/rpm/macros.python
 
 install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_libdir}/rpm/install-build-tree
+install %{SOURCE4} $RPM_BUILD_ROOT%{_libdir}/rpm/find-rpm-provides
 install %{SOURCE8} $RPM_BUILD_ROOT%{_libdir}/rpm/find-spec-bcond
 install %{SOURCE10} $RPM_BUILD_ROOT%{_libdir}/rpm/find-provides
 install %{SOURCE11} $RPM_BUILD_ROOT%{_libdir}/rpm/find-requires
