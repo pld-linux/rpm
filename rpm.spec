@@ -22,7 +22,7 @@ Source8:	%{name}-find-spec-bcond
 Source9:	%{name}-find-lang
 Source10:	%{name}-find-provides
 Source11:	%{name}-find-requires
-Source12:	%{name}-non-english-man-pages.tar.gz
+Source12:	%{name}-non-english-man-pages.tar.bz2
 Patch0:		%{name}-rpmrc.patch
 Patch1:		%{name}-macros.patch
 Patch2:		%{name}-arch.patch
