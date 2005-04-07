@@ -364,7 +364,7 @@
 +    regex_t *noautoreqdep;
 +    int noautoreqdep_c;
 +
-+    noautoreqdep=rpmfcExpandRegexps("%{_noautoreqdep}",&noautoreqdep_c);
++    noautoreqdep=rpmfcExpandRegexps("%{__noautoreqdep}", &noautoreqdep_c);
 +    
 +    ts = rpmtsCreate(); /* XXX ts created in main() should be used */
 +    
@@ -468,12 +468,12 @@
 +    buildroot = rpmExpand("%{buildroot}",NULL);
 +    buildroot_l = strlen(buildroot);
 +    
-+    noautoprovfiles = rpmfcExpandRegexps("%{_noautoprovfiles}",&noautoprovfiles_c);
-+    noautoreqfiles = rpmfcExpandRegexps("%{_noautoreqfiles}",&noautoreqfiles_c);
-+    noautoprov = rpmfcExpandRegexps("%{_noautoprov}",&noautoprov_c);
-+    noautoreq = rpmfcExpandRegexps("%{_noautoreq}",&noautoreq_c);
-+    rpmMessage(RPMMESS_DEBUG, _("%i _noautoprov patterns.\n"),noautoprov_c);
-+    rpmMessage(RPMMESS_DEBUG, _("%i _noautoreq patterns.\n"),noautoreq_c);
++    noautoprovfiles = rpmfcExpandRegexps("%{__noautoprovfiles}", &noautoprovfiles_c);
++    noautoreqfiles = rpmfcExpandRegexps("%{__noautoreqfiles}", &noautoreqfiles_c);
++    noautoprov = rpmfcExpandRegexps("%{__noautoprov}", &noautoprov_c);
++    noautoreq = rpmfcExpandRegexps("%{__noautoreq}", &noautoreq_c);
++    rpmMessage(RPMMESS_DEBUG, _("%i _noautoprov patterns.\n"), noautoprov_c);
++    rpmMessage(RPMMESS_DEBUG, _("%i _noautoreq patterns.\n"), noautoreq_c);
  
      /* Generate package and per-file dependencies. */
      for (fc->ix = 0; fc->fn[fc->ix] != NULL; fc->ix++) {
@@ -513,8 +513,8 @@
  	}
      }
  
-+    noautoprovfiles = rpmfcFreeRegexps(noautoprovfiles,noautoprovfiles_c);
-+    noautoreqfiles = rpmfcFreeRegexps(noautoreqfiles,noautoreqfiles_c);
++    noautoprovfiles = rpmfcFreeRegexps(noautoprovfiles, noautoprovfiles_c);
++    noautoreqfiles = rpmfcFreeRegexps(noautoreqfiles, noautoreqfiles_c);
 +    noautoprov = rpmfcFreeRegexps(noautoprov, noautoprov_c);
 +    noautoreq = rpmfcFreeRegexps(noautoreq, noautoreq_c);
 +
