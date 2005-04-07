@@ -29,7 +29,10 @@
 
 # Build system path macros.
 #
-%__libtoolize           libtoolize --copy --force
+%__autoconf			autoconf %{?debug:-Wall}
+%__automake			automake -a -c -f --foreign
+%__autopoint		autopoint --force
+
 %__gettextize { \
     if ! gettextize --version | grep -q '0\.10\.' ; then \
 	if grep -qs 'AM_GNU_GETTEXT.*external' configure.{ac,in} ; then \
@@ -44,9 +47,12 @@
 	gettextize --copy --force; \
     fi; \
 }
-%__autopoint            autopoint --force
-%__automake             automake -a -c -f --foreign
-%__autoconf             autoconf %{?debug:-Wall}
+
+%__glib_gettextize	glib-gettextize --copy --force
+%__gnome_doc_common	gnome-doc-common --copy
+%__gtkdocize		gtkdocize --copy
+%__intltoolize		intltoolize --copy --force
+%__libtoolize		libtoolize --copy --force
 
 #-----------------------------------------------------------------
 %configure2_13 { \
@@ -361,13 +367,60 @@ echo "Compress kernel modules if any."; \
 #
 %gconf_schema_install() \
     umask 022; \
-    GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" /usr/bin/gconftool-2 --makefile-install-rule %{?1}%{!?1:/etc/gconf/schemas/*.schemas} > /dev/null \
+    GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" /usr/bin/gconftool-2 --makefile-install-rule /etc/gconf/schemas/%{?1}%{!?1:*.schemas} > /dev/null \
     %{nil}
 
 %gconf_schema_uninstall() \
+if [ $1 = 0 ]; then \
     umask 022; \
-    GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" /usr/bin/gconftool-2 --makefile-uninstall-rule %{?1} > /dev/null \
-    %{nil}
+    GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" /usr/bin/gconftool-2 --makefile-uninstall-rule /etc/gconf/schemas/%{?1} > /dev/null \
+fi \
+%{nil}
+
+#-----------------------------------------------------------------
+# Update desktop MIME database
+# requries: desktop-file-utils
+#
+%update_desktop_database_post() \
+	umask 022; \
+	/usr/bin/update-desktop-database; \
+	%{nil}
+
+%update_desktop_database_postun() \
+if [ $1 = 0 ]; then \
+	umask 022; \
+	/usr/bin/update-desktop-database; \
+fi \
+%{nil}
+
+#-----------------------------------------------------------------
+# Update scrollkeeper database
+# requires: scrollkeeper
+#
+%scrollkeeper_update_post() \
+	umask 022; \
+	/usr/bin/scrollkeeper-update -q; \
+	%{nil}
+
+%scrollkeeper_update_postun() \
+if [ $1 = 0 ]; then \
+	umask 022; \
+	/usr/bin/scrollkeeper-update -q; \
+fi \
+%{nil}
+
+#-----------------------------------------------------------------
+# Run ldconfig after installing/deinstalling libraries
+#
+%ldconfig_post() \
+	/sbin/ldconfig; \
+	%{nil}
+
+%ldconfig_postun() \
+if [ $1 = 0 ]; then \
+	/sbin/ldconfig; \
+fi \
+%{nil}
 
 #-----------------------------------------------------------------
 # post %install sequence:
