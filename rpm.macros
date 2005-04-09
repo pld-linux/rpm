@@ -586,3 +586,83 @@ fi \
 $CMD %2%{?3: %3} \
 %nil
 
+#
+# useradd/groupadd macros written by glen@pld-linux.org.
+# All rights reserved. Permission to copy is hereby granted.. yada, yada, yada
+#
+# Usage:
+#   %useradd [-P package] [-u uid] [-d home_dir] [-s shell] [-c comment]
+#   [-g initial_group] [-G group[,...]] login
+#
+#  -u uid. REQUIRED
+#  -g gid/group. REQUIRED
+#  -s defaults to /bin/false
+#  -d defaults to /usr/share/empty
+#  -c No default
+#  -r is accepted but ignored (it's always set)
+# rpm specific flags
+#  -P package name. defaults to %{name}
+#
+# NOTE: the syntax errors are intentional to trigger parse error at package
+# time for required options
+#
+%useradd(c:d:e:f:g:G:Mmk:op:s:u:rP:) \
+%{!-u:%(\
+\
+%useradd: Required argument -u missing\
+} \
+%{!-g:%(\
+\
+%useradd: Required argument -g missing\
+} \
+%{!?1:%(\
+\
+%useradd: Required parameter login missing\
+} \
+if [ -n "`/bin/id -u %{expand:%{%{#}}} 2>/dev/null`" ]; then \
+	if [ "`/bin/id -u %{expand:%{%{#}}}`" != "%{-u*}" ]; then \
+		echo "Error: user %{expand:%{%{#}}} doesn't have uid=%{-u*}. Correct this before installing %{-P*}%{!?-P:%{name}}." 1>&2 \
+		exit 1 \
+	fi \
+else \
+	echo "Adding user %{expand:%{%{#}}} UID=%{-u*}." \
+	/usr/sbin/useradd \\\
+		-u %{-u*} \\\
+		-r \\\
+		-d %{-d*}%{!-d:/usr/share/empty} \\\
+		-s %{-s*}%{!-s:/bin/false} \\\
+		%{-c:-c '%(set -- %{-c*}%{*}; echo $1)'}\\\
+		-g %{-g*} \\\
+		%{-M} \\\
+		%{-G:-G %{-G*}} \\\
+		%{expand:%{%{#}}} 1>&2 \\\
+fi;
+
+
+# Usage:
+#   %groupadd [-P package] [-g gid] group
+#
+# -g gid. REQUIRED
+#
+# Sample:
+#   %groupadd -P %{name}-base -g %{gid} %{name}
+
+%groupadd(g:P:rfo)	\
+%{!-g:%(\
+\
+%groupadd: Required argument -g missing\
+} \
+%{!?1:%(\
+\
+%groupadd: Required parameter group missing\
+} \
+if [ -n "`/usr/bin/getgid %{1}`" ]; then \
+	if [ "`/usr/bin/getgid %{1}`" != "%{-g*}" ]; then \
+		echo "Error: group %{1} doesn't have gid=%{-g*}. Correct this before installing %{-P*}%{!?-P:%{name}}." 1>&2 \
+		exit 1 \
+	fi \
+else \
+	echo "Adding group %{1} GID=%{-g*}." \
+	/usr/sbin/groupadd -g %{-g*} -r %{1} \
+fi;
+
