@@ -31,7 +31,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.1
-Release:	0.8
+Release:	0.9
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -96,6 +96,7 @@ Patch37:	%{name}-doxygen_hack.patch
 Patch38:	%{name}-gcc4.patch
 Patch39:	%{name}-pythondeps.patch
 Patch40:	%{name}-print-requires.patch
+Patch41:	%{name}-reduce-stack-usage.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -636,6 +637,7 @@ cat %{SOURCE11} >> macros.in
 %patch38 -p1
 %patch39 -p1
 %patch40 -p1
+%patch41 -p1
 %patch0 -p1
 %patch3 -p1
 
