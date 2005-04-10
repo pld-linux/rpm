@@ -157,12 +157,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_rpmlibdir /usr/lib/rpm
 
-
-# GCC4 borked (Th-specific hack)
-%ifarch athlon
-%define		optflags -O1 -march=athlon
-%endif
-
 %description
 RPM is a powerful package manager, which can be used to build,
 install, query, verify, update, and uninstall individual software
