@@ -101,6 +101,7 @@ Patch46:	%{name}-python24.patch
 Patch47:	%{name}-distver.patch
 Patch48:	%{name}-python24-dictiter.patch
 Patch49:	%{name}-patch-quote.patch
+Patch50:	%{name}-getcwd.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -623,6 +624,7 @@ cat %{SOURCE11} >> macros.in
 %patch48 -p1
 %endif
 %patch49 -p1
+%patch50 -p1
 
 cd scripts;
 mv -f perl.req perl.req.in
