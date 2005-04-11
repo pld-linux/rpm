@@ -559,11 +559,6 @@ fi \
 $CMD %2%{?3: %3} \
 %nil
 
-# fatal macro. produces recursion and therefore stops rpm build.
-# until there's no legal way of stopping rpmbuild from macros, this is used by
-# %useradd/%groupadd to notify user of wrong usage. glen@pld-linux.org
-%fatal() { %{*} %fatal }
-
 # useradd/groupadd macros written by glen@pld-linux.org.
 # All rights reserved. Permission to copy is hereby granted.. yada, yada, yada
 #
@@ -581,9 +576,9 @@ $CMD %2%{?3: %3} \
 #  -P package name. defaults to %{name}
 #
 %useradd(c:d:e:f:g:G:Mmk:op:s:u:rP:) \
-%{!-u:%fatal -- useradd: Required argument -u missing} \
-%{!-g:%fatal -- useradd: Required argument -g missing} \
-%{!?1:%fatal -- useradd: Required parameter login missing} \
+%{!-u:%{error:useradd: Required argument -u missing}} \
+%{!-g:%{error:useradd: Required argument -g missing}} \
+%{!?1:%{error:useradd: Required parameter login missing}} \
 if [ -n "`/bin/id -u %{expand:%{%{#}}} 2>/dev/null`" ]; then \
 	if [ "`/bin/id -u %{expand:%{%{#}}}`" != "%{-u*}" ]; then \
 		echo "Error: user %{expand:%{%{#}}} doesn't have uid=%{-u*}. Correct this before installing %{-P*}%{!?-P:%{name}}." 1>&2 \
@@ -612,8 +607,8 @@ fi;
 #   %groupadd -P %{name}-base -g %{gid} %{name}
 
 %groupadd(g:P:rfo)	\
-%{!-g:%fatal -- groupadd: Required argument -g missing} \
-%{!?1:%fatal -- groupadd: Required parameter group missing} \
+%{!-g:%{error:groupadd: Required argument -g missing}} \
+%{!?1:%{error:groupadd: Required parameter group missing}} \
 if [ -n "`/usr/bin/getgid %{1}`" ]; then \
 	if [ "`/usr/bin/getgid %{1}`" != "%{-g*}" ]; then \
 		echo "Error: group %{1} doesn't have gid=%{-g*}. Correct this before installing %{-P*}%{!?-P:%{name}}." 1>&2 \
