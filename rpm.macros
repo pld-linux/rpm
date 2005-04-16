@@ -19,7 +19,7 @@
 %debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -ggdb}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
 
 %debugcflags	-O0 -g -Wall
-%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
+%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags} -Wl,--as-needed
 %rpmcxxflags	%{rpmcflags} -fvisibility-inlines-hidden
 %rpmldflags	%{nil}
 
