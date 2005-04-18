@@ -415,10 +415,8 @@ fi \
 	%{nil}
 
 %ldconfig_postun() \
-if [ $1 = 0 ]; then \
 	/sbin/ldconfig; \
-fi \
-%{nil}
+	%{nil}
 
 #-----------------------------------------------------------------
 # post %install sequence:
