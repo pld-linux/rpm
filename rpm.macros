@@ -21,7 +21,8 @@
 %debugcflags	-O0 -g -Wall
 %rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
 %rpmcxxflags	%{rpmcflags} -fvisibility-inlines-hidden
-%rpmldflags	-Wl,--as-needed
+%rpmldflags %{nil}
+# %rpmldflags	-Wl,--as-needed
 
 # kernel compiler
 %kgcc		gcc
