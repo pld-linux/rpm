@@ -539,8 +539,8 @@ fi; \
 # the banner text, the banner text
 # the banner text, and following line
 #EOF
-# You can use any form of here-document, <<'EOF' <<-EOT, can do
-# NOTE: if your use "<<-EOF", then You can actually indent in here-document.
+# You can use any form of here-document, <<'EOF' <<-EOT will do.
+# NOTE: if your use "<<-EOF", then You can actually indent inside here-document.
 #
 # -a   - append to the banner
 # -e   - send to stderr instead of stdout
