@@ -499,7 +499,7 @@ fi \
 done \
 } }
 
-# remove python sources, so that check-files won't complain                                                                
+# remove python sources, so that check-files won't complain
 # (idea by glen <at> pld-linux <dot> org)
 %py_postclean() \
 for d in %{py_sitescriptdir} %{py_sitedir}; do \
