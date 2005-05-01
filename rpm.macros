@@ -388,17 +388,17 @@ fi \
 # Update desktop MIME database
 # requries: desktop-file-utils
 #
-%update_desktop_database_post() \
+%update_desktop_database_post() {{\
 	umask 022; \
 	/usr/bin/update-desktop-database; \
-	%{nil}
+}}
 
-%update_desktop_database_postun() \
+%update_desktop_database_postun() {{\
 if [ $1 = 0 ]; then \
 	umask 022; \
 	/usr/bin/update-desktop-database; \
 fi \
-%{nil}
+}}
 
 #-----------------------------------------------------------------
 # Update scrollkeeper database
