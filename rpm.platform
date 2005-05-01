@@ -20,6 +20,7 @@
 %{__spec_install_post_chrpath}\
 %{__spec_install_post_compress_docs}\
 %{__spec_install_post_compress_modules}\
+%{__spec_install_post_py_hardlink}\
 %{__arch_install_post}\
 %{nil}
 
