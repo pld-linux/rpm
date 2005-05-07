@@ -31,7 +31,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.1
-Release:	1.5
+Release:	1.6
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -80,7 +80,7 @@ Patch21:	%{name}-dontneedutils.patch
 Patch22:	%{name}-provides-dont-obsolete.patch
 Patch23:	%{name}-examplesaredoc.patch
 Patch24:	%{name}-po.patch
-Patch25:	%{name}-amd64.patch
+
 Patch26:	%{name}-notsc.patch
 Patch27:	%{name}-hack-norpmlibdep.patch
 Patch28:	%{name}-makefile-no_myLDADD_deps.patch
@@ -615,7 +615,7 @@ cat %{SOURCE11} >> macros.in
 %patch22 -p1
 %patch23 -p1
 %patch24 -p1
-%patch25 -p1
+
 %patch26 -p1
 %patch27 -p1
 %patch28 -p1
@@ -1004,9 +1004,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %ifarch alpha
 %{_rpmlibdir}/alpha*
 %endif
-%ifarch amd64
-%{_rpmlibdir}/amd64*
-%endif
 %ifarch ia64
 %{_rpmlibdir}/ia64*
 %endif
@@ -1018,6 +1015,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %endif
 %ifarch sparc sparc64
 %{_rpmlibdir}/sparc*
+%endif
+%ifarch x86_64
+%{_rpmlibdir}/x86_64*
 %endif
 # must be here for "Requires: rpm-*prov" to work
 %{_rpmlibdir}/macros.perl
