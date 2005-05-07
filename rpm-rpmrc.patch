@@ -69,9 +69,9 @@
 +optflags: pentium4 -O2 -march=pentium4%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_pentium4: %{specflags_pentium4}}}
 +optflags: athlon -O2 -march=athlon%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_athlon: %{specflags_athlon}}}
 +optflags: ia64 -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia64: %{specflags_ia64}}}
-+optflags: x86_64 -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_x86_64: %{specflags_x86_64}}}
-+optflags: amd64 -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_amd64: %{specflags_amd64}}}
-+optflags: ia32e -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32e: %{specflags_ia32e}}}
++optflags: x86_64 -march=x86-64 -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_x86_64: %{specflags_x86_64}}}
++optflags: amd64 -march=k8 -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_amd64: %{specflags_amd64}}}
++optflags: ia32e -march=nocona -O2%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32e: %{specflags_ia32e}}}
 +
 +optflags: alpha -O2 -mieee%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_alpha: %{specflags_alpha}}}
 +optflags: alphaev5 -O2 -mieee -mcpu=ev5%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_alpha: %{specflags_alpha}}%{?specflags_alphaev5: %{specflags_alphaev5}}}
