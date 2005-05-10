@@ -80,7 +80,7 @@ Patch21:	%{name}-dontneedutils.patch
 Patch22:	%{name}-provides-dont-obsolete.patch
 Patch23:	%{name}-examplesaredoc.patch
 Patch24:	%{name}-po.patch
-
+Patch25:	%{name}-getcwd.patch
 Patch26:	%{name}-notsc.patch
 Patch27:	%{name}-hack-norpmlibdep.patch
 Patch28:	%{name}-makefile-no_myLDADD_deps.patch
@@ -615,7 +615,7 @@ cat %{SOURCE11} >> macros.in
 %patch22 -p1
 %patch23 -p1
 %patch24 -p1
-
+%patch25 -p1
 %patch26 -p1
 %patch27 -p1
 %patch28 -p1
