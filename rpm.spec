@@ -4,7 +4,6 @@
 #   ELF first; it should be provided by python-libs not binary anyway)
 # - consider using system libmagic not internal libfmagic
 #   (but internal has different method of passing output)
-# - after ac drop amd64 patch and make x86_64 generic arch + subarchs amd64 and ia32e
 # 
 # Conditional build:
 %bcond_with	static		# build static rpmi (not supported at the moment)
@@ -422,7 +421,7 @@ Provides:	rpmbuild(macros) = %{rpm_macros_rev}
 Provides:	rpmbuild(noauto) = 3
 # because of -fvisibility-inlines-hidden in rpm.macros
 Conflicts:	gcc-c++ < 5:3.4
-%ifarch amd64
+%ifarch %{x8664}
 Conflicts:	automake < 1:1.7.9-2
 Conflicts:	libtool < 2:1.5-13
 %endif
