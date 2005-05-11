@@ -32,8 +32,8 @@
 
 # Build system path macros.
 #
-%__autoconf			autoconf %{?debug:-Wall}
-%__automake			automake -a -c -f --foreign
+%__autoconf		autoconf %{?debug:-Wall}
+%__automake		automake -a -c -f --foreign
 %__autopoint		autopoint --force
 
 %__gettextize { \
