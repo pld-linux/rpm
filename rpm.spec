@@ -148,7 +148,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # don't require very fresh rpm.macros to build
 %define		__gettextize gettextize --copy --force --intl ; cp -f po/Makevars{.template,}
-%define		ix86 i386 i486 i586 i686 athlon pentium3 pentium4
+%define		ix86	i386 i486 i586 i686 athlon pentium3 pentium4
+%define		x8664	amd64 ia32e x86_64
 
 # stabilize new build environment
 %define		__newcc %{?force_cc}%{!?force_cc:%{_target_cpu}-pld-linux-gcc}
@@ -1016,7 +1017,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %ifarch sparc sparc64
 %{_rpmlibdir}/sparc*
 %endif
-%ifarch x86_64
+%ifarch %{x8664}
 %{_rpmlibdir}/x86_64*
 %endif
 # must be here for "Requires: rpm-*prov" to work
