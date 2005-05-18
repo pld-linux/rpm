@@ -30,7 +30,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.1
-Release:	1.9
+Release:	1.10
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -397,16 +397,8 @@ Requires:	elfutils
 Requires:	file >= 4.13-2
 Requires:	fileutils
 Requires:	findutils
-%ifarch athlon
-Requires:	gcc >= 3.0.3
-%else
-%ifarch i686
-# because of -mtune in rpmrc
-Requires:	gcc >= 5:3.4
-%else
-Requires:	gcc
-%endif
-%endif
+# because of -fvisibility... related fixes
+Requires:	gcc >= 5:4.0.1-0.20050514.2
 Requires:	glibc-devel
 Requires:	grep
 Requires:	gzip
@@ -419,8 +411,6 @@ Requires:	tar
 Requires:	textutils
 Provides:	rpmbuild(macros) = %{rpm_macros_rev}
 Provides:	rpmbuild(noauto) = 3
-# because of -fvisibility-inlines-hidden in rpm.macros
-Conflicts:	gcc-c++ < 5:3.4
 %ifarch %{x8664}
 Conflicts:	automake < 1:1.7.9-2
 Conflicts:	libtool < 2:1.5-13

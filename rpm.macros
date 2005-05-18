@@ -20,9 +20,7 @@
 
 %debugcflags	-O0 -g -Wall
 %rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
-%rpmcxxflags	%{rpmcflags}
-# -fvisibility-inlines-hidden disabled. see gcc/PR(19664,20218) for details.
-# %rpmcxxflags	%{rpmcflags} -fvisibility-inlines-hidden
+%rpmcxxflags	%{rpmcflags} -fvisibility-inlines-hidden
 %rpmldflags	%{nil}
 # %rpmldflags	-Wl,--as-needed
 
