@@ -1,0 +1,20 @@
+--- rpm-4.3/build.c.orig	2005-04-10 02:35:15.000000000 +0200
++++ rpm-4.3/build.c	2005-04-10 02:35:43.000000000 +0200
+@@ -206,7 +206,7 @@
+ 	   directory for this run */
+ 
+ 	if (*arg != '/') {
+-	    (void)getcwd(buf, BUFSIZ);
++	    if (getcwd(buf, BUFSIZ) == NULL) strcpy(buf, ".");
+ 	    strcat(buf, "/");
+ 	    strcat(buf, arg);
+ 	} else 
+@@ -225,7 +225,7 @@
+     specut = urlPath(specURL, &specFile);
+     if (*specFile != '/') {
+ 	char *s = alloca(BUFSIZ);
+-	(void)getcwd(s, BUFSIZ);
++	if (getcwd(s, BUFSIZ) == NULL) strcpy(s, ".");
+ 	strcat(s, "/");
+ 	strcat(s, arg);
+ 	specURL = s;

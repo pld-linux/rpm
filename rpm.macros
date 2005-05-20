@@ -1,7 +1,8 @@
 # PLD rpm macros
 
 # other macros
-%_enable_debug_packages 1
+%epoch		0
+%_enable_debug_packages 0
 
 %__id		@__ID@
 %__id_u		%{__id} -u 
@@ -10,15 +11,16 @@
 
 %_fixowner       [ `%{__id_u}` = '0' ] && %{__chown_Rhf} root:@ROOT_GROUP@
 %_fixgroup       true
-%_fixperms             %{__chmod} -Rf @FIXPERMS@
+%_fixperms       %{__chmod} -Rf @FIXPERMS@
 %_topdir         %(echo $HOME)/rpm
 #-----------------------------------------------------------------
 # CFLAGS and LDFLAGS used to build
 
-#%debuginfocflags        -ggdb
+%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -ggdb}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
 
 %debugcflags	-O0 -g -Wall
-%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags: %debuginfocflags}
+%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
+%rpmcxxflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
 %rpmldflags	%{nil}
 
 # kernel compiler
@@ -27,7 +29,10 @@
 
 # Build system path macros.
 #
-%__libtoolize           libtoolize --copy --force
+%__autoconf		autoconf %{?debug:-Wall}
+%__automake		automake -a -c -f --foreign
+%__autopoint		autopoint --force
+
 %__gettextize { \
     if ! gettextize --version | grep -q '0\.10\.' ; then \
 	if grep -qs 'AM_GNU_GETTEXT.*external' configure.{ac,in} ; then \
@@ -42,9 +47,12 @@
 	gettextize --copy --force; \
     fi; \
 }
-%__autopoint            autopoint --force
-%__automake             automake -a -c -f --foreign
-%__autoconf             autoconf %{?debug:-Wall}
+
+%__glib_gettextize	glib-gettextize --copy --force
+%__gnome_doc_common	gnome-doc-common --copy
+%__gtkdocize		gtkdocize --copy
+%__intltoolize		intltoolize --copy --force
+%__libtoolize		libtoolize --copy --force
 
 #-----------------------------------------------------------------
 %configure2_13 { \
@@ -107,12 +115,14 @@
 LANG=C\
 export LANG\
 unset DISPLAY ||:\
+unset LINGUAS ||:\
 %{nil}
 
 %build %%build\
 LANG=C\
 export LANG\
 unset DISPLAY ||:\
+unset LINGUAS ||:\
 %{nil}
 
 %install %{?_enable_debug_packages:%{?buildsubdir:%{debug_package}}}\
@@ -120,6 +130,7 @@ unset DISPLAY ||:\
 LANG=C\
 export LANG\
 unset DISPLAY ||:\
+unset LINGUAS ||:\
 %{nil}
 
 # ------------------------------------------------------------------------
@@ -174,11 +185,9 @@ unset DISPLAY ||:\
 # Location of pkgconfig files
 %_pkgconfigdir	/usr/%{_lib}/pkgconfig
 
-# Location of top applink dir
-%_applnkdir	/usr/X11R6/share/applnk
-
 # Location of desktop files
 %_desktopdir	/usr/share/applications
+%_applnkdir	ERROR:_applnkdir_is_obsolete_use_desktopdir_instead
 
 # Location of pixmaps for applnk/desktop files
 %_pixmapsdir	/usr/share/pixmaps
@@ -194,6 +203,9 @@ unset DISPLAY ||:\
 
 # Location of KDE documentation
 %_kdedocdir  %{_defaultdocdir}/kde/HTML
+
+# unsermake script
+%__unsermake /usr/share/unsermake/unsermake
 
 # Current date
 %date 		%(LC_ALL="C" date +"%a %b %d %Y")
@@ -211,26 +223,31 @@ unset DISPLAY ||:\
 %_rpmfilename		%%{NAME}-%%{VERSION}-%%{RELEASE}%{?debug:dbg}.%%{ARCH}.rpm
 
 # Requires name = version-release
-%requires_releq()  		%(LC_ALL="C" echo '%*' | xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}-%%{release}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
-%requires_releq_kernel_up()  	%(LC_ALL="C" rpm -qf --qf 'Prereq: kernel-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -vE "(is not|no such)")
-%requires_releq_kernel_smp()  	%(LC_ALL="C" rpm -qf --qf 'Prereq: kernel-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -vE "(is not|no such)")
-%requires_eq_to() %(LC_ALL="C" rpm -q --qf 'Requires: %1 = %%{epoch}:%%{version}\\n' %2 | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
+%requires_releq()		%(LC_ALL="C" echo '%*' | xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}-%%{release}\\n' | sed -e 's/ (none):/ /' | grep -v "is not")
+
+%releq_kernel_up()		%(LC_ALL="C" rpm -qf --qf '%%{name}-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
+%releq_kernel_smp()  		%(LC_ALL="C" rpm -qf --qf '%%{name}-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
+%requires_releq_kernel_up()  	%(LC_ALL="C" rpm -qf --qf 'PreReq: %%{name}-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
+%requires_releq_kernel_smp()  	%(LC_ALL="C" rpm -qf --qf 'PreReq: %%{name}-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
+
+%requires_eq_to() %(LC_ALL="C" rpm -q --qf 'Requires: %1 = %%{epoch}:%%{version}\\n' %2 | sed -e 's/ (none):/ /' | grep -v "is not")
 
 %apache_modules_api %(awk '/#define MODULE_MAGIC_NUMBER_MAJOR/ {print $3}' /usr/include/apache/ap_mmn.h 2>/dev/null || echo ERROR)
 
 # kernel version-release handling
-%__kernel_ver   %([ -f %{_kernelsrcdir}/include/linux/version.h ] && (grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2) || (awk '/^VERSION/ { ver = $0; gsub(/VERSION.*=/, NIL, ver); } /^PATCHLEVEL/ { plev = $0; gsub(/PATCHLEVEL.*=/, NIL, plev); } /^SUBLEVEL/ { slev = $0; gsub(/SUBLEVEL.*=/, NIL, slev); } END { printf("%d.%d.%d", ver, plev, slev); }' %{_kernelsrcdir}/Makefile 2> /dev/null))
+%__kernel_ver   %([ -f %{_kernelsrcdir}/include/linux/version.h ] && (grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | head -n 1 | cut -d'"' -f2) || (awk '/^VERSION/ { ver = $0; gsub(/VERSION.*=/, NIL, ver); } /^PATCHLEVEL/ { plev = $0; gsub(/PATCHLEVEL.*=/, NIL, plev); } /^SUBLEVEL/ { slev = $0; gsub(/SUBLEVEL.*=/, NIL, slev); } /^EXTRAVERSION/ { ever = $0; gsub(/EXTRAVERSION.*=/, NIL, ever); gsub(/ /, NIL, ever); } END { printf("%d.%d.%d%s", ver, plev, slev, ever); }' %{_kernelsrcdir}/Makefile 2> /dev/null))
 %__kernel_rel    %(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h --queryformat "%{RELEASE}" | grep -v "is not")
-%_kernel_ver     %(echo %{__kernel_ver}%{!?_without_dist_kernel:-%{__kernel_rel}})
-%_kernel_ver_str %(echo %{_kernel_ver} | sed s/-/_/g)
+%__kernel_rpmvr  %(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h --queryformat "%{VERSION}-%{RELEASE}" | grep -v "is not")
+%_kernel_ver     %{__kernel_ver}%{?with_dist_kernel:%(echo %{__kernel_ver} | grep -q -e - || echo -%{__kernel_rel})}
+%_kernel_ver_str %(echo %{!?_without_dist_kernel:%{__kernel_rpmvr}}%{?_without_dist_kernel:%{__kernel_ver}} | sed -e 's/-/_/g')
 
 # sgml macros
-%xmlcat_add()            /usr/bin/xmlcatalog --noout --add nextCatalog \"\" %1 /etc/xml/catalog
-%xmlcat_del()            /usr/bin/xmlcatalog --noout --del %1 /etc/xml/catalog
+%xmlcat_add()            /usr/bin/xmlcatalog --noout --add nextCatalog \"\" %1 /etc/xml/catalog ;
+%xmlcat_del()            /usr/bin/xmlcatalog --noout --del %1 /etc/xml/catalog ;
 %xmlcat_add_rewrite      /usr/bin/xmlcatalog --noout --add rewriteSystem
-%xmlcat_create()          /usr/bin/xmlcatalog --noout --create %1
-%sgmlcat_add()           /usr/bin/install-catalog --add %1 %2 > /dev/null
-%sgmlcat_del()           /usr/bin/install-catalog --remove %1 %2 > /dev/null
+%xmlcat_create()          /usr/bin/xmlcatalog --noout --create %1 ;
+%sgmlcat_add()           /usr/bin/install-catalog --add %1 %2 > /dev/null ;
+%sgmlcat_del()           /usr/bin/install-catalog --remove %1 %2 > /dev/null ;
 %docbook_sgmlcat_fix() { for l in \
 '' \
 '  -- default decl --' \
@@ -302,7 +319,7 @@ unset DISPLAY ||:\
 if [ -d "$RPM_BUILD_ROOT" ]; then \
 echo "Remove RPATH from executable binaries and shared object files."; \
 find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" %{?_noautochrpath:! -regex "%{_noautochrpath}"} | xargs -r file | \
-	awk '/ELF.*(executable|shared object)/ {print $1}' | cut -d: -f1 | \
+	awk '/ELF.*(executable.*dynamically linked|shared object)/ {print $1}' | cut -d: -f1 | \
 while read file ; do \
 	rpath= ; \
 	chmod u+w "$file"; \
@@ -335,8 +352,8 @@ fi; } \
     if [ -d "$RPM_BUILD_ROOT" ]; then \
 echo "Compress kernel modules if any."; \
     if test -d $RPM_BUILD_ROOT/lib/modules ; then \
-       find $RPM_BUILD_ROOT/lib/modules -name \*o -type f -print | \
-       xargs -r %{__gzip} -9nf; \
+	find $RPM_BUILD_ROOT/lib/modules -name \*o -type f -print | \
+	xargs -r %{__gzip} -9nf; \
 	   find $RPM_BUILD_ROOT/lib/modules -name \*o -type l -printf "%p %l\n" | \
 	   while read a b; do ln -sf $b.gz $a.gz; rm -f $a; done; \
     fi; \
@@ -347,15 +364,62 @@ echo "Compress kernel modules if any."; \
 %_binary_payload        w9.bzdio
 
 #-----------------------------------------------------------------
-# Update all GConf2 schemas
+# Update GConf2 schemas
 #
 # Requires: GConf2
 #
-%gconf_schema_install { umask 022; \
-    GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" \
-    /usr/bin/gconftool-2 --makefile-install-rule \
-    /etc/gconf/schemas/*.schemas > /dev/null \
-}
+%gconf_schema_install() \
+    umask 022; \
+    GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" /usr/bin/gconftool-2 --makefile-install-rule /etc/gconf/schemas/%{?1}%{!?1:*.schemas} > /dev/null \
+    %{nil}
+
+%gconf_schema_uninstall() \
+if [ $1 = 0 ]; then \
+    umask 022; \
+    GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" /usr/bin/gconftool-2 --makefile-uninstall-rule /etc/gconf/schemas/%{?1} > /dev/null \
+fi \
+%{nil}
+
+#-----------------------------------------------------------------
+# Update desktop MIME database
+# requries: desktop-file-utils
+#
+%update_desktop_database_post() {{\
+	umask 022; \
+	/usr/bin/update-desktop-database; \
+}}
+
+%update_desktop_database_postun() {{ \
+if [ $1 = 0 ]; then \
+	umask 022; \
+	/usr/bin/update-desktop-database; \
+fi \
+}}
+
+#-----------------------------------------------------------------
+# Update scrollkeeper database
+# requires: scrollkeeper
+#
+%scrollkeeper_update_post() \
+	/usr/bin/scrollkeeper-update -q; \
+	%{nil}
+
+%scrollkeeper_update_postun() \
+if [ $1 = 0 ]; then \
+	/usr/bin/scrollkeeper-update -q; \
+fi \
+%{nil}
+
+#-----------------------------------------------------------------
+# Run ldconfig after installing/deinstalling libraries
+#
+%ldconfig_post() \
+	/sbin/ldconfig; \
+	%{nil}
+
+%ldconfig_postun() \
+	/sbin/ldconfig; \
+	%{nil}
 
 #-----------------------------------------------------------------
 # post %install sequence:
@@ -368,11 +432,11 @@ echo "Compress kernel modules if any."; \
 # Requires/Provides automation
 # exceptions system by Jacek Konieczny <jajcus@pld.org.pl>
 #
-%_noautoreqfiles	%(sed -e s'/#.*//' /etc/rpm/noautoreqfiles)
-%_noautoprovfiles	%(sed -e s'/#.*//' /etc/rpm/noautoprovfiles)
-%_noautoreq		%(sed -e s'/#.*//' /etc/rpm/noautoreq)
-%_noautoreqdep		%(sed -e s'/#.*//' /etc/rpm/noautoreqdep)
-%_noautoprov		%(sed -e s'/#.*//' /etc/rpm/noautoprov)
+%__noautoreqfiles	%(sed -e s'/#.*//' /etc/rpm/noautoreqfiles)%{?_noautoreqfiles: %{_noautoreqfiles}}
+%__noautoprovfiles	%(sed -e s'/#.*//' /etc/rpm/noautoprovfiles)%{?_noautoprovfiles: %{_noautoprovfiles}}
+%__noautoreq		%(sed -e s'/#.*//' /etc/rpm/noautoreq)%{?_noautoreq: %{_noautoreq}}
+%__noautoreqdep		%(sed -e s'/#.*//' /etc/rpm/noautoreqdep)%{?_noautoreqdep: %{_noautoreqdep}}
+%__noautoprov		%(sed -e s'/#.*//' /etc/rpm/noautoprov)%{?_noautoprov: %{_noautoprov}}
 #%_noautocompressdoc	%{nil}
 #
 %_missing_doc_files_terminate_build	1%{nil}
@@ -416,11 +480,32 @@ echo "Compress kernel modules if any."; \
 %py_ocomp       python -O -c "import compileall; import sys; compileall.compile_dir(sys.argv[1], ddir=sys.argv[1][len('$RPM_BUILD_ROOT'):])"
 
 # Software written in Python language require Python with main version
-# unchanged
-%pyrequires_eq() Requires:       %1 >= 1:%py_ver %1 < 1:%(echo `python -c "import sys; import string; ver=sys.version[:3].split('.'); ver[1]=str(int(ver[1])+1); print string.join(ver, '.')"`)
+%pyrequires_eq() Requires:	python(bytecode) = %py_ver %1
+
+
+# Hardlink binary identical .pyc and .pyo files
+# (idea by glen <at> pld-linux <dot> org)
+%__spec_install_post_py_hardlink {\
+%{!?no_install_post_py_hardlink: \
+[ ! -d "$RPM_BUILD_ROOT" ] || find "$RPM_BUILD_ROOT" -name '*.pyc' | while read a; do \
+	b="$(echo $a|sed -e 's/.pyc$/.pyo/')"; \
+	if cmp -s "$a" "$b"; then \
+		ln -f "$a" "$b"; \
+	fi; \
+done \
+} }
+
+# remove python sources, so that check-files won't complain
+# (idea by glen <at> pld-linux <dot> org)
+%py_postclean() \
+for d in %{py_sitescriptdir} %{py_sitedir}; do \
+ [ ! -d "$RPM_BUILD_ROOT$d" ] || find "$RPM_BUILD_ROOT$d" -name '*.py' -exec rm {} \; ;\
+done \
+%{nil}
 
 # depmod macro
 %depmod() { \
+umask 022; \
 if [ -e /boot/System.map-%1 ]; then \
         /sbin/depmod -a -F /boot/System.map-%1 %1; \
 else \
@@ -444,4 +529,116 @@ fi; \
 %xmms_effect_plugindir        %(xmms-config --effect-plugin-dir)
 %xmms_general_plugindir       %(xmms-config --general-plugin-dir)
 
-%_target_base_arch	%(echo %{_target_cpu} | sed 's/i.86/i386/;s/athlon/i386/;s/pentium./i386/;s/amd64/x86_64/')
+%_target_base_arch	%(echo %{_target_cpu} | sed 's/i.86/i386/;s/athlon/i386/;s/pentium./i386/;s/amd64/x86_64/;s/ia32e/x86_64/')
+
+%x8664			x86_64 amd64 ia32e
+
+# user/group checking macros
+#
+# Usage:
+#	%userremove myuser
+#
+%userremove	/usr/lib/rpm/user_group.sh user del
+%groupremove	/usr/lib/rpm/user_group.sh group del
+#
+# Usage:
+#	if %usertestrm myuser; then
+#		/usr/sbin/userdel -r myuser
+# Note:
+#	use these macros only if you need to call userdel/groupdel with
+#	a non-standard option or take an extra action; otherwise use the
+#	%userremove/%groupremove macros
+#
+%usertestrm	/usr/lib/rpm/user_group.sh user testrm
+%grouptestrm	/usr/lib/rpm/user_group.sh group testrm
+# user group membership management macros
+#
+# Usage:
+#	%addusertogroup myuser agroup
+#
+%addusertogroup	/usr/lib/rpm/user_group.sh user addtogroup
+
+# banner support (useful in {pre,post}{,un} and triggers)
+#
+# Usage:
+#	%banner name [-a] [-e] [-n] [-tn] <<EOF
+# the banner text, the banner text
+# the banner text, and following line
+#EOF
+# You can use any form of here-document, <<'EOF' <<-EOT will do.
+# NOTE: if your use "<<-EOF", then You can actually indent inside here-document.
+#
+# -a   - append to the banner
+# -e   - send to stderr instead of stdout
+# -n   - no show banner (overrides -t)
+# -t   - show only, if RPM_SCRIPTVERBOSITY >= n; default n=5
+%banner(aent:)	\
+RPM_SCRIPTVERBOSITY=5 \
+[ -r /etc/sysconfig/rpm ] && . /etc/sysconfig/rpm \
+if [ -x /usr/bin/banner.sh ]; then \
+	CMD="/usr/bin/banner.sh %{-e:--stderr} %{!-n:$([ $RPM_SCRIPTVERBOSITY -ge %{-t:%{-t*}}%{!-t:5} ] && echo -s)} %{!-a:-m}%{-a:-M} %1" \
+else \
+	CMD="cat%{-e: >&2}" \
+fi \
+$CMD %2%{?3: %3} \
+%nil
+
+# useradd/groupadd macros written by glen@pld-linux.org.
+# All rights reserved. Permission to copy is hereby granted.. yada, yada, yada
+#
+# Usage:
+#   %useradd [-P package] [-u uid] [-d home_dir] [-s shell] [-c comment]
+#   [-g initial_group] [-G group[,...]] login
+#
+#  -u uid. REQUIRED
+#  -g gid/group. REQUIRED
+#  -s defaults to /bin/false
+#  -d defaults to /usr/share/empty
+#  -c No default
+#  -r is accepted but ignored (it's always set)
+# rpm specific flags
+#  -P package name. defaults to %{name}
+#
+%useradd(c:d:e:f:g:G:Mmk:op:s:u:rP:) \
+%{!-u:%{error:useradd: Required argument -u missing}} \
+%{!-g:%{error:useradd: Required argument -g missing}} \
+%{!?1:%{error:useradd: Required parameter login missing}} \
+if [ -n "`/bin/id -u %{expand:%{%{#}}} 2>/dev/null`" ]; then \
+	if [ "`/bin/id -u %{expand:%{%{#}}}`" != "%{-u*}" ]; then \
+		echo "Error: user %{expand:%{%{#}}} doesn't have uid=%{-u*}. Correct this before installing %{-P*}%{!?-P:%{name}}." 1>&2 \
+		exit 1 \
+	fi \
+else \
+	echo "Adding user %{expand:%{%{#}}} UID=%{-u*}." \
+	/usr/sbin/useradd \\\
+		-u %{-u*} \\\
+		-r \\\
+		-d %{-d*}%{!-d:/usr/share/empty} \\\
+		-s %{-s*}%{!-s:/bin/false} \\\
+		%{-c:-c "%(set -- %{-c*} %{*}; echo $1)"}\\\
+		-g %{-g*} \\\
+		%{-M} \\\
+		%{-G:-G %{-G*}} \\\
+		%{expand:%{%{#}}} 1>&2 \
+fi;
+
+# Usage:
+#   %groupadd [-P package] [-g gid] group
+#
+# -g gid. REQUIRED
+#
+# Sample:
+#   %groupadd -P %{name}-base -g %{gid} %{name}
+
+%groupadd(g:P:rfo)	\
+%{!-g:%{error:groupadd: Required argument -g missing}} \
+%{!?1:%{error:groupadd: Required parameter group missing}} \
+if [ -n "`/usr/bin/getgid %{1}`" ]; then \
+	if [ "`/usr/bin/getgid %{1}`" != "%{-g*}" ]; then \
+		echo "Error: group %{1} doesn't have gid=%{-g*}. Correct this before installing %{-P*}%{!?-P:%{name}}." 1>&2 \
+		exit 1 \
+	fi \
+else \
+	echo "Adding group %{1} GID=%{-g*}." \
+	/usr/sbin/groupadd -g %{-g*} -r %{1} 1>&2 \
+fi;
