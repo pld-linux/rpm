@@ -225,10 +225,10 @@ unset LINGUAS ||:\
 # Requires name = version-release
 %requires_releq()		%(LC_ALL="C" echo '%*' | xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}-%%{release}\\n' | sed -e 's/ (none):/ /' | grep -v "is not")
 
-%releq_kernel_up()		%(LC_ALL="C" rpm -qf --qf 'kernel-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | grep -vE "(is not|no such)")
-%releq_kernel_smp()  		%(LC_ALL="C" rpm -qf --qf 'kernel-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | grep -vE "(is not|no such)")
-%requires_releq_kernel_up()  	%(LC_ALL="C" rpm -qf --qf 'PreReq: kernel-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | grep -vE "(is not|no such)")
-%requires_releq_kernel_smp()  	%(LC_ALL="C" rpm -qf --qf 'PreReq: kernel-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | grep -vE "(is not|no such)")
+%releq_kernel_up()		%(LC_ALL="C" rpm -qf --qf '%%{name}-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
+%releq_kernel_smp()  		%(LC_ALL="C" rpm -qf --qf '%%{name}-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
+%requires_releq_kernel_up()  	%(LC_ALL="C" rpm -qf --qf 'PreReq: %%{name}-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
+%requires_releq_kernel_smp()  	%(LC_ALL="C" rpm -qf --qf 'PreReq: %%{name}-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
 
 %requires_eq_to() %(LC_ALL="C" rpm -q --qf 'Requires: %1 = %%{epoch}:%%{version}\\n' %2 | sed -e 's/ (none):/ /' | grep -v "is not")
 
