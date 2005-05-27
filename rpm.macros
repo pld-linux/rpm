@@ -388,7 +388,7 @@ fi \
 # Update desktop MIME database
 # requries: desktop-file-utils
 #
-%update_desktop_database_post() {{\
+%update_desktop_database_post() {{ \
 	umask 022; \
 	/usr/bin/update-desktop-database; \
 }}
@@ -503,7 +503,7 @@ done \
 # (idea by glen <at> pld-linux <dot> org)
 %py_postclean() \
 for d in %{py_sitescriptdir} %{py_sitedir}; do \
- [ ! -d "$RPM_BUILD_ROOT$d" ] || find "$RPM_BUILD_ROOT$d" -name '*.py' -exec rm {} \; ;\
+ [ ! -d "$RPM_BUILD_ROOT$d" ] || find "$RPM_BUILD_ROOT$d" -name '*.py' -print0 | xargs -0r -l512 rm;\
 done \
 %{nil}
 
