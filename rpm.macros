@@ -86,6 +86,9 @@
 }
 
 #----------------------------------------------------------------
+%global configure_cache 0
+%configure_cache_file   %{buildroot}.configure.cache
+
 %configure {./configure \
  	LDFLAGS="${LDFLAGS:-%rpmldflags}" \
 	CFLAGS="${CFLAGS:-%rpmcflags}" \
@@ -110,6 +113,7 @@
 	--infodir=%{_infodir} \
 	--x-libraries=/usr/X11R6/%{_lib} \
 	%{dependencytracking} \
+	%{?configure_cache:--cache-file=%{configure_cache_file:-%{buildroot}.configure.cache}} \
 }
 
 # ------------------------------------------------------------------------
