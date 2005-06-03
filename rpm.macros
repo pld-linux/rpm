@@ -650,3 +650,68 @@ else \
 	echo "Adding group %{1} GID=%{-g*}." \
 	/usr/sbin/groupadd -g %{-g*} -r %{1} 1>&2 \
 fi;
+
+# apache_config_{install/uninstall} macros written by glen@pld-linux.org.
+# All rights reserved. Permission to copy is hereby granted.. yada, yada, yada
+#
+# The config is installed/removed inside trigger, this means that you can any
+# time install apache1 or apache package and the configuration file is updated.
+# if you don't need the config for various reason for specific apache, just
+# remove the symlink from apache config directory. the trigger will not put the
+# config again to that version of apache. In other words the config is linked
+# to apache config directory on first install of PACKAGE or apache.
+#
+# should be called in trigger body:
+#  %triggerin -- apache1 >= 1.3.33-2
+#  %apache_config_install -v 1
+#
+# Add package's apache config to apache config.
+#
+# Usage:
+#   %apache_config_install -v {1|2} -c %{_sysconfdir}/apache-%{name}.conf -n 99
+#
+#  -v REQUIRED: specify apache version. can be 1 or 2.
+#  -c OPTIONAL: specify full path to PACKAGE's config. Defaults to %{_sysconfdir}/apache-%{name}.conf.
+#  -n OPTIONAL: specify config "slot". defaults to 99
+#
+# Internal macros. don't use ;).
+# expands apache config dir by apache version at build time.
+%__apache_confdir() %(if [ %{1} = 1 ]; then echo /etc/apache/conf.d; elif [ %{1} = 2 ]; then echo /etc/httpd/httpd.conf; else echo >&2 Unknown apache version specified; fi)
+# expands apache service name by apache version at build time.
+%__apache_svcname() %(if [ %{1} = 1 ]; then echo apache; elif [ %{1} = 2 ]; then echo httpd; else echo >&2 Unknown apache version specified; fi)
+
+%apache_config_install(v:c:n:) \
+%{!-v:%{error:apache_config_install: Required argument -v missing}} \
+%{?debug:set -x; echo "apache_config_install:%{-v*} %{name}-%{version}-%{release} 1:[$1]; 2:[$2]"} \
+if [ "$1" = "1" ] && [ "$2" = "1" ] && [ -d %{__apache_confdir %{-v*}} ]; then\
+	ln -sf %{-c*}%{!-c:%{_sysconfdir}/apache-%{name}.conf} %{__apache_confdir %{-v*}}/%{-n*}%{!-n:99}_%{name}.conf\
+fi\
+# restart apache if the config symlink is there\
+if [ -L /etc/apache/conf.d/%{-n*}%{!-n:99}_%{name}.conf ]; then\
+	if [ -f /var/lock/subsys/%{__apache_svcname %{-v*}} ]; then\
+		/etc/rc.d/init.d/%{__apache_svcname %{-v*}} restart 1>&2\
+	fi\
+fi\
+%{nil}
+
+# Remove package's apache config from apache config.
+#
+# Usage:
+#   %apache_config_uninstall -v {1|2} -n 99
+#
+#  -v REQUIRED: specify apache version. can be 1 or 2.
+#  -n OPTIONAL: specify config "slot". defaults to 99
+%apache_config_uninstall(v:n:) \
+%{!-v:%{error:apache_config_uninstall: Required argument -v missing}} \
+%{?debug:set -x; echo "apache_config_uninstall:%{-v*} %{name}-%{version}-%{release}: 1:[$1]; 2:[$2]"} \
+# remove link if eighter of the packages are gone \
+if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
+	if [ -L %{__apache_confdir %{-v*}}/%{-n*}%{!-n:99}_%{name}.conf ]; then \
+		rm -f %{__apache_confdir %{-v*}}/%{-n*}%{!-n:99}_%{name}.conf \
+		if [ -f /var/lock/subsys/%{__apache_svcname %{-v*}} ]; then \
+			/etc/rc.d/init.d/%{__apache_svcname %{-v*}} restart 1>&2 \
+		fi \
+	fi \
+fi \
+%{nil}
+
