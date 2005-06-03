@@ -704,7 +704,7 @@ fi\
 %apache_config_uninstall(v:n:) \
 %{!-v:%{error:apache_config_uninstall: Required argument -v missing}} \
 %{?debug:set -x; echo "apache_config_uninstall:%{-v*} %{name}-%{version}-%{release}: 1:[$1]; 2:[$2]"} \
-# remove link if eighter of the packages are gone \
+# remove link if either of the packages are gone \
 if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
 	if [ -L %{__apache_confdir %{-v*}}/%{-n*}%{!-n:99}_%{name}.conf ]; then \
 		rm -f %{__apache_confdir %{-v*}}/%{-n*}%{!-n:99}_%{name}.conf \
