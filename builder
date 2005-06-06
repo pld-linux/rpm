@@ -23,10 +23,11 @@
 
 VERSION="\
 Build package utility from PLD CVS repository
-V 0.11 (C) 1999-2003 Free Penguins".
+V 0.11 (C) 1999-2004 Free Penguins".
 PATH="/bin:/usr/bin:/usr/sbin:/sbin:/usr/X11R6/bin"
 
 COMMAND="build"
+TARGET=""
 
 SPECFILE=""
 BE_VERBOSE=""
@@ -40,6 +41,7 @@ NODIST=""
 UPDATE=""
 UPDATE5=""
 ADD5=""
+NO5=""
 ALWAYS_CVSUP=${ALWAYS_CVSUP:-"yes"}
 CVSROOT=""
 
@@ -100,7 +102,7 @@ fi
 
 POLDEK_INDEX_DIR="`$RPM --eval %_rpmdir`/"
 POLDEK_SOURCE="cvs"
-POLDEK_CMD="/usr/bin/poldek"
+POLDEK_CMD="/usr/bin/poldek --noask"
 
 # Here we load saved user environment used to
 # predefine options set above, or passed to builder
@@ -120,12 +122,12 @@ fi
 #LOGFILE='../LOGS/log.$PACKAGE_NAME.$DATE'
 #
 if [ -n "$HOME_ETC" ]; then
-	USER_CFG=$HOME_ETC/.builderrc
+	USER_CFG="$HOME_ETC/.builderrc"
 else
 	USER_CFG=~/.builderrc
 fi
 
-[ -f $USER_CFG ] && . $USER_CFG
+[ -f "$USER_CFG" ] && . "$USER_CFG"
 
 run_poldek()
 {
@@ -170,12 +172,13 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
 [-q|--quiet] [--date <yyyy-mm-dd> [-r <cvstag>] [{-T--tag <cvstag>]
 [-Tvs|--tag-version-stable] [-Tvn|--tag-version-nest]
 [-Ts|--tag-stable] [-Tn|--tag-nest] [-Tv|--tag-version]
-[{-Tp|--tag-prefix} <prefix>]
+[{-Tp|--tag-prefix} <prefix>] [{-tt|--test-tag}]
 [-nu|--no-urls] [-v|--verbose] [--opts <rpm opts>]
 [--with/--without <feature>] [--define <macro> <value>] <package>[.spec]
 	
 -5, --update-md5    - update md5 comments in spec, implies -nd -ncs
 -a5, --add-md5      - add md5 comments to URL sources, implies -nc -nd -ncs
+-n5, --no-md5       - ignore md5 comments in spec
 -D, --debug         - enable script debugging mode,
 -V, --version       - output builder version
 -a, --as_anon       - get files via pserver as cvs@$CVS_SERVER,
@@ -210,6 +213,7 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
 -nu, --no-urls      - don't try to download from FTP/HTTP location,
 -ns, --no-srcs      - don't download Sources
 -ns0, --no-source0  - don't download Source0
+-nn, --no-net       - don't download anything from the net
 --opts <rpm opts>   - additional options for rpm
 -q, --quiet         - be quiet,
 --date yyyy-mm-dd   - build package using resources from specified CVS date,
@@ -237,6 +241,8 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
                     - add cvs tag NAME-VERSION-RELESE for files,
 -Tp, --tag-prefix <prefix>
                     - add <prefix> to NAME-VERSION-RELEASE tags,
+-tt, --test-tag <prefix>
+                    - fail if tag is already present,
 -v, --verbose       - be verbose,
 -u, --try-upgrade   - check version, and try to upgrade package
 -un, --try-upgrade-with-float-version
@@ -249,6 +255,8 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
                       %_without_<feature> macro switch.  You may now use
                       --with feat1 feat2 feat3 --without feat4 feat5 --with feat6
                       constructions. Set GROUP_BCONDS to yes to make use of it.
+--target <platform>
+		    - build for platform <platform>.
 "
 }
 
@@ -362,9 +370,11 @@ get_spec()
 		set -v;
 	fi
 
+	cd "$SPECS_DIR"
+	if [ \! -f "$SPECFILE" ]; then
+		SPECFILE="`basename $SPECFILE .spec`.spec";
+	fi
 	if [ "$NOCVSSPEC" != "yes" ]; then
-		cd $SPECS_DIR
-
 		OPTIONS="up "
 
 		if [ -n "$CVSROOT" ]; then
@@ -449,6 +459,7 @@ src_no ()
 
 src_md5 ()
 {
+	[ X"$NO5" = X"yes" ] && return
 	no=$(src_no "$1")
 	[ -z "$no" ] && return
 	cd $SPECS_DIR
@@ -498,7 +509,7 @@ get_files()
 	fi
 
 	if [ -n "$1$2$3$4$5$6$7$8$9${10}" ]; then
-		cd $SOURCE_DIR
+		cd "$SOURCE_DIR"
 
 		OPTIONS="up "
 		if [ -n "$CVSROOT" ]; then
@@ -665,6 +676,18 @@ get_files()
 	fi
 }
 
+make_tagver() {
+		# Check whether first character of PACKAGE_NAME is legal for tag name
+		if [ -z "${PACKAGE_NAME##[_0-9]*}" -a -z "$TAG_PREFIX" ]; then
+			TAG_PREFIX=tag_
+		fi
+		TAGVER=$TAG_PREFIX$PACKAGE_NAME-`echo $PACKAGE_VERSION | sed -e "s/\./\_/g" -e "s/@/#/g"`-`echo $PACKAGE_RELEASE | sed -e "s/\./\_/g" -e "s/@/#/g"`
+		# Remove #kernel.version_release from TAGVER because tagging sources
+		# could occur with different kernel-headers than kernel-headers used at build time.
+		TAGVER=$(echo "$TAGVER" | sed -e 's/#.*//g')
+		echo -n "$TAGVER"
+}
+
 tag_files()
 {
 	TAG_FILES="$@"
@@ -677,14 +700,9 @@ tag_files()
 	if [ -n "$1$2$3$4$5$6$7$8$9${10}" ]; then
 		echo "Version: $PACKAGE_VERSION"
 		echo "Release: $PACKAGE_RELEASE"
-		# Check whether first character of PACKAGE_NAME is legal for tag name
-		if [ -z "${PACKAGE_NAME##[_0-9]*}" -a -z "$TAG_PREFIX" ]; then
-			TAG_PREFIX=tag_
-		fi
-		TAGVER=$TAG_PREFIX$PACKAGE_NAME-`echo $PACKAGE_VERSION | sed -e "s/\./\_/g" -e "s/@/#/g"`-`echo $PACKAGE_RELEASE | sed -e "s/\./\_/g" -e "s/@/#/g"`
-		# Remove #kernel.version_release from TAGVER because tagging sources
-		# could occur with different kernel-headers than kernel-headers used at build time.
-		TAGVER=$(echo "$TAGVER" | sed -e 's/#.*//g')
+
+		TAGVER=`make_tagver`
+
 		if [ "$TAG_VERSION" = "yes" ]; then
 			echo "CVS tag: $TAGVER"
 		fi
@@ -697,7 +715,7 @@ tag_files()
 			OPTIONS="-d $CVSROOT $OPTIONS"
 		fi
 
-		cd $SOURCE_DIR
+		cd "$SOURCE_DIR"
 		for i in $TAG_FILES
 		do
 			# don't tag files stored on distfiles
@@ -714,7 +732,7 @@ tag_files()
 			fi
 		done
 
-		cd $SPECS_DIR
+		cd "$SPECS_DIR"
 		if [ "$TAG_VERSION" = "yes" ]; then
 			cvs $OPTIONS $TAGVER $SPECFILE
 		fi
@@ -745,7 +763,7 @@ branch_files()
 		if [ -n "$CVSROOT" ]; then
 			OPTIONS="-d $CVSROOT $OPTIONS"
 		fi
-		cd $SOURCE_DIR
+		cd "$SOURCE_DIR"
 		for i in $TAG_FILES
 		do
 			if [ -f `nourl $i` ]; then
@@ -754,7 +772,7 @@ branch_files()
 				Exit_error err_no_source_in_repo $i
 			fi
 		done
-		cd $SPECS_DIR
+		cd "$SPECS_DIR"
 		cvs $OPTIONS $TAG $SPECFILE
 
 		unset OPTIONS
@@ -770,7 +788,7 @@ build_package()
 		set -v;
 	fi
 
-	cd $SPECS_DIR
+	cd "$SPECS_DIR"
 
 	if [ -n "$TRY_UPGRADE" ]; then
 		if [ -n "$FLOAT_VERSION" ]; then
@@ -793,8 +811,12 @@ build_package()
 			unset TOLDVER TNEWVER TNOTIFY
 		fi
 	fi
-	cd $SPECS_DIR
-
+	cd "$SPECS_DIR"
+	
+	if [ -n "$TARGET" ]; then 
+		TARGET_SWITCH="--target $TARGET"
+	fi
+	
 	case "$COMMAND" in
 		build )
 			BUILD_SWITCH="-ba" ;;
@@ -807,11 +829,16 @@ build_package()
 	esac
 	if [ -n "$LOGFILE" ]; then
 		LOG=`eval echo $LOGFILE`
+		if [ -d "$LOG" ]; then
+			echo "Log file $LOG is a directory."
+			echo "Parse error in the spec?"
+			Exit_error err_build_fail;
+		fi
 		if [ -n "$LASTLOG_FILE" ]; then
 			echo "LASTLOG=$LOG" > $LASTLOG_FILE
 		fi
 		RES_FILE=~/tmp/$RPMBUILD-exit-status.$RANDOM
-		(time nice -n ${DEF_NICE_LEVEL} $RPMBUILD $BUILD_SWITCH -v $QUIET $CLEAN $RPMOPTS $BCOND $SPECFILE; echo $? > $RES_FILE) 2>&1 |tee $LOG
+		(time nice -n ${DEF_NICE_LEVEL} $RPMBUILD $BUILD_SWITCH $TARGET_SWITCH -v $QUIET $CLEAN $RPMOPTS $BCOND $SPECFILE; echo $? > $RES_FILE) 2>&1 |tee $LOG
 		RETVAL=`cat $RES_FILE`
 		rm $RES_FILE
 		if [ -n "$LOGDIROK" ] && [ -n "$LOGDIRFAIL" ]; then
@@ -822,7 +849,7 @@ build_package()
 			fi
 		fi
 	else
-		eval nice -n ${DEF_NICE_LEVEL} $RPMBUILD $BUILD_SWITCH -v $QUIET $CLEAN $RPMOPTS $BCOND $SPECFILE
+		eval nice -n ${DEF_NICE_LEVEL} $RPMBUILD $BUILD_SWITCH $TARGET_SWITCH -v $QUIET $CLEAN $RPMOPTS $BCOND $SPECFILE
 		RETVAL=$?
 	fi
 	if [ "$RETVAL" -ne "0" ]; then
@@ -833,6 +860,7 @@ build_package()
 		Exit_error err_build_fail;
 	fi
 	unset BUILD_SWITCH
+	unset TARGET_SWITCH
 }
 
 nourl()
@@ -995,20 +1023,37 @@ remove_build_requires()
 display_bconds()
 {
 	if [ "$AVAIL_BCONDS_WITH" != "" ] || [ "$AVAIL_BCONDS_WITHOUT" != "" ]; then
-		echo -ne "We are going to build $SPECFILE with the following conditional flags:\n"
 		if [ "$BCOND" != "" ]; then
+			echo -ne "\nBuilding $SPECFILE with the following conditional flags:\n"
 			echo -ne "$BCOND"
 		else
-			echo -ne "No --with || --without conditions passed to $0!"
+			echo -ne "\nNo conditional flags passed"
 		fi
-		echo -ne "\n\nfrom available:\n\n"
+		echo -ne "\n\nfrom available:\n"
 		echo -ne "--with   :\t$AVAIL_BCONDS_WITH\n--without:\t$AVAIL_BCONDS_WITHOUT\n\n"
 	fi
 }
 
 fetch_build_requires()
 {
-	if [ "${FETCH_BUILD_REQUIRES}" == "yes" ]; then
+	if [ "${FETCH_BUILD_REQUIRES}" = "yes" ]; then
+		if [ "$FETCH_BUILD_REQUIRES_RPMGETDEPS" = "yes" ]; then
+			 CONF=$(rpm-getdeps $BCOND $SPECFILE 2> /dev/null | awk '/^\-/ { print "@" $3 } ' | xargs)
+			 DEPS=$(rpm-getdeps $BCOND $SPECFILE 2> /dev/null | awk '/^\+/ { print "@" $3 } ' | xargs)
+			 if [ -n "$CONF" -o -n "$DEPS" ]; then
+				  /usr/bin/poldek --update; /usr/bin/poldek --upa
+			 fi
+			 if [ -n "$CONF" ]; then
+				  echo "Trying to uninstall conflicting packages ($CONF):"
+				  /usr/bin/poldek --noask --nofollow -ev $CONF
+			 fi
+			 if [ -n "$DEPS" ]; then
+				  echo "Trying to install dependencies ($DEPS):"
+				  /usr/bin/poldek --caplookup -uGv $DEPS
+			 fi
+			 return
+		fi
+		 
 		echo -ne "\nAll packages installed by fetch_build_requires() are written to:\n"
 		echo -ne "`pwd`/.${SPECFILE}_INSTALLED_PACKAGES\n"
 		echo -ne "\nIf anything fails, you may get rid of them by executing:\n"
@@ -1136,7 +1181,7 @@ fetch_build_requires()
 		done
 		export PROMPT_COMMAND=`echo -ne "\033]0;${SPECFILE}\007"`
 		if [ "$NOT_INSTALLED_PACKAGES" != "" ]; then
-			echo "Nie uda³o siê zainstalowaæ nastêpuj±cych pakietów i ich zale¿no¶ci:"
+			echo "Unable to install following packages and their dependencies:"
 			for pkg in "$NOT_INSTALLED_PACKAGES"
 			do
 				echo $pkg
@@ -1171,6 +1216,9 @@ do
 			NOCVSSPEC="yes"
 			UPDATE5="yes"
 			ADD5="yes"
+			shift ;;
+		-n5 | --no-md5 )
+			NO5="yes"
 			shift ;;
 		-D | --debug )
 			DEBUG="yes"; shift ;;
@@ -1218,6 +1266,14 @@ do
 			NOSRCS="yes"; shift ;;
 		-ns0 | --no-source0 )
 			NOSOURCE0="yes"; shift ;;
+		-nn | --no-net )
+			NOCVS="yes"
+			NOCVSSPEC="yes"
+			NODIST="yes"
+			NOMIRRORS="yes"
+			NOURLS="yes"
+			NOSRCS="yes"
+			shift;;
 		--opts )
 			shift; RPMOPTS="${1}"; shift ;;
 		--with | --without )
@@ -1234,6 +1290,8 @@ do
 					BCOND="$BCOND $1 $2" ; shift 2 ;;
 			esac
 			;;
+		--target )
+			shift; TARGET="${1}"; shift ;;
 		-q | --quiet )
 			QUIET="--quiet"; shift ;;
 		--date )
@@ -1278,6 +1336,9 @@ do
 		-Tp | --tag-prefix )
 			TAG_PREFIX="$2"
 			shift 2;;
+		-tt | --test-tag )
+			TEST_TAG="yes"
+			shift;;
 		-T | --tag )
 			COMMAND="tag";
 			shift
@@ -1312,7 +1373,7 @@ do
 			RPMOPTS="${RPMOPTS} --nodeps"
 			;;
 		* )
-			SPECFILE="`basename ${1} .spec`.spec";
+			SPECFILE="${1}"
 			export PROMPT_COMMAND=`echo -ne "\033]0;${SPECFILE}\007"`
 			shift ;;
 	esac
@@ -1333,13 +1394,13 @@ case "$COMMAND" in
 		fetch_build_requires;
 		parse_spec;
 
-		if [ -n "$FAIL_IF_CHANGED_BUT_NOT_BUMPED" ]; then
-			TAGVER=$PACKAGE_NAME-`echo $PACKAGE_VERSION | sed -e "s/\./\_/g" -e "s/@/#/g"`-`echo $PACKAGE_RELEASE | sed -e "s/\./\_/g" -e "s/@/#/g"`
-			CURTAGREL=$(cvs status $SPECFILE | grep "Working revision:" | awk '{ print $3 }')
+		if [ -n "$TEST_TAG" ]; then
+			TAGVER=`make_tagver`
+			echo "Searching for tag $TAGVER..."
 			TAGREL=$(cvs status -v $SPECFILE | grep -E "^[[:space:]]*${TAGVER}[[[:space:]]" | sed -e 's#.*(revision: ##g' -e 's#).*##g')
 
-			if [ -n "$TAGREL" -a "$TAGREL" != "$CURTAGREL" ]; then
-				Exit_error err_build_fail "not bumped ver-rel - was already used in rev $TAGREL"
+			if [ -n "$TAGREL" ]; then
+				Exit_error err_build_fail "Tag $TAGVER already present (spec release: $TAGREL)"
 			fi
 		fi
 
