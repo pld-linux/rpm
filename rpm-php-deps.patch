@@ -37,26 +37,24 @@
  
      return 0;
  }
-@@ -1029,7 +1039,7 @@
- /*@unchecked@*/
- static struct rpmfcApplyTbl_s rpmfcApplyTable[] = {
+@@ -1068,6 +1068,7 @@
      { rpmfcELF,		RPMFC_ELF },
--    { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL) },
-+    { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL|RPMFC_PHP) },
+     { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL) },
+     { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PYTHON) },
++    { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PHP) },
      { NULL, 0 }
  };
  
-@@ -1167,6 +1177,10 @@
+@@ -1227,6 +1227,9 @@
+ /*@-branchstate@*/
  	if (slen >= sizeof(".pm") && !strcmp(s+slen-(sizeof(".pm")-1), ".pm"))
- 	    strcpy(fm->obuf, "Perl5 module source text");
- 
+ 	    ftype = "Perl5 module source text";
 +	/* XXX all files with extension ".php" are PHP modules for now. */
-+	if (slen >= sizeof(".php") && !strcmp(s+slen-(sizeof(".php")-1), ".php"))
-+		strcpy(fm->obuf, "PHP script text");
-+
- 	se = fm->obuf;
-         rpmMessage(RPMMESS_DEBUG, "%s: %s\n", s, se);
- 
++	else if (slen >= sizeof(".php") && !strcmp(s+slen-(sizeof(".php")-1), ".php"))
++	    ftype = "PHP script text";
+ 	/* XXX skip all files in /dev/ which are (or should be) %dev dummies. */
+ 	else if (slen >= fc->brlen+sizeof("/dev/") && !strncmp(s+fc->brlen, "/dev/", sizeof("/dev/")-1))
+ 	    ftype = "";
 --- rpm-4.2/build/rpmfc.h.wiget	Tue Apr  1 10:00:23 2003
 +++ rpm-4.2/build/rpmfc.h	Tue Apr  1 10:01:22 2003
 @@ -40,6 +40,7 @@
