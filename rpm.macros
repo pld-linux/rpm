@@ -2,7 +2,7 @@
 
 # other macros
 %epoch		0
-%_enable_debug_packages 1
+%_enable_debug_packages 0
 
 %__id		@__ID@
 %__id_u		%{__id} -u 
@@ -20,9 +20,8 @@
 
 %debugcflags	-O0 -g -Wall
 %rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
-%rpmcxxflags	%{rpmcflags} -fvisibility-inlines-hidden
+%rpmcxxflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
 %rpmldflags	%{nil}
-# %rpmldflags	-Wl,--as-needed
 
 # kernel compiler
 %kgcc		gcc
@@ -61,7 +60,7 @@
  if [ -n "$LINGUAS" ]; then unset LINGUAS; fi; \
  LDFLAGS="${LDFLAGS:-%rpmldflags}" ; export LDFLAGS ; \
  CFLAGS="${CFLAGS:-%rpmcflags}" ; export CFLAGS ; \
- CXXFLAGS="${CXXFLAGS:-%rpmcxxflags}" ; export CXXFLAGS ; \
+ CXXFLAGS="${CXXFLAGS:-%rpmcflags}" ; export CXXFLAGS ; \
  FFLAGS="${FFLAGS:-%rpmcflags}" ; export FFLAGS ; \
  CPPFLAGS="${CPPFLAGS:-}" ; export CPPFLAGS ; \
  %{?__cc:CC="%{__cc}" ; export CC ; } \
@@ -92,7 +91,7 @@
 %configure {./configure \
  	LDFLAGS="${LDFLAGS:-%rpmldflags}" \
 	CFLAGS="${CFLAGS:-%rpmcflags}" \
-	CXXFLAGS="${CXXFLAGS:-%rpmcxxflags}" \
+	CXXFLAGS="${CXXFLAGS:-%rpmcflags}" \
 	FFLAGS="${FFLAGS:-%rpmcflags}" \
 	CPPFLAGS="${CPPFLAGS:-}" \
 	%{?__cc:CC="%{__cc}"} \
@@ -687,7 +686,7 @@ if [ "$1" = "1" ] && [ "$2" = "1" ] && [ -d %{__apache_confdir %{-v*}} ]; then\
 	ln -sf %{-c*}%{!-c:%{_sysconfdir}/apache-%{name}.conf} %{__apache_confdir %{-v*}}/%{-n*}%{!-n:99}_%{name}.conf\
 fi\
 # restart apache if the config symlink is there\
-if [ -L /etc/apache/conf.d/%{-n*}%{!-n:99}_%{name}.conf ]; then\
+if [ -L %{__apache_confdir %{-v*}}/%{-n*}%{!-n:99}_%{name}.conf ]; then\
 	if [ -f /var/lock/subsys/%{__apache_svcname %{-v*}} ]; then\
 		/etc/rc.d/init.d/%{__apache_svcname %{-v*}} restart 1>&2\
 	fi\
