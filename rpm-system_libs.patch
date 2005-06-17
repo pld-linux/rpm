@@ -1,7 +1,7 @@
-diff -urN rpm-4.3.org/configure.ac rpm-4.3/configure.ac
---- rpm-4.3.org/configure.ac	2004-01-07 02:28:38.420706689 +0100
-+++ rpm-4.3/configure.ac	2004-01-07 02:29:17.078719715 +0100
-@@ -425,6 +425,18 @@
+diff -urN rpm.org/configure.ac rpm/configure.ac
+--- rpm.org/configure.ac	2004-06-14 11:46:10.220092656 +0200
++++ rpm/configure.ac	2004-06-14 11:47:13.499472728 +0200
+@@ -428,6 +428,18 @@
  AC_SUBST(WITH_BEECRYPT_INCLUDE)
  AC_SUBST(WITH_BEECRYPT_LIB)
  
@@ -20,45 +20,45 @@ diff -urN rpm-4.3.org/configure.ac rpm-4.3/configure.ac
  AC_CHECK_FUNC(setreuid, [], [
      AC_CHECK_LIB(ucb, setreuid, [if echo $LIBS | grep -- -lucb >/dev/null ;then :; else LIBS="$LIBS -lc -lucb" USEUCB=y;fi])
  ])
-@@ -1193,7 +1205,7 @@
+@@ -1203,7 +1215,7 @@
  dnl # XXX Propagate -lucb to popt ...
  dnl export LIBS INCPATH CONFIG_SITE
  
--AC_CONFIG_SUBDIRS(popt beecrypt zlib elfutils file db3)
+-AC_CONFIG_SUBDIRS(popt zlib file sqlite db3)
 +AC_CONFIG_SUBDIRS(file)
  
  AC_CONFIG_FILES([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
  	scripts/perl.req scripts/perl.prov
-@@ -1216,7 +1228,7 @@
- 	python/rpmdb/Makefile
+@@ -1227,7 +1239,7 @@
  	python/rpmdb/test/Makefile
+  	lua/Makefile
    ])
 -AC_CONFIG_COMMANDS([default],[[	echo timestamp > popt/stamp-h.in
 +AC_CONFIG_COMMANDS([default],[[	
  	echo timestamp > stamp-h.in
    
  ]],[[]])
-diff -urN rpm-4.3.org/lib/Makefile.am rpm-4.3/lib/Makefile.am
---- rpm-4.3.org/lib/Makefile.am	2004-01-07 02:27:38.909001150 +0100
-+++ rpm-4.3/lib/Makefile.am	2004-01-07 02:29:44.348085397 +0100
+diff -urN rpm.org/lib/Makefile.am rpm/lib/Makefile.am
+--- rpm.org/lib/Makefile.am	2004-06-14 11:46:08.925289496 +0200
++++ rpm/lib/Makefile.am	2004-06-14 11:47:13.502472272 +0200
 @@ -40,7 +40,7 @@
- librpm_la_LDFLAGS = -release 4.3 $(LDFLAGS) \
+ librpm_la_LDFLAGS = -release 4.4 $(LDFLAGS) \
  	$(top_builddir)/rpmdb/librpmdb.la \
  	$(top_builddir)/rpmio/librpmio.la \
 -	$(top_builddir)/popt/libpopt.la \
 +	-lpopt \
- 	@WITH_SELINUX_LIB@
+ 	@WITH_SELINUX_LIB@ \
+ 	@INTLLIBS@
  
- getdate.c: getdate.y
-diff -urN rpm-4.3.org/Makefile.am rpm-4.3/Makefile.am
---- rpm-4.3.org/Makefile.am	2004-01-07 02:27:37.031389024 +0100
-+++ rpm-4.3/Makefile.am	2004-01-07 02:29:17.082718889 +0100
+diff -urN rpm.org/Makefile.am rpm/Makefile.am
+--- rpm.org/Makefile.am	2004-06-14 11:46:04.409975928 +0200
++++ rpm/Makefile.am	2004-06-14 11:48:04.236759488 +0200
 @@ -14,7 +14,7 @@
  	po/*.in po/*.po po/rpm.pot \
  	rpm.magic rpmpopt-$(VERSION) rpmqv.c rpm.c
  
--SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ popt @WITH_BEECRYPT_SUBDIR@  rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
-+SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ @WITH_BEECRYPT_SUBDIR@  rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
+-SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ popt @WITH_BEECRYPT_SUBDIR@ lua rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
++SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ @WITH_BEECRYPT_SUBDIR@ lua rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
  
  INCLUDES = \
  	-I$(top_srcdir)/build \
@@ -67,9 +67,9 @@ diff -urN rpm-4.3.org/Makefile.am rpm-4.3/Makefile.am
  	-I$(top_srcdir)/rpmio \
  	@WITH_BEECRYPT_INCLUDE@ \
 -	-I$(top_srcdir)/popt \
+ 	-I$(top_srcdir)/misc \
  	@WITH_LIBELF_INCLUDE@ \
  	@INCPATH@
- 
 @@ -34,7 +33,7 @@
  	$(top_builddir)/lib/librpm.la \
  	$(top_builddir)/rpmdb/librpmdb.la \
@@ -98,71 +98,86 @@ diff -urN rpm-4.3.org/Makefile.am rpm-4.3/Makefile.am
  
  CVSTAG = r$(subst .,-,$(VERSION))
  
-diff -urN rpm-4.3.org/rpmdb/Makefile.am rpm-4.3/rpmdb/Makefile.am
---- rpm-4.3.org/rpmdb/Makefile.am	2004-01-07 02:28:11.926180317 +0100
-+++ rpm-4.3/rpmdb/Makefile.am	2004-01-07 02:29:17.087717856 +0100
+diff -urN rpm.org/rpmdb/Makefile.am rpm/rpmdb/Makefile.am
+--- rpm.org/rpmdb/Makefile.am	2004-06-14 11:46:09.726167744 +0200
++++ rpm/rpmdb/Makefile.am	2004-06-14 11:47:13.524468928 +0200
 @@ -9,7 +9,6 @@
  	-I$(top_srcdir)/lib \
  	-I$(top_srcdir)/rpmio \
  	@WITH_BEECRYPT_INCLUDE@ \
 -	-I$(top_srcdir)/popt \
+ 	-I$(top_srcdir)/misc \
  	@WITH_LIBELF_INCLUDE@ \
  	@INCPATH@
- 
 @@ -51,7 +50,7 @@
  	tagname.c tagtbl.c
- librpmdb_la_LDFLAGS = -release 4.3 \
+ librpmdb_la_LDFLAGS = -release 4.4 \
  	$(top_builddir)/rpmio/librpmio.la \
 -	$(top_builddir)/popt/libpopt.la \
 +	@WITH_POPT_LIB@ \
+ 	@WITH_SQLITE3_LIB@ \
  	@WITH_LIBELF_LIB@
  librpmdb_la_LIBADD = $(DBLIBOBJS) $(libdb_la)
- librpmdb_la_DEPENDENCIES = $(DBLIBOBJS) $(libdb_la)
-diff -urN rpm-4.3.org/rpmio/Makefile.am rpm-4.3/rpmio/Makefile.am
---- rpm-4.3.org/rpmio/Makefile.am	2004-01-07 02:27:43.915966813 +0100
-+++ rpm-4.3/rpmio/Makefile.am	2004-01-07 02:29:17.090717237 +0100
-@@ -11,7 +11,6 @@
- INCLUDES = -I. \
+--- rpm.org/rpmio/Makefile.am.org	2004-11-18 17:42:53.756263795 +0100
++++ rpm.org/rpmio/Makefile.am	2004-11-18 17:43:09.526885309 +0100
+@@ -12,7 +12,6 @@
  	-I$(top_srcdir) \
  	@WITH_BEECRYPT_INCLUDE@ \
+ 	@WITH_LUA_INCLUDE@ \
 -	-I$(top_srcdir)/popt \
+ 	-I$(top_srcdir)/misc \
  	@INCPATH@
  
- pkgincdir = $(pkgincludedir)
-@@ -65,34 +64,34 @@
- 	$(LINT) $(DEFS) $(INCLUDES) $(librpmio_la_SOURCES)
+@@ -71,47 +71,47 @@
+ tax_LDADD = librpmio.la
  
  tdigest_SOURCES = tdigest.c
 -tdigest_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la -lgcrypt
 +tdigest_LDADD = librpmio.la -lpopt -lgcrypt
  
  tdir_SOURCES = tdir.c
- tdir_LDFLAGS = -all-static
+ tdir_LDFLAGS = @LDFLAGS_STATIC@
 -tdir_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
 +tdir_LDADD = librpmio.la -lpopt
  
  tfts_SOURCES = tfts.c
- tfts_LDFLAGS = -all-static
+ tfts_LDFLAGS = @LDFLAGS_STATIC@
 -tfts_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
 +tfts_LDADD = librpmio.la -lpopt
  
+ tget_SOURCES = tget.c
+ tget_LDFLAGS = @LDFLAGS_STATIC@
+-tget_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++tget_LDADD = librpmio.la -lpopt
+ 
+ thkp_SOURCES = thkp.c
+ thkp_LDFLAGS = @LDFLAGS_STATIC@
+-thkp_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++thkp_LDADD = librpmio.la -lpopt
+ 
+ tput_SOURCES = tput.c
+ tput_LDFLAGS = @LDFLAGS_STATIC@
+-tput_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++tput_LDADD = librpmio.la -lpopt
+ 
+ 
  tglob_SOURCES = tglob.c
- tglob_LDFLAGS = -all-static
+ tglob_LDFLAGS = @LDFLAGS_STATIC@
 -tglob_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
 +tglob_LDADD = librpmio.la -lpopt
  
  tinv_SOURCES = tinv.c
- tinv_LDFLAGS = -all-static
+ tinv_LDFLAGS = @LDFLAGS_STATIC@
 -tinv_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
 +tinv_LDADD = librpmio.la -lpopt
  
  tkey_SOURCES = tkey.c
- tkey_LDFLAGS = -all-static
+ tkey_LDFLAGS = @LDFLAGS_STATIC@
 -tkey_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
 +tkey_LDADD = librpmio.la -lpopt
  
  tring_SOURCES = tring.c
- tring_LDFLAGS = -all-static
+ tring_LDFLAGS = @LDFLAGS_STATIC@
 -tring_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
 +tring_LDADD = librpmio.la -lpopt
  
@@ -172,9 +187,9 @@ diff -urN rpm-4.3.org/rpmio/Makefile.am rpm-4.3/rpmio/Makefile.am
  
  tsw_SOURCES = tsw.c
  tsw_LDFLAGS = librpmio.la
-diff -urN rpm-4.3.org/tools/Makefile.am rpm-4.3/tools/Makefile.am
---- rpm-4.3.org/tools/Makefile.am	2004-01-07 02:27:44.830777831 +0100
-+++ rpm-4.3/tools/Makefile.am	2004-01-07 02:29:17.096715997 +0100
+diff -urN rpm.org/tools/Makefile.am rpm/tools/Makefile.am
+--- rpm.org/tools/Makefile.am	2004-06-14 11:46:09.906140384 +0200
++++ rpm/tools/Makefile.am	2004-06-14 11:47:13.532467712 +0200
 @@ -9,7 +9,6 @@
  	-I$(top_srcdir)/rpmdb \
  	-I$(top_srcdir)/rpmio \
@@ -183,7 +198,7 @@ diff -urN rpm-4.3.org/tools/Makefile.am rpm-4.3/tools/Makefile.am
  	@WITH_LIBELF_INCLUDE@ \
  	@WITH_LIBDWARF_INCLUDE@ \
  	-I$(top_srcdir)/file/src \
-@@ -38,7 +37,7 @@
+@@ -37,7 +36,7 @@
  
  debugedit_SOURCES =	debugedit.c hashtab.c
  debugedit_LDADD =	@LDFLAGS_STATIC@ @WITH_LIBELF_LIB@ \
@@ -191,4 +206,23 @@ diff -urN rpm-4.3.org/tools/Makefile.am rpm-4.3/tools/Makefile.am
 +	-lpopt
  
  javadeps_SOURCES =	javadeps.c
+ 
+--- rpm/python/Makefile.am.org	2004-11-18 20:01:55.658219108 +0100
++++ rpm/python/Makefile.am	2004-11-18 20:02:10.571929388 +0100
+@@ -16,7 +16,6 @@
+ 	-I$(top_srcdir)/rpmdb \
+ 	-I$(top_srcdir)/rpmio \
+ 	@WITH_BEECRYPT_INCLUDE@ \
+-	-I$(top_srcdir)/popt \
+ 	-I$(top_srcdir)/misc \
+ 	-I$(pyincdir) \
+ 	@WITH_LIBELF_INCLUDE@ \
+@@ -31,7 +30,7 @@
+ 	$(top_builddir)/lib/librpm.la \
+ 	$(top_builddir)/rpmdb/librpmdb.la \
+ 	$(top_builddir)/rpmio/librpmio.la \
+-	$(top_builddir)/popt/libpopt.la \
++	-lpopt \
+ 	$(top_builddir)/build/librpmbuild.la \
+ 	@WITH_LIBELF_LIB@
  
