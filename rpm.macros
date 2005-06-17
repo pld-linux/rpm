@@ -54,6 +54,7 @@
 %__intltoolize		intltoolize --copy --force
 %__libtoolize		libtoolize --copy --force
 
+%dependencytracking	%{nil}
 #-----------------------------------------------------------------
 %configure2_13 { \
  if [ -n "$LINGUAS" ]; then unset LINGUAS; fi; \
@@ -80,9 +81,13 @@
 	--mandir=%{_mandir} \
 	--infodir=%{_infodir} \
 	--x-libraries=/usr/X11R6/%{_lib} \
+	%{dependencytracking} \
 }
 
 #----------------------------------------------------------------
+%global configure_cache 0
+%configure_cache_file   %{buildroot}.configure.cache
+
 %configure {./configure \
  	LDFLAGS="${LDFLAGS:-%rpmldflags}" \
 	CFLAGS="${CFLAGS:-%rpmcflags}" \
@@ -106,6 +111,8 @@
 	--mandir=%{_mandir} \
 	--infodir=%{_infodir} \
 	--x-libraries=/usr/X11R6/%{_lib} \
+	%{dependencytracking} \
+	%{?configure_cache:--cache-file=%{configure_cache_file:-%{buildroot}.configure.cache}} \
 }
 
 # ------------------------------------------------------------------------
@@ -235,9 +242,9 @@ unset LINGUAS ||:\
 %apache_modules_api %(awk '/#define MODULE_MAGIC_NUMBER_MAJOR/ {print $3}' /usr/include/apache/ap_mmn.h 2>/dev/null || echo ERROR)
 
 # kernel version-release handling
-%__kernel_ver   %([ -f %{_kernelsrcdir}/include/linux/version.h ] && (grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | head -n 1 | cut -d'"' -f2) || (awk '/^VERSION/ { ver = $0; gsub(/VERSION.*=/, NIL, ver); } /^PATCHLEVEL/ { plev = $0; gsub(/PATCHLEVEL.*=/, NIL, plev); } /^SUBLEVEL/ { slev = $0; gsub(/SUBLEVEL.*=/, NIL, slev); } /^EXTRAVERSION/ { ever = $0; gsub(/EXTRAVERSION.*=/, NIL, ever); gsub(/ /, NIL, ever); } END { printf("%d.%d.%d%s", ver, plev, slev, ever); }' %{_kernelsrcdir}/Makefile 2> /dev/null))
-%__kernel_rel    %(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h --queryformat "%{RELEASE}" | grep -v "is not")
-%__kernel_rpmvr  %(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h --queryformat "%{VERSION}-%{RELEASE}" | grep -v "is not")
+%__kernel_ver    %([ -f %{_kernelsrcdir}/include/linux/version.h ] && (grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | head -n 1 | cut -d'"' -f2) || (awk '/^VERSION/ { ver = $0; gsub(/VERSION.*=/, NIL, ver); } /^PATCHLEVEL/ { plev = $0; gsub(/PATCHLEVEL.*=/, NIL, plev); } /^SUBLEVEL/ { slev = $0; gsub(/SUBLEVEL.*=/, NIL, slev); } /^EXTRAVERSION/ { ever = $0; gsub(/EXTRAVERSION.*=/, NIL, ever); gsub(/ /, NIL, ever); } END { printf("%d.%d.%d%s", ver, plev, slev, ever); }' %{_kernelsrcdir}/Makefile 2> /dev/null))
+%__kernel_rel    %(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{RELEASE}" | grep -v "is not")
+%__kernel_rpmvr  %(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{VERSION}-%{RELEASE}" | grep -v "is not")
 %_kernel_ver     %{__kernel_ver}%{?with_dist_kernel:%(echo %{__kernel_ver} | grep -q -e - || echo -%{__kernel_rel})}
 %_kernel_ver_str %(echo %{!?_without_dist_kernel:%{__kernel_rpmvr}}%{?_without_dist_kernel:%{__kernel_ver}} | sed -e 's/-/_/g')
 
@@ -318,7 +325,7 @@ unset LINGUAS ||:\
 	%{?verbose:set -x;} \
 if [ -d "$RPM_BUILD_ROOT" ]; then \
 echo "Remove RPATH from executable binaries and shared object files."; \
-find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" %{?_noautochrpath:! -regex "%{_noautochrpath}"} | xargs -r file | \
+find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*" %{?_noautochrpath:! -regex "%{_noautochrpath}"} | xargs -r file | \
 	awk '/ELF.*(executable.*dynamically linked|shared object)/ {print $1}' | cut -d: -f1 | \
 while read file ; do \
 	rpath= ; \
@@ -480,7 +487,7 @@ fi \
 %py_ocomp       python -O -c "import compileall; import sys; compileall.compile_dir(sys.argv[1], ddir=sys.argv[1][len('$RPM_BUILD_ROOT'):])"
 
 # Software written in Python language require Python with main version
-%pyrequires_eq() Requires:	python(bytecode) = %py_ver %1
+%pyrequires_eq() Requires:	%1
 
 
 # Hardlink binary identical .pyc and .pyo files
