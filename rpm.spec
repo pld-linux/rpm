@@ -18,7 +18,7 @@
 # versions of required libraries
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.10.1
-%define	beecrypt_ver	3.0.0-0.20030610.1
+%define	beecrypt_ver	2:4.1.0
 %define	rpm_macros_rev	1.222
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
@@ -30,7 +30,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.1
-Release:	0.1
+Release:	0.2
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
