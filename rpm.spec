@@ -30,7 +30,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.1
-Release:	2
+Release:	3
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -1000,11 +1000,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %ifarch alpha
 %{_rpmlibdir}/alpha*
 %endif
-%ifarch x86_64
-#%{_rpmlibdir}/x86_64*
-%endif
 %ifarch amd64
-#%{_rpmlibdir}/amd64*
+%{_rpmlibdir}/amd64*
 %{_rpmlibdir}/x86_64*
 %endif
 %ifarch ia64
