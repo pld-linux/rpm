@@ -503,7 +503,7 @@ Summary:	Python macros, which simplifies creation of rpm packages with Python so
 Summary(pl):	Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w Pythonie
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
-Requires:	python-modules
+Requires:	python
 
 %description pythonprov
 Python macros, which simplifies creation of rpm packages with Python
