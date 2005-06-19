@@ -106,7 +106,7 @@ Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
-BuildRequires:	bzip2-devel >= 1.0.1
+BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	db-devel >= %{reqdb_ver}
 %{?with_apidoc:BuildRequires:	doxygen}
 BuildRequires:	elfutils-devel
@@ -133,7 +133,7 @@ BuildRequires:	zlib-devel
 %if %{with static}
 # Require static library only for static build
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
-BuildRequires:	bzip2-static >= 1.0.2-5
+BuildRequires:	bzip2-static >= 1.0.2-17
 BuildRequires:	db-static >= %{reqdb_ver}
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	elfutils-static
