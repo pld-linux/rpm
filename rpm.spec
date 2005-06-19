@@ -11,6 +11,7 @@
 %bcond_without	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
+%bcond_with	neon		# build with HTTP/WebDAV support (neon library)
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
@@ -18,7 +19,7 @@
 # versions of required libraries
 %define	reqdb_ver	4.2.50-1
 %define	reqpopt_ver	1.10.1
-%define	beecrypt_ver	2:4.1.0
+%define	beecrypt_ver	2:4.1.2-4
 %define	rpm_macros_rev	1.222
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
@@ -30,7 +31,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.1
-Release:	3
+Release:	3.2
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -98,6 +99,8 @@ Patch40:	%{name}-print-requires.patch
 Patch41:	%{name}-reduce-stack-usage.patch
 Patch42:	%{name}-amd64.patch
 Patch43:	%{name}-patch-quote.patch
+Patch44:	%{name}-no-neon.patch
+Patch45:	%{name}-no-sqlite.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -109,14 +112,16 @@ BuildRequires:	db-devel >= %{reqdb_ver}
 BuildRequires:	elfutils-devel
 BuildRequires:	findutils
 BuildRequires:	gettext-devel >= 0.11.4-2
-BuildRequires:	home-etc-devel
+BuildRequires:	home-etc-devel >= 1:1.0.9-2
 #BuildRequires:	libmagic-devel
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
+%if %{with neon}
 BuildRequires:	libxml2-devel
 BuildRequires:	neon-devel >= 0.24.7-3
+%endif
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
 %{?with_python:BuildRequires:	python-devel >= 2.2}
@@ -214,11 +219,14 @@ RPM - це потужний менеджер пакет╕в, що може бути використаний для
 Summary:	RPMs library
 Summary(pl):	Biblioteki RPM-a
 Group:		Libraries
+Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	db >= %{reqdb_ver}
 Requires:	popt >= %{reqpopt_ver}
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
+# avoid linking to /usr/lib
+Conflicts:	home-etc < 1.0.9-2
 
 %description lib
 RPMs library.
@@ -630,6 +638,8 @@ cat %{SOURCE11} >> macros.in
 %patch41 -p1
 %patch42 -p1
 %patch43 -p1
+%{!?with_neon:%patch44 -p1}
+%patch45 -p1
 %patch0 -p1
 %patch3 -p1
 
@@ -641,7 +651,7 @@ cd ..
 mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
 
-rm -rf neon zlib libelf db db3 popt rpmdb/db.h
+rm -rf sqlite zlib db db3 popt rpmdb/db.h
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
