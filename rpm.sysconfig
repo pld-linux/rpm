@@ -8,3 +8,7 @@ RPM_SCRIPTVERBOSITY=5
 
 # Should unused users be removed at package deinstalation?
 RPM_USERDEL=yes
+
+# cache rpm -qa in /var/log/rpmpkgs?
+# bash-completion uses this for faster command completion.
+RPM_CRON_RPMQA_CACHE=no
