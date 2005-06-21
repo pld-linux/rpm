@@ -31,7 +31,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.1
-Release:	4
+Release:	5
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -109,7 +109,7 @@ BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	db-devel >= %{reqdb_ver}
 %{?with_apidoc:BuildRequires:	doxygen}
-BuildRequires:	elfutils-devel > 0.108
+BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	findutils
 BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	home-etc-devel >= 1:1.0.9-2
