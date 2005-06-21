@@ -7,19 +7,20 @@
 # 
 # Conditional build:
 %bcond_with	static		# build static rpmi (not supported at the moment)
-%bcond_without	apidocs		# don't generate documentation with doxygen
-%bcond_with	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
+%bcond_without	apidoc		# don't generate documentation with doxygen
+%bcond_without	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
+%bcond_with	neon		# build with HTTP/WebDAV support (neon library)
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
 # versions of required libraries
-%define	reqdb_ver	4.3.27-1
+%define	reqdb_ver	4.2.52-8
 %define	reqpopt_ver	1.10.1
-%define	beecrypt_ver	2:4.1.0
-%define	rpm_macros_rev	1.220
+%define	beecrypt_ver	2:4.1.2-4
+%define	rpm_macros_rev	1.223
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -30,7 +31,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.1
-Release:	1.11
+Release:	5
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -96,35 +97,43 @@ Patch38:	%{name}-gcc4.patch
 Patch39:	%{name}-pythondeps.patch
 Patch40:	%{name}-print-requires.patch
 Patch41:	%{name}-reduce-stack-usage.patch
+Patch42:	%{name}-amd64.patch
+Patch43:	%{name}-patch-quote.patch
+Patch44:	%{name}-no-neon.patch
+Patch45:	%{name}-no-sqlite.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
-BuildRequires:	bzip2-devel >= 1.0.1
+BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	db-devel >= %{reqdb_ver}
-%{?with_apidocs:BuildRequires:	doxygen}
-BuildRequires:	elfutils-devel
+%{?with_apidoc:BuildRequires:	doxygen}
+BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	findutils
 BuildRequires:	gettext-devel >= 0.11.4-2
+BuildRequires:	home-etc-devel >= 1:1.0.9-2
 #BuildRequires:	libmagic-devel
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
+%if %{with neon}
 BuildRequires:	libxml2-devel
 BuildRequires:	neon-devel >= 0.24.7-3
+%endif
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
 %{?with_python:BuildRequires:	python-devel >= 2.2}
 BuildRequires:	python-modules >= 2.2
 BuildRequires:	readline-devel
 BuildRequires:	rpm-perlprov
+BuildRequires:	rpm-pythonprov
 BuildRequires:	zlib-devel
 %if %{with static}
 # Require static library only for static build
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
-BuildRequires:	bzip2-static >= 1.0.2-5
+BuildRequires:	bzip2-static >= 1.0.2-17
 BuildRequires:	db-static >= %{reqdb_ver}
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	elfutils-static
@@ -151,9 +160,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		x8664	amd64 ia32e x86_64
 
 # stabilize new build environment
-%define		__newcc %{?force_cc}%{!?force_cc:%{_target_cpu}-pld-linux-gcc}
-%define		__newcxx %{?force_cxx}%{!?force_cxx:%{_target_cpu}-pld-linux-g++}
-%define		__newcpp %{?force_cpp}%{!?force_cpp:%{_target_cpu}-pld-linux-gcc -E}
+%define		__cc %{?force_cc}%{!?force_cc:%{_target_cpu}-pld-linux-gcc}
+%define		__cxx %{?force_cxx}%{!?force_cxx:%{_target_cpu}-pld-linux-g++}
+%define		__cpp %{?force_cpp}%{!?force_cpp:%{_target_cpu}-pld-linux-gcc -E}
 
 %define		_rpmlibdir /usr/lib/rpm
 
@@ -210,11 +219,14 @@ RPM - це потужний менеджер пакет╕в, що може бути використаний для
 Summary:	RPMs library
 Summary(pl):	Biblioteki RPM-a
 Group:		Libraries
+Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	db >= %{reqdb_ver}
-%{?with_selinux:BuildRequires:	libselinux >= 1.18}
 Requires:	popt >= %{reqpopt_ver}
+Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
+# avoid linking to /usr/lib
+Conflicts:	home-etc < 1.0.9-2
 
 %description lib
 RPMs library.
@@ -397,8 +409,11 @@ Requires:	elfutils
 Requires:	file >= 4.13-2
 Requires:	fileutils
 Requires:	findutils
-# because of -fvisibility... related fixes
-Requires:	gcc >= 5:4.0.1-0.20050514.2
+%ifarch athlon
+Requires:	gcc >= 3.0.3
+%else
+Requires:	gcc
+%endif
 Requires:	glibc-devel
 Requires:	grep
 Requires:	gzip
@@ -581,8 +596,7 @@ ze ╪rodeЁ RPM-a przez doxygen.
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
-# home-etc FIXME
-#%patch14 -p1
+%patch14 -p1
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
@@ -622,6 +636,10 @@ cat %{SOURCE11} >> macros.in
 %patch39 -p1
 %patch40 -p1
 %patch41 -p1
+%patch42 -p1
+%patch43 -p1
+%{!?with_neon:%patch44 -p1}
+%patch45 -p1
 %patch0 -p1
 %patch3 -p1
 
@@ -633,7 +651,7 @@ cd ..
 mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
 
-rm -rf neon zlib libelf db db3 popt rpmdb/db.h
+rm -rf sqlite zlib db db3 popt rpmdb/db.h
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
@@ -672,13 +690,13 @@ mv -f macros.tmp macros.in
 
 # pass CC and CXX too in case of building with some older configure macro
 %configure \
-	CC="%{__newcc}" \
-	CXX="%{__newcxx}" \
-	CPP="%{__newcpp}" \
+	CC="%{__cc}" \
+	CXX="%{__cxx}" \
+	CPP="%{__cpp}" \
 	--enable-shared \
 	--enable-static \
 	%{?with_apidoc:--with-apidocs} \
-	%{?with_pkgnameinautoreq:--enable-adding-packages-names-in-autogenerated-dependancies} \
+	%{?with_autoreqdep:--enable-adding-packages-names-in-autogenerated-dependancies} \
 	%{?with_python:--with-python=auto} \
 	%{!?with_python:--without-python} \
 	%{!?with_selinux:--without-selinux} \
@@ -686,15 +704,13 @@ mv -f macros.tmp macros.in
 
 # file_LDFLAGS, debugedit_LDADD - no need to link "file" and "debugedit" statically
 %{__make} \
-	CC="%{__cc}" \
-	CXX="%{__cxx}" \
-	CPP="%{__cpp}" \
 	pylibdir=%{py_libdir} \
 	myLDFLAGS="%{rpmldflags}" \
 	file_LDFLAGS= \
 	debugedit_LDADD="\$(WITH_LIBELF_LIB) -lpopt"
 
 #	%{!?with_static:rpm_LDFLAGS="\$(myLDFLAGS)"} \
+
 %{?with_apidocs:%{__make} doxygen}
 
 %install
@@ -994,6 +1010,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %ifarch alpha
 %{_rpmlibdir}/alpha*
 %endif
+%ifarch amd64
+%{_rpmlibdir}/amd64*
+%{_rpmlibdir}/x86_64*
+%endif
 %ifarch ia64
 %{_rpmlibdir}/ia64*
 %endif
@@ -1005,9 +1025,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %endif
 %ifarch sparc sparc64
 %{_rpmlibdir}/sparc*
-%endif
-%ifarch %{x8664}
-%{_rpmlibdir}/x86_64*
 %endif
 # must be here for "Requires: rpm-*prov" to work
 %{_rpmlibdir}/macros.perl

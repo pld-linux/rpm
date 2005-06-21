@@ -1,105 +1,80 @@
-diff -Nru rpm-4.1/lib/rpmrc.c rpm-4.1.new/lib/rpmrc.c
---- rpm-4.1/lib/rpmrc.c	Tue Aug 20 16:53:44 2002
-+++ rpm-4.1.new/lib/rpmrc.c	Tue Mar 11 18:41:48 2003
-@@ -1756,27 +1756,39 @@
- 	/* Expand ~/ to $HOME/ */
- 	fn[0] = '\0';
- 	if (r[0] == '~' && r[1] == '/') {
-+			const char * etc_dir = getenv("HOME_ETC");
- 	    const char * home = getenv("HOME");
--	    if (home == NULL) {
-+			if (etc_dir) {
-+	    	if (strlen(etc_dir) > (sizeof(fn) - strlen(r))) {
-+					rpmError(RPMERR_RPMRC, _("Cannot read %s, HOME_ETC is too large.\n"),r);
-+					rc = 1;
-+					break;
-+	    	}
-+	    	strcpy(fn, etc_dir);
-+				strncat(fn, "/", sizeof(fn) - strlen(fn));				
-+	  	  r+=2;
-+		
-+			} else {
-+	    	if (home == NULL) {
- 	    /* XXX Only /usr/lib/rpm/rpmrc must exist in default rcfiles list */
--		if (rcfiles == defrcfiles && myrcfiles != r)
--		    continue;
--		rpmError(RPMERR_RPMRC, _("Cannot expand %s\n"), r);
--		rc = 1;
--		break;
--	    }
--	    if (strlen(home) > (sizeof(fn) - strlen(r))) {
--		rpmError(RPMERR_RPMRC, _("Cannot read %s, HOME is too large.\n"),
-+			if (rcfiles == defrcfiles && myrcfiles != r)
-+		    	continue;
-+			rpmError(RPMERR_RPMRC, _("Cannot expand %s\n"), r);
-+			rc = 1;
-+			break;
-+	    	}
-+	    	if (strlen(home) > (sizeof(fn) - strlen(r))) {
-+			rpmError(RPMERR_RPMRC, _("Cannot read %s, HOME is too large.\n"),
- 				r);
--		rc = 1;
--		break;
--	    }
--	    strcpy(fn, home);
--	    r++;
--	}
--	strncat(fn, r, sizeof(fn) - (strlen(fn) + 1));
--	fn[sizeof(fn)-1] = '\0';
--
-+			rc = 1;
-+			break;
-+	    	}
-+	    	strcpy(fn, home);
-+	  	  r++;
-+			}
-+		}
-+		strncat(fn, r, sizeof(fn) - (strlen(fn) + 1));
-+		fn[sizeof(fn)-1] = '\0';
- 	/* Read another rcfile */
- 	fd = Fopen(fn, "r.fpio");
- 	if (fd == NULL || Ferror(fd)) {
-diff -Nru rpm-4.1/rpmio/macro.c rpm-4.1.new/rpmio/macro.c
---- rpm-4.1/rpmio/macro.c	Tue Sep 17 14:58:23 2002
-+++ rpm-4.1.new/rpmio/macro.c	Tue Mar 11 18:21:59 2003
-@@ -1614,15 +1614,22 @@
- 	buf[0] = '\0';
- 	if (mfile[0] == '~' && mfile[1] == '/') {
- 	    char *home;
--	    if ((home = getenv("HOME")) != NULL) {
--		mfile += 2;
--		strncpy(buf, home, sizeof(buf));
--		strncat(buf, "/", sizeof(buf) - strlen(buf));
-+			char *etc_dir = getenv("HOME_ETC");
-+
-+			if (etc_dir) {
-+				mfile += 2;
-+				strncpy(buf, etc_dir, sizeof(buf));
-+				strncat(buf, "/", sizeof(buf) - strlen(buf));				
-+			} else {
-+	    	if ((home = getenv("HOME")) != NULL) {
-+			mfile += 2;
-+			strncpy(buf, home, sizeof(buf));
-+			strncat(buf, "/", sizeof(buf) - strlen(buf));
- 	    }
-+		}
- 	}
- 	strncat(buf, mfile, sizeof(buf) - strlen(buf));
- 	buf[sizeof(buf)-1] = '\0';
--
- 	fd = Fopen(buf, "r.fpio");
- 	if (fd == NULL || Ferror(fd)) {
- 	    if (fd) (void) Fclose(fd);
---- rpm-4.3/po/pl.po.orig	2003-06-10 23:59:11.000000000 +0200
-+++ rpm-4.3/po/pl.po	2003-06-11 00:06:16.000000000 +0200
-@@ -2834,6 +2834,10 @@
- msgid "Please contact rpm-list@redhat.com\n"
- msgstr "Proszê skontaktowaæ siê z rpm-list@redhat.com\n"
+diff -ur rpm-4.4.1/lib/rpmrc.c rpm-4.4.1-home_etc/lib/rpmrc.c
+--- rpm-4.4.1/lib/rpmrc.c	2005-01-17 19:46:23.000000000 +0100
++++ rpm-4.4.1-home_etc/lib/rpmrc.c	2005-06-17 14:28:10.000000000 +0200
+@@ -1,6 +1,8 @@
+ /*@-bounds@*/
+ #include "system.h"
  
-+#: lib/rpmrc.c:1764
-+msgid "Cannot read %s, HOME_ETC is too large.\n"
-+msgstr "Nie mo¿na odczytaæ %s, HOME_ETC jest zbyt du¿e.\n"
++#include <home_etc.h>
 +
- #: lib/rpmrc.c:1765
- #, c-format
- msgid "Cannot expand %s\n"
+ #include <stdarg.h>
+ #if defined(__linux__) && defined(__powerpc__)
+ #include <setjmp.h>
+@@ -1814,13 +1814,13 @@
+ 		rc = 1;
+ 		break;
+ 	    }
+-	    if (strlen(home) > (sizeof(fn) - strlen(r))) {
++	    if (strlen(_HE(home)) > (sizeof(fn) - strlen(r))) {
+ 		rpmError(RPMERR_RPMRC, _("Cannot read %s, HOME is too large.\n"),
+ 				r);
+ 		rc = 1;
+ 		break;
+ 	    }
+-	    strcpy(fn, home);
++	    strcpy(fn, _HE(home));
+ 	    r++;
+ 	}
+ 	strncat(fn, r, sizeof(fn) - (strlen(fn) + 1));
+diff -ur rpm-4.4.1/rpmio/macro.c rpm-4.4.1-home_etc/rpmio/macro.c
+--- rpm-4.4.1/rpmio/macro.c	2005-01-26 04:39:58.000000000 +0100
++++ rpm-4.4.1-home_etc/rpmio/macro.c	2005-06-17 14:25:02.415093480 +0200
+@@ -5,6 +5,8 @@
+ 
+ #include "system.h"
+ #include <stdarg.h>
++
++#include <home_etc.h>
+ 
+ #if !defined(isblank)
+ #define	isblank(_c)	((_c) == ' ' || (_c) == '\t')
+@@ -1731,7 +1731,7 @@
+ 	/* XXX Prepend the URL leader for globs that have stripped it off */
+ 	maxb = 0;
+ 	for (i = 0; i < gl.gl_pathc; i++) {
+-	    if ((nb = strlen(&(gl.gl_pathv[i][0]))) > maxb)
++	    if ((nb = strlen(_HE(&(gl.gl_pathv[i][0])))) > maxb)
+ 		maxb = nb;
+ 	}
+ 	
+@@ -1765,7 +1765,7 @@
+ 	    const char * globFile = &(gl.gl_pathv[i][0]);
+ 	    if (globRoot > globURL && globRoot[-1] == '/')
+ 		while (*globFile == '/') globFile++;
+-	    strcpy(globRoot, globFile);
++	    strcpy(globRoot, _HE(globFile));
+ if (_debug)
+ fprintf(stderr, "*** rpmGlob argv[%d] \"%s\"\n", argc, globURL);
+ 	    argv[argc++] = xstrdup(globURL);
+--- rpm-4.4.1/lib/Makefile.am~	2005-06-17 15:08:29.901412560 +0200
++++ rpm-4.4.1/lib/Makefile.am	2005-06-17 15:08:41.173698912 +0200
+@@ -44,7 +44,7 @@
+ librpm_la_LDFLAGS = -release 4.4 $(LDFLAGS) \
+ 	$(top_builddir)/rpmdb/librpmdb.la \
+ 	$(top_builddir)/rpmio/librpmio.la \
+-	-lpopt \
++	-lpopt -lhome_etc \
+ 	@WITH_SELINUX_LIB@ \
+ 	@INTLLIBS@
+ 
+--- rpm-4.4.1/rpmio/Makefile.am~	2005-06-17 15:08:29.902412408 +0200
++++ rpm-4.4.1/rpmio/Makefile.am	2005-06-17 15:09:10.987166576 +0200
+@@ -37,7 +37,7 @@
+ 	@WITH_LUA_LIB@ \
+ 	$(top_builddir)/file/src/libmagic.la \
+ 	@WITH_ZLIB_LIB@ \
+-	-lneon -lpthread
++	-lneon -lpthread -lhome_etc
+ librpmio_la_LIBADD = # $(BEECRYPTLOBJS)
+ librpmio_la_DEPENDENCIES = # .created
+ 
