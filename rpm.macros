@@ -60,7 +60,7 @@
  if [ -n "$LINGUAS" ]; then unset LINGUAS; fi; \
  LDFLAGS="${LDFLAGS:-%rpmldflags}" ; export LDFLAGS ; \
  CFLAGS="${CFLAGS:-%rpmcflags}" ; export CFLAGS ; \
- CXXFLAGS="${CXXFLAGS:-%rpmcflags}" ; export CXXFLAGS ; \
+ CXXFLAGS="${CXXFLAGS:-%rpmcxxflags}" ; export CXXFLAGS ; \
  FFLAGS="${FFLAGS:-%rpmcflags}" ; export FFLAGS ; \
  CPPFLAGS="${CPPFLAGS:-}" ; export CPPFLAGS ; \
  %{?__cc:CC="%{__cc}" ; export CC ; } \
@@ -91,7 +91,7 @@
 %configure {./configure \
  	LDFLAGS="${LDFLAGS:-%rpmldflags}" \
 	CFLAGS="${CFLAGS:-%rpmcflags}" \
-	CXXFLAGS="${CXXFLAGS:-%rpmcflags}" \
+	CXXFLAGS="${CXXFLAGS:-%rpmcxxflags}" \
 	FFLAGS="${FFLAGS:-%rpmcflags}" \
 	CPPFLAGS="${CPPFLAGS:-}" \
 	%{?__cc:CC="%{__cc}"} \
