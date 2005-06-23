@@ -715,3 +715,28 @@ if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
 fi \
 %{nil}
 
+# see browser-plugins.spec / template-browser-plugin.spec
+# written by glen@pld-linux.org.
+%ns_plugin_install(d:) { \
+# create link if it's first install of either of the packages \
+if [ "$1" = "1" ] && [ "$2" = "1" ]; then \
+( \
+%( \
+	for file in %{*}; do \
+		echo echo Installing $file to %{-d*}; \
+		echo "ln -sf %{_libdir}/browser-plugins/$file %{-d*};"; \
+	done ) \
+) | ( %banner -t 5 -e %{name}-in ); fi; \
+}
+
+%ns_plugin_uninstall(d:) { \
+# remove link if either of the packages are gone \
+if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
+( \
+%( \
+	for file in %{*}; do \
+		echo echo Removing $file from %{-d*}; \
+		echo "rm -f %{-d*}/$file;"; \
+	done ) \
+) | ( %banner -t 5 -e %{name}-un ); fi; \
+}
