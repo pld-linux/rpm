@@ -221,6 +221,7 @@ Summary(pl):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	db >= %{reqdb_ver}
+%{?with_selinux:Requires:	libselinux >= 1.18}
 Requires:	popt >= %{reqpopt_ver}
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
