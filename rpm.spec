@@ -663,10 +663,6 @@ for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
 	mv -f ${f}.tmp $f
 done
 
-# ... and make some cleanings
-rm -fr $(find ./ -type d -name CVS )
-rm -f  $(find ./ -type f -name ".cvsignore" )
-
 %build
 cd file
 %{__libtoolize}
