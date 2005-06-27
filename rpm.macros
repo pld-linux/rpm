@@ -717,7 +717,7 @@ fi \
 
 # see browser-plugins.spec / template-browser-plugin.spec
 # written by glen@pld-linux.org.
-%ns_plugin_install(d:) { \
+%nsplugin_install(d:) { \
 # create link if it's first install of either of the packages \
 if [ "$1" = "1" ] && [ "$2" = "1" ]; then \
 ( \
@@ -729,7 +729,7 @@ if [ "$1" = "1" ] && [ "$2" = "1" ]; then \
 ) | ( %banner -t 5 -e %{name}-in ); fi; \
 }
 
-%ns_plugin_uninstall(d:) { \
+%nsplugin_uninstall(d:) { \
 # remove link if either of the packages are gone \
 if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
 ( \
