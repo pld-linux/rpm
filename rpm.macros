@@ -685,10 +685,10 @@ fi;
 if [ "$1" = "1" ] && [ "$2" = "1" ] && [ -d %{__apache_confdir %{-v*}} ]; then\
 	ln -sf %{-c*}%{!-c:%{_sysconfdir}/apache-%{name}.conf} %{__apache_confdir %{-v*}}/%{-n*}%{!-n:99}_%{name}.conf\
 fi\
-# restart apache if the config symlink is there\
+# reload apache if the config symlink is there\
 if [ -L %{__apache_confdir %{-v*}}/%{-n*}%{!-n:99}_%{name}.conf ]; then\
 	if [ -f /var/lock/subsys/%{__apache_svcname %{-v*}} ]; then\
-		/etc/rc.d/init.d/%{__apache_svcname %{-v*}} restart 1>&2\
+		/etc/rc.d/init.d/%{__apache_svcname %{-v*}} reload 1>&2\
 	fi\
 fi\
 %{nil}
@@ -708,7 +708,7 @@ if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
 	if [ -L %{__apache_confdir %{-v*}}/%{-n*}%{!-n:99}_%{name}.conf ]; then \
 		rm -f %{__apache_confdir %{-v*}}/%{-n*}%{!-n:99}_%{name}.conf \
 		if [ -f /var/lock/subsys/%{__apache_svcname %{-v*}} ]; then \
-			/etc/rc.d/init.d/%{__apache_svcname %{-v*}} restart 1>&2 \
+			/etc/rc.d/init.d/%{__apache_svcname %{-v*}} reload 1>&2 \
 		fi \
 	fi \
 fi \
