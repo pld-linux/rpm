@@ -686,8 +686,6 @@ sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' \
 	-e 's|@host_cpu@|%{_target_cpu}|' macros.in > macros.tmp
 mv -f macros.tmp macros.in
 
-# glibc glob() has no support to GLOB_QUOTE and GLOB_LIMIT/GLOB_MAXPATH
-# rename internal libroken glob/globfree
 CPPFLAGS="-Dglob=rpm_glob -Dglobfree=rpm_globfree"; export CPPFLAGS
 
 # pass CC and CXX too in case of building with some older configure macro
