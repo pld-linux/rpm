@@ -20,7 +20,7 @@
 
 %debugcflags	-O0 -g -Wall
 %rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
-%rpmcxxflags	%{rpmcflags} -fvisibility-inlines-hidden
+%rpmcxxflags	%{rpmcflags}
 %rpmldflags	%{nil}
 # %rpmldflags	-Wl,--as-needed
 
