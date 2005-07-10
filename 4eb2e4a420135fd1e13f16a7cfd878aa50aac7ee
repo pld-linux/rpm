@@ -1,0 +1,2 @@
+- R(kernel-headers) added.
+  %__kernel_rel uses %{_kernelsrcdir}/include/linux/fs.h.
