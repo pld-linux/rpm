@@ -740,3 +740,36 @@ if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
 	done ) \
 ) | ( %banner -t 5 -e %{name}-un ); fi; \
 }
+
+# service macro.
+#
+# calls usual service restart on package %post, but skips the restart if
+# administrator has disabled automatic service restarts in either global
+# /etc/sysconfig/rpm or per service /etc/sysconfig/SERVICE file.
+#
+# written by glen@pld-linux.org.
+# All rights reserved. Permission to copy is hereby granted.. yada, yada, yada
+#
+# Usage:
+#   %service [-q] SERVICE ACTION
+#
+#  -q be silent when service isn't started (for postun scriplets)
+#
+%service(q) \
+# we use function, not to globber namespace with useless variables \
+skip_auto_restart() { \
+	. /etc/sysconfig/rpm # global setting \
+	[ -f /etc/sysconfig/%1 ] && . /etc/sysconfig/%1 # per service setting \
+	echo ${RPM_SKIP_AUTO_RESTART:-no} \
+} \
+if [ -f /var/lock/subsys/%1 ]; then \
+	if [ $(skip_auto_restart) = no ]; then \
+		/etc/rc.d/init.d/%1 %2 1>&2 \
+	else \
+		echo 'Run "/etc/rc.d/init.d/%1 %2" to %2 %1 service.' \
+	fi \
+else \
+	%{!-q:echo 'Run "/etc/rc.d/init.d/%1 start" to start %1 service.'} \
+	%{-q::} \
+fi;
+
