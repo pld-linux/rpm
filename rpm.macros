@@ -771,5 +771,5 @@ if [ -f /var/lock/subsys/%1 ]; then \
 else \
 	%{!-q:echo 'Run "/etc/rc.d/init.d/%1 start" to start %1 service.';} \
 	%{-q::;} \
-fi }};
+fi }; }
 
