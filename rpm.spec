@@ -30,7 +30,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.1
-Release:	1.12
+Release:	1.99
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -96,6 +96,7 @@ Patch38:	%{name}-gcc4.patch
 Patch39:	%{name}-pythondeps.patch
 Patch40:	%{name}-print-requires.patch
 Patch41:	%{name}-reduce-stack-usage.patch
+Patch42:	%{name}-glob.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -622,6 +623,7 @@ cat %{SOURCE11} >> macros.in
 %patch39 -p1
 %patch40 -p1
 %patch41 -p1
+%patch42 -p1
 %patch0 -p1
 %patch3 -p1
 
@@ -680,6 +682,7 @@ CPPFLAGS="-Dglob=rpm_glob -Dglobfree=rpm_globfree"; export CPPFLAGS
 	%{?with_python:--with-python=auto} \
 	%{!?with_python:--without-python} \
 	%{!?with_selinux:--without-selinux} \
+	--with-glob \
 	--without-db
 
 # file_LDFLAGS, debugedit_LDADD - no need to link "file" and "debugedit" statically
