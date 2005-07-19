@@ -35,8 +35,8 @@ diff -ur rpm-4.4.1/rpmio/Makefile.am rpm-4.4.1-no-neon/rpmio/Makefile.am
  	@WITH_LUA_LIB@ \
  	$(top_builddir)/file/src/libmagic.la \
  	@WITH_ZLIB_LIB@ \
--	-lneon -lpthread -lhome_etc
-+	-lpthread -lhome_etc
+-	-lneon -lpthread @HOME_ETC_LIB@
++	-lpthread @HOME_ETC_LIB@
  librpmio_la_LIBADD = # $(BEECRYPTLOBJS)
  librpmio_la_DEPENDENCIES = # .created
  
