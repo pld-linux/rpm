@@ -1,16 +1,19 @@
-diff -ur rpm-4.4.1/lib/rpmrc.c rpm-4.4.1-home_etc/lib/rpmrc.c
---- rpm-4.4.1/lib/rpmrc.c	2005-01-17 19:46:23.000000000 +0100
-+++ rpm-4.4.1-home_etc/lib/rpmrc.c	2005-06-17 14:28:10.000000000 +0200
-@@ -1,6 +1,8 @@
+--- rpm-4.4.1/lib/rpmrc.c.orig	2005-07-19 18:53:09.096470264 +0200
++++ rpm-4.4.1/lib/rpmrc.c	2005-07-19 19:00:48.610613496 +0200
+@@ -1,6 +1,12 @@
  /*@-bounds@*/
  #include "system.h"
  
++#ifdef USE_HOME_ETC
 +#include <home_etc.h>
++#else
++#define _HE(x) (x)
++#endif
 +
  #include <stdarg.h>
  #if defined(__linux__) && defined(__powerpc__)
  #include <setjmp.h>
-@@ -1814,13 +1814,13 @@
+@@ -1815,13 +1821,13 @@
  		rc = 1;
  		break;
  	    }
@@ -26,19 +29,22 @@ diff -ur rpm-4.4.1/lib/rpmrc.c rpm-4.4.1-home_etc/lib/rpmrc.c
  	    r++;
  	}
  	strncat(fn, r, sizeof(fn) - (strlen(fn) + 1));
-diff -ur rpm-4.4.1/rpmio/macro.c rpm-4.4.1-home_etc/rpmio/macro.c
---- rpm-4.4.1/rpmio/macro.c	2005-01-26 04:39:58.000000000 +0100
-+++ rpm-4.4.1-home_etc/rpmio/macro.c	2005-06-17 14:25:02.415093480 +0200
-@@ -5,6 +5,8 @@
- 
+--- rpm-4.4.1/rpmio/macro.c.orig	2005-07-19 18:53:09.358430440 +0200
++++ rpm-4.4.1/rpmio/macro.c	2005-07-19 19:04:25.098702304 +0200
+@@ -6,6 +6,12 @@
  #include "system.h"
  #include <stdarg.h>
-+
-+#include <home_etc.h>
  
++#ifdef USE_HOME_ETC
++#include <home_etc.h>
++#else
++#define _HE(x) (x)
++#endif
++
  #if !defined(isblank)
  #define	isblank(_c)	((_c) == ' ' || (_c) == '\t')
-@@ -1731,7 +1731,7 @@
+ #endif
+@@ -1732,7 +1738,7 @@
  	/* XXX Prepend the URL leader for globs that have stripped it off */
  	maxb = 0;
  	for (i = 0; i < gl.gl_pathc; i++) {
@@ -47,7 +53,7 @@ diff -ur rpm-4.4.1/rpmio/macro.c rpm-4.4.1-home_etc/rpmio/macro.c
  		maxb = nb;
  	}
  	
-@@ -1765,7 +1765,7 @@
+@@ -1766,7 +1772,7 @@
  	    const char * globFile = &(gl.gl_pathv[i][0]);
  	    if (globRoot > globURL && globRoot[-1] == '/')
  		while (*globFile == '/') globFile++;
@@ -56,25 +62,42 @@ diff -ur rpm-4.4.1/rpmio/macro.c rpm-4.4.1-home_etc/rpmio/macro.c
  if (_debug)
  fprintf(stderr, "*** rpmGlob argv[%d] \"%s\"\n", argc, globURL);
  	    argv[argc++] = xstrdup(globURL);
---- rpm-4.4.1/lib/Makefile.am~	2005-06-17 15:08:29.901412560 +0200
-+++ rpm-4.4.1/lib/Makefile.am	2005-06-17 15:08:41.173698912 +0200
+--- rpm-4.4.1/lib/Makefile.am.orig	2005-07-19 18:53:08.705529696 +0200
++++ rpm-4.4.1/lib/Makefile.am	2005-07-19 19:04:59.525468640 +0200
 @@ -44,7 +44,7 @@
  librpm_la_LDFLAGS = -release 4.4 $(LDFLAGS) \
  	$(top_builddir)/rpmdb/librpmdb.la \
  	$(top_builddir)/rpmio/librpmio.la \
 -	-lpopt \
-+	-lpopt -lhome_etc \
++	-lpopt @HOME_ETC_LIB@ \
  	@WITH_SELINUX_LIB@ \
  	@INTLLIBS@
  
---- rpm-4.4.1/rpmio/Makefile.am~	2005-06-17 15:08:29.902412408 +0200
-+++ rpm-4.4.1/rpmio/Makefile.am	2005-06-17 15:09:10.987166576 +0200
+--- rpm-4.4.1/rpmio/Makefile.am.orig	2005-07-19 18:53:09.387426032 +0200
++++ rpm-4.4.1/rpmio/Makefile.am	2005-07-19 19:04:42.440066016 +0200
 @@ -37,7 +37,7 @@
  	@WITH_LUA_LIB@ \
  	$(top_builddir)/file/src/libmagic.la \
  	@WITH_ZLIB_LIB@ \
 -	-lneon -lpthread
-+	-lneon -lpthread -lhome_etc
++	-lneon -lpthread @HOME_ETC_LIB@
  librpmio_la_LIBADD = # $(BEECRYPTLOBJS)
  librpmio_la_DEPENDENCIES = # .created
  
+--- rpm-4.4.1/configure.ac.orig	2005-07-19 18:53:09.385426000 +0200
++++ rpm-4.4.1/configure.ac	2005-07-19 19:10:49.732229120 +0200
+@@ -945,6 +945,14 @@
+ fi
+ AC_SUBST(WITH_SELINUX_LIB)
+ 
++withval=no
++AC_ARG_WITH(home_etc, [  --with-home_etc         build with home_etc support ])
++if test $withval != no ; then
++  AC_DEFINE(USE_HOME_ETC, 1, [Build with home_etc support?])
++  HOME_ETC_LIB="-lhome_etc"
++fi
++AC_SUBST(HOME_ETC_LIB)
++
+ WITH_LUA_LIB=
+ WITH_LUA_SUBDIR=
+ WITH_LUA_INCLUDE=
