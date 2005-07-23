@@ -1,23 +1,27 @@
---- rpm-4.4.1/configure.ac~	2005-06-19 16:27:34.713451864 +0200
-+++ rpm-4.4.1/configure.ac	2005-06-19 16:28:06.515617200 +0200
-@@ -514,17 +514,9 @@
- WITH_INTERNAL_DB=1
- DBLIBSRCS="db3.c"
+--- rpm-4.4.2/configure.ac.orig	2005-07-23 14:12:39.097833000 +0200
++++ rpm-4.4.2/configure.ac	2005-07-23 14:14:23.972889568 +0200
+@@ -588,24 +588,6 @@
+ WITH_SQLITE3_INCLUDE=
+ WITH_SQLITE3_LIB=
  
 -AC_CHECK_HEADER([sqlite3.h], [
--  AC_DEFINE(HAVE_SQLITE3_H, 1, [Define if you have the <sqlite3.h> header file])
--  WITH_SQLITE3=1
--  WITH_SQLITE3_INCLUDE=
--  WITH_SQLITE3_LIB=-lsqlite3
--  DBLIBSRCS="$DBLIBSRCS sqlite.c"
+-  AC_CHECK_LIB(sqlite3, sqlite3_open, [
+-    AC_DEFINE(HAVE_SQLITE3_H, 1, [Define if you have the <sqlite3.h> header file])
+-    WITH_SQLITE3_SUBDIR=
+-    WITH_SQLITE3_INCLUDE=
+-    WITH_SQLITE3_LIB="-lsqlite3"
+-    DBLIBSRCS="$DBLIBSRCS sqlite.c"
+-  ])
 -],[
--  WITH_SQLITE3=0
--  WITH_SQLITE3_INCLUDE=
--  WITH_SQLITE3_LIB=
+-  if test -d sqlite ; then
+-    AC_DEFINE(HAVE_SQLITE3_H, 1, [Define if you have the <sqlite3.h> header file])
+-    WITH_SQLITE3_SUBDIR=sqlite
+-    WITH_SQLITE3_INCLUDE="-I\${top_srcdir}/${WITH_SQLITE3_SUBDIR}/src"
+-    WITH_SQLITE3_LIB="\${top_builddir}/${WITH_SQLITE3_SUBDIR}/libsqlite3.la"
+-    DBLIBSRCS="$DBLIBSRCS sqlite.c"
+-  fi
 -])
-+WITH_SQLITE3=0
-+WITH_SQLITE3_INCLUDE=
-+WITH_SQLITE3_LIB=
- 
- AC_SUBST(WITH_DB_SUBDIR)
- AC_SUBST(WITH_INTERNAL_DB)
+-
+ AC_SUBST(WITH_SQLITE3_SUBDIR)
+ AC_SUBST(WITH_SQLITE3_INCLUDE)
+ AC_SUBST(WITH_SQLITE3_LIB)
