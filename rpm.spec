@@ -75,7 +75,7 @@ Patch15:	%{name}-system_libs-more.patch
 Patch16:	%{name}-php-deps.patch
 Patch17:	%{name}-ldconfig-always.patch
 Patch18:	%{name}-perl_req.patch
-Patch19:	%{name}-no-bin-env.patch
+
 Patch20:	%{name}-magic-usesystem.patch
 Patch21:	%{name}-dontneedutils.patch
 Patch22:	%{name}-provides-dont-obsolete.patch
@@ -94,7 +94,7 @@ Patch34:	%{name}-epoch0.patch
 Patch35:	%{name}-perl_req-INC_dirs.patch
 Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
-Patch38:	%{name}-gcc4.patch
+
 Patch39:	%{name}-pythondeps.patch
 Patch40:	%{name}-print-requires.patch
 Patch41:	%{name}-reduce-stack-usage.patch
@@ -102,7 +102,6 @@ Patch42:	%{name}-glob.patch
 Patch43:	%{name}-patch-quote.patch
 Patch44:	%{name}-no-neon.patch
 Patch45:	%{name}-no-sqlite.patch
-Patch46:	%{name}-file-update.patch
 URL:		http://www.rpm.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -126,8 +125,8 @@ BuildRequires:	neon-devel >= 0.24.7-3
 %endif
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
-%{?with_python:BuildRequires:	python-devel >= 2.2}
-BuildRequires:	python-modules >= 2.2
+%{?with_python:BuildRequires:	python-devel >= 1:2.3}
+BuildRequires:	python-modules >= 1:2.3
 BuildRequires:	readline-devel
 BuildRequires:	rpm-perlprov
 BuildRequires:	zlib-devel
@@ -603,7 +602,6 @@ ze ¼rode³ RPM-a przez doxygen.
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
-%patch19 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
@@ -634,7 +632,6 @@ cat %{SOURCE11} >> macros.in
 %patch35 -p0
 %patch36 -p1
 %patch37 -p1
-%patch38 -p1
 %patch39 -p1
 %patch40 -p1
 %patch41 -p1
@@ -642,11 +639,10 @@ cat %{SOURCE11} >> macros.in
 %patch43 -p1
 %{!?with_neon:%patch44 -p1}
 %patch45 -p1
-%patch46 -p1
 %patch0 -p1
 %patch3 -p1
 
-cd scripts;
+cd scripts
 mv -f perl.req perl.req.in
 mv -f perl.prov perl.prov.in
 cd ..
@@ -1082,11 +1078,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %if %{with python}
 %files -n python-rpm
 %defattr(644,root,root,755)
-%attr(755,root,root) %{py_sitedir}/*.so
 %attr(755,root,root) %{py_sitedir}/rpm/*.so
 %attr(755,root,root) %{py_sitedir}/rpm/*.py[co]
-%attr(755,root,root) %{py_sitedir}/rpmdb/*.so
-%{py_sitedir}/rpmdb/*.py*
 %endif
 
 %if %{with apidocs}
