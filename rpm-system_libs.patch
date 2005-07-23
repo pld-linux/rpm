@@ -1,25 +1,6 @@
 diff -urN rpm.org/configure.ac rpm/configure.ac
 --- rpm.org/configure.ac	2004-06-14 11:46:10.220092656 +0200
 +++ rpm/configure.ac	2004-06-14 11:47:13.499472728 +0200
-@@ -428,6 +428,18 @@
- AC_SUBST(WITH_BEECRYPT_INCLUDE)
- AC_SUBST(WITH_BEECRYPT_LIB)
- 
-+WITH_POPT_SUBDIR=
-+WITH_POPT_LIB=
-+AC_CHECK_HEADERS([popt.h])
-+AC_CHECK_LIB(popt, poptGetContext, [
-+       AC_DEFINE(HAVE_LIBPOPT, 1, [Define to 1 if you have libpopt.])
-+       WITH_POPT_LIB="-lpopt"
-+       ],[WITH_POPT_SUBDIR="popt"
-+       WITH_POPT_LIB="\$(top_builddir)/popt/libpopt.la"])
-+
-+AC_SUBST(WITH_POPT_SUBDIR)
-+AC_SUBST(WITH_POPT_LIB)
-+
- AC_CHECK_FUNC(setreuid, [], [
-     AC_CHECK_LIB(ucb, setreuid, [if echo $LIBS | grep -- -lucb >/dev/null ;then :; else LIBS="$LIBS -lc -lucb" USEUCB=y;fi])
- ])
 @@ -1203,7 +1215,7 @@
  dnl # XXX Propagate -lucb to popt ...
  dnl export LIBS INCPATH CONFIG_SITE
@@ -38,47 +19,31 @@ diff -urN rpm.org/configure.ac rpm/configure.ac
  	echo timestamp > stamp-h.in
    
  ]],[[]])
-diff -urN rpm.org/lib/Makefile.am rpm/lib/Makefile.am
---- rpm.org/lib/Makefile.am	2004-06-14 11:46:08.925289496 +0200
-+++ rpm/lib/Makefile.am	2004-06-14 11:47:13.502472272 +0200
-@@ -40,7 +40,7 @@
- librpm_la_LDFLAGS = -release 4.4 $(LDFLAGS) \
- 	$(top_builddir)/rpmdb/librpmdb.la \
+--- rpm-4.4.2/lib/Makefile.am.orig	2005-02-17 01:14:40.000000000 +0100
++++ rpm-4.4.2/lib/Makefile.am	2005-07-23 13:32:57.886832096 +0200
+@@ -98,7 +98,7 @@
+ 	$(LINK) @LDFLAGS_STATIC@ $(CFLAGS) $(DEFS) $(INCLUDES) -o $@ $< \
+ 	-lselinux \
  	$(top_builddir)/rpmio/librpmio.la \
--	$(top_builddir)/popt/libpopt.la \
-+	-lpopt \
- 	@WITH_SELINUX_LIB@ \
- 	@INTLLIBS@
+-	$(top_builddir)/popt/libpopt.la
++	-lpopt
+ 	
+ #tds: tds.c librpm.la
+ #	$(CC) $(CFLAGS) $(DEFS) $(INCLUDES) -o $@ $< $(mylibs)
+@@ -109,8 +109,8 @@
+ tthread: tthread.o librpm.la
+ 	$(LINK) $(CFLAGS) $(DEFS) $(INCLUDES) -o $@ $< $(mylibs) @WITH_LIBELF_LIB@
  
+-tsystem: tsystem.o $(top_builddir)/popt/libpopt.la
+-	$(LINK) $(CFLAGS) $(DEFS) $(INCLUDES) -o $@ $< $(top_builddir)/rpmio/librpmio.la $(top_builddir)/popt/libpopt.la
++tsystem: tsystem.o
++	$(LINK) $(CFLAGS) $(DEFS) $(INCLUDES) -o $@ $< $(top_builddir)/rpmio/librpmio.la -lpopt
+ 
+ tre: tre.o librpm.la
+ 	$(LINK) $(CFLAGS) $(DEFS) $(INCLUDES) -o $@ $< \
 diff -urN rpm.org/Makefile.am rpm/Makefile.am
 --- rpm.org/Makefile.am	2004-06-14 11:46:04.409975928 +0200
 +++ rpm/Makefile.am	2004-06-14 11:48:04.236759488 +0200
-@@ -14,7 +14,7 @@
- 	po/*.in po/*.po po/rpm.pot \
- 	rpm.magic rpmpopt-$(VERSION) rpmqv.c rpm.c
- 
--SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ popt @WITH_BEECRYPT_SUBDIR@ lua rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
-+SUBDIRS = intl po @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ file @WITH_DB_SUBDIR@ @WITH_BEECRYPT_SUBDIR@ lua rpmio rpmdb lib build misc @WITH_PYTHON_SUBDIR@ tools scripts tests doc .
- 
- INCLUDES = \
- 	-I$(top_srcdir)/build \
-@@ -22,7 +22,6 @@
- 	-I$(top_srcdir)/rpmdb \
- 	-I$(top_srcdir)/rpmio \
- 	@WITH_BEECRYPT_INCLUDE@ \
--	-I$(top_srcdir)/popt \
- 	-I$(top_srcdir)/misc \
- 	@WITH_LIBELF_INCLUDE@ \
- 	@INCPATH@
-@@ -34,7 +33,7 @@
- 	$(top_builddir)/lib/librpm.la \
- 	$(top_builddir)/rpmdb/librpmdb.la \
- 	$(top_builddir)/rpmio/librpmio.la \
--	$(top_builddir)/popt/libpopt.la \
-+	-lpopt \
- 	@WITH_ZLIB_LIB@ \
- 	@INTLLIBS@ \
- 	@LIBMISC@
 @@ -107,7 +106,6 @@
  	    -load lib/rpmlib.lcd \
  	    -load rpmdb/rpmdb.lcd \
@@ -87,47 +52,8 @@ diff -urN rpm.org/Makefile.am rpm/Makefile.am
  		$(DEFS) $(INCLUDES) rpmqv.c $(rpmb_SOURCES)
  
  .PHONY:	lint
-@@ -117,9 +115,7 @@
- 		`make -s sources -C lib` \
- 		`make -s sources -C rpmdb` \
- 		`make -s sources -C rpmio` \
--		`make -s sources -C beecrypt` \
--		`make -s sources -C file/src` \
--		`make -s sources -C popt`
-+		`make -s sources -C file/src`
- 
- CVSTAG = r$(subst .,-,$(VERSION))
- 
-diff -urN rpm.org/rpmdb/Makefile.am rpm/rpmdb/Makefile.am
---- rpm.org/rpmdb/Makefile.am	2004-06-14 11:46:09.726167744 +0200
-+++ rpm/rpmdb/Makefile.am	2004-06-14 11:47:13.524468928 +0200
-@@ -9,7 +9,6 @@
- 	-I$(top_srcdir)/lib \
- 	-I$(top_srcdir)/rpmio \
- 	@WITH_BEECRYPT_INCLUDE@ \
--	-I$(top_srcdir)/popt \
- 	-I$(top_srcdir)/misc \
- 	@WITH_LIBELF_INCLUDE@ \
- 	@INCPATH@
-@@ -51,7 +50,7 @@
- 	tagname.c tagtbl.c
- librpmdb_la_LDFLAGS = -release 4.4 \
- 	$(top_builddir)/rpmio/librpmio.la \
--	$(top_builddir)/popt/libpopt.la \
-+	@WITH_POPT_LIB@ \
- 	@WITH_SQLITE3_LIB@ \
- 	@WITH_LIBELF_LIB@
- librpmdb_la_LIBADD = $(DBLIBOBJS) $(libdb_la)
 --- rpm.org/rpmio/Makefile.am.org	2004-11-18 17:42:53.756263795 +0100
 +++ rpm.org/rpmio/Makefile.am	2004-11-18 17:43:09.526885309 +0100
-@@ -12,7 +12,6 @@
- 	-I$(top_srcdir) \
- 	@WITH_BEECRYPT_INCLUDE@ \
- 	@WITH_LUA_INCLUDE@ \
--	-I$(top_srcdir)/popt \
- 	-I$(top_srcdir)/misc \
- 	@INCPATH@
- 
 @@ -71,47 +71,47 @@
  tax_LDADD = librpmio.la
  
@@ -187,42 +113,3 @@ diff -urN rpm.org/rpmdb/Makefile.am rpm/rpmdb/Makefile.am
  
  tsw_SOURCES = tsw.c
  tsw_LDFLAGS = librpmio.la
-diff -urN rpm.org/tools/Makefile.am rpm/tools/Makefile.am
---- rpm.org/tools/Makefile.am	2004-06-14 11:46:09.906140384 +0200
-+++ rpm/tools/Makefile.am	2004-06-14 11:47:13.532467712 +0200
-@@ -9,7 +9,6 @@
- 	-I$(top_srcdir)/rpmdb \
- 	-I$(top_srcdir)/rpmio \
- 	@WITH_BEECRYPT_INCLUDE@ \
--	-I$(top_srcdir)/popt \
- 	@WITH_LIBELF_INCLUDE@ \
- 	@WITH_LIBDWARF_INCLUDE@ \
- 	-I$(top_srcdir)/file/src \
-@@ -37,7 +36,7 @@
- 
- debugedit_SOURCES =	debugedit.c hashtab.c
- debugedit_LDADD =	@LDFLAGS_STATIC@ @WITH_LIBELF_LIB@ \
--	$(top_builddir)/popt/libpopt.la
-+	-lpopt
- 
- javadeps_SOURCES =	javadeps.c
- 
---- rpm/python/Makefile.am.org	2004-11-18 20:01:55.658219108 +0100
-+++ rpm/python/Makefile.am	2004-11-18 20:02:10.571929388 +0100
-@@ -16,7 +16,6 @@
- 	-I$(top_srcdir)/rpmdb \
- 	-I$(top_srcdir)/rpmio \
- 	@WITH_BEECRYPT_INCLUDE@ \
--	-I$(top_srcdir)/popt \
- 	-I$(top_srcdir)/misc \
- 	-I$(pyincdir) \
- 	@WITH_LIBELF_INCLUDE@ \
-@@ -31,7 +30,7 @@
- 	$(top_builddir)/lib/librpm.la \
- 	$(top_builddir)/rpmdb/librpmdb.la \
- 	$(top_builddir)/rpmio/librpmio.la \
--	$(top_builddir)/popt/libpopt.la \
-+	-lpopt \
- 	$(top_builddir)/build/librpmbuild.la \
- 	@WITH_LIBELF_LIB@
- 
