@@ -103,7 +103,7 @@ Applications/Databases/Interfaces
 Applications/Dictionaries
 	[cs]:		Aplikace/Slovníky
 	[da]:		Programmer/Ordbøger
-	[de]:		Applikationen/Wörterbücher
+	[de]:		Applikationen/WÃ¶rterbÃ¼cher
 	[es]:		Aplicaciones/Diccionarios
 	[fr]:		Applications/Dictionaires
 	[is]:		Forrit/Orðabókum
@@ -507,7 +507,7 @@ Applications/Sound
 Applications/Spreadsheets
 	[cs]:		Aplikace/Tabulkove procesorý
 	[da]:		Programmer/Regneark
-	[de]:		Applikationen/Arbeitsblätter
+	[de]:		Applikationen/ArbeitsblÃ¤tter
 	[es]:		Aplicaciones/Hojas de Cálculo
 	[fr]:		Applications/Tableurs
 	[is]:		Forrit/Töflureikni
@@ -587,7 +587,7 @@ Applications/WWW
 Base
 	[cs]:		Základ
 	[da]:		Basal
-	[de]:		Grundsätzlich
+	[de]:		GrundsÃ¤tzlich
 	[es]:		Base
 	[fr]:		Base
 	[is]:		Grunnforrit
@@ -605,7 +605,7 @@ Base
 Base/Kernel
 	[cs]:		Základ/Jádro
 	[da]:		Basal/Kerne
-	[de]:		Grundsätzlich/Kern
+	[de]:		GrundsÃ¤tzlich/Kern
 	[es]:		Base/Núcleo
 	[fr]:		Base/Noyau
 	[is]:		Grunnforrit/Kjarninn
@@ -621,7 +621,7 @@ Base/Kernel
 
 Base/Authentication and Authorization
 	[cs]:		Základ/Autentizace a autorizace
-	[de]:		Grundsätzlich/Authentisierung und Ermächtigung
+	[de]:		GrundsÃ¤tzlich/Authentisierung und ErmÃ¤chtigung
 	[es]:		Base/Autenticación y Autorización
 	[fr]:		Base/Authentification et autorisation
 	[it]:		Base/Autenticazione e autorizzazione
@@ -635,7 +635,7 @@ Base/Authentication and Authorization
 Base/Utilities
 	[cs]:		Základ/Utility
 	[da]:		Basal/Værktøj
-	[de]:		Gründsätzlich/Dienstprogramme
+	[de]:		GrÃ¼ndsÃ¤tzlich/Dienstprogramme
 	[es]:		Base/Utilitarios
 	[fr]:		Base/Utilitaires
 	[is]:		Grunnforrit/Tól
@@ -956,7 +956,7 @@ Documentation
 Fonts
 	[cs]:		Fonty
 	[da]:		Skrifttyper
-	[de]:		Zeichensätze
+	[de]:		ZeichensÃ¤tze
 	[es]:		Fuentes
 	[fr]:		Polices
 	[is]:		Leturgerðir
