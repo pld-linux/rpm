@@ -55,15 +55,20 @@ diff -urN rpm-4.3.org/macros.in rpm-4.3/macros.in
  	elfexelist=`echo $filelist | xargs -r file | \
  		awk '/ELF.*executable/ {print $1}' | cut -d: -f1`; \
  	elfsharedlist=`echo $filelist | xargs -r file | \
-diff -urN rpm-4.3.org/scripts/find-debuginfo.sh rpm-4.3/scripts/find-debuginfo.sh
---- rpm-4.3.org/scripts/find-debuginfo.sh	2004-05-31 17:16:16.146175184 +0200
-+++ rpm-4.3/scripts/find-debuginfo.sh	2004-05-31 17:16:51.153853208 +0200
-@@ -26,12 +26,14 @@
+--- rpm-4.4.2/scripts/find-debuginfo.sh.orig	2005-07-14 17:52:31.000000000 +0200
++++ rpm-4.4.2/scripts/find-debuginfo.sh	2005-07-23 13:57:04.542906944 +0200
+@@ -25,7 +25,7 @@
+ 	[ -f "${debugfn}" ] && continue
  
- 	mkdir -p "${debugdn}"
  	echo extracting debug info from $f
 -	/usr/lib/rpm/debugedit -b "$RPM_BUILD_DIR" -d /usr/src/debug -l "$SOURCEFILE" "$f"
 +	/usr/bin/debugedit -b "$RPM_BUILD_DIR" -d /usr/src/debug -l "$SOURCEFILE" "$f"
+ 
+ 	# A binary already copied into /usr/lib/debug doesn't get stripped,
+ 	# just has its file names collected and adjusted.
+@@ -35,10 +35,12 @@
+ 
+ 	mkdir -p "${debugdn}"
  	if test -w "$f"; then
 -		eu-strip -f "${debugfn}" "$f" || :
 +		eu-strip -f "${debugfn}" -o "$f.tmp" "$f" || :
