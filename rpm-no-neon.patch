@@ -1,67 +1,62 @@
-diff -ur rpm-4.4.1/configure.ac rpm-4.4.1-no-neon/configure.ac
---- rpm-4.4.1/configure.ac	2005-06-19 20:37:35.675035608 +0200
-+++ rpm-4.4.1-no-neon/configure.ac	2005-06-19 20:34:07.022755576 +0200
-@@ -448,26 +448,6 @@
+--- rpm-4.4.2/configure.ac.orig	2005-07-23 14:06:59.692430464 +0200
++++ rpm-4.4.2/configure.ac	2005-07-23 14:08:45.591331384 +0200
+@@ -516,28 +516,6 @@
  WITH_NEON_SUBDIR=
  WITH_NEON_INCLUDE=
  WITH_NEON_LIB=
 -AC_CHECK_HEADER([neon/ne_session.h], [
--	AC_CHECK_LIB(neon, ne_session_create, [
--	    AC_DEFINE(HAVE_LIBNEON, 1, [Define to 1 if you have the `neon' library (-lneon).])
--	    AC_CHECK_LIB(neon, ne_get_response_header, [
--		AC_DEFINE(HAVE_NEON_NE_GET_RESPONSE_HEADER, 1, [Define to 1 if you have ne_get_response_header() in libneon.])
--		])
--	    AC_CHECK_LIB(neon, ne_send_request_chunk, [
--		AC_DEFINE(HAVE_NEON_NE_SEND_REQUEST_CHUNK, 1, [Define to 1 if you have ne_send_request_chunk() in libneon.])
--		])
--	    WITH_NEON_INCLUDE="-I${includedir}/neon"
--	    WITH_NEON_LIB="-lneon"
--	])
--    ], [
--	if test -d neon ; then
--	    AC_DEFINE(HAVE_LIBNEON, 1, [Define to 1 if you have the `neon' library (-lneon).])
--	    WITH_NEON_SUBDIR=neon
--	    WITH_NEON_INCLUDE="-I\${top_srcdir}/${WITH_NEON_SUBDIR}/src"
--	    WITH_NEON_LIB="\${top_builddir}/${WITH_NEON_SUBDIR}/src/libneon.la"
--	fi
+-  AC_CHECK_LIB(neon, ne_session_create, [
+-    AC_DEFINE(HAVE_LIBNEON, 1, [Define to 1 if you have the 'neon' library (-lneon).])
+-    AC_CHECK_LIB(neon, ne_get_response_header, [
+-      AC_DEFINE(HAVE_NEON_NE_GET_RESPONSE_HEADER, 1, [Define to 1 if you have ne_get_response_header() in libneon.])
+-    ])
+-    AC_CHECK_LIB(neon, ne_send_request_chunk, [
+-	AC_DEFINE(HAVE_NEON_NE_SEND_REQUEST_CHUNK, 1, [Define to 1 if you have ne_send_request_chunk() in libneon.])
+-    ])
+-    WITH_NEON_INCLUDE="-I${includedir}/neon"
+-    WITH_NEON_LIB="-lneon"
+-  ])
+-],[
+-  if test -d neon ; then
+-    AC_DEFINE(HAVE_LIBNEON, 1, [Define to 1 if you have the 'neon' library (-lneon).])
+-# XXX HAVE_NEON_NE_GET_RESPONSE_HEADER assumes libneon-0.25 devel internal
+-    AC_DEFINE(HAVE_NEON_NE_GET_RESPONSE_HEADER, 1, [Define to 1 if you have ne_get_response_header() in libneon.])
+-    WITH_NEON_SUBDIR=neon
+-    WITH_NEON_INCLUDE="-I\${top_srcdir}/${WITH_NEON_SUBDIR}/src"
+-    WITH_NEON_LIB="\${top_builddir}/${WITH_NEON_SUBDIR}/src/libneon.la"
+-  fi
 -])
  AC_SUBST(WITH_NEON_SUBDIR)
  AC_SUBST(WITH_NEON_INCLUDE)
  AC_SUBST(WITH_NEON_LIB)
-diff -ur rpm-4.4.1/rpmio/Makefile.am rpm-4.4.1-no-neon/rpmio/Makefile.am
---- rpm-4.4.1/rpmio/Makefile.am	2005-06-19 20:37:35.322089264 +0200
-+++ rpm-4.4.1-no-neon/rpmio/Makefile.am	2005-06-19 20:34:06.996759528 +0200
-@@ -37,7 +37,7 @@
- 	@WITH_LUA_LIB@ \
- 	$(top_builddir)/file/src/libmagic.la \
- 	@WITH_ZLIB_LIB@ \
--	-lneon -lpthread @HOME_ETC_LIB@
-+	-lpthread @HOME_ETC_LIB@
- librpmio_la_LIBADD = # $(BEECRYPTLOBJS)
- librpmio_la_DEPENDENCIES = # .created
- 
-diff -ur rpm-4.4.1/rpmio/rpmdav.c rpm-4.4.1-no-neon/rpmio/rpmdav.c
---- rpm-4.4.1/rpmio/rpmdav.c	2005-01-17 19:46:27.000000000 +0100
-+++ rpm-4.4.1-no-neon/rpmio/rpmdav.c	2005-06-19 20:35:12.340825720 +0200
-@@ -9,17 +9,6 @@
+--- rpm-4.4.2/rpmio/rpmdav.c.orig	2005-02-17 02:07:18.000000000 +0100
++++ rpm-4.4.2/rpmio/rpmdav.c	2005-07-23 14:11:17.251275568 +0200
+@@ -9,24 +9,6 @@
  #include <pthread.h>
  #endif
  
--#include <neon/ne_alloc.h>
--#include <neon/ne_auth.h>
--#include <neon/ne_basic.h>
--#include <neon/ne_dates.h>
--#include <neon/ne_locks.h>
--#include <neon/ne_props.h>
--#include <neon/ne_request.h>
--#include <neon/ne_socket.h>
--#include <neon/ne_string.h>
--#include <neon/ne_utils.h>
+-#include "ne_alloc.h"
+-#include "ne_auth.h"
+-#include "ne_basic.h"
+-#include "ne_dates.h"
+-#include "ne_locks.h"
+-
+-#define	NEONBLOWSCHUNKS
+-#ifndef	NEONBLOWSCHUNKS
+-/* HACK: include ne_private.h to access sess->socket for now. */
+-#include "../neon/src/ne_private.h"
+-#endif
+-
+-#include "ne_props.h"
+-#include "ne_request.h"
+-#include "ne_socket.h"
+-#include "ne_string.h"
+-#include "ne_utils.h"
 -
  #include <rpmio_internal.h>
  
  #define _RPMDAV_INTERNAL
-@@ -55,1304 +44,6 @@
+@@ -62,1315 +44,6 @@
  }
  
  /* =============================================================== */
@@ -946,7 +941,7 @@ diff -ur rpm-4.4.1/rpmio/rpmdav.c rpm-4.4.1-no-neon/rpmio/rpmdav.c
 -#endif
 -
 -    if (!strcmp(httpCmd, "PUT")) {
--#ifdef	NOTYET		/* XXX HACK no wr_chunked until libneon supports */
+-#if defined(HAVE_NEON_NE_SEND_REQUEST_CHUNK)
 -	ctrl->wr_chunked = 1;
 -	ne_add_request_header(ctrl->req, "Transfer-Encoding", "chunked");
 -	ne_set_request_chunked(ctrl->req, 1);
@@ -1075,13 +1070,28 @@ diff -ur rpm-4.4.1/rpmio/rpmdav.c rpm-4.4.1-no-neon/rpmio/rpmdav.c
 -
 -ssize_t davWrite(void * cookie, const char * buf, size_t count)
 -{
--#ifdef	NOTYET		/* XXX HACK no wr_chunked until libneon supports */
 -    FD_t fd = cookie;
 -    ssize_t rc;
 -    int xx;
 -
+-#ifndef	NEONBLOWSCHUNKS
+-    ne_session * sess;
+-
+-assert(fd->req != NULL);
+-    sess = ne_get_session(fd->req);
+-assert(sess != NULL);
+-
+-    /* HACK: include ne_private.h to access sess->socket for now. */
+-    xx = ne_sock_fullwrite(sess->socket, buf, count);
+-#else
+-#if defined(HAVE_NEON_NE_SEND_REQUEST_CHUNK)
 -assert(fd->req != NULL);
 -    xx = ne_send_request_chunk(fd->req, buf, count);
+-#else
+-    errno = EIO;       /* HACK */
+-    return -1;
+-#endif
+-#endif
 -
 -    /* HACK: stupid error impedence matching. */
 -    rc = (xx == 0 ? count : -1);
@@ -1094,10 +1104,6 @@ diff -ur rpm-4.4.1/rpmio/rpmdav.c rpm-4.4.1-no-neon/rpmio/rpmdav.c
 -#endif
 -
 -    return rc;
--#else
--    errno = EIO;	/* HACK */
--    return -1;
--#endif
 -}
 -
 -int davSeek(void * cookie, /*@unused@*/ _libio_pos_t pos, int whence)
@@ -1366,7 +1372,7 @@ diff -ur rpm-4.4.1/rpmio/rpmdav.c rpm-4.4.1-no-neon/rpmio/rpmdav.c
  /*@unchecked@*/
  int avmagicdir = 0x3607113;
  
-@@ -1475,172 +166,3 @@
+@@ -1493,172 +166,3 @@
  /*@=kepttrans@*/
  }
  /*@=boundswrite@*/
