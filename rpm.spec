@@ -102,7 +102,7 @@ Patch42:	%{name}-glob.patch
 Patch43:	%{name}-patch-quote.patch
 Patch44:	%{name}-no-neon.patch
 Patch45:	%{name}-no-sqlite.patch
-URL:		http://www.rpm.org/
+URL:		http://wraptastic.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
