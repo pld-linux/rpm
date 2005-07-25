@@ -390,7 +390,7 @@ fi \
 
 #-----------------------------------------------------------------
 # Update desktop MIME database
-# requries: desktop-file-utils
+# requires: desktop-file-utils
 #
 %update_desktop_database_post() {{ \
 	umask 022; \
