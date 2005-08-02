@@ -513,6 +513,7 @@ Summary(pl):	Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w 
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	python
+Requires:	python-modules
 
 %description pythonprov
 Python macros, which simplifies creation of rpm packages with Python
