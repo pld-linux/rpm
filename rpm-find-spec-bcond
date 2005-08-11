@@ -28,9 +28,9 @@ bconds=`awk -F"\n" 'BEGIN { chlog=0 }
 	       		print substr($0, RSTART, RLENGTH)                       
 	    	}
 		/^%bcond_with/ && chlog == 0 {
-			match($0, /bcond_with(out)?[ 	]+[_a-zA-Z0-9]+/);
+			match($0, /bcond_with(out)?[ \t]+[_a-zA-Z0-9]+/);
 				 bcond = substr($0, RSTART +5 , RLENGTH -5);
-				 gsub(/ /,"_",bcond);
+				 gsub(/[ \t]+/,"_",bcond);
 				 print bcond
 			}' $SPEC | sort -u`
 
