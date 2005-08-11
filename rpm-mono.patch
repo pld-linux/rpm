@@ -1,0 +1,132 @@
+diff -ruN rpm-4.4.2./build/rpmfc.c rpm-4.4.2/build/rpmfc.c
+--- rpm-4.4.2./build/rpmfc.c	2005-08-11 13:11:54.000000000 +0200
++++ rpm-4.4.2/build/rpmfc.c	2005-08-11 15:33:47.000000000 +0200
+@@ -534,6 +534,9 @@
+   /* XXX "python 2.3 byte-compiled" */
+   { "python ",			RPMFC_PYTHON|RPMFC_INCLUDE },
+ 
++  /* .NET executables and libraries. file(1) cannot differ it from native win32 executables unfortunatelly */
++  { "PE executable",		RPMFC_MONO|RPMFC_INCLUDE },
++
+   { "current ar archive",	RPMFC_STATIC|RPMFC_LIBRARY|RPMFC_ARCHIVE|RPMFC_INCLUDE },
+ 
+   { "Zip archive data",		RPMFC_COMPRESSED|RPMFC_ARCHIVE|RPMFC_INCLUDE },
+@@ -827,6 +830,42 @@
+ }
+ 
+ /**
++ * Extract .NET dependencies.
++ * @param fc		file classifier
++ * @param findprov	1 to enable provides
++ * @param findreq	1 to enable requires
++ * @param noautoprov	_noautoprov regexps
++ * @param noautoprov_c	# of _noautoprov regexps
++ * @param noautoreq	_noautoreq regexps
++ * @param noautoreq_c	# of _noautoreq regexps
++ * @return		0 on success
++ */
++static int rpmfcMONO(rpmfc fc, int findprov, int findreq,
++    regex_t *noautoprov, int noautoprov_c, regex_t *noautoreq, int noautoreq_c)
++	/*@globals rpmGlobalMacroContext, h_errno, fileSystem, internalState @*/
++	/*@modifies fc, rpmGlobalMacroContext, fileSystem, internalState @*/
++{
++    const char * fn = fc->fn[fc->ix];
++    FILE * fp;
++    int xx;
++
++    fp = fopen(fn, "r");
++    if (fp == NULL || ferror(fp)) {
++	if (fp) (void) fclose(fp);
++	return -1;
++    }
++
++    (void) fclose(fp);
++
++    if (findprov)
++	xx = rpmfcHelper(fc, 'P', "mono", noautoprov, noautoprov_c);
++    if (findreq)
++	xx = rpmfcHelper(fc, 'R', "mono", noautoreq, noautoreq_c);
++
++    return 0;
++}
++
++/**
+  * Extract Elf dependencies.
+  * @param fc		file classifier
+  * @param findprov	1 to enable provides
+@@ -1179,6 +1218,7 @@
+     { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL) },
+     { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PYTHON) },
+     { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PHP) },
++    { rpmfcMONO,	RPMFC_MONO },
+     { NULL, 0 }
+ };
+ 
+diff -ruN rpm-4.4.2./build/rpmfc.h rpm-4.4.2/build/rpmfc.h
+--- rpm-4.4.2./build/rpmfc.h	2005-08-11 13:11:54.000000000 +0200
++++ rpm-4.4.2/build/rpmfc.h	2005-08-11 14:10:33.000000000 +0200
+@@ -78,6 +78,7 @@
+     RPMFC_PYTHON		= (1 << 26),
+     RPMFC_PHP			= (1 << 27),
+     RPMFC_TCL			= (1 << 28),
++    RPMFC_MONO			= (1 <<  6),
+ 
+     RPMFC_WHITE			= (1 << 29),
+     RPMFC_INCLUDE		= (1 << 30),
+diff -ruN rpm-4.4.2./macros.in rpm-4.4.2/macros.in
+--- rpm-4.4.2./macros.in	2005-08-11 13:11:54.000000000 +0200
++++ rpm-4.4.2/macros.in	2005-08-11 17:20:46.276790376 +0200
+@@ -443,6 +443,9 @@
+ %__python_provides	@RPMCONFIGDIR@/pythondeps.sh --provides
+ %__python_requires	@RPMCONFIGDIR@/pythondeps.sh --requires
+ 
++%__mono_provides	@RPMCONFIGDIR@/monodeps.sh --provides
++%__mono_requires	@RPMCONFIGDIR@/monodeps.sh --requires
++
+ #
+ # fixowner, fixgroup, and fixperms are run at the end of hardcoded setup
+ # These macros are necessary only for legacy compatibility, and have moved
+diff -ruN rpm-4.4.2./configure.ac rpm-4.4.2/configure.ac
+--- rpm-4.4.2./configure.ac	2005-08-11 17:36:01.000000000 +0200
++++ rpm-4.4.2/configure.ac	2005-08-11 18:11:15.449385328 +0200
+@@ -1355,7 +1355,7 @@
+ 	scripts/php.req scripts/php.prov
+ 	rpmio/Makefile rpmdb/Makefile lib/Makefile build/Makefile
+ 	scripts/Makefile scripts/brp-redhat
+-	scripts/macros.perl scripts/macros.php scripts/macros.python
++	scripts/macros.perl scripts/macros.php scripts/macros.python scripts/macros.mono
+ 	tools/Makefile
+ 	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
+ 	misc/Makefile intl/Makefile po/Makefile.in
+diff -ruN rpm-4.4.2./scripts/macros.mono rpm-4.4.2/scripts/macros.mono
+--- rpm-4.4.2./scripts/macros.mono	1970-01-01 01:00:00.000000000 +0100
++++ rpm-4.4.2/scripts/macros.mono	2005-08-11 18:14:44.387621888 +0200
+@@ -0,0 +1,6 @@
++# Mono specific macro definitions.
++# To make use of these macros insert the following line into your spec file:
++# %include /usr/lib/rpm/macros.mono
++
++%define		__find_requires	/usr/bin/mono-find-requires
++%define		__find_provides	/usr/bin/mono-find-provides
+diff -ruN rpm-4.4.2./scripts/macros.mono.in rpm-4.4.2/scripts/macros.mono.in
+--- rpm-4.4.2./scripts/macros.mono.in	1970-01-01 01:00:00.000000000 +0100
++++ rpm-4.4.2/scripts/macros.mono.in	2005-08-11 18:15:49.420735352 +0200
+@@ -0,0 +1,6 @@
++# Mono specific macro definitions.
++# To make use of these macros insert the following line into your spec file:
++# %include @RPMCONFIGDIR@/macros.mono
++
++%define		__find_requires	/usr/bin/mono-find-requires
++%define		__find_provides	/usr/bin/mono-find-provides
+diff -ruN rpm-4.4.2./scripts/Makefile.am rpm-4.4.2/scripts/Makefile.am
+--- rpm-4.4.2./scripts/Makefile.am	2005-07-13 14:19:13.000000000 +0200
++++ rpm-4.4.2/scripts/Makefile.am	2005-08-11 18:13:19.998450992 +0200
+@@ -16,7 +16,7 @@
+ 	rpm.daily rpm.log rpm.xinetd rpm2cpio.sh \
+ 	sql.prov sql.req tcl.req tgpg trpm u_pkg.sh \
+ 	vpkg-provides.sh vpkg-provides2.sh \
+-	macros.perl* macros.python* \
++	macros.perl* macros.python* macros.mono* \
+ 	macros.php* find-*.php find-php-*
+ 
+ installprefix = $(DESTDIR)
