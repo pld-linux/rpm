@@ -32,7 +32,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.2
-Release:	0.1
+Release:	0.3
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -102,6 +102,7 @@ Patch42:	%{name}-glob.patch
 Patch43:	%{name}-patch-quote.patch
 Patch44:	%{name}-no-neon.patch
 Patch45:	%{name}-no-sqlite.patch
+Patch46:	%{name}-mono.patch
 URL:		http://wraptastic.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -610,6 +611,8 @@ echo '%%define	__perl_requires	%%{__perl} /usr/lib/rpm/perl.req' >> macros.perl
 echo '# obsoleted file' > macros.python
 echo '%%define	__php_provides	/usr/lib/rpm/php.prov' > macros.php
 echo '%%define	__php_requires	/usr/lib/rpm/php.req' >> macros.php
+echo '%%define	__mono_provides	/usr/bin/mono-find-provides' > macros.mono
+echo '%%define	__mono_requires	/usr/bin/mono-find-requires' >> macros.mono
 install %{SOURCE5} scripts/find-lang.sh
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
@@ -640,6 +643,7 @@ cat %{SOURCE11} >> macros.in
 %patch43 -p1
 %{!?with_neon:%patch44 -p1}
 %patch45 -p1
+%patch46 -p1
 %patch0 -p1
 %patch3 -p1
 
@@ -732,6 +736,7 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{provides,requires}.perl
 install macros.perl	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.perl
 install macros.python	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.python
 install macros.php	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.php
+install macros.mono	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.mono
 
 install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
@@ -1029,6 +1034,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/x86_64*
 %endif
 # must be here for "Requires: rpm-*prov" to work
+%{_rpmlibdir}/macros.mono
 %{_rpmlibdir}/macros.perl
 %{_rpmlibdir}/macros.php
 # not used yet ... these six depend on perl
