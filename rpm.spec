@@ -32,7 +32,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.2
-Release:	0.3
+Release:	0.9
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -414,8 +414,6 @@ Requires:	elfutils
 Requires:	file >= 4.13-2
 Requires:	fileutils
 Requires:	findutils
-# because of -fvisibility... related fixes
-Requires:	gcc >= 5:4.0.1-0.20050514.2
 Requires:	glibc-devel
 Requires:	grep
 Requires:	gzip
@@ -427,6 +425,7 @@ Requires:	sh-utils
 Requires:	tar
 Requires:	textutils
 Provides:	rpmbuild(macros) = %{rpm_macros_rev}
+Provides:	rpmbuild(monoautodeps)
 Provides:	rpmbuild(noauto) = 3
 %ifarch %{x8664}
 Conflicts:	automake < 1:1.7.9-2
