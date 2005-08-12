@@ -414,6 +414,7 @@ Requires:	elfutils
 Requires:	file >= 4.13-2
 Requires:	fileutils
 Requires:	findutils
+Requires:	gcc >= 5:3.4
 Requires:	glibc-devel
 Requires:	grep
 Requires:	gzip
@@ -610,8 +611,8 @@ echo '%%define	__perl_requires	%%{__perl} /usr/lib/rpm/perl.req' >> macros.perl
 echo '# obsoleted file' > macros.python
 echo '%%define	__php_provides	/usr/lib/rpm/php.prov' > macros.php
 echo '%%define	__php_requires	/usr/lib/rpm/php.req' >> macros.php
-echo '%%define	__mono_provides	/usr/bin/mono-find-provides' > macros.mono
-echo '%%define	__mono_requires	/usr/bin/mono-find-requires' >> macros.mono
+echo '%%define	__mono_provides	/usr/lib/rpm/mono-find-provides' > macros.mono
+echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
 install %{SOURCE5} scripts/find-lang.sh
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
