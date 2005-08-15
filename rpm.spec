@@ -32,7 +32,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.2
-Release:	0.9
+Release:	2
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -103,6 +103,7 @@ Patch43:	%{name}-patch-quote.patch
 Patch44:	%{name}-no-neon.patch
 Patch45:	%{name}-no-sqlite.patch
 Patch46:	%{name}-mono.patch
+Patch47:	%{name}-posttrans.patch
 URL:		http://wraptastic.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -644,6 +645,7 @@ cat %{SOURCE11} >> macros.in
 %{!?with_neon:%patch44 -p1}
 %patch45 -p1
 %patch46 -p1
+%patch47 -p1
 %patch0 -p1
 %patch3 -p1
 
