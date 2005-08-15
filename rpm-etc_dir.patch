@@ -62,28 +62,26 @@
  if (_debug)
  fprintf(stderr, "*** rpmGlob argv[%d] \"%s\"\n", argc, globURL);
  	    argv[argc++] = xstrdup(globURL);
---- rpm-4.4.1/lib/Makefile.am.orig	2005-07-19 18:53:08.705529696 +0200
-+++ rpm-4.4.1/lib/Makefile.am	2005-07-19 19:04:59.525468640 +0200
-@@ -44,7 +44,7 @@
- librpm_la_LDFLAGS = -release 4.4 $(LDFLAGS) \
- 	$(top_builddir)/rpmdb/librpmdb.la \
+--- rpm-4.4.2/lib/Makefile.am.orig	2005-07-23 13:40:23.191135552 +0200
++++ rpm-4.4.2/lib/Makefile.am	2005-07-23 13:41:49.474018560 +0200
+@@ -46,6 +46,7 @@
  	$(top_builddir)/rpmio/librpmio.la \
--	-lpopt \
-+	-lpopt @HOME_ETC_LIB@ \
+ 	@WITH_POPT_LIB@ \
  	@WITH_SELINUX_LIB@ \
++	@HOME_ETC_LIB@ \
  	@INTLLIBS@
  
---- rpm-4.4.1/rpmio/Makefile.am.orig	2005-07-19 18:53:09.387426032 +0200
-+++ rpm-4.4.1/rpmio/Makefile.am	2005-07-19 19:04:42.440066016 +0200
-@@ -37,7 +37,7 @@
+ getdate.c: getdate.y
+--- rpm-4.4.2/rpmio/Makefile.am.orig	2005-07-23 13:40:23.194135096 +0200
++++ rpm-4.4.2/rpmio/Makefile.am	2005-07-23 13:42:06.205474992 +0200
+@@ -40,6 +40,7 @@
  	@WITH_LUA_LIB@ \
- 	$(top_builddir)/file/src/libmagic.la \
+ 	@WITH_MAGIC_LIB@ \
  	@WITH_ZLIB_LIB@ \
--	-lneon -lpthread
-+	-lneon -lpthread @HOME_ETC_LIB@
++	@HOME_ETC_LIB@ \
+ 	-lpthread
  librpmio_la_LIBADD = # $(BEECRYPTLOBJS)
  librpmio_la_DEPENDENCIES = # .created
- 
 --- rpm-4.4.1/configure.ac.orig	2005-07-19 18:53:09.385426000 +0200
 +++ rpm-4.4.1/configure.ac	2005-07-19 19:10:49.732229120 +0200
 @@ -945,6 +945,14 @@
