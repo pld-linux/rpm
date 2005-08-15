@@ -1,61 +1,41 @@
-20:33 < jbj> glen: there's inverted logic on an if statement iirc.
-20:34 < jbj> hang on ...
-Index: transaction.c
-===================================================================
-RCS file: /cvs/devel/rpm/lib/transaction.c,v
-retrieving revision 1.315.2.2
-diff -u -u -r1.315.2.2 transaction.c
---- lib/transaction.c   10 Feb 2005 09:04:06 -0000      1.315.2.2
-+++ lib/transaction.c   28 Feb 2005 22:15:10 -0000
-@@ -2285,7 +2285,7 @@
-        p->fi = rpmfiFree(p->fi);
-                                                                                
-        /* If no post-transaction script, then don't bother. */
--       if (haspostscript)
-+       if (!haspostscript)
-            continue;
-                                                                                
-        p->fd = ts->notify(p->h, RPMCALLBACK_INST_OPEN_FILE, 0, 0,
-
 20:35 < jbj> and this fixes the debugging lableing i believe (untested):
-20:35 < jbj> cvs server: Diffing .
 Index: psm.c
 ===================================================================
 RCS file: /cvs/devel/rpm/lib/psm.c,v
 retrieving revision 2.192.2.4
 diff -u -b -B -w -p -r2.192.2.4 psm.c
 --- ./lib/psm.c       13 Jul 2005 11:15:16 -0000      2.192.2.4
-+++ ./lib/psm.c       15 Aug 2005 17:35:08 -0000
-@@ -461,6 +461,8 @@ static /*@observer@*/ const char * const
-     case RPMTAG_PREUN:         return "%preun";
-     case RPMTAG_POSTUN:                return "%postun";
-     case RPMTAG_VERIFYSCRIPT:  return "%verify";
-+    case RPMTAG_PRETRANS:      return "%pretrans";
-+    case RPMTAG_POSTTRANS:     return "%posttrans";
++++ ./lib/psm.c	2005-08-15 21:24:41.000000000 +0300
+@@ -461,6 +461,8 @@
+     case RPMTAG_PREUN:		return "%preun";
+     case RPMTAG_POSTUN:		return "%postun";
+     case RPMTAG_VERIFYSCRIPT:	return "%verify";
++    case RPMTAG_PRETRANS:	return "%pretrans";
++    case RPMTAG_POSTTRANS:	return "%posttrans";
      }
      return "%unknownscript";
  }
-
 Index: transaction.c
 ===================================================================
 RCS file: /cvs/devel/rpm/lib/transaction.c,v
 retrieving revision 1.315.2.3
 diff -u -b -B -w -p -r1.315.2.3 transaction.c
 --- ./lib/transaction.c       2 Jul 2005 18:53:12 -0000       1.315.2.3
-+++ ./lib/transaction.c       15 Aug 2005 17:35:09 -0000
-@@ -1616,6 +1616,7 @@ rpmMessage(RPMMESS_DEBUG, _("sanity chec
-                psm = rpmpsmNew(ts, p, p->fi);
++++ ./lib/transaction.c	2005-08-15 21:28:15.000000000 +0300
+@@ -1616,6 +1616,7 @@
+ 		psm = rpmpsmNew(ts, p, p->fi);
  /*@=compdef =usereleased@*/
  assert(psm != NULL);
-+               psm->stepName = "pretrans";
-                psm->scriptTag = RPMTAG_PRETRANS;
-                psm->progTag = RPMTAG_PRETRANSPROG;
-                xx = rpmpsmStage(psm, PSM_SCRIPT);
-@@ -2320,6 +2321,7 @@ assert(psm != NULL);
-            psm = rpmpsmNew(ts, p, p->fi);
++		psm->stepName = "pretrans";
+ 		psm->scriptTag = RPMTAG_PRETRANS;
+ 		psm->progTag = RPMTAG_PRETRANSPROG;
+ 		xx = rpmpsmStage(psm, PSM_SCRIPT);
+@@ -2321,6 +2321,7 @@
+ 	    psm = rpmpsmNew(ts, p, p->fi);
  /*@=compdef =usereleased@*/
  assert(psm != NULL);
-+           psm->stepName = "posttrans";
-            psm->scriptTag = RPMTAG_POSTTRANS;
-            psm->progTag = RPMTAG_POSTTRANSPROG;
-            xx = rpmpsmStage(psm, PSM_SCRIPT);
++	    psm->stepName = "posttrans";
+ 	    psm->scriptTag = RPMTAG_POSTTRANS;
+ 	    psm->progTag = RPMTAG_POSTTRANSPROG;
+ 	    xx = rpmpsmStage(psm, PSM_SCRIPT);
+20:40 < jbj> glen: now tested, fixes.
