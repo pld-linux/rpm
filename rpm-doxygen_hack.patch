@@ -1,5 +1,5 @@
---- rpm-4.4.1/Doxyfile.in~	2005-06-24 20:11:49.175736352 +0200
-+++ rpm-4.4.1/Doxyfile.in	2005-06-24 20:12:00.480017840 +0200
+--- rpm-4.4.2/Doxyfile.in.orig	2005-07-04 21:00:46.000000000 +0200
++++ rpm-4.4.2/Doxyfile.in	2005-07-23 14:02:43.454384568 +0200
 @@ -383,29 +383,7 @@
                           @top_srcdir@/rpmrc \
                           @top_srcdir@/rpm2cpio.c \
@@ -31,7 +31,7 @@
                           @top_srcdir@/doc/manual/builddependencies \
                           @top_srcdir@/doc/manual/buildroot \
                           @top_srcdir@/doc/manual/conditionalbuilds \
-@@ -420,196 +398,13 @@
+@@ -420,195 +398,13 @@
                           @top_srcdir@/doc/manual/spec \
                           @top_srcdir@/doc/manual/triggers \
                           @top_srcdir@/doc/manual/tsort \
@@ -191,7 +191,6 @@
 -                         @top_srcdir@/popt/popthelp.c \
 -                         @top_srcdir@/popt/poptint.h \
 -                         @top_srcdir@/popt/poptparse.c \
--                         @top_srcdir@/python/_rpmdb.c \
 -                         @top_srcdir@/python/header-py.c \
 -                         @top_srcdir@/python/header-py.h \
 -                         @top_srcdir@/python/rpmal-py.c \
@@ -227,15 +226,15 @@
 -                         @top_srcdir@/tools/rpmxp.c
 +                         @top_srcdir@/file/src/ \
 +                         @top_srcdir@/lib/ \
-+                         @top_srcdir@/lua/ \
++			 @top_srcdir@/lua/ \
 +                         @top_srcdir@/rpmdb/ \
 +                         @top_srcdir@/rpmio/ \
 +                         @top_srcdir@/python/ \
-+                         @top_srcdir@/tools/ 
++                         @top_srcdir@/tools/
  
  # If the value of the INPUT tag contains directories, you can use the 
  # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
-@@ -618,8 +413,8 @@
+@@ -617,8 +413,8 @@
  # *.c *.cc *.cxx *.cpp *.c++ *.java *.ii *.ixx *.ipp *.i++ *.inl *.h *.hh *.hxx *.hpp 
  # *.h++ *.idl *.odl *.cs *.php *.php3 *.inc
  
