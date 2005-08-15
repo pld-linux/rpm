@@ -19,7 +19,7 @@
 
 # versions of required libraries
 %define	reqdb_ver	4.2.52-10
-%define	reqpopt_ver	1.10.1
+%define	reqpopt_ver	1.10.2
 %define	beecrypt_ver	2:4.1.2-4
 %define	rpm_macros_rev	1.231
 Summary:	RPM Package Manager
@@ -31,12 +31,12 @@ Summary(ru):	íÅÎÅÄÖÅÒ ÐÁËÅÔÏ× ÏÔ RPM
 Summary(uk):	íÅÎÅÄÖÅÒ ÐÁËÅÔ¦× ×¦Ä RPM
 Name:		rpm
 %define	sover	4.4
-Version:	4.4.1
-Release:	9
+Version:	4.4.2
+Release:	0.1
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
-# Source0-md5:	90ded9047b1b69d918c6c7c7b56fd7a9
+# Source0-md5:	e24ce468082479fe850c9d6563f56db5
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -75,7 +75,7 @@ Patch15:	%{name}-system_libs-more.patch
 Patch16:	%{name}-php-deps.patch
 Patch17:	%{name}-ldconfig-always.patch
 Patch18:	%{name}-perl_req.patch
-Patch19:	%{name}-no-bin-env.patch
+
 Patch20:	%{name}-magic-usesystem.patch
 Patch21:	%{name}-dontneedutils.patch
 Patch22:	%{name}-provides-dont-obsolete.patch
@@ -94,7 +94,7 @@ Patch34:	%{name}-epoch0.patch
 Patch35:	%{name}-perl_req-INC_dirs.patch
 Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
-Patch38:	%{name}-gcc4.patch
+
 Patch39:	%{name}-pythondeps.patch
 Patch40:	%{name}-print-requires.patch
 Patch41:	%{name}-reduce-stack-usage.patch
@@ -102,8 +102,8 @@ Patch42:	%{name}-amd64.patch
 Patch43:	%{name}-patch-quote.patch
 Patch44:	%{name}-no-neon.patch
 Patch45:	%{name}-no-sqlite.patch
-Patch46:	%{name}-file-update.patch
-URL:		http://www.rpm.org/
+Patch46:	%{name}-mono.patch
+URL:		http://wraptastic.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -126,8 +126,8 @@ BuildRequires:	neon-devel >= 0.24.7-3
 %endif
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
-%{?with_python:BuildRequires:	python-devel >= 2.2}
-BuildRequires:	python-modules >= 2.2
+%{?with_python:BuildRequires:	python-devel >= 1:2.3}
+BuildRequires:	python-modules >= 1:2.3
 BuildRequires:	readline-devel
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpm-pythonprov
@@ -431,6 +431,7 @@ Requires:	sh-utils
 Requires:	tar
 Requires:	textutils
 Provides:	rpmbuild(macros) = %{rpm_macros_rev}
+Provides:	rpmbuild(monoautodeps)
 Provides:	rpmbuild(noauto) = 3
 %ifarch %{x8664}
 Conflicts:	automake < 1:1.7.9-2
@@ -608,7 +609,6 @@ ze ¼rode³ RPM-a przez doxygen.
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
-%patch19 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 cp -f platform.in macros.pld.in
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
@@ -616,6 +616,8 @@ echo '%%define	__perl_requires	%%{__perl} /usr/lib/rpm/perl.req' >> macros.perl
 echo '# obsoleted file' > macros.python
 echo '%%define	__php_provides	/usr/lib/rpm/php.prov' > macros.php
 echo '%%define	__php_requires	/usr/lib/rpm/php.req' >> macros.php
+echo '%%define	__mono_provides	/usr/lib/rpm/mono-find-provides' > macros.mono
+echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
 install %{SOURCE5} scripts/find-lang.sh
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
@@ -639,7 +641,6 @@ cat %{SOURCE11} >> macros.in
 %patch35 -p0
 %patch36 -p1
 %patch37 -p1
-%patch38 -p1
 %patch39 -p1
 %patch40 -p1
 %patch41 -p1
@@ -651,7 +652,7 @@ cat %{SOURCE11} >> macros.in
 %patch0 -p1
 %patch3 -p1
 
-cd scripts;
+cd scripts
 mv -f perl.req perl.req.in
 mv -f perl.prov perl.prov.in
 cd ..
@@ -736,6 +737,7 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{provides,requires}.perl
 install macros.perl	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.perl
 install macros.python	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.python
 install macros.php	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.php
+install macros.mono	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.mono
 
 install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
@@ -1034,6 +1036,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/sparc*
 %endif
 # must be here for "Requires: rpm-*prov" to work
+%{_rpmlibdir}/macros.mono
 %{_rpmlibdir}/macros.perl
 %{_rpmlibdir}/macros.php
 # not used yet ... these six depend on perl
@@ -1084,11 +1087,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %if %{with python}
 %files -n python-rpm
 %defattr(644,root,root,755)
-%attr(755,root,root) %{py_sitedir}/*.so
 %attr(755,root,root) %{py_sitedir}/rpm/*.so
 %attr(755,root,root) %{py_sitedir}/rpm/*.py[co]
-%attr(755,root,root) %{py_sitedir}/rpmdb/*.so
-%{py_sitedir}/rpmdb/*.py*
 %endif
 
 %if %{with apidocs}
