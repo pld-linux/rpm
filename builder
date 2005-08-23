@@ -2,15 +2,18 @@
 # -----------
 # $Id$
 # Exit codes:
-#	0 - succesful
-#	1 - help displayed
-#	2 - no spec file name in cmdl parameters
-#	3 - spec file not stored in repo
-#	4 - some source, patch or icon files not stored in repo
-#	5 - package build failed
-#	6 - spec file with errors
-#	7 - wrong source in /etc/poldek.conf
-#  8 - Failed installing buildrequirements and subrequirements
+#	  0 - succesful
+#	  1 - help displayed
+#	  2 - no spec file name in cmdl parameters
+#	  3 - spec file not stored in repo
+#	  4 - some source, patch or icon files not stored in repo
+#	  5 - package build failed
+#	  6 - spec file with errors
+#	  7 - wrong source in /etc/poldek.conf
+#	  8 - Failed installing buildrequirements and subrequirements
+#	  9 - Requested tag already exist
+#	 10 - Refused to build fractional release
+#	100 - Unknown error (should not happen)
 
 # Notes (todo):
 #	- builder -u fetches current version first
@@ -23,7 +26,7 @@
 
 VERSION="\
 Build package utility from PLD CVS repository
-V 0.11 (C) 1999-2004 Free Penguins".
+V 0.12 (C) 1999-2005 Free Penguins".
 PATH="/bin:/usr/bin:/usr/sbin:/sbin:/usr/X11R6/bin"
 
 COMMAND="build"
@@ -42,6 +45,7 @@ UPDATE=""
 UPDATE5=""
 ADD5=""
 NO5=""
+ADAPTERIZE=""
 ALWAYS_CVSUP=${ALWAYS_CVSUP:-"yes"}
 CVSROOT=""
 
@@ -64,6 +68,7 @@ CHMOD_MODE="0444"
 RPMOPTS=""
 BCOND=""
 GROUP_BCONDS="no"
+CVSIGNORE_DF="no"
 
 PATCHES=""
 SOURCES=""
@@ -80,29 +85,17 @@ RES_FILE=""
 
 CVS_SERVER="cvs.pld-linux.org"
 DISTFILES_SERVER="://distfiles.pld-linux.org"
+ATTICDISTFILES_SERVER="://attic-distfiles.pld-linux.org"
 
-DEF_NICE_LEVEL=0
+DEF_NICE_LEVEL=19
 
 FAIL_IF_NO_SOURCES="yes"
 
-wget --help 2>&1 | grep -q ' \-\-inet ' && WGET_OPTS="$WGET_OPTS --inet"
-wget --help 2>&1 | grep -q ' \-\-retry\-connrefused ' && WGET_OPTS="$WGET_OPTS --retry-connrefused"
-
-GETURI="wget --passive-ftp -c -nd -t$WGET_RETRIES $WGET_OPTS"
-GETURI2="wget -c -nd -t$WGET_RETRIES $WGET_OPTS"
-GETLOCAL="cp -a"
-
-if (rpm --version 2>&1 | grep -q '4.0.[0-2]'); then
-	RPM="rpm"
-	RPMBUILD="rpm"
+if [ -x /usr/bin/rpm-getdeps ]; then
+	 FETCH_BUILD_REQUIRES_RPMGETDEPS="yes"
 else
-	RPM="rpm"
-	RPMBUILD="rpmbuild"
+	 FETCH_BUILD_REQUIRES_RPMGETDEPS="no"
 fi
-
-POLDEK_INDEX_DIR="`$RPM --eval %_rpmdir`/"
-POLDEK_SOURCE="cvs"
-POLDEK_CMD="/usr/bin/poldek --noask"
 
 # Here we load saved user environment used to
 # predefine options set above, or passed to builder
@@ -121,6 +114,7 @@ fi
 #GROUP_BCONDS="yes"
 #LOGFILE='../LOGS/log.$PACKAGE_NAME.$DATE'
 #
+SU_SUDO=""
 if [ -n "$HOME_ETC" ]; then
 	USER_CFG="$HOME_ETC/.builderrc"
 else
@@ -128,6 +122,36 @@ else
 fi
 
 [ -f "$USER_CFG" ] && . "$USER_CFG"
+
+if [ -n "$USE_PROZILLA" ]; then
+	GETURI="proz --no-getch -r -P ./ -t$WGET_RETRIES $PROZILLA_OPTS"
+	GETURI2="$GETURI"
+	OUTFILEOPT="-O"
+elif [ -n "$USE_AXEL" ]; then
+	GETURI="axel -a $AXEL_OPTS"
+	GETURI2="$GETURI"
+	OUTFILEOPT="-o"
+else
+	wget --help 2>&1 | grep -q ' \-\-inet ' && WGET_OPTS="$WGET_OPTS --inet"
+	wget --help 2>&1 | grep -q ' \-\-retry\-connrefused ' && WGET_OPTS="$WGET_OPTS --retry-connrefused"
+	 
+	GETURI="wget --passive-ftp -c -nd -t$WGET_RETRIES $WGET_OPTS"
+	GETURI2="wget -c -nd -t$WGET_RETRIES $WGET_OPTS"
+	OUTFILEOPT="-O"
+fi
+
+GETLOCAL="cp -a"
+
+if (rpm --version 2>&1 | grep -q '4.0.[0-2]'); then
+	RPM="rpm"
+	RPMBUILD="rpm"
+else
+	RPM="rpm"
+	RPMBUILD="rpmbuild"
+fi
+
+POLDEK_INDEX_DIR="`$RPM --eval %_rpmdir`/"
+POLDEK_CMD="$SU_SUDO /usr/bin/poldek --noask"
 
 run_poldek()
 {
@@ -137,7 +161,7 @@ run_poldek()
 		if [ -n "$LASTLOG_FILE" ]; then
 			echo "LASTLOG=$LOG" > $LASTLOG_FILE
 		fi
-		(nice -n ${DEF_NICE_LEVEL} ${POLDEK_CMD} `while test $# -gt 0; do echo "$1 ";shift;done` ; echo $? > ${RES_FILE})|tee $LOG
+		(nice -n ${DEF_NICE_LEVEL} ${POLDEK_CMD} `while test $# -gt 0; do echo "$1 ";shift;done` ; echo $? > ${RES_FILE})|tee -a $LOG
 		return $exit_pldk
 	else
 		(nice -n ${DEF_NICE_LEVEL} ${POLDEK_CMD} `while test $# -gt 0; do echo "$1 ";shift;done` ; echo $? > ${RES_FILE}) 1>&2 >/dev/null
@@ -145,17 +169,6 @@ run_poldek()
 		rm -rf ${RES_FILE}
 	fi
 }
-
-# Example grep cvs /etc/poldek.conf:
-# source = cvs /home/users/yoshi/rpm/RPMS/
-if [ "$UPDATE_POLDEK_INDEXES" = "yes" ]; then
-	run_poldek -l -n ${POLDEK_SOURCE} 1>&2 > /dev/null
-	if [ ! "$?" == "0" ]; then
-		echo "Using improper source '${POLDEK_SOURCE}' in /etc/poldek.conf"
-		echo "Fix it and try to continue"
-		exit 7
-	fi
-fi
 
 #---------------------------------------------
 # functions
@@ -175,11 +188,13 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
 [{-Tp|--tag-prefix} <prefix>] [{-tt|--test-tag}]
 [-nu|--no-urls] [-v|--verbose] [--opts <rpm opts>]
 [--with/--without <feature>] [--define <macro> <value>] <package>[.spec]
-	
+
 -5, --update-md5    - update md5 comments in spec, implies -nd -ncs
+--adapter[ize]      - run adapter.awk on SPECFILE
 -a5, --add-md5      - add md5 comments to URL sources, implies -nc -nd -ncs
 -n5, --no-md5       - ignore md5 comments in spec
--D, --debug         - enable script debugging mode,
+-D, --debug         - enable builder script debugging mode,
+-debug              - produce rpm debug package (same as --opts -debug)
 -V, --version       - output builder version
 -a, --as_anon       - get files via pserver as cvs@$CVS_SERVER,
 -b, -ba, --build    - get all files from CVS repo or HTTP/FTP and build package
@@ -192,7 +207,7 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
 -B, --branch        - add branch
 -c, --clean         - clean all temporarily created files (in BUILD, SOURCES,
                       SPECS and \$RPM_BUILD_ROOT),
--d <cvsroot>, --cvsroot <cvsroot>	
+-d <cvsroot>, --cvsroot <cvsroot>
                     - setup \$CVSROOT,
 --define <macro> <value>
                     - define a macro <macro> with value <value>,
@@ -227,22 +242,30 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
 -FRB, --force-remove-build-requires
                     - remove all you fetched with -R or --fetch-build-requires
                       remember, this option works without confirmation,
+-sf, --source-files - list sources - bare filenames (intended for offline
+                      operations; does not work when Icon field is present
+							 but icon file is absent),
+-sp, --source-paths - list sources - filenames with full local paths (intended for
+                      offline operations; does not work when Icon field is present
+							 but icon file is absent),
 -T <cvstag> , --tag <cvstag>
                     - add cvs tag <cvstag> for files,
 -Tvs, --tag-version-stable
-                    - add cvs tags STABLE and NAME-VERSION-RELESE for files,
+                    - add cvs tags STABLE and NAME-VERSION-RELEASE for files,
 -Tvn, --tag-version-nest
-                    - add cvs tags NEST and NAME-VERSION-RELESE for files,
+                    - add cvs tags NEST and NAME-VERSION-RELEASE for files,
 -Ts, --tag-stable
                     - add cvs tag STABLE for files,
 -Tn, --tag-nest
                     - add cvs tag NEST for files,
 -Tv, --tag-version
-                    - add cvs tag NAME-VERSION-RELESE for files,
+                    - add cvs tag NAME-VERSION-RELEASE for files,
 -Tp, --tag-prefix <prefix>
                     - add <prefix> to NAME-VERSION-RELEASE tags,
 -tt, --test-tag <prefix>
                     - fail if tag is already present,
+-ir, --integer-release-only
+                    - allow only integer and snapshot releases
 -v, --verbose       - be verbose,
 -u, --try-upgrade   - check version, and try to upgrade package
 -un, --try-upgrade-with-float-version
@@ -255,16 +278,20 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
                       %_without_<feature> macro switch.  You may now use
                       --with feat1 feat2 feat3 --without feat4 feat5 --with feat6
                       constructions. Set GROUP_BCONDS to yes to make use of it.
---target <platform>
+--target <platform>, --target=<platform>
 		    - build for platform <platform>.
 "
 }
 
 cache_rpm_dump () {
+	 if [ -n "$DEBUG" ]; then
+		  set -x;
+		  set -v;
+	 fi
 rpm_dump_cache=`
 	case "$RPMBUILD" in
 		rpm )
-			rpm -bp --nodeps --define 'prep %dump' $BCOND $SPECFILE 2>&1
+			rpm -bp --nodeps --define 'prep %dump' $BCOND $TARGET_SWITCH $SPECFILE 2>&1
 			;;
 		rpmbuild )
 			rpmbuild --nodigest --nosignature --define 'prep %dump' $BCOND $SPECFILE 2>&1
@@ -302,6 +329,13 @@ parse_spec()
 	PACKAGE_NAME="`$RPM -q --qf '%{NAME}\n' --specfile ${SPECFILE} 2> /dev/null | head -n 1`"
 	PACKAGE_VERSION="`$RPM -q --qf '%{VERSION}\n' --specfile ${SPECFILE} 2> /dev/null| head -n 1`"
 	PACKAGE_RELEASE="`$RPM -q --qf '%{RELEASE}\n' --specfile ${SPECFILE} 2> /dev/null | head -n 1`"
+
+# These variables may be unset after first cache_rpm_dump call
+# (because of not-yet-retrieved icon file)
+#
+#	if [ -z "$PACKAGE_NAME" -o -z "$PACKAGE_VERSION" -o -z "$PACKAGE_RELEASE" ]; then
+#		 Exit_error err_no_package_data;
+#	fi
 
 	if [ -n "$BE_VERBOSE" ]; then
 		echo "- Sources :  `nourl $SOURCES`"
@@ -347,7 +381,22 @@ Exit_error()
 			remove_build_requires
 			echo "Error: package build failed. (${2:-no more info})";
 			exit 5 ;;
+		"err_no_package_data" )
+			remove_build_requires
+			echo "Error: couldn't get out package name/version/release from spec file."
+			exit 6 ;;
+	   "err_tag_exists" )
+			remove_build_requires
+			echo "Tag ${2} already exists (spec release: ${3}).";
+			exit 9 ;;
+	   "err_fract_rel" )
+			remove_build_requires
+			echo "Release ${2} not integer and not a snapshot.";
+			exit 10 ;;
+
 	esac
+   echo "Unknown error."
+   exit 100
 }
 
 init_builder()
@@ -423,7 +472,7 @@ get_spec()
 		chmod $CHMOD_MODE $SPECFILE
 	fi
 	unset OPTIONS
-	grep -E -m 1 "^#.*Revision:.*Date" $SPECFILE
+	[ -n "$DONT_PRINT_REVISION" ] || grep -E -m 1 "^#.*Revision:.*Date" $SPECFILE
 }
 
 find_mirror()
@@ -463,7 +512,7 @@ src_md5 ()
 	no=$(src_no "$1")
 	[ -z "$no" ] && return
 	cd $SPECS_DIR
-	spec_rev=$(grep $SPECFILE CVS/Entries | sed -e s:/$SPECFILE/:: -e s:/.*::)
+	spec_rev=$(grep $SPECFILE CVS/Entries 2>/dev/null | sed -e s:/$SPECFILE/:: -e s:/.*::)
 	if [ -z "$spec_rev" ]; then
 		spec_rev="$(head -n 1 $SPECFILE | sed -e 's/.*\$Revision: \([0-9.]*\).*/\1/')"
 	fi
@@ -473,7 +522,17 @@ src_md5 ()
 	sed -e 's/^\([0-9a-f]\{32\}\).*/\1/' | \
 	grep -E '^[0-9a-f]{32}$')
 	if [ X"$md5" = X"" ] ; then
-		grep -i "#[ 	]*Source$no-md5[ 	]*:" $SPECFILE | sed -e 's/.*://' | xargs
+		source_md5=`grep -i "#[ 	]*Source$no-md5[ 	]*:" $SPECFILE | sed -e 's/.*://'`
+		if [ ! -z "$source_md5" ] ; then
+			echo $source_md5;
+		else
+			# we have empty SourceX-md5, but it is still possible
+			# that we have NoSourceX-md5 AND NoSource: X
+			nosource_md5=`grep -i "#[	 ]*NoSource$no-md5[	 ]*:" $SPECFILE | sed -e 's/.*://'`
+			if [ ! -z "$nosource_md5" -a ! X"`grep -i "^NoSource:[	 ]*$no$" $SPECFILE`" = X"" ] ; then
+				echo $nosource_md5;
+			fi;
+		fi;
 	else
 		if [ $(echo "$md5" | wc -l) != 1 ] ; then
 			echo "$SPECFILE: more then one entry in additional-md5sums for $1" 1>&2
@@ -484,12 +543,12 @@ src_md5 ()
 
 distfiles_url ()
 {
-	echo "$PROTOCOL$DISTFILES_SERVER/by-md5/$(src_md5 "$1" | sed -e 's|^\(.\)\(.\)|\1/\2/&|')/$(basename "$1")"
+	echo "$PROTOCOL$DISTFILES_SERVER/distfiles/by-md5/$(src_md5 "$1" | sed -e 's|^\(.\)\(.\)|\1/\2/&|')/$(basename "$1")"
 }
 
 distfiles_attic_url ()
 {
-	echo "$PROTOCOL$DISTFILES_SERVER/Attic/by-md5/$(src_md5 "$1" | sed -e 's|^\(.\)\(.\)|\1/\2/&|')/$(basename "$1")"
+	echo "$PROTOCOL$ATTICDISTFILES_SERVER/distfiles/Attic/by-md5/$(src_md5 "$1" | sed -e 's|^\(.\)\(.\)|\1/\2/&|')/$(basename "$1")"
 }
 
 good_md5 ()
@@ -497,6 +556,23 @@ good_md5 ()
 	md5=$(src_md5 "$1")
 	[ "$md5" = "" ] || \
 	[ "$md5" = "$(md5sum $(nourl "$1") 2> /dev/null | sed -e 's/ .*//')" ]
+}
+
+good_size ()
+{
+	 size="$(find $(nourl "$1") -printf "%s" 2>/dev/null)"
+	 [ -n "$size" -a "$size" -gt 0 ]
+}
+
+cvsignore_df ()
+{
+	if [ "$CVSIGNORE_DF" != "yes" ]; then
+		return
+	fi
+	cvsignore=${SOURCE_DIR}/.cvsignore
+	if ! grep -q "^$1\$" $cvsignore 2> /dev/null; then
+		echo "$1" >> $cvsignore
+	fi
 }
 
 get_files()
@@ -547,7 +623,7 @@ get_files()
 				fi
 
 				if [ -n "$(src_md5 "$i")" ] && [ -z "$NODIST" ]; then
-					if good_md5 "$i"; then
+					if good_md5 "$i" && good_size "$i"; then
 						echo "$(nourl "$i") having proper md5sum already exists"
 						continue
 					fi
@@ -561,9 +637,9 @@ get_files()
 						if [ -z "$NOMIRRORS" ]; then
 							url="`find_mirror "$url"`"
 						fi
-						${GETURI} -O "$target" "$url" || \
+						${GETURI} ${OUTFILEOPT} "$target" "$url" || \
 						if [ `echo $url | grep -E 'ftp://'` ]; then
-							${GETURI2} -O "$target" "$url"
+							${GETURI2} ${OUTFILEOPT} "$target" "$url"
 						fi
 					fi
 					if ! test -s "$target"; then
@@ -574,13 +650,15 @@ get_files()
 							if [ -z "$NOMIRRORS" ]; then
 								url_attic="`find_mirror "$url_attic"`"
 							fi
-							${GETURI} -O "$target" "$url_attic" || \
+							${GETURI} ${OUTFILEOPT} "$target" "$url_attic" || \
 							if [ `echo $url_attic | grep -E 'ftp://'` ]; then
-								${GETURI2} -O "$target" "$url_attic"
+								${GETURI2} ${OUTFILEOPT} "$target" "$url_attic"
 							fi
 						fi
 					fi
-					if ! test -s "$target"; then
+					if test -s "$target"; then
+						cvsignore_df $target
+					else
 						rm -f "$target"
 						FROM_DISTFILES=0
 					fi
@@ -613,7 +691,7 @@ get_files()
 					${GETURI} "$im" || \
 					if [ `echo $im | grep -E 'ftp://'` ]; then
 						${GETURI2} "$im"
-			  		fi
+					fi
 				fi
 
 			fi
@@ -634,8 +712,8 @@ get_files()
 				' \
 				$SPECS_DIR/$SPECFILE
 			fi
-	
-			if good_md5 "$i"; then
+
+			if good_md5 "$i" && good_size "$i"; then
 				:
 			elif [ "$FROM_DISTFILES" = 1 ]; then
 				# wrong md5 from distfiles: remove the file and try again
@@ -643,24 +721,24 @@ get_files()
 				echo "MD5 sum mismatch. Trying full fetch."
 				FROM_DISTFILES=2
 				rm -f $target
-				${GETURI} -O "$target" "$url" || \
+				${GETURI} ${OUTFILEOPT} "$target" "$url" || \
 				if [ `echo $url | grep -E 'ftp://'` ]; then
-					${GETURI2} -O "$target" "$url"
+					${GETURI2} ${OUTFILEOPT} "$target" "$url"
 				fi
 				if ! test -s "$target"; then
 					rm -f "$target"
-					${GETURI} -O "$target" "$url_attic" || \
+					${GETURI} ${OUTFILEOPT} "$target" "$url_attic" || \
 					if [ `echo $url_attic | grep -E 'ftp://'` ]; then
-						${GETURI2} -O "$target" "$url_attic"
+						${GETURI2} ${OUTFILEOPT} "$target" "$url_attic"
 					fi
 				fi
 				test -s "$target" || rm -f "$target"
 			fi
 
-			if good_md5 "$i"; then
+			if good_md5 "$i" && good_size "$i" ; then
 				:
 			else
-				echo "MD5 sum mismatch.  Use -U to refetch sources,"
+				echo "MD5 sum mismatch or 0 size.  Use -U to refetch sources,"
 				echo "or -5 to update md5 sums, if you're sure files are correct."
 				Exit_error err_no_source_in_repo $i
 			fi
@@ -677,6 +755,12 @@ get_files()
 }
 
 make_tagver() {
+
+		if [ -n "$DEBUG" ]; then
+			 set -x;
+			 set -v;
+		fi
+
 		# Check whether first character of PACKAGE_NAME is legal for tag name
 		if [ -z "${PACKAGE_NAME##[_0-9]*}" -a -z "$TAG_PREFIX" ]; then
 			TAG_PREFIX=tag_
@@ -807,16 +891,16 @@ build_package()
 			eval "perl -pi -e 's/Version:\t"$TOLDVER"/Version:\t"$TNEWVER"/gs' $SPECFILE"
 			eval "perl -pi -e 's/Release:\t[1-9]{0,4}/Release:\t1/' $SPECFILE"
 			parse_spec;
+			if [ -n "$ICONS" ]; then
+				get_files $ICONS;
+				parse_spec;
+			fi
 			get_files "$SOURCES $PATCHES";
 			unset TOLDVER TNEWVER TNOTIFY
 		fi
 	fi
 	cd "$SPECS_DIR"
-	
-	if [ -n "$TARGET" ]; then 
-		TARGET_SWITCH="--target $TARGET"
-	fi
-	
+
 	case "$COMMAND" in
 		build )
 			BUILD_SWITCH="-ba" ;;
@@ -838,7 +922,7 @@ build_package()
 			echo "LASTLOG=$LOG" > $LASTLOG_FILE
 		fi
 		RES_FILE=~/tmp/$RPMBUILD-exit-status.$RANDOM
-		(time nice -n ${DEF_NICE_LEVEL} $RPMBUILD $BUILD_SWITCH $TARGET_SWITCH -v $QUIET $CLEAN $RPMOPTS $BCOND $SPECFILE; echo $? > $RES_FILE) 2>&1 |tee $LOG
+		(time nice -n ${DEF_NICE_LEVEL} $RPMBUILD $BUILD_SWITCH -v $QUIET $CLEAN $RPMOPTS $BCOND $TARGET_SWITCH $SPECFILE; echo $? > $RES_FILE) 2>&1 |tee $LOG
 		RETVAL=`cat $RES_FILE`
 		rm $RES_FILE
 		if [ -n "$LOGDIROK" ] && [ -n "$LOGDIRFAIL" ]; then
@@ -849,7 +933,7 @@ build_package()
 			fi
 		fi
 	else
-		eval nice -n ${DEF_NICE_LEVEL} $RPMBUILD $BUILD_SWITCH $TARGET_SWITCH -v $QUIET $CLEAN $RPMOPTS $BCOND $SPECFILE
+		eval nice -n ${DEF_NICE_LEVEL} $RPMBUILD $BUILD_SWITCH -v $QUIET $CLEAN $RPMOPTS $BCOND $TARGET_SWITCH $SPECFILE
 		RETVAL=$?
 	fi
 	if [ "$RETVAL" -ne "0" ]; then
@@ -860,14 +944,12 @@ build_package()
 		Exit_error err_build_fail;
 	fi
 	unset BUILD_SWITCH
-	unset TARGET_SWITCH
 }
 
 nourl()
 {
 	echo "$@" | sed 's#\<\(ftp\|http\|https\|cvs\|svn\)://[^ ]*/##g'
 }
-
 
 install_required_packages()
 {
@@ -881,16 +963,56 @@ set_bconds_values()
 	AVAIL_BCONDS_WITH=""
 	if `grep -q ^%bcond ${SPECFILE}`; then
 		BCOND_VERSION="NEW"
-	elif `grep -q bcond ${SPECFILE}`; then
+	elif `egrep -q ^#\ *_with ${SPECFILE}`; then
 		BCOND_VERSION="OLD"
 	else
 		BCOND_VERSION="NONE"
 	fi
+
+	# expand bconds from ~/.bcondrc
+	# The file structure is like gentoo's package.use:
+	# ---
+	# * -selinux
+	# samba -mysql -pgsql
+	# w32codec-installer license_agreement
+	# php +mysqli
+	# ---
+	if [ "${BCOND_VERSION}" != "NONE" ] && ( [ -f $HOME/.bcondrc ] || ( [ -n $HOME_ETC ] && [ -f $HOME_ETC/.bcondrc ] ) ) ; then
+		# This takes package name, first defined in spec.
+		# so consider that when defining flags for package.
+		PN=`$RPM -q --qf '%{NAME}\n' --specfile $SPECFILE | head -n 1`
+		AVAIL=`$RPMBUILD --bcond $SPECFILE`
+
+		BCONDRC=$HOME/.bcondrc
+		[ -n $HOME_ETC ] && [ -f $HOME_ETC/.bcondrc ] && BCONDRC=$HOME_ETC/.bcondrc
+
+		while read pkg flags; do
+			# ignore comments
+			[[ "$pkg" == \#* ]] && continue
+
+			# any package or current package?
+			if [ "$pkg" = "*" ] || [ "$pkg" = "$PN" ]; then
+				for flag in $flags; do
+					opt=${flag#[+-]}
+
+					# use only flags which are in this package.
+					if [[ $AVAIL = *${opt}* ]]; then
+						if [[ $flag = -* ]]; then
+							BCOND="$BCOND --without $opt"
+						else
+							BCOND="$BCOND --with $opt"
+						fi
+					fi
+				done
+			fi
+		done < $BCONDRC
+	fi
+
 	case "${BCOND_VERSION}" in
 		 NONE)
-		 	:
+			:
 			;;
-		 OLD)
+		OLD)
 			echo "Warning: This spec has old style bconds. Fix it || die."
 			for opt in `$RPMBUILD --bcond $SPECFILE |grep ^_without_`
 			do
@@ -901,7 +1023,7 @@ set_bconds_values()
 					AVAIL_BCONDS_WITHOUT="$AVAIL_BCONDS_WITHOUT $AVAIL_BCOND_WITHOUT"
 				fi
 			done
-		
+
 			for opt in `$RPMBUILD --bcond $SPECFILE |grep ^_with_`
 			do
 				AVAIL_BCOND_WITH=`echo $opt|sed -e "s/^_with_//g"`
@@ -923,6 +1045,22 @@ set_bconds_values()
 					_with)
 						cond_type="with"
 						;;
+					_without_*)
+						AVAIL_BCOND_WITHOUT="`echo $opt | sed 's/^_without_//g'`"
+						if `echo $BCOND|grep -q -- "--without $AVAIL_BCOND_WITHOUT"`;then
+							AVAIL_BCONDS_WITHOUT="$AVAIL_BCONDS_WITHOUT <$AVAIL_BCOND_WITHOUT>"
+						else
+							AVAIL_BCONDS_WITHOUT="$AVAIL_BCONDS_WITHOUT $AVAIL_BCOND_WITHOUT"
+						fi
+						;;
+					_with_*)
+						AVAIL_BCOND_WITH="`echo $opt | sed 's/^_with_//g'`"
+						if `echo $BCOND|grep -q -- "--with $AVAIL_BCOND_WITH"`;then
+							AVAIL_BCONDS_WITH="$AVAIL_BCONDS_WITH <$AVAIL_BCOND_WITH>"
+						else
+							AVAIL_BCONDS_WITH="$AVAIL_BCONDS_WITH $AVAIL_BCOND_WITH"
+						fi
+						;;
 					*)
 						case "$cond_type" in
 							with)
@@ -933,7 +1071,7 @@ set_bconds_values()
 								else
 									AVAIL_BCONDS_WITH="$AVAIL_BCONDS_WITH $AVAIL_BCOND_WITH"
 								fi
-							 	;;
+								;;
 							without)
 								cond_type=''
 								AVAIL_BCOND_WITHOUT="$opt"
@@ -968,7 +1106,6 @@ run_sub_builder()
 	# y0shi.
 
 	parent_spec_name=''
-
 
 	# Istnieje taki spec? ${package}.spec
 	if [ -f "${SPECS_DIR}${package}.spec" ]; then
@@ -1034,39 +1171,78 @@ display_bconds()
 	fi
 }
 
+# checks a given list of packages/files/provides agains current rpmdb.
+# outputs all dependencies whcih current rpmdb doesn't satisfy.
+# input can be either STDIN or parameters
+_rpm_prov_check()
+{
+	 local DEPS
+
+	 if [ "$#" -gt 0 ]; then
+		  DEPS="$@"
+	 else
+		  DEPS=$(cat)
+	 fi
+
+	 DEPS=$(rpm -q --whatprovides $DEPS 2>&1 | awk '/^(error:|no package provides)/ { print }')
+
+	 # packages
+	 echo "$DEPS" | awk '/^no package provides/ { print "@" $NF }'
+
+	 # other deps (files)
+	 echo "$DEPS" | awk -F: '/^error:.*No such file/{o=$2; gsub("^ file ", "", o); print "@" o}'
+}
+
+# checks if given package/files/provides exists in rpmdb.
+# inout can be either stdin or parameters
+# returns packages wchi hare present in the rpmdb
+_rpm_cnfl_check()
+{
+	 local DEPS
+
+	 if [ "$#" -gt 0 ]; then
+		  DEPS="$@"
+	 else
+		  DEPS=$(cat)
+	 fi
+
+	 rpm -q --whatprovides $DEPS 2>/dev/null | awk '!/no package provides/ { print }'
+}
+
 fetch_build_requires()
 {
 	if [ "${FETCH_BUILD_REQUIRES}" = "yes" ]; then
 		if [ "$FETCH_BUILD_REQUIRES_RPMGETDEPS" = "yes" ]; then
-			 CONF=$(rpm-getdeps $BCOND $SPECFILE 2> /dev/null | awk '/^\-/ { print "@" $3 } ' | xargs)
-			 DEPS=$(rpm-getdeps $BCOND $SPECFILE 2> /dev/null | awk '/^\+/ { print "@" $3 } ' | xargs)
-			 if [ -n "$CONF" -o -n "$DEPS" ]; then
-				  /usr/bin/poldek --update; /usr/bin/poldek --upa
-			 fi
-			 if [ -n "$CONF" ]; then
-				  echo "Trying to uninstall conflicting packages ($CONF):"
-				  /usr/bin/poldek --noask --nofollow -ev $CONF
-			 fi
-			 if [ -n "$DEPS" ]; then
-				  echo "Trying to install dependencies ($DEPS):"
-				  /usr/bin/poldek --caplookup -uGv $DEPS
-			 fi
-			 return
+			CONF=$(rpm-getdeps $BCOND $SPECFILE 2> /dev/null | awk '/^\-/ { print $3 } ' | _rpm_cnfl_check | xargs)
+			DEPS=$(rpm-getdeps $BCOND $SPECFILE 2> /dev/null | awk '/^\+/ { print $3 } ' | _rpm_prov_check | xargs)
+
+			if [ -n "$CONF" ] || [ -n "$DEPS" ]; then
+				$SU_SUDO /usr/bin/poldek --update || $SU_SUDO /usr/bin/poldek --upa
+			fi
+			if [ -n "$CONF" ]; then
+				echo "Trying to uninstall conflicting packages ($CONF):"
+				$SU_SUDO /usr/bin/poldek --noask --nofollow -ev $CONF
+			fi
+			if [ -n "$DEPS" ]; then
+				echo "Trying to install dependencies ($DEPS):"
+				$SU_SUDO /usr/bin/poldek --caplookup -uGv $DEPS
+			fi
+			return
 		fi
-		 
+
 		echo -ne "\nAll packages installed by fetch_build_requires() are written to:\n"
 		echo -ne "`pwd`/.${SPECFILE}_INSTALLED_PACKAGES\n"
 		echo -ne "\nIf anything fails, you may get rid of them by executing:\n"
 		echo "poldek -e \`cat `pwd`/.${SPECFILE}_INSTALLED_PACKAGES\`\n\n"
 		echo > `pwd`/.${SPECFILE}_INSTALLED_PACKAGES
-		for package_item in `cat $SPECFILE|grep -B100000 ^%changelog|grep -v ^#|grep BuildRequires|grep -v ^-|sed -e "s/^.*BuildRequires://g"|awk '{print $1}'|sed -e s,perl\(,perl-,g -e s,::,-,g -e s,\(.*\),,g -e s,%{,,g -e s,},,g|grep -v OpenGL-devel|sed -e s,sh-utils,coreutils,g -e s,fileutils,coreutils,g -e s,kgcc_package,gcc,g -e s,\),,g`
+		for package_item in `cat $SPECFILE|grep -B100000 ^%changelog|grep -v ^#|grep BuildRequires|grep -v ^-|sed -e "s/^.*BuildRequires://g"|awk '{print $1}'|sed -e s,perl\(,perl-,g -e s,::,-,g -e s,\(.*\),,g -e s,%{,,g -e s,},,g|grep -v OpenGL-devel|sed -e s,sh-utils,coreutils,g -e s,fileutils,coreutils,g -e s,textutils,coreutils,g -e s,kgcc_package,gcc,g -e s,\),,g`
 		do
 			package_item="`echo $package_item|sed -e s,rpmbuild,rpm-build,g |sed -e s,__perl,perl,g |sed -e s,gasp,binutils-gasp,g -e s,binutils-binutils,binutils,g -e s,apxs,apache,g|sed -e s,apache\(EAPI\)-devel,apache-devel,g -e s,kernel-headers\(netfilter\),kernel-headers,g -e s,awk,mawk,g -e s,mmawk,mawk,g -e s,motif,openmotif,g -e s,openopenmotif,openmotif,g`"
 			GO="yes"
 			package=`basename "$package_item"|sed -e "s/}$//g"`
 			COND_ARCH_TST="`cat $SPECFILE|grep -B1 BuildRequires|grep -B1 $package|grep ifarch|sed -e "s/^.*ifarch//g"`"
 			mach=`uname -m`
-		
+
 			COND_TST=`cat $SPECFILE|grep BuildRequires|grep "$package"`
 			if `echo $COND_TST|grep -q '^BuildRequires:'`; then
 				if [ "$COND_ARCH_TST" != "" ] && [ "`echo $COND_ARCH_TST|sed -e "s/i.86/ix86/g"`" != "`echo $mach|sed -e "s/i.86/ix86/g"`" ]; then
@@ -1078,30 +1254,34 @@ fetch_build_requires()
 				GO=""
 				# %{without}
 				if `echo $COND_TST|grep -q 'without_'`; then
-					COND_NAME=`echo $COND_NAME|sed -e s,^.*_without_,,g`
+					COND_NAME=`echo $COND_NAME|sed -e s,^.*without_,,g`
 					if `echo $COND_TST|grep -q !`; then
 						COND_STATE="with"
 					else
 						COND_STATE="wout"
 					fi
-					if `echo $AVAIL_BCONDS_WITHOUT|grep -q "<$COND_NAME>"`; then
+					COND_WITH=`echo $AVAIL_BCONDS_WITH|grep "<$COND_NAME>"`
+					COND_WITHOUT=`echo $AVAIL_BCONDS_WITHOUT|grep "<$COND_NAME>"`
+					if [ -n "$COND_WITHOUT" ] || [ -z "$COND_WITH" ]; then
 						COND_ARGV="wout"
 					else
 						COND_ARGV="with"
 					fi
 				# %{with}
 				elif `echo $COND_TST|grep -q 'with_'`; then
-					COND_NAME=`echo $COND_NAME|sed -e s,^.*_with_,,g`
+					COND_NAME=`echo $COND_NAME|sed -e s,^.*with_,,g`
 					if `echo $COND_TST|grep -q !`; then
 						COND_STATE="wout"
 					else
 						COND_STATE="with"
-					fi					
-					if `echo $AVAIL_BCONDS_WITH|grep -q "<$COND_NAME>"`; then
+					fi
+					COND_WITH=`echo $AVAIL_BCONDS_WITH|grep "<$COND_NAME>"`
+					COND_WITHOUT=`echo $AVAIL_BCONDS_WITHOUT|grep "<$COND_NAME>"`
+					if [ -n "$COND_WITH" ] || [ -z "$COND_WITHOUT" ]; then
 						COND_ARGV="with"
 					else
 						COND_ARGV="wout"
-					fi	
+					fi
 				fi
 				RESULT="${COND_STATE}-${COND_ARGV}"
 				case "$RESULT" in
@@ -1192,6 +1372,57 @@ fetch_build_requires()
 	fi
 }
 
+diffcol()
+{
+	 # vim like diff colourization, glen@pld-linux.org
+	 sed -e '
+	 s,,[44m^[[49m,g;
+	 s,,[44m^G[49m,g;
+	 s,^\(Index:\|diff\|---\|+++\) .*$,[32m&,;
+	 s,^@@ ,[33m&,g;
+	 s,^-,[35m&,;
+	 s,^+,[36m&,;
+	 s,,[44m^M[49m,g;
+	 s,	,    ,g;
+	 s,\([^[:space:]]\)\([[:space:]]\+\)$,\1[41m\2[49m,g;
+	 s,$,[0m,
+	 ' "$@"
+}
+
+adapterize()
+{
+	 cd "$SPECS_DIR"
+	 local tmpdir
+	 tmpdir=$(mktemp -d ${TMPDIR:-/tmp}/adapter-XXXXXX) || exit
+	 awk -f adapter.awk $SPECFILE > $tmpdir/$SPECFILE
+
+	 if [ "`diff --brief $SPECFILE $tmpdir/$SPECFILE`" ] ; then
+		  diff -u $SPECFILE $tmpdir/$SPECFILE > $tmpdir/$SPECFILE.diff
+		  diffcol $tmpdir/$SPECFILE.diff | less -r
+		  (
+				while : ; do
+					 echo -n "Accept? [yn] "
+					 read ans
+					 case "$ans" in
+					 [yYoO]) # y0 mama
+						  mv -f $tmpdir/$SPECFILE $SPECFILE
+						  echo "Ok, adapterized."
+						  break
+					 ;;
+					 [nNsS])
+						  echo "Ok, exiting."
+						  break
+					 ;;
+					 esac
+				done
+		  )
+	 else
+		  echo "The SPEC is perfect ;)"
+	 fi
+
+	 rm -rf $tmpdir
+}
+
 #---------------------------------------------
 # main()
 
@@ -1208,6 +1439,12 @@ do
 			NODIST="yes"
 			NOCVSSPEC="yes"
 			UPDATE5="yes"
+			shift ;;
+		--adapter | --adapterize )
+			COMMAND="adapterize";
+			NODIST="yes"
+			NOCVSSPEC="yes"
+			ADAPTERIZE="yes"
 			shift ;;
 		-a5 | --add-md5 )
 			COMMAND="get";
@@ -1275,7 +1512,7 @@ do
 			NOSRCS="yes"
 			shift;;
 		--opts )
-			shift; RPMOPTS="${1}"; shift ;;
+			shift; RPMOPTS="$RPM_OPTS ${1}"; shift ;;
 		--with | --without )
 			case $GROUP_BCONDS in
 				"yes")
@@ -1292,6 +1529,8 @@ do
 			;;
 		--target )
 			shift; TARGET="${1}"; shift ;;
+		--target=* )
+			TARGET=$(echo "${1}" | sed 's/^--target=//'); shift ;;
 		-q | --quiet )
 			QUIET="--quiet"; shift ;;
 		--date )
@@ -1308,6 +1547,12 @@ do
 		-FRB | --force-remove-build-requires)
 			REMOVE_BUILD_REQUIRES="force"
 			shift ;;
+		-sf | --sources-files)
+			COMMAND="list-sources-files"
+			shift ;;	
+		-sp | --sources-paths)
+			COMMAND="list-sources-local-paths"
+			shift ;;	
 		-Tvs | --tag-version-stable )
 			COMMAND="tag";
 			TAG="STABLE"
@@ -1345,6 +1590,9 @@ do
 			TAG="$1"
 			TAG_VERSION="no"
 			shift;;
+		-ir | --integer-release-only )
+			INTEGER_RELEASE="yes"
+			shift;;
 		-U | --update )
 			COMMAND="get"
 			UPDATE="yes"
@@ -1372,6 +1620,8 @@ do
 			shift
 			RPMOPTS="${RPMOPTS} --nodeps"
 			;;
+		-debug)
+			RPMOPTS="${RPMOPTS} -debug"; shift ;;
 		* )
 			SPECFILE="${1}"
 			export PROMPT_COMMAND=`echo -ne "\033]0;${SPECFILE}\007"`
@@ -1384,44 +1634,57 @@ if [ -n "$DEBUG" ]; then
 	set -v;
 fi
 
+if [ -n "$TARGET" ]; then
+	case "$RPMBUILD" in
+		"rpmbuild")
+			TARGET_SWITCH="--target $TARGET" ;;
+		"rpm")
+			TARGET_SWITCH="--target=$TARGET" ;;
+	esac
+fi
+
 case "$COMMAND" in
 	"build" | "build-binary" | "build-source" | "build-prep" )
 		init_builder;
 		if [ -n "$SPECFILE" ]; then
-		get_spec;
-		set_bconds_values;
-		display_bconds;
-		fetch_build_requires;
-		parse_spec;
-
-		if [ -n "$TEST_TAG" ]; then
-			TAGVER=`make_tagver`
-			echo "Searching for tag $TAGVER..."
-			TAGREL=$(cvs status -v $SPECFILE | grep -E "^[[:space:]]*${TAGVER}[[[:space:]]" | sed -e 's#.*(revision: ##g' -e 's#).*##g')
-
-			if [ -n "$TAGREL" ]; then
-				Exit_error err_build_fail "Tag $TAGVER already present (spec release: $TAGREL)"
-			fi
-		fi
-
-		if [ -n "$ICONS" ]; then
-			get_files $ICONS;
+			get_spec;
+			set_bconds_values;
+			display_bconds;
+			fetch_build_requires;
 			parse_spec;
+			if [ "$INTEGER_RELEASE" = "yes" ]; then
+				echo "Checking release $PACKAGE_RELEASE..."
+				if echo $PACKAGE_RELEASE | grep -q '^[^.]*\.[^.]*$' 2>/dev/null ; then
+					Exit_error err_fract_rel "$PACKAGE_RELEASE"
+				fi
+			fi
+
+			if [ -n "$TEST_TAG" ]; then
+				TAGVER=`make_tagver`
+				echo "Searching for tag $TAGVER..."
+				TAGREL=$(cvs status -v $SPECFILE | grep -E "^[[:space:]]*${TAGVER}[[[:space:]]" | sed -e 's#.*(revision: ##g' -e 's#).*##g')
+				if [ -n "$TAGREL" ]; then
+					Exit_error err_tag_exists "$TAGVER" "$TAGREL"
+				fi
+			fi
+
+			if [ -n "$ICONS" ]; then
+				get_files $ICONS;
+				parse_spec;
+			fi
+			if [ -n "$NOSOURCE0" ] ; then
+				SOURCES=`echo $SOURCES | xargs | sed -e 's/[^ ]*//'`
+			fi
+			get_files "$SOURCES $PATCHES";
+			build_package;
+			if [ "$UPDATE_POLDEK_INDEXES" = "yes" -a "$COMMAND" != "build-prep" ]; then
+				run_poldek --sdir="${POLDEK_INDEX_DIR}" --mkidxz
+			fi
+			remove_build_requires;
+		else
+			Exit_error err_no_spec_in_cmdl;
 		fi
-		if [ -n "$NOSOURCE0" ] ; then
-			SOURCES=`echo $SOURCES | xargs | sed -e 's/[^ ]*//'`
-		fi
-		get_files "$SOURCES $PATCHES";
-		build_package;
-		if [ "$UPDATE_POLDEK_INDEXES" = "yes" ]; then
-			run_poldek --sn ${POLDEK_SOURCE} --mkidx="${POLDEK_INDEX_DIR}/packages.dir.gz"
-			run_poldek --sn ${POLDEK_SOURCE} --up
-		fi
-		remove_build_requires;
-	else
-		Exit_error err_no_spec_in_cmdl;
-	fi
-	;;
+		;;
 	"branch" )
 		init_builder;
 		if [ -n "$SPECFILE" ]; then
@@ -1443,7 +1706,9 @@ case "$COMMAND" in
 			get_spec;
 			parse_spec;
 			if [ -n "$ICONS" ]; then
-				get_files $ICONS
+				OLD_UPDATE5=$UPDATE5
+				UPDATE5= get_files $ICONS
+				UPDATE5=$OLD_UPDATE5
 				parse_spec;
 			fi
 			if [ -n "$NOSOURCE0" ] ; then
@@ -1482,12 +1747,39 @@ case "$COMMAND" in
 	"mr-proper" )
 		$RPM --clean --rmsource --rmspec --force --nodeps $SPECFILE
 		;;
+	"list-sources-files" )
+		init_builder
+		NOCVSSPEC="yes"
+		DONT_PRINT_REVISION="yes"
+		get_spec
+		parse_spec
+		SAPS="$SOURCES $PATCHES"
+		for SAP in $SAPS ; do
+			 echo $SAP | awk '{gsub(/.*\//,"") ; print}'
+		done
+		;;
+	"list-sources-local-paths" )
+		init_builder
+		NOCVSSPEC="yes"
+		DONT_PRINT_REVISION="yes"
+		get_spec
+		parse_spec
+		SAPS="$SOURCES $PATCHES"
+		for SAP in $SAPS ; do
+			 echo $SOURCE_DIR/$(echo $SAP | awk '{gsub(/.*\//,"") ; print }')
+		done
+		;;
+	"adapterize" )
+		adapterize
+		;;
 	"usage" )
 		usage;;
 	"version" )
 		echo "$VERSION";;
 esac
-test -f `pwd`/.${SPECFILE}_INSTALLED_PACKAGES && rm `pwd`/.${SPECFILE}_INSTALLED_PACKAGES
+if [ -f "`pwd`/.${SPECFILE}_INSTALLED_PACKAGES" -a "$REMOVE_BUILD_REQUIRES" != "" ]; then
+	rm "`pwd`/.${SPECFILE}_INSTALLED_PACKAGES"
+fi
 cd "$__PWD"
 
 # vi:syntax=sh:ts=3:sw=4
