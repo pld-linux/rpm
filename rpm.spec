@@ -9,7 +9,6 @@
 %bcond_with	static		# build static rpmi (not supported at the moment)
 %bcond_without	apidocs		# don't generate documentation with doxygen
 %bcond_without	autoreqdep	# don't autogenerate package name deps in addition to sonames/perl(X)
-%bcond_without	home_etc	# build without HOME_ETC support
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
 %bcond_with	neon		# build with HTTP/WebDAV support (neon library)
@@ -32,7 +31,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.2
-Release:	1.1
+Release:	2
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -115,7 +114,6 @@ BuildRequires:	db-devel >= %{reqdb_ver}
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	findutils
 BuildRequires:	gettext-devel >= 0.11.4-2
-%{?with_home_etc:BuildRequires:	home-etc-devel >= 1:1.0.9-2}
 #BuildRequires:	libmagic-devel
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
@@ -229,10 +227,6 @@ Requires:	popt >= %{reqpopt_ver}
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
-%if %{with home_etc}
-# avoid linking to /usr/lib
-Conflicts:	home-etc < 1.0.9-2
-%endif
 
 %description lib
 RPMs library.
@@ -254,7 +248,6 @@ Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
 Requires:	db-devel >= %{reqdb_ver}
 Requires:	elfutils-devel
-%{?with_home_etc:Requires:	home-etc-devel >= 1:1.0.9-2}
 %{?with_selinux:Requires:	libselinux-devel}
 Requires:	popt-devel >= %{reqpopt_ver}
 Requires:	zlib-devel
@@ -706,7 +699,6 @@ CPPFLAGS="-Dglob=rpm_glob -Dglobfree=rpm_globfree"; export CPPFLAGS
 	--enable-shared \
 	--enable-static \
 	%{?with_apidocs:--with-apidocs} \
-	%{?with_home_etc:--with-home_etc} \
 	%{?with_python:--with-python=auto} \
 	%{!?with_python:--without-python} \
 	%{!?with_selinux:--without-selinux} \
