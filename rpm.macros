@@ -457,6 +457,8 @@ fi \
 %__php_requires %{nil}
 %__perl_provides %{nil}
 %__perl_requires %{nil}
+%__mono_provides %{nil}
+%__mono_requires %{nil}
 
 # Perl specific macro definitions.
 %perl_privlib	%(eval "`%{__perl} -V:installprivlib`"; echo $installprivlib)
