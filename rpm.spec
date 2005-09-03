@@ -12,6 +12,8 @@
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
 %bcond_with	neon		# build with HTTP/WebDAV support (neon library)
+%bcond_with	system_libmagic
+
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
@@ -31,7 +33,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.2
-Release:	3
+Release:	3.1
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -74,7 +76,6 @@ Patch15:	%{name}-system_libs-more.patch
 Patch16:	%{name}-php-deps.patch
 Patch17:	%{name}-ldconfig-always.patch
 Patch18:	%{name}-perl_req.patch
-
 Patch20:	%{name}-magic-usesystem.patch
 Patch21:	%{name}-dontneedutils.patch
 Patch22:	%{name}-provides-dont-obsolete.patch
@@ -114,7 +115,7 @@ BuildRequires:	db-devel >= %{reqdb_ver}
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	findutils
 BuildRequires:	gettext-devel >= 0.11.4-2
-#BuildRequires:	libmagic-devel
+%{?with_system_libmagic:BuildRequires:	libmagic-devel}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
@@ -138,7 +139,7 @@ BuildRequires:	bzip2-static >= 1.0.2-17
 BuildRequires:	db-static >= %{reqdb_ver}
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	elfutils-static
-#BuildRequires:	libmagic-static
+%{with_system_libmagic:BuildRequires:	libmagic-static}
 %{?with_selinux:BuildRequires:	libselinux-static >= 1.18}
 BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
@@ -655,7 +656,7 @@ cd ..
 mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
 
-rm -rf sqlite zlib db db3 popt rpmdb/db.h
+rm -rf file sqlite zlib db db3 popt rpmdb/db.h
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
@@ -667,14 +668,6 @@ for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
 done
 
 %build
-cd file
-%{__libtoolize}
-%{__aclocal}
-%{__autoheader}
-%{__autoconf}
-%{__automake}
-cd ..
-
 %{__libtoolize}
 %{__gettextize}
 %{__aclocal}
@@ -950,7 +943,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/rpmcache
 %attr(755,root,root) %{_bindir}/rpmdeps
 %attr(755,root,root) %{_bindir}/rpmgraph
-%attr(755,root,root) %{_bindir}/rpmfile
+%{!?with_system_libmagic:%attr(755,root,root) %{_bindir}/rpmfile}
 %attr(755,root,root) %{_rpmlibdir}/find-debuginfo.sh
 %attr(755,root,root) %{_rpmlibdir}/rpm2cpio.sh
 %attr(755,root,root) %{_rpmlibdir}/tgpg
