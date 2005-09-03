@@ -656,7 +656,8 @@ cd ..
 mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
 
-rm -rf file sqlite zlib db db3 popt rpmdb/db.h
+rm -rf sqlite zlib db db3 popt rpmdb/db.h
+%{?with_system_libmagic:rm -rf file}
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
