@@ -406,7 +406,7 @@ Requires:	chrpath >= 0.10-4
 Requires:	cpio
 Requires:	diffutils
 Requires:	elfutils
-Requires:	file >= 4.13-2
+Requires:	file >= 4.14-1
 Requires:	fileutils
 Requires:	findutils
 %ifarch athlon
