@@ -53,3 +53,15 @@ diff -ur rpm.org/tools/Makefile.am rpm/tools/Makefile.am
  
  bin_PROGRAMS =	rpmgraph
  
+diff -urbB rpm-4.4.2.org/tools/Makefile.am rpm-4.4.2/tools/Makefile.am
+--- rpm-4.4.2.org/tools/Makefile.am	2005-09-03 16:35:22.169432000 +0200
++++ rpm-4.4.2/tools/Makefile.am	2005-09-03 16:36:53.947479736 +0200
+@@ -28,7 +28,7 @@
+ noinst_PROGRAMS = dumpdb
+ 
+ pkgbindir = @RPMCONFIGDIR@
+-pkgbin_PROGRAMS = @WITH_LIBDWARF_DEBUGEDIT@ javadeps rpmcache rpmdeps rpmfile
++pkgbin_PROGRAMS = @WITH_LIBDWARF_DEBUGEDIT@ javadeps rpmcache rpmdeps @WITH_RPMFILE@
+ MAGIC	= /usr/share/file/magic
+ 
+ bin_PROGRAMS =	rpmgraph
