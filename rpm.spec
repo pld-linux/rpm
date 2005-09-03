@@ -2,8 +2,6 @@
 # TODO:
 # - python(abi) cap is not provided automatically (because /usr/bin/python matches
 #   ELF first; it should be provided by python-libs not binary anyway)
-# - consider using system libmagic not internal libfmagic
-#   (but internal has different method of passing output)
 # 
 # Conditional build:
 %bcond_with	static		# build static rpmi (not supported at the moment)
@@ -11,8 +9,8 @@
 %bcond_without	autoreqdep	# don't autogenerate package name deps in addition to sonames/perl(X)
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
+%bcond_without	system_libmagic	# don't use system libmagic
 %bcond_with	neon		# build with HTTP/WebDAV support (neon library)
-%bcond_with	system_libmagic
 
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
@@ -33,7 +31,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.2
-Release:	3.1
+Release:	4
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
