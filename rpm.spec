@@ -657,7 +657,6 @@ mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
 
 rm -rf sqlite zlib db db3 popt rpmdb/db.h
-%{?with_system_libmagic:rm -rf file}
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
@@ -669,6 +668,18 @@ for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
 done
 
 %build
+%if %{with system_libmagic}
+rm -rf file
+%else
+cd file
+%{__libtoolize}
+%{__aclocal}
+%{__autoheader}
+%{__autoconf}
+%{__automake}
+cd ..
+%endif
+
 %{__libtoolize}
 %{__gettextize}
 %{__aclocal}
