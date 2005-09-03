@@ -31,7 +31,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.2
-Release:	4
+Release:	5
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -222,6 +222,7 @@ Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	db >= %{reqdb_ver}
 %{?with_selinux:Requires:	libselinux >= 1.18}
+%{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
 Requires:	popt >= %{reqpopt_ver}
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
