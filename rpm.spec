@@ -432,6 +432,7 @@ Provides:	rpmbuild(noauto) = 3
 Conflicts:	automake < 1:1.7.9-2
 Conflicts:	libtool < 2:1.5-13
 %endif
+Obsoletes:	rpmbuild(macros) < %{rpm_macros_rev}
 
 %description build
 Scripts for building binary RPM packages.
