@@ -720,9 +720,9 @@ fi \
 
 # see browser-plugins.spec / template-browser-plugin.spec
 # written by glen@pld-linux.org.
-%nsplugin_install(d:) { \
+%nsplugin_install(d:f) { \
 # create link if it's first install of either of the packages \
-if [ "$1" = "1" ] && [ "$2" = "1" ] && [ -d %{-d*} ]; then \
+if [ -n "%{-f:1}" ] || ([ "$1" = "1" ] && [ "$2" = "1" ] && [ -d %{-d*} ]); then \
 ( \
 %( \
 	for file in %{*}; do \
