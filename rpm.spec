@@ -249,6 +249,7 @@ Requires:	bzip2-devel
 Requires:	db-devel >= %{reqdb_ver}
 Requires:	elfutils-devel
 %{?with_selinux:Requires:	libselinux-devel}
+%{?with_system_libmagic:Requires:	libmagic-devel}
 Requires:	popt-devel >= %{reqpopt_ver}
 Requires:	zlib-devel
 
