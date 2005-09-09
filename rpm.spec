@@ -311,6 +311,7 @@ Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
 Requires:	db-static >= %{reqdb_ver}
 Requires:	elfutils-static
+%{?with_system_libmagic:Requires:	libmagic-static}
 Requires:	popt-static >= %{reqpopt_ver}
 Requires:	zlib-static
 
