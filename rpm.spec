@@ -12,6 +12,7 @@
 %bcond_without	home_etc	# build without HOME_ETC support
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
+%bcond_without	system_libmagic # don't use system libmagic
 %bcond_with	neon		# build with HTTP/WebDAV support (neon library)
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
@@ -116,7 +117,7 @@ BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	findutils
 BuildRequires:	gettext-devel >= 0.11.4-2
 %{?with_home_etc:BuildRequires:	home-etc-devel >= 1:1.0.9-2}
-#BuildRequires:	libmagic-devel
+%{?with_system_libmagic:BuildRequires: libmagic-devel}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
@@ -139,7 +140,7 @@ BuildRequires:	bzip2-static >= 1.0.2-17
 BuildRequires:	db-static >= %{reqdb_ver}
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	elfutils-static
-#BuildRequires:	libmagic-static
+%{with_system_libmagic:BuildRequires:  libmagic-static}
 %{?with_selinux:BuildRequires:	libselinux-static >= 1.18}
 BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
@@ -224,6 +225,7 @@ Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	db >= %{reqdb_ver}
 %{?with_selinux:Requires:	libselinux >= 1.18}
+%{?with_system_libmagic:Requires:      libmagic >= 1.15-2}
 Requires:	popt >= %{reqpopt_ver}
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
@@ -255,6 +257,7 @@ Requires:	db-devel >= %{reqdb_ver}
 Requires:	elfutils-devel
 %{?with_home_etc:Requires:	home-etc-devel >= 1:1.0.9-2}
 %{?with_selinux:Requires:	libselinux-devel}
+%{?with_system_libmagic:Requires:       libmagic-devel}
 Requires:	popt-devel >= %{reqpopt_ver}
 Requires:	zlib-devel
 
@@ -316,6 +319,7 @@ Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
 Requires:	db-static >= %{reqdb_ver}
 Requires:	elfutils-static
+%{?with_system_libmagic:Requires:       libmagic-static}
 Requires:	popt-static >= %{reqpopt_ver}
 Requires:	zlib-static
 
@@ -669,6 +673,9 @@ for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
 done
 
 %build
+%if %{with system_libmagic}
+rm -rf file
+%else
 cd file
 %{__libtoolize}
 %{__aclocal}
@@ -676,6 +683,7 @@ cd file
 %{__autoconf}
 %{__automake}
 cd ..
+%endif
 
 %{__libtoolize}
 %{__gettextize}
@@ -950,7 +958,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/rpmcache
 %attr(755,root,root) %{_bindir}/rpmdeps
 %attr(755,root,root) %{_bindir}/rpmgraph
-%attr(755,root,root) %{_bindir}/rpmfile
+%{!?with_system_libmagic:%attr(755,root,root) %{_bindir}/rpmfile}
 %attr(755,root,root) %{_rpmlibdir}/find-debuginfo.sh
 %attr(755,root,root) %{_rpmlibdir}/rpm2cpio.sh
 %attr(755,root,root) %{_rpmlibdir}/tgpg
