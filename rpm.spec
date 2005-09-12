@@ -31,7 +31,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.2
-Release:	7
+Release:	8
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -844,6 +844,8 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep <<EOF
 ^libpsres.so
 ^libxkbfile.so
 ^libxkbui.so
+# -- famin / gamin
+^libfam.so.0
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc <<EOF
 # global list of file masks not to be compressed in DOCDIR
