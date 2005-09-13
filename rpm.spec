@@ -2,8 +2,6 @@
 # TODO:
 # - python(abi) cap is not provided automatically (because /usr/bin/python matches
 #   ELF first; it should be provided by python-libs not binary anyway)
-# - consider using system libmagic not internal libfmagic
-#   (but internal has different method of passing output)
 # 
 # Conditional build:
 %bcond_with	static		# build static rpmi (not supported at the moment)
