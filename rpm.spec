@@ -852,6 +852,8 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep <<EOF
 ^libpsres.so
 ^libxkbfile.so
 ^libxkbui.so
+# -- fam / gamin
+^libfam.so.0
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc <<EOF
 # global list of file masks not to be compressed in DOCDIR
