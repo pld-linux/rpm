@@ -470,6 +470,27 @@ fi \
 
 %php_pear_dir	%{_datadir}/pear
 
+# extract php/zend api versions
+%php_api_version %(awk '/#define php_api_version/{print $3}' /usr/include/php/main/php.h)
+%zend_module_api %(awk '/#define zend_module_api_no/{print $3}' /usr/include/php/zend/zend_modules.h)
+%zend_extension_api %(awk '/#define zend_extension_api_no/{print $3}' /usr/include/php/zend/zend_extensions.h)
+
+# directory where php includes are installed on system.
+%__php_includedir		/usr/include/php
+%php_api_version		%(awk '/#define php_api_version/{print $3}' %{__php_includedir}/main/php.h 2>/dev/null || echo error)
+%zend_module_api		%(awk '/#define zend_module_api_no/{print $3}' %{__php_includedir}/zend/zend_modules.h 2>/dev/null || echo error)
+%zend_extension_api		%(awk '/#define zend_extension_api_no/{print $3}' %{__php_includedir}/zend/zend_extensions.h 2>/dev/null || echo error)
+
+# helper macro
+%__php_api_requires() requires: php(%{expand:%1}) = %{expand:%{%{!?2:%{1}}%{?2}}}
+
+# macros for public use
+# for php extensions (php-pecl)
+%requires_php_extension %{__php_api_requires modules_api php_api_version}
+# for zend extensions
+%requires_zend_extension %{__php_api_requires zend_module_api} \
+%{__php_api_requires zend_extension_api}
+
 # Python specific macro definitions.
 # python main version
 %py_ver         %(echo `python -c "import sys; print sys.version[:3]"`)
