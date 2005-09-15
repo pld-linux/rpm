@@ -610,7 +610,7 @@ if [ -x /usr/bin/banner.sh ]; then \
 else \
 	CMD="cat%{-e: >&2}" \
 fi \
-$CMD %2%{?3: %3} \
+eval $CMD %2%{?3: %3} \
 %nil
 
 # useradd/groupadd macros written by glen@pld-linux.org.
