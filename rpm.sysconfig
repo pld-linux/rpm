@@ -8,3 +8,11 @@ RPM_SCRIPTVERBOSITY=5
 
 # Should unused users be removed at package deinstalation?
 RPM_USERDEL=yes
+
+# Should automatic restarts from rpm upgrades be skipped?
+# You want to enable this if you have critical services running and lots of
+# packages trigger the service restart, like apache or php packages upgrade
+# could cause your service being interupted for serveral minutes depending how
+# (un)powerful your server hardware is.
+# You can also disable this per service, if service supports it from /etc/sysconfig/SERVICE
+#RPM_SKIP_AUTO_RESTART=yes
