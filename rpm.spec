@@ -428,6 +428,7 @@ Provides:	rpmbuild(noauto) = 3
 Conflicts:	automake < 1:1.7.9-2
 Conflicts:	libtool < 2:1.5-13
 %endif
+Obsoletes:	rpmbuild(macros) < %{rpm_macros_rev}
 
 %description build
 Scripts for building binary RPM packages.
@@ -858,6 +859,13 @@ for a in librpm-%{sover}.so librpmdb-%{sover}.so librpmio-%{sover}.so ; do
 	mv -f $RPM_BUILD_ROOT%{_libdir}/$a $RPM_BUILD_ROOT/%{_lib}
 	ln -s /%{_lib}/$a $RPM_BUILD_ROOT%{_libdir}/$a
 done
+
+# remove arch dependant macros which have no use on noarch
+sed -i -e '
+/{__spec_install_post_strip}/d
+/{__spec_install_post_chrpath}/d
+/{__spec_install_post_compress_modules}/d
+' $RPM_BUILD_ROOT%{_rpmlibdir}/noarch-linux/macros
 
 %py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
 %py_comp $RPM_BUILD_ROOT%{py_sitedir}
