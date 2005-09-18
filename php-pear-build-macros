@@ -1,0 +1,24 @@
+# vim:syn=spec:ai
+
+%define	pear_package_setup(a:) \
+%setup -q -c -T\
+D=%{_builddir}/%{name}-%{version} \
+sh %{_bindir}/pear \\\
+	-d doc_dir=/docs \\\
+	-d data_dir=%{php_pear_dir}/data \\\
+	install \\\
+	--installroot=${D} \\\
+	--offline \\\
+	--nodeps \\\
+	%{S:%{-a*}%{!-a:0}} \
+rm ./%{php_pear_dir}/.{lock,filemap} \
+# undos sources \
+find . -type f -print0 | xargs -0 sed -i -e 's,\\r$,,' \
+# don't know why installroot stays in installed files. PEAR bug? \
+grep -rl "${D}" ./{%{_bindir},%{php_pear_dir}}/* | xargs -r sed -i -e "s,${D},," \
+%{nil}
+
+ 
+%define	pear_package_install() \
+cp -a ./%{php_pear_dir}/{.registry,*} $RPM_BUILD_ROOT%{php_pear_dir} \
+%{nil}
