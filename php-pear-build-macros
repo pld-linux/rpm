@@ -17,7 +17,7 @@ pear \\\
 # make post message of optional packages \
 grep 'can optionally use package' install.log | sed -e 's,pear/,php-pear-,g' > optional-packages.txt \
 if [ -s optional-packages.txt ]; then \
-	awk -F'"' '{print $2}' optional-packages.txt | sed -e "s,php-pear-, 'pear(,;s,$,/*)'," | tr -d '\\\n' > _noautoreq \
+	awk -F'"' '{print $2}' optional-packages.txt | sed -e "s,_,/,g;s,php-pear-, 'pear(,;s,$,.*)'," | tr -d '\\\n' > _noautoreq \
 else \
 	rm -f optional-packages.txt \
 fi \
