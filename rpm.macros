@@ -96,6 +96,7 @@
 	CPPFLAGS="${CPPFLAGS:-}" \
 	%{?__cc:CC="%{__cc}"} \
 	%{?__cxx:CXX="%{__cxx}"} \
+	--host=%{_target_platform} \
 	--build=%{_target_platform} \
  	--prefix=%{_prefix} \
 	--exec-prefix=%{_exec_prefix} \
