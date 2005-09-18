@@ -10,7 +10,9 @@ sh %{_bindir}/pear \\\
 	--installroot=${D} \\\
 	--offline \\\
 	--nodeps \\\
-	%{S:%{-a*}%{!-a:0}} \
+	%{S:%{-a*}%{!-a:0}} | tee install.log \
+# make post message of optional packages \
+grep 'can optionally use package' install.log > optional-packages.txt \
 rm ./%{php_pear_dir}/.{lock,filemap} \
 # undos sources \
 find . -type f -print0 | xargs -0 sed -i -e 's,\\r$,,' \
