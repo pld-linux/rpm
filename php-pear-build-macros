@@ -16,7 +16,11 @@ pear \\\
 	%{S:%{-a*}%{!-a:0}} | tee install.log \
 # make post message of optional packages \
 grep 'can optionally use package' install.log | sed -e 's,pear/,php-pear-,g' > optional-packages.txt \
-test -s optional-packages.txt || rm -f optional-packages.txt \
+if [ -s optional-packages.txt ]; then \
+	awk -F'"' '{print $2}' optional-packages.txt | sed -e "s,php-pear-, 'pear(,;s,$,/*)'," | tr -d '\\\n' > _noautoreq \
+else \
+	rm -f optional-packages.txt \
+fi \
 rm ./%{php_pear_dir}/.{lock,filemap} \
 # undos sources \
 find . -type f -print0 | xargs -0 sed -i -e 's,\\r$,,' \
@@ -27,6 +31,11 @@ grep -rl "${D}" ./{%{_bindir},%{php_pear_dir}}/* | xargs -r sed -i -e "s,${D},,"
  
 %define	pear_package_install() \
 cp -a ./%{php_pear_dir}/{.registry,*} $RPM_BUILD_ROOT%{php_pear_dir} \
+# help the developer out a little: \
+if [ -f _noautoreq ]; then \
+	echo "AutoReqdep detected:" \
+	echo "_noautoreq $(cat _noautoreq)" \
+fi \
 %{nil}
 
 # displayed in post
