@@ -3,9 +3,12 @@
 %define	pear_package_setup(a:) \
 %setup -q -c -T\
 D=%{_builddir}/%{name}-%{version} \
-sh %{_bindir}/pear \\\
+pear \\\
 	-d doc_dir=/docs \\\
+	-d php_dir=%{php_pear_dir} \\\
+	-d bin_dir=%{_bindir} \\\
 	-d data_dir=%{php_pear_dir}/data \\\
+	-d test_dir=%{php_pear_dir}/tests \\\
 	install \\\
 	--installroot=${D} \\\
 	--offline \\\
@@ -17,7 +20,7 @@ test -s optional-packages.txt || rm -f optional-packages.txt \
 rm ./%{php_pear_dir}/.{lock,filemap} \
 # undos sources \
 find . -type f -print0 | xargs -0 sed -i -e 's,\\r$,,' \
-# don't know why installroot stays in installed files. PEAR bug? \
+# bug in PEAR --installroot. \
 grep -rl "${D}" ./{%{_bindir},%{php_pear_dir}}/* | xargs -r sed -i -e "s,${D},," \
 %{nil}
 
