@@ -40,3 +40,6 @@ fi \
 
 # displayed in post
 %define _noautocompressdoc optional-packages.txt
+
+# don't provide tests
+%define	_noautoprov 'pear(tests/.*)'
