@@ -25,6 +25,7 @@ rm ./%{php_pear_dir}/.{lock,filemap} \
 # undos sources \
 find . -type f -print0 | xargs -0 sed -i -e 's,\\r$,,' \
 # bug in PEAR --installroot. \
+# http://pear.php.net/bugs/bug.php?id=5448 \
 grep -rl "${D}" ./{%{_bindir},%{php_pear_dir}}/* | xargs -r sed -i -e "s,${D},," \
 %{nil}
 
