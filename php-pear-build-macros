@@ -1,5 +1,9 @@
 # vim:syn=spec:ai
 
+# original macros.php macros
+%define	__php_provides	/usr/lib/rpm/php.prov
+%define	__php_requires	/usr/lib/rpm/php.req
+
 # pear install macros written by glen@pld-linux.org.
 # All rights reserved. Permission to copy is hereby granted.. yada, yada, yada
 #
@@ -24,7 +28,7 @@
 # in %%post of a package. you should put this file to %%doc. noautocompressdoc is
 # automatically added for this file.
 #
-%pear_package_setup(a:n:) \
+%define pear_package_setup(a:n:) \
 %setup -q -c -T -n %{-n*}%{!-n:%{_pearname}-%{version}}\
 D=%{_builddir}/%{-n*}%{!-n:%{_pearname}-%{version}} \
 pear \\\
@@ -57,7 +61,7 @@ grep -rl "${D}" ./{%{_bindir},%{php_pear_dir}}/* | xargs -r sed -i -e "s,${D},,"
 # copies exctracted PEAR package structure to buildroot. also copies PEAR
 # registry file.
 # please use this macro, for future expansions being possible.
-%pear_package_install() \
+%define pear_package_install() \
 cp -a ./%{php_pear_dir}/{.registry,*} $RPM_BUILD_ROOT%{php_pear_dir} \
 # help the developer out a little: \
 if [ -f _noautoreq ]; then \
@@ -71,7 +75,7 @@ fi \
 # %%{expand:%%%%define _noautocompressdoc %%{_noautocompressdoc} otherexcludes} in your specfile.
 
 # this file displayed in %post
-%_noautocompressdoc optional-packages.txt
+%define _noautocompressdoc optional-packages.txt
 
 # don't provide tests
-%_noautoprov 'pear(tests/.*)'
+%define _noautoprov 'pear(tests/.*)'
