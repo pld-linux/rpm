@@ -7,7 +7,7 @@
 #	%%pear_package_setup [-a #] [-n FMT]
 #
 # -a #   - unpack SOURCE# instead of SOURCE0
-# -n FMT - create builddir with FMT, instead of default %%{name}-%%{version}
+# -n FMT - create builddir with FMT, instead of default %%{_pearname}-%%{version}
 #
 # unpack PEAR package to %%{_builddir}/FMT. package is extracted with already
 # destination hierarchy. you should copy the tree to buildroot after
@@ -25,8 +25,8 @@
 # automatically added for this file.
 #
 %define	pear_package_setup(a:n:) \
-%setup -q -c -T %{-n:-n %{-n*}}\
-D=%{_builddir}/%{-n*}%{!-n:%{name}-%{version}} \
+%setup -q -c -T -n %{-n*}%{!-n:%{_pearname}-%{version}}\
+D=%{_builddir}/%{-n*}%{!-n:%{_pearname}-%{version}} \
 pear \\\
 	-d doc_dir=/docs \\\
 	-d php_dir=%{php_pear_dir} \\\
