@@ -31,7 +31,7 @@ Summary(uk):	íÅÎÅÄÖÅÒ ÐÁËÅÔ¦× ×¦Ä RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.2
-Release:	10
+Release:	10.2
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -55,6 +55,7 @@ Source31:	adapter.awk
 Source32:	pldnotify.awk
 # http://svn.pld-linux.org/banner.sh/
 Source33:	banner.sh
+Source34:	php-pear-build-macros
 Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
@@ -531,9 +532,14 @@ Summary:	Additional utilities for managing rpm packages and database
 Summary(pl):	Dodatkowe narzêdzia do sprawdzania zale¿no¶ci skryptów php w rpm
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
+Requires:	php-pear-PEAR >= 1:1.4.0-0.b1.3
+Requires:	php-zlib
 
 %description php-pearprov
 Additional utilities for checking php pear provides/requires in rpm
+packages.
+
+This package provides rpm macros and dependencies to help building PEAR
 packages.
 
 %description php-pearprov -l pl
@@ -611,8 +617,7 @@ cp -f platform.in macros.pld.in
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
 echo '%%define	__perl_requires	%%{__perl} /usr/lib/rpm/perl.req' >> macros.perl
 echo '# obsoleted file' > macros.python
-echo '%%define	__php_provides	/usr/lib/rpm/php.prov' > macros.php
-echo '%%define	__php_requires	/usr/lib/rpm/php.req' >> macros.php
+install %{SOURCE34} macros.php
 echo '%%define	__mono_provides	/usr/lib/rpm/mono-find-provides' > macros.mono
 echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
 install %{SOURCE5} scripts/find-lang.sh
