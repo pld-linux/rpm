@@ -1,8 +1,32 @@
 # vim:syn=spec:ai
 
-%define	pear_package_setup(a:) \
-%setup -q -c -T\
-D=%{_builddir}/%{name}-%{version} \
+# pear install macros written by glen@pld-linux.org.
+# All rights reserved. Permission to copy is hereby granted.. yada, yada, yada
+#
+# Usage:
+#	%%pear_package_setup [-a #] [-n FMT]
+#
+# -a #   - unpack SOURCE# instead of SOURCE0
+# -n FMT - create builddir with FMT, instead of default %%{name}-%%{version}
+#
+# unpack PEAR package to %%{_builddir}/FMT. package is extracted with already
+# destination hierarchy. you should copy the tree to buildroot after
+# patching/reorganizing with %%pear_package_install.
+#
+# additionally BUILDROOT is stripped from files and files are converted to UNIX
+# line endings.
+#
+# the pear install process output is recorded to install.log, you should put it
+# to %%doc for latter debug or just information.
+#
+# additionally additional-packages.txt is produced if it was detected that the
+# package has optional dependencies. the file format is suitable of displaying
+# in %%post of a package. you should put this file to %%doc. noautocompressdoc is
+# automatically added for this file.
+#
+%define	pear_package_setup(a:n:) \
+%setup -q -c -T %{-n:-n %{-n*}}\
+D=%{_builddir}/%{-n*}%{!-n:%{name}-%{version}} \
 pear \\\
 	-d doc_dir=/docs \\\
 	-d php_dir=%{php_pear_dir} \\\
@@ -29,7 +53,10 @@ find . -type f -print0 | xargs -0 sed -i -e 's,\\r$,,' \
 grep -rl "${D}" ./{%{_bindir},%{php_pear_dir}}/* | xargs -r sed -i -e "s,${D},," \
 %{nil}
 
- 
+
+# copies exctracted PEAR package structure to buildroot. also copies PEAR
+# registry file.
+# please use this macro, for future expansions being possible.
 %define	pear_package_install() \
 cp -a ./%{php_pear_dir}/{.registry,*} $RPM_BUILD_ROOT%{php_pear_dir} \
 # help the developer out a little: \
@@ -39,8 +66,12 @@ if [ -f _noautoreq ]; then \
 fi \
 %{nil}
 
-# displayed in post
+# default excludes for PEAR packages.
+# if you need add something to the list use
+# %%{expand:%%%%define _noautocompressdoc %%{_noautocompressdoc} otherexcludes} in your specfile.
+
+# this file displayed in %post
 %define _noautocompressdoc optional-packages.txt
 
 # don't provide tests
-%define	_noautoprov 'pear(tests/.*)'
+%define _noautoprov 'pear(tests/.*)'
