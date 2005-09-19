@@ -128,7 +128,7 @@
  buildarch_compat: ia32e: x86_64
  
 -macrofiles:	@RPMCONFIGDIR@/macros:@RPMCONFIGDIR@/%{_target}/macros:@SYSCONFIGDIR@/macros.*:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/.rpmmacros
-+macrofiles:	@RPMCONFIGDIR@/macros:@RPMCONFIGDIR@/macros.*:@RPMCONFIGDIR@/%{_target}/macros:@SYSCONFIGDIR@/macros.*:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/etc/.rpmmacros:~/.rpmmacros
++macrofiles:	@RPMCONFIGDIR@/macros:@RPMCONFIGDIR@/%{_target}/macros:@SYSCONFIGDIR@/macros.*:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/etc/.rpmmacros:~/.rpmmacros
  
  # \endverbatim
  #*/
