@@ -65,6 +65,7 @@ grep -rl "${D}" ./{%{_bindir},%{php_pear_dir}}/* | xargs -r sed -i -e "s,${D},,"
 # please use this macro, for future expansions being possible.
 %define pear_package_install() \
 cp -a ./%{php_pear_dir}/{.registry,*} $RPM_BUILD_ROOT%{php_pear_dir} \
+find $RPM_BUILD_ROOT%{php_pear_dir} '(' -name '*~' -o -name '*.orig' ')' | xargs -r rm -v \
 # help the developer out a little: \
 if [ -f _noautoreq ]; then \
 	echo "AutoReqdep detected:" \
