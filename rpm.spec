@@ -534,6 +534,7 @@ Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	php-pear-PEAR >= 1:1.4.0-0.b1.3
 Requires:	php-zlib
+Requires:	sed >= 4.0
 
 %description php-pearprov
 Additional utilities for checking php pear provides/requires in rpm
