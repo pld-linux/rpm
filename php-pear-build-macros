@@ -13,6 +13,7 @@
 # -a #   - unpack SOURCE# instead of SOURCE0
 # -n FMT - create builddir with FMT, instead of default %%{_pearname}-%%{version}
 # -z     - unpack pear package and let pear use package.xml (not tarball) for install. use this for buggy packages.
+# -f     - force pear install. use with care.
 #
 # unpack PEAR package to %%{_builddir}/FMT. package is extracted with already
 # destination hierarchy. you should copy the tree to buildroot after
@@ -29,10 +30,10 @@
 # in %%post of a package. you should put this file to %%doc. noautocompressdoc is
 # automatically added for this file.
 #
-%define pear_package_setup(a:n:z) \
+%define pear_package_setup(a:n:zf) \
 %setup -q -c -T -n %{-n*}%{!-n:%{_pearname}-%{version}}\
 D=%{_builddir}/%{-n*}%{!-n:%{_pearname}-%{version}} \
-%{-z:tar zxf %{S:%{-a*}%{!-a:0}}} \
+%{-z:tar zxf %{S:%{-a*}%{!-a:0}}; P=%{_pearname}-%{version}/package.xml; [ -f $P ] || P=package.xml} \
 pear \\\
 	-d doc_dir=/docs \\\
 	-d php_dir=%{php_pear_dir} \\\
@@ -43,7 +44,8 @@ pear \\\
 	--installroot=${D} \\\
 	--offline \\\
 	--nodeps \\\
-	%{!-z:%{S:%{-a*}%{!-a:0}}}%{-z:%{_pearname}-%{version}/package.xml} | tee install.log \
+	%{-f:--force} \\\
+	%{!-z:%{S:%{-a*}%{!-a:0}}}%{-z:$P} | tee install.log \
 # make post message of optional packages \
 grep 'can optionally use' install.log | sed -e 's,package "pear/,package "php-pear-,g;s,^pear/,php-pear-,' > optional-packages.txt \
 if [ -s optional-packages.txt ]; then \
