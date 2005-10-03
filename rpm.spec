@@ -1105,7 +1105,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %defattr(644,root,root,755)
 %dir %{py_sitedir}/rpm
 %attr(755,root,root) %{py_sitedir}/rpm/*.so
-%attr(755,root,root) %{py_sitedir}/rpm/*.py[co]
+%{py_sitedir}/rpm/*.py[co]
 %endif
 
 %if %{with apidocs}
