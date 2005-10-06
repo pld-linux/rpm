@@ -33,7 +33,7 @@ Version:	4.4.2
 Release:	4
 License:	GPL
 Group:		Base
-Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
+Source0:	ftp://jbj.org/pub/%{name}-%{sover}.x/%{name}-%{version}.tar.gz
 # Source0-md5:	e24ce468082479fe850c9d6563f56db5
 Source1:	%{name}.groups
 Source2:	%{name}.platform
