@@ -129,7 +129,7 @@ BuildRequires:	popt-devel >= %{reqpopt_ver}
 BuildRequires:	python-modules >= 1:2.3
 BuildRequires:	readline-devel
 BuildRequires:	rpm-perlprov
-BuildRequires:	rpm-pythonprov
+%{?with_python:BuildRequires:	rpm-pythonprov}
 BuildRequires:	zlib-devel
 %if %{with static}
 # Require static library only for static build
@@ -540,12 +540,15 @@ Requires:	sed >= 4.0
 Additional utilities for checking php pear provides/requires in rpm
 packages.
 
-This package provides rpm macros and dependencies to help building PEAR
-packages.
+This package provides rpm macros and dependencies to help building
+PEAR packages.
 
 %description php-pearprov -l pl
 Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów php pear w
 pakietach rpm.
+
+Ten pakiet dostarcza makra rpm-a i zale¿no¶ci pomagaj±ce przy
+budowaniu pakietów PEAR-a.
 
 %package -n python-rpm
 Summary:	Python interface to RPM library
@@ -1035,10 +1038,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %ifarch alpha
 %{_rpmlibdir}/alpha*
 %endif
-%ifarch amd64
-%{_rpmlibdir}/amd64*
-%{_rpmlibdir}/x86_64*
-%endif
 %ifarch ia64
 %{_rpmlibdir}/ia64*
 %endif
@@ -1050,6 +1049,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %endif
 %ifarch sparc sparc64
 %{_rpmlibdir}/sparc*
+%endif
+%ifarch %{x8664}
+%{_rpmlibdir}/amd64*
+%{_rpmlibdir}/x86_64*
 %endif
 # must be here for "Requires: rpm-*prov" to work
 %{_rpmlibdir}/macros.mono
