@@ -9,7 +9,7 @@
 %bcond_with	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
-%bcond_without	system_libmagic # don't use system libmagic
+%bcond_without	system_libmagic	# don't use system libmagic
 %bcond_with	neon		# build with HTTP/WebDAV support (neon library)
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
@@ -19,7 +19,7 @@
 %define	reqdb_ver	4.3.27-1
 %define	reqpopt_ver	1.10.2
 %define	beecrypt_ver	2:4.1.2-4
-%define	rpm_macros_rev	1.238
+%define	rpm_macros_rev	1.241
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -54,6 +54,7 @@ Source31:	adapter.awk
 Source32:	pldnotify.awk
 # http://svn.pld-linux.org/banner.sh/
 Source33:	banner.sh
+Source34:	php-pear-build-macros
 Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
@@ -113,7 +114,7 @@ BuildRequires:	db-devel >= %{reqdb_ver}
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	findutils
 BuildRequires:	gettext-devel >= 0.11.4-2
-%{?with_system_libmagic:BuildRequires: libmagic-devel}
+%{?with_system_libmagic:BuildRequires:	libmagic-devel}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
@@ -137,7 +138,7 @@ BuildRequires:	bzip2-static >= 1.0.2-17
 BuildRequires:	db-static >= %{reqdb_ver}
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	elfutils-static
-%{with_system_libmagic:BuildRequires:  libmagic-static}
+%{with_system_libmagic:BuildRequires:	libmagic-static}
 %{?with_selinux:BuildRequires:	libselinux-static >= 1.18}
 BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
@@ -222,7 +223,7 @@ Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	db >= %{reqdb_ver}
 %{?with_selinux:Requires:	libselinux >= 1.18}
-%{?with_system_libmagic:Requires:      libmagic >= 1.15-2}
+%{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
 Requires:	popt >= %{reqpopt_ver}
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
@@ -249,7 +250,7 @@ Requires:	bzip2-devel
 Requires:	db-devel >= %{reqdb_ver}
 Requires:	elfutils-devel
 %{?with_selinux:Requires:	libselinux-devel}
-%{?with_system_libmagic:Requires:       libmagic-devel}
+%{?with_system_libmagic:Requires:	libmagic-devel}
 Requires:	popt-devel >= %{reqpopt_ver}
 Requires:	zlib-devel
 
@@ -311,7 +312,7 @@ Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
 Requires:	db-static >= %{reqdb_ver}
 Requires:	elfutils-static
-%{?with_system_libmagic:Requires:       libmagic-static}
+%{?with_system_libmagic:Requires:	libmagic-static}
 Requires:	popt-static >= %{reqpopt_ver}
 Requires:	zlib-static
 
@@ -527,14 +528,23 @@ Summary:	Additional utilities for managing rpm packages and database
 Summary(pl):	Dodatkowe narzêdzia do sprawdzania zale¿no¶ci skryptów php w rpm
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
+Requires:	php-pear-PEAR >= 1:1.4.0-0.b1.3
+Requires:	php-zlib
+Requires:	sed >= 4.0
 
 %description php-pearprov
 Additional utilities for checking php pear provides/requires in rpm
 packages.
 
+This package provides rpm macros and dependencies to help building
+PEAR packages.
+
 %description php-pearprov -l pl
 Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów php pear w
 pakietach rpm.
+
+Ten pakiet dostarcza makra rpm-a i zale¿no¶ci pomagaj±ce przy
+budowaniu pakietów PEAR-a.
 
 %package -n python-rpm
 Summary:	Python interface to RPM library
@@ -607,8 +617,7 @@ cp -f platform.in macros.pld.in
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
 echo '%%define	__perl_requires	%%{__perl} /usr/lib/rpm/perl.req' >> macros.perl
 echo '# obsoleted file' > macros.python
-echo '%%define	__php_provides	/usr/lib/rpm/php.prov' > macros.php
-echo '%%define	__php_requires	/usr/lib/rpm/php.req' >> macros.php
+install %{SOURCE34} macros.php
 echo '%%define	__mono_provides	/usr/lib/rpm/mono-find-provides' > macros.mono
 echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
 install %{SOURCE5} scripts/find-lang.sh
