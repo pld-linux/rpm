@@ -103,6 +103,7 @@ Patch44:	%{name}-no-neon.patch
 Patch45:	%{name}-no-sqlite.patch
 Patch46:	%{name}-mono.patch
 Patch47:	%{name}-posttrans.patch
+Patch48:	%{name}-requireseq.patch
 URL:		http://wraptastic.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -652,6 +653,7 @@ cat %{SOURCE11} >> macros.in
 %patch45 -p1
 %patch46 -p1
 %patch47 -p1
+%patch48 -p1
 %patch0 -p1
 %patch3 -p1
 
