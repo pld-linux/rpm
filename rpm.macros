@@ -628,7 +628,6 @@ eval $CMD %2%{?3: %3} \
 #  -d defaults to /usr/share/empty
 #  -c No default
 #  -r is accepted but ignored (it's always set)
-#  -m IGNORED. always set.
 #  -k skeleton dir. defaults to /usr/share/empty
 # rpm specific flags
 #  -P package name. defaults to %{name}
@@ -645,7 +644,6 @@ if [ -n "`/bin/id -u %{expand:%{%{#}}} 2>/dev/null`" ]; then \
 else \
 	echo "Adding user %{expand:%{%{#}}} UID=%{-u*}." \
 	/usr/sbin/useradd \\\
-		-m \\\
 		-k %{-k*}%{!-k:/usr/share/empty} \\\
 		-u %{-u*} \\\
 		-r \\\
@@ -653,6 +651,7 @@ else \
 		-s %{-s*}%{!-s:/bin/false} \\\
 		%{-c:-c "%(set -- %{-c*} %{*}; echo $1)"}\\\
 		-g %{-g*} \\\
+		%{-m} \\\
 		%{-M} \\\
 		%{-G:-G %{-G*}} \\\
 		%{expand:%{%{#}}} 1>&2 \
