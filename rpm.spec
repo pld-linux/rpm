@@ -31,7 +31,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.2
-Release:	14
+Release:	14.1
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -146,6 +146,7 @@ BuildRequires:	zlib-static
 %endif
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	popt >= %{reqpopt_ver}
+Requires:	%{name}-base = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
 %{!?with_static:Obsoletes:	rpm-utils-static}
 Conflicts:	glibc < 2.2.92
@@ -216,6 +217,15 @@ RPM - це потужний менеджер пакет╕в, що може бути використаний для
 видалення програмних пакет╕в. Пакет склада╓ться з файлового арх╕ву та
 службово╖ ╕нформац╕╖, що м╕стить назву, верс╕ю, опис та ╕ншу
 ╕нформац╕ю про пакет.
+
+%package base
+Summary:	RPM base
+Group:		Base
+Obsoletes:	vserver-rpm
+
+%description base
+The RPM base package contains userdel and groupdel scripts to delete
+users created by rpm packages from system.
 
 %package lib
 Summary:	RPMs library
@@ -913,7 +923,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpm/macros
-%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/rpm
 
 %{_mandir}/man8/rpm.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
@@ -928,20 +937,23 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %dir /var/lock/rpm
 /var/lock/rpm/transaction
 
-%dir %{_rpmlibdir}
 #%attr(755,root,root) %{_rpmlibdir}/rpmd
 #%{!?with_static:%attr(755,root,root) %{_rpmlibdir}/rpm[eiu]}
 #%attr(755,root,root) %{_rpmlibdir}/rpmk
 #%attr(755,root,root) %{_rpmlibdir}/rpm[qv]
 
 %doc %attr(755,root,root) %{_rpmlibdir}/convertrpmrc.sh
-%attr(755,root,root) %{_rpmlibdir}/user_group.sh
-
-%attr(755,root,root) %{_bindir}/banner.sh
 
 %{_rpmlibdir}/rpmrc
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/macros
+
+%files base
+%defattr(644,root,root,755)
+%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/rpm
+%dir %{_rpmlibdir}
+%attr(755,root,root) %{_bindir}/banner.sh
+%attr(755,root,root) %{_rpmlibdir}/user_group.sh
 
 %files lib
 %defattr(644,root,root,755)
