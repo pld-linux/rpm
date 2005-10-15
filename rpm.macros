@@ -644,14 +644,13 @@ if [ -n "`/bin/id -u %{expand:%{%{#}}} 2>/dev/null`" ]; then \
 else \
 	echo "Adding user %{expand:%{%{#}}} UID=%{-u*}." \
 	/usr/sbin/useradd \\\
-		-k %{-k*}%{!-k:/usr/share/empty} \\\
+		%{-m:-m -k %{-k*}%{!-k:/usr/share/empty}} \\\
 		-u %{-u*} \\\
 		-r \\\
 		-d %{-d*}%{!-d:/usr/share/empty} \\\
 		-s %{-s*}%{!-s:/bin/false} \\\
 		%{-c:-c "%(set -- %{-c*} %{*}; echo $1)"}\\\
 		-g %{-g*} \\\
-		%{-m} \\\
 		%{-M} \\\
 		%{-G:-G %{-G*}} \\\
 		%{expand:%{%{#}}} 1>&2 \
