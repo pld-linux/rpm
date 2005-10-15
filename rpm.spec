@@ -19,7 +19,7 @@
 %define	reqdb_ver	4.3.27-1
 %define	reqpopt_ver	1.10.2
 %define	beecrypt_ver	2:4.1.2-4
-%define	rpm_macros_rev	1.244
+%define	rpm_macros_rev	1.245
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
