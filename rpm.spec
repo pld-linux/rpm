@@ -219,7 +219,8 @@ RPM - це потужний менеджер пакет╕в, що може бути використаний для
 ╕нформац╕ю про пакет.
 
 %package base
-Summary:	RPM base
+Summary:	RPM base (userdel and groupdel scripts)
+Summary(pl):	RPM base (skrypty userdel i groupdel)
 Group:		Base
 Obsoletes:	vserver-rpm
 
