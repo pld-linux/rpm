@@ -227,6 +227,10 @@ Obsoletes:	vserver-rpm
 The RPM base package contains userdel and groupdel scripts to delete
 users created by rpm packages from system.
 
+%description base -l pl
+Paczka RPM Base zwiera skrypty userdel i groupdel do kasowania
+u¿ytkowników stworzonych przez paczki rpm z systemu.
+
 %package lib
 Summary:	RPMs library
 Summary(pl):	Biblioteki RPM-a
