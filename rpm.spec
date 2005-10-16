@@ -219,14 +219,17 @@ RPM - це потужний менеджер пакет╕в, що може бути використаний для
 ╕нформац╕ю про пакет.
 
 %package base
-Summary:	RPM base (userdel and groupdel scripts)
-Summary(pl):	RPM base (skrypty userdel i groupdel)
+Summary:	RPM base
+Summary(pl):	RPM base
 Group:		Base
 Obsoletes:	vserver-rpm
 
 %description base
-The RPM base package contains userdel and groupdel scripts to delete
-users created by rpm packages from system.
+The RPM base package contains scripts used by rpm packages itself.
+These include:
+- user/group adding/removing scripts for managing users and groups
+  needed for packages,
+- banner.sh to display %%banner messages from rpm scriptlets.
 
 %description base -l pl
 Paczka RPM Base zwiera skrypty userdel i groupdel do kasowania
@@ -959,6 +962,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %dir %{_rpmlibdir}
 %attr(755,root,root) %{_bindir}/banner.sh
 %attr(755,root,root) %{_rpmlibdir}/user_group.sh
+%dir /var/lib/banner
 
 %files lib
 %defattr(644,root,root,755)
