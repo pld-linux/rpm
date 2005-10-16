@@ -219,21 +219,23 @@ RPM - ÃÅ ĞÏÔÕÖÎÉÊ ÍÅÎÅÄÖÅÒ ĞÁËÅÔ¦×, İÏ ÍÏÖÅ ÂÕÔÉ ×ÉËÏÒÉÓÔÁÎÉÊ ÄÌÑ
 ¦ÎÆÏÒÍÁÃ¦À ĞÒÏ ĞÁËÅÔ.
 
 %package base
-Summary:	RPM base
-Summary(pl):	RPM base
+Summary:	The RPM base package contains scripts used by rpm packages itself.
+Summary(pl):	Paczka RPM Base zwiera skrypty u¿ywane przez paczki rpm
 Group:		Base
 Obsoletes:	vserver-rpm
 
 %description base
 The RPM base package contains scripts used by rpm packages itself.
 These include:
-- user/group adding/removing scripts for managing users and groups
-  needed for packages,
+- scripts for adding/removing groups and users needed for rpm
+  packages,
 - banner.sh to display %%banner messages from rpm scriptlets.
 
 %description base -l pl
-Paczka RPM Base zwiera skrypty userdel i groupdel do kasowania
-u¿ytkowników stworzonych przez paczki rpm z systemu.
+Paczka RPM Base zwiera skrypty u¿ywane przez paczki rpm.
+Zawiera ona:
+- skrypty dodaj±ce/usuwaj±ce grupy i u¿ytkownków dla paczek rpm,
+- banner.sh do pokazywania komunikatów %%banner dla skrypcików rpm.
 
 %package lib
 Summary:	RPMs library
