@@ -139,7 +139,7 @@ BuildRequires:	bzip2-static >= 1.0.2-17
 BuildRequires:	db-static >= %{reqdb_ver}
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	elfutils-static
-%{with_system_libmagic:BuildRequires:	libmagic-static}
+%{?with_system_libmagic:BuildRequires:	libmagic-static}
 %{?with_selinux:BuildRequires:	libselinux-static >= 1.18}
 BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
@@ -219,23 +219,23 @@ RPM - ÃÅ ĞÏÔÕÖÎÉÊ ÍÅÎÅÄÖÅÒ ĞÁËÅÔ¦×, İÏ ÍÏÖÅ ÂÕÔÉ ×ÉËÏÒÉÓÔÁÎÉÊ ÄÌÑ
 ¦ÎÆÏÒÍÁÃ¦À ĞÒÏ ĞÁËÅÔ.
 
 %package base
-Summary:	The RPM base package contains scripts used by rpm packages itself.
-Summary(pl):	Paczka RPM Base zwiera skrypty u¿ywane przez paczki rpm
+Summary:	RPM base package - scripts used by rpm packages themselves
+Summary(pl):	Podstawowy pakiet RPM - skrypty u¿ywane przez same pakiety rpm
 Group:		Base
 Obsoletes:	vserver-rpm
 
 %description base
-The RPM base package contains scripts used by rpm packages itself.
+The RPM base package contains scripts used by rpm packages themselves.
 These include:
 - scripts for adding/removing groups and users needed for rpm
   packages,
 - banner.sh to display %%banner messages from rpm scriptlets.
 
 %description base -l pl
-Paczka RPM Base zwiera skrypty u¿ywane przez paczki rpm.
-Zawiera ona:
-- skrypty dodaj±ce/usuwaj±ce grupy i u¿ytkownków dla paczek rpm,
-- banner.sh do pokazywania komunikatów %%banner dla skrypcików rpm.
+Pakiet podstawowy RPM zwiera skrypty u¿ywane przez same pakiety rpm.
+Zawiera on:
+- skrypty dodaj±ce/usuwaj±ce grupy i u¿ytkowników dla pakietów rpm,
+- banner.sh do pokazywania komunikatów %%banner dla skryptletów rpm.
 
 %package lib
 Summary:	RPMs library
