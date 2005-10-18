@@ -932,7 +932,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_bindir}/rpmverify
 
 %dir %{_sysconfdir}/rpm
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpm/macros
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
 
 %{_mandir}/man8/rpm.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
@@ -960,7 +960,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files base
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/rpm
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rpm
 %dir %{_rpmlibdir}
 %attr(755,root,root) %{_bindir}/banner.sh
 %attr(755,root,root) %{_rpmlibdir}/user_group.sh
@@ -1030,7 +1030,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files build
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpm/noauto*
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/noauto*
 %attr(755,root,root) %{_rpmlibdir}/compress-doc
 %attr(755,root,root) %{_rpmlibdir}/cross-build
 #%attr(755,root,root) %{_rpmlibdir}/find-provides
