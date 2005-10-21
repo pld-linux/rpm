@@ -30,7 +30,7 @@ Summary(uk):	íÅÎÅÄÖÅÒ ÐÁËÅÔ¦× ×¦Ä RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.2
-Release:	5
+Release:	16.1
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -93,7 +93,7 @@ Patch34:	%{name}-epoch0.patch
 Patch35:	%{name}-perl_req-INC_dirs.patch
 Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
-
+Patch38:	%{name}-kill-prereq.patch
 Patch39:	%{name}-pythondeps.patch
 Patch40:	%{name}-print-requires.patch
 Patch41:	%{name}-reduce-stack-usage.patch
@@ -146,6 +146,7 @@ BuildRequires:	zlib-static
 %endif
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	popt >= %{reqpopt_ver}
+Requires:	%{name}-base = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
 %{!?with_static:Obsoletes:	rpm-utils-static}
 Conflicts:	glibc < 2.2.92
@@ -216,6 +217,26 @@ RPM - ÃÅ ÐÏÔÕÖÎÉÊ ÍÅÎÅÄÖÅÒ ÐÁËÅÔ¦×, ÝÏ ÍÏÖÅ ÂÕÔÉ ×ÉËÏÒÉÓÔÁÎÉÊ ÄÌÑ
 ×ÉÄÁÌÅÎÎÑ ÐÒÏÇÒÁÍÎÉÈ ÐÁËÅÔ¦×. ðÁËÅÔ ÓËÌÁÄÁ¤ÔØÓÑ Ú ÆÁÊÌÏ×ÏÇÏ ÁÒÈ¦×Õ ÔÁ
 ÓÌÕÖÂÏ×Ï§ ¦ÎÆÏÒÍÁÃ¦§, ÝÏ Í¦ÓÔÉÔØ ÎÁÚ×Õ, ×ÅÒÓ¦À, ÏÐÉÓ ÔÁ ¦ÎÛÕ
 ¦ÎÆÏÒÍÁÃ¦À ÐÒÏ ÐÁËÅÔ.
+
+%package base
+Summary:	RPM base package - scripts used by rpm packages themselves
+Summary(pl):	Podstawowy pakiet RPM - skrypty u¿ywane przez same pakiety rpm
+Group:		Base
+Requires:	sed
+Obsoletes:	vserver-rpm
+
+%description base
+The RPM base package contains scripts used by rpm packages themselves.
+These include:
+- scripts for adding/removing groups and users needed for rpm
+  packages,
+- banner.sh to display %%banner messages from rpm scriptlets.
+
+%description base -l pl
+Pakiet podstawowy RPM zwiera skrypty u¿ywane przez same pakiety rpm.
+Zawiera on:
+- skrypty dodaj±ce/usuwaj±ce grupy i u¿ytkowników dla pakietów rpm,
+- banner.sh do pokazywania komunikatów %%banner dla skryptletów rpm.
 
 %package lib
 Summary:	RPMs library
@@ -644,6 +665,7 @@ cat %{SOURCE11} >> macros.in
 %patch35 -p0
 %patch36 -p1
 %patch37 -p1
+%patch38 -p1
 %patch39 -p1
 %patch40 -p1
 %patch41 -p1
@@ -735,7 +757,7 @@ CPPFLAGS="-Dglob=rpm_glob -Dglobfree=rpm_globfree"; export CPPFLAGS
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm}
+install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -911,8 +933,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_bindir}/rpmverify
 
 %dir %{_sysconfdir}/rpm
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpm/macros
-%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/rpm
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
 
 %{_mandir}/man8/rpm.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
@@ -927,20 +948,24 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %dir /var/lock/rpm
 /var/lock/rpm/transaction
 
-%dir %{_rpmlibdir}
 #%attr(755,root,root) %{_rpmlibdir}/rpmd
 #%{!?with_static:%attr(755,root,root) %{_rpmlibdir}/rpm[eiu]}
 #%attr(755,root,root) %{_rpmlibdir}/rpmk
 #%attr(755,root,root) %{_rpmlibdir}/rpm[qv]
 
 %doc %attr(755,root,root) %{_rpmlibdir}/convertrpmrc.sh
-%attr(755,root,root) %{_rpmlibdir}/user_group.sh
-
-%attr(755,root,root) %{_bindir}/banner.sh
 
 %{_rpmlibdir}/rpmrc
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/macros
+
+%files base
+%defattr(644,root,root,755)
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rpm
+%dir %{_rpmlibdir}
+%attr(755,root,root) %{_bindir}/banner.sh
+%attr(755,root,root) %{_rpmlibdir}/user_group.sh
+%dir /var/lib/banner
 
 %files lib
 %defattr(644,root,root,755)
@@ -1006,7 +1031,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files build
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpm/noauto*
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/noauto*
 %attr(755,root,root) %{_rpmlibdir}/compress-doc
 %attr(755,root,root) %{_rpmlibdir}/cross-build
 #%attr(755,root,root) %{_rpmlibdir}/find-provides
