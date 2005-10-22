@@ -795,8 +795,7 @@ if [ -f /var/lock/subsys/%1 ]; then \
 	else \
 		echo 'Run "/etc/rc.d/init.d/%1 %2" to %2 %{!?3:%1 service}%{?3:%(set -- %{*}; echo "$3")}.'; \
 	fi \
-else \
+%{!-q:else} \
 	%{!-q:echo 'Run "/etc/rc.d/init.d/%1 start" to start %{!?3:%1 service}%{?3:%(set -- %{*}; echo "$3")}.';} \
-	%{-q::;} \
 fi }; }
 
