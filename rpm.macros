@@ -777,7 +777,7 @@ if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
 # All rights reserved. Permission to copy is hereby granted.. yada, yada, yada
 #
 # Usage:
-#   %service [-q] SERVICE ACTION
+#   %service [-q] SERVICE ACTION ["SERVICE NICE DESCRIPTION"]
 #
 #  -q be silent when service isn't started (for postun scriplets)
 #
@@ -792,10 +792,10 @@ if [ -f /var/lock/subsys/%1 ]; then \
 	if [ $(skip_auto_restart) = no ]; then \
 		/etc/rc.d/init.d/%1 %2 1>&2; \
 	else \
-		echo 'Run "/etc/rc.d/init.d/%1 %2" to %2 %1 service.'; \
+		echo 'Run "/etc/rc.d/init.d/%1 %2" to %2 %{!?3:%1 service}%{?3:%(set -- %{*}; echo "$3")}.'; \
 	fi \
 else \
-	%{!-q:echo 'Run "/etc/rc.d/init.d/%1 start" to start %1 service.';} \
+	%{!-q:echo 'Run "/etc/rc.d/init.d/%1 start" to start %{!?3:%1 service}%{?3:%(set -- %{*}; echo "$3")}.';} \
 	%{-q::;} \
 fi }; }
 
