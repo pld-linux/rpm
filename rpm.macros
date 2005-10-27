@@ -482,7 +482,7 @@ fi \
 %php_debug				%(awk '/#define ZEND_DEBUG/{print $3}' %{__php_includedir}/main/php_config.h 2>/dev/null || echo ERROR)
 %zend_module_api		%(awk '/#define ZEND_MODULE_API_NO/{print $3}' %{__php_includedir}/Zend/zend_modules.h 2>/dev/null || echo ERROR)
 %zend_extension_api		%(awk '/#define ZEND_EXTENSION_API_NO/{print $3}' %{__php_includedir}/Zend/zend_extensions.h 2>/dev/null || echo ERROR)
-%zend_zts				%(awk '/#define ZTS/{print $3}' %{__php_includedir}/main/php_config.h 2>/dev/null || echo ERROR)
+%zend_zts				%(grep -c '#define ZTS 1' %{__php_includedir}/main/php_config.h || echo ERROR)
 
 # helper macro
 %__php_api_requires() Requires: php(%{expand:%1}) = %{expand:%{%{!?2:%{1}}%{?2}}}
