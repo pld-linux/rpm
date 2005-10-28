@@ -31,7 +31,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.2
-Release:	22
+Release:	22.3
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -46,7 +46,7 @@ Source7:	%{name}-compress-doc
 Source8:	%{name}-check-files
 Source9:	%{name}-php-provides
 Source10:	%{name}-php-requires
-Source11:	%{name}.macros
+
 Source12:	perl.prov
 Source13:	%{name}-user_group.sh
 Source14:	%{name}.sysconfig
@@ -422,6 +422,7 @@ Summary(ru):	Скрипты и утилиты, необходимые для сборки пакетов
 Summary(uk):	Скрипти та утил╕ти, необх╕дн╕ для побудови пакет╕в
 Group:		Applications/File
 Requires(pre):	findutils
+Requires:	%{name}-build-macros
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
@@ -449,14 +450,12 @@ Requires:	sed
 Requires:	sh-utils
 Requires:	tar
 Requires:	textutils
-Provides:	rpmbuild(macros) = %{rpm_macros_rev}
 Provides:	rpmbuild(monoautodeps)
 Provides:	rpmbuild(noauto) = 3
 %ifarch %{x8664}
 Conflicts:	automake < 1:1.7.9-2
 Conflicts:	libtool < 2:1.5-13
 %endif
-Obsoletes:	rpmbuild(macros) < %{rpm_macros_rev}
 
 %description build
 Scripts for building binary RPM packages.
@@ -639,7 +638,7 @@ ze ╪rodeЁ RPM-a przez doxygen.
 %patch17 -p1
 %patch18 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
-cp -f platform.in macros.pld.in
+#cp -f platform.in macros.pld.in # what for?
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
 echo '%%define	__perl_requires	%%{__perl} /usr/lib/rpm/perl.req' >> macros.perl
 echo '# obsoleted file' > macros.python
@@ -650,7 +649,6 @@ install %{SOURCE5} scripts/find-lang.sh
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
-cat %{SOURCE11} >> macros.in
 %patch20 -p1
 %patch21 -p1
 %patch22 -p1
