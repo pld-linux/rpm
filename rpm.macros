@@ -487,19 +487,19 @@ fi \
 %zend_zts				%(Z=$(grep -sc '^#define ZTS 1' %{__php_includedir}/main/php_config.h); echo ${Z:-ERROR})
 
 # helper macro
-%__php_api_requires() Requires: php(%{expand:%1}) = %{expand:%{%{!?2:%{1}}%{?2}}}
+%__php_api_requires(v:) Requires: php%{-v*}(%{expand:%1}) = %{expand:%{%{!?2:%{1}}%{?2}}}
 
 # macros for public use
 # for php extensions (php-pecl)
 %requires_php_extension %{__php_api_requires modules_api php_api_version} \
-%{__php_api_requires debug:%php_major_version php_debug} \
-%{__php_api_requires thread-safety:%php_major_version zend_zts}
+%{__php_api_requires -v %php_major_version debug php_debug} \
+%{__php_api_requires -v %php_major_version thread-safety zend_zts}
 
 # for zend extensions
 %requires_zend_extension %{__php_api_requires zend_module_api} \
 %{__php_api_requires zend_extension_api} \
-%{__php_api_requires debug:%php_major_version php_debug} \
-%{__php_api_requires thread-safety:%php_major_version zend_zts}
+%{__php_api_requires -v %php_major_version debug php_debug} \
+%{__php_api_requires -v %php_major_version thread-safety zend_zts}
 
 # Python specific macro definitions.
 # python main version
