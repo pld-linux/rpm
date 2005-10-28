@@ -125,7 +125,10 @@ unset DISPLAY ||:\
 unset LINGUAS ||:\
 %{nil}
 
-%install %{?_enable_debug_packages:%{?buildsubdir:%{debug_package}}}\
+%install \
+%if 0%{?_enable_debug_packages}\
+%{?buildsubdir:%{debug_package}}\
+%endif\
 %%install\
 LANG=C\
 export LANG\
@@ -289,7 +292,7 @@ unset LINGUAS ||:\
     %{?verbose:set -x;} \
     if [ -d "$RPM_BUILD_ROOT" ]; then \
 	echo "Strip executable binaries, archives and shared object files."; \
-	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" %{?_noautostrip:! -regex "%{_noautostrip}"}`; \
+	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*\.debug" %{?_noautostrip:! -regex "%{_noautostrip}"}`; \
 	elfexelist=`echo $filelist | xargs -r file | \
 		awk '/ELF.*executable/ {print $1}' | cut -d: -f1`; \
 	elfsharedlist=`echo $filelist | xargs -r file | \
