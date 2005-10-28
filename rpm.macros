@@ -478,6 +478,7 @@ fi \
 
 # directory where php includes are installed on system.
 %__php_includedir		/usr/include/php
+%php_major_version		%(awk '/#define PHP_MAJOR_VERSION/{print $3}' %{__php_includedir}/main/php_version.h 2>/dev/null || echo ERROR)
 %php_api_version		%(awk '/#define PHP_API_VERSION/{print $3}' %{__php_includedir}/main/php.h 2>/dev/null || echo ERROR)
 %php_debug				%(awk '/#define ZEND_DEBUG/{print $3}' %{__php_includedir}/main/php_config.h 2>/dev/null || echo ERROR)
 %zend_module_api		%(awk '/#define ZEND_MODULE_API_NO/{print $3}' %{__php_includedir}/Zend/zend_modules.h 2>/dev/null || echo ERROR)
@@ -490,14 +491,14 @@ fi \
 # macros for public use
 # for php extensions (php-pecl)
 %requires_php_extension %{__php_api_requires modules_api php_api_version} \
-%{__php_api_requires debug php_debug} \
-%{__php_api_requires thread-safety zend_zts}
+%{__php_api_requires debug:%php_major_version php_debug} \
+%{__php_api_requires thread-safety:%php_major_version zend_zts}
 
 # for zend extensions
 %requires_zend_extension %{__php_api_requires zend_module_api} \
 %{__php_api_requires zend_extension_api} \
-%{__php_api_requires debug php_debug} \
-%{__php_api_requires thread-safety zend_zts}
+%{__php_api_requires debug:%php_major_version php_debug} \
+%{__php_api_requires thread-safety:%php_major_version zend_zts}
 
 # Python specific macro definitions.
 # python main version
