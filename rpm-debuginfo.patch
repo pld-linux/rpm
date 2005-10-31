@@ -34,27 +34,6 @@ diff -urN rpm-4.3.org/macros.in rpm-4.3/macros.in
  %{__arch_install_post}\
  %{__os_install_post}\
  %{nil}
-@@ -1250,7 +1250,10 @@
- unset DISPLAY ||:\
- %{nil}
- 
--%install %{?_enable_debug_packages:%{?buildsubdir:%{debug_package}}}\
-+%install \
-+%if 0%{?_enable_debug_packages}\
-+%{?buildsubdir:%{debug_package}}\
-+%endif\
- %%install\
- LANG=C\
- export LANG\
-@@ -1407,7 +1410,7 @@
-     %{?verbose:set -x;} \
-     if [ -d "$RPM_BUILD_ROOT" ]; then \
- 	echo "Strip executable binaries, archives and shared object files."; \
--	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" %{?_noautostrip:! -regex "%{_noautostrip}"}`; \
-+	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*\.debug" %{?_noautostrip:! -regex "%{_noautostrip}"}`; \
- 	elfexelist=`echo $filelist | xargs -r file | \
- 		awk '/ELF.*executable/ {print $1}' | cut -d: -f1`; \
- 	elfsharedlist=`echo $filelist | xargs -r file | \
 --- rpm-4.4.2/scripts/find-debuginfo.sh.orig	2005-07-14 17:52:31.000000000 +0200
 +++ rpm-4.4.2/scripts/find-debuginfo.sh	2005-07-23 13:57:04.542906944 +0200
 @@ -25,7 +25,7 @@
