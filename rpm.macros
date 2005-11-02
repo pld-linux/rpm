@@ -2,19 +2,6 @@
 
 # other macros
 %epoch		0
-%_enable_debug_packages 1
-
-%_topdir         %(echo $HOME)/rpm
-#-----------------------------------------------------------------
-# CFLAGS and LDFLAGS used to build
-
-%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -ggdb}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
-
-%debugcflags	-O0 -g -Wall
-%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
-%rpmcxxflags	%{rpmcflags}
-%rpmldflags	%{nil}
-# %rpmldflags	-Wl,--as-needed
 
 # kernel compiler
 %kgcc		gcc
