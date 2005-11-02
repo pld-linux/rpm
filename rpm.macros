@@ -1,11 +1,14 @@
 # PLD rpm macros
 
-# other macros
 %epoch		0
+%x8664		x86_64 amd64 ia32e
 
 # kernel compiler
 %kgcc		gcc
 %kgcc_package	gcc
+
+%_source_payload	w9.gzdio
+%_binary_payload	w9.bzdio
 
 # Build system path macros.
 #
@@ -14,18 +17,18 @@
 %__autopoint		autopoint --force
 
 %__gettextize { \
-    if ! gettextize --version | grep -q '0\.10\.' ; then \
+if ! gettextize --version | grep -q '0\.10\.' ; then \
 	if grep -qs 'AM_GNU_GETTEXT.*external' configure.{ac,in} ; then \
-	    gettextize --copy --force --no-changelog; \
+		gettextize --copy --force --no-changelog; \
 	else \
-	    gettextize --copy --force --no-changelog --intl; \
+		gettextize --copy --force --no-changelog --intl; \
 	fi; \
 	if [ ! -f po/Makevars ]; then \
-	    cp -f po/Makevars{.template,}; \
+		cp -f po/Makevars{.template,}; \
 	fi; \
-    else \
+else \
 	gettextize --copy --force; \
-    fi; \
+fi; \
 }
 
 %__glib_gettextize	glib-gettextize --copy --force
@@ -35,6 +38,7 @@
 %__libtoolize		libtoolize --copy --force
 
 %dependencytracking	%{nil}
+
 #-----------------------------------------------------------------
 %configure2_13 { \
  if [ -n "$LINGUAS" ]; then unset LINGUAS; fi; \
@@ -183,19 +187,19 @@ unset LINGUAS ||:\
 %apache_modules_api %(awk '/#define MODULE_MAGIC_NUMBER_MAJOR/ {print $3}' /usr/include/apache/ap_mmn.h 2>/dev/null || echo ERROR)
 
 # kernel version-release handling
-%__kernel_ver    %([ -f %{_kernelsrcdir}/include/linux/version.h ] && (grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | head -n 1 | cut -d'"' -f2) || (awk '/^VERSION/ { ver = $0; gsub(/VERSION.*=/, NIL, ver); } /^PATCHLEVEL/ { plev = $0; gsub(/PATCHLEVEL.*=/, NIL, plev); } /^SUBLEVEL/ { slev = $0; gsub(/SUBLEVEL.*=/, NIL, slev); } /^EXTRAVERSION/ { ever = $0; gsub(/EXTRAVERSION.*=/, NIL, ever); gsub(/ /, NIL, ever); } END { printf("%d.%d.%d%s", ver, plev, slev, ever); }' %{_kernelsrcdir}/Makefile 2> /dev/null))
-%__kernel_rel    %(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{RELEASE}" | grep -v "is not")
+%__kernel_ver	%([ -f %{_kernelsrcdir}/include/linux/version.h ] && (grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | head -n 1 | cut -d'"' -f2) || (awk '/^VERSION/ { ver = $0; gsub(/VERSION.*=/, NIL, ver); } /^PATCHLEVEL/ { plev = $0; gsub(/PATCHLEVEL.*=/, NIL, plev); } /^SUBLEVEL/ { slev = $0; gsub(/SUBLEVEL.*=/, NIL, slev); } /^EXTRAVERSION/ { ever = $0; gsub(/EXTRAVERSION.*=/, NIL, ever); gsub(/ /, NIL, ever); } END { printf("%d.%d.%d%s", ver, plev, slev, ever); }' %{_kernelsrcdir}/Makefile 2> /dev/null))
+%__kernel_rel	%(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{RELEASE}" | grep -v "is not")
 %__kernel_rpmvr  %(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{VERSION}-%{RELEASE}" | grep -v "is not")
-%_kernel_ver     %{__kernel_ver}%{?with_dist_kernel:%(echo %{__kernel_ver} | grep -q -e - || echo -%{__kernel_rel})}
+%_kernel_ver	%{__kernel_ver}%{?with_dist_kernel:%(echo %{__kernel_ver} | grep -q -e - || echo -%{__kernel_rel})}
 %_kernel_ver_str %(echo %{!?_without_dist_kernel:%{__kernel_rpmvr}}%{?_without_dist_kernel:%{__kernel_ver}} | sed -e 's/-/_/g')
 
 # sgml macros
-%xmlcat_add()            /usr/bin/xmlcatalog --noout --add nextCatalog \"\" %1 /etc/xml/catalog ;
-%xmlcat_del()            /usr/bin/xmlcatalog --noout --del %1 /etc/xml/catalog ;
-%xmlcat_add_rewrite      /usr/bin/xmlcatalog --noout --add rewriteSystem
-%xmlcat_create()          /usr/bin/xmlcatalog --noout --create %1 ;
-%sgmlcat_add()           /usr/bin/install-catalog --add %1 %2 > /dev/null ;
-%sgmlcat_del()           /usr/bin/install-catalog --remove %1 %2 > /dev/null ;
+%xmlcat_add()		/usr/bin/xmlcatalog --noout --add nextCatalog \"\" %1 /etc/xml/catalog ;
+%xmlcat_del()		/usr/bin/xmlcatalog --noout --del %1 /etc/xml/catalog ;
+%xmlcat_add_rewrite	/usr/bin/xmlcatalog --noout --add rewriteSystem
+%xmlcat_create()	/usr/bin/xmlcatalog --noout --create %1 ;
+%sgmlcat_add()		/usr/bin/install-catalog --add %1 %2 > /dev/null ;
+%sgmlcat_del()		/usr/bin/install-catalog --remove %1 %2 > /dev/null ;
 %docbook_sgmlcat_fix() { for l in \
 '' \
 '  -- default decl --' \
@@ -234,8 +238,8 @@ unset LINGUAS ||:\
 #%no_install_post_strip	1
 %__spec_install_post_strip {%{!?debug: \
 %{!?no_install_post_strip: \
-    %{?verbose:set -x;} \
-    if [ -d "$RPM_BUILD_ROOT" ]; then \
+%{?verbose:set -x;} \
+	if [ -d "$RPM_BUILD_ROOT" ]; then \
 	echo "Strip executable binaries, archives and shared object files."; \
 	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*\.debug" %{?_noautostrip:! -regex "%{_noautostrip}"}`; \
 	elfexelist=`echo $filelist | xargs -r file | \
@@ -253,8 +257,9 @@ unset LINGUAS ||:\
 	if [ -n "$elfarchiveslist" ]; then \
 		%{__strip} --strip-debug --remove-section=.note  --remove-section=.comment $elfarchiveslist; \
 	fi; \
-    fi; } \
+fi; } \
 } }
+
 #-----------------------------------------------------------------
 # remove all RPATH from executable binaries and shared object files
 #
@@ -272,7 +277,7 @@ while read file ; do \
 	rpath= ; \
 	chmod u+w "$file"; \
 	for dir in `chrpath -l "$file" | \
-		    awk '/RPATH=/ { gsub(/.*RPATH=/,""); gsub(/:/," "); print $0 }'` ; do \
+			awk '/RPATH=/ { gsub(/.*RPATH=/,""); gsub(/:/," "); print $0 }'` ; do \
 			case $dir in \
 			/home/* | /tmp/* | /usr/lib | /usr/lib64 | /lib | /lib64 | /usr/local/lib | /usr/local/lib64 | /usr/X11R6/lib | /usr/X11R6/lib64 ) \
 				echo "remove-rpath: $dir in $file"; \
@@ -288,6 +293,7 @@ while read file ; do \
 done; \
 fi; } \
 } }
+
 #-----------------------------------------------------------------
 # Find and gzip all kernel modules
 #
@@ -296,20 +302,17 @@ fi; } \
 #%no_install_post_compress_modules  1
 %__spec_install_post_compress_modules { \
 %{!?no_install_post_compress_modules: \
-    %{?verbose:set -x;} \
-    if [ -d "$RPM_BUILD_ROOT" ]; then \
-echo "Compress kernel modules if any."; \
-    if test -d $RPM_BUILD_ROOT/lib/modules ; then \
-	find $RPM_BUILD_ROOT/lib/modules -name \*o -type f -print | \
-	xargs -r %{__gzip} -9nf; \
-	   find $RPM_BUILD_ROOT/lib/modules -name \*o -type l -printf "%p %l\n" | \
-	   while read a b; do ln -sf $b.gz $a.gz; rm -f $a; done; \
-    fi; \
-    fi; \
+	%{?verbose:set -x;} \
+	if [ -d "$RPM_BUILD_ROOT" ]; then \
+		echo "Compress kernel modules if any."; \
+		if test -d $RPM_BUILD_ROOT/lib/modules ; then \
+			find $RPM_BUILD_ROOT/lib/modules -name \*o -type f -print | \
+			xargs -r %{__gzip} -9nf; \
+			   find $RPM_BUILD_ROOT/lib/modules -name \*o -type l -printf "%p %l\n" | \
+			   while read a b; do ln -sf $b.gz $a.gz; rm -f $a; done; \
+		fi; \
+	fi; \
 } }
-
-%_source_payload        w9.gzdio
-%_binary_payload        w9.bzdio
 
 #-----------------------------------------------------------------
 # Update GConf2 schemas
@@ -317,14 +320,14 @@ echo "Compress kernel modules if any."; \
 # Requires: GConf2
 #
 %gconf_schema_install() \
-    umask 022; \
-    GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" /usr/bin/gconftool-2 --makefile-install-rule /etc/gconf/schemas/%{?1}%{!?1:*.schemas} > /dev/null \
-    %{nil}
+	umask 022; \
+	GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" /usr/bin/gconftool-2 --makefile-install-rule /etc/gconf/schemas/%{?1}%{!?1:*.schemas} > /dev/null \
+	%{nil}
 
 %gconf_schema_uninstall() \
 if [ $1 = 0 ]; then \
-    umask 022; \
-    GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" /usr/bin/gconftool-2 --makefile-uninstall-rule /etc/gconf/schemas/%{?1} > /dev/null \
+	umask 022; \
+	GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" /usr/bin/gconftool-2 --makefile-uninstall-rule /etc/gconf/schemas/%{?1} > /dev/null \
 fi \
 %{nil}
 
@@ -438,25 +441,24 @@ fi \
 
 # Python specific macro definitions.
 # python main version
-%py_ver         %(echo `python -c "import sys; print sys.version[:3]"`)
+%py_ver		%(python -c "import sys; print sys.version[:3]")
 
 # directories
-%py_prefix      %(echo `python -c "import sys; print sys.prefix"`)
-%py_libdir      %{py_prefix}/%{_lib}/python%{py_ver}
+%py_prefix		%(python -c "import sys; print sys.prefix")
+%py_libdir		%{py_prefix}/%{_lib}/python%{py_ver}
 %py_scriptdir	%{py_prefix}/share/python%{py_ver}
-%py_incdir      /usr/include/python%{py_ver}
+%py_incdir		/usr/include/python%{py_ver}
 %py_sitedir	%{py_libdir}/site-packages
 %py_sitescriptdir %{py_scriptdir}/site-packages
-%py_dyndir      %{py_libdir}/lib-dynload
+%py_dyndir		%{py_libdir}/lib-dynload
 
 # pure python modules compilation
-%py_comp        python -c "import compileall; import sys; compileall.compile_dir(sys.argv[1], ddir=sys.argv[1][len('$RPM_BUILD_ROOT'):])"
+%py_comp		python -c "import compileall; import sys; compileall.compile_dir(sys.argv[1], ddir=sys.argv[1][len('$RPM_BUILD_ROOT'):])"
 
-%py_ocomp       python -O -c "import compileall; import sys; compileall.compile_dir(sys.argv[1], ddir=sys.argv[1][len('$RPM_BUILD_ROOT'):])"
+%py_ocomp		python -O -c "import compileall; import sys; compileall.compile_dir(sys.argv[1], ddir=sys.argv[1][len('$RPM_BUILD_ROOT'):])"
 
 # Software written in Python language require Python with main version
 %pyrequires_eq() Requires:	%1
-
 
 # Hardlink binary identical .pyc and .pyo files
 # (idea by glen <at> pld-linux <dot> org)
@@ -482,31 +484,29 @@ done \
 %depmod() { \
 umask 022; \
 if [ -e /boot/System.map-%1 ]; then \
-        /sbin/depmod -a -F /boot/System.map-%1 %1; \
+	/sbin/depmod -a -F /boot/System.map-%1 %1; \
 else \
-        if [ -e /boot/System.map ]; then \
-                /sbin/depmod -a -F /boot/System.map %1; \
-        else \
-                /sbin/depmod -a %1; \
-        fi \
+	if [ -e /boot/System.map ]; then \
+		/sbin/depmod -a -F /boot/System.map %1; \
+	else \
+		/sbin/depmod -a %1; \
+	fi \
 fi; \
 }
 
 # XMMS specific macros
-%xmms_prefix                  %(xmms-config --prefix 2>/dev/null)
-%xmms_exec_prefix             %(xmms-config --exec-prefix 2>/dev/null)
-%xmms_version                 %(xmms-config --version 2>/dev/null)
-%xmms_datadir                 %(xmms-config --data-dir 2>/dev/null)
-%xmms_plugindir               %(xmms-config --plugin-dir 2>/dev/null)
-%xmms_visualization_plugindir %(xmms-config --visualization-plugin-dir 2>/dev/null)
-%xmms_input_plugindir         %(xmms-config --input-plugin-dir 2>/dev/null)
-%xmms_output_plugindir        %(xmms-config --output-plugin-dir 2>/dev/null)
-%xmms_effect_plugindir        %(xmms-config --effect-plugin-dir 2>/dev/null)
-%xmms_general_plugindir       %(xmms-config --general-plugin-dir 2>/dev/null)
+%xmms_prefix			%(xmms-config --prefix 2>/dev/null)
+%xmms_exec_prefix		%(xmms-config --exec-prefix 2>/dev/null)
+%xmms_version			%(xmms-config --version 2>/dev/null)
+%xmms_datadir			%(xmms-config --data-dir 2>/dev/null)
+%xmms_plugindir			%(xmms-config --plugin-dir 2>/dev/null)
+%xmms_visualization_plugindir	%(xmms-config --visualization-plugin-dir 2>/dev/null)
+%xmms_input_plugindir		%(xmms-config --input-plugin-dir 2>/dev/null)
+%xmms_output_plugindir		%(xmms-config --output-plugin-dir 2>/dev/null)
+%xmms_effect_plugindir		%(xmms-config --effect-plugin-dir 2>/dev/null)
+%xmms_general_plugindir		%(xmms-config --general-plugin-dir 2>/dev/null)
 
 %_target_base_arch	%(echo %{_target_cpu} | sed 's/i.86/i386/;s/athlon/i386/;s/pentium./i386/;s/amd64/x86_64/;s/ia32e/x86_64/')
-
-%x8664			x86_64 amd64 ia32e
 
 # user/group checking macros
 #
