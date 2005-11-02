@@ -411,13 +411,9 @@ fi \
 
 %php_pear_dir	%{_datadir}/pear
 
-# extract php/zend api versions
-%php_api_version %(awk '/#define PHP_API_VERSION/{print $3}' /usr/include/php/main/php.h)
-%zend_module_api %(awk '/#define ZEND_MODULE_API_NO/{print $3}' /usr/include/php/Zend/zend_modules.h)
-%zend_extension_api %(awk '/#define ZEND_EXTENSION_API_NO/{print $3}' /usr/include/php/Zend/zend_extensions.h)
-
 # directory where php includes are installed on system.
 %__php_includedir		/usr/include/php
+# extract php/zend api versions
 %php_major_version		%(awk '/#define PHP_MAJOR_VERSION/{print $3}' %{__php_includedir}/main/php_version.h 2>/dev/null || echo ERROR)
 %php_api_version		%(awk '/#define PHP_API_VERSION/{print $3}' %{__php_includedir}/main/php.h 2>/dev/null || echo ERROR)
 %php_debug				%(awk '/#define ZEND_DEBUG/{print $3}' %{__php_includedir}/main/php_config.h 2>/dev/null || echo ERROR)
