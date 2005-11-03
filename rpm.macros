@@ -39,6 +39,16 @@ fi; \
 
 %dependencytracking	%{nil}
 
+#	Relations between package names that cause dependency loops
+#	with legacy packages that cannot be fixed. Relations are
+#	specified as
+#		p>q
+#	where package p has a Requires: on something that package q Provides:
+#
+# XXX	Note: that there cannot be any whitespace within the string "p>q",
+#	and that both p and q are package names (i.e. no version/release).
+%_dependency_whiteout	%{nil}
+
 #-----------------------------------------------------------------
 %configure2_13 { \
  if [ -n "$LINGUAS" ]; then unset LINGUAS; fi; \
