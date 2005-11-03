@@ -735,8 +735,8 @@ skip_auto_restart() { \
 if [ -f /var/lock/subsys/%1 ]; then \
 	if [ $(skip_auto_restart) = no ]; then \
 		/etc/rc.d/init.d/%1 %2 1>&2; \
-	else \
-		echo 'Run "/etc/rc.d/init.d/%1 %2" to %2 %{!?3:%1 service}%{?3:%(set -- %{*}; echo "$3")}.'; \
+%{!-q:else} \
+	%{!-q:echo 'Run "/etc/rc.d/init.d/%1 %2" to %2 %{!?3:%1 service}%{?3:%(set -- %{*}; echo "$3")}.';} \
 	fi \
 %{!-q:else} \
 	%{!-q:echo 'Run "/etc/rc.d/init.d/%1 start" to start %{!?3:%1 service}%{?3:%(set -- %{*}; echo "$3")}.';} \
