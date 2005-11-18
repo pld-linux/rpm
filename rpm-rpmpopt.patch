@@ -1,24 +1,15 @@
---- rpm-4.3/rpmpopt.in.orig	2003-02-06 19:02:50.000000000 +0100
-+++ rpm-4.3/rpmpopt.in	2003-06-10 23:55:22.000000000 +0200
-@@ -105,16 +105,11 @@
- 	--POPTdesc=$"find package name that contains a required capability (needs rpmdb-redhat package installed)"
+--- rpm-4.4.3/rpmpopt.in.orig	2005-10-30 02:15:44.000000000 +0200
++++ rpm-4.4.3/rpmpopt.in	2005-11-18 22:43:57.809703712 +0100
+@@ -134,7 +134,7 @@
+ 	--POPTdesc=$"Failed transactions will be rolled back automatically"
  
  # colon separated i18n domains to use as PO catalogue lookaside for
 -* retrieving header group/description/summary.
 +# retrieving header group/description/summary.
  #
- # For Red Hat, value should be "redhat-dist:redhat-powertools".
+ # For vendors, value should be "vendor-dist".
  rpm alias --i18ndomains --define '_i18ndomains !#:+'
- 
--# Build policies enabled from command line. Last policy applies.
--rpm alias --buildpolicy --define '__os_install_post @RPMCONFIGDIR@/brp-!#:+' \
--	--POPTdesc=$"set buildroot <policy> (e.g. compress man pages)" \
--	--POPTargs=$"<policy>"
--
- # Choose db interface:
- #	0	same as 1
- #	1	native db1 interface (e.g. linux glibc libdb1 routines).
-@@ -217,6 +212,15 @@
+@@ -246,6 +246,15 @@
  rpmb	alias --without		--define "_without_!#:+    --without-!#:+" \
  	--POPTdesc=$"disable configure <option> for build" \
  	--POPTargs=$"<option>"
@@ -34,7 +25,7 @@
  #==============================================================================
  rpmbuild	alias --dbpath		--define '_dbpath !#:+' \
  	--POPTdesc=$"use database in DIRECTORY" \
-@@ -232,6 +236,19 @@
+@@ -261,6 +270,15 @@
  rpmbuild alias --without	--define "_without_!#:+  --without-!#:+" \
  	--POPTdesc=$"disable configure <option> for build" \
  	--POPTargs=$"<option>"
@@ -47,10 +38,6 @@
 +# (PLD-specific) Conditional building
 +rpmbuild exec  --bcond find-spec-bcond \
 +	--POPTdesc=$"find all --with/--without values"
-+# Build policies enabled from command line. Last policy applies.
-+#rpmbuild alias --buildpolicy --define '__os_install_post @RPMCONFIGDIR@/brp-!#:+' \
-+#	--POPTdesc=$"set buildroot <policy> (e.g. compress man pages)" \
-+#	--POPTargs=$"<policy>"
  #==============================================================================
  rpmd	alias --dbpath		--define '_dbpath !#:+' \
  	--POPTdesc=$"use database in DIRECTORY" \
@@ -60,15 +47,15 @@
  msgid "disable configure <option> for build"
  msgstr "wy³±cz <opcjê> konfiguracji przy budowaniu"
  
-+#: ../rpmpopt:217
++#: ../rpmpopt:251
 +msgid "make all needed dirs for building binary rpms"
 +msgstr "utwórz wszystkie katalogi potrzebne do budowania binarnych RPM-ów"
 +
-+#: ../rpmpopt:220
++#: ../rpmpopt:254
 +msgid "build packages with debug information"
 +msgstr "buduj pakiety z informacjami do odpluskwiania"
 +
-+#: ../rpmpopt:223
++#: ../rpmpopt:257
 +msgid "find all --with/--without values"
 +msgstr "znajd¼ wszystkie warto¶ci --with/--without"
 +
