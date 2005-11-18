@@ -1,5 +1,5 @@
---- rpm-4.4.2/Doxyfile.in.orig	2005-07-04 21:00:46.000000000 +0200
-+++ rpm-4.4.2/Doxyfile.in	2005-07-23 14:02:43.454384568 +0200
+--- rpm-4.4.3/Doxyfile.in.orig	2005-11-06 17:06:09.000000000 +0100
++++ rpm-4.4.3/Doxyfile.in	2005-11-19 00:31:53.373268416 +0100
 @@ -383,29 +383,7 @@
                           @top_srcdir@/rpmrc \
                           @top_srcdir@/rpm2cpio.c \
@@ -31,7 +31,7 @@
                           @top_srcdir@/doc/manual/builddependencies \
                           @top_srcdir@/doc/manual/buildroot \
                           @top_srcdir@/doc/manual/conditionalbuilds \
-@@ -420,195 +398,13 @@
+@@ -420,193 +398,12 @@
                           @top_srcdir@/doc/manual/spec \
                           @top_srcdir@/doc/manual/triggers \
                           @top_srcdir@/doc/manual/tsort \
@@ -79,7 +79,6 @@
 -                         @top_srcdir@/lib/rpmlead.c \
 -                         @top_srcdir@/lib/rpmlead.h \
 -                         @top_srcdir@/lib/rpmlib.h \
--                         @top_srcdir@/lib/rpmlibprov.c \
 -                         @top_srcdir@/lib/rpmps.c \
 -                         @top_srcdir@/lib/rpmps.h \
 -                         @top_srcdir@/lib/rpmrc.c \
@@ -214,7 +213,6 @@
 -                         @top_srcdir@/python/rpmte-py.h \
 -                         @top_srcdir@/python/rpmts-py.c \
 -                         @top_srcdir@/python/rpmts-py.h \
--                         @top_srcdir@/tools/dump.c \
 -                         @top_srcdir@/tools/dumpdb.c \
 -                         @top_srcdir@/tools/javadeps.c \
 -                         @top_srcdir@/tools/rpmcache.c \
@@ -224,7 +222,6 @@
 -                         @top_srcdir@/tools/rpmtool.c \
 -                         @top_srcdir@/tools/rpmxml.c \
 -                         @top_srcdir@/tools/rpmxp.c
-+                         @top_srcdir@/file/src/ \
 +                         @top_srcdir@/lib/ \
 +			 @top_srcdir@/lua/ \
 +                         @top_srcdir@/rpmdb/ \
@@ -234,7 +231,7 @@
  
  # If the value of the INPUT tag contains directories, you can use the 
  # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
-@@ -617,8 +413,8 @@
+@@ -615,8 +412,8 @@
  # *.c *.cc *.cxx *.cpp *.c++ *.java *.ii *.ixx *.ipp *.i++ *.inl *.h *.hh *.hxx *.hpp 
  # *.h++ *.idl *.odl *.cs *.php *.php3 *.inc
  
