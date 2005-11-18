@@ -1,11 +1,11 @@
---- rpm-4.4.1/rpmrc.in.orig	2005-01-09 18:48:19.000000000 +0100
-+++ rpm-4.4.1/rpmrc.in	2005-02-18 12:23:10.000000000 +0100
-@@ -13,65 +13,65 @@
+--- rpm-4.4.3/rpmrc.in.orig	2005-10-26 03:01:40.000000000 +0200
++++ rpm-4.4.3/rpmrc.in	2005-11-18 19:24:50.519967824 +0100
+@@ -13,67 +13,67 @@
  # Values for RPM_OPT_FLAGS for various platforms
  
  # "fat" binary with both archs, for Darwin
 -optflags: fat -O2 -g -arch i386 -arch ppc
-+optflags: fat -O2 -arch i386 -arch ppc %{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_fat: %{specflags_fat}}}
++optflags: fat -O2 -arch i386 -arch ppc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_fat: %{specflags_fat}}}
  
 -optflags: i386 -O2 -g -march=i386 -mcpu=i686
 -optflags: i486 -O2 -g -march=i486
@@ -53,6 +53,8 @@
 -optflags: armv3l -O2 -g -fsigned-char -fomit-frame-pointer -march=armv3
 -optflags: armv4b -O2 -g -fsigned-char -fomit-frame-pointer -march=armv4
 -optflags: armv4l -O2 -g -fsigned-char -fomit-frame-pointer -march=armv4
+-optflags: armv5teb -O2 -g -fsigned-char -fomit-frame-pointer -march=armv5te
+-optflags: armv5tel -O2 -g -fsigned-char -fomit-frame-pointer -march=armv5te
 -
 -optflags: atarist -O2 -g -fomit-frame-pointer
 -optflags: atariste -O2 -g -fomit-frame-pointer
@@ -107,6 +109,8 @@
 +optflags: armv3l -O2 -fsigned-char -fomit-frame-pointer -march=armv3%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_armv3l: %{specflags_armv3l}}}
 +optflags: armv4b -O2 -fsigned-char -fomit-frame-pointer -march=armv4%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_armv4b: %{specflags_armv4b}}}
 +optflags: armv4l -O2 -fsigned-char -fomit-frame-pointer -march=armv4%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_armv4l: %{specflags_armv4l}}}
++optflags: armv5teb -O2 -g -fsigned-char -fomit-frame-pointer -march=armv5te%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_armv5teb: %{specflags_armv5teb}}}
++optflags: armv5tel -O2 -g -fsigned-char -fomit-frame-pointer -march=armv5te%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_armv5tel: %{specflags_armv5tel}}}
 +
 +optflags: atarist -O2 -fomit-frame-pointer%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_atarist: %{specflags_atarist}}}
 +optflags: atariste -O2 -fomit-frame-pointer%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_atariste: %{specflags_atariste}}}
@@ -123,7 +127,7 @@
  
  #############################################################
  # Canonical arch names and numbers
-@@ -409,7 +409,7 @@
+@@ -416,7 +416,7 @@
  buildarch_compat: amd64: x86_64
  buildarch_compat: ia32e: x86_64
  
