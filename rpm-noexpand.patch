@@ -1,9 +1,9 @@
---- rpm-4.3/build/parseChangelog.c.wiget	Tue Jun 25 16:52:52 2002
-+++ rpm-4.3/build/parseChangelog.c	Fri May 16 00:06:47 2003
-@@ -221,7 +221,7 @@
-     
-     while (! (nextPart = isPart(spec->line))) {
+--- rpm-4.4.3/build/parseChangelog.c.orig	2005-11-12 01:20:12.000000000 +0100
++++ rpm-4.4.3/build/parseChangelog.c	2005-11-18 19:46:50.357322048 +0100
+@@ -255,7 +255,7 @@
+ 	line = xstrtolocale(line);
  	appendStringBuf(sb, spec->line);
+ 	line = _free(line);
 -	if ((rc = readLine(spec, STRIP_COMMENTS)) > 0) {
 +	if ((rc = readLine(spec, STRIP_COMMENTS | STRIP_NOEXPAND)) > 0) {
  	    nextPart = PART_NONE;
