@@ -1,17 +1,17 @@
---- rpm-4.3/configure.ac.orig	2004-02-01 20:53:09.000000000 +0100
-+++ rpm-4.3/configure.ac	2004-02-01 21:22:12.430982800 +0100
-@@ -37,7 +37,7 @@
- AM_INIT_AUTOMAKE([foreign])
+--- rpm-4.4.3/configure.ac.orig	2005-11-18 23:04:14.916675328 +0100
++++ rpm-4.4.3/configure.ac	2005-11-18 23:05:28.163540112 +0100
+@@ -42,7 +42,7 @@
+ AC_SUBST(LT_AGE, 0)
  
  dnl Set of available languages.
--ALL_LINGUAS="cs da de fi fr gl is ja ko no pl pt pt_BR ro ru sk sl sr sv tr"
-+ALL_LINGUAS="cs da de fi fr gl is ja ko nb pl pt pt_BR ro ru sk sl sr@Latn sv tr"
+-ALL_LINGUAS="cs da de fi fr gl is ja ko no pl pt pt_BR ro ru sk sl sr sv tr uk"
++ALL_LINGUAS="cs da de fi fr gl is ja ko nb pl pt pt_BR ro ru sk sl sr@Latn sv tr uk"
  
  dnl Checks for programs.
  AC_PROG_CXX
---- rpm-4.4.2/po/de.po.orig	2005-07-21 03:48:42.000000000 +0200
-+++ rpm-4.4.2/po/de.po	2005-07-23 15:25:11.869111184 +0200
-@@ -1568,7 +1568,7 @@
+--- rpm-4.4.3/po/de.po.orig	2005-11-17 13:24:18.000000000 +0100
++++ rpm-4.4.3/po/de.po	2005-11-18 23:06:16.517189240 +0100
+@@ -1610,7 +1610,7 @@
  #: lib/fsm.c:1354
  #, c-format
  msgid "%s directory created with perms %04o, context %s.\n"
@@ -20,23 +20,23 @@
  
  #: lib/fsm.c:1657
  #, c-format
-@@ -2038,12 +2038,12 @@
- #: lib/poptI.c:277
+@@ -2101,12 +2101,12 @@
+ #: lib/poptI.c:340
  #, c-format
  msgid "do not execute %%preun scriptlet (if any)"
 -msgstr "%preun-Skriptlet nicht ausführen (wenn vorhanden)"
 +msgstr "%%preun-Skriptlet nicht ausführen (wenn vorhanden)"
  
- #: lib/poptI.c:280
+ #: lib/poptI.c:343
  #, c-format
  msgid "do not execute %%postun scriptlet (if any)"
 -msgstr "%postun-Skriptlet nicht ausführen (wenn vorhanden)"
 +msgstr "%%postun-Skriptlet nicht ausführen (wenn vorhanden)"
  
- #: lib/poptI.c:290
+ #: lib/poptI.c:353
  msgid "do not execute any scriptlet(s) triggered by this package"
-@@ -3302,7 +3302,7 @@
- #: lib/signature.c:612
+@@ -3482,7 +3482,7 @@
+ #: lib/signature.c:614
  #, c-format
  msgid "gpg exec failed (%d)\n"
 -msgstr "GPG fehlgeschlagen\n"
@@ -44,7 +44,7 @@
  
  #. GPG failed to write signature
  #. Just in case
-@@ -3592,12 +3592,12 @@
+@@ -3843,12 +3843,12 @@
  #: rpmdb/db3.c:189
  #, c-format
  msgid "closed   db environment %s/%s\n"
@@ -59,12 +59,12 @@
  
  #: rpmdb/db3.c:298
  #, c-format
-@@ -3812,7 +3812,7 @@
- #: rpmdb/rpmdb.c:2696
+@@ -4067,7 +4067,7 @@
+ #: rpmdb/rpmdb.c:2714
  #, c-format
  msgid "error(%d) setting header #%d record for %s removal\n"
 -msgstr "Fehler(%d) beim Markieren des Header-Eintrags #%d zur Entfernung\n"
 +msgstr "Fehler(%d) beim Markieren des Header-Eintrags #%d zur Entfernung %s\n"
  
- #: rpmdb/rpmdb.c:2811
+ #: rpmdb/rpmdb.c:2822
  #, c-format
