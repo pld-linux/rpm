@@ -65,7 +65,7 @@ Patch7:		%{name}-scripts-closefds.patch
 Patch8:		%{name}-python-macros.patch
 Patch9:		%{name}-gettext-in-header.patch
 Patch10:	%{name}-compress-doc.patch
-
+Patch11:	%{name}-rpmdeps-segv.patch
 Patch12:	%{name}-system_libs.patch
 Patch13:	%{name}-bb-and-short-circuit.patch
 Patch14:	%{name}-etc_dir.patch
@@ -443,7 +443,6 @@ Requires:	grep
 Requires:	gzip
 Requires:	make
 Requires:	patch
-Requires:	popt >= 1.7
 Requires:	sed
 Requires:	sh-utils
 Requires:	tar
@@ -627,6 +626,7 @@ ze ¼rode³ RPM-a przez doxygen.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 %patch12 -p1
 %patch13 -p1
 %patch14 -p1
