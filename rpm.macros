@@ -422,6 +422,13 @@ fi \
 %perl_sitelib	%(eval "`%{__perl} -V:installsitelib`"; echo $installsitelib)
 %perl_sitearch	%(eval "`%{__perl} -V:installsitearch`"; echo $installsitearch)
 
+# Ruby
+%define	ruby_archdir	%(ruby -r rbconfig -e 'print Config::CONFIG["archdir"]')
+%define	ruby_rubylibdir	%(ruby -r rbconfig -e 'print Config::CONFIG["rubylibdir"]')
+%define	ruby_ridir	%(ruby -r rbconfig -e 'include Config; print File.join(CONFIG["datadir"], "ri", CONFIG["ruby_vers
+ion"], "system")')
+%define	ruby_version	%(ruby -r rbconfig -e 'print Config::CONFIG["ruby_version"]')
+
 %php_pear_dir	%{_datadir}/pear
 
 # directory where php includes are installed on system.
