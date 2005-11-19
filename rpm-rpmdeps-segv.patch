@@ -1,0 +1,13 @@
+--- rpm-4.4.3/tools/rpmdeps.c.orig	2005-11-14 14:35:31.000000000 +0100
++++ rpm-4.4.3/tools/rpmdeps.c	2005-11-19 13:58:20.277340896 +0100
+@@ -267,6 +267,10 @@
+ 
+     switch (rpmdeps_mode) {
+     case RPMDEP_RPMFC:
++	/* rpmfcApply() doesn't expect empty file list */
++	if(ac <= 0)
++		break;
++
+ 	/* Build file class dictionary. */
+ 	fc = rpmfcNew();
+ 	xx = rpmfcClassify(fc, av, NULL);
