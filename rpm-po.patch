@@ -35,6 +35,27 @@
  
  #: lib/poptI.c:353
  msgid "do not execute any scriptlet(s) triggered by this package"
+@@ -2798,8 +2798,7 @@
+ #: lib/rpmds.c:1424
+ #, c-format
+ msgid "%s:%d \"%s\" must begin with alphanumeric, '_', '/' or '%%'.\n"
+-msgstr ""
+-"Zeile %d:%d \"%s\" muss alphanumerisch, mit '_' oder '/' beginnen: %s\n"
++msgstr "%s:%d \"%s\" muss alphanumerisch, mit '_', '/' oder '%%' beginnen.\n"
+ 
+ #. XXX No comparison operator found.
+ #: lib/rpmds.c:1458
+@@ -2823,7 +2822,9 @@
+ msgid ""
+ "\tline %d: \"%s\" must begin with alphanumeric, '_', '/' or '%%'. "
+ "Skipping ...\n"
+-msgstr "Zeile %d: \"%s\" muss alphanumerisch, mit '_' oder '/' beginnen: %s\n"
++msgstr ""
++"\tzeile %d: \"%s\" muss alphanumerisch, mit '_', '/' oder '%%' beginnen. "
++"Überspringe...\n"
+ 
+ #. XXX No comparison operator found.
+ #: lib/rpmds.c:3021
 @@ -3482,7 +3482,7 @@
  #: lib/signature.c:614
  #, c-format
