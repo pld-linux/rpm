@@ -73,7 +73,7 @@ Patch15:	%{name}-system_libs-more.patch
 Patch16:	%{name}-php-deps.patch
 Patch17:	%{name}-ldconfig-always.patch
 Patch18:	%{name}-perl_req.patch
-
+Patch19:	%{name}-link.patch
 Patch20:	%{name}-magic-usesystem.patch
 Patch21:	%{name}-dontneedutils.patch
 Patch22:	%{name}-provides-dont-obsolete.patch
@@ -646,6 +646,7 @@ install %{SOURCE5} scripts/find-lang.sh
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
+%patch19 -p1
 %patch20 -p1
 %patch21 -p1
 %patch22 -p1
