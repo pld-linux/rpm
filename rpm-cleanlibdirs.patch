@@ -43,15 +43,3 @@
  usrlibdir = $(libdir)@MARK64@
  usrlib_LTLIBRARIES = librpmbuild.la
  librpmbuild_la_SOURCES = \
---- rpm-4.4.2/configure.ac.orig	2005-10-07 13:52:54.000000000 +0200
-+++ rpm-4.4.2/configure.ac	2005-11-08 15:55:31.000000000 +0100
-@@ -350,9 +350,6 @@
- localdone=
- 
- dirs=$prefix
--if test "$cross_compiling" != "yes"; then
--  dirs="$dirs /usr/local"
--fi
- for dir in $dirs
- do
- 	case $dir in

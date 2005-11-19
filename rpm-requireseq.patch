@@ -1,12 +1,11 @@
-diff -urBb rpm-4.4.2.org/macros.in rpm-4.4.2/macros.in
---- rpm-4.4.2.org/macros.in	2005-10-08 13:38:33.470982000 +0200
-+++ rpm-4.4.2/macros.in	2005-10-08 13:39:51.327848250 +0200
-@@ -1249,7 +1249,7 @@
- #	%{perl_sitearch}/Image
+--- rpm-4.4.3/macros.in.orig	2005-11-19 01:16:40.317790760 +0100
++++ rpm-4.4.3/macros.in	2005-11-19 01:17:48.254462816 +0100
+@@ -1298,7 +1298,7 @@
  #	%dir %{perl_sitearch}/auto/Image
  #
+ 
 -%requires_eq()	%(LC_ALL="C" echo '%*' | xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
 +%requires_eq()	%(echo '%*' | LC_ALL="C" xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
+ 
  %perl_sitearch	%(eval "`%{__perl} -V:installsitearch`"; echo $installsitearch)
  %perl_sitelib	%(eval "`%{__perl} -V:installsitelib`"; echo $installsitelib)
- %perl_vendorarch %(eval "`%{__perl} -V:installvendorarch`"; echo $installvendorarch)

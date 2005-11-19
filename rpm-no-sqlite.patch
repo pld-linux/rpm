@@ -1,6 +1,6 @@
---- rpm-4.4.2/configure.ac.orig	2005-07-23 14:12:39.097833000 +0200
-+++ rpm-4.4.2/configure.ac	2005-07-23 14:14:23.972889568 +0200
-@@ -588,24 +588,6 @@
+--- rpm-4.4.3/configure.ac.orig	2005-11-19 01:08:41.529577632 +0100
++++ rpm-4.4.3/configure.ac	2005-11-19 01:09:44.521001480 +0100
+@@ -618,24 +596,6 @@
  WITH_SQLITE3_INCLUDE=
  WITH_SQLITE3_LIB=
  
@@ -16,7 +16,7 @@
 -  if test -d sqlite ; then
 -    AC_DEFINE(HAVE_SQLITE3_H, 1, [Define if you have the <sqlite3.h> header file])
 -    WITH_SQLITE3_SUBDIR=sqlite
--    WITH_SQLITE3_INCLUDE="-I\${top_srcdir}/${WITH_SQLITE3_SUBDIR}/src"
+-    WITH_SQLITE3_INCLUDE="-I\${top_srcdir}/${WITH_SQLITE3_SUBDIR} -I\${top_srcdir}/${WITH_SQLITE3_SUBDIR}/src"
 -    WITH_SQLITE3_LIB="\${top_builddir}/${WITH_SQLITE3_SUBDIR}/libsqlite3.la"
 -    DBLIBSRCS="$DBLIBSRCS sqlite.c"
 -  fi

@@ -29,8 +29,8 @@
  AC_SUBST(WITH_NEON_SUBDIR)
  AC_SUBST(WITH_NEON_INCLUDE)
  AC_SUBST(WITH_NEON_LIB)
---- rpm-4.4.2/rpmio/rpmdav.c.orig	2005-02-17 02:07:18.000000000 +0100
-+++ rpm-4.4.2/rpmio/rpmdav.c	2005-07-23 14:11:17.251275568 +0200
+--- rpm-4.4.3/rpmio/rpmdav.c.orig	2005-11-16 01:09:03.000000000 +0100
++++ rpm-4.4.3/rpmio/rpmdav.c	2005-11-19 00:57:53.058160272 +0100
 @@ -9,24 +9,6 @@
  #include <pthread.h>
  #endif
@@ -56,7 +56,7 @@
  #include <rpmio_internal.h>
  
  #define _RPMDAV_INTERNAL
-@@ -62,1315 +44,6 @@
+@@ -62,1326 +44,6 @@
  }
  
  /* =============================================================== */
@@ -350,7 +350,7 @@
 -	/* XXX check that neon is ssl enabled. */
 -	if (!strcasecmp(u->scheme, "https"))
 -	    ne_ssl_set_verify(u->sess, davVerifyCert, (char *)u->host);
--                                                                                
+-
 -	ne_set_session_private(u->sess, "urlinfo", u);
 -
 -	ne_hook_destroy_session(u->sess, davDestroySession, u);
@@ -384,8 +384,9 @@
 -    resr_reference,
 -    resr_error
 -};
--                                                                                
+-
 -struct fetch_resource_s {
+-/*@dependent@*/
 -    struct fetch_resource_s *next;
 -    char *uri;
 -/*@unused@*/
@@ -434,7 +435,7 @@
 -
 -/* =============================================================== */
 -struct fetch_context_s {
--/*@relnull@*/
+-/*@relnull@*/ /*@dependent@*/
 -    struct fetch_resource_s **resrock;
 -    const char *uri;
 -    unsigned int include_target; /* Include resource at href */
@@ -508,7 +509,7 @@
 -    { "DAV:", "collection", ELM_collection }
 -};
 -
--static int fetch_startelm(void *userdata, int parent, 
+-static int fetch_startelm(void *userdata, int parent,
 -		const char *nspace, const char *name,
 -		/*@unused@*/ const char **atts)
 -	/*@*/
@@ -518,7 +519,7 @@
 -    int state = ne_xml_mapid(fetch_idmap, NE_XML_MAPLEN(fetch_idmap),
 -                             nspace, name);
 -
--    if (r == NULL || 
+-    if (r == NULL ||
 -        !((parent == NE_207_STATE_PROP && state == ELM_resourcetype) ||
 -          (parent == ELM_resourcetype && state == ELM_collection)))
 -        return NE_XML_DECLINE;
@@ -530,7 +531,7 @@
 -    return state;
 -}
 -
--static int fetch_compare(const struct fetch_resource_s *r1, 
+-static int fetch_compare(const struct fetch_resource_s *r1,
 -			    const struct fetch_resource_s *r2)
 -	/*@*/
 -{
@@ -573,26 +574,28 @@
 -
 -if (_dav_debug < 0)
 -fprintf(stderr, "==> %s in uri %s\n", path, ctx->uri);
--    
+-
 -    if (ne_path_compare(ctx->uri, path) == 0 && !ctx->include_target) {
 -	/* This is the target URI */
 -if (_dav_debug < 0)
 -fprintf(stderr, "==> %s skipping target resource.\n", path);
 -	/* Free the private structure. */
+-/*@-dependenttrans -exposetrans@*/
 -	free(newres);
+-/*@=dependenttrans =exposetrans@*/
 -	return;
 -    }
 -
 -    newres->uri = ne_strdup(path);
 -
 -/*@-boundsread@*/
--    clength = ne_propset_value(set, &fetch_props[0]);    
+-    clength = ne_propset_value(set, &fetch_props[0]);
 -    modtime = ne_propset_value(set, &fetch_props[1]);
 -    isexec = ne_propset_value(set, &fetch_props[2]);
 -    checkin = ne_propset_value(set, &fetch_props[4]);
 -    checkout = ne_propset_value(set, &fetch_props[5]);
 -/*@=boundsread@*/
--    
+-
 -/*@-branchstate@*/
 -    if (clength == NULL)
 -	status = ne_propset_status(set, &fetch_props[0]);
@@ -644,7 +647,7 @@
 -	newres->is_vcr = 0;
 -    }
 -
--    for (current = *ctx->resrock, previous = NULL; current != NULL; 
+-    for (current = *ctx->resrock, previous = NULL; current != NULL;
 -	previous = current, current = current->next)
 -    {
 -	if (fetch_compare(current, newres) >= 0) {
@@ -654,9 +657,9 @@
 -    if (previous) {
 -	previous->next = newres;
 -    } else {
--/*@-boundswrite@*/
+-/*@-boundswrite -dependenttrans @*/
 -	*ctx->resrock = newres;
--/*@=boundswrite@*/
+-/*@=boundswrite =dependenttrans @*/
 -    }
 -    newres->next = current;
 -}
@@ -684,7 +687,7 @@
 -    ctx->resrock = resrock;
 -    ctx->include_target = include_target;
 -
--    ne_xml_push_handler(ne_propfind_get_parser(pfh), 
+-    ne_xml_push_handler(ne_propfind_get_parser(pfh),
 -                        fetch_startelm, NULL, NULL, pfh);
 -
 -    ne_propfind_set_private(pfh, fetch_create_item, NULL);
@@ -834,12 +837,13 @@
 -}
 -#endif
 -
+-/*@-mustmod@*/
 -static void davAcceptRanges(void * userdata, /*@null@*/ const char * value)
 -	/*@modifies userdata @*/
 -{
 -    urlinfo u = userdata;
 -
--    if (!(u && value)) return;
+-    if (!(u != NULL && value != NULL)) return;
 -if (_dav_debug < 0)
 -fprintf(stderr, "*** u %p Accept-Ranges: %s\n", u, value);
 -    if (!strcmp(value, "bytes"))
@@ -847,37 +851,41 @@
 -    if (!strcmp(value, "none"))
 -	u->httpHasRange = 0;
 -}
+-/*@=mustmod@*/
 -
 -#if !defined(HAVE_NEON_NE_GET_RESPONSE_HEADER)
 -static void davAllHeaders(void * userdata, const char * value)
 -{
 -    FD_t ctrl = userdata;
 -
--    if (!(ctrl && value)) return;
+-    if (!(ctrl != NULL && value != NULL)) return;
 -if (_dav_debug)
 -fprintf(stderr, "<- %s\n", value);
 -}
 -#endif
 -
+-/*@-mustmod@*/
 -static void davContentLength(void * userdata, /*@null@*/ const char * value)
 -	/*@modifies userdata @*/
 -{
 -    FD_t ctrl = userdata;
 -
--    if (!(ctrl && value)) return;
+-    if (!(ctrl != NULL && value != NULL)) return;
 -if (_dav_debug < 0)
 -fprintf(stderr, "*** fd %p Content-Length: %s\n", ctrl, value);
 -/*@-unrecog@*/
 -   ctrl->contentLength = strtoll(value, NULL, 10);
 -/*@=unrecog@*/
 -}
+-/*@=mustmod@*/
 -
+-/*@-mustmod@*/
 -static void davConnection(void * userdata, /*@null@*/ const char * value)
 -	/*@modifies userdata @*/
 -{
 -    FD_t ctrl = userdata;
 -
--    if (!(ctrl && value)) return;
+-    if (!(ctrl != NULL && value != NULL)) return;
 -if (_dav_debug < 0)
 -fprintf(stderr, "*** fd %p Connection: %s\n", ctrl, value);
 -    if (!strcasecmp(value, "close"))
@@ -885,6 +893,7 @@
 -    else if (!strcasecmp(value, "Keep-Alive"))
 -	ctrl->persist = 1;
 -}
+-/*@=mustmod@*/
 -
 -/*@-mustmod@*/ /* HACK: stash error in *str. */
 -int davResp(urlinfo u, FD_t ctrl, /*@unused@*/ char *const * str)
@@ -1028,7 +1037,9 @@
 -	fd = fdNew("grab ctrl (davOpen)");
 -
 -    if (fd) {
+-	fdSetOpen(fd, url, flags, mode);
 -	fdSetIo(fd, ufdio);
+-
 -	fd->ftpFileDoneNeeded = 0;
 -	fd->rd_timeoutsecs = httpTimeoutSecs;
 -	fd->contentLength = fd->bytesRemain = -1;
@@ -1074,7 +1085,7 @@
 -    ssize_t rc;
 -    int xx;
 -
--#ifndef	NEONBLOWSCHUNKS
+-#if !defined(NEONBLOWSCHUNKS)
 -    ne_session * sess;
 -
 -assert(fd->req != NULL);
@@ -1084,7 +1095,7 @@
 -    /* HACK: include ne_private.h to access sess->socket for now. */
 -    xx = ne_sock_fullwrite(sess->socket, buf, count);
 -#else
--#if defined(HAVE_NEON_NE_SEND_REQUEST_CHUNK)
+-#if defined(HAVE_NEON_NE_SEND_REQUEST_CHUNK) || defined(__LCLINT__)
 -assert(fd->req != NULL);
 -    xx = ne_send_request_chunk(fd->req, buf, count);
 -#else
@@ -1297,7 +1308,7 @@
 -    if (S_ISREG(st->st_mode)) {
 -	st->st_nlink = 1;
 -	st->st_mode |= 0644;
--    } 
+-    }
 -
 -    /* XXX fts(3) needs/uses st_ino, make something up for now. */
 -    if (st->st_ino == 0)
@@ -1342,7 +1353,7 @@
 -    if (S_ISREG(st->st_mode)) {
 -	st->st_nlink = 1;
 -	st->st_mode |= 0644;
--    } 
+-    }
 -
 -    /* XXX fts(3) needs/uses st_ino, make something up for now. */
 -    if (st->st_ino == 0)
@@ -1372,7 +1383,7 @@
  /*@unchecked@*/
  int avmagicdir = 0x3607113;
  
-@@ -1493,172 +166,3 @@
+@@ -1504,172 +166,3 @@
  /*@=kepttrans@*/
  }
  /*@=boundswrite@*/
@@ -1430,7 +1441,7 @@
 -    dp->d_ino = i + 1;		/* W2DO? */
 -    dp->d_reclen = 0;		/* W2DO? */
 -
--#if !defined(hpux) && !defined(sun)
+-#if !(defined(hpux) || defined(__hpux) || defined(sun))
 -#if !defined(__APPLE__)
 -    dp->d_off = 0;		/* W2DO? */
 -#endif
@@ -1443,7 +1454,7 @@
 -    strncpy(dp->d_name, av[i], sizeof(dp->d_name));
 -if (_dav_debug < 0)
 -fprintf(stderr, "*** davReaddir(%p) %p \"%s\"\n", (void *)avdir, dp, dp->d_name);
--    
+-
 -    return dp;
 -}
 -
@@ -1545,10 +1556,9 @@
 -/*@=kepttrans@*/
 -}
 -/*@=modfilesys@*/
-diff -ur rpm-4.4.1/rpmio/rpmdav.h rpm-4.4.1-no-neon/rpmio/rpmdav.h
---- rpm-4.4.1/rpmio/rpmdav.h	2005-01-17 19:46:27.000000000 +0100
-+++ rpm-4.4.1-no-neon/rpmio/rpmdav.h	2005-06-19 20:39:46.034218000 +0200
-@@ -80,131 +80,6 @@
+--- rpm-4.4.3/rpmio/rpmdav.h.orig	2005-10-11 21:13:59.000000000 +0200
++++ rpm-4.4.3/rpmio/rpmdav.h	2005-11-19 01:07:54.224769056 +0100
+@@ -80,133 +80,6 @@
  	/*@globals fileSystem, internalState @*/
  	/*@modifies fileSystem, internalState @*/;
  
@@ -1570,9 +1580,11 @@ diff -ur rpm-4.4.1/rpmio/rpmdav.h rpm-4.4.1-no-neon/rpmio/rpmdav.h
 - * @retval *str		error msg		
 - * @returns		0 on success
 - */
+-/*@-exportlocal@*/
 -int davResp(urlinfo u, FD_t ctrl, /*@out@*/ /*@null@*/ char *const * str)
 -	/*@globals fileSystem, internalState @*/
 -	/*@modifies ctrl, *str, fileSystem, internalState @*/;
+-/*@=exportlocal@*/
 -
 -/**
 - */
@@ -1680,22 +1692,9 @@ diff -ur rpm-4.4.1/rpmio/rpmdav.h rpm-4.4.1-no-neon/rpmio/rpmdav.h
  #ifdef __cplusplus
  }
  #endif
-diff -ur rpm-4.4.1/rpmio/rpmio.c rpm-4.4.1-no-neon/rpmio/rpmio.c
---- rpm-4.4.1/rpmio/rpmio.c	2005-01-26 04:39:58.000000000 +0100
-+++ rpm-4.4.1-no-neon/rpmio/rpmio.c	2005-06-19 20:34:07.005758160 +0200
-@@ -104,11 +104,6 @@
- /**
-  */
- /*@unchecked@*/
--static int httpTimeoutSecs = TIMEOUT_SECS;
--
--/**
-- */
--/*@unchecked@*/
- int _rpmio_debug = 0;
- 
- /**
-@@ -369,13 +364,6 @@
+--- rpm-4.4.3/rpmio/rpmio.c.orig	2005-11-16 01:05:39.000000000 +0100
++++ rpm-4.4.3/rpmio/rpmio.c	2005-11-19 01:03:10.769860752 +0100
+@@ -371,13 +371,6 @@
  
      fdstat_enter(fd, FDSTAT_READ);
  /*@-boundswrite@*/
@@ -1709,7 +1708,7 @@ diff -ur rpm-4.4.1/rpmio/rpmio.c rpm-4.4.1-no-neon/rpmio/rpmio.c
  	rc = read(fdFileno(fd), buf, (count > fd->bytesRemain ? fd->bytesRemain : count));
  /*@=boundswrite@*/
      fdstat_exit(fd, FDSTAT_READ, rc);
-@@ -403,10 +391,6 @@
+@@ -405,10 +398,6 @@
  
      fdstat_enter(fd, FDSTAT_WRITE);
  /*@-boundsread@*/
@@ -1720,7 +1719,7 @@ diff -ur rpm-4.4.1/rpmio/rpmio.c rpm-4.4.1-no-neon/rpmio/rpmio.c
  	rc = write(fdno, buf, (count > fd->bytesRemain ? fd->bytesRemain : count));
  /*@=boundsread@*/
      fdstat_exit(fd, FDSTAT_WRITE, rc);
-@@ -453,11 +437,6 @@
+@@ -455,11 +444,6 @@
      fdSetFdno(fd, -1);
  
      fdstat_enter(fd, FDSTAT_CLOSE);
@@ -1732,7 +1731,7 @@ diff -ur rpm-4.4.1/rpmio/rpmio.c rpm-4.4.1-no-neon/rpmio/rpmio.c
  	rc = ((fdno >= 0) ? close(fdno) : -2);
  /*@=branchstate@*/
      fdstat_exit(fd, FDSTAT_CLOSE, rc);
-@@ -509,10 +488,6 @@
+@@ -512,10 +496,6 @@
      FD_ZERO(&wrfds);
  #endif
  	
@@ -1743,7 +1742,7 @@ diff -ur rpm-4.4.1/rpmio/rpmio.c rpm-4.4.1-no-neon/rpmio/rpmio.c
      if ((fdno = fdFileno(fd)) < 0)
  	return -1;	/* XXX W2DO? */
  	
-@@ -564,10 +539,6 @@
+@@ -567,10 +547,6 @@
      FD_ZERO(&rdfds);
  #endif
  
@@ -1754,10 +1753,11 @@ diff -ur rpm-4.4.1/rpmio/rpmio.c rpm-4.4.1-no-neon/rpmio/rpmio.c
      if ((fdno = fdFileno(fd)) < 0)
  	return -1;	/* XXX W2DO? */
  	
-@@ -1562,152 +1533,6 @@
+@@ -1566,154 +1542,6 @@
      return rc;
  }
  
+-#ifdef DEAD
 -static int httpResp(urlinfo u, FD_t ctrl, /*@out@*/ char ** str)
 -	/*@globals fileSystem @*/
 -	/*@modifies ctrl, *str, fileSystem @*/
@@ -1903,11 +1903,12 @@ diff -ur rpm-4.4.1/rpmio/rpmio.c rpm-4.4.1-no-neon/rpmio/rpmio.c
 -    return rc;
 -/*@=usereleased@*/
 -}
+-#endif
 -
  /* XXX DYING: unused */
  void * ufdGetUrlinfo(FD_t fd)
  {
-@@ -2064,29 +1889,6 @@
+@@ -2071,29 +1899,6 @@
  	    fd->wr_chunked = 0;
  	}
  	break;
@@ -1937,19 +1938,19 @@ diff -ur rpm-4.4.1/rpmio/rpmio.c rpm-4.4.1-no-neon/rpmio/rpmio.c
      case URL_IS_DASH:
  	assert(!(flags & O_RDWR));
  	fd = fdDup( ((flags & O_WRONLY) ? STDOUT_FILENO : STDIN_FILENO) );
-@@ -2703,10 +2505,8 @@
+@@ -2711,10 +2516,8 @@
  	    if (fd->nfps > 0 && fpno == -1 &&
  		fd->fps[fd->nfps-1].io == ufdio &&
  		fd->fps[fd->nfps-1].fp == fp &&
 -		(fd->fps[fd->nfps-1].fdno >= 0 || fd->req != NULL))
-+		fd->fps[fd->nfps-1].fdno >= 0)
++		(fd->fps[fd->nfps-1].fdno >= 0))
  	    {
 -		int hadreqpersist = (fd->req != NULL);
 -
  		if (fp)
  		    rc = fflush(fp);
  		fd->nfps--;
-@@ -2716,26 +2516,9 @@
+@@ -2724,26 +2527,9 @@
  /*@-usereleased@*/
  		if (fdGetFdno(fd) >= 0)
  		    break;
@@ -1976,14 +1977,14 @@ diff -ur rpm-4.4.1/rpmio/rpmio.c rpm-4.4.1-no-neon/rpmio/rpmio.c
  			rc = fclose(fp);
  		}
  		fdPop(fd);
-@@ -2984,18 +2767,9 @@
+@@ -2992,18 +2778,10 @@
  	    return NULL;
  	}
      } else {
 -	FILE *fp;
 -	int fdno;
 -	int isHTTP = 0;
--
+ 
  	/* XXX gzdio and bzdio here too */
  
  	switch (urlIsURL(path)) {
@@ -1995,7 +1996,7 @@ diff -ur rpm-4.4.1/rpmio/rpmio.c rpm-4.4.1-no-neon/rpmio/rpmio.c
  	case URL_IS_PATH:
  	case URL_IS_DASH:
  	case URL_IS_FTP:
-@@ -3003,7 +2777,7 @@
+@@ -3011,7 +2789,7 @@
  if (_rpmio_debug)
  fprintf(stderr, "*** Fopen ufdio path %s fmode %s\n", path, fmode);
  	    fd = ufdOpen(path, flags, perms);
@@ -2004,7 +2005,7 @@ diff -ur rpm-4.4.1/rpmio/rpmio.c rpm-4.4.1-no-neon/rpmio/rpmio.c
  		return fd;
  	    break;
  	default:
-@@ -3012,15 +2786,6 @@
+@@ -3020,15 +2798,6 @@
  	    return NULL;
  	    /*@notreached@*/ break;
  	}
@@ -2020,7 +2021,7 @@ diff -ur rpm-4.4.1/rpmio/rpmio.c rpm-4.4.1-no-neon/rpmio/rpmio.c
      }
      /*@=branchstate@*/
  
-@@ -3056,10 +2821,6 @@
+@@ -3064,10 +2833,6 @@
      int i, rc = 0;
  
      if (fd == NULL) return -1;
@@ -2031,7 +2032,7 @@ diff -ur rpm-4.4.1/rpmio/rpmio.c rpm-4.4.1-no-neon/rpmio/rpmio.c
      for (i = fd->nfps; rc == 0 && i >= 0; i--) {
  /*@-boundsread@*/
  	FDSTACK_t * fps = &fd->fps[i];
-@@ -3094,9 +2855,6 @@
+@@ -3102,9 +2867,6 @@
  {
      int i, rc = -1;
  

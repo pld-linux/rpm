@@ -1,17 +1,17 @@
---- ./macros.in~	2005-10-30 16:24:30.000000000 +0200
-+++ ./macros.in	2005-10-30 16:24:32.000000000 +0200
-@@ -223,7 +223,7 @@
+--- rpm-4.4.3/macros.in.orig	2005-11-19 01:18:44.483914640 +0100
++++ rpm-4.4.3/macros.in	2005-11-19 01:19:50.657854672 +0100
+@@ -219,7 +219,7 @@
  %_tmppath		%{_var}/tmp
  
  #	Path to top of build area.
--%_topdir		%{_usrsrc}/redhat
-+%_topdir         %(echo $HOME)/rpm
+-%_topdir		%{_usrsrc}/rpm
++%_topdir		%(echo $HOME)/rpm
  
  #	The path to the unzip executable (legacy, use %{__unzip} instead).
  %_unzipbin		%{__unzip}
-@@ -1276,5 +1276,18 @@
- #
- %find_lang	@RPMCONFIGDIR@/find-lang.sh %{buildroot}
+@@ -1373,5 +1373,18 @@
+ #%__executable_provides	@RPMCONFIGDIR@/executabledeps.sh --provides
+ #%__executable_requires	@RPMCONFIGDIR@/executabledeps.sh --requires
  
 +# PLD rpm macros
 +%_enable_debug_packages 1

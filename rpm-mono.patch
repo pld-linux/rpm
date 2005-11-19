@@ -1,9 +1,8 @@
-diff -ruN rpm-4.4.2./build/rpmfc.c rpm-4.4.2/build/rpmfc.c
---- rpm-4.4.2./build/rpmfc.c	2005-08-11 13:11:54.000000000 +0200
-+++ rpm-4.4.2/build/rpmfc.c	2005-08-11 15:33:47.000000000 +0200
-@@ -534,6 +534,9 @@
-   /* XXX "python 2.3 byte-compiled" */
-   { "python ",			RPMFC_PYTHON|RPMFC_INCLUDE },
+--- rpm-4.4.3/build/rpmfc.c.orig	2005-11-19 01:11:00.884392480 +0100
++++ rpm-4.4.3/build/rpmfc.c	2005-11-19 01:13:08.489993480 +0100
+@@ -539,6 +539,9 @@
+ 
+   { "Java ",			RPMFC_JAVA|RPMFC_INCLUDE },
  
 +  /* .NET executables and libraries. file(1) cannot differ it from native win32 executables unfortunatelly */
 +  { "PE executable",		RPMFC_MONO|RPMFC_INCLUDE },
@@ -11,22 +10,15 @@ diff -ruN rpm-4.4.2./build/rpmfc.c rpm-4.4.2/build/rpmfc.c
    { "current ar archive",	RPMFC_STATIC|RPMFC_LIBRARY|RPMFC_ARCHIVE|RPMFC_INCLUDE },
  
    { "Zip archive data",		RPMFC_COMPRESSED|RPMFC_ARCHIVE|RPMFC_INCLUDE },
-@@ -827,6 +830,42 @@
+@@ -900,6 +903,35 @@
  }
  
  /**
 + * Extract .NET dependencies.
 + * @param fc		file classifier
-+ * @param findprov	1 to enable provides
-+ * @param findreq	1 to enable requires
-+ * @param noautoprov	_noautoprov regexps
-+ * @param noautoprov_c	# of _noautoprov regexps
-+ * @param noautoreq	_noautoreq regexps
-+ * @param noautoreq_c	# of _noautoreq regexps
 + * @return		0 on success
 + */
-+static int rpmfcMONO(rpmfc fc, int findprov, int findreq,
-+    regex_t *noautoprov, int noautoprov_c, regex_t *noautoreq, int noautoreq_c)
++static int rpmfcMONO(rpmfc fc)
 +	/*@globals rpmGlobalMacroContext, h_errno, fileSystem, internalState @*/
 +	/*@modifies fc, rpmGlobalMacroContext, fileSystem, internalState @*/
 +{
@@ -42,10 +34,10 @@ diff -ruN rpm-4.4.2./build/rpmfc.c rpm-4.4.2/build/rpmfc.c
 +
 +    (void) fclose(fp);
 +
-+    if (findprov)
-+	xx = rpmfcHelper(fc, 'P', "mono", noautoprov, noautoprov_c);
-+    if (findreq)
-+	xx = rpmfcHelper(fc, 'R', "mono", noautoreq, noautoreq_c);
++    if (fc->findprov)
++	xx = rpmfcHelper(fc, 'P', "mono", fc->noautoprov, fc->noautoprov_c);
++    if (fc->findreq)
++	xx = rpmfcHelper(fc, 'R', "mono", fc->noautoreq, fc->noautoreq_c);
 +
 +    return 0;
 +}
@@ -53,11 +45,11 @@ diff -ruN rpm-4.4.2./build/rpmfc.c rpm-4.4.2/build/rpmfc.c
 +/**
   * Extract Elf dependencies.
   * @param fc		file classifier
-  * @param findprov	1 to enable provides
-@@ -1179,6 +1218,7 @@
-     { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL) },
-     { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PYTHON) },
-     { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PHP) },
+  * @return		0 on success
+@@ -931,6 +963,7 @@
+ static struct rpmfcApplyTbl_s rpmfcApplyTable[] = {
+     { rpmfcELF,		RPMFC_ELF },
+     { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL|RPMFC_PYTHON|RPMFC_LIBTOOL|RPMFC_PKGCONFIG|RPMFC_BOURNE|RPMFC_JAVA|RPMFC_PHP) },
 +    { rpmfcMONO,	RPMFC_MONO },
      { NULL, 0 }
  };
