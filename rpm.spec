@@ -16,7 +16,7 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
 # versions of required libraries
-%define	reqdb_ver	4.3.27-1
+%define	reqdb_ver	4.3.29
 %define	reqpopt_ver	1.10.3
 %define	beecrypt_ver	2:4.1.2-4
 Summary:	RPM Package Manager
