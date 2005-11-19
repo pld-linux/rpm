@@ -9,6 +9,19 @@
  
  #	The path to the unzip executable (legacy, use %{__unzip} instead).
  %_unzipbin		%{__unzip}
+@@ -932,10 +932,10 @@
+   export RPM_BUILD_ROOT}\
+   %{?_javaclasspath:CLASSPATH=\"%{_javaclasspath}\"\
+   export CLASSPATH}\
+-  unset PERL_MM_OPT\
++  unset PERL_MM_OPT || :\
+   LANG=C\
+   export LANG\
+-  unset DISPLAY\
++  unset DISPLAY || :\
+   \
+   %{verbose:set -x}%{!verbose:exec > /dev/null}\
+   umask 022\
 @@ -1373,5 +1373,18 @@
  #%__executable_provides	@RPMCONFIGDIR@/executabledeps.sh --provides
  #%__executable_requires	@RPMCONFIGDIR@/executabledeps.sh --requires
