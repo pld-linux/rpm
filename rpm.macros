@@ -703,6 +703,56 @@ if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
 fi \
 %{nil}
 
+# Add package's webserver config to webserver webapps dir.
+#
+# Usage:
+#   %webapp_register HTTPD WEBAPP
+#
+# The config is installed/removed inside trigger, this means that you can any
+# time install apache1/apache/lighttpd package and the configuration file is
+# updated.  if you don't need the config for various reason for specific
+# webserver, just remove the symlink from config directory using webapp
+# program. the trigger will not recreate the symlink on upgrades. In other
+# words the config is linked to webserver config directory on first install of
+# PACKAGE or WEBSERVER.
+#
+# should be called in trigger body:
+#  %triggerin -- apache1 >= 1.3.33-2
+#  %apache_config_install -v 1
+#
+%webapp_register() \
+%{?debug:set -x; echo "webapp_register: %{name}-%{version}-%{release} 1:[$1]; 2:[$2]"} \
+if [ "$1" = "1" ] && [ "$2" = "1" ]; then\
+	/usr/sbin/webapp register %1 %2\
+fi\
+# reload webserver if the config symlink is there\
+if [ -L /etc/%1/webapps.d/%2.conf ]; then\
+	# additionally don't reload if target package (the webserver) is upgraded, as webserver is restarted anyway in %post \
+	if [ "$2" != "2" ] && [ -f /var/lock/subsys/%1 ]; then\
+		/etc/rc.d/init.d/%1 reload 1>&2\
+	fi\
+fi\
+%{nil}
+
+# Remove package's config from webserver webapps dir.
+#
+# Usage:
+#   %webapp_register HTTPD WEBAPP
+%webapp_unregister() \
+%{?debug:set -x; echo "webapp_unregister: %{name}-%{version}-%{release}: 1:[$1]; 2:[$2]"} \
+# remove link if either of the packages are gone \
+if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
+	if [ -L /etc/%1/webapps.d/%2.conf ]; then \
+		rm -f /etc/%1/webapps.d/%2.conf \
+		if [ -f /var/lock/subsys/%1 ]; then \
+			/etc/rc.d/init.d/%1 reload 1>&2 \
+		fi \
+	fi \
+fi \
+%{nil}
+
+
+
 # see browser-plugins.spec / template-browser-plugin.spec
 # written by glen@pld-linux.org.
 %nsplugin_install(d:f) { \
