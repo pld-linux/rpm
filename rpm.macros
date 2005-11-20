@@ -722,12 +722,9 @@ fi \
 if [ "$1" = "1" ] && [ "$2" = "1" ]; then\
 	/usr/sbin/webapp register %1 %2\
 fi\
-# reload webserver if the config symlink is there\
-if [ -L /etc/%1/webapps.d/%2.conf ]; then\
-	# additionally don't reload if target package (the webserver) is upgraded, as webserver is restarted anyway in %post \
-	if [ "$2" != "2" ] && [ -f /var/lock/subsys/%1 ]; then\
-		/etc/rc.d/init.d/%1 reload 1>&2\
-	fi\
+# reload webserver if the config symlink is there and skip reload if webserver is upgraded\
+if [ -L /etc/%1/webapps.d/%2.conf ] && [ "$2" -lt "2" ] && [ -f /var/lock/subsys/%1 ]; then\
+	/etc/rc.d/init.d/%1 reload 1>&2\
 fi\
 %{nil}
 
@@ -737,17 +734,13 @@ fi\
 %webapp_unregister() \
 %{?debug:set -x; echo "webapp_unregister: %{name}-%{version}-%{release}: 1:[$1]; 2:[$2]"} \
 # remove link if either of the packages are gone \
-if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
-	if [ -L /etc/%1/webapps.d/%2.conf ]; then \
-		rm -f /etc/%1/webapps.d/%2.conf \
-		if [ -f /var/lock/subsys/%1 ]; then \
-			/etc/rc.d/init.d/%1 reload 1>&2 \
-		fi \
+if [ "$1" = "0" ] || [ "$2" = "0" ] && [ -L /etc/%1/webapps.d/%2.conf ]; then \
+	rm -f /etc/%1/webapps.d/%2.conf \
+	if [ -f /var/lock/subsys/%1 ]; then \
+		/etc/rc.d/init.d/%1 reload 1>&2 \
 	fi \
 fi \
 %{nil}
-
-
 
 # see browser-plugins.spec / template-browser-plugin.spec
 # written by glen@pld-linux.org.
