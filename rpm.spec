@@ -29,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.3
-Release:	0.2
+Release:	0.3
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -761,6 +761,7 @@ install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/b
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
+	staticLDFLAGS=%{?with_static:-all-static} \
 	pylibdir=%{py_libdir} \
 	pkgbindir="%{_bindir}"
 
