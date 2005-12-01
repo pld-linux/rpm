@@ -782,4 +782,4 @@ if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
 #
 #  -q be silent when service isn't started (for postun scriplets)
 #
-%service(q) {{%(export quiet=%{-q:1}; sh /usr/lib/rpm/service_generator.sh %{*}); }}
+%service(q) {{%(export quiet=%{-q:1}; /usr/lib/rpm/service_generator.sh %{*}) };}
