@@ -4,7 +4,7 @@
 %x8664		x86_64 amd64 ia32e
 
 # kernel compiler
-%kgcc		gcc
+%kgcc		%{__cc}
 %kgcc_package	gcc
 
 %_source_payload	w9.gzdio
