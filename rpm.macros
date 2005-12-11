@@ -716,7 +716,7 @@ fi \
 #
 # Add package's webserver config to webserver webapps dir.
 # Usage:
-#   %webapp_register HTTPD WEBAPP
+#   %webapp_register WEBSERVER WEBAPP
 #
 %webapp_register() \
 %{?debug:set -x; echo "webapp_register: %{name}-%{version}-%{release} 1:[$1]; 2:[$2]"} \
@@ -731,12 +731,12 @@ fi\
 
 # Remove package's config from webserver webapps dir.
 # Usage:
-#   %webapp_register HTTPD WEBAPP
+#   %webapp_register WEBSERVER WEBAPP
 %webapp_unregister() \
 %{?debug:set -x; echo "webapp_unregister: %{name}-%{version}-%{release}: 1:[$1]; 2:[$2]"} \
 # remove link if either of the packages are gone \
 if [ "$1" = "0" ] || [ "$2" = "0" ] && [ -L /etc/%1/webapps.d/%2.conf ]; then \
-	rm -f /etc/%1/webapps.d/%2.conf \
+	/usr/sbin/webapp unregister %1 %2\
 	if [ -f /var/lock/subsys/%1 ]; then \
 		/etc/rc.d/init.d/%1 reload 1>&2 \
 	fi \
