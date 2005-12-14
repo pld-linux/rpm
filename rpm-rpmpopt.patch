@@ -1,14 +1,5 @@
---- rpm-4.4.3/rpmpopt.in.orig	2005-10-30 02:15:44.000000000 +0200
-+++ rpm-4.4.3/rpmpopt.in	2005-11-18 22:43:57.809703712 +0100
-@@ -134,7 +134,7 @@
- 	--POPTdesc=$"Failed transactions will be rolled back automatically"
- 
- # colon separated i18n domains to use as PO catalogue lookaside for
--* retrieving header group/description/summary.
-+# retrieving header group/description/summary.
- #
- # For vendors, value should be "vendor-dist".
- rpm alias --i18ndomains --define '_i18ndomains !#:+'
+--- rpm-4.4.4/rpmpopt.in.orig	2005-10-30 02:15:44.000000000 +0200
++++ rpm-4.4.4/rpmpopt.in	2005-11-18 22:43:57.809703712 +0100
 @@ -246,6 +246,15 @@
  rpmb	alias --without		--define "_without_!#:+    --without-!#:+" \
  	--POPTdesc=$"disable configure <option> for build" \

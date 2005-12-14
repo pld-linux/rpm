@@ -9,34 +9,34 @@
  
  dnl Checks for programs.
  AC_PROG_CXX
---- rpm-4.4.3/po/de.po.orig	2005-11-17 13:24:18.000000000 +0100
-+++ rpm-4.4.3/po/de.po	2005-11-18 23:06:16.517189240 +0100
-@@ -1610,7 +1610,7 @@
- #: lib/fsm.c:1354
+--- rpm-4.4.4/po/de.po.orig	2005-12-13 13:22:59.000000000 +0100
++++ rpm-4.4.4/po/de.po	2005-12-15 00:04:09.888163608 +0100
+@@ -1606,7 +1606,7 @@
+ #: lib/fsm.c:1391
  #, c-format
  msgid "%s directory created with perms %04o, context %s.\n"
 -msgstr "Verzeichnis %s mit Berechtigungen %04o erstellt, Kontext.\n"
 +msgstr "Verzeichnis %s mit Berechtigungen %04o erstellt, Kontext %s.\n"
  
- #: lib/fsm.c:1657
+ #: lib/fsm.c:1697
  #, c-format
-@@ -2101,12 +2101,12 @@
- #: lib/poptI.c:340
+@@ -2106,12 +2106,12 @@
+ #: lib/poptI.c:341
  #, c-format
  msgid "do not execute %%preun scriptlet (if any)"
 -msgstr "%preun-Skriptlet nicht ausführen (wenn vorhanden)"
 +msgstr "%%preun-Skriptlet nicht ausführen (wenn vorhanden)"
  
- #: lib/poptI.c:343
+ #: lib/poptI.c:344
  #, c-format
  msgid "do not execute %%postun scriptlet (if any)"
 -msgstr "%postun-Skriptlet nicht ausführen (wenn vorhanden)"
 +msgstr "%%postun-Skriptlet nicht ausführen (wenn vorhanden)"
  
- #: lib/poptI.c:353
+ #: lib/poptI.c:354
  msgid "do not execute any scriptlet(s) triggered by this package"
-@@ -2798,8 +2798,7 @@
- #: lib/rpmds.c:1424
+@@ -2797,8 +2797,7 @@
+ #: lib/rpmds.c:1427
  #, c-format
  msgid "%s:%d \"%s\" must begin with alphanumeric, '_', '/' or '%%'.\n"
 -msgstr ""
@@ -44,8 +44,8 @@
 +msgstr "%s:%d \"%s\" muss alphanumerisch, mit '_', '/' oder '%%' beginnen.\n"
  
  #. XXX No comparison operator found.
- #: lib/rpmds.c:1458
-@@ -2823,7 +2822,9 @@
+ #: lib/rpmds.c:1461
+@@ -2822,7 +2821,9 @@
  msgid ""
  "\tline %d: \"%s\" must begin with alphanumeric, '_', '/' or '%%'. "
  "Skipping ...\n"
@@ -55,8 +55,8 @@
 +"Überspringe...\n"
  
  #. XXX No comparison operator found.
- #: lib/rpmds.c:3021
-@@ -3482,7 +3482,7 @@
+ #: lib/rpmds.c:3027
+@@ -3416,7 +3417,7 @@
  #: lib/signature.c:614
  #, c-format
  msgid "gpg exec failed (%d)\n"
@@ -65,7 +65,7 @@
  
  #. GPG failed to write signature
  #. Just in case
-@@ -3843,12 +3843,12 @@
+@@ -3750,12 +3751,12 @@
  #: rpmdb/db3.c:189
  #, c-format
  msgid "closed   db environment %s/%s\n"
@@ -80,14 +80,14 @@
  
  #: rpmdb/db3.c:298
  #, c-format
-@@ -4067,7 +4067,7 @@
- #: rpmdb/rpmdb.c:2714
+@@ -3974,7 +3975,7 @@
+ #: rpmdb/rpmdb.c:2716
  #, c-format
  msgid "error(%d) setting header #%d record for %s removal\n"
 -msgstr "Fehler(%d) beim Markieren des Header-Eintrags #%d zur Entfernung\n"
 +msgstr "Fehler(%d) beim Markieren des Header-Eintrags #%d zur Entfernung %s\n"
  
- #: rpmdb/rpmdb.c:2822
+ #: rpmdb/rpmdb.c:2824
  #, c-format
 --- rpm-4.4.3/po/id.po.orig	2005-11-19 08:59:12.402832000 +0100
 +++ rpm-4.4.3/po/id.po	2005-11-19 09:14:05.194107648 +0100
