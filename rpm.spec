@@ -16,8 +16,8 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
 # versions of required libraries
-%define	reqdb_ver	4.3.29
-%define	reqpopt_ver	1.10.3
+%define	reqdb_ver	4.4.16
+%define	reqpopt_ver	1.10.4
 %define	beecrypt_ver	2:4.1.2-4
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
@@ -28,12 +28,12 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
-Version:	4.4.3
-Release:	1
+Version:	4.4.4
+Release:	0.1
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
-# Source0-md5:	12ffef41c0f0ff565d2f6a89ad6c0598
+# Source0-md5:	d6cba56ec786915c3bf340c310a0bc44
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -92,7 +92,7 @@ Patch34:	%{name}-epoch0.patch
 Patch35:	%{name}-perl_req-INC_dirs.patch
 Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
-Patch38:	%{name}-elf64-sonamedep.patch
+
 Patch39:	%{name}-pythondeps.patch
 Patch40:	%{name}-print-requires.patch
 Patch41:	%{name}-reduce-stack-usage.patch
@@ -667,7 +667,6 @@ install %{SOURCE12} scripts/perl.prov
 %patch35 -p0
 %patch36 -p1
 %patch37 -p1
-%patch38 -p1
 %patch39 -p1
 %patch40 -p1
 %patch41 -p1
