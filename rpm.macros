@@ -195,7 +195,7 @@ unset LINGUAS ||:\
 
 %requires_eq_to() %(LC_ALL="C" rpm -q --qf 'Requires: %1 = %%{epoch}:%%{version}\\n' %2 | sed -e 's/ (none):/ /' | grep -v "is not")
 
-%apache_modules_api %(awk '/#define MODULE_MAGIC_NUMBER_MAJOR/ {print $3}' /usr/include/apache/ap_mmn.h 2>/dev/null || echo ERROR)
+%apache_modules_api(v:) %(awk '/#define MODULE_MAGIC_NUMBER_MAJOR/ {print $3}' /usr/include/apache%{-v*}/ap_mmn.h 2>/dev/null || echo ERROR)
 
 # kernel version-release handling
 %__kernel_ver	%([ -f %{_kernelsrcdir}/include/linux/version.h ] && (grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | head -n 1 | cut -d'"' -f2) || (awk '/^VERSION/ { ver = $0; gsub(/VERSION.*=/, NIL, ver); } /^PATCHLEVEL/ { plev = $0; gsub(/PATCHLEVEL.*=/, NIL, plev); } /^SUBLEVEL/ { slev = $0; gsub(/SUBLEVEL.*=/, NIL, slev); } /^EXTRAVERSION/ { ever = $0; gsub(/EXTRAVERSION.*=/, NIL, ever); gsub(/ /, NIL, ever); } END { printf("%d.%d.%d%s", ver, plev, slev, ever); }' %{_kernelsrcdir}/Makefile 2> /dev/null))
