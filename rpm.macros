@@ -661,6 +661,7 @@ fi;
 #  -v REQUIRED: specify apache version. can be 1 or 2.
 #  -c OPTIONAL: specify full path to PACKAGE's config. Defaults to %{_sysconfdir}/apache-%{name}.conf.
 #  -n OPTIONAL: specify config "slot". defaults to 99
+#  -f OPTIONAL: force symlink creation regardless if package was upraded. useful in triggers
 #
 # Internal macros. don't use ;).
 # expands apache config dir by apache version at build time.
@@ -668,10 +669,10 @@ fi;
 # expands apache service name by apache version at build time.
 %__apache_svcname() %(if [ %{1} = 1 ]; then echo apache; elif [ %{1} = 2 ]; then echo httpd; else echo >&2 Unknown apache version specified; fi)
 
-%apache_config_install(v:c:n:) \
+%apache_config_install(fv:c:n:) \
 %{!-v:%{error:apache_config_install: Required argument -v missing}} \
 %{?debug:set -x; echo "apache_config_install:%{-v*} %{name}-%{version}-%{release} 1:[$1]; 2:[$2]"} \
-if [ "$1" = "1" ] && [ "$2" = "1" ] && [ -d %{__apache_confdir %{-v*}} ]; then\
+if [ -n "%{-f:1}" ] || ([ "$1" = "1" ] && [ "$2" = "1" ]) && [ -d %{__apache_confdir %{-v*}} ]; then\
 	ln -sf %{-c*}%{!-c:%{_sysconfdir}/apache-%{name}.conf} %{__apache_confdir %{-v*}}/%{-n*}%{!-n:99}_%{name}.conf\
 fi\
 # reload apache if the config symlink is there\
