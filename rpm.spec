@@ -29,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.4
-Release:	0.2
+Release:	0.3
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -96,7 +96,7 @@ Patch38:	%{name}-empty-rpmlock-path.patch
 Patch39:	%{name}-pythondeps.patch
 Patch40:	%{name}-print-requires.patch
 Patch41:	%{name}-reduce-stack-usage.patch
-
+Patch42:	%{name}-old-fileconflicts-behaviour.patch
 Patch43:	%{name}-patch-quote.patch
 Patch44:	%{name}-no-neon.patch
 Patch45:	%{name}-no-sqlite.patch
@@ -671,10 +671,12 @@ install %{SOURCE12} scripts/perl.prov
 %patch39 -p1
 %patch40 -p1
 %patch41 -p1
+%patch42 -p1
 %patch43 -p1
 %{!?with_neon:%patch44 -p1}
 %patch45 -p1
 %patch46 -p1
+
 %patch48 -p1
 %patch49 -p1
 %patch50 -p1
