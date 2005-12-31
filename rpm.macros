@@ -430,8 +430,8 @@ fi \
 %ruby_sitearchdir	%(ruby -r rbconfig -e 'print Config::CONFIG["sitearchdir"]')
 %ruby_sitelibdir	%(ruby -r rbconfig -e 'print Config::CONFIG["sitelibdir"]')
 %ruby_version		%(ruby -r rbconfig -e 'print Config::CONFIG["ruby_version"]')
-%ruby_ver_requires_eq	Requires:	ruby(ver) = %(ruby -r rbconfig -e 'print Config::CONFIG["ruby_version"]')
-%ruby_mod_ver_requires_eq	Requires:	ruby-modules(ver) = %(ruby -r rbconfig -e 'print Config::CONFIG["ruby_version"]')
+%ruby_ver_requires_eq	Requires:	ruby(ver) = %ruby_version
+%ruby_mod_ver_requires_eq	Requires:	ruby-modules(ver) = %ruby_version
 
 %php_pear_dir	%{_datadir}/pear
 
