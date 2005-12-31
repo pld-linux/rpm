@@ -424,12 +424,12 @@ fi \
 %perl_sitearch		%(eval "`%{__perl} -V:installsitearch`"; echo $installsitearch)
 
 # Ruby
-%ruby_archdir		%(ruby -r rbconfig -e 'print Config::CONFIG["archdir"]')
-%ruby_ridir		%(ruby -r rbconfig -e 'include Config; print File.join(CONFIG["datadir"], "ri", CONFIG["ruby_version"], "system")')
-%ruby_rubylibdir	%(ruby -r rbconfig -e 'print Config::CONFIG["rubylibdir"]')
-%ruby_sitearchdir	%(ruby -r rbconfig -e 'print Config::CONFIG["sitearchdir"]')
-%ruby_sitelibdir	%(ruby -r rbconfig -e 'print Config::CONFIG["sitelibdir"]')
-%ruby_version		%(ruby -r rbconfig -e 'print Config::CONFIG["ruby_version"]')
+%ruby_archdir		%(ruby -r rbconfig -e 'print Config::CONFIG["archdir"]' 2>/dev/null || echo ERROR)
+%ruby_ridir		%(ruby -r rbconfig -e 'include Config; print File.join(CONFIG["datadir"], "ri", CONFIG["ruby_version"], "system")' 2>/dev/null || echo ERROR)
+%ruby_rubylibdir	%(ruby -r rbconfig -e 'print Config::CONFIG["rubylibdir"]' 2>/dev/null || echo ERROR)
+%ruby_sitearchdir	%(ruby -r rbconfig -e 'print Config::CONFIG["sitearchdir"]' 2>/dev/null || echo ERROR)
+%ruby_sitelibdir	%(ruby -r rbconfig -e 'print Config::CONFIG["sitelibdir"]' 2>/dev/null || echo ERROR)
+%ruby_version		%(ruby -r rbconfig -e 'print Config::CONFIG["ruby_version"]' 2>/dev/null || echo ERROR)
 %ruby_ver_requires_eq	Requires:	ruby(ver) = %ruby_version
 %ruby_mod_ver_requires_eq	Requires:	ruby-modules(ver) = %ruby_version
 
