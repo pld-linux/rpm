@@ -106,6 +106,7 @@ Patch48:	%{name}-requireseq.patch
 Patch49:	%{name}-p4.patch
 Patch50:	%{name}-macros.patch
 Patch51:	%{name}-cleanlibdirs.patch
+Patch52:	%{name}-dep_whiteout.patch
 URL:		http://wraptastic.org/
 Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
@@ -683,6 +684,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch49 -p1
 %patch50 -p1
 %patch51 -p1
+%patch52 -p1
 %patch0 -p1
 %patch3 -p1
 
