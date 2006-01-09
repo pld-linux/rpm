@@ -107,7 +107,6 @@ Patch49:	%{name}-p4.patch
 Patch50:	%{name}-macros.patch
 Patch51:	%{name}-cleanlibdirs.patch
 URL:		http://wraptastic.org/
-Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
