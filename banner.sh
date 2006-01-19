@@ -94,10 +94,7 @@ Unknown parameter $1
 EOF
 	Help
 }
-check_banner_name()
-{
-	echo "$1"|sed 's,.*/,,'
-}
+
 check_banners_mtime()
 {
 	BANNERS="$1"
@@ -145,7 +142,7 @@ make_banner()
 {
 	BANNER="$1"
 	SHOW="$2"
-	mkdir -p $(echo $BANNER|sed 's,/[^/]*$,,')
+	mkdir -p "${BANNER%/*}"
 	data=$(cat)
 	if [ $NEW_APPEND -eq 0 ]; then
 		echo "$data" > $BANNER
@@ -188,8 +185,8 @@ while [ ! -z $1 ]; do
 			;;
 		-m|--make|-M)
 			NEED_BANNER_LIST=0
-			if [ "$(check_banner_name $2)" == "$2" ]; then
-				NEW_BANNER=$BANNERDIR/$(check_banner_name "$2")
+			if [[ $2 != */* ]]; then
+				NEW_BANNER="$BANNERDIR/${2##*/}"
 			else
 				NEW_BANNER="$2"
 			fi
@@ -248,9 +245,9 @@ while [ ! -z $1 ]; do
 			;;
 		*)
 			if [ $EXCLUDE_FLAG -eq 0 ];then
-				BANNERS="$BANNERS $(check_banner_name $1)"
+				BANNERS="$BANNERS ${1##*/}"
 			else
-				NOBANNERS="$NOBANNERS $(check_banner_name $1)"
+				NOBANNERS="$NOBANNERS ${1##*/}"
 			fi
 			;;
 	esac
