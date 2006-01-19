@@ -64,24 +64,24 @@ Help()
 --all       - all banners
 --delete    - delete wanted banners
 -e
---exclude   - exclude following banners (usefull with -a)
+--exclude   - exclude following banners (useful with -a)
 -h
---help      - shows this help
+--help      - show this help
 -i
---include   - cancels effect of -e (EXCLUDED banners will remain excluded)
+--include   - cancel effect of -e (EXCLUDED banners will remain excluded)
 -m
---make      - makes a brand-new banner named as following para [1] (from stdin)
+--make      - make a brand-new banner named as following parameter [1] (from stdin)
 -M          - same as above, but append if file exists
 -n
---names     - shows names of the banners
---newer     - all choosen banners should be newer than following para in seconds
---older     - all choosen banners should be older than following para in seconds
+--names     - show names of the banners
+--newer     - all choosen banners should be newer than following parameter in seconds
+--older     - all choosen banners should be older than following parameter in seconds
 -s
---show      - shows wanted banners
+--show      - show wanted banners
 --stderr    - send banner to stderr instead of stdout (or other)
 --stdout    - send banner to stdout instead of stderr (or other)
 -u
---usage     - shows short help
+--usage     - show short help
 
 [1] - if there will be no slash ('/') in name then config dir will be used,
       else -- specified.
