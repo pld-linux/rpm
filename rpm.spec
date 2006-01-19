@@ -931,7 +931,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc RPM-PGP-KEY CHANGES manual
+%doc RPM-PGP-KEY CHANGES manual/*
 
 %attr(755,root,root) /bin/rpm
 #%attr(755,root,root) %{_bindir}/rpmdb
