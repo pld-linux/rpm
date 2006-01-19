@@ -146,13 +146,14 @@ make_banner()
 	BANNER="$1"
 	SHOW="$2"
 	mkdir -p $(echo $BANNER|sed 's,/[^/]*$,,')
+	data=$(cat)
 	if [ $NEW_APPEND -eq 0 ]; then
-		cat > $BANNER
+		echo "$data" > $BANNER
 	else
-		cat >> $BANNER
+		echo "$data" >> $BANNER
 	fi
 	if [ $SHOW -eq 1 ];then
-		cat $BANNER
+		echo "$data"
 	fi
 }
 show_banner()
