@@ -224,7 +224,6 @@ RPM - це потужний менеджер пакет╕в, що може бути використаний для
 Summary:	RPM base package - scripts used by rpm packages themselves
 Summary(pl):	Podstawowy pakiet RPM - skrypty u©ywane przez same pakiety rpm
 Group:		Base
-Requires:	sed
 Obsoletes:	vserver-rpm
 
 %description base
