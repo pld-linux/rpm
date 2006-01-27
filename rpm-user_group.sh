@@ -34,7 +34,7 @@ bannercmd()
 
 testrm()
 {
-	[ "$RPM_USERDEL" != yes ] && return 1
+	[ "$RPM_USERDEL" != yes ] || [ ! -x /bin/rpm ] && return 1
 	[ -z "$1" ] && return 2
 	rpm -q --whatprovides "${MODE}($1)" >/dev/null 2>&1
 	# no package Provides it (strange)
