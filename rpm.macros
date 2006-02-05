@@ -75,7 +75,7 @@ fi; \
 	--sharedstatedir=%{_sharedstatedir} \
 	--mandir=%{_mandir} \
 	--infodir=%{_infodir} \
-	--x-libraries=%{_libdir} \
+	--x-libraries=%{?_x_libraries}%{!?_x_libraries:%{_libdir}} \
 	%{dependencytracking} \
 }
 
@@ -106,7 +106,7 @@ fi; \
 	--sharedstatedir=%{_sharedstatedir} \
 	--mandir=%{_mandir} \
 	--infodir=%{_infodir} \
-	--x-libraries=%{_libdir} \
+	--x-libraries=%{?_x_libraries}%{!?_x_libraries:%{_libdir}} \
 	%{dependencytracking} \
 	%{?configure_cache:--cache-file=%{configure_cache_file:-%{buildroot}.configure.cache}} \
 }
