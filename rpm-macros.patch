@@ -67,3 +67,13 @@
  # arch macro for all Intel i?86 compatibile processors
  #  (Note: This macro (and it's analogues) will probably be obsoleted when
  #   rpm can use regular expressions against target platforms in macro
+--- rpm-4.4.2/macros.in~	2006-02-05 18:16:32.000000000 +0200
++++ rpm-4.4.2/macros.in	2006-02-05 18:19:54.000000000 +0200
+@@ -1019,6 +1019,7 @@
+ %_oldincludedir		/usr/include
+ %_infodir		%{_prefix}/info
+ %_mandir		%{_prefix}/man
++%_x_libraries	/usr/X11R6/%{_lib}
+ 
+ #==============================================================================
+ # ---- config.guess platform macros.
