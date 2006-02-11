@@ -106,6 +106,7 @@ Patch48:	%{name}-requireseq.patch
 Patch49:	%{name}-p4.patch
 Patch50:	%{name}-macros.patch
 Patch51:	%{name}-cleanlibdirs.patch
+Patch52:	%{name}-morearchs.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -161,6 +162,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # don't require very fresh rpm.macros to build
 %define		__gettextize gettextize --copy --force --intl ; cp -f po/Makevars{.template,}
 %define		ix86	i386 i486 i586 i686 athlon pentium3 pentium4
+%define		ppc	ppc ppc7400 ppc7450
 %define		x8664	amd64 ia32e x86_64
 
 # stabilize new build environment
@@ -679,6 +681,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch49 -p1
 %patch50 -p1
 %patch51 -p1
+%patch52 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
@@ -721,8 +724,14 @@ cd ..
 
 # config.guess doesn't handle athlon, so we have to change it by hand.
 # rpm checks for CPU type at runtime, but it looks better
+%ifarch %{ppc}
+TARG=$( echo %{_target_cpu} | sed 's/ppc//' )
+sed -e "s|@host@|ppc-%{_target_vendor}-linux-gnu|" \
+	-e "s|@host_cpu@|%{_target_cpu}|" macros.in > macros.tmp
+%else
 sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' \
 	-e 's|@host_cpu@|%{_target_cpu}|' macros.in > macros.tmp
+%endif
 mv -f macros.tmp macros.in
 
 CPPFLAGS="-Dglob=rpm_glob -Dglobfree=rpm_globfree"; export CPPFLAGS
@@ -1069,7 +1078,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %ifarch mips mipsel mips64 mips64el
 %{_rpmlibdir}/mips*
 %endif
-%ifarch ppc
+%ifarch %{ppc}
 %{_rpmlibdir}/ppc*
 %endif
 %ifarch sparc sparc64
