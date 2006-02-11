@@ -34,7 +34,7 @@ diff -ur rpm-4.4.4/lib/rpmrc.c rpm-4.4.4.morearchs/lib/rpmrc.c
 +		    // 0x8000: 7450, 0x8001: 7455, 0x8002: 7457, 0x8003: 7447A
 +		    strcpy(un.machine, "ppc7450");
 +		else if ( pvr == 0x800C || pvr == 12 )
-+		    strcpy(un.machine, "ppc7400\n");
++		    strcpy(un.machine, "ppc7400");
 +		else if ( pvr >= 0x40)
  		    strcpy(un.machine, "ppcpseries");
  		else if ( (pvr == 0x36) || (pvr == 0x37) )
