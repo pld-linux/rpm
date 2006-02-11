@@ -29,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.4
-Release:	0.3
+Release:	0.4
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -727,7 +727,7 @@ cd ..
 %ifarch %{ppc}
 TARG=$( echo %{_target_cpu} | sed 's/ppc//' )
 sed -e "s|@host@|ppc-%{_target_vendor}-linux-gnu|" \
-	-e "s|@host_cpu@|%{_target_cpu}|" macros.in > macros.tmp
+	-e "s|@host_cpu@|ppc|" macros.in > macros.tmp
 %else
 sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' \
 	-e 's|@host_cpu@|%{_target_cpu}|' macros.in > macros.tmp
@@ -774,6 +774,11 @@ install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/b
 	staticLDFLAGS=%{?with_static:-all-static} \
 	pylibdir=%{py_libdir} \
 	pkgbindir="%{_bindir}"
+
+%ifarch %{ppc}
+sed -e '/_target_platform/s/[%]{_target_cpu}/ppc/' \
+	-i $RPM_BUILD_ROOT%{_rpmlibdir}/ppc74[05]0-linux/macros
+%endif
 
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/vpkg-provides*
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{prov,req}.pl
