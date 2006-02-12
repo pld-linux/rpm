@@ -29,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.4
-Release:	0.4
+Release:	0.5
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -724,14 +724,8 @@ cd ..
 
 # config.guess doesn't handle athlon, so we have to change it by hand.
 # rpm checks for CPU type at runtime, but it looks better
-%ifarch %{ppc}
-TARG=$( echo %{_target_cpu} | sed 's/ppc//' )
-sed -e "s|@host@|ppc-%{_target_vendor}-linux-gnu|" \
-	-e "s|@host_cpu@|ppc|" macros.in > macros.tmp
-%else
 sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' \
 	-e 's|@host_cpu@|%{_target_cpu}|' macros.in > macros.tmp
-%endif
 mv -f macros.tmp macros.in
 
 CPPFLAGS="-Dglob=rpm_glob -Dglobfree=rpm_globfree"; export CPPFLAGS
