@@ -326,6 +326,12 @@ fi; } \
 	fi; \
 } }
 
+# Remove common Perl files we don't package
+%__spec_install_post_perl_clean {\
+%{!?no_install_post_perl_clean: \
+%{?pdir:rm -f $RPM_BUILD_ROOT{%{perl_archlib}/perllocal.pod,%{perl_vendorarch}/auto/%{pdir}%{?pnam:/%(echo %{pnam} | tr - /)}/.packlist}} \
+} }
+
 #-----------------------------------------------------------------
 # Update GConf2 schemas
 #
