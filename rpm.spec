@@ -29,7 +29,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.4
-Release:	0.6
+Release:	1
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -107,6 +107,7 @@ Patch49:	%{name}-p4.patch
 Patch50:	%{name}-macros.patch
 Patch51:	%{name}-cleanlibdirs.patch
 Patch52:	%{name}-morearchs.patch
+Patch53:	%{name}-symlinks.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -682,6 +683,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch50 -p1
 %patch51 -p1
 %patch52 -p1
+%patch53 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
