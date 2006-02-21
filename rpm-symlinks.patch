@@ -1,0 +1,32 @@
+From: Jeff Johnson <n3npq@mac.com>
+Subject: Re: rpm-4.4.4 fails to install symlinks marked with unsupported %lang.
+Date: Tue, 21 Feb 2006 13:35:22 -0500
+To: pluto@pld-linux.org
+
+While refactoring symlink processing out of lib/fsm.c in order to
+handle tar (and other non-cpio) headers, the payload positioning
+broke with (in this case) a locale colored symlink that was supposed
+to not be installed.
+
+--- rpm/lib/fsm.c       20 Feb 2006 23:48:00 -0000      2.112.2.18
++++ rpm/lib/fsm.c       21 Feb 2006 18:31:11 -0000
+@@ -1778,8 +1778,11 @@
+ 	break;
+     case FSM_PROCESS:
+ 	if (fsm->postpone) {
+-	    if (fsm->goal == FSM_PKGINSTALL)
+-		rc = fsmNext(fsm, FSM_EAT);
++	    if (fsm->goal == FSM_PKGINSTALL) {
++		/* XXX Skip over file body, archive headers already done. */
++		if (S_ISREG(st->st_mode))
++		    rc = fsmNext(fsm, FSM_EAT);
++	    }
+ 	    break;
+ 	}
+ 
+
+Fix will be in rpm-4.4.5.
+
+Thanks for the report.
+
+73 de Jeff
