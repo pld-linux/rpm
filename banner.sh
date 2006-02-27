@@ -142,7 +142,9 @@ make_banner()
 {
 	BANNER="$1"
 	SHOW="$2"
-	mkdir -p "${BANNER%/*}"
+	if [ ! -d "${BANNER%/*}" ]; then
+		mkdir -p "${BANNER%/*}"
+	fi
 	data=$(cat)
 	if [ $NEW_APPEND -eq 0 ]; then
 		echo "$data" > $BANNER
