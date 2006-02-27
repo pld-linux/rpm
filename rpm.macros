@@ -735,7 +735,7 @@ if [ "$1" = "1" ] && [ "$2" = "1" ]; then\
 fi\
 # reload webserver if the config symlink is there and skip reload if webserver is upgraded\
 if [ -L /etc/%1/webapps.d/%2.conf ] && [ "$2" -lt "2" ]; then\
-	%{expand:%service %%1 reload}\
+	%{expand:%service -q %%1 reload}\
 fi\
 %{nil}
 
@@ -747,7 +747,7 @@ fi\
 # remove link if either of the packages are gone \
 if [ -n "%{-f:1}" ] || [ "$1" = "0" ] || [ "$2" = "0" ] && [ -L /etc/%1/webapps.d/%2.conf ]; then \
 	/usr/sbin/webapp unregister %1 %2\
-	%{expand:%service %%1 reload}\
+	%{expand:%service -q %%1 reload}\
 fi \
 %{nil}
 
