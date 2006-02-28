@@ -16,8 +16,8 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
 # versions of required libraries
-%define	reqdb_ver	4.4.16
-%define	reqpopt_ver	1.10.4
+%define	reqdb_ver	4.4.20
+%define	reqpopt_ver	1.10.5
 %define	beecrypt_ver	2:4.1.2-4
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
@@ -28,12 +28,12 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
-Version:	4.4.4
-Release:	1
+Version:	4.4.5
+Release:	0.1
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
-# Source0-md5:	d6cba56ec786915c3bf340c310a0bc44
+# Source0-md5:	d5f434789c0c56d05d77be6f4262a561
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -107,7 +107,6 @@ Patch49:	%{name}-p4.patch
 Patch50:	%{name}-macros.patch
 Patch51:	%{name}-cleanlibdirs.patch
 Patch52:	%{name}-morearchs.patch
-Patch53:	%{name}-symlinks.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -125,13 +124,12 @@ BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
 %if %{with neon}
 BuildRequires:	libxml2-devel
-BuildRequires:	neon-devel >= 0.24.7-3
+BuildRequires:	neon-devel >= 0.25.5
 %endif
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
 %{?with_python:BuildRequires:	python-devel >= 1:2.3}
 BuildRequires:	python-modules >= 1:2.3
-BuildRequires:	readline-devel
 BuildRequires:	rpm-perlprov
 %{?with_python:BuildRequires:	rpm-pythonprov}
 BuildRequires:	zlib-devel
@@ -683,7 +681,6 @@ install %{SOURCE12} scripts/perl.prov
 %patch50 -p1
 %patch51 -p1
 %patch52 -p1
-%patch53 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
