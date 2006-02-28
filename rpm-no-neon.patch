@@ -29,8 +29,8 @@
  AC_SUBST(WITH_NEON_SUBDIR)
  AC_SUBST(WITH_NEON_INCLUDE)
  AC_SUBST(WITH_NEON_LIB)
---- rpm-4.4.3/rpmio/rpmdav.c.orig	2005-11-16 01:09:03.000000000 +0100
-+++ rpm-4.4.3/rpmio/rpmdav.c	2005-11-19 00:57:53.058160272 +0100
+--- rpm-4.4.5/rpmio/rpmdav.c.orig	2006-02-22 00:58:54.000000000 +0100
++++ rpm-4.4.5/rpmio/rpmdav.c	2006-02-28 22:00:44.929948750 +0100
 @@ -9,24 +9,6 @@
  #include <pthread.h>
  #endif
@@ -1070,7 +1070,7 @@
 -    rc = ne_read_response_block(fd->req, buf, count);
 -
 -if (_dav_debug < 0) {
--fprintf(stderr, "*** davRead(%p,%p,0x%x) rc 0x%x\n", cookie, buf, count, (unsigned)rc);
+-fprintf(stderr, "*** davRead(%p,%p,0x%x) rc 0x%x\n", cookie, buf, (unsigned)count, (unsigned)rc);
 -#ifdef	DYING
 -hexdump(buf, rc);
 -#endif
@@ -1108,7 +1108,7 @@
 -    rc = (xx == 0 ? count : -1);
 -
 -if (_dav_debug < 0)
--fprintf(stderr, "*** davWrite(%p,%p,0x%x) rc 0x%x\n", cookie, buf, count, rc);
+-fprintf(stderr, "*** davWrite(%p,%p,0x%x) rc 0x%x\n", cookie, buf, (unsigned)count, (unsigned)rc);
 -#ifdef	DYING
 -if (count > 0)
 -hexdump(buf, count);

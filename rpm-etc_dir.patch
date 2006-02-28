@@ -59,16 +59,16 @@ diff -Nru rpm-4.1/lib/rpmrc.c rpm-4.1.new/lib/rpmrc.c
  	/* Read another rcfile */
  	fd = Fopen(fn, "r.fpio");
  	if (fd == NULL || Ferror(fd)) {
---- rpm-4.4.3/po/pl.po.orig	2005-11-18 22:46:19.577151784 +0100
-+++ rpm-4.4.3/po/pl.po	2005-11-18 22:48:30.947180504 +0100
-@@ -3176,6 +3176,10 @@
+--- rpm-4.4.5/po/pl.po.orig	2006-02-28 20:32:10.457815000 +0100
++++ rpm-4.4.5/po/pl.po	2006-02-28 21:31:38.132780750 +0100
+@@ -3188,6 +3188,10 @@
  msgid "bad option '%s' at %s:%d\n"
  msgstr "b³êdna opcja '%s' w %s:%d\n"
  
-+#: lib/rpmrc.c:1796
++#: lib/rpmrc.c:1809
 +msgid "Cannot read %s, HOME_ETC is too large.\n"
 +msgstr "Nie mo¿na odczytaæ %s, HOME_ETC jest zbyt du¿e.\n"
 +
- #: lib/rpmrc.c:1797
+ #: lib/rpmrc.c:1810
  #, c-format
  msgid "Cannot expand %s\n"
