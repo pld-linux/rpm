@@ -2,7 +2,7 @@
 # TODO:
 # - python(abi) cap is not provided automatically (because /usr/bin/python matches
 #   ELF first; it should be provided by python-libs not binary anyway)
-# 
+#
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
 %bcond_without	apidocs		# don't generate documentation with doxygen
@@ -19,6 +19,7 @@
 %define	reqdb_ver	4.4.20
 %define	reqpopt_ver	1.10.5
 %define	beecrypt_ver	2:4.1.2-4
+%define	sover	4.4
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -27,7 +28,6 @@ Summary(pt_BR):	Gerenciador de pacotes RPM
 Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
-%define	sover	4.4
 Version:	4.4.5
 Release:	0.1
 License:	GPL
@@ -138,17 +138,17 @@ BuildRequires:	zlib-devel
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
 BuildRequires:	bzip2-static >= 1.0.2-17
 BuildRequires:	db-static >= %{reqdb_ver}
-BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	elfutils-static
+BuildRequires:	glibc-static >= 2.2.94
 %{?with_system_libmagic:BuildRequires:	libmagic-static}
 %{?with_selinux:BuildRequires:	libselinux-static >= 1.18}
 BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
 %endif
-Requires:	beecrypt >= %{beecrypt_ver}
-Requires:	popt >= %{reqpopt_ver}
 Requires:	%{name}-base = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
+Requires:	beecrypt >= %{beecrypt_ver}
+Requires:	popt >= %{reqpopt_ver}
 %{!?with_static:Obsoletes:	rpm-utils-static}
 Conflicts:	glibc < 2.2.92
 # avoid SEGV caused by mixed db versions
@@ -274,8 +274,8 @@ Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
 Requires:	db-devel >= %{reqdb_ver}
 Requires:	elfutils-devel
-%{?with_selinux:Requires:	libselinux-devel}
 %{?with_system_libmagic:Requires:	libmagic-devel}
+%{?with_selinux:Requires:	libselinux-devel}
 Requires:	popt-devel >= %{reqpopt_ver}
 Requires:	zlib-devel
 
@@ -604,7 +604,7 @@ Python para manipular pacotes e bancos de dados RPM.
 %package apidocs
 Summary:	RPM API documentation and guides
 Summary(pl):	Documentacja API RPM-a i przewodniki
-Group:		Documentation	
+Group:		Documentation
 
 %description apidocs
 Documentation for RPM API and guides in HTML format generated
