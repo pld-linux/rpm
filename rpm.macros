@@ -188,10 +188,10 @@ unset LINGUAS ||:\
 # Requires name = version-release
 %requires_releq()		%(echo '%*' | LC_ALL="C" xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}-%%{release}\\n' | sed -e 's/ (none):/ /' | grep -v "is not")
 
-%releq_kernel_up()		%(LC_ALL="C" rpm -qf --qf '%%{name}-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
-%releq_kernel_smp()  		%(LC_ALL="C" rpm -qf --qf '%%{name}-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
-%requires_releq_kernel_up()  	%(LC_ALL="C" rpm -qf --qf 'PreReq: %%{name}-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
-%requires_releq_kernel_smp()  	%(LC_ALL="C" rpm -qf --qf 'PreReq: %%{name}-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
+%releq_kernel_up()  		%(LC_ALL="C" rpm -qf --qf '%%{name}-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h 2>/dev/null || echo ERROR | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
+%releq_kernel_smp()  		%(LC_ALL="C" rpm -qf --qf '%%{name}-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h 2>/dev/null || echo ERROR | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
+%requires_releq_kernel_up(s:)  	Requires%{-s:(%{-s*})}: %releq_kernel_up
+%requires_releq_kernel_smp(s:) 	Requires%{-s:(%{-s*})}: %releq_kernel_smp
 
 %requires_eq()		%(echo '%*' | LC_ALL="C" xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
 %requires_eq_to() %(LC_ALL="C" rpm -q --qf 'Requires: %1 = %%{epoch}:%%{version}\\n' %2 | sed -e 's/ (none):/ /' | grep -v "is not")
@@ -651,6 +651,8 @@ fi;
 # apache_config_{install/uninstall} macros written by glen@pld-linux.org.
 # All rights reserved. Permission to copy is hereby granted.. yada, yada, yada
 #
+# You should use webapp macros instead. these are here until single piece of them is gone from specs ;)
+#
 # The config is installed/removed inside trigger, this means that you can any
 # time install apache1 or apache package and the configuration file is updated.
 # if you don't need the config for various reason for specific apache, just
@@ -789,6 +791,6 @@ if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
 # Usage:
 #   %service [-q] SERVICE ACTION ["SERVICE NICE DESCRIPTION"]
 #
-#  -q be silent when service isn't started (for postun scriplets)
+#  -q be silent when service isn't started (for scriplets restaring other package's services)
 #
 %service(q) {{%(export quiet=%{-q:1}; /usr/lib/rpm/service_generator.sh %{*}) };}
