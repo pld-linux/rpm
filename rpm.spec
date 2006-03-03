@@ -29,7 +29,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.5
-Release:	0.1
+Release:	0.2
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -680,7 +680,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch49 -p1
 %patch50 -p1
 %patch51 -p1
-%patch52 -p1
+#%patch52 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
@@ -769,8 +769,8 @@ install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/b
 	pkgbindir="%{_bindir}"
 
 %ifarch %{ppc}
-sed -e '/_target_platform/s/[%]{_target_cpu}/ppc/' \
-	-i $RPM_BUILD_ROOT%{_rpmlibdir}/ppc74[05]0-linux/macros
+#sed -e '/_target_platform/s/[%]{_target_cpu}/ppc/' \
+#	-i $RPM_BUILD_ROOT%{_rpmlibdir}/ppc74[05]0-linux/macros
 %endif
 
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/vpkg-provides*
