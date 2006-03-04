@@ -1,5 +1,5 @@
 --- rpm-4.4.5/po/pl.po.orig	2006-02-22 01:30:32.000000000 +0100
-+++ rpm-4.4.5/po/pl.po	2006-02-28 20:30:16.154671500 +0100
++++ rpm-4.4.5/po/pl.po	2006-03-04 16:21:10.931303500 +0100
 @@ -4,15 +4,15 @@
  # get your own copy of PePeSza from http://www.ids.pl/~pkollegu/pepesza.html
  # Wojciech Drapiñski <wojciech.drapinski@zie.pg.gda.pl>, 1999.
@@ -19,6 +19,15 @@
  "Last-Translator: Jakub Bogusz <qboosh@pld-linux.org>\n"
  "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
  "MIME-Version: 1.0\n"
+@@ -2897,7 +2897,7 @@
+ 
+ #: lib/rpminstall.c:213
+ msgid "Repackaging..."
+-msgstr "Ponowne pakowywanie..."
++msgstr "Ponowne pakowanie..."
+ 
+ #: lib/rpminstall.c:215
+ msgid "Repackaging erased files..."
 @@ -3003,14 +3003,13 @@
  msgstr "Instalacja %s\n"
  
