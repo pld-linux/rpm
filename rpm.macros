@@ -230,9 +230,8 @@ unset LINGUAS ||:\
 #
 #%no_install_post_compress_docs	1
 %__spec_install_post_compress_docs { \
-%{!?no_install_post_compress_docs: \
+%{!?no_install_post_compress_docs:__spec_install_post_compress_docs() { \
 	echo "Compress man and info pages."; \
-	%{?verbose:set -x;} \
 	for i in /usr/share/man /usr/X11R6/man /usr/share/info; do \
 		if [ -d "$RPM_BUILD_ROOT$i" ]; then \
 			find "$RPM_BUILD_ROOT$i" -name \*.bz2 -print | xargs -r %{__bzip2} -df; \
@@ -240,7 +239,7 @@ unset LINGUAS ||:\
 			find "$RPM_BUILD_ROOT$i" -type f -print | xargs -r %{__gzip} -9nf; \
 		fi; \
 	done; \
-} }
+}; __spec_install_post_compress_docs } }
 
 #-----------------------------------------------------------------
 # Strip executable binaries and shared object files
@@ -249,8 +248,7 @@ unset LINGUAS ||:\
 #
 #%no_install_post_strip	1
 %__spec_install_post_strip {%{!?debug: \
-%{!?no_install_post_strip: \
-%{?verbose:set -x;} \
+%{!?no_install_post_strip:__spec_install_post_strip() { \
 	if [ -d "$RPM_BUILD_ROOT" ]; then \
 	echo "Strip executable binaries, archives and shared object files."; \
 	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*\.debug" %{?_noautostrip:! -regex "%{_noautostrip}"}`; \
@@ -269,8 +267,7 @@ unset LINGUAS ||:\
 	if [ -n "$elfarchiveslist" ]; then \
 		%{__strip} --strip-debug --remove-section=.note  --remove-section=.comment $elfarchiveslist; \
 	fi; \
-fi; } \
-} }
+fi; }; __spec_install_post_strip } } }
 
 #-----------------------------------------------------------------
 # remove all RPATH from executable binaries and shared object files
@@ -279,8 +276,7 @@ fi; } \
 #
 #%no_install_post_chrpath	1
 %__spec_install_post_chrpath {%{!?debug: \
-%{!?no_install_post_chrpath: \
-	%{?verbose:set -x;} \
+%{!?no_install_post_chrpath: __spec_install_post_chrpath() { \
 if [ -d "$RPM_BUILD_ROOT" ]; then \
 echo "Remove RPATH from executable binaries and shared object files."; \
 find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*" %{?_noautochrpath:! -regex "%{_noautochrpath}"} | xargs -r file | \
@@ -303,8 +299,7 @@ while read file ; do \
 	if [ "$rpath" = "" ] ; then chrpath -d "$file" > /dev/null ; \
 	else chrpath -r "$rpath" "$file" > /dev/null ; fi ; \
 done; \
-fi; } \
-} }
+fi; }; __spec_install_post_chrpath } } }
 
 #-----------------------------------------------------------------
 # Find and gzip all kernel modules
@@ -313,8 +308,7 @@ fi; } \
 #
 #%no_install_post_compress_modules  1
 %__spec_install_post_compress_modules { \
-%{!?no_install_post_compress_modules: \
-	%{?verbose:set -x;} \
+%{!?no_install_post_compress_modules: __spec_install_post_compress_modules() { \
 	if [ -d "$RPM_BUILD_ROOT" ]; then \
 		echo "Compress kernel modules if any."; \
 		if test -d $RPM_BUILD_ROOT/lib/modules ; then \
@@ -324,7 +318,7 @@ fi; } \
 			   while read a b; do ln -sf $b.gz $a.gz; rm -f $a; done; \
 		fi; \
 	fi; \
-} }
+}; __spec_install_post_compress_modules } }
 
 # Remove common Perl files we don't package
 %__spec_install_post_perl_clean {\
@@ -491,14 +485,14 @@ fi \
 # Hardlink binary identical .pyc and .pyo files
 # (idea by glen <at> pld-linux <dot> org)
 %__spec_install_post_py_hardlink {\
-%{!?no_install_post_py_hardlink: \
+%{!?no_install_post_py_hardlink: __spec_install_post_py_hardlink() { \
 [ ! -d "$RPM_BUILD_ROOT" ] || find "$RPM_BUILD_ROOT" -name '*.pyc' | while read a; do \
 	b="$(echo $a|sed -e 's/.pyc$/.pyo/')"; \
 	if cmp -s "$a" "$b"; then \
 		ln -f "$a" "$b"; \
 	fi; \
 done \
-} }
+}; __spec_install_post_py_hardlink } }
 
 # remove python sources, so that check-files won't complain
 # (idea by glen <at> pld-linux <dot> org)
