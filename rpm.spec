@@ -555,8 +555,6 @@ Summary:	Additional utilities for managing rpm packages and database
 Summary(pl):	Dodatkowe narzêdzia do sprawdzania zale¿no¶ci skryptów php w rpm
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
-Requires:	php-pear-PEAR >= 1:1.4.0-0.b1.3
-Requires:	php-zlib
 Requires:	sed >= 4.0
 
 %description php-pearprov
