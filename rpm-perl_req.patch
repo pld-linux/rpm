@@ -1,0 +1,25 @@
+--- rpm-4.4.3/scripts/perl.req.orig	2005-11-18 23:00:58.604519312 +0100
++++ rpm-4.4.3/scripts/perl.req	2005-11-18 23:03:17.506403016 +0100
+@@ -57,7 +57,7 @@
+ foreach $module (sort keys %require) {
+   if (length($require{$module}) == 0) {
+      if ($module =~ /^[0-9._]+$/) {
+-       print "perl >= $module\n";
++       print "perl-base >= $module\n";
+      } else {
+          print "perl($module)\n";
+      }
+@@ -255,11 +255,11 @@
+ 
+       my $ver=$1;
+       if ($ver =~ /5.00/) {
+-        print "perl >= 0:$ver\n";
++        print "perl-base >= 0:$ver\n";
+         next;
+       }
+       else {
+-        print "perl >= 1:$ver\n";
++        print "perl-base >= 1:$ver\n";
+         next;
+       }
+ 
