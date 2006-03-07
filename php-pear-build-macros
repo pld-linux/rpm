@@ -10,10 +10,9 @@
 # Usage:
 #	%%pear_package_setup [-a #] [-n FMT]
 #
-# -a #   - unpack SOURCE# instead of SOURCE0
+# -a #   - also unpack SOURCE#. for PEAR bootstrapping
 # -n FMT - create builddir with FMT, instead of default %%{_pearname}-%%{version}
-# -z     - unpack pear package and let pear use package.xml (not tarball) for install. use this for buggy packages.
-# -f     - force pear install. use with care.
+# -z     - unpack pear package and let pear use package.xml (not tarball) for install. for PEAR bootstrapping
 #
 # unpack PEAR package to %%{_builddir}/FMT. package is extracted with already
 # destination hierarchy. you should copy the tree to buildroot after
@@ -29,7 +28,9 @@
 # package has optional dependencies. the file format is suitable of displaying
 # in %%post of a package. you should put this file to %%doc. noautocompressdoc is
 # automatically added for this file.
-#
+
+
+# records install.log and transforms PEAR names to PLD Linux rpm package names.
 %define	__pear_install_log \
 tee install.log \
 # make post message of optional packages \
@@ -42,10 +43,14 @@ fi \
 # undos sources \
 find . -type f -print0 | xargs -0 sed -i -e 's,\\r$,,' \
 
-%define	__pear sh -x /usr/bin/pear -dinclude_path=.
-%define	__pear php -dinclude_path=. -doutput_buffering=1 -dopen_basedir= -dmemory_limit=24M /tmp/p/pearcmd.php
+# command invoking pear cli
+%define	__pear /usr/bin/pear
 
-%define pear_package_setup(a:n:zfqc) \
+# the main macro.
+# using this macro will append optional-packages.txt to the nocompressdoc list
+# as it's displayed to user after package install. and adding additional gzip
+# dep is just waste ;)
+%define pear_package_setup(a:n:z) \
 %setup -q -c -T -n %{-n*}%{!-n:%{_pearname}-%{version}}\
 _D=%{_builddir}/%{-n*}%{!-n:%{_pearname}-%{version}} \
 %{-z:tar zxf %{S:0}; %{-a:tar zxf %{S:%{-a*}};} _P=package2.xml; [ -f $_P ] || _P=package.xml; _N=%{!-n:%{_pearname}-%{version}}; mv $_P $_N; cd $_N} \
@@ -69,12 +74,13 @@ cat %{-z:$_N/}.install.log | %__pear_install_log \
 # bug in PEAR --installroot. \
 # http://pear.php.net/bugs/bug.php?id=5448 \
 grep -rl "${_D}" ./{%{_bindir},%{php_pear_dir}}/* | xargs -r sed -i -e "s,${_D},," \
+%{!?_noautocompressdoc:%global _noautocompressdoc %{nil}}%{expand:%%global _noautocompressdoc %{_noautocompressdoc} optional-packages.txt} \
+%{!?_noautoprov:%global _noautoprov %{nil}}%{expand:%%global _noautoprov %{_noautoprov} 'pear(tests/.*)'} \
 %{nil}
 
-
-# copies exctracted PEAR package structure to buildroot. also copies PEAR
-# registry file.
-# please use this macro, for future expansions being possible.
+# copies exctracted PEAR package structure to buildroot.
+# also copies PEAR registry file.
+# please use this macro, for future extensions being possible.
 %define pear_package_install() \
 cp -a ./%{php_pear_dir}/{.registry,*} $RPM_BUILD_ROOT%{php_pear_dir} \
 find $RPM_BUILD_ROOT%{php_pear_dir} '(' -name '*~' -o -name '*.orig' ')' | xargs -r rm -v \
@@ -84,13 +90,3 @@ if [ -f _noautoreq ]; then \
 	echo "_noautoreq $(cat _noautoreq)" \
 fi \
 %{nil}
-
-# default excludes for PEAR packages.
-# if you need add something to the list use
-# %%{expand:%%%%define _noautocompressdoc %%{_noautocompressdoc} otherexcludes} in your specfile.
-
-# this file displayed in %post
-%define _noautocompressdoc optional-packages.txt
-
-# don't provide tests
-%define _noautoprov 'pear(tests/.*)'
