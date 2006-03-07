@@ -1,0 +1,10 @@
+--- rpm-4.4.2/Doxyfile.in~	2006-03-07 01:59:42.000000000 +0100
++++ rpm-4.4.2/Doxyfile.in	2006-03-07 02:00:00.000000000 +0100
+@@ -398,7 +398,6 @@
+                          @top_srcdir@/doc/manual/spec \
+                          @top_srcdir@/doc/manual/triggers \
+                          @top_srcdir@/doc/manual/tsort \
+-                         @top_srcdir@/file/src/ \
+                          @top_srcdir@/lib/ \
+ 			 @top_srcdir@/lua/ \
+                          @top_srcdir@/rpmdb/ \
