@@ -30,22 +30,8 @@
 # in %%post of a package. you should put this file to %%doc. noautocompressdoc is
 # automatically added for this file.
 #
-%define pear_package_setup(a:n:zf) \
-%setup -q -c -T -n %{-n*}%{!-n:%{_pearname}-%{version}}\
-D=%{_builddir}/%{-n*}%{!-n:%{_pearname}-%{version}} \
-%{-z:tar zxf %{S:%{-a*}%{!-a:0}}; P=%{_pearname}-%{version}/package.xml; [ -f $P ] || P=package.xml} \
-pear \\\
-	-d doc_dir=/docs \\\
-	-d php_dir=%{php_pear_dir} \\\
-	-d bin_dir=%{_bindir} \\\
-	-d data_dir=%{php_pear_dir}/data \\\
-	-d test_dir=%{php_pear_dir}/tests \\\
-	install \\\
-	--installroot=${D} \\\
-	--offline \\\
-	--nodeps \\\
-	%{-f:--force} \\\
-	%{!-z:%{S:%{-a*}%{!-a:0}}}%{-z:$P} | tee install.log \
+%define	__pear_install_log \
+tee install.log \
 # make post message of optional packages \
 grep 'can optionally use' install.log | sed -e 's,package "pear/,package "php-pear-,g;s,^pear/,php-pear-,' > optional-packages.txt \
 if [ -s optional-packages.txt ]; then \
@@ -53,12 +39,36 @@ if [ -s optional-packages.txt ]; then \
 else \
 	rm -f optional-packages.txt \
 fi \
-rm ./%{php_pear_dir}/.{lock,filemap} \
 # undos sources \
 find . -type f -print0 | xargs -0 sed -i -e 's,\\r$,,' \
+
+%define	__pear sh -x /usr/bin/pear -dinclude_path=.
+%define	__pear php -dinclude_path=. -doutput_buffering=1 -dopen_basedir= -dmemory_limit=24M /tmp/p/pearcmd.php
+
+%define pear_package_setup(a:n:zfqc) \
+%setup -q -c -T -n %{-n*}%{!-n:%{_pearname}-%{version}}\
+_D=%{_builddir}/%{-n*}%{!-n:%{_pearname}-%{version}} \
+%{-z:tar zxf %{S:0}; %{-a:tar zxf %{S:%{-a*}};} _P=package2.xml; [ -f $_P ] || _P=package.xml; _N=%{!-n:%{_pearname}-%{version}}; mv $_P $_N; cd $_N} \
+install -d ./%{php_pear_dir} \
+%__pear \\\
+	-c pearrc \\\
+	-d doc_dir=/docs \\\
+	-d php_dir=%{php_pear_dir} \\\
+	-d bin_dir=%{_bindir} \\\
+	-d data_dir=%{php_pear_dir}/data \\\
+	-d test_dir=%{php_pear_dir}/tests \\\
+	install \\\
+	--packagingroot=${_D} \\\
+	--offline \\\
+	--nodeps \\\
+	%{-f:--force} \\\
+	%{!-z:%{S:%{-a*}%{!-a:0}}}%{-z:$_P} > .install.log || { c=$?; cat .install.log; exit $c; } \
+%{-z:cd ..} \
+cat %{-z:$_N/}.install.log | %__pear_install_log \
+#rm ./%{php_pear_dir}/.{lock,filemap} \
 # bug in PEAR --installroot. \
 # http://pear.php.net/bugs/bug.php?id=5448 \
-grep -rl "${D}" ./{%{_bindir},%{php_pear_dir}}/* | xargs -r sed -i -e "s,${D},," \
+grep -rl "${_D}" ./{%{_bindir},%{php_pear_dir}}/* | xargs -r sed -i -e "s,${_D},," \
 %{nil}
 
 
