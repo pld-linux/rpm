@@ -29,7 +29,7 @@ Summary(ru):	íÅÎÅÄÖÅÒ ÐÁËÅÔÏ× ÏÔ RPM
 Summary(uk):	íÅÎÅÄÖÅÒ ÐÁËÅÔ¦× ×¦Ä RPM
 Name:		rpm
 Version:	4.4.5
-Release:	0.3
+Release:	0.4
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -551,8 +551,6 @@ Summary:	Additional utilities for managing rpm packages and database
 Summary(pl):	Dodatkowe narzêdzia do sprawdzania zale¿no¶ci skryptów php w rpm
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
-Requires:	php-pear-PEAR >= 1:1.4.0-0.b1.3
-Requires:	php-zlib
 Requires:	sed >= 4.0
 
 %description php-pearprov
