@@ -30,7 +30,7 @@ Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 %define	sover	4.4
 Version:	4.4.2
-Release:	29
+Release:	30
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -107,6 +107,7 @@ Patch49:	%{name}-p4.patch
 Patch50:	%{name}-macros.patch
 Patch51:	%{name}-cleanlibdirs.patch
 Patch52:	%{name}-dep_whiteout.patch
+Patch53:	%{name}-doxygen_no_file.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -685,6 +686,10 @@ install %{SOURCE12} scripts/perl.prov
 %patch52 -p1
 %patch0 -p1
 %patch3 -p1
+%if %{with system_libmagic}
+rm -rf file
+%patch53 -p1
+%endif
 
 cd scripts
 mv -f perl.req perl.req.in
@@ -706,9 +711,7 @@ for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
 done
 
 %build
-%if %{with system_libmagic}
-rm -rf file
-%else
+%if ! %{with system_libmagic}
 cd file
 %{__libtoolize}
 %{__aclocal}
@@ -1144,5 +1147,5 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
-%doc apidocs
+%doc apidocs/html/*
 %endif
