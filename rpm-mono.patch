@@ -5,7 +5,7 @@
    { "Java ",			RPMFC_JAVA|RPMFC_INCLUDE },
  
 +  /* .NET executables and libraries. file(1) cannot differ it from native win32 executables unfortunatelly */
-+  { "PE executable",		RPMFC_MONO|RPMFC_INCLUDE },
++  { "executable PE",		RPMFC_MONO|RPMFC_INCLUDE },
 +
    { "current ar archive",	RPMFC_STATIC|RPMFC_LIBRARY|RPMFC_ARCHIVE|RPMFC_INCLUDE },
  
