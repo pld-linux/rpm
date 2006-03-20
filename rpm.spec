@@ -435,7 +435,7 @@ Requires:	chrpath >= 0.10-4
 Requires:	cpio
 Requires:	diffutils
 Requires:	elfutils
-Requires:	file >= 4.14-1
+Requires:	file >= 4.17
 Requires:	fileutils
 Requires:	findutils
 Requires:	gcc >= 5:3.4
