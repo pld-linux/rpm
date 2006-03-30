@@ -70,10 +70,6 @@ install -d ./%{php_pear_dir} \
 	%{!-z:%{S:%{-a*}%{!-a:0}}}%{-z:$_P} > .install.log || { c=$?; cat .install.log; exit $c; } \
 %{-z:cd ..} \
 cat %{-z:$_N/}.install.log | %__pear_install_log \
-#rm ./%{php_pear_dir}/.{lock,filemap} \
-# bug in PEAR --installroot. \
-# http://pear.php.net/bugs/bug.php?id=5448 \
-grep -rl "${_D}" ./{%{_bindir},%{php_pear_dir}}/* | xargs -r sed -i -e "s,${_D},," \
 %{!?_noautocompressdoc:%global _noautocompressdoc %{nil}}%{expand:%%global _noautocompressdoc %{_noautocompressdoc} optional-packages.txt} \
 %{!?_noautoprov:%global _noautoprov %{nil}}%{expand:%%global _noautoprov %{_noautoprov} 'pear(tests/.*)'} \
 %{nil}
