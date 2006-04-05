@@ -2,7 +2,9 @@
 # TODO:
 # - python(abi) cap is not provided automatically (because /usr/bin/python matches
 #   ELF first; it should be provided by python-libs not binary anyway)
-# 
+# - /etc/rpm/macros.rpm{new,old,save} should not be processed
+#   open("/etc/rpm/macros.rpmnew", O_RDONLY|O_LARGEFILE) = 3
+#
 # Conditional build:
 %bcond_with	static		# build static rpmi (not supported at the moment)
 %bcond_without	apidocs		# don't generate documentation with doxygen
