@@ -618,7 +618,8 @@ else \
 		-g %{-g*} \\\
 		%{-M} \\\
 		%{-G:-G %{-G*}} \\\
-		%{expand:%{%{#}}} 1>&2 \
+		%{expand:%{%{#}}} 1>&2 || exit $? \
+	[ ! -x /usr/sbin/nscd ] || /usr/sbin/nscd -i passwd \
 fi;
 
 # Usage:
@@ -639,7 +640,8 @@ if [ -n "`/usr/bin/getgid %{1}`" ]; then \
 	fi \
 else \
 	echo "Adding group %{1} GID=%{-g*}." \
-	/usr/sbin/groupadd -g %{-g*} -r %{1} 1>&2 \
+	/usr/sbin/groupadd -g %{-g*} -r %{1} 1>&2 || exit $? \
+	[ ! -x /usr/sbin/nscd ] || /usr/sbin/nscd -i group \
 fi;
 
 # apache_config_{install/uninstall} macros written by glen@pld-linux.org.
