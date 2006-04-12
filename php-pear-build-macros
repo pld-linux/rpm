@@ -59,12 +59,13 @@ find . -type f -print0 | xargs -0 sed -i -e 's,\\r$,,' \
 # bug in PEAR --installroot. \
 # http://pear.php.net/bugs/bug.php?id=5448 \
 grep -rl "${D}" ./{%{_bindir},%{php_pear_dir}}/* | xargs -r sed -i -e "s,${D},," \
+%{!?_noautocompressdoc:%global _noautocompressdoc %{nil}}%{expand:%%global _noautocompressdoc %{_noautocompressdoc} optional-packages.txt} \
+%{!?_noautoprov:%global _noautoprov %{nil}}%{expand:%%global _noautoprov %{_noautoprov} 'pear(tests/.*)'} \
 %{nil}
 
-
-# copies exctracted PEAR package structure to buildroot. also copies PEAR
-# registry file.
-# please use this macro, for future expansions being possible.
+# copies exctracted PEAR package structure to buildroot.
+# also copies PEAR registry file.
+# please use this macro, for future extensions being possible.
 %define pear_package_install() \
 cp -a ./%{php_pear_dir}/{.registry,*} $RPM_BUILD_ROOT%{php_pear_dir} \
 find $RPM_BUILD_ROOT%{php_pear_dir} '(' -name '*~' -o -name '*.orig' ')' | xargs -r rm -v \
@@ -74,13 +75,3 @@ if [ -f _noautoreq ]; then \
 	echo "_noautoreq $(cat _noautoreq)" \
 fi \
 %{nil}
-
-# default excludes for PEAR packages.
-# if you need add something to the list use
-# %%{expand:%%%%define _noautocompressdoc %%{_noautocompressdoc} otherexcludes} in your specfile.
-
-# this file displayed in %post
-%define _noautocompressdoc optional-packages.txt
-
-# don't provide tests
-%define _noautoprov 'pear(tests/.*)'
