@@ -17,7 +17,7 @@
 
 # versions of required libraries
 %define	reqdb_ver	4.4.20
-%define	reqpopt_ver	1.10.5
+%define	reqpopt_ver	1.10.6
 %define	beecrypt_ver	2:4.1.2-4
 %define	sover	4.4
 Summary:	RPM Package Manager
@@ -28,12 +28,12 @@ Summary(pt_BR):	Gerenciador de pacotes RPM
 Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
-Version:	4.4.5
-Release:	2
+Version:	4.4.6
+Release:	0.1
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
-# Source0-md5:	d5f434789c0c56d05d77be6f4262a561
+# Source0-md5:	baa6f371446c65b4080d1cd1f194a7ae
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -108,7 +108,7 @@ Patch50:	%{name}-macros.patch
 Patch51:	%{name}-cleanlibdirs.patch
 Patch52:	%{name}-morearchs.patch
 URL:		http://wraptastic.org/
-BuildRequires:	autoconf >= 2.52
+BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.2-17
@@ -121,7 +121,7 @@ BuildRequires:	gettext-devel >= 0.11.4-2
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
-BuildRequires:	libtool
+BuildRequires:	libtool >= 1:1.4.2-9
 %if %{with neon}
 BuildRequires:	libxml2-devel
 BuildRequires:	neon-devel >= 0.25.5
