@@ -311,7 +311,7 @@
 +        }
 +        hdr=rpmdbNextIterator(it);
 +        assert(hdr!=NULL);
-+        r=rpmHeaderGetEntry(hdr,RPMTAG_NAME,NULL,(void **)&hname, NULL);
++        r=headerGetEntry(hdr,RPMTAG_NAME,NULL,(void **)&hname, NULL);
 +        assert(r<2);
 +        if (!strcmp(hname,N)) {
 +            rpmMessage(RPMMESS_DEBUG, _("%s -> %s (skipping)\n"),N,hname);

@@ -19,28 +19,6 @@ diff -urN rpm.org/configure.ac rpm/configure.ac
  	echo timestamp > stamp-h.in
    
  ]],[[]])
---- rpm-4.4.2/lib/Makefile.am.orig	2005-02-17 01:14:40.000000000 +0100
-+++ rpm-4.4.2/lib/Makefile.am	2005-07-23 13:32:57.886832096 +0200
-@@ -98,7 +98,7 @@
- 	$(LINK) @LDFLAGS_STATIC@ $(CFLAGS) $(DEFS) $(INCLUDES) -o $@ $< \
- 	-lselinux \
- 	$(top_builddir)/rpmio/librpmio.la \
--	$(top_builddir)/popt/libpopt.la
-+	-lpopt
- 	
- #tds: tds.c librpm.la
- #	$(CC) $(CFLAGS) $(DEFS) $(INCLUDES) -o $@ $< $(mylibs)
-@@ -109,8 +109,8 @@
- tthread: tthread.o librpm.la
- 	$(LINK) $(CFLAGS) $(DEFS) $(INCLUDES) -o $@ $< $(mylibs) @WITH_LIBELF_LIB@
- 
--tsystem: tsystem.o $(top_builddir)/popt/libpopt.la
--	$(LINK) $(CFLAGS) $(DEFS) $(INCLUDES) -o $@ $< $(top_builddir)/rpmio/librpmio.la $(top_builddir)/popt/libpopt.la
-+tsystem: tsystem.o
-+	$(LINK) $(CFLAGS) $(DEFS) $(INCLUDES) -o $@ $< $(top_builddir)/rpmio/librpmio.la -lpopt
- 
- tre: tre.o librpm.la
- 	$(LINK) $(CFLAGS) $(DEFS) $(INCLUDES) -o $@ $< \
 diff -urN rpm.org/Makefile.am rpm/Makefile.am
 --- rpm.org/Makefile.am	2004-06-14 11:46:04.409975928 +0200
 +++ rpm/Makefile.am	2004-06-14 11:48:04.236759488 +0200

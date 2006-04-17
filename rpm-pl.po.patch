@@ -1,105 +1,115 @@
---- rpm-4.4.5/po/pl.po.orig	2006-02-22 01:30:32.000000000 +0100
-+++ rpm-4.4.5/po/pl.po	2006-03-04 16:21:10.931303500 +0100
-@@ -4,15 +4,15 @@
- # get your own copy of PePeSza from http://www.ids.pl/~pkollegu/pepesza.html
- # Wojciech Drapiñski <wojciech.drapinski@zie.pg.gda.pl>, 1999.
- # Pawe³ Dziekoñski <pdziekonski@mml.ch.pwr.wroc.pl>, 1999
--# Jakub Bogusz <qboosh@pld-linux.org>, 2002-2005.
-+# Jakub Bogusz <qboosh@pld-linux.org>, 2002-2006.
- # Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>, 2004.
+--- rpm-4.4.6/po/pl.po.orig	2006-04-08 22:45:18.000000000 +0200
++++ rpm-4.4.6/po/pl.po	2006-04-17 17:50:01.616615500 +0200
+@@ -9,10 +9,10 @@
  #
  msgid ""
  msgstr ""
--"Project-Id-Version: rpm 4.4.4\n"
-+"Project-Id-Version: rpm 4.4.5\n"
+-"Project-Id-Version: rpm 4.4.5\n"
++"Project-Id-Version: rpm 4.4.6\n"
  "Report-Msgid-Bugs-To: \n"
- "POT-Creation-Date: 2006-02-21 19:05-0500\n"
--"PO-Revision-Date: 2005-12-14 23:47+0100\n"
-+"PO-Revision-Date: 2006-02-28 20:20+0100\n"
+ "POT-Creation-Date: 2006-04-08 15:03-0400\n"
+-"PO-Revision-Date: 2006-02-28 20:20+0100\n"
++"PO-Revision-Date: 2006-04-17 17:43+0200\n"
  "Last-Translator: Jakub Bogusz <qboosh@pld-linux.org>\n"
  "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
  "MIME-Version: 1.0\n"
-@@ -2897,7 +2897,7 @@
+@@ -939,9 +939,9 @@
+ msgstr "BuildRoot nie mo¿e byæ \"/\": %s\n"
  
- #: lib/rpminstall.c:213
- msgid "Repackaging..."
--msgstr "Ponowne pakowywanie..."
-+msgstr "Ponowne pakowanie..."
+ #: build/parsePreamble.c:606
+-#, fuzzy, c-format
++#, c-format
+ msgid "line %d: Prefixes must begin with \"/\": %s\n"
+-msgstr "linia %d: Prefiksy nie mog± siê koñczyæ na \"/\": %s\n"
++msgstr "linia %d: Prefiksy musz± zaczynaæ siê od \"/\": %s\n"
  
- #: lib/rpminstall.c:215
- msgid "Repackaging erased files..."
-@@ -3003,14 +3003,13 @@
- msgstr "Instalacja %s\n"
+ #: build/parsePreamble.c:614
+ #, c-format
+@@ -954,9 +954,9 @@
+ msgstr "linia %d: Docdir musi siê zaczynaæ od '/': %s\n"
  
- #: lib/rpminstall.c:1138
+ #: build/parsePreamble.c:640
+-#, fuzzy, c-format
++#, c-format
+ msgid "line %d: %s takes an integer value: %s\n"
+-msgstr "linia %d: Etykieta przyjmuje tylko jeden znacznik: %s\n"
++msgstr "linia %d: %s przyjmuje warto¶æ ca³kowit±: %s\n"
+ 
+ #: build/parsePreamble.c:680 build/parsePreamble.c:691
+ #, c-format
+@@ -1376,9 +1376,8 @@
+ msgstr "Brakuj±ce twarde dowi±zania"
+ 
+ #: lib/cpio.c:277
 -#, fuzzy
- msgid "Missing repackaged package(s) detected:\n"
--msgstr "Czyszczenie przepakowanych pakietów:\n"
-+msgstr "Wykryto brakuj±ce przepakowane pakiety:\n"
+ msgid "File digest mismatch"
+-msgstr "B³±d sumy MD5"
++msgstr "Niezgodno¶æ skrótu pliku"
  
- #: lib/rpminstall.c:1140
--#, fuzzy, c-format
-+#, c-format
- msgid "    %s[%d]: %s\n"
--msgstr "%s: %s\n"
-+msgstr "    %s[%d]: %s\n"
+ #: lib/cpio.c:278
+ msgid "Internal error"
+@@ -1524,9 +1523,8 @@
+ msgstr "(b³êdny typ xml)"
  
- #: lib/rpminstall.c:1363
- #, c-format
-@@ -3079,14 +3078,14 @@
- msgstr "pakiet %s (nowszy ni¿ %s) jest ju¿ zainstalowany"
+ #: lib/formats.c:578
+-#, fuzzy
+ msgid "(invalid yaml type)"
+-msgstr "(b³êdny typ xml)"
++msgstr "(b³êdny typ yaml)"
  
- #: lib/rpmps.c:243
--#, fuzzy, c-format
-+#, c-format
- msgid "installing package %s needs %lu%cB on the %s filesystem"
--msgstr "instalacja pakietu %s wymaga %ld%cB w systemie plików %s"
-+msgstr "instalacja pakietu %s wymaga %lu%cB w systemie plików %s"
+ #: lib/formats.c:687
+ msgid "(not an OpenPGP signature)"
+@@ -2059,9 +2057,8 @@
  
- #: lib/rpmps.c:253
--#, fuzzy, c-format
-+#, c-format
- msgid "installing package %s needs %lu inodes on the %s filesystem"
--msgstr "instalacja pakietu %s wymaga %ld i-wêz³ów w systemie plików %s"
-+msgstr "instalacja pakietu %s wymaga %lu i-wêz³ów w systemie plików %s"
+ #: lib/poptI.c:317 lib/poptI.c:319 lib/poptQV.c:354 lib/poptQV.c:357
+ #: lib/poptQV.c:359
+-#, fuzzy
+ msgid "don't verify file digests"
+-msgstr "nie sprawdzaj skrótów pakietu"
++msgstr "nie sprawdzaj skrótów plików"
  
- #: lib/rpmps.c:258
- #, c-format
-@@ -3109,9 +3108,9 @@
- msgstr "%s jest w konflikcie z %s%s"
+ #: lib/poptI.c:321
+ msgid "don't install file security contexts"
+@@ -2260,9 +2257,8 @@
+ msgstr "odpytaj/sprawd¼ pakiet(y) wymagaj±ce zasobu"
  
- #: lib/rpmps.c:273
--#, fuzzy, c-format
-+#, c-format
- msgid "installing package %s on %s rdonly filesystem"
--msgstr "instalacja pakietu %s wymaga %ld%cB w systemie plików %s"
-+msgstr "instalacja pakietu %s w systemie plików %s tylko do odczytu"
+ #: lib/poptQV.c:147
+-#, fuzzy
+ msgid "query/verify the package(s) which require any contained provide"
+-msgstr "odpytaj/sprawd¼ pakiet(y) wymagaj±ce zasobu"
++msgstr "odpytaj/sprawd¼ pakiet(y) wymagaj±ce dowolnej zawartej w³asno¶ci"
  
- #: lib/rpmps.c:278
- #, c-format
-@@ -3300,19 +3299,19 @@
- msgstr "    i        urz    bloków  bl.wolnych    i.wolnych punkt montowania\n"
+ #: lib/poptQV.c:151
+ msgid "query/verify the package(s) which provide a dependency"
+@@ -4508,19 +4504,16 @@
+ msgid "DIRECTORY"
+ msgstr "KATALOG"
  
- #: lib/rpmts.c:1293
--#, fuzzy, c-format
-+#, c-format
- msgid "%5d 0x%08x %8u %12ld %12ld %s %s\n"
--msgstr "%5d 0x%08x %8u %12ld %12ld %s\n"
-+msgstr "%5d 0x%08x %8u %12ld %12ld %s %s\n"
+-#~ msgid "line %d: Epoch/Serial field must be a number: %s\n"
+-#~ msgstr "linia %d: pole Epoch/Serial musi byæ liczb±: %s\n"
+-
+-#~ msgid "generate headers compatible with rpm4 packaging"
+-#~ msgstr "generuj nag³ówki kompatybilne z pakietami rpm4"
+-
+-#~ msgid ""
+-#~ "generate package header(s) compatible with (legacy) rpm[23] packaging"
+-#~ msgstr ""
+-#~ "generuj nag³ówki pakietu kompatybilne z (wymieraj±cymi) pakietami rpm[23]"
+-
+-#~ msgid "generate headers compatible with (legacy) rpm[23] packaging"
+-#~ msgstr "generuj nag³ówki kompatybilne z (wymieraj±cymi) pakietami rpm[23]"
++# --- from popt/po/pl.po (in popt.h, not in .pot) ---
++msgid "Options implemented via popt alias/exec:"
++msgstr "Opcje zaimplementowane poprzez popt alias/exec:"
++
++msgid "Help options:"
++msgstr "Opcje pomocy:"
++
++# --- from popt (displayed using rpm domain)
++msgid "Show this help message"
++msgstr "Poka¿ tê pomoc"
  
- #: lib/signature.c:139
--#, fuzzy, c-format
-+#, c-format
- msgid "Expected size: %12lu = lead(%d)+sigs(%d)+pad(%d)+data(%lu)\n"
--msgstr "Oczekiwany rozmiar: %12d = nag³(%d)+sygn(%d)+wyrówn(%d)+dane(%d)\n"
-+msgstr "Oczekiwany rozmiar: %12lu = nag³(%d)+sygn(%d)+wyrówn(%d)+dane(%lu)\n"
- 
- #: lib/signature.c:144
--#, fuzzy, c-format
-+#, c-format
- msgid "  Actual size: %12lu\n"
--msgstr "  Faktyczny rozmiar: %12d\n"
-+msgstr "  Faktyczny rozmiar: %12lu\n"
- 
- #: lib/signature.c:187
- #, c-format
+-#~ msgid "don't verify MD5 digest of files"
+-#~ msgstr "nie sprawdzaj skrótów MD5 plików"
++msgid "Display brief usage message"
++msgstr "Wy¶wietl skrócony sposób u¿ycia"
