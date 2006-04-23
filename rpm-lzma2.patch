@@ -66,7 +66,7 @@ diff -Nru rpm-4.4.5.old/rpmio/Makefile.am rpm-4.4.5/rpmio/Makefile.am
 --- rpm-4.4.5.old/rpmio/Makefile.am	2006-04-22 15:02:56.000000000 +0200
 +++ rpm-4.4.5/rpmio/Makefile.am	2006-04-23 13:31:09.000000000 +0200
 @@ -22,14 +22,14 @@
- 	argv.h fts.h rpmdav.h \
+ 	argv.h fts.h rmd128.h rmd160.h rpmdav.h \
  	rpmio.h rpmurl.h rpmmacro.h rpmlog.h rpmmessages.h rpmerr.h rpmpgp.h \
  	rpmsq.h rpmsw.h ugid.h
 -noinst_HEADERS = rpmio_internal.h rpmlua.h rpmhook.h
@@ -77,8 +77,8 @@ diff -Nru rpm-4.4.5.old/rpmio/Makefile.am rpm-4.4.5/rpmio/Makefile.am
  usrlibdir = $(libdir)@MARK64@
  usrlib_LTLIBRARIES = librpmio.la
  librpmio_la_SOURCES = \
--	argv.c digest.c fts.c macro.c rpmdav.c \
-+	LzmaDecode.c argv.c digest.c fts.c macro.c rpmdav.c \
+-	argv.c digest.c fts.c macro.c rmd128.c rmd160.c rpmdav.c \
++	LzmaDecode.c argv.c digest.c fts.c macro.c rmd128.c rmd160.c rpmdav.c \
  	rpmhook.c rpmio.c rpmlog.c rpmlua.c rpmmalloc.c \
  	rpmpgp.c rpmrpc.c rpmsq.c rpmsw.c strcasecmp.c strtolocale.c \
  	stubs.c url.c ugid.c
