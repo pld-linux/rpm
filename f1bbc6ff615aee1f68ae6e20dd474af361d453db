@@ -1,0 +1,4 @@
+- rewritten %banner macro (now is much safer)
+- req. macro rev. 1.175
+- rel .3
+- %banner works for me
