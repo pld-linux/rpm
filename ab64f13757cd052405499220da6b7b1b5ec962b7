@@ -1,0 +1,4 @@
+- changed behaviour in -n and -t in %banner
+- added banner support to user_group.sh (PLEASE CHECK!)
+- release .5
+- req. macros rev. 1.177
