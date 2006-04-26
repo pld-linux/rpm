@@ -2,8 +2,6 @@
 # TODO:
 # - python(abi) cap is not provided automatically (because /usr/bin/python matches
 #   ELF first; it should be provided by python-libs not binary anyway)
-# - /etc/rpm/macros.rpm{new,old,save} should not be processed
-#   open("/etc/rpm/macros.rpmnew", O_RDONLY|O_LARGEFILE) = 3
 #
 # Conditional build:
 %bcond_with	static		# build static rpmi (not supported at the moment)
@@ -32,7 +30,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.2
-Release:	31.44
+Release:	31.50
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -111,6 +109,8 @@ Patch51:	%{name}-cleanlibdirs.patch
 Patch52:	%{name}-dep_whiteout.patch
 Patch53:	%{name}-doxygen_no_file.patch
 Patch54:	%{name}-truncate-cvslog.patch
+Patch55:	%{name}-bug-146549.patch
+Patch56:	%{name}-skip-backups.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -691,6 +691,8 @@ rm -rf file
 %patch53 -p1
 %endif
 %patch54 -p1
+%patch55 -p1
+%patch56 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
@@ -905,7 +907,7 @@ for a in librpm-%{sover}.so librpmdb-%{sover}.so librpmio-%{sover}.so ; do
 done
 
 # remove arch dependant macros which have no use on noarch
-sed -i -e '
+%{__sed} -i -e '
 /{__spec_install_post_strip}/d
 /{__spec_install_post_chrpath}/d
 /{__spec_install_post_compress_modules}/d
