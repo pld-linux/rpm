@@ -1,0 +1,65 @@
+# vim:ts=8:sw=4
+--- rpm-4.4.2/build/parseChangelog.c	2006-04-26 22:34:05.263994598 +0300
++++ rpm-4.4.2-truncate-changelog/build/parseChangelog.c	2006-04-26 22:32:50.622329157 +0300
+@@ -8,6 +8,9 @@
+ #include "rpmbuild.h"
+ #include "debug.h"
+ 
++#define CVS_RCSID "$""Log: "
++#define CVS_REVISION "Revision "
++
+ void addChangelogEntry(Header h, time_t time, const char *name, const char *text)
+ {
+     int_32 mytime = time;	/* XXX convert to header representation */
+@@ -116,6 +119,7 @@
+     time_t time;
+     time_t lastTime = 0;
+     char *date, *name, *text, *next;
++    int numchangelog = rpmExpandNumeric("%{?_buildchangelog}");
+ 
+     s = getStringBuf(sb);
+ 
+@@ -197,6 +202,43 @@
+ 	while ((s > text) && xisspace(*s)) {
+ 	    *s-- = '\0';
+ 	}
++
++	if (numchangelog && (s = strstr(text, CVS_RCSID))) {
++	    /* find end of line */
++	    while(*s && *s != '\n') s++;
++	    if (!*s) {
++		rpmError(RPMERR_BADSPEC, _("incomplete %%changelog entry\n"));
++		return RPMERR_BADSPEC;
++	    }
++	    s++;
++	    if (!*s) {
++		rpmError(RPMERR_BADSPEC, _("incomplete %%changelog entry\n"));
++		return RPMERR_BADSPEC;
++	    }
++
++	    /* we reached place where first Revisions should be */
++	    i = 0;
++	    while (1) {
++		if (strncmp(s, CVS_REVISION, sizeof(CVS_REVISION) - 1) == 0) {
++		    if (i++ == numchangelog) {
++			break;
++		    }
++		}
++		while(*s && *s != '\n') s++;
++		if (!*s) {
++		    break;
++		}
++		s++;
++	    }
++
++	    if (*s) {
++		s--;
++		/* backup to the beginning of line */
++		while ((s > text) && (*s == '\n' || xisspace(*s))) {
++		    *s-- = '\0';
++		}
++	    }
++	}
+ 	
+ 	addChangelogEntry(h, time, name, text);
+ 	s = next;
