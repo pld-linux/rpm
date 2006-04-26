@@ -1,0 +1,2 @@
+- obsolete older rpm_macros_rev from standalone rpm-macros package if
+  we provide newer to prevent older macros doing bad things
