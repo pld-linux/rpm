@@ -1,0 +1,1 @@
+- use ifarch %{x8664} to allow using amd64/ia32e as buildarch
