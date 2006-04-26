@@ -22,6 +22,7 @@
 %define	reqdb_ver	4.2.52-10
 %define	reqpopt_ver	1.10.2
 %define	beecrypt_ver	2:4.1.2-4
+%define	sover	4.4
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -30,9 +31,8 @@ Summary(pt_BR):	Gerenciador de pacotes RPM
 Summary(ru):	íÅÎÅÄÖÅÒ ÐÁËÅÔÏ× ÏÔ RPM
 Summary(uk):	íÅÎÅÄÖÅÒ ÐÁËÅÔ¦× ×¦Ä RPM
 Name:		rpm
-%define	sover	4.4
 Version:	4.4.2
-Release:	31
+Release:	31.44
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -110,6 +110,7 @@ Patch50:	%{name}-macros.patch
 Patch51:	%{name}-cleanlibdirs.patch
 Patch52:	%{name}-dep_whiteout.patch
 Patch53:	%{name}-doxygen_no_file.patch
+Patch54:	%{name}-truncate-cvslog.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -118,7 +119,6 @@ BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	db-devel >= %{reqdb_ver}
 %{?with_apidocs:BuildRequires:	doxygen}
 BuildRequires:	elfutils-devel >= 0.108
-BuildRequires:	findutils
 BuildRequires:	gettext-devel >= 0.11.4-2
 %{?with_system_libmagic:BuildRequires:	libmagic-devel}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
@@ -142,17 +142,17 @@ BuildRequires:	zlib-devel
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
 BuildRequires:	bzip2-static >= 1.0.2-17
 BuildRequires:	db-static >= %{reqdb_ver}
-BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	elfutils-static
+BuildRequires:	glibc-static >= 2.2.94
 %{?with_system_libmagic:BuildRequires:	libmagic-static}
 %{?with_selinux:BuildRequires:	libselinux-static >= 1.18}
 BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
 %endif
-Requires:	beecrypt >= %{beecrypt_ver}
-Requires:	popt >= %{reqpopt_ver}
 Requires:	%{name}-base = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
+Requires:	beecrypt >= %{beecrypt_ver}
+Requires:	popt >= %{reqpopt_ver}
 %{!?with_static:Obsoletes:	rpm-utils-static}
 Conflicts:	glibc < 2.2.92
 # avoid SEGV caused by mixed db versions
@@ -275,8 +275,8 @@ Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
 Requires:	db-devel >= %{reqdb_ver}
 Requires:	elfutils-devel
-%{?with_selinux:Requires:	libselinux-devel}
 %{?with_system_libmagic:Requires:	libmagic-devel}
+%{?with_selinux:Requires:	libselinux-devel}
 Requires:	popt-devel >= %{reqpopt_ver}
 Requires:	zlib-devel
 
@@ -608,15 +608,15 @@ Python para manipular pacotes e bancos de dados RPM.
 %package apidocs
 Summary:	RPM API documentation and guides
 Summary(pl):	Documentacja API RPM-a i przewodniki
-Group:		Documentation	
+Group:		Documentation
 
 %description apidocs
-Documentation for RPM API and guides in HTML format generated
-from rpm sources by doxygen.
+Documentation for RPM API and guides in HTML format generated from rpm
+sources by doxygen.
 
 %description apidocs -l pl
-Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane
-ze ¼rode³ RPM-a przez doxygen.
+Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
+¼rode³ RPM-a przez doxygen.
 
 %prep
 %setup -q
@@ -690,6 +690,7 @@ install %{SOURCE12} scripts/perl.prov
 rm -rf file
 %patch53 -p1
 %endif
+%patch54 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
@@ -825,8 +826,8 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov <<EOF
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles <<EOF
 # global list of files (regexps) which don't generate Requires
-^/usr/src/examples/
-^/usr/share/doc/
+^%{_examplesdir}/
+^%{_docdir}/
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq <<EOF
 # global list of script capabilities (regexps) not to be used in Requires
