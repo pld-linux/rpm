@@ -1,0 +1,3 @@
+- rpm macros rev = 1.170
+- release 0.snap.0.2
+- added banner.sh and %banner support
