@@ -1,0 +1,4 @@
+- added lzma patches (lzma has high compression ratio even better than bzip2).
+  Use w9.lzdio as payload. Not heavily tested.
+- rpm-build requires lzma
+- release 1
