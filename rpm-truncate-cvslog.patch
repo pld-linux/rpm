@@ -15,7 +15,7 @@
      time_t time;
      time_t lastTime = 0;
      char *date, *name, *text, *next;
-+    int numchangelog = rpmExpandNumeric("%{?_buildchangelog}");
++    int numchangelog = rpmExpandNumeric("%{?_buildchangelogtruncate}");
  
      s = getStringBuf(sb);
  
