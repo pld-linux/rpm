@@ -38,6 +38,9 @@ fi; \
 %__intltoolize		intltoolize --copy --force
 %__libtoolize		libtoolize --copy --force
 
+#	The number of cvs changelog entries kept when building package.
+%_buildchangelogtruncate 20
+
 %dependencytracking	%{nil}
 
 #	Relations between package names that cause dependency loops
