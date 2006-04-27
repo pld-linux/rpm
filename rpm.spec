@@ -107,8 +107,8 @@ Patch49:	%{name}-p4.patch
 Patch50:	%{name}-macros.patch
 Patch51:	%{name}-cleanlibdirs.patch
 Patch52:	%{name}-morearchs.patch
-Patch53:    %{name}-lzma.patch
-Patch54:    %{name}-lzma2.patch
+Patch53:	%{name}-lzma.patch
+Patch54:	%{name}-lzma2.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
@@ -117,7 +117,6 @@ BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	db-devel >= %{reqdb_ver}
 %{?with_apidocs:BuildRequires:	doxygen}
 BuildRequires:	elfutils-devel >= 0.108
-BuildRequires:	findutils
 BuildRequires:	gettext-devel >= 0.11.4-2
 %{?with_system_libmagic:BuildRequires:	libmagic-devel}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
@@ -444,7 +443,7 @@ Requires:	gcc >= 5:3.4
 Requires:	glibc-devel
 Requires:	grep
 Requires:	gzip
-Requires:   lzma
+Requires:	lzma
 Requires:	make
 Requires:	patch
 Requires:	sed
@@ -608,12 +607,12 @@ Summary(pl):	Documentacja API RPM-a i przewodniki
 Group:		Documentation
 
 %description apidocs
-Documentation for RPM API and guides in HTML format generated
-from rpm sources by doxygen.
+Documentation for RPM API and guides in HTML format generated from rpm
+sources by doxygen.
 
 %description apidocs -l pl
-Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane
-ze ¼rode³ RPM-a przez doxygen.
+Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
+¼rode³ RPM-a przez doxygen.
 
 %prep
 %setup -q
@@ -828,8 +827,8 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov <<EOF
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles <<EOF
 # global list of files (regexps) which don't generate Requires
-^/usr/src/examples/
-^/usr/share/doc/
+^%{_examplesdir}/
+^%{_docdir}/
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq <<EOF
 # global list of script capabilities (regexps) not to be used in Requires
