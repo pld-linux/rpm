@@ -817,6 +817,9 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # SELinux file contexts policy instead of one stored in packages payload
 %%_install_file_context_path	%%{nil}
 %%_verify_file_context_path	%%{nil}
+
+# If non-zero, all erasures will be automagically repackaged.
+#%%_repackage_all_erasures    1
 EOF
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF
@@ -906,7 +909,7 @@ for a in librpm-%{sover}.so librpmdb-%{sover}.so librpmio-%{sover}.so ; do
 done
 
 # remove arch dependant macros which have no use on noarch
-sed -i -e '
+%{__sed} -i -e '
 /{__spec_install_post_strip}/d
 /{__spec_install_post_chrpath}/d
 /{__spec_install_post_compress_modules}/d
