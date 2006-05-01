@@ -182,8 +182,11 @@ unset LINGUAS ||:\
 # Example files, programs, scripts...
 %_examplesdir	/usr/src/examples
 
+# Alternative kernel type/version
+%alt_kernel	%{nil}%{?_alt_kernel:-%{?_alt_kernel}}
+
 # The directory holding Linux kernel sources
-%_kernelsrcdir	/usr/src/linux
+%_kernelsrcdir	/usr/src/linux%{alt_kernel}
 
 # If non-empty "debug" macro defined, add "dbg" suffix to release number
 %_rpmfilename		%%{NAME}-%%{VERSION}-%%{RELEASE}%{?debug:dbg}.%%{ARCH}.rpm
