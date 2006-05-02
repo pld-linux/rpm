@@ -1,0 +1,56 @@
+# vim:ts=8:sw=4
+--- rpm-4.4.6/build/parseChangelog.c~	2006-04-30 17:34:40.334393487 +0300
++++ rpm-4.4.6/build/parseChangelog.c	2006-05-02 19:46:06.357193264 +0300
+@@ -8,6 +8,9 @@
+ #include "rpmbuild.h"
+ #include "debug.h"
+ 
++#define CVS_RCSID "$""Log: "
++#define CVS_REVISION "Revision "
++
+ void addChangelogEntry(Header h, time_t time, const char *name, const char *text)
+ {
+     int_32 mytime = time;	/* XXX convert to header representation */
+@@ -222,6 +223,42 @@
+ 	/* backup to end of description */
+ 	while ((s > text) && xisspace(*s))
+ 	    *s-- = '\0';
++
++	if (numchangelog && (s = strstr(text, CVS_RCSID))) {
++	    /* find end of line */
++	    while(*s && *s != '\n') s++;
++	    if (!*s) {
++		goto out;
++	    }
++	    s++;
++	    if (!*s) {
++		goto out;
++	    }
++
++	    /* we reached place where first Revisions should be */
++	    i = 0;
++	    while (1) {
++		if (strncmp(s, CVS_REVISION, sizeof(CVS_REVISION) - 1) == 0) {
++		    if (i++ == numchangelog) {
++			break;
++		    }
++		}
++		while(*s && *s != '\n') s++;
++		if (!*s) {
++		    break;
++		}
++		s++;
++	    }
++
++	    if (*s) {
++		s--;
++		/* backup to the beginning of line */
++		while ((s > text) && (*s == '\n' || xisspace(*s))) {
++		    *s-- = '\0';
++		}
++	    }
++	}
++out:
+ 	
+ 	/* Add entry if not truncated. */
+ 	nentries++;
