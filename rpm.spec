@@ -29,7 +29,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.6
-Release:	1
+Release:	1.1
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -109,6 +109,8 @@ Patch51:	%{name}-cleanlibdirs.patch
 Patch52:	%{name}-morearchs.patch
 Patch53:	%{name}-lzma.patch
 Patch54:	%{name}-lzma2.patch
+Patch55:	%{name}-truncate-cvslog.patch
+Patch56:	%{name}-skip-backups.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
@@ -683,6 +685,8 @@ install %{SOURCE12} scripts/perl.prov
 #%patch52 -p1
 %patch53 -p1
 %patch54 -p1
+%patch55 -p1
+%patch56 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
