@@ -447,6 +447,7 @@ fi \
 # extract php/zend api versions
 %php_major_version		%(awk '/#define PHP_MAJOR_VERSION/{print $3}' %{__php_includedir}/main/php_version.h 2>/dev/null || echo ERROR)
 %php_api_version		%(awk '/#define PHP_API_VERSION/{print $3}' %{__php_includedir}/main/php.h 2>/dev/null || echo ERROR)
+%php_pdo_api_version	%(awk '/#define PDO_DRIVER_API/{print $3}' %{__php_includedir}/ext/pdo/php_pdo_driver.h 2>/dev/null || echo ERROR)
 %php_debug				%(awk '/#define ZEND_DEBUG/{print $3}' %{__php_includedir}/main/php_config.h 2>/dev/null || echo ERROR)
 %zend_module_api		%(awk '/#define ZEND_MODULE_API_NO/{print $3}' %{__php_includedir}/Zend/zend_modules.h 2>/dev/null || echo ERROR)
 %zend_extension_api		%(awk '/#define ZEND_EXTENSION_API_NO/{print $3}' %{__php_includedir}/Zend/zend_extensions.h 2>/dev/null || echo ERROR)
@@ -466,6 +467,9 @@ fi \
 %{__php_api_requires zend_extension_api} \
 %{__php_api_requires -v %php_major_version debug php_debug} \
 %{__php_api_requires -v %php_major_version thread-safety zend_zts}
+
+# for php pdo modules (php-pecl-PDO_*)
+%requires_php_pdo_module %{__php_api_requires PDO_API php_pdo_api_version}
 
 # Python specific macro definitions.
 # python main version
