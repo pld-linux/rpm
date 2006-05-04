@@ -11,6 +11,14 @@
  void addChangelogEntry(Header h, time_t time, const char *name, const char *text)
  {
      int_32 mytime = time;	/* XXX convert to header representation */
+@@ -123,6 +123,7 @@
+     int nentries = 0;
+     static time_t last = 0;
+     static int oneshot = 0;
++    int numchangelog = rpmExpandNumeric("%{?_buildchangelogtruncate}");
+ 
+     /* Determine changelog truncation criteria. */
+     if (!oneshot++) {
 @@ -222,6 +223,42 @@
  	/* backup to end of description */
  	while ((s > text) && xisspace(*s))
