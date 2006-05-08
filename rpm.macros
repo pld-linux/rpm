@@ -82,6 +82,14 @@ fi; \
 	%{dependencytracking} \
 }
 
+%cmake { \
+CC="%{__cc}" \
+CXX="%{__cxx}" \
+CFLAGS="%{rpmcflags}" \
+CXXFLAGS="%{rpmcxxflags}" \
+cmake \
+}
+
 #----------------------------------------------------------------
 %global configure_cache 0
 %configure_cache_file   %{buildroot}.configure.cache
