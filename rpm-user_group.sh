@@ -63,12 +63,12 @@ elif [ "$1" = del ]; then
 		fi
 	fi
 elif [ "$MODE" = "user" -a "$1" = "addtogroup" ]; then
-	USER=$2
-	GROUP=$3
-	GROUPS=`id -n -G $USER | sed -e's/^[^ ]* //;s/ /,/g'`
-	if ! echo ",$GROUPS," | grep -q ",$GROUP," ; then
-	    echo "Adding user $USER to group $GROUP" | `bannercmd "${MODE}mod-$USER"`
-	    usermod -G "$GROUPS,$GROUP" $USER
+	CUSER=$2
+	CGROUP=$3
+	CGROUPS=`id -n -G $CUSER | sed -e's/^[^ ]* //;s/ /,/g'`
+	if ! echo ",$CGROUPS," | grep -q ",$CGROUP," ; then
+	    echo "Adding user $CUSER to group $CGROUP" | `bannercmd "${MODE}mod-$CUSER"`
+	    usermod -G "$CGROUPS,$CGROUP" $CUSER
 	fi
 else
 	echo ERROR
