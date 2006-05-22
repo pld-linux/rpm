@@ -817,9 +817,10 @@ if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
 %_jvmlibdir		%{_libdir}/jvm
 %_jvmdatadir		%{_datadir}/jvm
 %_jvmsysconfdir		%{_sysconfdir}/jvm
-%_jvmcommonlibdir	%{_libdir}/jvm-commmon
-%_jvmcommondatadir	%{_datadir}/jvm-commmon
-%_jvmcommonsysconfdir	%{_sysconfdir}/jvm-commmon
+# FIXME: are these used?
+%_jvmcommonlibdir	%{_libdir}/jvm-common
+%_jvmcommondatadir	%{_datadir}/jvm-common
+%_jvmcommonsysconfdir	%{_sysconfdir}/jvm-common
 %_javadir		%{_datadir}/java
 %_jnidir		%{_libdir}/java
 %_javadocdir 		%{_datadir}/javadoc
