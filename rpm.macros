@@ -92,7 +92,7 @@ cmake \
 
 #----------------------------------------------------------------
 %global configure_cache 0
-%configure_cache_file   %{buildroot}.configure.cache
+%configure_cache_file	%{buildroot}.configure.cache
 
 %configure {./configure \
  	LDFLAGS="${LDFLAGS:-%rpmldflags}" \
@@ -173,10 +173,10 @@ unset LINGUAS ||:\
 %_fontsdir	/usr/share/fonts
 
 # Location of Gtk and associated libraries documentation
-%_gtkdocdir  %{_defaultdocdir}/gtk-doc/html
+%_gtkdocdir	%{_defaultdocdir}/gtk-doc/html
 
 # Location of KDE documentation
-%_kdedocdir  %{_defaultdocdir}/kde/HTML
+%_kdedocdir	%{_defaultdocdir}/kde/HTML
 
 # unsermake script
 %__unsermake /usr/share/unsermake/unsermake
@@ -202,9 +202,9 @@ unset LINGUAS ||:\
 # Requires name = version-release
 %requires_releq()		%(echo '%*' | LC_ALL="C" xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}-%%{release}\\n' | sed -e 's/ (none):/ /' | grep -v "is not")
 
-%releq_kernel_up()  		%((LC_ALL="C" rpm -qf --qf '%%{name}-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h 2>/dev/null || echo ERROR) | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
-%releq_kernel_smp()  		%((LC_ALL="C" rpm -qf --qf '%%{name}-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h 2>/dev/null || echo ERROR) | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
-%requires_releq_kernel_up(s:)  	Requires%{-s:(%{-s*})}: %releq_kernel_up
+%releq_kernel_up()		%((LC_ALL="C" rpm -qf --qf '%%{name}-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h 2>/dev/null || echo ERROR) | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
+%releq_kernel_smp()		%((LC_ALL="C" rpm -qf --qf '%%{name}-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h 2>/dev/null || echo ERROR) | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
+%requires_releq_kernel_up(s:)	Requires%{-s:(%{-s*})}: %releq_kernel_up
 %requires_releq_kernel_smp(s:) 	Requires%{-s:(%{-s*})}: %releq_kernel_smp
 
 %requires_eq()		%(echo '%*' | LC_ALL="C" xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
@@ -215,7 +215,7 @@ unset LINGUAS ||:\
 # kernel version-release handling
 %__kernel_ver	%([ -f %{_kernelsrcdir}/include/linux/version.h ] && (grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | head -n 1 | cut -d'"' -f2) || (awk '/^VERSION/ { ver = $0; gsub(/VERSION.*=/, NIL, ver); } /^PATCHLEVEL/ { plev = $0; gsub(/PATCHLEVEL.*=/, NIL, plev); } /^SUBLEVEL/ { slev = $0; gsub(/SUBLEVEL.*=/, NIL, slev); } /^EXTRAVERSION/ { ever = $0; gsub(/EXTRAVERSION.*=/, NIL, ever); gsub(/ /, NIL, ever); } END { printf("%d.%d.%d%s", ver, plev, slev, ever); }' %{_kernelsrcdir}/Makefile 2> /dev/null))
 %__kernel_rel	%(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{RELEASE}" | grep -v "is not")
-%__kernel_rpmvr  %(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{VERSION}-%{RELEASE}" | grep -v "is not")
+%__kernel_rpmvr	%(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{VERSION}-%{RELEASE}" | grep -v "is not")
 %_kernel_ver	%{__kernel_ver}%{?with_dist_kernel:%(echo %{__kernel_ver} | grep -q -e - || echo -%{__kernel_rel})}
 %_kernel_ver_str %(echo %{!?_without_dist_kernel:%{__kernel_rpmvr}}%{?_without_dist_kernel:%{__kernel_ver}} | sed -e 's/-/_/g')
 
@@ -273,13 +273,13 @@ unset LINGUAS ||:\
 	elfarchiveslist=`echo $filelist | xargs -r file | \
 		awk '/current ar archive/ {print $1}' | cut -d: -f1`; \
 	if [ -n "$elfexelist" ]; then \
-		%{__strip} --remove-section=.note  --remove-section=.comment $elfexelist; \
+		%{__strip} --remove-section=.note --remove-section=.comment $elfexelist; \
 	fi; \
 	if [ -n "$elfsharedlist" ]; then \
-		%{__strip} --strip-unneeded --remove-section=.note  --remove-section=.comment $elfsharedlist; \
+		%{__strip} --strip-unneeded --remove-section=.note --remove-section=.comment $elfsharedlist; \
 	fi; \
 	if [ -n "$elfarchiveslist" ]; then \
-		%{__strip} --strip-debug --remove-section=.note  --remove-section=.comment $elfarchiveslist; \
+		%{__strip} --strip-debug --remove-section=.note --remove-section=.comment $elfarchiveslist; \
 	fi; \
 fi; }; __spec_install_post_strip } } }
 
@@ -320,7 +320,7 @@ fi; }; __spec_install_post_chrpath } } }
 #
 # Requires: find
 #
-#%no_install_post_compress_modules  1
+#%no_install_post_compress_modules	1
 %__spec_install_post_compress_modules { \
 %{!?no_install_post_compress_modules: __spec_install_post_compress_modules() { \
 	if [ -d "$RPM_BUILD_ROOT" ]; then \
@@ -328,8 +328,8 @@ fi; }; __spec_install_post_chrpath } } }
 		if test -d $RPM_BUILD_ROOT/lib/modules ; then \
 			find $RPM_BUILD_ROOT/lib/modules -name \*o -type f -print | \
 			xargs -r %{__gzip} -9nf; \
-			   find $RPM_BUILD_ROOT/lib/modules -name \*o -type l -printf "%p %l\n" | \
-			   while read a b; do ln -sf $b.gz $a.gz; rm -f $a; done; \
+			find $RPM_BUILD_ROOT/lib/modules -name \*o -type l -printf "%p %l\n" | \
+			while read a b; do ln -sf $b.gz $a.gz; rm -f $a; done; \
 		fi; \
 	fi; \
 }; __spec_install_post_compress_modules } }
@@ -734,7 +734,7 @@ fi \
 #
 # The config is installed/removed inside trigger, this means that you can any
 # time install apache1/apache/lighttpd package and the configuration file is
-# updated.  if you don't need the config for various reason for specific
+# updated. if you don't need the config for various reason for specific
 # webserver, just remove the symlink from config directory using webapp
 # program. the trigger will not recreate the symlink on upgrades. In other
 # words the config is linked to webserver config directory on first install of
@@ -811,27 +811,27 @@ if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
 
 
 # java macros. based on jpackage macros.java
-%_jvmdir	%{_prefix}/lib/jvm
-%_jvmjardir	%{_prefix}/lib/jvm-exports
-%_jvmprivdir	%{_prefix}/lib/jvm-private
-%_jvmlibdir	%{_prefix}/lib/jvm
-%_jvmdatadir	%{_datadir}/jvm
-%_jvmsysconfdir	%{_sysconfdir}/jvm
+%_jvmdir		%{_prefix}/lib/jvm
+%_jvmjardir		%{_prefix}/lib/jvm-exports
+%_jvmprivdir		%{_prefix}/lib/jvm-private
+%_jvmlibdir		%{_prefix}/lib/jvm
+%_jvmdatadir		%{_datadir}/jvm
+%_jvmsysconfdir		%{_sysconfdir}/jvm
 %_jvmcommonlibdir	%{_prefix}/lib/jvm-commmon
 %_jvmcommondatadir	%{_datadir}/jvm-commmon
 %_jvmcommonsysconfdir	%{_sysconfdir}/jvm-commmon
-%_javadir        %{_datadir}/java
-%_jnidir        %{_prefix}/lib/java
-%_javadocdir     %{_datadir}/javadoc
-%java_home      %(unset JAVA_HOME; . %{_javadir}-utils/java-functions; set_jvm; echo $JAVA_HOME)
+%_javadir		%{_datadir}/java
+%_jnidir		%{_prefix}/lib/java
+%_javadocdir 		%{_datadir}/javadoc
+%java_home		%(unset JAVA_HOME; . %{_javadir}-utils/java-functions; set_jvm; echo $JAVA_HOME)
 
-%ant            JAVA_HOME=%{java_home} ant
-%jar            %{java_home}/bin/jar
-%java           %(unset JAVACMD; . %{_javadir}-utils/java-functions; set_javacmd; echo $JAVACMD)
-%javac          %{java_home}/bin/javac
-%javadoc        %{java_home}/bin/javadoc
+%ant			JAVA_HOME=%{java_home} ant
+%jar			%{java_home}/bin/jar
+%java			%(unset JAVACMD; . %{_javadir}-utils/java-functions; set_javacmd; echo $JAVACMD)
+%javac			%{java_home}/bin/javac
+%javadoc		%{java_home}/bin/javadoc
 
-%add_jvm_extension JAVA_LIBDIR=%{buildroot}/%{_javadir}	%{_bindir}/jvmjar -l
+%add_jvm_extension	JAVA_LIBDIR=%{buildroot}/%{_javadir}	%{_bindir}/jvmjar -l
 
 %jpackage_script() \
 install -d -m 755 $RPM_BUILD_ROOT%{_bindir}\
@@ -846,12 +846,12 @@ cat > $RPM_BUILD_ROOT%{_bindir}/%5 << EOF \
 \
 # Source system prefs\
 if [ -f %{_sysconfdir}/java/%{name}.conf ] ; then\
-  . %{_sysconfdir}/java/%{name}.conf\
+    . %{_sysconfdir}/java/%{name}.conf\
 fi\
 \
 # Source user prefs\
 if [ -f \\$HOME/.%{name}rc ] ; then\
-  . \\$HOME/.%{name}rc\
+    . \\$HOME/.%{name}rc\
 fi\
 \
 # Configuration\
@@ -870,3 +870,4 @@ set_options \\$BASE_OPTIONS\
 run "\\$@"\
 EOF
 
+# vim:ts=8 sw=8 noet
