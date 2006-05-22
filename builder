@@ -22,7 +22,7 @@
 
 VERSION="\
 Build package utility from PLD Linux CVS repository
-v0.14 (C) 1999-2006 Free Penguins".
+v0.16 (C) 1999-2006 Free Penguins".
 PATH="/bin:/usr/bin:/usr/sbin:/sbin:/usr/X11R6/bin"
 
 COMMAND="build"
@@ -37,6 +37,7 @@ NOURLS=""
 NOCVS=""
 NOCVSSPEC=""
 NODIST=""
+NOINIT=""
 UPDATE=""
 UPDATE5=""
 ADD5=""
@@ -61,6 +62,7 @@ LASTLOG_FILE=""
 CHMOD="no"
 CHMOD_MODE="0444"
 RPMOPTS=""
+RPMBUILDOPTS=""
 BCOND=""
 GROUP_BCONDS="no"
 CVSIGNORE_DF="no"
@@ -83,6 +85,7 @@ DISTFILES_SERVER="://distfiles.pld-linux.org"
 ATTICDISTFILES_SERVER="://attic-distfiles.pld-linux.org"
 
 DEF_NICE_LEVEL=19
+SCHEDTOOL="auto"
 
 FAIL_IF_NO_SOURCES="yes"
 
@@ -90,9 +93,9 @@ FAIL_IF_NO_SOURCES="yes"
 SKIP_EXISTING_FILES="no"
 
 if [ -x /usr/bin/rpm-getdeps ]; then
-	 FETCH_BUILD_REQUIRES_RPMGETDEPS="yes"
+	FETCH_BUILD_REQUIRES_RPMGETDEPS="yes"
 else
-	 FETCH_BUILD_REQUIRES_RPMGETDEPS="no"
+	FETCH_BUILD_REQUIRES_RPMGETDEPS="no"
 fi
 
 # Here we load saved user environment used to
@@ -111,6 +114,7 @@ fi
 #REMOVE_BUILD_REQUIRES="force"
 #GROUP_BCONDS="yes"
 #LOGFILE='../LOGS/log.$PACKAGE_NAME.$DATE'
+#TITLECHANGE=no
 #
 SU_SUDO=""
 if [ -n "$HOME_ETC" ]; then
@@ -121,7 +125,13 @@ fi
 
 [ -f "$USER_CFG" ] && . "$USER_CFG"
 
-wget --help 2>&1 | grep -q ' \-\-no-check\-certificate ' && WGET_OPTS="$WGET_OPTS --no-check-certificate"
+if [ "$SCHEDTOOL" = "auto" ]; then
+	if [ -x /usr/bin/schedtool ] && schedtool -B -e echo >/dev/null; then
+		SCHEDTOOL="schedtool -B -e"
+	else
+		SCHEDTOOL="no"
+	fi
+fi
 
 if [ -n "$USE_PROZILLA" ]; then
 	GETURI="proz --no-getch -r -P ./ -t$WGET_RETRIES $PROZILLA_OPTS"
@@ -132,8 +142,9 @@ elif [ -n "$USE_AXEL" ]; then
 	GETURI2="$GETURI"
 	OUTFILEOPT="-o"
 else
-	wget --help 2>&1 | grep -q ' \-\-inet ' && WGET_OPTS="$WGET_OPTS --inet"
-	wget --help 2>&1 | grep -q ' \-\-retry\-connrefused ' && WGET_OPTS="$WGET_OPTS --retry-connrefused"
+	wget --help 2>&1 | grep -q -- ' --no-check-certificate ' && WGET_OPTS="$WGET_OPTS --no-check-certificate"
+	wget --help 2>&1 | grep -q -- ' --inet ' && WGET_OPTS="$WGET_OPTS --inet"
+	wget --help 2>&1 | grep -q -- ' --retry-connrefused ' && WGET_OPTS="$WGET_OPTS --retry-connrefused"
 
 	GETURI="wget --passive-ftp -c -nd -t$WGET_RETRIES $WGET_OPTS"
 	GETURI2="wget -c -nd -t$WGET_RETRIES $WGET_OPTS"
@@ -161,10 +172,10 @@ run_poldek()
 		if [ -n "$LASTLOG_FILE" ]; then
 			echo "LASTLOG=$LOG" > $LASTLOG_FILE
 		fi
-		(nice -n ${DEF_NICE_LEVEL} ${POLDEK_CMD} `while test $# -gt 0; do echo "$1 ";shift;done` ; echo $? > ${RES_FILE})|tee -a $LOG
+		(${NICE_COMMAND} ${POLDEK_CMD} `while test $# -gt 0; do echo "$1 ";shift;done` ; echo $? > ${RES_FILE})|tee -a $LOG
 		return $exit_pldk
 	else
-		(nice -n ${DEF_NICE_LEVEL} ${POLDEK_CMD} `while test $# -gt 0; do echo "$1 ";shift;done` ; echo $? > ${RES_FILE}) 1>&2 >/dev/null
+		(${NICE_COMMAND} ${POLDEK_CMD} `while test $# -gt 0; do echo "$1 ";shift;done` ; echo $? > ${RES_FILE}) 1>&2 >/dev/null
 		return `cat ${RES_FILE}`
 		rm -rf ${RES_FILE}
 	fi
@@ -231,6 +242,7 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
 -ns, --no-srcs      - don't download Sources
 -ns0, --no-source0  - don't download Source0
 -nn, --no-net       - don't download anything from the net
+--no-init           - don't initialize builder paths (SPECS and SOURCES)
 -ske,
 --skip-existing-files - skip existing files in get_files
 --opts <rpm opts>   - additional options for rpm
@@ -246,12 +258,19 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
 -FRB, --force-remove-build-requires
                     - remove all you fetched with -R or --fetch-build-requires
                       remember, this option works without confirmation,
+-sd, --source-distfiles - list sources available from distfiles (intended for offline
+                      operations; does not work when Icon field is present
+                      but icon file is absent),
+-sdp, --source-distfiles-paths - list sources available from distfiles -
+                      paths relative to distfiles directory (intended for offline
+                      operations; does not work when Icon field is present
+                      but icon file is absent),
 -sf, --source-files - list sources - bare filenames (intended for offline
                       operations; does not work when Icon field is present
-							 but icon file is absent),
+                      but icon file is absent),
 -sp, --source-paths - list sources - filenames with full local paths (intended for
                       offline operations; does not work when Icon field is present
-							 but icon file is absent),
+                      but icon file is absent),
 -su, --source-urls  - list urls - urls to sources and patches
                       intended for copying urls with spec with lots of macros in urls
 -T <cvstag> , --tag <cvstag>
@@ -289,8 +308,8 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
                       --with feat1 feat2 feat3 --without feat4 feat5 --with feat6
                       constructions. Set GROUP_BCONDS to yes to make use of it.
 --target <platform>, --target=<platform>
-		    - build for platform <platform>.
---init-rpm-dir		 - initialize ~/rpm directory structure
+                     - build for platform <platform>.
+--init-rpm-dir       - initialize ~/rpm directory structure
 "
 }
 
@@ -303,31 +322,41 @@ update_shell_title() {
 		echo >&2 "$(date +%s.%N) $*"
 	fi
 
-	msg="builder[$SPECFILE] ${SHELL_TITLE_PREFIX:+$SHELL_TITLE_PREFIX }$msg"
-	case "$TERM" in
-		cygwin|xterm*)
-		echo >&2 -ne "\033]1;$msg\007\033]2;$msg\007"
-	;;
-		screen*)
-		echo >&2 -ne "\033]0;$msg\007"
-	;;
-	esac
+	if [ "x$TITLECHANGE" == "xyes" -o "x$TITLECHANGE" == "x" ]; then
+		local pkg
+		if [ -n "$PACKAGE_NAME" ]; then
+			pkg=${PACKAGE_NAME}-${PACKAGE_VERSION}-${PACKAGE_RELEASE}
+		else
+			pkg=${SPECFILE}
+		fi
+
+		msg="$pkg: ${SHELL_TITLE_PREFIX:+$SHELL_TITLE_PREFIX }$msg"
+		msg="$(echo $msg | tr -d '\n\r')"
+		case "$TERM" in
+			cygwin|xterm*)
+			echo >&2 -ne "\033]1;$msg\007\033]2;$msg\007"
+		;;
+			screen*)
+			echo >&2 -ne "\033]0;$msg\007"
+		;;
+		esac
+	fi
 }
 
 # set TARGET from BuildArch: from SPECFILE
 set_spec_target() {
-	 if [ -n "$SPECFILE" ] && [ -z "$TARGET" ]; then
-		  tmp=$(awk '/^BuildArch:/ { print $NF}' $SPECFILE)
-		  if [ "$tmp" ]; then
+	if [ -n "$SPECFILE" ] && [ -z "$TARGET" ]; then
+		tmp=$(awk '/^BuildArch:/ { print $NF}' $SPECFILE)
+		if [ "$tmp" ]; then
 				TARGET="$tmp"
 				case "$RPMBUILD" in
 				"rpmbuild")
-					 TARGET_SWITCH="--target $TARGET" ;;
+					TARGET_SWITCH="--target $TARGET" ;;
 				"rpm")
-					 TARGET_SWITCH="--target=$TARGET" ;;
+					TARGET_SWITCH="--target=$TARGET" ;;
 				esac
-		  fi
-	 fi
+		fi
+	fi
 }
 
 cache_rpm_dump () {
@@ -344,12 +373,12 @@ cache_rpm_dump () {
 	# executed here, while none of them are actually needed.
 	# what we need from dump is NAME, VERSION, RELEASE and PATCHES/SOURCES.
 	# at the time of this writing macros.build + macros contained 70 "%(...)" macros.
-	macrofiles="/usr/lib/rpm/macros:$SPECS_DIR/.rpmmacros:~/etc/.rpmmacros:~/.rpmmacros"
+	macrofiles="/usr/lib/rpm/macros:$SPECS_DIR/.builder-rpmmacros:~/etc/.rpmmacros:~/.rpmmacros"
 	dump='%{echo:dummy: PACKAGE_NAME %{name} }%dump'
 	# FIXME: better ideas than .rpmrc?
-	printf 'include:/usr/lib/rpm/rpmrc\nmacrofiles:%s\n' $macrofiles > .rpmrc
+	printf 'include:/usr/lib/rpm/rpmrc\nmacrofiles:%s\n' $macrofiles > .builder-rpmrc
 # TODO: move these to /usr/lib/rpm/macros
-	cat > .rpmmacros <<'EOF'
+	cat > .builder-rpmmacros <<'EOF'
 %requires_releq_kernel_up %{nil}
 %requires_releq_kernel_smp %{nil}
 %requires_releq() %{nil}
@@ -376,7 +405,13 @@ EOF
 		ARGS='--nodigest --nosignature --nobuild'
 		;;
 	esac
-	$RPMBUILD --rcfile .rpmrc $ARGS --nodeps --define "prep $dump" $BCOND $TARGET_SWITCH $SPECFILE 2>&1
+	if [ "$NOINIT" = "yes" ] ; then
+		cat >> .builder-rpmmacros <<'EOF'
+%_specdir ./
+%_sourcedir ./
+EOF
+	fi
+	$RPMBUILD --rcfile .builder-rpmrc $ARGS $ARGDIRS --nodeps --define "prep $dump" $BCOND $TARGET_SWITCH $SPECFILE 2>&1
 	`
 	if [ $? -gt 0 ]; then
 		error=$(echo "$rpm_dump" | sed -ne '/^error:/,$p')
@@ -410,7 +445,7 @@ get_icons()
 		return
 	fi
 
-	rpm_dump_cache="böö" NODIST="yes" UPDATE5= get_files $ICONS
+	rpm_dump_cache="kalasaba" NODIST="yes" UPDATE5= get_files $ICONS
 }
 
 parse_spec()
@@ -491,11 +526,11 @@ Exit_error()
 			remove_build_requires
 			echo "Error: couldn't get out package name/version/release from spec file."
 			exit 6 ;;
-	   "err_tag_exists" )
+		"err_tag_exists" )
 			remove_build_requires
 			echo "Tag ${2} already exists (spec release: ${3}).";
 			exit 9 ;;
-	   "err_fract_rel" )
+		"err_fract_rel" )
 			remove_build_requires
 			echo "Release ${2} not integer and not a snapshot.";
 			exit 10 ;;
@@ -516,8 +551,13 @@ init_builder()
 		set -v;
 	fi
 
-	SOURCE_DIR="`eval $RPM $RPMOPTS --eval '%{_sourcedir}'`"
-	SPECS_DIR="`eval $RPM $RPMOPTS --eval '%{_specdir}'`"
+	if [ "$NOINIT" != "yes" ] ; then
+		SOURCE_DIR="`eval $RPM $RPMOPTS --eval '%{_sourcedir}'`"
+		SPECS_DIR="`eval $RPM $RPMOPTS --eval '%{_specdir}'`"
+	else
+		SOURCE_DIR="."
+		SPECS_DIR="."
+	fi
 
 	__PWD="`pwd`"
 }
@@ -556,24 +596,28 @@ get_spec()
 	unset OPTIONS
 	[ -n "$DONT_PRINT_REVISION" ] || grep -E -m 1 "^#.*Revision:.*Date" $SPECFILE
 
-	 set_spec_target
+	set_spec_target
 }
 
 find_mirror()
 {
 	cd "$SPECS_DIR"
-	url="$1"
+	local url="$1"
 	if [ ! -f "mirrors" -a "$NOCVSSPEC" != "yes" ] ; then
 		cvs update mirrors >&2
 	fi
 
 	IFS="|"
-	while read origin mirror name rest
-	do
+	local origin mirror name rest ol prefix
+	while read origin mirror name rest; do
+		# skip comments and empty lines
+		if [ -z "$origin" ] || [[ $origin == \#* ]]; then
+			continue
+		fi
 		ol=`echo -n "$origin"|wc -c`
 		prefix="`echo -n "$url" | head -c $ol`"
 		if [ "$prefix" = "$origin" ] ; then
-			suffix="`echo "$url"|cut -b $ol-`"
+			suffix="`echo "$url"|cut -b $((ol+1))-`"
 			echo -n "$mirror$suffix"
 			return 0
 		fi
@@ -625,14 +669,19 @@ src_md5 ()
 	fi
 }
 
+distfiles_path ()
+{
+	echo "by-md5/$(src_md5 "$1" | sed -e 's|^\(.\)\(.\)|\1/\2/&|')/$(basename "$1")"
+}
+
 distfiles_url ()
 {
-	echo "$PROTOCOL$DISTFILES_SERVER/distfiles/by-md5/$(src_md5 "$1" | sed -e 's|^\(.\)\(.\)|\1/\2/&|')/$(basename "$1")"
+	echo "$PROTOCOL$DISTFILES_SERVER/distfiles/$(distfiles_path "$1")"
 }
 
 distfiles_attic_url ()
 {
-	echo "$PROTOCOL$ATTICDISTFILES_SERVER/distfiles/Attic/by-md5/$(src_md5 "$1" | sed -e 's|^\(.\)\(.\)|\1/\2/&|')/$(basename "$1")"
+	echo "$PROTOCOL$ATTICDISTFILES_SERVER/distfiles/Attic/$(distfiles_path "$1")"
 }
 
 good_md5 ()
@@ -644,8 +693,8 @@ good_md5 ()
 
 good_size ()
 {
-	 size="$(find $(nourl "$1") -printf "%s" 2>/dev/null)"
-	 [ -n "$size" -a "$size" -gt 0 ]
+	size="$(find $(nourl "$1") -printf "%s" 2>/dev/null)"
+	[ -n "$size" -a "$size" -gt 0 ]
 }
 
 cvsignore_df ()
@@ -661,46 +710,46 @@ cvsignore_df ()
 
 cvsup()
 {
-	 update_shell_title "cvsup"
-	 local OPTIONS="up "
-	 if [ -n "$CVSROOT" ]; then
-		  OPTIONS="-d $CVSROOT $OPTIONS"
-	 fi
+	update_shell_title "cvsup"
+	local OPTIONS="up "
+	if [ -n "$CVSROOT" ]; then
+		OPTIONS="-d $CVSROOT $OPTIONS"
+	fi
 
-	 if [ -z "$CVSDATE" -a -z "$CVSTAG" ]; then
-		  OPTIONS="$OPTIONS -A"
-	 else
-		  if [ -n "$CVSDATE" ]; then
-				OPTIONS="$OPTIONS -D $CVSDATE"
-		  fi
-		  if [ -n "$CVSTAG" ]; then
-				OPTIONS="$OPTIONS -r $CVSTAG"
-		  fi
-	 fi
+	if [ -z "$CVSDATE" -a -z "$CVSTAG" ]; then
+		OPTIONS="$OPTIONS -A"
+	else
+		if [ -n "$CVSDATE" ]; then
+			OPTIONS="$OPTIONS -D $CVSDATE"
+		fi
+		if [ -n "$CVSTAG" ]; then
+			OPTIONS="$OPTIONS -r $CVSTAG"
+		fi
+	fi
 
-	 local result=1
-	 local retries_counter=0
-	 if [ $# = 1 ]; then
-		 update_shell_title "cvsup: $*"
-	 else
-		 update_shell_title "cvsup: $# files"
-	 fi
-	 while [ "$result" != "0" -a "$retries_counter" -le "$CVS_RETRIES" ]; do
-		  retries_counter=$(( $retries_counter + 1 ))
-		  output=$(LC_ALL=C cvs $OPTIONS "$@" 2>&1)
-		  result=$?
-		  [ -n "$output" ] && echo "$output"
-		  if (echo "$output" | grep -qE "(Cannot connect to|connect to .* failed|Connection reset by peer|Connection timed out|Unknown host)") && [ "$result" -ne "0" -a "$retries_counter" -le "$CVS_RETRIES" ]; then
-				echo "Trying again [$*]... ($retries_counter)"
-				update_shell_title "cvsup: retry #$retries_counter"
-				sleep 2
-				continue
-		  else
-				break
-		  fi
-	 done
-	 update_shell_title "cvsup: done!"
-	 return $result
+	local result=1
+	local retries_counter=0
+	if [ $# = 1 ]; then
+		update_shell_title "cvsup: $*"
+	else
+		update_shell_title "cvsup: $# files"
+	fi
+	while [ "$result" != "0" -a "$retries_counter" -le "$CVS_RETRIES" ]; do
+		retries_counter=$(( $retries_counter + 1 ))
+		output=$(LC_ALL=C cvs $OPTIONS "$@" 2>&1)
+		result=$?
+		[ -n "$output" ] && echo "$output"
+		if (echo "$output" | grep -qE "(Cannot connect to|connect to .* failed|Connection reset by peer|Connection timed out|Unknown host)") && [ "$result" -ne "0" -a "$retries_counter" -le "$CVS_RETRIES" ]; then
+			echo "Trying again [$*]... ($retries_counter)"
+			update_shell_title "cvsup: retry #$retries_counter"
+			sleep 2
+			continue
+		else
+			break
+		fi
+	done
+	update_shell_title "cvsup: done!"
+	return $result
 }
 
 get_files()
@@ -729,7 +778,7 @@ get_files()
 			update_shell_title "$i"
 			local fp=`nourl "$i"`
 			if [ -f "$fp" ] && [ "$SKIP_EXISTING_FILES" = "yes" ]; then
-				 continue
+				continue
 			fi
 			if [ -n "$UPDATE5" ]; then
 				if [ -n "$ADD5" ]; then
@@ -780,7 +829,7 @@ get_files()
 							update_shell_title "${GETURI%% *}: $url_attic"
 							${GETURI} ${OUTFILEOPT} "$target" "$url_attic" || \
 							if [ "`echo $url_attic | grep -E 'ftp://'`" ]; then
-								 update_shell_title "${GETURI2%% *}: $url_attic"
+								update_shell_title "${GETURI2%% *}: $url_attic"
 								${GETURI2} ${OUTFILEOPT} "$target" "$url_attic"
 							fi
 						fi
@@ -807,10 +856,10 @@ get_files()
 					else
 						im="$i"
 					fi
-				 	update_shell_title "${GETURI%% *}: $im"
+					update_shell_title "${GETURI%% *}: $im"
 					${GETURI} "$im" || \
 					if [ "`echo $im | grep -E 'ftp://'`" ]; then
-						 update_shell_title "${GETURI2%% *}: $im"
+						update_shell_title "${GETURI2%% *}: $im"
 						${GETURI2} "$im"
 					fi
 				fi
@@ -849,7 +898,7 @@ get_files()
 				update_shell_title "${GETURI%% *}: $url"
 				${GETURI} ${OUTFILEOPT} "$target" "$url" || \
 				if [ "`echo $url | grep -E 'ftp://'`" ]; then
-					 update_shell_title "${GETURI2%% *}: $url"
+					update_shell_title "${GETURI2%% *}: $url"
 					${GETURI2} ${OUTFILEOPT} "$target" "$url"
 				fi
 				if ! test -s "$target"; then
@@ -857,7 +906,7 @@ get_files()
 					update_shell_title "${GETURI%% *}: $url_attic"
 					${GETURI} ${OUTFILEOPT} "$target" "$url_attic" || \
 					if [ "`echo $url_attic | grep -E 'ftp://'`" ]; then
-						 update_shell_title "${GETURI2%% *}: $url_attic"
+						update_shell_title "${GETURI2%% *}: $url_attic"
 						${GETURI2} ${OUTFILEOPT} "$target" "$url_attic"
 					fi
 				fi
@@ -875,7 +924,7 @@ get_files()
 		SHELL_TITLE_PREFIX=""
 
 		if [ "$get_files_cvs" ]; then
-			 cvsup $get_files_cvs
+			cvsup $get_files_cvs
 		fi
 
 		if [ "$CHMOD" = "yes" ]; then
@@ -888,21 +937,20 @@ get_files()
 }
 
 make_tagver() {
+	if [ -n "$DEBUG" ]; then
+		set -x;
+		set -v;
+	fi
 
-		if [ -n "$DEBUG" ]; then
-			 set -x;
-			 set -v;
-		fi
-
-		# Check whether first character of PACKAGE_NAME is legal for tag name
-		if [ -z "${PACKAGE_NAME##[_0-9]*}" -a -z "$TAG_PREFIX" ]; then
-			TAG_PREFIX=tag_
-		fi
-		TAGVER=$TAG_PREFIX$PACKAGE_NAME-`echo $PACKAGE_VERSION | sed -e "s/\./\_/g" -e "s/@/#/g"`-`echo $PACKAGE_RELEASE | sed -e "s/\./\_/g" -e "s/@/#/g"`
-		# Remove #kernel.version_release from TAGVER because tagging sources
-		# could occur with different kernel-headers than kernel-headers used at build time.
-		TAGVER=$(echo "$TAGVER" | sed -e 's/#.*//g')
-		echo -n "$TAGVER"
+	# Check whether first character of PACKAGE_NAME is legal for tag name
+	if [ -z "${PACKAGE_NAME##[_0-9]*}" -a -z "$TAG_PREFIX" ]; then
+		TAG_PREFIX=tag_
+	fi
+	TAGVER=$TAG_PREFIX$PACKAGE_NAME-`echo $PACKAGE_VERSION | sed -e "s/\./\_/g" -e "s/@/#/g"`-`echo $PACKAGE_RELEASE | sed -e "s/\./\_/g" -e "s/@/#/g"`
+	# Remove #kernel.version_release from TAGVER because tagging sources
+	# could occur with different kernel-headers than kernel-headers used at build time.
+	TAGVER=$(echo "$TAGVER" | sed -e 's/#.*//g')
+	echo -n "$TAGVER"
 }
 
 tag_files()
@@ -1009,7 +1057,7 @@ build_package()
 	cd "$SPECS_DIR"
 
 	if [ -n "$TRY_UPGRADE" ]; then
-		  update_shell_title "build_package: try_upgrade"
+		update_shell_title "build_package: try_upgrade"
 		if [ -n "$FLOAT_VERSION" ]; then
 			TNOTIFY=`./pldnotify.awk $SPECFILE -n` || exit 1
 		else
@@ -1055,7 +1103,7 @@ build_package()
 			echo "LASTLOG=$LOG" > $LASTLOG_FILE
 		fi
 		RES_FILE=~/tmp/$RPMBUILD-exit-status.$RANDOM
-		(time eval nice -n ${DEF_NICE_LEVEL} $RPMBUILD $BUILD_SWITCH -v $QUIET $CLEAN $RPMOPTS $BCOND $TARGET_SWITCH $SPECFILE; echo $? > $RES_FILE) 2>&1 |tee $LOG
+		(time eval ${NICE_COMMAND} $RPMBUILD $BUILD_SWITCH -v $QUIET $CLEAN $RPMOPTS $RPMBUILDOPTS $BCOND $TARGET_SWITCH $SPECFILE; echo $? > $RES_FILE) 2>&1 |tee $LOG
 		RETVAL=`cat $RES_FILE`
 		rm $RES_FILE
 		if [ -n "$LOGDIROK" ] && [ -n "$LOGDIRFAIL" ]; then
@@ -1066,12 +1114,12 @@ build_package()
 			fi
 		fi
 	else
-		eval nice -n ${DEF_NICE_LEVEL} $RPMBUILD $BUILD_SWITCH -v $QUIET $CLEAN $RPMOPTS $BCOND $TARGET_SWITCH $SPECFILE
+		eval ${NICE_COMMAND} $RPMBUILD $BUILD_SWITCH -v $QUIET $CLEAN $RPMOPTS $RPMBUILDOPTS $BCOND $TARGET_SWITCH $SPECFILE
 		RETVAL=$?
 	fi
 	if [ "$RETVAL" -ne "0" ]; then
 		if [ -n "$TRY_UPGRADE" ]; then
-			echo "\n!!! Package with new version cannot be build automagically\n"
+			echo "\n!!! Package with new version cannot be built automagically\n"
 			mv -f $SPECFILE.bak $SPECFILE
 		fi
 		Exit_error err_build_fail;
@@ -1280,24 +1328,24 @@ run_sub_builder()
 
 spawn_sub_builder()
 {
-	 package_name="${1}"
-	 update_shell_title "spawn_sub_builder $package_name"
+	package_name="${1}"
+	update_shell_title "spawn_sub_builder $package_name"
 
-	 sub_builder_opts=''
-	 if [ "${FETCH_BUILD_REQUIRES}" == "yes" ]; then
-		  sub_builder_opts="${sub_builder_opts} -R"
-	 fi
-	 if [ "${REMOVE_BUILD_REQUIRES}" == "nice" ]; then
-		  sub_builder_opts="${sub_builder_opts} -RB"
-	 elif [ "${REMOVE_BUILD_REQUIRES}" == "force" ]; then
-		  sub_builder_opts="${sub_builder_opts} -FRB"
-	 fi
-	 if [ "${UPDATE_POLDEK_INDEXES}" == "yes" ]; then
-		  sub_builder_opts="${sub_builder_opts} -Upi"
-	 fi
+	sub_builder_opts=''
+	if [ "${FETCH_BUILD_REQUIRES}" == "yes" ]; then
+		sub_builder_opts="${sub_builder_opts} -R"
+	fi
+	if [ "${REMOVE_BUILD_REQUIRES}" == "nice" ]; then
+		sub_builder_opts="${sub_builder_opts} -RB"
+	elif [ "${REMOVE_BUILD_REQUIRES}" == "force" ]; then
+		sub_builder_opts="${sub_builder_opts} -FRB"
+	fi
+	if [ "${UPDATE_POLDEK_INDEXES}" == "yes" ]; then
+		sub_builder_opts="${sub_builder_opts} -Upi"
+	fi
 
-	 cd "${SPECS_DIR}"
-	 ./builder ${sub_builder_opts} "$@"
+	cd "${SPECS_DIR}"
+	./builder ${sub_builder_opts} "$@"
 }
 
 remove_build_requires()
@@ -1335,10 +1383,10 @@ display_bconds()
 
 display_branches()
 {
-	 if [ "$NOCVSSPEC" != "yes" ]; then
-		  echo -ne "Available branches: "
-		  cvs status -v "${SPECFILE}" | awk '!/Sticky Tag:/ && /\(branch:/ { print $1 } ' | xargs
-	 fi
+	if [ "$NOCVSSPEC" != "yes" ]; then
+		echo -ne "Available branches: "
+		cvs status -v "${SPECFILE}" | awk '!/Sticky Tag:/ && /\(branch:/ { print $1 } ' | xargs
+	fi
 }
 
 # checks a given list of packages/files/provides agains current rpmdb.
@@ -1346,21 +1394,21 @@ display_branches()
 # input can be either STDIN or parameters
 _rpm_prov_check()
 {
-	 local DEPS
+	local DEPS
 
-	 if [ "$#" -gt 0 ]; then
-		  DEPS="$@"
-	 else
-		  DEPS=$(cat)
-	 fi
+	if [ "$#" -gt 0 ]; then
+		DEPS="$@"
+	else
+		DEPS=$(cat)
+	fi
 
-	 DEPS=$(rpm -q --whatprovides $DEPS 2>&1 | awk '/^(error:|no package provides)/ { print }')
+	DEPS=$(rpm -q --whatprovides $DEPS 2>&1 | awk '/^(error:|no package provides)/ { print }')
 
-	 # packages
-	 echo "$DEPS" | awk '/^no package provides/ { print $NF }'
+	# packages
+	echo "$DEPS" | awk '/^no package provides/ { print $NF }'
 
-	 # other deps (files)
-	 echo "$DEPS" | awk -F: '/^error:.*No such file/{o = $2; gsub("^ file ", "", o); print o}'
+	# other deps (files)
+	echo "$DEPS" | awk -F: '/^error:.*No such file/{o = $2; gsub("^ file ", "", o); print o}'
 }
 
 # checks if given package/files/provides exists in rpmdb.
@@ -1368,15 +1416,15 @@ _rpm_prov_check()
 # returns packages wchi hare present in the rpmdb
 _rpm_cnfl_check()
 {
-	 local DEPS
+	local DEPS
 
-	 if [ "$#" -gt 0 ]; then
-		  DEPS="$@"
-	 else
-		  DEPS=$(cat)
-	 fi
+	if [ "$#" -gt 0 ]; then
+		DEPS="$@"
+	else
+		DEPS=$(cat)
+	fi
 
-	 rpm -q --whatprovides $DEPS 2>/dev/null | awk '!/no package provides/ { print }'
+	rpm -q --whatprovides $DEPS 2>/dev/null | awk '!/no package provides/ { print }'
 }
 
 fetch_build_requires()
@@ -1397,7 +1445,7 @@ fetch_build_requires()
 				$SU_SUDO /usr/bin/poldek --noask --nofollow -ev $CONF
 			fi
 
-		   while [ "$DEPS" ]; do
+		while [ "$DEPS" ]; do
 				update_shell_title "install deps: $DEPS"
 				echo "Trying to install dependencies ($DEPS):"
 				local log=.${SPECFILE}_poldek.log
@@ -1406,15 +1454,15 @@ fetch_build_requires()
 				rm -f $log
 				local ok
 				if [ -n "$failed" ]; then
-					 for package in $failed; do
-						  # FIXME: sanitise, deps could be not .spec files
-						  spawn_sub_builder -bb $package && ok="$ok $package"
-					 done
-					 DEPS="$ok"
+					for package in $failed; do
+						# FIXME: sanitise, deps could be not .spec files
+						spawn_sub_builder -bb $package && ok="$ok $package"
+					done
+					DEPS="$ok"
 				else
-					 DEPS=""
+					DEPS=""
 				fi
-		   done
+		done
 			return
 		fi
 
@@ -1667,6 +1715,9 @@ do
 			NOSRCS="yes"
 			ALWAYS_CVSUP="no"
 			shift;;
+		--no-init )
+			NOINIT="yes"
+			shift;;
 		--opts )
 			shift; RPMOPTS="$RPM_OPTS ${1}"; shift ;;
 		--nopatch | -np )
@@ -1683,11 +1734,11 @@ do
 					done;;
 				"no")
 					if [[ "$2" = *,* ]]; then
-						 for a in $(echo "$2" | tr , ' '); do
-							  BCOND="$BCOND $1 $a"
-						 done
+						for a in $(echo "$2" | tr , ' '); do
+							BCOND="$BCOND $1 $a"
+						done
 					else
-						 BCOND="$BCOND $1 $2"
+						BCOND="$BCOND $1 $2"
 					fi
 					shift 2 ;;
 			esac
@@ -1711,6 +1762,12 @@ do
 			shift ;;
 		-FRB | --force-remove-build-requires)
 			REMOVE_BUILD_REQUIRES="force"
+			shift ;;
+		-sd | --sources-distfiles)
+			COMMAND="list-sources-distfiles"
+			shift ;;
+		-sdp | --sources-distfiles-paths)
+			COMMAND="list-sources-distfiles-paths"
 			shift ;;
 		-sf | --sources-files)
 			COMMAND="list-sources-files"
@@ -1796,7 +1853,7 @@ do
 			RPMOPTS="${RPMOPTS} --nodeps"
 			;;
 		-debug)
-			RPMOPTS="${RPMOPTS} -debug"; shift ;;
+			RPMBUILDOPTS="${RPMBUILDOPTS} -debug"; shift ;;
 		* )
 			SPECFILE="${1}"
 			# check if specname was passed as specname:cvstag
@@ -1820,6 +1877,12 @@ if [ -n "$TARGET" ]; then
 		"rpm")
 			TARGET_SWITCH="--target=$TARGET" ;;
 	esac
+fi
+
+if [ "$SCHEDTOOL" != "no" ]; then
+	NICE_COMMAND="$SCHEDTOOL"
+else
+	NICE_COMMAND="nice -n ${DEF_NICE_LEVEL}"
 fi
 
 update_shell_title "$COMMAND"
@@ -1852,12 +1915,11 @@ case "$COMMAND" in
 				# - do not allow to build from HEAD when XX-branch exists
 				TREE_PREFIX=$(echo "$TAG_PREFIX" | sed -e 's#^auto-\([a-zA-Z]\+\)-.*#\1#g')
 				if [ "$TREE_PREFIX" != "$TAG_PREFIX" ]; then
-					 TAG_BRANCH="${TREE_PREFIX}-branch"
-					 TAG_STATUS=$(cvs status -v $SPECFILE | grep -Ei "${TAG_BRANCH}.+(branch: [0-9.]+)")
-					 if [ -n "$TAG_STATUS" -a "$CVSTAG" = "HEAD" ]; then
-						  Exit_error err_branch_exists "$TAG_STATUS"
-					 fi
-
+					TAG_BRANCH="${TREE_PREFIX}-branch"
+					TAG_STATUS=$(cvs status -v $SPECFILE | grep -Ei "${TAG_BRANCH}.+(branch: [0-9.]+)")
+					if [ -n "$TAG_STATUS" -a "$CVSTAG" = "HEAD" ]; then
+						Exit_error err_branch_exists "$TAG_STATUS"
+					fi
 				fi
 			fi
 
@@ -1932,7 +1994,7 @@ case "$COMMAND" in
 		parse_spec
 		SAPS="$SOURCES $PATCHES"
 		for SAP in $SAPS ; do
-			 echo $SAP | awk '{gsub(/.*\//,"") ; print}'
+			echo $SAP | awk '{gsub(/.*\//,"") ; print}'
 		done
 		;;
 	"list-sources-urls" )
@@ -1943,7 +2005,7 @@ case "$COMMAND" in
 		parse_spec
 		SAPS="$SOURCES $PATCHES"
 		for SAP in $SAPS ; do
-			 echo $SAP
+			echo $SAP
 		done
 		;;
 	"list-sources-local-paths" )
@@ -1954,7 +2016,33 @@ case "$COMMAND" in
 		parse_spec
 		SAPS="$SOURCES $PATCHES"
 		for SAP in $SAPS ; do
-			 echo $SOURCE_DIR/$(echo $SAP | awk '{gsub(/.*\//,"") ; print }')
+			echo $SOURCE_DIR/$(echo $SAP | awk '{gsub(/.*\//,"") ; print }')
+		done
+		;;
+	"list-sources-distfiles-paths" )
+		init_builder
+		NOCVSSPEC="yes"
+		DONT_PRINT_REVISION="yes"
+		get_spec
+		parse_spec
+		SAPS="$SOURCES $PATCHES"
+		for SAP in $SAPS ; do
+			if [ -n "$(src_md5 "$SAP")" ]; then
+				distfiles_path "$SAP"
+			fi
+		done
+		;;
+	"list-sources-distfiles" )
+		init_builder
+		NOCVSSPEC="yes"
+		DONT_PRINT_REVISION="yes"
+		get_spec
+		parse_spec
+		SAPS="$SOURCES $PATCHES"
+		for SAP in $SAPS ; do
+			if [ -n "$(src_md5 "$SAP")" ]; then
+				distfiles_url "$SAP"
+			fi
 		done
 		;;
 	"init_rpm_dir")
