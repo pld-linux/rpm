@@ -808,3 +808,65 @@ if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
 #  -q be silent when service isn't started (for scriplets restaring other package's services)
 #
 %service(q) {{%(export quiet=%{-q:1}; /usr/lib/rpm/service_generator.sh %{*}) };}
+
+
+# java macros. based on jpackage macros.java
+%_jvmdir	%{_prefix}/lib/jvm
+%_jvmjardir	%{_prefix}/lib/jvm-exports
+%_jvmprivdir	%{_prefix}/lib/jvm-private
+%_jvmlibdir	%{_prefix}/lib/jvm
+%_jvmdatadir	%{_datadir}/jvm
+%_jvmsysconfdir	%{_sysconfdir}/jvm
+%_jvmcommonlibdir	%{_prefix}/lib/jvm-commmon
+%_jvmcommondatadir	%{_datadir}/jvm-commmon
+%_jvmcommonsysconfdir	%{_sysconfdir}/jvm-commmon
+%_javadir        %{_datadir}/java
+%_jnidir        %{_prefix}/lib/java
+%_javadocdir     %{_datadir}/javadoc
+%java_home      %(unset JAVA_HOME; . %{_javadir}-utils/java-functions; set_jvm; echo $JAVA_HOME)
+
+%ant            JAVA_HOME=%{java_home} ant
+%jar            %{java_home}/bin/jar
+%java           %(unset JAVACMD; . %{_javadir}-utils/java-functions; set_javacmd; echo $JAVACMD)
+%javac          %{java_home}/bin/javac
+%javadoc        %{java_home}/bin/javadoc
+
+%add_jvm_extension JAVA_LIBDIR=%{buildroot}/%{_javadir}	%{_bindir}/jvmjar -l
+
+%jpackage_script() \
+install -d -m 755 $RPM_BUILD_ROOT%{_bindir}\
+cat > $RPM_BUILD_ROOT%{_bindir}/%5 << EOF \
+#!/bin/sh\
+#\
+# %{name} script\
+# JPackage Project <http://www.jpackage.org/>\
+\
+# Source functions library\
+. %{_javadir}-utils/java-functions\
+\
+# Source system prefs\
+if [ -f %{_sysconfdir}/java/%{name}.conf ] ; then\
+  . %{_sysconfdir}/java/%{name}.conf\
+fi\
+\
+# Source user prefs\
+if [ -f \\$HOME/.%{name}rc ] ; then\
+  . \\$HOME/.%{name}rc\
+fi\
+\
+# Configuration\
+MAIN_CLASS=%1\
+BASE_FLAGS=%2\
+BASE_OPTIONS=%3\
+BASE_JARS="%(echo %4 | sed -e 's,:, ,g')"\
+\
+# Set parameters\
+set_jvm\
+set_classpath \\$BASE_JARS\
+set_flags \\$BASE_FLAGS\
+set_options \\$BASE_OPTIONS\
+\
+# Let's start\
+run "\\$@"\
+EOF
+
