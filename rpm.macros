@@ -388,17 +388,6 @@ fi \
 %{nil}
 
 #-----------------------------------------------------------------
-# Run ldconfig after installing/deinstalling libraries
-#
-%ldconfig_post() \
-	/sbin/ldconfig; \
-	%{nil}
-
-%ldconfig_postun() \
-	/sbin/ldconfig; \
-	%{nil}
-
-#-----------------------------------------------------------------
 # post %install sequence:
 # - autodeps exceptions
 # - compress all man and info pages,
