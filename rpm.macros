@@ -9,7 +9,7 @@
 %kgcc_package	gcc
 
 %_source_payload	w9.gzdio
-%_binary_payload	w9.bzdio
+%_binary_payload	w9.lzdio
 
 # Build system path macros.
 #
