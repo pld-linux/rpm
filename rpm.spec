@@ -30,7 +30,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.2
-Release:	33
+Release:	34
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -111,6 +111,8 @@ Patch53:	%{name}-doxygen_no_file.patch
 Patch54:	%{name}-truncate-cvslog.patch
 Patch55:	%{name}-bug-146549.patch
 Patch56:	%{name}-skip-backups.patch
+Patch57:	%{name}-lzma.patch
+Patch58:	%{name}-lzma2.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -693,6 +695,8 @@ rm -rf file
 %patch54 -p1
 %patch55 -p1
 %patch56 -p1
+%patch57 -p1
+%patch58 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
