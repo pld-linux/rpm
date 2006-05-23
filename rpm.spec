@@ -54,7 +54,6 @@ Source31:	adapter.awk
 Source32:	pldnotify.awk
 # http://svn.pld-linux.org/banner.sh/
 Source33:	banner.sh
-Source34:	php-pear-build-macros
 Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
@@ -565,15 +564,9 @@ Requires:	sed >= 4.0
 Additional utilities for checking php pear provides/requires in rpm
 packages.
 
-This package provides rpm macros and dependencies to help building
-PEAR packages.
-
 %description php-pearprov -l pl
 Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów php pear w
 pakietach rpm.
-
-Ten pakiet dostarcza makra rpm-a i zale¿no¶ci pomagaj±ce przy
-budowaniu pakietów PEAR-a.
 
 %package -n python-rpm
 Summary:	Python interface to RPM library
@@ -646,7 +639,8 @@ sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
 echo '%%define	__perl_requires	%%{__perl} /usr/lib/rpm/perl.req' >> macros.perl
 echo '# obsoleted file' > macros.python
-install %{SOURCE34} macros.php
+echo '%%define	__php_provides	/usr/lib/rpm/php.prov' > macros.php
+echo '%%define	__php_requires	/usr/lib/rpm/php.req' >> macros.php
 echo '%%define	__mono_provides	/usr/lib/rpm/mono-find-provides' > macros.mono
 echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
 install %{SOURCE5} scripts/find-lang.sh
