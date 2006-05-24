@@ -1,5 +1,14 @@
---- rpm-4.4.2/macros.in~	2006-05-24 11:55:23.556060140 +0300
-+++ rpm-4.4.2/macros.in	2006-05-24 11:58:19.559999273 +0300
+--- rpm-4.4.2/macros.in~	2006-01-17 20:55:45.000000000 +0200
++++ rpm-4.4.2/macros.in	2006-01-17 20:57:51.000000000 +0200
+@@ -223,7 +223,7 @@
+ %_tmppath		%{_var}/tmp
+ 
+ #	Path to top of build area.
+-%_topdir		%{_usrsrc}/redhat
++%_topdir         %(echo $HOME)/rpm
+ 
+ #	The path to the unzip executable (legacy, use %{__unzip} instead).
+ %_unzipbin		%{__unzip}
 @@ -327,8 +327,8 @@
  #		"w9.gzdio"	gzip level 9 (default).
  #		"w9.bzdio"	bzip2 level 9.
@@ -11,3 +20,66 @@
  
  #	The signature to use and the location of configuration files for
  #	signing packages with PGP.
+@@ -1019,6 +1019,7 @@
+ %_oldincludedir		/usr/include
+ %_infodir		%{_prefix}/info
+ %_mandir		%{_prefix}/man
++%_x_libraries	/usr/X11R6/%{_lib}
+ 
+ #==============================================================================
+ # ---- config.guess platform macros.
+@@ -1157,36 +1157,6 @@
+   %{-C:cd ${_mydir}; unset _mydir}
+ 
+ #------------------------------------------------------------------------------
+-# Useful perl macros (from Artur Frysiak <wiget@t17.ds.pwr.wroc.pl>)
+-#
+-# For example, these can be used as (from ImageMagick.spec from PLD site)
+-#	[...]
+-#	BuildPrereq: perl
+-#	[...]
+-#	%package perl
+-#	Summary: libraries and modules for access to ImageMagick from perl
+-#	Group: Development/Languages/Perl
+-#	Requires: %{name} = %{version}
+-#	%requires_eq    perl
+-#	[...]
+-#	%install
+-#	rm -fr $RPM_BUILD_ROOT
+-#	install -d $RPM_BUILD_ROOT/%{perl_sitearch}
+-#	[...]
+-#	%files perl
+-#	%defattr(644,root,root,755)
+-#	%{perl_sitearch}/Image
+-#	%dir %{perl_sitearch}/auto/Image
+-#
+-%requires_eq()	%(echo '%*' | LC_ALL="C" xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
+-%perl_sitearch	%(eval "`%{__perl} -V:installsitearch`"; echo $installsitearch)
+-%perl_sitelib	%(eval "`%{__perl} -V:installsitelib`"; echo $installsitelib)
+-%perl_vendorarch %(eval "`%{__perl} -V:installvendorarch`"; echo $installvendorarch)
+-%perl_vendorlib  %(eval "`%{__perl} -V:installvendorlib`"; echo $installvendorlib)
+-%perl_archlib	%(eval "`%{__perl} -V:installarchlib`"; echo $installarchlib)
+-%perl_privlib	%(eval "`%{__perl} -V:installprivlib`"; echo $installprivlib)
+-
+-#------------------------------------------------------------------------------
+ # arch macro for all Intel i?86 compatibile processors
+ #  (Note: This macro (and it's analogues) will probably be obsoleted when
+ #   rpm can use regular expressions against target platforms in macro
+@@ -1277,4 +1277,17 @@
+ %find_lang	@RPMCONFIGDIR@/find-lang.sh %{buildroot}
+ 
++# PLD rpm macros
++%_enable_debug_packages 0
++
++#-----------------------------------------------------------------
++# CFLAGS and LDFLAGS used to build
++
++%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -ggdb}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
++
++%debugcflags	-O0 -g -Wall
++%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
++%rpmcxxflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
++%rpmldflags	%{nil}
++
+ # \endverbatim
+ #*/
