@@ -1,5 +1,5 @@
---- rpm-4.4.3/macros.in.orig	2005-11-19 01:18:44.483914640 +0100
-+++ rpm-4.4.3/macros.in	2005-11-19 01:19:50.657854672 +0100
+--- rpm-4.4.3/macros.in	2005-11-19 01:19:50.657854672 +0100
++++ rpm-4.4.6/macros.in	2006-05-24 11:49:38.438332239 +0300
 @@ -219,7 +219,7 @@
  %_tmppath		%{_var}/tmp
  
@@ -9,6 +9,17 @@
  
  #	The path to the unzip executable (legacy, use %{__unzip} instead).
  %_unzipbin		%{__unzip}
+@@ -330,8 +330,8 @@
+ #		"w9.gzdio"	gzip level 9 (default).
+ #		"w9.bzdio"	bzip2 level 9.
+ #
+-#%_source_payload	w9.gzdio
+-#%_binary_payload	w9.gzdio
++%_source_payload	w9.gzdio
++%_binary_payload	w9.lzdio
+ 
+ #	Archive formats to use for source/binary package payloads.
+ #		"cpio"		cpio archive (default)
 @@ -932,10 +932,10 @@
    export RPM_BUILD_ROOT}\
    %{?_javaclasspath:CLASSPATH=\"%{_javaclasspath}\"\
@@ -22,8 +33,7 @@
    \
    %{verbose:set -x}%{!verbose:exec > /dev/null}\
    umask 022\
-@@ -1373,5 +1373,18 @@
- #%__executable_provides	@RPMCONFIGDIR@/executabledeps.sh --provides
+@@ -1374,4 +1374,17 @@
  #%__executable_requires	@RPMCONFIGDIR@/executabledeps.sh --requires
  
 +# PLD rpm macros

@@ -512,16 +512,3 @@ diff -Nru rpm-4.4.5.old/tools/rpmtool.c rpm-4.4.5/tools/rpmtool.c
  
  		gzdi = Fdopen(fdi, rpmio_flags);	/* XXX gzdi == fdi */
  		if (gzdi == NULL) {
---- rpm-4.4.6/macros.in~	2006-05-24 11:46:48.794530959 +0300
-+++ rpm-4.4.6/macros.in	2006-05-24 11:49:38.438332239 +0300
-@@ -330,8 +330,8 @@
- #		"w9.gzdio"	gzip level 9 (default).
- #		"w9.bzdio"	bzip2 level 9.
- #
--#%_source_payload	w9.gzdio
--#%_binary_payload	w9.gzdio
-+%_source_payload	w9.gzdio
-+%_binary_payload	w9.lzdio
- 
- #	Archive formats to use for source/binary package payloads.
- #		"cpio"		cpio archive (default)
