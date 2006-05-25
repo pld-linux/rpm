@@ -29,7 +29,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.6
-Release:	1.5
+Release:	1.6
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -228,7 +228,7 @@ RPM - це потужний менеджер пакет╕в, що може бути використаний для
 Summary:	RPM base package - scripts used by rpm packages themselves
 Summary(pl):	Podstawowy pakiet RPM - skrypty u©ywane przez same pakiety rpm
 Group:		Base
-Requires:	rc-scripts
+Requires:	filesystem
 Obsoletes:	vserver-rpm
 
 %description base
