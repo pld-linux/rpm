@@ -807,9 +807,7 @@ if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
 %_jvmcommonlibdir	%{_libdir}/jvm-common
 %_jvmcommondatadir	%{_datadir}/jvm-common
 %_jvmcommonsysconfdir	%{_sysconfdir}/jvm-common
-%_javadir		%{_datadir}/java
 %_jnidir		%{_libdir}/java
-%_javadocdir 		%{_datadir}/javadoc
 %java_home		%(unset JAVA_HOME; . %{_javadir}-utils/java-functions; set_jvm; echo $JAVA_HOME)
 
 %ant			JAVA_HOME=%{java_home} ant
