@@ -205,7 +205,7 @@ diff -Nru rpm-4.4.5.old/rpmio/rpmio.c rpm-4.4.5/rpmio/rpmio.c
 +        dup2(p[0], 0);
 +        dup2(fdno, 1);
 +        for (i = 3; i < 1024; i++) close(i);
-+        if (execlp("lzma", "lzma", "e", "-si", "-so", NULL)) {
++        if (execl("/usr/bin/lzma", "lzma", "e", "-si", "-so", NULL)) {
 +            _exit(1);
 +	    }
 +    }
