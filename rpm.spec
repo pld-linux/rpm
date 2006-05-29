@@ -112,6 +112,7 @@ Patch55:	%{name}-bug-146549.patch
 Patch56:	%{name}-skip-backups.patch
 Patch57:	%{name}-lzma.patch
 Patch58:	%{name}-lzma2.patch
+Patch59:	%{name}-find_lang.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -691,6 +692,7 @@ rm -rf file
 %patch56 -p1
 %patch57 -p1
 %patch58 -p1
+%patch59 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
@@ -755,7 +757,7 @@ CPPFLAGS="-Dglob=rpm_glob -Dglobfree=rpm_globfree"; export CPPFLAGS
 %{__make} \
 	pylibdir=%{py_libdir} \
 	myLDFLAGS="%{rpmldflags}" \
-	file_LDFLAGS= \
+	file_LDFLAGS="" \
 	debugedit_LDADD="\$(WITH_LIBELF_LIB) -lpopt"
 
 #	%{!?with_static:rpm_LDFLAGS="\$(myLDFLAGS)"} \
