@@ -927,4 +927,50 @@ if [ -f _noautoreq ]; then \
 fi \
 %{nil}
 
-# vim:ts=8 sw=8 noet
+
+# Register OpenLDAP schema.
+# Author: Elan Ruusamäe <glen@pld-linux.org>
+#
+# Usage:
+#   %%openldap_schema_register [-d core,nis] %{schemadir}/horde.schema
+#
+#  -d specify dependant schemas, separated by comma
+#
+%openldap_schema_register(d:) \
+for schema in %*; do \
+	if ! grep -q "$schema" /etc/openldap/slapd.conf; then \
+		%{__sed} -i -e " \
+			/^include.*local.schema/{ \
+				iinclude\\t	$schema\
+			} \
+		" /etc/openldap/slapd.conf \
+	fi \
+done \
+# enable dependant schemas \
+if [ "%{-d*}" ]; then \
+	%{__sed} -i -e ' \
+	/^#include.*\\(%(echo '%{-d*}' | %{__sed} -e 's/,/\\\\|/g')\\)\\.schema/{ \
+		s/^#// \
+	}' /etc/openldap/slapd.conf \
+fi \
+%{nil}
+
+# Unregister OpenLDAP schema.
+# Author: Elan Ruusamäe <glen@pld-linux.org>
+#
+# Usage:
+#   %%openldap_schema_unregister %{schemadir}/horde.schema
+#
+%openldap_schema_unregister() \
+for schema in %*; do \
+	if grep -q "$schema" /etc/openldap/slapd.conf; then \
+		%{__sed} -i -e " \
+		/^include.*$(echo "$schema" | %{__sed} -e 's,/,\\\\/,g')/d \
+		# for symmetry it would be nice if we disable enabled schemas in post, \
+		# but we really can not do that, it would break something else. \
+		" /etc/openldap/slapd.conf \
+	fi \
+done \
+%{nil}
+
+# vim:ts=4 sw=4 noet
