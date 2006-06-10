@@ -234,6 +234,11 @@ unset LINGUAS ||:\
 ; do echo $l; done >> %1 \
 }
 
+# minimum file size needed for compressed documents.
+# just smaller files than this get larger when compressed.
+# current number is based from experiment that 0 byte file compressed was 25 bytes .gz
+%_min_compress_bytes	25
+
 #-----------------------------------------------------------------
 # find and gzip all files in %{_mandir} and %{infodir}
 #
@@ -245,9 +250,9 @@ unset LINGUAS ||:\
 	echo "Compress man and info pages."; \
 	for i in /usr/share/man /usr/X11R6/man /usr/share/info; do \
 		if [ -d "$RPM_BUILD_ROOT$i" ]; then \
-			find "$RPM_BUILD_ROOT$i" -name \*.bz2 -print | xargs -r %{__bzip2} -df; \
-			find "$RPM_BUILD_ROOT$i" -name \*.gz -print | xargs -r %{__gzip} -dnf; \
-			find "$RPM_BUILD_ROOT$i" -type f -print | xargs -r %{__gzip} -9nf; \
+			find "$RPM_BUILD_ROOT$i" -name '*.bz2' -print | xargs -r %{__bzip2} -df; \
+			find "$RPM_BUILD_ROOT$i" -name '*.gz' -print | xargs -r %{__gzip} -dnf; \
+			find "$RPM_BUILD_ROOT$i" -type f -size +%{_min_compress_bytes}c -print | xargs -r %{__gzip} -9nf; \
 		fi; \
 	done; \
 }; __spec_install_post_compress_docs } }
