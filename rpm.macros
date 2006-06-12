@@ -744,7 +744,7 @@ if [ "$1" = "1" ] && [ "$2" = "1" ]; then\
 	/usr/sbin/webapp register %1 %2\
 fi\
 # reload webserver if the config symlink is there and skip reload if webserver is upgraded\
-if [ -L /etc/%1/webapps.d/%2.conf ] && [ "$2" -lt "2" ]; then\
+if [ -L /etc/%1/webapps.d/%(echo "%2" | tr '/' '-').conf ] && [ "$2" -lt "2" ]; then\
 	%{expand:%service -q %%1 reload}\
 fi\
 %{nil}
@@ -755,7 +755,7 @@ fi\
 %webapp_unregister(f) \
 %{?debug:set -x; echo "webapp_unregister: %{name}-%{version}-%{release}: 1:[$1]; 2:[$2]"} \
 # remove link if either of the packages are gone \
-if [ -n "%{-f:1}" ] || [ "$1" = "0" ] || [ "$2" = "0" ] && [ -L /etc/%1/webapps.d/%2.conf ]; then \
+if [ -n "%{-f:1}" ] || [ "$1" = "0" ] || [ "$2" = "0" ] && [ -L /etc/%1/webapps.d/%(echo "%2" | tr '/' '-').conf ]; then \
 	/usr/sbin/webapp unregister %1 %2\
 	%{expand:%service -q %%1 reload}\
 fi \
