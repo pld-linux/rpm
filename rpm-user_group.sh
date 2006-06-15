@@ -63,12 +63,15 @@ elif [ "$1" = del ]; then
 		fi
 	fi
 elif [ "$MODE" = "user" -a "$1" = "addtogroup" ]; then
-	CUSER="$2"
-	CGROUP="$3"
-	CGROUPS=$(id -n -G $CUSER)
-	if [[ " $CGROUPS " != *\ $CGROUP\ * ]]; then
-	    echo "Adding user $CUSER to group $CGROUP" | `bannercmd "${MODE}mod-$CUSER"`
-	    usermod -G "$CGROUPS,$CGROUP" $CUSER
+	user="$2"
+	group="$3"
+	groups=$(id -n -G $user)
+	if [[ " $groups " != *\ $group\ * ]]; then
+	    echo "Adding user $user to group $group" | `bannercmd "${MODE}mod-$user"`
+		for grp in $groups $group; do
+			new="$new${new:+,}$grp"
+		done
+	    usermod -G "$new" $user
 	fi
 else
 	echo ERROR
