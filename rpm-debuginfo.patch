@@ -1,7 +1,7 @@
-diff -urN rpm-4.3.org/macros.in rpm-4.3/macros.in
---- rpm-4.3.org/macros.in	2004-05-31 17:16:23.251095072 +0200
-+++ rpm-4.3/macros.in	2004-05-31 17:35:47.653079064 +0200
-@@ -118,15 +118,20 @@
+diff -ur rpm-4.4.6.org/macros.in rpm-4.4.6/macros.in
+--- rpm-4.4.6.org/macros.in	2006-04-08 21:04:54.000000000 +0200
++++ rpm-4.4.6/macros.in	2006-06-30 22:03:15.076727750 +0200
+@@ -168,15 +168,20 @@
  %debug_package \
  %ifnarch noarch\
  %global __debug_package 1\
@@ -25,7 +25,7 @@ diff -urN rpm-4.3.org/macros.in rpm-4.3/macros.in
  %defattr(-,root,root)\
  %endif\
  %{nil}
-@@ -844,7 +849,7 @@
+@@ -961,7 +966,7 @@
  %__spec_install_pre	%{___build_pre}
  %__spec_install_body	%{___build_body}
  %__spec_install_post\
@@ -34,8 +34,21 @@ diff -urN rpm-4.3.org/macros.in rpm-4.3/macros.in
  %{__arch_install_post}\
  %{__os_install_post}\
  %{nil}
---- rpm-4.4.3/scripts/find-debuginfo.sh.orig	2005-08-25 19:38:36.000000000 +0200
-+++ rpm-4.4.3/scripts/find-debuginfo.sh	2005-11-19 00:21:45.007754032 +0100
+diff -ur rpm-4.4.6.org/platform.in rpm-4.4.6/platform.in
+--- rpm-4.4.6.org/platform.in	2006-06-30 22:01:46.743207000 +0200
++++ rpm-4.4.6/platform.in	2006-06-30 22:03:15.080728000 +0200
+@@ -61,7 +61,7 @@
+ %{nil}
+ 
+ %__spec_install_post\
+-    %{?__debug_package:%{__debug_install_post}}\
++    %{expand:%%define __sip_%{?_enable_debug_packages} 1}%{?__sip_1:%{?__debug_package:%{__debug_install_post}}}%{expand:%%undefine __sip_%{?_enable_debug_packages}}\
+     %{__arch_install_post}\
+     %{__os_install_post}\
+ %{nil}
+diff -ur rpm-4.4.6.org/scripts/find-debuginfo.sh rpm-4.4.6/scripts/find-debuginfo.sh
+--- rpm-4.4.6.org/scripts/find-debuginfo.sh	2006-02-12 15:59:51.000000000 +0100
++++ rpm-4.4.6/scripts/find-debuginfo.sh	2006-06-30 22:03:53.451126000 +0200
 @@ -15,7 +15,8 @@
  
  strip_to_debug()
@@ -55,14 +68,9 @@ diff -urN rpm-4.3.org/macros.in rpm-4.3/macros.in
  
  	# A binary already copied into /usr/lib/debug doesn't get stripped,
  	# just has its file names collected and adjusted.
---- rpm-4.3/platform.in.orig	2004-07-28 21:35:25.000000000 +0200
-+++ rpm-4.3/platform.in	2004-07-28 21:37:22.000000000 +0200
-@@ -60,7 +60,7 @@
- %{nil}
+@@ -54,4 +55,5 @@
+ find ${RPM_BUILD_ROOT}/usr/src/debug -type d -print0 | xargs -0 chmod a+rx
  
- %__spec_install_post\
--    %{?__debug_package:%{__debug_install_post}}\
-+    %{expand:%%define __sip_%{?_enable_debug_packages} 1}%{?__sip_1:%{?__debug_package:%{__debug_install_post}}}%{expand:%%undefine __sip_%{?_enable_debug_packages}}\
-     %{__arch_install_post}\
-     %{__os_install_post}\
- %{nil}
+ find ${RPM_BUILD_ROOT}/usr/lib/debug -type f | sed -n -e "s#^$RPM_BUILD_ROOT##p" > $LISTFILE
++find ${RPM_BUILD_ROOT}/usr/lib/debug -mindepth 1 -type d | sed -n -e "s#^$RPM_BUILD_ROOT#%dir #p" >> $LISTFILE
+ find ${RPM_BUILD_ROOT}/usr/src/debug -mindepth 1 -maxdepth 1 | sed -n -e "s#^$RPM_BUILD_ROOT##p" >> $LISTFILE
