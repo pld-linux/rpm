@@ -278,12 +278,15 @@ unset LINGUAS ||:\
 	elfarchiveslist=`echo $filelist | xargs -r file | \
 		awk '/current ar archive/ {print $1}' | cut -d: -f1`; \
 	if [ -n "$elfexelist" ]; then \
+		chmod u+w $elfexelist; \
 		%{__strip} --remove-section=.note --remove-section=.comment $elfexelist; \
 	fi; \
 	if [ -n "$elfsharedlist" ]; then \
+		chmod u+w $elfsharedlist; \
 		%{__strip} --strip-unneeded --remove-section=.note --remove-section=.comment $elfsharedlist; \
 	fi; \
 	if [ -n "$elfarchiveslist" ]; then \
+		chmod u+w $elfarchiveslist; \
 		%{__strip} --strip-debug --remove-section=.note --remove-section=.comment $elfarchiveslist; \
 	fi; \
 fi; }; __spec_install_post_strip } } }
