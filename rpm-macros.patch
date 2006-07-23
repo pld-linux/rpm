@@ -47,7 +47,7 @@
 +%debugcflags	-O0 -g -Wall
 +%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
 +%rpmcxxflags	%{rpmcflags}
-+%rpmldflags	%{nil}
++%rpmldflags	%{!?no_build_with_as_needed:-Wl,--as-needed}
 +
  # \endverbatim
  #*/
