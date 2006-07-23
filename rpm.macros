@@ -397,7 +397,7 @@ fi \
 #
 %update_icon_cache() {{ \
 	umask 022; \
-	gtk-update-icon-cache -qf %{_datadir}/icons/%1; \
+	/usr/bin/gtk-update-icon-cache -qf %{_datadir}/icons/%1; \
 }}
 
 #-----------------------------------------------------------------
