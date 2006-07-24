@@ -29,7 +29,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.6
-Release:	1.8
+Release:	1.9
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -983,10 +983,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/banner.sh
 %attr(755,root,root) %{_rpmlibdir}/user_group.sh
 %dir /var/lib/banner
-%dir %{_libdir}/debug
-%dir %{_libdir}/debug/usr
-%dir %{_libdir}/debug/usr/bin
-%dir %{_prefix}/src/debug
 
 %files lib
 %defattr(644,root,root,755)
