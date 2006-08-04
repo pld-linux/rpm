@@ -113,6 +113,7 @@ Patch56:	%{name}-skip-backups.patch
 Patch57:	%{name}-lzma.patch
 Patch58:	%{name}-lzma2.patch
 Patch59:	%{name}-find_lang.patch
+Patch60:	%{name}-as_needed-fix.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -693,6 +694,7 @@ rm -rf file
 %patch57 -p1
 %patch58 -p1
 %patch59 -p1
+%patch60 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
