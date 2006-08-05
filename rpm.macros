@@ -86,7 +86,7 @@ fi; \
 }')
 
 %rpmldflags %(awk 'BEGIN {
-	split("%{optldflags}",I);
+	split("%{?optldflags}",I);
 	split("%{?filterout_ld}",F)
 	%{filter_out}
 }')
