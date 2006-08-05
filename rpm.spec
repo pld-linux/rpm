@@ -29,7 +29,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.6
-Release:	1.9
+Release:	1.10
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -116,7 +116,6 @@ BuildRequires:	automake
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	db-devel >= %{reqdb_ver}
-%{?with_apidocs:BuildRequires:	doxygen}
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gettext-devel >= 0.11.4-2
 %{?with_system_libmagic:BuildRequires:	libmagic-devel}
@@ -135,6 +134,12 @@ BuildRequires:	python-modules >= 1:2.3
 BuildRequires:	rpm-perlprov
 %{?with_python:BuildRequires:	rpm-pythonprov}
 BuildRequires:	zlib-devel
+%if %{with apidocs}
+BuildRequires:	doxygen
+BuildRequires:	ghostscript
+BuildRequires:	graphviz
+BuildRequires:	tetex-pdftex
+%endif
 %if %{with static}
 # Require static library only for static build
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
@@ -428,7 +433,7 @@ Summary(ru):	Скрипты и утилиты, необходимые для сборки пакетов
 Summary(uk):	Скрипти та утил╕ти, необх╕дн╕ для побудови пакет╕в
 Group:		Applications/File
 Requires(pre):	findutils
-Requires:	%{name}-build-macros >= 1.302
+Requires:	%{name}-build-macros >= 1.314
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
