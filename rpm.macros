@@ -51,6 +51,46 @@ fi; \
 #	and that both p and q are package names (i.e. no version/release).
 %_dependency_whiteout	%{nil}
 
+
+#-----------------------------------------------------------------
+#
+# (re)definition of %{rpm*flags} with %filterout_* support
+# Requires:		awk
+#
+# Flags specified in %filterout_* are removed from %rpm*flags, exactly:
+# %rpmcflags	= %optflags - %filterout_c - %filterout_ld
+# %rpmcxxflags	= %rpmcflags - %filterout_cxx
+# %rpmldflags	= %optldflags - %filterout_ld
+#
+# Regular expressions are supported, but to avoid some character be treated
+# as regular expression it must be escaped twice.
+
+%filter_out 						\
+	for (i in I) { 	A=0;			\
+		for (f in F) {				\
+			if (I[i] ~ "^" F[f] "$") A=1;	\
+		};							\
+		if (!A) printf(I[i] FS);	\
+	}
+
+%rpmcflags %(awk 'BEGIN {
+	split("%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}",I);
+	split("%{?filterout_c} %{?filterout_ld}",F);
+	%{filter_out}
+}')
+
+%rpmcxxflags %(awk 'BEGIN {
+	split("%{rpmcflags}",I);
+	split("%{?filterout_cxx}",F);
+	%{filter_out}
+}')
+
+%rpmldflags %(awk 'BEGIN {
+	split("%{optldflags}",I);
+	split("%{?filterout_ld}",F)
+	%{filter_out}
+}')
+
 #-----------------------------------------------------------------
 %configure2_13 { \
  if [ -n "$LINGUAS" ]; then unset LINGUAS; fi; \
