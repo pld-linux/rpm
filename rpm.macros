@@ -58,9 +58,9 @@ fi; \
 # Requires:		awk
 #
 # Flags specified in %filterout_* are removed from %rpm*flags, exactly:
-# %rpmcflags	= %optflags - %filterout_c - %filterout_ld
-# %rpmcxxflags	= %rpmcflags - %filterout_cxx
-# %rpmldflags	= %optldflags - %filterout_ld
+# %rpmcflags    = %optflags - %filterout - %filterout_c   - %filterout_ld
+# %rpmcxxflags  = %optflags - %filterout - %filterout_cxx - %filterout_ld
+# %rpmldflags   = %optldflags - %filterout_ld
 #
 # Regular expressions are supported, but to avoid some character be treated
 # as regular expression it must be escaped twice.
@@ -75,13 +75,13 @@ fi; \
 
 %rpmcflags %(awk 'BEGIN {
 	split("%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}",I);
-	split("%{?filterout_c} %{?filterout_ld}",F);
+	split("%{?filterout} %{?filterout_c} %{?filterout_ld}",F);
 	%{filter_out}
 }')
 
 %rpmcxxflags %(awk 'BEGIN {
-	split("%{rpmcflags}",I);
-	split("%{?filterout_cxx}",F);
+	split("%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}",I);
+	split("%{?filterout} %{?filterout_cxx} %{?filterout_ld}",F);
 	%{filter_out}
 }')
 
