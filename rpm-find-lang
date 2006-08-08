@@ -13,6 +13,8 @@
 
 #changes:
 # $Id$
+# 2006-08-09 Elan Ruusamäe <glen@pld-linux.org>
+#   * huge performance boost for packages calling %find_lang multiple times (kde*i18n)
 # 2001-01-08 Micha³ Kochanowicz <mkochano@pld.org.pl>
 #   * --all-name support for KDE.
 # 2000-11-28 Rafa³ Cygnarowski <pascalek@pld.org.pl>
@@ -49,47 +51,52 @@ EOF
 exit 1
 }
 
-if [ -z "$1" ] ; then usage
-elif [ $1 = / ] ; then echo $0: expects non-/ argument for '$1' 1>&2
-elif [ ! -d $1 ] ; then
- echo $0: $1: no such directory
- exit 1
-else TOP_DIR="`echo $1|sed -e 's:/$::'`"
+if [ -z "$1" ]; then
+	usage
+elif [ $1 = / ]; then
+	echo >&2 "$0: expects non-/ argument for '$1'"
+elif [ ! -d $1 ]; then
+	echo "$0: $1: no such directory"
+	exit 1
+else
+	TOP_DIR="${1%/}"
 fi
 shift
 
-if [ -z "$1" ] ; then usage
-else NAME=$1
+if [ -z "$1" ]; then
+   	usage
+else
+   	NAME=$1
 fi
 shift
 
-GNOME=#
-KDE=#
-MO=
+GNOME='#'
+KDE='#'
+MO=''
 MO_NAME=$NAME.lang
-ALL_NAME=#
-NO_ALL_NAME=
+ALL_NAME='#'
+NO_ALL_NAME=''
 while test $# -gt 0 ; do
-    case "${1}" in
-	--with-gnome )
-  		GNOME=
+    case "$1" in
+	--with-gnome)
+  		GNOME=''
 		shift
 		;;
-	--with-kde )
-		KDE=
+	--with-kde)
+		KDE=''
 		shift
 		;;
-	--without-mo )
-		MO=#
+	--without-mo)
+		MO='#'
 		shift
 		;;
-	--all-name )
-		ALL_NAME=
-		NO_ALL_NAME=#
+	--all-name)
+		ALL_NAME=''
+		NO_ALL_NAME='#'
 		shift
 		;;
 	* )
-		MO_NAME=${1}
+		MO_NAME=$1
 		shift
 		;;
     esac
@@ -97,18 +104,24 @@ done
 
 echo '%defattr(644,root,root,755)' > $MO_NAME
 
-find $TOP_DIR -type f -name \*.mo | xargs -r file | egrep -v ', 1 messages$' |\
-sed '
-s/:.*//
-s:'"$TOP_DIR"'::
+if [ ! -f __find.files ]; then
+	find $TOP_DIR -type f -name '*.mo' | xargs -r file | egrep -v ', 1 messages$' | \
+	sed -e '
+		s/:.*//
+		s:'"$TOP_DIR"'::' > __find.files
+fi
+
+fgrep $NAME __find.files | sed '
 '"$ALL_NAME$MO"'s:\(.*/share/locale/\)\([^/_]\+\)\(.*\.mo$\):%lang(\2) \1\2\3:
 '"$NO_ALL_NAME$MO"'s:\(.*/share/locale/\)\([^/]\+\)\(.*/'"$NAME"'\.mo$\):%lang(\2) \1\2\3:
 s:^\([^%].*\)::
 s:%lang(C) ::
 s:^\$::' | egrep -v '^$' >> $MO_NAME
 
-find $TOP_DIR -type d|sed '
-s:'"$TOP_DIR"'::
+if [ ! -f __find.dirs ]; then
+	find $TOP_DIR -type d | sed 's:'"$TOP_DIR"'::' > __find.dirs
+fi
+fgrep $NAME __find.dirs | sed '
 '"$NO_ALL_NAME$GNOME"'s:\(.*/gnome/help/'"$NAME"'$\):%dir \1:
 '"$NO_ALL_NAME$GNOME"'s:\(.*/gnome/help/'"$NAME"'/[a-zA-Z0-9.\_\-]/.\+\)::
 '"$NO_ALL_NAME$GNOME"'s:\(.*/gnome/help/'"$NAME"'\/\)\([^/]\+\):%lang(\2) \1\2:
@@ -119,8 +132,7 @@ s:%lang(.*) .*/gnome/help/[a-zA-Z0-9.\_\-]\+/[a-zA-Z0-9.\_\-]\+/.*::
 s:^\([^%].*\)::
 s:%lang(C) ::' | egrep -v '^$' >> $MO_NAME
 
-find $TOP_DIR -type d|sed '
-s:'"$TOP_DIR"'::
+fgrep $NAME __find.dirs | sed '
 '"$NO_ALL_NAME$KDE"'s:\(.*/doc/kde/HTML/\)\([^/_]\+\)\(.*/'"$NAME"'/\)::
 '"$NO_ALL_NAME$KDE"'s:\(.*/doc/kde/HTML/\)\([^/_]\+\)\(.*/'"$NAME"'\)$:%lang(\2) \1\2\3:
 '"$ALL_NAME$KDE"'s:\(.*/doc/kde/HTML/\)\([^/_]\+\)\(.*/[a-zA-Z0-9.\_\-]\+/\)::
@@ -128,8 +140,7 @@ s:'"$TOP_DIR"'::
 s:^\([^%].*\)::
 s:%lang(C) ::' | egrep -v '^$' >> $MO_NAME
 
-if [ "$(cat $MO_NAME | egrep -v '(^%defattr|^$)' | wc -l)" -le 0  ]; then
-        echo 'Error: international files not found !'
-        exit 1
+if [ "$(egrep -v '(^%defattr|^$)' $MO_NAME | wc -l)" -le 0 ]; then
+	echo 'Error: international files not found !'
+	exit 1
 fi
-
