@@ -29,7 +29,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.6
-Release:	1.10
+Release:	1.11
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -130,8 +130,8 @@ BuildRequires:	neon-devel >= 0.25.5
 %endif
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
-%{?with_python:BuildRequires:	python-devel >= 1:2.3}
-BuildRequires:	python-modules >= 1:2.3
+%{?with_python:BuildRequires:	python-devel >= 1:2.5}
+BuildRequires:	python-modules >= 1:2.5
 BuildRequires:	rpm-perlprov
 %{?with_python:BuildRequires:	rpm-pythonprov}
 BuildRequires:	zlib-devel
@@ -748,7 +748,7 @@ CPPFLAGS="-Dglob=rpm_glob -Dglobfree=rpm_globfree"; export CPPFLAGS
 	--enable-shared \
 	--enable-static \
 	%{?with_apidocs:--with-apidocs} \
-	%{?with_python:--with-python=auto} \
+	%{?with_python:--with-python=2.5} \
 	%{!?with_python:--without-python} \
 	%{!?with_selinux:--without-selinux} \
 	--without-db
