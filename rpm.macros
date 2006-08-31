@@ -1043,6 +1043,6 @@ for schema in %*; do \
 done \
 %{nil}
 
-%env_update [ -x /sbin/env-update ] || /sbin/env-update -u
+%env_update [ ! -x /sbin/env-update ] || /sbin/env-update -u
 
 # vim:ts=4 sw=4 noet
