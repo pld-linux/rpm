@@ -54,8 +54,8 @@ diff -ur rpm-4.4.6.org/scripts/find-debuginfo.sh rpm-4.4.6/scripts/find-debuginf
  strip_to_debug()
  {
 -  eu-strip --remove-comment -f "$1" "$2" || :
-+  eu-strip --remove-comment -f "$1" -o "${2}.tmp" "$2" || :
-+  rm -f "${2}.tmp"
++  objcopy --only-keep-debug --remove-section .comment "$2" "$1"
++  objcopy --add-gnu-debuglink="$1" "$2"
  }
  
  # Strip ELF binaries
