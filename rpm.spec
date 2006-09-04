@@ -29,7 +29,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.6
-Release:	1.12
+Release:	1.13
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -262,6 +262,7 @@ Requires:	popt >= %{reqpopt_ver}
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
+Suggests:	lzma
 
 %description lib
 RPMs library.
