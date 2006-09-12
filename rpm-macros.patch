@@ -44,7 +44,7 @@ diff -Nur rpm-4.4.6.orig/macros.in rpm-4.4.6.macros/macros.in
 +#-----------------------------------------------------------------
 +# CFLAGS and LDFLAGS used to build
 +
-+%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -ggdb}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
++%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -gdwarf-2 -g2 -feliminate-dwarf2-dups}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
 +
 +%debugcflags	-O0 -g -Wall
 +%optldflags	-Wl,--as-needed
