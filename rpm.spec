@@ -157,6 +157,8 @@ BuildRequires:	zlib-static
 Requires:	%{name}-base = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt >= %{beecrypt_ver}
+# we need fixed binutils for -feliminate-dwarf2-dups
+Requires:	binutils >= 3:2.17.50.0.3-2
 Requires:	popt >= %{reqpopt_ver}
 %{!?with_static:Obsoletes:	rpm-utils-static}
 Conflicts:	glibc < 2.2.92
