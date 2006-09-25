@@ -2,6 +2,7 @@
 # TODO:
 # - python(abi) cap is not provided automatically (because /usr/bin/python matches
 #   ELF first; it should be provided by python-libs not binary anyway)
+# - repackaging when lzma is not installed (todo: fix digest signature of header)
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
@@ -29,7 +30,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.6
-Release:	1.14
+Release:	1.15
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -111,6 +112,7 @@ Patch54:	%{name}-lzma2.patch
 Patch55:	%{name}-truncate-cvslog.patch
 Patch56:	%{name}-skip-backups.patch
 Patch57:	%{name}-as_needed-fix.patch
+Patch58:	%{name}-repackage-wo-lzma.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
@@ -691,6 +693,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch55 -p1
 %patch56 -p1
 %patch57 -p1
+%patch58 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
