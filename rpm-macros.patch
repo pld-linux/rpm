@@ -24,7 +24,7 @@
  %_oldincludedir		/usr/include
  %_infodir		%{_prefix}/info
  %_mandir		%{_prefix}/man
-+%_x_libraries	/usr/X11R6/%{_lib}
++%_x_libraries	%{_prefix}/X11R6/%{_lib}
  
  #==============================================================================
  # ---- config.guess platform macros.
