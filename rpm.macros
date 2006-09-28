@@ -251,7 +251,7 @@ unset LINGUAS ||:\
 %apache_modules_api %(awk '/#define MODULE_MAGIC_NUMBER_MAJOR/ {print $3}' /usr/include/apache/ap_mmn.h 2>/dev/null || echo ERROR)
 
 # kernel version-release handling
-%__kernel_ver	%([ -f %{_kernelsrcdir}/include/linux/version.h ] && (grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | head -n 1 | cut -d'"' -f2) || (awk '/^VERSION/ { ver = $0; gsub(/VERSION.*=/, NIL, ver); } /^PATCHLEVEL/ { plev = $0; gsub(/PATCHLEVEL.*=/, NIL, plev); } /^SUBLEVEL/ { slev = $0; gsub(/SUBLEVEL.*=/, NIL, slev); } /^EXTRAVERSION/ { ever = $0; gsub(/EXTRAVERSION.*=/, NIL, ever); gsub(/ /, NIL, ever); } END { printf("%d.%d.%d%s", ver, plev, slev, ever); }' %{_kernelsrcdir}/Makefile 2> /dev/null))
+%__kernel_ver	%( VER_H=%{_kernelsrcdir}/include/linux/utsrelease.h; [ -f $VER_H ] || VER_H=%{_kernelsrcdir}/include/linux/version.h; [ -f $VER_H ] && (grep UTS_RELEASE $VER_H 2>/dev/null | head -n 1 | cut -d'"' -f2) || (awk '/^VERSION/ { ver = $0; gsub(/VERSION.*=/, NIL, ver); } /^PATCHLEVEL/ { plev = $0; gsub(/PATCHLEVEL.*=/, NIL, plev); } /^SUBLEVEL/ { slev = $0; gsub(/SUBLEVEL.*=/, NIL, slev); } /^EXTRAVERSION/ { ever = $0; gsub(/EXTRAVERSION.*=/, NIL, ever); gsub(/ /, NIL, ever); } END { printf("%d.%d.%d%s", ver, plev, slev, ever); }' %{_kernelsrcdir}/Makefile 2> /dev/null))
 %__kernel_rel	%(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{RELEASE}" | grep -v "is not")
 %__kernel_rpmvr	%(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{VERSION}-%{RELEASE}" | grep -v "is not")
 %_kernel_ver	%{__kernel_ver}%{?with_dist_kernel:%(echo %{__kernel_ver} | grep -q -e - || echo -%{__kernel_rel})}
