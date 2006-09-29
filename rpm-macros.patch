@@ -34,7 +34,7 @@ diff -Nur rpm-4.4.6.orig/macros.in rpm-4.4.6.macros/macros.in
    \
    %{verbose:set -x}%{!verbose:exec > /dev/null}\
    umask 022\
-@@ -1350,5 +1350,22 @@
+@@ -1350,5 +1350,23 @@
  #%__executable_provides	@RPMCONFIGDIR@/executabledeps.sh --provides
  #%__executable_requires	@RPMCONFIGDIR@/executabledeps.sh --requires
  
@@ -44,7 +44,8 @@ diff -Nur rpm-4.4.6.orig/macros.in rpm-4.4.6.macros/macros.in
 +#-----------------------------------------------------------------
 +# CFLAGS and LDFLAGS used to build
 +
-+%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -gdwarf-2 -g2 -feliminate-dwarf2-dups}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
++%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -gdwarf-2 -g2}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
++# -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
 +
 +%debugcflags	-O0 -g -Wall
 +%optldflags	-Wl,--as-needed
