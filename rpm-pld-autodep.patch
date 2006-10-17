@@ -337,9 +337,9 @@
  {
      rpmfcApplyTbl fcat;
 @@ -865,6 +1055,26 @@
-     int ix;
      int i;
      int xx;
+     int skipping;
 +    int j;
 +    regex_t *noautoprovfiles = NULL;
 +    int noautoprovfiles_c;
@@ -363,8 +363,6 @@
  
      /* Generate package and per-file dependencies. */
      for (fc->ix = 0; fc->fn[fc->ix] != NULL; fc->ix++) {
---- rpm-4.4.7/build/rpmfc.c.org	2006-10-17 22:07:32.281698500 +0200
-+++ rpm-4.4.7/build/rpmfc.c	2006-10-17 22:08:38.313825250 +0200
 @@ -1076,9 +1076,43 @@
  	for (fcat = rpmfcApplyTable; fcat->func != NULL; fcat++) {
  	    if (!(fc->fcolor->vals[fc->ix] & fcat->colormask))
