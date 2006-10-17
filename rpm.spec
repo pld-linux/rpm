@@ -87,7 +87,7 @@ Patch29:	%{name}-libdir64.patch
 Patch30:	%{name}-libdir-links.patch
 Patch31:	%{name}-missing-prototypes.patch
 Patch32:	%{name}-pld-autodep.patch
-
+Patch33:	%{name}-arch-x86_64.patch
 Patch34:	%{name}-epoch0.patch
 Patch35:	%{name}-perl_req-INC_dirs.patch
 Patch36:	%{name}-debuginfo.patch
@@ -667,9 +667,8 @@ install %{SOURCE12} scripts/perl.prov
 %patch29 -p1
 %patch30 -p1
 %patch31 -p1
-# FIXME
-#%patch32 -p1
-
+%patch32 -p1
+%patch33 -p1
 %patch34 -p1
 %patch35 -p0
 %patch36 -p1
@@ -680,8 +679,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch41 -p1
 %patch42 -p1
 %patch43 -p1
-# FIXME
-#%{!?with_neon:%patch44 -p1}
+%{!?with_neon:%patch44 -p1}
 %patch45 -p1
 %patch46 -p1
 
@@ -984,7 +982,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_rpmlibdir}/rpmk
 #%attr(755,root,root) %{_rpmlibdir}/rpm[qv]
 
-%doc %attr(755,root,root) %{_rpmlibdir}/convertrpmrc.sh
+#%doc %attr(755,root,root) %{_rpmlibdir}/convertrpmrc.sh
 
 %{_rpmlibdir}/rpmrc
 %{_rpmlibdir}/rpmpopt*
@@ -1025,6 +1023,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/rpm2cpio
 %attr(755,root,root) %{_bindir}/rpmcache
 %attr(755,root,root) %{_bindir}/rpmdeps
+%attr(755,root,root) %{_bindir}/rpmdigest
 %attr(755,root,root) %{_bindir}/rpmgraph
 %{!?with_system_libmagic:%attr(755,root,root) %{_bindir}/rpmfile}
 %attr(755,root,root) %{_rpmlibdir}/find-debuginfo.sh
@@ -1061,7 +1060,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/noauto*
 %attr(755,root,root) %{_rpmlibdir}/brp-*
 %attr(755,root,root) %{_rpmlibdir}/check-files
-%attr(755,root,root) %{_rpmlibdir}/check-prereqs
+# %attr(755,root,root) %{_rpmlibdir}/check-prereqs
 %attr(755,root,root) %{_rpmlibdir}/compress-doc
 %attr(755,root,root) %{_rpmlibdir}/config.*
 %attr(755,root,root) %{_rpmlibdir}/cross-build
@@ -1140,7 +1139,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_rpmlibdir}/find-*.perl
 #%attr(755,root,root) %{_rpmlibdir}/find-prov.pl
 #%attr(755,root,root) %{_rpmlibdir}/find-req.pl
-%attr(755,root,root) %{_rpmlibdir}/get_magic.pl
+#%attr(755,root,root) %{_rpmlibdir}/get_magic.pl
 
 %files pythonprov
 %defattr(644,root,root,755)
