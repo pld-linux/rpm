@@ -1,9 +1,15 @@
---- rpm-4.4.2/configure.ac.orig	2005-07-23 14:06:59.692430464 +0200
-+++ rpm-4.4.2/configure.ac	2005-07-23 14:08:45.591331384 +0200
-@@ -516,28 +516,6 @@
- WITH_NEON_SUBDIR=
- WITH_NEON_INCLUDE=
- WITH_NEON_LIB=
+diff -ur rpm-4.4.7.org/configure.ac rpm-4.4.7/configure.ac
+--- rpm-4.4.7.org/configure.ac	2006-10-17 22:12:03.110624000 +0200
++++ rpm-4.4.7/configure.ac	2006-10-17 22:12:43.117124500 +0200
+@@ -530,33 +530,6 @@
+ AC_SUBST(WITH_BEECRYPT_INCLUDE)
+ AC_SUBST(WITH_BEECRYPT_LIB)
+ 
+-#=================
+-# Check for neon library. Prefer external, otherwise internal.
+-WITH_NEON_SUBDIR=
+-WITH_NEON_INCLUDE=
+-WITH_NEON_LIB=
 -AC_CHECK_HEADER([neon/ne_session.h], [
 -  AC_CHECK_LIB(neon, ne_session_create, [
 -    AC_DEFINE(HAVE_LIBNEON, 1, [Define to 1 if you have the 'neon' library (-lneon).])
@@ -29,8 +35,9 @@
  AC_SUBST(WITH_NEON_SUBDIR)
  AC_SUBST(WITH_NEON_INCLUDE)
  AC_SUBST(WITH_NEON_LIB)
---- rpm-4.4.6/rpmio/rpmdav.c.orig	2006-03-12 20:24:23.000000000 +0100
-+++ rpm-4.4.6/rpmio/rpmdav.c	2006-04-17 18:20:07.597482250 +0200
+diff -ur rpm-4.4.7.org/rpmio/rpmdav.c rpm-4.4.7/rpmio/rpmdav.c
+--- rpm-4.4.7.org/rpmio/rpmdav.c	2006-04-17 17:23:29.000000000 +0200
++++ rpm-4.4.7/rpmio/rpmdav.c	2006-10-17 22:14:01.150001250 +0200
 @@ -9,31 +9,6 @@
  #include <pthread.h>
  #endif
@@ -1396,11 +1403,10 @@
  /*@unchecked@*/
  int avmagicdir = 0x3607113;
  
-@@ -1517,172 +166,3 @@
- /*@=kepttrans@*/
+@@ -1518,171 +167,4 @@
  }
  /*@=boundswrite@*/
--
+ 
 -/* =============================================================== */
 -/*@unchecked@*/
 -int davmagicdir = 0x8440291;
@@ -1483,7 +1489,7 @@
 -    char * t;
 -    int ac, nac;
 -    int rc;
--
+ 
 -    /* HACK: glob does not pass dirs with trailing '/' */
 -    nb = strlen(path)+1;
 -/*@-branchstate@*/
@@ -1569,8 +1575,9 @@
 -/*@=kepttrans@*/
 -}
 -/*@=modfilesys@*/
---- rpm-4.4.3/rpmio/rpmdav.h.orig	2005-10-11 21:13:59.000000000 +0200
-+++ rpm-4.4.3/rpmio/rpmdav.h	2005-11-19 01:07:54.224769056 +0100
+diff -ur rpm-4.4.7.org/rpmio/rpmdav.h rpm-4.4.7/rpmio/rpmdav.h
+--- rpm-4.4.7.org/rpmio/rpmdav.h	2005-10-11 21:13:59.000000000 +0200
++++ rpm-4.4.7/rpmio/rpmdav.h	2006-10-17 22:14:25.659533000 +0200
 @@ -80,133 +80,6 @@
  	/*@globals fileSystem, internalState @*/
  	/*@modifies fileSystem, internalState @*/;
@@ -1705,9 +1712,10 @@
  #ifdef __cplusplus
  }
  #endif
---- rpm-4.4.3/rpmio/rpmio.c.orig	2005-11-16 01:05:39.000000000 +0100
-+++ rpm-4.4.3/rpmio/rpmio.c	2005-11-19 01:03:10.769860752 +0100
-@@ -371,13 +371,6 @@
+diff -ur rpm-4.4.7.org/rpmio/rpmio.c rpm-4.4.7/rpmio/rpmio.c
+--- rpm-4.4.7.org/rpmio/rpmio.c	2006-08-08 08:55:01.000000000 +0200
++++ rpm-4.4.7/rpmio/rpmio.c	2006-10-17 22:18:38.135311750 +0200
+@@ -406,13 +406,6 @@
  
      fdstat_enter(fd, FDSTAT_READ);
  /*@-boundswrite@*/
@@ -1721,7 +1729,7 @@
  	rc = read(fdFileno(fd), buf, (count > fd->bytesRemain ? fd->bytesRemain : count));
  /*@=boundswrite@*/
      fdstat_exit(fd, FDSTAT_READ, rc);
-@@ -405,10 +398,6 @@
+@@ -440,10 +433,6 @@
  
      fdstat_enter(fd, FDSTAT_WRITE);
  /*@-boundsread@*/
@@ -1732,7 +1740,7 @@
  	rc = write(fdno, buf, (count > fd->bytesRemain ? fd->bytesRemain : count));
  /*@=boundsread@*/
      fdstat_exit(fd, FDSTAT_WRITE, rc);
-@@ -455,11 +444,6 @@
+@@ -490,11 +479,6 @@
      fdSetFdno(fd, -1);
  
      fdstat_enter(fd, FDSTAT_CLOSE);
@@ -1744,7 +1752,7 @@
  	rc = ((fdno >= 0) ? close(fdno) : -2);
  /*@=branchstate@*/
      fdstat_exit(fd, FDSTAT_CLOSE, rc);
-@@ -512,10 +496,6 @@
+@@ -547,10 +531,6 @@
      FD_ZERO(&wrfds);
  #endif
  	
@@ -1755,7 +1763,7 @@
      if ((fdno = fdFileno(fd)) < 0)
  	return -1;	/* XXX W2DO? */
  	
-@@ -567,10 +547,6 @@
+@@ -602,10 +582,6 @@
      FD_ZERO(&rdfds);
  #endif
  
@@ -1766,7 +1774,7 @@
      if ((fdno = fdFileno(fd)) < 0)
  	return -1;	/* XXX W2DO? */
  	
-@@ -1566,154 +1542,6 @@
+@@ -1758,159 +1734,6 @@
      return rc;
  }
  
@@ -1807,6 +1815,7 @@
 -    urlinfo u;
 -    const char * host;
 -    const char * path;
+-    char hthost[NI_MAXHOST];
 -    int port;
 -    int rc;
 -    char * req;
@@ -1819,6 +1828,10 @@
 -
 -    if (((host = (u->proxyh ? u->proxyh : u->host)) == NULL))
 -	return FTPERR_BAD_HOSTNAME;
+-    if (strchr(host, ':'))
+-	sprintf(hthost, "[%s]", host);
+-    else
+-	strcpy(hthost, host);
 -
 -    if ((port = (u->proxyp > 0 ? u->proxyp : u->port)) < 0) port = 80;
 -    path = (u->proxyh || u->proxyp > 0) ? u->url : httpArg;
@@ -1848,7 +1861,7 @@
 -Accept: text/plain\r\n\
 -Transfer-Encoding: chunked\r\n\
 -\r\n\
--") + strlen(httpCmd) + strlen(path) + sizeof(VERSION) + strlen(host) + 20;
+-") + strlen(httpCmd) + strlen(path) + sizeof(VERSION) + strlen(hthost) + 20;
 -
 -/*@-boundswrite@*/
 -    req = alloca(len);
@@ -1862,7 +1875,7 @@
 -Accept: text/plain\r\n\
 -Transfer-Encoding: chunked\r\n\
 -\r\n\
--",	httpCmd, path, (u->httpVersion ? 1 : 0), VERSION, host, port);
+-",	httpCmd, path, (u->httpVersion ? 1 : 0), VERSION, hthost, port);
 -} else {
 -    sprintf(req, "\
 -%s %s HTTP/1.%d\r\n\
@@ -1870,7 +1883,7 @@
 -Host: %s:%d\r\n\
 -Accept: text/plain\r\n\
 -\r\n\
--",	httpCmd, path, (u->httpVersion ? 1 : 0), VERSION, host, port);
+-",	httpCmd, path, (u->httpVersion ? 1 : 0), VERSION, hthost, port);
 -}
 -/*@=boundswrite@*/
 -
@@ -1921,7 +1934,7 @@
  /* XXX DYING: unused */
  void * ufdGetUrlinfo(FD_t fd)
  {
-@@ -2071,29 +1899,6 @@
+@@ -2268,29 +2091,6 @@
  	    fd->wr_chunked = 0;
  	}
  	break;
@@ -1951,7 +1964,7 @@
      case URL_IS_DASH:
  	assert(!(flags & O_RDWR));
  	fd = fdDup( ((flags & O_WRONLY) ? STDOUT_FILENO : STDIN_FILENO) );
-@@ -2711,10 +2516,8 @@
+@@ -2908,10 +2708,8 @@
  	    if (fd->nfps > 0 && fpno == -1 &&
  		fd->fps[fd->nfps-1].io == ufdio &&
  		fd->fps[fd->nfps-1].fp == fp &&
@@ -1963,7 +1976,7 @@
  		if (fp)
  		    rc = fflush(fp);
  		fd->nfps--;
-@@ -2724,26 +2527,9 @@
+@@ -2921,26 +2719,9 @@
  /*@-usereleased@*/
  		if (fdGetFdno(fd) >= 0)
  		    break;
@@ -1990,14 +2003,14 @@
  			rc = fclose(fp);
  		}
  		fdPop(fd);
-@@ -2992,18 +2778,10 @@
+@@ -3195,18 +2976,9 @@
  	    return NULL;
  	}
      } else {
 -	FILE *fp;
 -	int fdno;
 -	int isHTTP = 0;
- 
+-
  	/* XXX gzdio and bzdio here too */
  
  	switch (urlIsURL(path)) {
@@ -2009,7 +2022,7 @@
  	case URL_IS_PATH:
  	case URL_IS_DASH:
  	case URL_IS_FTP:
-@@ -3011,7 +2789,7 @@
+@@ -3214,7 +2986,7 @@
  if (_rpmio_debug)
  fprintf(stderr, "*** Fopen ufdio path %s fmode %s\n", path, fmode);
  	    fd = ufdOpen(path, flags, perms);
@@ -2018,7 +2031,7 @@
  		return fd;
  	    break;
  	default:
-@@ -3020,15 +2798,6 @@
+@@ -3223,15 +2995,6 @@
  	    return NULL;
  	    /*@notreached@*/ break;
  	}
@@ -2034,7 +2047,7 @@
      }
      /*@=branchstate@*/
  
-@@ -3064,10 +2833,6 @@
+@@ -3267,10 +3030,6 @@
      int i, rc = 0;
  
      if (fd == NULL) return -1;
@@ -2045,7 +2058,7 @@
      for (i = fd->nfps; rc == 0 && i >= 0; i--) {
  /*@-boundsread@*/
  	FDSTACK_t * fps = &fd->fps[i];
-@@ -3102,9 +2867,6 @@
+@@ -3305,9 +3064,6 @@
  {
      int i, rc = -1;
  
@@ -2055,10 +2068,10 @@
      for (i = fd->nfps ; rc == -1 && i >= 0; i--) {
  /*@-boundsread@*/
  	rc = fd->fps[i].fdno;
-diff -ur rpm-4.4.1/rpmio/rpmio_internal.h rpm-4.4.1-no-neon/rpmio/rpmio_internal.h
---- rpm-4.4.1/rpmio/rpmio_internal.h	2005-02-08 18:14:20.000000000 +0100
-+++ rpm-4.4.1-no-neon/rpmio/rpmio_internal.h	2005-06-19 20:34:07.006758008 +0200
-@@ -152,7 +152,6 @@
+diff -ur rpm-4.4.7.org/rpmio/rpmio_internal.h rpm-4.4.7/rpmio/rpmio_internal.h
+--- rpm-4.4.7.org/rpmio/rpmio_internal.h	2006-06-18 20:54:59.000000000 +0200
++++ rpm-4.4.7/rpmio/rpmio_internal.h	2006-10-17 22:18:51.308135000 +0200
+@@ -157,7 +157,6 @@
  /*@dependent@*/
      void *	url;		/* ufdio: URL info */
  /*@relnull@*/
@@ -2066,9 +2079,9 @@ diff -ur rpm-4.4.1/rpmio/rpmio_internal.h rpm-4.4.1-no-neon/rpmio/rpmio_internal
  
      int		rd_timeoutsecs;	/* ufdRead: per FD_t timer */
      ssize_t	bytesRemain;	/* ufdio: */
-diff -ur rpm-4.4.1/rpmio/rpmrpc.c rpm-4.4.1-no-neon/rpmio/rpmrpc.c
---- rpm-4.4.1/rpmio/rpmrpc.c	2005-01-26 06:16:09.000000000 +0100
-+++ rpm-4.4.1-no-neon/rpmio/rpmrpc.c	2005-06-19 20:34:07.008757704 +0200
+diff -ur rpm-4.4.7.org/rpmio/rpmrpc.c rpm-4.4.7/rpmio/rpmrpc.c
+--- rpm-4.4.7.org/rpmio/rpmrpc.c	2006-10-03 06:38:01.000000000 +0200
++++ rpm-4.4.7/rpmio/rpmrpc.c	2006-10-17 22:20:28.658219000 +0200
 @@ -91,10 +91,6 @@
      case URL_IS_FTP:
  	return ftpMkdir(path, mode);
@@ -2080,7 +2093,7 @@ diff -ur rpm-4.4.1/rpmio/rpmrpc.c rpm-4.4.1-no-neon/rpmio/rpmrpc.c
      case URL_IS_PATH:
  	path = lpath;
  	/*@fallthrough@*/
-@@ -118,14 +114,6 @@
+@@ -118,15 +114,6 @@
      case URL_IS_FTP:
  	return ftpChdir(path);
  	/*@notreached@*/ break;
@@ -2089,13 +2102,14 @@ diff -ur rpm-4.4.1/rpmio/rpmrpc.c rpm-4.4.1-no-neon/rpmio/rpmrpc.c
 -#ifdef	NOTYET
 -	return davChdir(path);
 -#else
+-	errno = EINVAL;		/* XXX W2DO? */
 -	return -2;
 -#endif
 -	/*@notreached@*/ break;
      case URL_IS_PATH:
  	path = lpath;
  	/*@fallthrough@*/
-@@ -149,10 +137,6 @@
+@@ -151,10 +138,6 @@
      case URL_IS_FTP:
  	return ftpRmdir(path);
  	/*@notreached@*/ break;
@@ -2106,7 +2120,16 @@ diff -ur rpm-4.4.1/rpmio/rpmrpc.c rpm-4.4.1-no-neon/rpmio/rpmrpc.c
      case URL_IS_PATH:
  	path = lpath;
  	/*@fallthrough@*/
-@@ -180,10 +164,6 @@
+@@ -185,8 +168,6 @@
+     case URL_IS_DASH:
+     case URL_IS_HKP:
+     case URL_IS_FTP:		/* XXX TODO: implement. */
+-    case URL_IS_HTTPS:		/* XXX TODO: implement. */
+-    case URL_IS_HTTP:		/* XXX TODO: implement. */
+     default:
+ 	errno = EINVAL;		/* XXX W2DO? */
+ 	return -2;
+@@ -208,10 +189,6 @@
  
      oldut = urlPath(oldpath, &oe);
      switch (oldut) {
@@ -2117,7 +2140,34 @@ diff -ur rpm-4.4.1/rpmio/rpmrpc.c rpm-4.4.1-no-neon/rpmio/rpmrpc.c
      case URL_IS_FTP:		/* XXX WRONG WRONG WRONG */
      case URL_IS_PATH:
      case URL_IS_UNKNOWN:
-@@ -278,10 +258,6 @@
+@@ -233,8 +210,6 @@
+ 	    return -2;
+ 	return ftpRename(oldpath, newpath);
+ 	/*@notreached@*/ break;
+-    case URL_IS_HTTPS:		/* XXX WRONG WRONG WRONG */
+-    case URL_IS_HTTP:		/* XXX WRONG WRONG WRONG */
+     case URL_IS_PATH:
+ 	oldpath = oe;
+ 	newpath = ne;
+@@ -258,8 +233,6 @@
+ 
+     oldut = urlPath(oldpath, &oe);
+     switch (oldut) {
+-    case URL_IS_HTTPS:		/* XXX WRONG WRONG WRONG */
+-    case URL_IS_HTTP:		/* XXX WRONG WRONG WRONG */
+     case URL_IS_FTP:		/* XXX WRONG WRONG WRONG */
+     case URL_IS_PATH:
+     case URL_IS_UNKNOWN:
+@@ -273,8 +246,6 @@
+ 
+     newut = urlPath(newpath, &ne);
+     switch (newut) {
+-    case URL_IS_HTTPS:		/* XXX WRONG WRONG WRONG */
+-    case URL_IS_HTTP:		/* XXX WRONG WRONG WRONG */
+     case URL_IS_FTP:		/* XXX WRONG WRONG WRONG */
+     case URL_IS_PATH:
+ if (_rpmio_debug)
+@@ -306,10 +277,6 @@
      case URL_IS_FTP:
  	return ftpUnlink(path);
  	/*@notreached@*/ break;
@@ -2128,7 +2178,7 @@ diff -ur rpm-4.4.1/rpmio/rpmrpc.c rpm-4.4.1-no-neon/rpmio/rpmrpc.c
      case URL_IS_PATH:
  	path = lpath;
  	/*@fallthrough@*/
-@@ -1280,10 +1256,6 @@
+@@ -1308,10 +1275,6 @@
      case URL_IS_FTP:
  	return ftpStat(path, st);
  	/*@notreached@*/ break;
@@ -2139,7 +2189,7 @@ diff -ur rpm-4.4.1/rpmio/rpmrpc.c rpm-4.4.1-no-neon/rpmio/rpmrpc.c
      case URL_IS_PATH:
  	path = lpath;
  	/*@fallthrough@*/
-@@ -1309,10 +1281,6 @@
+@@ -1338,10 +1301,6 @@
      case URL_IS_FTP:
  	return ftpLstat(path, st);
  	/*@notreached@*/ break;
@@ -2150,7 +2200,79 @@ diff -ur rpm-4.4.1/rpmio/rpmrpc.c rpm-4.4.1-no-neon/rpmio/rpmrpc.c
      case URL_IS_PATH:
  	path = lpath;
  	/*@fallthrough@*/
-@@ -1336,14 +1304,6 @@
+@@ -1373,8 +1332,6 @@
+     case URL_IS_DASH:
+     case URL_IS_HKP:
+     case URL_IS_FTP:		/* XXX TODO: implement. */
+-    case URL_IS_HTTPS:		/* XXX TODO: implement. */
+-    case URL_IS_HTTP:		/* XXX TODO: implement. */
+     default:
+ 	errno = EINVAL;		/* XXX W2DO? */
+ 	return -2;
+@@ -1399,8 +1356,6 @@
+     case URL_IS_DASH:
+     case URL_IS_HKP:
+     case URL_IS_FTP:		/* XXX TODO: implement. */
+-    case URL_IS_HTTPS:		/* XXX TODO: implement. */
+-    case URL_IS_HTTP:		/* XXX TODO: implement. */
+     default:
+ 	errno = EINVAL;		/* XXX W2DO? */
+ 	return -2;
+@@ -1425,8 +1380,6 @@
+     case URL_IS_DASH:
+     case URL_IS_HKP:
+     case URL_IS_FTP:		/* XXX TODO: implement. */
+-    case URL_IS_HTTPS:		/* XXX TODO: implement. */
+-    case URL_IS_HTTP:		/* XXX TODO: implement. */
+     default:
+ 	errno = EINVAL;		/* XXX W2DO? */
+ 	return -2;
+@@ -1451,8 +1404,6 @@
+     case URL_IS_DASH:
+     case URL_IS_HKP:
+     case URL_IS_FTP:		/* XXX TODO: implement. */
+-    case URL_IS_HTTPS:		/* XXX TODO: implement. */
+-    case URL_IS_HTTP:		/* XXX TODO: implement. */
+     default:
+ 	errno = EINVAL;		/* XXX W2DO? */
+ 	return -2;
+@@ -1477,8 +1428,6 @@
+     case URL_IS_DASH:
+     case URL_IS_HKP:
+     case URL_IS_FTP:		/* XXX TODO: implement. */
+-    case URL_IS_HTTPS:		/* XXX TODO: implement. */
+-    case URL_IS_HTTP:		/* XXX TODO: implement. */
+     default:
+ 	errno = EINVAL;		/* XXX W2DO? */
+ 	return -2;
+@@ -1503,8 +1452,6 @@
+     case URL_IS_DASH:
+     case URL_IS_HKP:
+     case URL_IS_FTP:		/* XXX TODO: implement. */
+-    case URL_IS_HTTPS:		/* XXX TODO: implement. */
+-    case URL_IS_HTTP:		/* XXX TODO: implement. */
+     default:
+ 	errno = EINVAL;		/* XXX W2DO? */
+ 	return -2;
+@@ -1529,8 +1476,6 @@
+     case URL_IS_DASH:
+     case URL_IS_HKP:
+     case URL_IS_FTP:		/* XXX TODO: implement. */
+-    case URL_IS_HTTPS:		/* XXX TODO: implement. */
+-    case URL_IS_HTTP:		/* XXX TODO: implement. */
+     default:
+ 	errno = EINVAL;		/* XXX W2DO? */
+ 	return -2;
+@@ -1558,8 +1503,6 @@
+     case URL_IS_DASH:
+     case URL_IS_HKP:
+     case URL_IS_FTP:		/* XXX TODO: implement. */
+-    case URL_IS_HTTPS:		/* XXX TODO: implement. */
+-    case URL_IS_HTTP:		/* XXX TODO: implement. */
+     default:
+ 	errno = EINVAL;		/* XXX W2DO? */
+ 	return -2;
+@@ -1577,14 +1520,6 @@
      case URL_IS_FTP:
  	return ftpReadlink(path, buf, bufsiz);
  	/*@notreached@*/ break;
@@ -2165,7 +2287,25 @@ diff -ur rpm-4.4.1/rpmio/rpmrpc.c rpm-4.4.1-no-neon/rpmio/rpmrpc.c
      case URL_IS_PATH:
  	path = lpath;
  	/*@fallthrough@*/
-@@ -1487,10 +1447,6 @@
+@@ -1617,8 +1552,6 @@
+ 	break;
+     case URL_IS_DASH:
+     case URL_IS_HKP:
+-    case URL_IS_HTTPS:		/* XXX TODO: implement. */
+-    case URL_IS_HTTP:		/* XXX TODO: implement. */
+     case URL_IS_FTP:		/* XXX TODO: implement. */
+     default:
+ 	errno = EINVAL;		/* XXX W2DO? */
+@@ -1685,8 +1618,6 @@
+ fprintf(stderr, "*** Glob(%s,0x%x,%p,%p)\n", pattern, (unsigned)flags, (void *)errfunc, pglob);
+ /*@=castfcnptr@*/
+     switch (ut) {
+-    case URL_IS_HTTPS:
+-    case URL_IS_HTTP:
+     case URL_IS_FTP:
+ /*@-type@*/
+ 	pglob->gl_closedir = Closedir;
+@@ -1730,10 +1661,6 @@
      case URL_IS_FTP:
  	return ftpOpendir(path);
  	/*@notreached@*/ break;
@@ -2176,35 +2316,19 @@ diff -ur rpm-4.4.1/rpmio/rpmrpc.c rpm-4.4.1-no-neon/rpmio/rpmrpc.c
      case URL_IS_PATH:
  	path = lpath;
  	/*@fallthrough@*/
-@@ -1515,8 +1471,6 @@
- 	return NULL;
-     if (ISAVMAGIC(dir))
- 	return avReaddir(dir);
--    if (ISDAVMAGIC(dir))
--	return davReaddir(dir);
-     return readdir(dir);
- }
- 
-@@ -1528,7 +1482,5 @@
- 	return 0;
-     if (ISAVMAGIC(dir))
- 	return avClosedir(dir);
--    if (ISDAVMAGIC(dir))
--	return davClosedir(dir);
-     return closedir(dir);
- }
-diff -ur rpm-4.4.1/rpmio/tget.c rpm-4.4.1-no-neon/rpmio/tget.c
---- rpm-4.4.1/rpmio/tget.c	2004-11-19 17:52:58.000000000 +0100
-+++ rpm-4.4.1-no-neon/rpmio/tget.c	2005-06-19 20:34:07.009757552 +0200
-@@ -9,7 +9,6 @@
+diff -ur rpm-4.4.7.org/rpmio/tget.c rpm-4.4.7/rpmio/tget.c
+--- rpm-4.4.7.org/rpmio/tget.c	2004-11-19 17:52:58.000000000 +0100
++++ rpm-4.4.7/rpmio/tget.c	2006-10-17 22:20:47.995427500 +0200
+@@ -9,8 +9,6 @@
  
  static int _debug = 0;
  
 -int noNeon;
- 
+-
  #define	HTTPSPATH	"https://localhost/test.txt"
  #define	HTTPPATH	"http://localhost/test.txt"
-@@ -40,8 +39,6 @@
+ #define	FTPPATH		"ftp://localhost/test.txt"
+@@ -40,8 +38,6 @@
   { "debug", 'd', POPT_ARG_VAL,	&_debug, -1,		NULL, NULL },
   { "ftpdebug", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_ftp_debug, -1,
  	N_("debug protocol data stream"), NULL},
@@ -2213,18 +2337,19 @@ diff -ur rpm-4.4.1/rpmio/tget.c rpm-4.4.1-no-neon/rpmio/tget.c
   { "rpmiodebug", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_rpmio_debug, -1,
  	N_("debug rpmio I/O"), NULL},
   { "urldebug", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_url_debug, -1,
-diff -ur rpm-4.4.1/rpmio/tglob.c rpm-4.4.1-no-neon/rpmio/tglob.c
---- rpm-4.4.1/rpmio/tglob.c	2004-11-19 17:53:05.000000000 +0100
-+++ rpm-4.4.1-no-neon/rpmio/tglob.c	2005-06-19 20:34:07.010757400 +0200
-@@ -9,7 +9,6 @@
+diff -ur rpm-4.4.7.org/rpmio/tglob.c rpm-4.4.7/rpmio/tglob.c
+--- rpm-4.4.7.org/rpmio/tglob.c	2004-11-19 17:53:05.000000000 +0100
++++ rpm-4.4.7/rpmio/tglob.c	2006-10-17 22:21:01.712284750 +0200
+@@ -9,8 +9,6 @@
  
  static int _debug = 0;
  
 -int noNeon;
- 
+-
  #define	HTTPSPATH	"https://localhost/rawhide/test/*.rpm"
  #if 0
-@@ -52,8 +51,6 @@
+ #define	HTTPPATH	"http://localhost/rawhide/test/*.rpm"
+@@ -52,8 +50,6 @@
   { "debug", 'd', POPT_ARG_VAL,	&_debug, -1,		NULL, NULL },
   { "ftpdebug", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_ftp_debug, -1,
  	N_("debug protocol data stream"), NULL},
@@ -2233,18 +2358,19 @@ diff -ur rpm-4.4.1/rpmio/tglob.c rpm-4.4.1-no-neon/rpmio/tglob.c
   { "rpmiodebug", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_rpmio_debug, -1,
  	N_("debug rpmio I/O"), NULL},
   { "urldebug", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_url_debug, -1,
-diff -ur rpm-4.4.1/rpmio/thkp.c rpm-4.4.1-no-neon/rpmio/thkp.c
---- rpm-4.4.1/rpmio/thkp.c	2005-01-04 17:35:12.000000000 +0100
-+++ rpm-4.4.1-no-neon/rpmio/thkp.c	2005-06-19 20:34:07.012757096 +0200
-@@ -10,7 +10,6 @@
+diff -ur rpm-4.4.7.org/rpmio/thkp.c rpm-4.4.7/rpmio/thkp.c
+--- rpm-4.4.7.org/rpmio/thkp.c	2005-01-04 17:35:12.000000000 +0100
++++ rpm-4.4.7/rpmio/thkp.c	2006-10-17 22:21:10.696846250 +0200
+@@ -10,8 +10,6 @@
  static int _debug = 0;
  static int _printing = 0;
  
 -int noNeon;
- 
+-
  #if 0
  #define	HKPPATH		"hkp://pgp.mit.edu:11371/pks/lookup?op=get&search=0xF5C75256"
-@@ -95,8 +94,6 @@
+ #else
+@@ -95,8 +93,6 @@
  	N_("debug protocol data stream"), NULL},
   { "ftpdebug", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_ftp_debug, -1,
  	N_("debug protocol data stream"), NULL},
@@ -2253,18 +2379,19 @@ diff -ur rpm-4.4.1/rpmio/thkp.c rpm-4.4.1-no-neon/rpmio/thkp.c
   { "rpmiodebug", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_rpmio_debug, -1,
  	N_("debug rpmio I/O"), NULL},
   { "urldebug", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_url_debug, -1,
-diff -ur rpm-4.4.1/rpmio/tput.c rpm-4.4.1-no-neon/rpmio/tput.c
---- rpm-4.4.1/rpmio/tput.c	2004-11-19 17:53:11.000000000 +0100
-+++ rpm-4.4.1-no-neon/rpmio/tput.c	2005-06-19 20:34:07.013756944 +0200
-@@ -9,7 +9,6 @@
+diff -ur rpm-4.4.7.org/rpmio/tput.c rpm-4.4.7/rpmio/tput.c
+--- rpm-4.4.7.org/rpmio/tput.c	2004-11-19 17:53:11.000000000 +0100
++++ rpm-4.4.7/rpmio/tput.c	2006-10-17 22:21:25.841792750 +0200
+@@ -9,8 +9,6 @@
  
  static int _debug = 0;
  
 -int noNeon;
- 
+-
  #define	HTTPSPATH	"https://localhost/rawhide/toad/tput.txt"
  #define	HTTPPATH	"http://localhost/rawhide/toad/tput.txt"
-@@ -100,8 +99,6 @@
+ #define	FTPPATH		"ftp://localhost/home/test/tput.txt"
+@@ -100,8 +98,6 @@
   { "debug", 'd', POPT_ARG_VAL,	&_debug, -1,		NULL, NULL },
   { "ftpdebug", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_ftp_debug, -1,
  	N_("debug protocol data stream"), NULL},
@@ -2273,29 +2400,9 @@ diff -ur rpm-4.4.1/rpmio/tput.c rpm-4.4.1-no-neon/rpmio/tput.c
   { "rpmiodebug", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_rpmio_debug, -1,
  	N_("debug rpmio I/O"), NULL},
   { "urldebug", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_url_debug, -1,
-diff -ur rpm-4.4.1/rpmio/tring.c rpm-4.4.1-no-neon/rpmio/tring.c
---- rpm-4.4.1/rpmio/tring.c	2004-11-28 21:41:04.000000000 +0100
-+++ rpm-4.4.1-no-neon/rpmio/tring.c	2005-06-19 20:34:07.013756944 +0200
-@@ -5,7 +5,6 @@
- 
- static int printing = 1;
- static int _debug = 0;
--int noNeon;
- 
- static struct poptOption optionsTable[] = {
-  { "print", 'p', POPT_ARG_VAL,	&printing, 1,		NULL, NULL },
-@@ -13,8 +12,6 @@
-  { "debug", 'd', POPT_ARG_VAL,	&_debug, -1,		NULL, NULL },
-  { "ftpdebug", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_ftp_debug, -1,
- 	N_("debug protocol data stream"), NULL},
-- { "noneon", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &noNeon, 1,
--	N_("disable use of libneon for HTTP"), NULL},
-  { "rpmiodebug", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_rpmio_debug, -1,
- 	N_("debug rpmio I/O"), NULL},
-  { "urldebug", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_url_debug, -1,
-diff -ur rpm-4.4.1/rpmio/url.c rpm-4.4.1-no-neon/rpmio/url.c
---- rpm-4.4.1/rpmio/url.c	2004-11-28 21:41:31.000000000 +0100
-+++ rpm-4.4.1-no-neon/rpmio/url.c	2005-06-19 20:37:11.810663544 +0200
+diff -ur rpm-4.4.7.org/rpmio/url.c rpm-4.4.7/rpmio/url.c
+--- rpm-4.4.7.org/rpmio/url.c	2006-08-06 02:31:18.000000000 +0200
++++ rpm-4.4.7/rpmio/url.c	2006-10-17 22:21:51.747411750 +0200
 @@ -148,7 +148,6 @@
      }
      if (u->sess != NULL) {
