@@ -29,12 +29,12 @@ Summary(pt_BR):	Gerenciador de pacotes RPM
 Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
-Version:	4.4.6
-Release:	1.17
+Version:	4.4.7
+Release:	0.1
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
-# Source0-md5:	baa6f371446c65b4080d1cd1f194a7ae
+# Source0-md5:	d012c81b5169f7377ea4a36607e1445e
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -636,7 +636,8 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
-%patch14 -p1
+# FIXME
+#%patch14 -p1
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
@@ -659,7 +660,8 @@ install %{SOURCE12} scripts/perl.prov
 %patch21 -p1
 %patch22 -p1
 %patch23 -p1
-%patch24 -p1
+# FIXME
+#%patch24 -p1
 %patch25 -p1
 %patch26 -p1
 %patch27 -p1
@@ -667,7 +669,8 @@ install %{SOURCE12} scripts/perl.prov
 %patch29 -p1
 %patch30 -p1
 %patch31 -p1
-%patch32 -p1
+# FIXME
+#%patch32 -p1
 
 %patch34 -p1
 %patch35 -p0
@@ -679,7 +682,8 @@ install %{SOURCE12} scripts/perl.prov
 %patch41 -p1
 %patch42 -p1
 %patch43 -p1
-%{!?with_neon:%patch44 -p1}
+# FIXME
+#%{!?with_neon:%patch44 -p1}
 %patch45 -p1
 %patch46 -p1
 
