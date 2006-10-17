@@ -1577,8 +1577,21 @@ diff -ur rpm-4.4.7.org/rpmio/rpmdav.c rpm-4.4.7/rpmio/rpmdav.c
 -/*@=modfilesys@*/
 diff -ur rpm-4.4.7.org/rpmio/rpmdav.h rpm-4.4.7/rpmio/rpmdav.h
 --- rpm-4.4.7.org/rpmio/rpmdav.h	2005-10-11 21:13:59.000000000 +0200
-+++ rpm-4.4.7/rpmio/rpmdav.h	2006-10-17 22:14:25.659533000 +0200
-@@ -80,133 +80,6 @@
++++ rpm-4.4.7/rpmio/rpmdav.h	2006-10-17 22:35:33.742783250 +0200
+@@ -41,12 +41,6 @@
+ extern int avmagicdir;
+ #define ISAVMAGIC(_dir) (!memcmp((_dir), &avmagicdir, sizeof(avmagicdir)))
+ 
+-/**
+- */
+-/*@unchecked@*/
+-extern int davmagicdir;
+-#define ISDAVMAGIC(_dir) (!memcmp((_dir), &davmagicdir, sizeof(davmagicdir)))
+-
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
+@@ -80,133 +74,6 @@
  	/*@globals fileSystem, internalState @*/
  	/*@modifies fileSystem, internalState @*/;
  
@@ -2081,7 +2094,7 @@ diff -ur rpm-4.4.7.org/rpmio/rpmio_internal.h rpm-4.4.7/rpmio/rpmio_internal.h
      ssize_t	bytesRemain;	/* ufdio: */
 diff -ur rpm-4.4.7.org/rpmio/rpmrpc.c rpm-4.4.7/rpmio/rpmrpc.c
 --- rpm-4.4.7.org/rpmio/rpmrpc.c	2006-10-03 06:38:01.000000000 +0200
-+++ rpm-4.4.7/rpmio/rpmrpc.c	2006-10-17 22:20:28.658219000 +0200
++++ rpm-4.4.7/rpmio/rpmrpc.c	2006-10-17 22:35:59.040364250 +0200
 @@ -91,10 +91,6 @@
      case URL_IS_FTP:
  	return ftpMkdir(path, mode);
@@ -2316,6 +2329,24 @@ diff -ur rpm-4.4.7.org/rpmio/rpmrpc.c rpm-4.4.7/rpmio/rpmrpc.c
      case URL_IS_PATH:
  	path = lpath;
  	/*@fallthrough@*/
+@@ -1758,8 +1685,6 @@
+ 	return NULL;
+     if (ISAVMAGIC(dir))
+ 	return avReaddir(dir);
+-    if (ISDAVMAGIC(dir))
+-	return davReaddir(dir);
+     return readdir(dir);
+ }
+ 
+@@ -1771,8 +1696,6 @@
+ 	return 0;
+     if (ISAVMAGIC(dir))
+ 	return avClosedir(dir);
+-    if (ISDAVMAGIC(dir))
+-	return davClosedir(dir);
+     return closedir(dir);
+ }
+ 
 diff -ur rpm-4.4.7.org/rpmio/tget.c rpm-4.4.7/rpmio/tget.c
 --- rpm-4.4.7.org/rpmio/tget.c	2004-11-19 17:52:58.000000000 +0100
 +++ rpm-4.4.7/rpmio/tget.c	2006-10-17 22:20:47.995427500 +0200
