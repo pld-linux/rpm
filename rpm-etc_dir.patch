@@ -1,27 +1,15 @@
 diff -Nru rpm-4.1/lib/rpmrc.c rpm-4.1.new/lib/rpmrc.c
 --- rpm-4.1/lib/rpmrc.c	Tue Aug 20 16:53:44 2002
 +++ rpm-4.1.new/lib/rpmrc.c	Tue Mar 11 18:41:48 2003
-@@ -1756,27 +1756,39 @@
+@@ -1820,23 +1820,37 @@
  	/* Expand ~/ to $HOME/ */
  	fn[0] = '\0';
  	if (r[0] == '~' && r[1] == '/') {
-+			const char * etc_dir = getenv("HOME_ETC");
++	    const char * etc_dir = getenv("HOME_ETC");
  	    const char * home = getenv("HOME");
 -	    if (home == NULL) {
-+			if (etc_dir) {
-+	    	if (strlen(etc_dir) > (sizeof(fn) - strlen(r))) {
-+					rpmError(RPMERR_RPMRC, _("Cannot read %s, HOME_ETC is too large.\n"),r);
-+					rc = 1;
-+					break;
-+	    	}
-+	    	strcpy(fn, etc_dir);
-+				strncat(fn, "/", sizeof(fn) - strlen(fn));				
-+	  	  r+=2;
-+		
-+			} else {
-+	    	if (home == NULL) {
- 	    /* XXX Only /usr/lib/rpm/rpmrc must exist in default rcfiles list */
--		if (rcfiles == defrcfiles && myrcfiles != r)
+-	    /* XXX Only /usr/lib/rpm/rpmrc must exist in default rcfiles list */
+-		if (rcfiles == rpmRcfiles && myrcfiles != r)
 -		    continue;
 -		rpmError(RPMERR_RPMRC, _("Cannot expand %s\n"), r);
 -		rc = 1;
@@ -29,46 +17,51 @@ diff -Nru rpm-4.1/lib/rpmrc.c rpm-4.1.new/lib/rpmrc.c
 -	    }
 -	    if (strlen(home) > (sizeof(fn) - strlen(r))) {
 -		rpmError(RPMERR_RPMRC, _("Cannot read %s, HOME is too large.\n"),
-+			if (rcfiles == defrcfiles && myrcfiles != r)
-+		    	continue;
-+			rpmError(RPMERR_RPMRC, _("Cannot expand %s\n"), r);
-+			rc = 1;
-+			break;
-+	    	}
-+	    	if (strlen(home) > (sizeof(fn) - strlen(r))) {
-+			rpmError(RPMERR_RPMRC, _("Cannot read %s, HOME is too large.\n"),
- 				r);
+-				r);
 -		rc = 1;
 -		break;
--	    }
++	    if (etc_dir) {
++		    if (strlen(etc_dir) > (sizeof(fn) - strlen(r))) {
++			    rpmError(RPMERR_RPMRC, _("Cannot read %s, HOME_ETC is too large.\n"),r);
++			    rc = 1;
++			    break;
++		    }
++		    strcpy(fn, etc_dir);
++		    strncat(fn, "/", sizeof(fn) - strlen(fn));
++		    r+=2;
++	    } else {
++		    if (home == NULL) {
++			    /* XXX Only /usr/lib/rpm/rpmrc must exist in default rcfiles list */
++			    if (rcfiles == rpmRcfiles && myrcfiles != r)
++				    continue;
++			    rpmError(RPMERR_RPMRC, _("Cannot expand %s\n"), r);
++			    rc = 1;
++			    break;
++		    }
++		    if (strlen(home) > (sizeof(fn) - strlen(r))) {
++			    rpmError(RPMERR_RPMRC, _("Cannot read %s, HOME is too large.\n"),
++					    r);
++			    rc = 1;
++			    break;
++		    }
++		    strcpy(fn, home);
++		    r++;
+ 	    }
 -	    strcpy(fn, home);
 -	    r++;
--	}
--	strncat(fn, r, sizeof(fn) - (strlen(fn) + 1));
--	fn[sizeof(fn)-1] = '\0';
--
-+			rc = 1;
-+			break;
-+	    	}
-+	    	strcpy(fn, home);
-+	  	  r++;
-+			}
-+		}
-+		strncat(fn, r, sizeof(fn) - (strlen(fn) + 1));
-+		fn[sizeof(fn)-1] = '\0';
- 	/* Read another rcfile */
- 	fd = Fopen(fn, "r.fpio");
- 	if (fd == NULL || Ferror(fd)) {
---- rpm-4.4.5/po/pl.po.orig	2006-02-28 20:32:10.457815000 +0100
-+++ rpm-4.4.5/po/pl.po	2006-02-28 21:31:38.132780750 +0100
-@@ -3188,6 +3188,10 @@
- msgid "bad option '%s' at %s:%d\n"
- msgstr "b³êdna opcja '%s' w %s:%d\n"
++	    strncat(fn, r, sizeof(fn) - (strlen(fn) + 1));
++	    fn[sizeof(fn)-1] = '\0';
+ 	}
+ 	strncat(fn, r, sizeof(fn) - (strlen(fn) + 1));
+ 	fn[sizeof(fn)-1] = '\0';
+--- rpm-4.4.7/po/pl.po.org	2006-10-17 21:07:48.889750500 +0200
++++ rpm-4.4.7/po/pl.po	2006-10-17 21:08:06.594857000 +0200
+@@ -4564,3 +4564,8 @@
  
+ #~ msgid "Display brief usage message"
+ #~ msgstr "Wy¶wietl skrócony sposób u¿ycia"
++
 +#: lib/rpmrc.c:1809
 +msgid "Cannot read %s, HOME_ETC is too large.\n"
 +msgstr "Nie mo¿na odczytaæ %s, HOME_ETC jest zbyt du¿e.\n"
 +
- #: lib/rpmrc.c:1810
- #, c-format
- msgid "Cannot expand %s\n"

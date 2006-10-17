@@ -21,13 +21,13 @@
  #: lib/fsm.c:1713
  #, c-format
 @@ -2108,12 +2108,12 @@
- #: lib/poptI.c:343
+ #: lib/poptI.c:347
  #, c-format
  msgid "do not execute %%preun scriptlet (if any)"
 -msgstr "%preun-Skriptlet nicht ausführen (wenn vorhanden)"
 +msgstr "%%preun-Skriptlet nicht ausführen (wenn vorhanden)"
  
- #: lib/poptI.c:346
+ #: lib/poptI.c:350
  #, c-format
  msgid "do not execute %%postun scriptlet (if any)"
 -msgstr "%postun-Skriptlet nicht ausführen (wenn vorhanden)"
