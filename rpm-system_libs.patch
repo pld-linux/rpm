@@ -32,12 +32,7 @@ diff -urN rpm.org/Makefile.am rpm/Makefile.am
  .PHONY:	lint
 --- rpm.org/rpmio/Makefile.am.org	2004-11-18 17:42:53.756263795 +0100
 +++ rpm.org/rpmio/Makefile.am	2004-11-18 17:43:09.526885309 +0100
-@@ -71,47 +71,47 @@
- tax_LDADD = librpmio.la
- 
- tdigest_SOURCES = tdigest.c
--tdigest_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la -lgcrypt
-+tdigest_LDADD = librpmio.la -lpopt -lgcrypt
+@@ -82,39 +82,39 @@
  
  tdir_SOURCES = tdir.c
  tdir_LDFLAGS = @LDFLAGS_STATIC@
@@ -80,14 +75,10 @@ diff -urN rpm.org/Makefile.am rpm/Makefile.am
 -tkey_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
 +tkey_LDADD = librpmio.la -lpopt
  
- tring_SOURCES = tring.c
- tring_LDFLAGS = @LDFLAGS_STATIC@
--tring_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
-+tring_LDADD = librpmio.la -lpopt
- 
  trpmio_SOURCES = trpmio.c
 -trpmio_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
 +trpmio_LDADD = librpmio.la -lpopt
  
  tsw_SOURCES = tsw.c
  tsw_LDFLAGS = librpmio.la
+

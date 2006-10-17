@@ -36,9 +36,9 @@ diff -Nru rpm-4.4.5.old/lib/rpmds.c rpm-4.4.5/lib/rpmds.c
 +    { "rpmlib(PayloadIsLzma)",		"4.4.6-1",
 +	(RPMSENSE_RPMLIB|RPMSENSE_EQUAL),
 +    N_("package payload can be compressed using lzma.") },
-     { NULL,				NULL, 0,	NULL }
- };
- 
+     { "rpmlib(FileDigestParameterized)",    "4.4.6-1",
+         (RPMSENSE_RPMLIB|RPMSENSE_EQUAL),
+     N_("file digests can be other than MD5.") },
 diff -Nru rpm-4.4.5.old/rpm2cpio.c rpm-4.4.5/rpm2cpio.c
 --- rpm-4.4.5.old/rpm2cpio.c	2005-01-17 19:46:16.000000000 +0100
 +++ rpm-4.4.5/rpm2cpio.c	2006-04-22 17:18:55.000000000 +0200
@@ -65,23 +65,25 @@ diff -Nru rpm-4.4.5.old/rpmio/librpmio.vers rpm-4.4.5/rpmio/librpmio.vers
 diff -Nru rpm-4.4.5.old/rpmio/Makefile.am rpm-4.4.5/rpmio/Makefile.am
 --- rpm-4.4.5.old/rpmio/Makefile.am	2006-04-22 15:02:56.000000000 +0200
 +++ rpm-4.4.5/rpmio/Makefile.am	2006-04-23 13:31:09.000000000 +0200
-@@ -22,14 +22,14 @@
- 	argv.h fts.h rmd128.h rmd160.h rpmdav.h \
+@@ -24,7 +24,7 @@
  	rpmio.h rpmurl.h rpmmacro.h rpmlog.h rpmmessages.h rpmerr.h rpmpgp.h \
  	rpmsq.h rpmsw.h ugid.h
--noinst_HEADERS = rpmio_internal.h rpmlua.h rpmhook.h
-+noinst_HEADERS = LzmaDecode.h rpmio_internal.h rpmlua.h rpmhook.h
+ noinst_HEADERS = md2.h md4.h rmd128.h rmd160.h tiger.h \
+-	rpmio_internal.h rpmlua.h rpmhook.h
++	LzmaDecode.h rpmio_internal.h rpmlua.h rpmhook.h
  
  BEECRYPTLOBJS = $(shell test X"@WITH_BEECRYPT_SUBDIR@" != X && cat $(top_builddir)/@WITH_BEECTYPT_SUBDIR@/listobjs)
  
- usrlibdir = $(libdir)@MARK64@
- usrlib_LTLIBRARIES = librpmio.la
- librpmio_la_SOURCES = \
--	argv.c digest.c fts.c macro.c rmd128.c rmd160.c rpmdav.c \
-+	LzmaDecode.c argv.c digest.c fts.c macro.c rmd128.c rmd160.c rpmdav.c \
- 	rpmhook.c rpmio.c rpmlog.c rpmlua.c rpmmalloc.c \
+@@ -34,7 +34,8 @@
+ 	argv.c digest.c fts.c macro.c md2.c md4.c rmd128.c rmd160.c tiger.c \
+ 	rpmdav.c rpmhook.c rpmio.c rpmlog.c rpmlua.c rpmmalloc.c \
  	rpmpgp.c rpmrpc.c rpmsq.c rpmsw.c strcasecmp.c strtolocale.c \
- 	stubs.c url.c ugid.c
+-	stubs.c url.c ugid.c
++	stubs.c url.c ugid.c \
++	LzmaDecode.c
+ librpmio_la_LDFLAGS = -no-undefined -release $(LT_CURRENT).$(LT_REVISION) $(LDFLAGS) \
+ 	@WITH_BEECRYPT_LIB@ \
+ 	@WITH_NEON_LIB@ \
 diff -Nru rpm-4.4.5.old/rpmio/rpmio.c rpm-4.4.5/rpmio/rpmio.c
 --- rpm-4.4.5.old/rpmio/rpmio.c	2006-04-22 15:02:55.000000000 +0200
 +++ rpm-4.4.5/rpmio/rpmio.c	2006-04-23 14:43:10.000000000 +0200

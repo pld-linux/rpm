@@ -1,15 +1,17 @@
 --- rpm-4.3/lib/depends.c.orig	2003-05-15 18:16:51.000000000 +0200
 +++ rpm-4.3/lib/depends.c	2003-06-29 00:17:42.000000000 +0200
-@@ -254,7 +254,11 @@
+@@ -343,8 +343,12 @@
  
      /* On upgrade, erase older packages of same color (if any). */
  
--    mi = rpmtsInitIterator(ts, RPMTAG_PROVIDENAME, rpmteN(p), 0);
 +    /* NOTE: in PLD we don't want to remove packages which only provided
 +     * %{name} (e.g. perl-modules in case of some newer perl modules),
 +     * so we use NAME instead of PROVIDENAME (as in vanilla rpm) here */
 +
+   if (!(depFlags & RPMDEPS_FLAG_NOUPGRADE)) {
+-    mi = rpmtsInitIterator(ts, RPMTAG_PROVIDENAME, rpmteN(p), 0);
 +    mi = rpmtsInitIterator(ts, RPMTAG_NAME, rpmteN(p), 0);
      while((oh = rpmdbNextIterator(mi)) != NULL) {
- 
- 	/* Ignore colored packages not in our rainbow. */
+ 	int lastx;
+ 	rpmte q;
+
