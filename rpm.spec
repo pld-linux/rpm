@@ -636,8 +636,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
-# FIXME
-#%patch14 -p1
+%patch14 -p1
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
@@ -660,8 +659,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch21 -p1
 %patch22 -p1
 %patch23 -p1
-# FIXME
-#%patch24 -p1
+%patch24 -p1
 %patch25 -p1
 %patch26 -p1
 %patch27 -p1
