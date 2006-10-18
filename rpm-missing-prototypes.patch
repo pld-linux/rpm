@@ -16,9 +16,9 @@
  #endif
  
 +#include "rpmio_internal.h"
- #include <rpmlib.h>
+ #include <rpmcli.h>
  #include <rpmmacro.h>
- 
+ #include <rpmlua.h>
 --- rpm-4.3/tools/convertdb1.c.orig	2004-01-04 02:13:09.000000000 +0000
 +++ rpm-4.3/tools/convertdb1.c	2004-01-12 10:52:04.000000000 +0000
 @@ -10,6 +10,7 @@
