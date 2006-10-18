@@ -1,43 +1,60 @@
 --- rpm-4.4.6/po/pl.po.orig	2006-04-08 22:45:18.000000000 +0200
 +++ rpm-4.4.6/po/pl.po	2006-04-17 17:50:01.616615500 +0200
-@@ -9,10 +9,10 @@
+@@ -5,7 +5,7 @@
+ # Wojciech Drapiñski <wojciech.drapinski@zie.pg.gda.pl>, 1999.
+ # Pawe³ Dziekoñski <pdziekonski@mml.ch.pwr.wroc.pl>, 1999
+ # Jakub Bogusz <qboosh@pld-linux.org>, 2002-2006.
+-# Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>, 2004.
++# Arkadiusz Mi¶kiewicz <arekm@pld-linux.org>, 2004, 2006.
  #
  msgid ""
  msgstr ""
--"Project-Id-Version: rpm 4.4.5\n"
-+"Project-Id-Version: rpm 4.4.6\n"
+@@ -13,7 +13,7 @@
  "Report-Msgid-Bugs-To: \n"
- "POT-Creation-Date: 2006-04-08 15:03-0400\n"
--"PO-Revision-Date: 2006-02-28 20:20+0100\n"
-+"PO-Revision-Date: 2006-04-17 17:43+0200\n"
- "Last-Translator: Jakub Bogusz <qboosh@pld-linux.org>\n"
+ "POT-Creation-Date: 2006-10-08 17:38-0400\n"
+ "PO-Revision-Date: 2006-02-28 20:20+0100\n"
+-"Last-Translator: Jakub Bogusz <qboosh@pld-linux.org>\n"
++"Last-Translator: Arkadiusz Miskiewicz <arekm@pld-linux.org>\n"
  "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
  "MIME-Version: 1.0\n"
-@@ -939,9 +939,9 @@
+ "Content-Type: text/plain; charset=ISO-8859-2\n"
+@@ -935,9 +935,9 @@
  msgstr "BuildRoot nie mo¿e byæ \"/\": %s\n"
  
- #: build/parsePreamble.c:606
+ #: build/parsePreamble.c:576
 -#, fuzzy, c-format
 +#, c-format
  msgid "line %d: Prefixes must begin with \"/\": %s\n"
 -msgstr "linia %d: Prefiksy nie mog± siê koñczyæ na \"/\": %s\n"
-+msgstr "linia %d: Prefiksy musz± zaczynaæ siê od \"/\": %s\n"
++msgstr "linia %d: Prefiksy musz± siê rozpoczynaæ od \"/\": %s\n"
  
- #: build/parsePreamble.c:614
+ #: build/parsePreamble.c:584
  #, c-format
-@@ -954,9 +954,9 @@
+@@ -950,9 +950,9 @@
  msgstr "linia %d: Docdir musi siê zaczynaæ od '/': %s\n"
  
- #: build/parsePreamble.c:640
+ #: build/parsePreamble.c:610
 -#, fuzzy, c-format
 +#, c-format
  msgid "line %d: %s takes an integer value: %s\n"
 -msgstr "linia %d: Etykieta przyjmuje tylko jeden znacznik: %s\n"
 +msgstr "linia %d: %s przyjmuje warto¶æ ca³kowit±: %s\n"
  
- #: build/parsePreamble.c:680 build/parsePreamble.c:691
+ #: build/parsePreamble.c:650 build/parsePreamble.c:661
  #, c-format
-@@ -1376,9 +1376,8 @@
+@@ -1049,9 +1049,9 @@
+ msgstr "linia %d: B³êdny argument dla %%patch: %s\n"
+ 
+ #: build/parsePrep.c:597
+-#, fuzzy, c-format
++#, c-format
+ msgid "Fetching %s failed: %s\n"
+-msgstr "%s nie powiod³o siê: %s\n"
++msgstr "Pobieranie %s nie powiod³o siê: %s\n"
+ 
+ #: build/parsePrep.c:619
+ #, c-format
+@@ -1357,9 +1357,8 @@
  msgstr "Brakuj±ce twarde dowi±zania"
  
  #: lib/cpio.c:277
@@ -48,7 +65,7 @@
  
  #: lib/cpio.c:278
  msgid "Internal error"
-@@ -1524,9 +1523,8 @@
+@@ -1505,9 +1504,8 @@
  msgstr "(b³êdny typ xml)"
  
  #: lib/formats.c:578
@@ -59,31 +76,110 @@
  
  #: lib/formats.c:687
  msgid "(not an OpenPGP signature)"
-@@ -2059,9 +2057,8 @@
+@@ -1949,32 +1947,30 @@
+ msgstr "nie sugeruj sposobu(ów) spe³nienia brakuj±cych zale¿no¶ci"
  
- #: lib/poptI.c:317 lib/poptI.c:319 lib/poptQV.c:354 lib/poptQV.c:357
- #: lib/poptQV.c:359
+ #: lib/poptI.c:232
+-#, fuzzy
+ msgid "do not check added package conflicts"
+-msgstr "nie wykonuj ¿adnych skryptów instalacyjnych"
++msgstr "nie sprawdzaj dodanych konfliktów pakietów"
+ 
+ #: lib/poptI.c:235
+ msgid "ignore added package requires on symlink targets"
+ msgstr ""
++"ignoruj dodane wymagania pakietów bazuj±ce na elementach wskazywanych przez "
++"dowi±zania symboliczne"
+ 
+ #: lib/poptI.c:238
+ msgid "ignore added package obsoletes"
+-msgstr ""
++msgstr "ignoruj dodane pakiety przestarza³e"
+ 
+ #: lib/poptI.c:241
+-#, fuzzy
+ msgid "ignore added package requires on file parent directory"
+-msgstr "zapisz usuwane pliki z pakietu przenosz±c do podkatalogu"
++msgstr "ignoruj dodane wymagania pakietów bazuj±ce na katalogu rodzicu"
+ 
+ #: lib/poptI.c:244
+-#, fuzzy
+ msgid "do not check added package requires"
+-msgstr "nie wykonuj ¿adnych skryptów instalacyjnych"
++msgstr "nie sprawdzaj dodanych wymogów pakietów"
+ 
+ #: lib/poptI.c:247
+-#, fuzzy
+ msgid "ignore added package upgrades"
+-msgstr "¿aden pakiet nie udostêpnia %s\n"
++msgstr "ignoruj dodane aktualizacje pakietów"
+ 
+ #: lib/poptI.c:251
+ msgid "install all files, even configurations which might otherwise be skipped"
+@@ -2076,9 +2072,8 @@
+ 
+ #: lib/poptI.c:325 lib/poptI.c:327 lib/poptQV.c:349 lib/poptQV.c:352
+ #: lib/poptQV.c:354
 -#, fuzzy
  msgid "don't verify file digests"
 -msgstr "nie sprawdzaj skrótów pakietu"
-+msgstr "nie sprawdzaj skrótów plików"
++msgstr "nie sprawdzaj skrótów pliku"
  
- #: lib/poptI.c:321
+ #: lib/poptI.c:329
  msgid "don't install file security contexts"
-@@ -2260,9 +2257,8 @@
+@@ -2273,9 +2268,8 @@
  msgstr "odpytaj/sprawd¼ pakiet(y) wymagaj±ce zasobu"
  
- #: lib/poptQV.c:147
+ #: lib/poptQV.c:146
 -#, fuzzy
  msgid "query/verify the package(s) which require any contained provide"
 -msgstr "odpytaj/sprawd¼ pakiet(y) wymagaj±ce zasobu"
-+msgstr "odpytaj/sprawd¼ pakiet(y) wymagaj±ce dowolnej zawartej w³asno¶ci"
++msgstr "odpytaj/sprawd¼ pakiet(y) wymagaj±ce dowolnej dostarczanej w³asno¶ci"
  
- #: lib/poptQV.c:151
+ #: lib/poptQV.c:150
  msgid "query/verify the package(s) which provide a dependency"
-@@ -4508,19 +4504,16 @@
- msgid "DIRECTORY"
- msgstr "KATALOG"
+@@ -3302,9 +3296,9 @@
+ msgstr "nie mo¿na otworzyæ bazy danych Solve w %s\n"
+ 
+ #: lib/rpmts.c:646
+-#, fuzzy, c-format
++#, c-format
+ msgid "incorrect solve path format: %s\n"
+-msgstr "b³êdny format: %s\n"
++msgstr "niepoprawny format ¶cie¿ki rozwik³ania: %s\n"
+ 
+ #: lib/rpmts.c:676
+ #, c-format
+@@ -3918,9 +3912,9 @@
+ msgstr "nie mo¿na otworzyæ indeksu %s\n"
+ 
+ #: rpmdb/rpmdb.c:820
+-#, fuzzy, c-format
++#, c-format
+ msgid "incorrect format: \"%s\": %s\n"
+-msgstr "b³êdny format: %s\n"
++msgstr "b³êdny format: \"%s\": %s\n"
+ 
+ #: rpmdb/rpmdb.c:1103
+ msgid "no dbpath has been set\n"
+@@ -4159,12 +4153,12 @@
+ 
+ #: rpmio/macro.c:1860
+ msgid "Macro expansion too big for target buffer\n"
+-msgstr ""
++msgstr "Rozwiniêcie makra zbyt du¿e dla docelowego bufora\n"
+ 
+ #: rpmio/macro.c:1888
+ #, c-format
+ msgid "Macro '%s' is readonly and cannot be changed.\n"
+-msgstr ""
++msgstr "Makro '%s' jest makrem tylko do odczytu i nie mo¿e byæ zmienione.\n"
+ 
+ #. XXX Fstrerror
+ #: rpmio/macro.c:2074 rpmio/macro.c:2080
+@@ -4545,19 +4539,16 @@
+ #~ msgid "Couldn't download nosource %s: %s\n"
+ #~ msgstr "Nie mo¿na ¶ci±gn±æ pliku nosource %s: %s\n"
  
 -#~ msgid "line %d: Epoch/Serial field must be a number: %s\n"
 -#~ msgstr "linia %d: pole Epoch/Serial musi byæ liczb±: %s\n"
@@ -99,17 +195,17 @@
 -#~ msgid "generate headers compatible with (legacy) rpm[23] packaging"
 -#~ msgstr "generuj nag³ówki kompatybilne z (wymieraj±cymi) pakietami rpm[23]"
 +# --- from popt/po/pl.po (in popt.h, not in .pot) ---
-+msgid "Options implemented via popt alias/exec:"
-+msgstr "Opcje zaimplementowane poprzez popt alias/exec:"
++#~ msgid "Options implemented via popt alias/exec:"
++#~ msgstr "Opcje zaimplementowane poprzez popt alias/exec:"
 +
-+msgid "Help options:"
-+msgstr "Opcje pomocy:"
++#~ msgid "Help options:"
++#~ msgstr "Opcje pomocy:"
 +
 +# --- from popt (displayed using rpm domain)
-+msgid "Show this help message"
-+msgstr "Poka¿ tê pomoc"
++#~ msgid "Show this help message"
++#~ msgstr "Poka¿ tê pomoc"
  
 -#~ msgid "don't verify MD5 digest of files"
 -#~ msgstr "nie sprawdzaj skrótów MD5 plików"
-+msgid "Display brief usage message"
-+msgstr "Wy¶wietl skrócony sposób u¿ycia"
++#~ msgid "Display brief usage message"
++#~ msgstr "Wy¶wietl skrócony sposób u¿ycia"
