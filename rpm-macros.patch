@@ -21,6 +21,15 @@ diff -Nur rpm-4.4.6.orig/macros.in rpm-4.4.6.macros/macros.in
  
  #	Archive formats to use for source/binary package payloads.
  #		"cpio"		cpio archive (default)
+@@ -481,7 +481,7 @@
+ 
+ #
+ # Path to magic file used for file classification.
+-%_rpmfc_magic_path	%{_usr}/lib/rpm/magic
++%_rpmfc_magic_path	/usr/share/file/magic
+ 
+ #==============================================================================
+ # ---- Database configuration macros.
 @@ -909,10 +909,10 @@
    export RPM_BUILD_ROOT}\
    %{?_javaclasspath:CLASSPATH=\"%{_javaclasspath}\"\
@@ -58,3 +67,4 @@ diff -Nur rpm-4.4.6.orig/macros.in rpm-4.4.6.macros/macros.in
 +
  # \endverbatim
  #*/
+
