@@ -30,7 +30,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.7
-Release:	0.1
+Release:	0.2
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -101,7 +101,7 @@ Patch43:	%{name}-patch-quote.patch
 Patch44:	%{name}-no-neon.patch
 Patch45:	%{name}-no-sqlite.patch
 Patch46:	%{name}-mono.patch
-
+Patch47:	%{name}-rpmrc-resurrect.patch
 Patch48:	%{name}-requireseq.patch
 Patch49:	%{name}-p4.patch
 Patch50:	%{name}-macros.patch
@@ -682,7 +682,7 @@ install %{SOURCE12} scripts/perl.prov
 %{!?with_neon:%patch44 -p1}
 %patch45 -p1
 %patch46 -p1
-
+%patch47 -p1
 %patch48 -p1
 %patch49 -p1
 %patch50 -p1
