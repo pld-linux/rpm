@@ -49,8 +49,8 @@ diff -Nru rpm-4.1/lib/rpmrc.c rpm-4.1.new/lib/rpmrc.c
  	    }
 -	    strcpy(fn, home);
 -	    r++;
-+	    strncat(fn, r, sizeof(fn) - (strlen(fn) + 1));
-+	    fn[sizeof(fn)-1] = '\0';
++
++
  	}
  	strncat(fn, r, sizeof(fn) - (strlen(fn) + 1));
  	fn[sizeof(fn)-1] = '\0';
