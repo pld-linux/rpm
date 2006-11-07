@@ -945,7 +945,7 @@ EOF
 # line endings.
 #
 # the pear install process output is recorded to install.log, you should put it
-# to %%doc for latter debug or just information.
+# to %%doc for later debug or just for information.
 #
 # additionally additional-packages.txt is produced if it was detected that the
 # package has optional dependencies. the file format is suitable of displaying
