@@ -972,8 +972,8 @@ fi \
 # as it's displayed to user after package install. and adding additional gzip
 # dep is just waste ;)
 %pear_package_setup(a:n:z) \
-%srcdir %{-n*}%{!-n:%{_pearname}-%{version}} \
-%builddir %{_builddir}/%{srcdir} \
+%define srcdir %{-n*}%{!-n:%{_pearname}-%{version}} \
+%define builddir %{_builddir}/%{srcdir} \
 %setup -q -c -T -n %{srcdir} \
 %{-z:tar zxf %{S:0}; %{-a:tar zxf %{S:%{-a*}}}} \
 %{-z:_P=package2.xml; [ -f $_P ] || _P=package.xml; _N=%{srcdir}; mv $_P $_N; cd $_N} \
