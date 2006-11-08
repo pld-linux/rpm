@@ -926,16 +926,15 @@ set_options $BASE_OPTIONS\
 run "$@"\
 EOF
 
-# pear install macros written by glen@pld-linux.org.
-# All rights reserved. Permission to copy is hereby granted.. yada, yada, yada
+# PEAR install macros
+# Author: glen@pld-linux.org.
 #
 # Usage:
 #	%%pear_package_setup [-a #] [-n FMT]
 #
-# -a #   - unpack SOURCE# instead of SOURCE0
+# -a #   - also unpack SOURCE#. for PEAR bootstrapping
 # -n FMT - create builddir with FMT, instead of default %%{_pearname}-%%{version}
-# -z     - unpack pear package and let pear use package.xml (not tarball) for install. use this for buggy packages.
-# -f     - force pear install. use with care.
+# -z     - unpack pear package and let pear use package.xml (not tarball) for install. for PEAR bootstrapping
 #
 # unpack PEAR package to %%{_builddir}/FMT. package is extracted with already
 # destination hierarchy. you should copy the tree to buildroot after
@@ -951,23 +950,11 @@ EOF
 # package has optional dependencies. the file format is suitable of displaying
 # in %%post of a package. you should put this file to %%doc. noautocompressdoc is
 # automatically added for this file.
-#
-%pear_package_setup(a:n:zf) \
-%setup -q -c -T -n %{-n*}%{!-n:%{_pearname}-%{version}}\
-D=%{_builddir}/%{-n*}%{!-n:%{_pearname}-%{version}} \
-%{-z:tar zxf %{S:%{-a*}%{!-a:0}}; P=%{_pearname}-%{version}/package.xml; [ -f $P ] || P=package.xml} \
-pear \\\
-	-d doc_dir=/docs \\\
-	-d php_dir=%{php_pear_dir} \\\
-	-d bin_dir=%{_bindir} \\\
-	-d data_dir=%{php_pear_dir}/data \\\
-	-d test_dir=%{php_pear_dir}/tests \\\
-	install \\\
-	--installroot=${D} \\\
-	--offline \\\
-	--nodeps \\\
-	%{-f:--force} \\\
-	%{!-z:%{S:%{-a*}%{!-a:0}}}%{-z:$P} | tee install.log \
+
+
+# records install.log and transforms PEAR names to PLD Linux rpm package names.
+%__pear_install_log \
+tee install.log \
 # make post message of optional packages \
 grep 'can optionally use' install.log | sed -e 's,package "pear/,package "php-pear-,g;s,^pear/,php-pear-,' > optional-packages.txt \
 if [ -s optional-packages.txt ]; then \
@@ -975,12 +962,39 @@ if [ -s optional-packages.txt ]; then \
 else \
 	rm -f optional-packages.txt \
 fi \
-rm ./%{php_pear_dir}/.{lock,filemap} \
+%{nil}
+
+# command invoking pear cli
+%__pear /usr/bin/pear
+
+# the main macro.
+# using this macro will append optional-packages.txt to the nocompressdoc list
+# as it's displayed to user after package install. and adding additional gzip
+# dep is just waste ;)
+%pear_package_setup(a:n:z) \
+%srcdir %{-n*}%{!-n:%{_pearname}-%{version}} \
+%builddir %{_builddir}/%{srcdir} \
+%setup -q -c -T -n %{srcdir} \
+%{-z:tar zxf %{S:0}; %{-a:tar zxf %{S:%{-a*}}}} \
+%{-z:_P=package2.xml; [ -f $_P ] || _P=package.xml; _N=%{srcdir}; mv $_P $_N; cd $_N} \
+%__pear \\\
+	-c pearrc \\\
+	-d doc_dir=/docs \\\
+	-d php_dir=%{php_pear_dir} \\\
+	-d bin_dir=%{_bindir} \\\
+	-d data_dir=%{php_pear_dir}/data \\\
+	-d test_dir=%{php_pear_dir}/tests \\\
+	install \\\
+	--packagingroot=%{builddir} \\\
+	--offline \\\
+	--nodeps \\\
+	%{-f:--force} \\\
+	%{!-z:%{S:%{-a*}%{!-a:0}}}%{-z:$_P} > .install.log || { c=$?; cat .install.log; exit $c; } \
+%{-z:cd ..} \
+cat %{-z:$_N/}.install.log | %__pear_install_log \
+\
 # undos sources \
 find . -type f -print0 | xargs -0 sed -i -e 's,\\r$,,' \
-# bug in PEAR --installroot. \
-# http://pear.php.net/bugs/bug.php?id=5448 \
-grep -rl "${D}" ./{%{_bindir},%{php_pear_dir}}/* | xargs -r sed -i -e "s,${D},," \
 %{!?_noautocompressdoc:%global _noautocompressdoc %{nil}}%{expand:%%global _noautocompressdoc %{_noautocompressdoc} optional-packages.txt} \
 %{!?_noautoprov:%global _noautoprov %{nil}}%{expand:%%global _noautoprov %{_noautoprov} 'pear(tests/.*)'} \
 %{nil}
@@ -1046,4 +1060,4 @@ done \
 
 %env_update [ ! -x /sbin/env-update ] || /sbin/env-update -u || :
 
-# vim:ts=4 sw=4 noet
+# vim:ts=4 sw=4 noet syn=spec
