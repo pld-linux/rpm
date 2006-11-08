@@ -31,7 +31,7 @@
 
 
 # records install.log and transforms PEAR names to PLD Linux rpm package names.
-%define	__pear_install_log \
+%define __pear_install_log \
 tee install.log \
 # make post message of optional packages \
 grep 'can optionally use' install.log | sed -e 's,package "pear/,package "php-pear-,g;s,^pear/,php-pear-,' > optional-packages.txt \
@@ -40,8 +40,7 @@ if [ -s optional-packages.txt ]; then \
 else \
 	rm -f optional-packages.txt \
 fi \
-# undos sources \
-find . -type f -print0 | xargs -0 sed -i -e 's,\\r$,,' \
+%{nil}
 
 # command invoking pear cli
 %define	__pear /usr/bin/pear
@@ -50,11 +49,12 @@ find . -type f -print0 | xargs -0 sed -i -e 's,\\r$,,' \
 # using this macro will append optional-packages.txt to the nocompressdoc list
 # as it's displayed to user after package install. and adding additional gzip
 # dep is just waste ;)
-%define pear_package_setup(a:n:z) \
-%setup -q -c -T -n %{-n*}%{!-n:%{_pearname}-%{version}}\
-_D=%{_builddir}/%{-n*}%{!-n:%{_pearname}-%{version}} \
-%{-z:tar zxf %{S:0}; %{-a:tar zxf %{S:%{-a*}};} _P=package2.xml; [ -f $_P ] || _P=package.xml; _N=%{-n*}%{!-n:%{_pearname}-%{version}}; mv $_P $_N; cd $_N} \
-install -d ./%{php_pear_dir} \
+%define	pear_package_setup(a:n:z) \
+%define	srcdir %{-n*}%{!-n:%{_pearname}-%{version}} \
+%define	builddir %{_builddir}/%{srcdir} \
+%setup -q -c -T -n %{srcdir} \
+%{-z:tar zxf %{S:0}; %{-a:tar zxf %{S:%{-a*}}}} \
+%{-z:_P=package2.xml; [ -f $_P ] || _P=package.xml; _N=%{srcdir}; mv $_P $_N; cd $_N} \
 %__pear \\\
 	-c pearrc \\\
 	-d doc_dir=/docs \\\
@@ -63,17 +63,16 @@ install -d ./%{php_pear_dir} \
 	-d data_dir=%{php_pear_dir}/data \\\
 	-d test_dir=%{php_pear_dir}/tests \\\
 	install \\\
-	--packagingroot=${_D} \\\
+	--packagingroot=%{builddir} \\\
 	--offline \\\
 	--nodeps \\\
 	%{-f:--force} \\\
 	%{!-z:%{S:%{-a*}%{!-a:0}}}%{-z:$_P} > .install.log || { c=$?; cat .install.log; exit $c; } \
 %{-z:cd ..} \
 cat %{-z:$_N/}.install.log | %__pear_install_log \
-#rm ./%{php_pear_dir}/.{lock,filemap} \
-# bug in PEAR --installroot. \
-# http://pear.php.net/bugs/bug.php?id=5448 \
-grep -rl "${_D}" ./{%{_bindir},%{php_pear_dir}}/* | xargs -r sed -i -e "s,${_D},," \
+\
+# undos sources \
+find . -type f -print0 | xargs -0 sed -i -e 's,\\r$,,' \
 %{!?_noautocompressdoc:%global _noautocompressdoc %{nil}}%{expand:%%global _noautocompressdoc %{_noautocompressdoc} optional-packages.txt} \
 %{!?_noautoprov:%global _noautoprov %{nil}}%{expand:%%global _noautoprov %{_noautoprov} 'pear(tests/.*)'} \
 %{nil}
@@ -81,7 +80,7 @@ grep -rl "${_D}" ./{%{_bindir},%{php_pear_dir}}/* | xargs -r sed -i -e "s,${_D},
 # copies exctracted PEAR package structure to buildroot.
 # also copies PEAR registry file.
 # please use this macro, for future extensions being possible.
-%define pear_package_install() \
+%define	pear_package_install() \
 cp -a ./%{php_pear_dir}/{.registry,*} $RPM_BUILD_ROOT%{php_pear_dir} \
 find $RPM_BUILD_ROOT%{php_pear_dir} '(' -name '*~' -o -name '*.orig' ')' | xargs -r rm -v \
 # help the developer out a little: \
