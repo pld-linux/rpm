@@ -1060,4 +1060,134 @@ done \
 
 %env_update [ ! -x /sbin/env-update ] || /sbin/env-update -u || :
 
+
+# Build modules for kernels 2.6
+# Author: Przemyslaw Iskra <sparky@pld-linux.org>
+#
+# Usage:
+#	%build_kernel_modules -m <modules>
+#
+#  remember that proper Makefile is still required
+# Options:
+#  -m <modules> (required) -- coma-separated list of modules to save,
+#		without .ko extension, may be placed in subdirectory
+#  -p <arg>, -P <arg> -- arguments passeed to make scripts
+#  <additional arguments> -- all additional arguments will be passed to
+#		make modules
+#
+# Additional patching supported via here document. Try:
+#	%build_kernel_modules -m module <<'EOF'
+#	your patch script here
+#	EOF
+# Don't use it unless patching depends on config options.
+
+# Developer note: don't touch it unless you know how to handle '\'.
+# - \ in script expands to nothing
+# - \\\ in script expands to \
+# - \\\ inside definition expands to noting
+# - \\\\\\\ inside definition expands to \
+# - in last line \ has to touch arguments so arguments passing
+#   in new lines (using \) will be supported
+
+%build_kernel_modules(p:P:m:)										\
+%{!?-m:%{error:%{0}: Required module name/list missing} exit 1}		\
+																	\
+%define Opts 														\\\\\\\
+%if "%{_target_base_arch}" != "%{_arch}"							\\\
+	%if "%{_arch}" == "x86_64" && "%{_target_base_arch}" == "i386"	\\\
+	CC="%{__cc}" CPP="%{__cpp}" ARCH=%{_target_base_arch}			\\\
+	%else															\\\
+	ARCH=%{_target_base_arch} CROSS_COMPILE=%{_target_cpu}-pld-linux- \\\
+	%endif															\\\
+%else																\\\
+	CC="%{__cc}" CPP="%{__cpp}"										\\\
+%endif																\
+%define	MakeOpts HOSTCC="%{__cc}" SYSSRC=%{_kernelsrcdir} SYSOUT=$PWD/o \\\\\\\
+		O=$PWD/o %{?with_verbose:V=1} %{Opts}						\
+																	\
+compile() {															\
+	L="<"; [[ '%{*}' != *$L$L* ]] || PATCH_SH="set -x -e;$(cat)"	\
+	set -e -x														\
+																	\
+for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do \
+	[ -r "%{_kernelsrcdir}/config-$cfg" ] || exit 1					\
+																	\
+	install -d o/include/linux										\
+	ln -sf %{_kernelsrcdir}/config-$cfg o/.config					\
+	ln -sf %{_kernelsrcdir}/Module.symvers-$cfg o/Module.symvers	\
+	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h o/include/linux/autoconf.h \
+																	\
+	set +x															\
+	[ -z "$PATCH_SH" ] || echo "$PATCH_SH" | %__spec_build_shell	\
+	set -x															\
+																	\
+	%if %{with dist_kernel}											\
+		%{__make} -j1 -C %{_kernelsrcdir} prepare scripts			\\\
+			%{-p*} %{-P*}											\\\
+			%{MakeOpts}												\
+	%else															\
+		install -d o/include/config									\
+		touch o/include/config/MARKER								\
+		ln -sf %{_kernelsrcdir}/scripts o/scripts					\
+	%endif															\
+																	\
+	%{__make} -C %{_kernelsrcdir} clean								\\\
+		RCS_FIND_IGNORE="-name '*.ko' -o"							\\\
+		M=$PWD %{MakeOpts}											\
+	%{__make} -C %{_kernelsrcdir} modules							\\\
+		${1+"$@"}													\\\
+		M=$PWD %{MakeOpts}											\
+																	\
+	for MODULE in {%{-m*},}; do										\
+		[ -z "${MODULE}" ] || mv ${MODULE}{,-$cfg}.ko				\
+	done															\
+done																\
+}																	\
+compile %{*}\
+%{nil}
+
+
+# Install kernel modules built by %build_kernel_modules
+# Author: Przemyslaw Iskra <sparky@pld-linux.org>
+#
+# Usage:
+#	%install_kernel_modules -m <modules> -d <directory>
+#
+# Options:
+#  -m <modules> (required) -- coma-separated list of modules to install,
+#		without .ko extension, may be placed in subdirectory
+#  -d <directory> (required) -- in what subdirectory modules should be
+#		installed (eg. misc, kernel/drivers/net)
+#  -s <suffix> -- suffix to use when installing modules, useful when module
+#		with same name exists in kernel already
+#  -n <file> -- name of modprobe config file to use (without .conf extension)
+#		for definig aliases, only useful with -s
+
+%install_kernel_modules(m:d:s:n:)									\
+%{!?-m:%{error:%{0}: Required module name (-m) missing}exit 1}		\
+%{!?-d:%{error:%{0}: Required module directory missing}exit 1}		\
+%{?-n:%{!?-s:%{error:%{0}: Modprobe .conf file requires module suffix}exit 1}} \
+																	\
+%define KernelD $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}			\
+%define ModprobeD $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{_kernel_ver} \
+																	\
+install -d %{KernelD}{,smp}/%{-d*}									\
+%{?-s:install -d %{ModprobeD}{,smp}}								\
+																	\
+for MODULE in {%{-m*},}; do											\
+	[ -n "${MODULE}" ] || continue									\
+	MNAME=${MODULE##*/}												\
+	install ${MODULE}-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko \\\
+		%{KernelD}/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko					\
+	%{?-s:echo "alias ${MNAME} ${MNAME}-%{-s*}"						\\\
+		>> %{ModprobeD}/%{-n*}.conf}								\
+    %if %{with smp} && %{with dist_kernel}							\
+	install ${MODULE}-smp.ko										\\\
+		%{KernelD}smp/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko				\
+	%{?-s:echo "alias ${MNAME} ${MNAME}-%{-s*}"						\\\
+		>> %{ModprobeD}smp/%{-n*}.conf}								\
+    %endif															\
+done																\
+%{nil}
+
 # vim:ts=4 sw=4 noet syn=spec
