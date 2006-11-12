@@ -1065,12 +1065,13 @@ done \
 # Author: Przemyslaw Iskra <sparky@pld-linux.org>
 #
 # Usage:
-#	%build_kernel_modules -m <modules>
+#	%build_kernel_modules -m <modules> -d <directory>
 #
 #  remember that proper Makefile is still required
 # Options:
 #  -m <modules> (required) -- comma-separated list of modules to save,
 #		without .ko extension, may be placed in subdirectory
+#  -d <directory> -- change to <directory> before doing anything
 #  -p <arg>, -P <arg> -- arguments passeed to make scripts
 #  <additional arguments> -- all additional arguments will be passed to
 #		make modules
@@ -1089,7 +1090,7 @@ done \
 # - in last line \ has to touch arguments so arguments passing
 #   in new lines (using \) will be supported
 
-%build_kernel_modules(p:P:m:)										\
+%build_kernel_modules(p:P:m:d:)										\
 %{!?-m:%{error:%{0}: Required module name/list missing} exit 1}		\
 																	\
 %define Opts 														\\\\\\\
@@ -1108,6 +1109,7 @@ done \
 compile() {															\
 	L="<"; [[ '%{*}' != *$L$L* ]] || PATCH_SH="set -x -e;$(cat)"	\
 	set -e -x														\
+%{?-d:cd %{-d*}}													\
 																	\
 for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do \
 	[ -r "%{_kernelsrcdir}/config-$cfg" ] || exit 1					\
@@ -1142,6 +1144,7 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 		[ -z "${MODULE}" ] || mv ${MODULE}{,-$cfg}.ko				\
 	done															\
 done																\
+%{?-d:cd -}															\
 }																	\
 compile %{*}\
 %{nil}
