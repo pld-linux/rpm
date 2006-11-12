@@ -655,8 +655,8 @@ fi \
 eval $CMD %2%{?3: %3} \
 %nil
 
-# useradd/groupadd macros written by glen@pld-linux.org.
-# All rights reserved. Permission to copy is hereby granted.. yada, yada, yada
+# useradd/groupadd macros
+# Author: Elan Ruusamäe <glen@pld-linux.org>
 #
 # Usage:
 #   %useradd [-P package] [-u uid] [-d home_dir] [-s shell] [-c comment]
@@ -719,10 +719,11 @@ else \
 	[ ! -x /usr/sbin/nscd ] || /usr/sbin/nscd -i group || : \
 fi;
 
-# apache_config_{install/uninstall} macros written by glen@pld-linux.org.
-# All rights reserved. Permission to copy is hereby granted.. yada, yada, yada
+# apache_config_{install/uninstall} macros *DEPRECATED*
+# Author: Elan Ruusamäe <glen@pld-linux.org>
 #
-# You should use webapp macros instead. these are here until single piece of them is gone from specs ;)
+# You should use webapp macros instead. these are here until single piece of
+# them is gone from specs ;)
 #
 # The config is installed/removed inside trigger, this means that you can any
 # time install apache1 or apache package and the configuration file is updated.
@@ -788,6 +789,7 @@ fi \
 %{nil}
 
 # webapp macros
+# Author: Elan Ruusamäe <glen@pld-linux.org>
 #
 # The config is installed/removed inside trigger, this means that you can any
 # time install apache1/apache/lighttpd package and the configuration file is
@@ -825,7 +827,7 @@ fi \
 %{nil}
 
 # see browser-plugins.spec / template-browser-plugin.spec
-# written by glen@pld-linux.org.
+# Author: Elan Ruusamäe <glen@pld-linux.org>
 %nsplugin_install(d:f) { \
 # create link if it's first install of either of the packages \
 if [ -n "%{-f:1}" ] || ([ "$1" = "1" ] && [ "$2" = "1" ] && [ -d %{-d*} ]); then \
@@ -851,13 +853,11 @@ if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
 }
 
 # service macro.
+# Author: Elan Ruusamäe <glen@pld-linux.org>
 #
 # calls usual service restart on package %post, but skips the restart if
 # administrator has disabled automatic service restarts in either global
 # /etc/sysconfig/rpm or per service /etc/sysconfig/SERVICE file.
-#
-# written by glen@pld-linux.org.
-# All rights reserved. Permission to copy is hereby granted.. yada, yada, yada
 #
 # Usage:
 #   %service [-q] SERVICE ACTION ["SERVICE NICE DESCRIPTION"]
@@ -927,7 +927,7 @@ run "$@"\
 EOF
 
 # PEAR install macros
-# Author: glen@pld-linux.org.
+# Author: Elan Ruusamäe <glen@pld-linux.org>
 #
 # Usage:
 #	%%pear_package_setup [-a #] [-n FMT]
@@ -1069,7 +1069,7 @@ done \
 #
 #  remember that proper Makefile is still required
 # Options:
-#  -m <modules> (required) -- coma-separated list of modules to save,
+#  -m <modules> (required) -- comma-separated list of modules to save,
 #		without .ko extension, may be placed in subdirectory
 #  -p <arg>, -P <arg> -- arguments passeed to make scripts
 #  <additional arguments> -- all additional arguments will be passed to
@@ -1154,7 +1154,7 @@ compile %{*}\
 #	%install_kernel_modules -m <modules> -d <directory>
 #
 # Options:
-#  -m <modules> (required) -- coma-separated list of modules to install,
+#  -m <modules> (required) -- comma-separated list of modules to install,
 #		without .ko extension, may be placed in subdirectory
 #  -d <directory> (required) -- in what subdirectory modules should be
 #		installed (eg. misc, kernel/drivers/net)
