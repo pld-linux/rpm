@@ -1114,6 +1114,7 @@ compile() {															\
 for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do \
 	[ -r "%{_kernelsrcdir}/config-$cfg" ] || exit 1					\
 																	\
+	rm -rf o														\
 	install -d o/include/linux										\
 	ln -sf %{_kernelsrcdir}/config-$cfg o/.config					\
 	ln -sf %{_kernelsrcdir}/Module.symvers-$cfg o/Module.symvers	\
