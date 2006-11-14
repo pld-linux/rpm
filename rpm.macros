@@ -1073,6 +1073,7 @@ done \
 #		without .ko extension, may be placed in subdirectory
 #  -C <directory> -- change to <directory> before doing anything
 #  -p <arg>, -P <arg> -- arguments passeed to make scripts
+#  -c -- do not execute make clean
 #  <additional arguments> -- all additional arguments will be passed to
 #		make modules
 #
@@ -1090,7 +1091,7 @@ done \
 # - in last line \ has to touch arguments so arguments passing
 #   in new lines (using \) will be supported
 
-%build_kernel_modules(p:P:m:C:)										\
+%build_kernel_modules(p:P:m:C:c)									\
 %{!?-m:%{error:%{0}: Required module name/list missing} exit 1}		\
 																	\
 %define Opts 														\\\\\\\
@@ -1134,9 +1135,9 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 		ln -sf %{_kernelsrcdir}/scripts o/scripts					\
 	%endif															\
 																	\
-	%{__make} -C %{_kernelsrcdir} clean								\\\
+	%{!?-c:%{__make} -C %{_kernelsrcdir} clean						\\\
 		RCS_FIND_IGNORE="-name '*.ko' -o"							\\\
-		M=$PWD %{MakeOpts}											\
+		M=$PWD %{MakeOpts}}											\
 	%{__make} -C %{_kernelsrcdir} modules							\\\
 		${1+"$@"}													\\\
 		M=$PWD %{MakeOpts}											\
