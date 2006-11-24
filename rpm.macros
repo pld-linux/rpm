@@ -91,6 +91,20 @@ fi; \
 	%{filter_out}
 }')
 
+# rpmldflags with stripped -Wl, -- in the form flags have to be passed to 'ld'
+# but, don't use it, better use gcc as linker
+%ld_rpmldflags %(awk 'BEGIN {
+        split("%{rpmldflags}",F);
+        for (f in F) {
+                s = F[f];
+                if (s ~ /^-Wl,/) {
+                        s = substr(s,5);
+                        gsub(/,/," ",s);
+                };
+                printf(s FS);
+        };
+}')
+
 #-----------------------------------------------------------------
 %configure2_13 { \
  if [ -n "$LINGUAS" ]; then unset LINGUAS; fi; \
