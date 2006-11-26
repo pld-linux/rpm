@@ -30,7 +30,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.6
-Release:	1.17
+Release:	1.18
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -87,7 +87,7 @@ Patch29:	%{name}-libdir64.patch
 Patch30:	%{name}-libdir-links.patch
 Patch31:	%{name}-missing-prototypes.patch
 Patch32:	%{name}-pld-autodep.patch
-
+Patch33:	%{name}-libtool-deps.patch
 Patch34:	%{name}-epoch0.patch
 Patch35:	%{name}-perl_req-INC_dirs.patch
 Patch36:	%{name}-debuginfo.patch
@@ -668,7 +668,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch30 -p1
 %patch31 -p1
 %patch32 -p1
-
+%patch33 -p1
 %patch34 -p1
 %patch35 -p0
 %patch36 -p1
