@@ -113,6 +113,7 @@ Patch55:	%{name}-truncate-cvslog.patch
 Patch56:	%{name}-skip-backups.patch
 Patch57:	%{name}-as_needed-fix.patch
 Patch58:	%{name}-repackage-wo-lzma.patch
+Patch59:	%{name}-libtool-deps.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
@@ -694,6 +695,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch56 -p1
 %patch57 -p1
 %patch58 -p1
+%patch59 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
