@@ -1,5 +1,7 @@
 #!/bin/awk -f
 # $Revision$, $Date$
+# TODO: "SourceXDownload" support (use given URLs if present instead of cut-down SourceX URLs)
+
 function fixedsub(s1,s2,t,	ind) {
 # substitutes fixed strings (not regexps)
 	if (ind = index(t,s1)) {
@@ -16,7 +18,7 @@ function ispre(s) {
 		return 0
 	}
 }
-	
+
 function compare_ver(v1,v2) {
 # compares version numbers
 	while (match(v1,/[a-zA-Z][0-9]|[0-9][a-zA-Z]/))
@@ -31,10 +33,10 @@ function compare_ver(v1,v2) {
 	if (DEBUG) print "v2 == " v2
 	count=split(v1,v1a,"\.")
 	count2=split(v2,v2a,"\.")
-	
-	if (count<count2) mincount=count 
+
+	if (count<count2) mincount=count
 	else mincount=count2
-	
+
 	for (i=1; i<=mincount; i++) {
 		if (v1a[i]=="") v1a[i]=0
 		if (v2a[i]=="") v2a[i]=0
@@ -86,10 +88,10 @@ function compare_ver_dec(v1,v2) {
 	if (DEBUG) print "v2 == " v2
 	count=split(v1,v1a,"\.")
 	count2=split(v2,v2a,"\.")
-	
-	if (count<count2) mincount=count 
+
+	if (count<count2) mincount=count
 	else mincount=count2
-	
+
 	for (i=1; i<=mincount; i++) {
 		if (v1a[i]=="") v1a[i]=0
 		if (v2a[i]=="") v2a[i]=0
@@ -136,64 +138,82 @@ function compare_ver_dec(v1,v2) {
 	return 0
 }
 
-function get_links(url,	errno,link,oneline,retval,odp,tmpfile) {
+function get_links(url,	errno,link,oneline,retval,odp,wholeodp,lowerodp,tmpfile) {
 # get all <A HREF=..> tags from specified URL
 	"mktemp /tmp/XXXXXX" | getline tmpfile
 	close("mktemp /tmp/XXXXXX")
-	
+
+	if (url ~ /^http:\/\/(download|dl).(sf|sourceforge).net\//) {
+		gsub("^http://(download|dl).(sf|sourceforge).net/", "", url)
+		url = "http://prdownloads.sourceforge.net/" substr(url, 1, 1) "/" substr(url, 1, 2) "/" url
+		if (DEBUG) print "sf url, mungled url to: " url
+	}
+
 	if (DEBUG) print "Retrieving: " url
 	errno=system("wget -O - \"" url "\" -t 3 -T 300 --passive-ftp > " tmpfile " 2>/dev/null" )
-	
+
 	if (errno==0) {
 		while (getline oneline < tmpfile)
-			odp=(odp " " oneline)
-		if ( DEBUG ) print "Odpowiedz: " odp
+			wholeodp=(wholeodp " " oneline)
+		if ( DEBUG ) print "Response: " wholeodp
 	}
-	
+
 	close(tmpfile)
 	system("rm -f " tmpfile)
 	urldir=url;
 	sub(/[^\/]+$/,"",urldir)
+
 	if ( errno==0) {
-		while ((tolower(odp) ~ /<frame[ \t]/)||(tolower(odp) ~ /href=/)) {
-			if (tolower(odp) ~ /<frame[ \t]/) {
-				match(tolower(odp),/<frame[ \t][^>]*>/)
-				ramka=substr(odp,RSTART,RLENGTH)
-				odp=substr(odp,RSTART+RLENGTH)
-				sub(/[sS][rR][cC]=[ \t]+/,"src=",ramka);
-				match(tolower(ramka),/src="[^"]+"/)
-				newurl=substr(ramka,RSTART+5,RLENGTH-6)
-				if (DEBUG) print "Ramka: " newurl
+		while (match(wholeodp, /<([aA]|[fF][rR][aA][mM][eE])[ \t][^>]*>/) > 0) {
+			odp=substr(wholeodp,RSTART,RLENGTH);
+			wholeodp=substr(wholeodp,RSTART+RLENGTH);
+
+			lowerodp=tolower(odp);
+			if (lowerodp ~ /<frame[ \t]/) {
+				sub(/[sS][rR][cC]=[ \t]*/,"src=",odp);
+				match(odp,/src="[^"]+"/)
+				newurl=substr(odp,RSTART+5,RLENGTH-6)
+				if (DEBUG) print "Frame: " newurl
 				if (newurl !~ /\//) {
 					newurl=(urldir newurl)
-					if (DEBUG) print "Ramka->: " newurl
+					if (DEBUG) print "Frame->: " newurl
 				}
 				retval=(retval " " get_links(newurl))
-			} else if (tolower(odp) ~ /href=[ \t]*"[^"]+"/) {
-				sub(/[hH][rR][eE][fF]=[ \t]+/,"href=",odp)
-				match(tolower(odp),/href="[^"]+"/)
+			} else if (lowerodp ~ /href=[ \t]*"[^"]*"/) {
+				sub(/[hH][rR][eE][fF]=[ \t]*"/,"href=\"",odp)
+				match(odp,/href="[^"]*"/)
 				link=substr(odp,RSTART,RLENGTH)
-				odp=substr(odp,RSTART+RLENGTH)
+				odp=substr(odp,1,RSTART) substr(odp,RSTART+RLENGTH)
 				link=substr(link,7,length(link)-7)
 				retval=(retval " " link)
-			} else if (tolower(odp) ~ /href=[ \t]*[^ \t>]+/) {
-				sub(/[hH][rR][eE][fF]=[ \t]+/,"href=",odp)
-				match(tolower(odp),/href=[^ \t>]+/)
+				if (DEBUG) print "href(\"\"): " link
+			} else if (lowerodp ~ /href=[ \t]*'[^']*'/) {
+				sub(/[hH][rR][eE][fF]=[ \t]*'/,"href='",odp)
+				match(odp,/href='[^']*'/)
 				link=substr(odp,RSTART,RLENGTH)
-				odp=substr(odp,RSTART+RLENGTH)
+				odp=substr(odp,1,RSTART) substr(odp,RSTART+RLENGTH)
+				link=substr(link,7,length(link)-7)
+				retval=(retval " " link)
+				if (DEBUG) print "href(''): " link
+			} else if (lowerodp ~ /href=[ \t]*[^ \t>]*/) {
+				sub(/[hH][rR][eE][fF]=[ \t]*/,"href=",odp)
+				match(odp,/href=[^ \t>]*/)
+				link=substr(odp,RSTART,RLENGTH)
+				odp=substr(odp,1,RSTART) substr(odp,RSTART+RLENGTH)
 				link=substr(link,6,length(link)-5)
 				retval=(retval " " link)
+				if (DEBUG) print "href(): " link
 			} else {
-				retval=(retval " INTERNAL_ERROR")
-				break
+				# <a ...> but not href - skip
+				if (DEBUG) print "skipping <a > without href: " odp
 			}
 		}
 	} else {
 		retval=("WGET ERROR: " errno)
 	}
-	
-	
-	if (DEBUG) print "Zwracane: " retval
+
+
+	if (DEBUG) print "Returning: " retval
 	return retval
 }
 
@@ -224,9 +244,9 @@ function find_mirror(url) {
 			mname=fields[3]
 			prefix=substr(url,1,length(origin))
 			if (prefix==origin){
-				if ( DEBUG ) print "Mirror znaleziony na " mname
+				if ( DEBUG ) print "Mirror fount at " mname
 				close("mirrors")
-				return mirror substr(url,length(origin))
+				return mirror substr(url,length(origin)+1)
 			}
 		}
 	}
@@ -236,10 +256,10 @@ function find_mirror(url) {
 
 function process_source(number,lurl,name,version) {
 # fetches file list, and compares version numbers
-	if ( DEBUG ) print "Przetwarzam " lurl
+	if ( DEBUG ) print "Processing " lurl
 
 	if ( index(lurl,version)==0 ) {
-		if (DEBUG) print "Nie ma numeru wersji."
+		if (DEBUG) print "There is no version number."
 		return 0
 	}
 
@@ -256,26 +276,26 @@ function process_source(number,lurl,name,version) {
 		dir=substr(dir,1,index(dir,version)-1)
 		sub("[^/]*$","",dir)
 		sub("(\.tar\.(bz|bz2|gz)|zip)$","",filename)
-		if ( DEBUG ) print "Sprawdze katalog: " dir
-		if ( DEBUG ) print "i plik: " filename
+		if ( DEBUG ) print "Will check a directory: " dir
+		if ( DEBUG ) print "and a file: " filename
 	}
 
 	filenameexp=filename
 	gsub("\+","\\+",filenameexp)
 	sub(version,"[A-Za-z0-9.]+",filenameexp)
 	gsub("\.","\\.",filenameexp)
-	if ( DEBUG ) print "Wzorzec: " filenameexp
+	if ( DEBUG ) print "Expression: " filenameexp
 	match(filename,version)
 	prever=substr(filename,1,RSTART-1)
 	postver=substr(filename,RSTART+RLENGTH)
-	if ( DEBUG ) print "Przed numerkiem: " prever
-	if ( DEBUG ) print "i po: " postver
-	newurl=find_mirror(acc "://" host dir)	
+	if ( DEBUG ) print "Before number: " prever
+	if ( DEBUG ) print "and after: " postver
+	newurl=find_mirror(acc "://" host dir)
 	#print acc "://" host dir
 	#newurl=url[1]"://"url[2]url[3]url[4]
 	#newurl=acc "://" host dir filename
-	if ( DEBUG ) print "Zagl±dam na " newurl 
-	
+	if ( DEBUG ) print "Looking at " newurl
+
 	references=0
 	finished=0
 	oldversion=version
@@ -283,27 +303,27 @@ function process_source(number,lurl,name,version) {
 	if( odp ~ "ERROR: ") {
 		print name "(" number ") " odp
 	} else {
-		if (DEBUG) print "Sciagnieta strona"
+		if (DEBUG) print "WebPage downloaded"
 		c=split(odp,linki)
 		for (nr=1; nr<=c; nr++) {
 			addr=linki[nr]
-			if (DEBUG) print "Znaleziony link: " addr
+			if (DEBUG) print "Found link: " addr
 			if ((addr ~ filenameexp) && !(addr ~ "[-_.0-9A-Za-z~]" filenameexp)) {
 				match(addr,filenameexp)
 				newfilename=substr(addr,RSTART,RLENGTH)
-				if (DEBUG) print "Hipotetyczny nowy: " newfilename
+				if (DEBUG) print "Hypothetical new: " newfilename
 				newfilename=fixedsub(prever,"",newfilename)
 				newfilename=fixedsub(postver,"",newfilename)
-				if (DEBUG) print "Wersja: " newfilename
-				if (newfilename ~ /\.(pkg|bin|binary)$/) continue
+				if (DEBUG) print "Version: " newfilename
+				if (newfilename ~ /\.(pkg|bin|binary|built)$/) continue
 				if (NUMERIC) {
 					if ( compare_ver_dec(version, newfilename)==1 ) {
-						if (DEBUG) print "Tak, jest nowa"
+						if (DEBUG) print "Yes, there is new one"
 						version=newfilename
 						finished=1
 					}
 				} else if ( compare_ver(version, newfilename)==1 ) {
-					if (DEBUG) print "Tak, jest nowa"
+					if (DEBUG) print "Yes, there is new one"
 					version=newfilename
 					finished=1
 				}
@@ -315,16 +335,41 @@ function process_source(number,lurl,name,version) {
 			print name "(" number ") [OLD] " oldversion " [NEW] " version
 	}
 }
-	
+
+# upgrade check for pear package using PEAR CLI
+function pear_upgrade(name, ver) {
+	pname = name;
+	sub(/^php-pear-/, "", pname);
+
+	pearcmd = "pear remote-info " pname " | awk '/^Latest/{print $NF}'"
+	if (DEBUG) {
+		print "pearcmd: " pearcmd
+	}
+	pearcmd | getline nver
+	close(pearcmd)
+
+	if (compare_ver(ver, nver)) {
+		print name " [OLD] " ver " [NEW] " nver
+	} else {
+		print name " seems ok: " ver
+	}
+
+	return
+}
+
 function process_data(name,ver,rel,src) {
+	if (name ~ /^php-pear-/) {
+		return pear_upgrade(name, ver);
+	}
+
 # this function checks if substitutions were valid, and if true:
 # processes each URL and tries to get current file list
 	for (i in src) {
 		if ( src[i] !~ /%{.*}/ && src[i] !~ /%[A-Za-z0-9_]/ )  {
-			if ( DEBUG ) print "Zrodlo: " src[i]
+			if ( DEBUG ) print "Source: " src[i]
 			process_source(i,src[i],name,ver)
 		} else {
-			print FNAME ":" i ": niemozliwe podstawienie: " src[i]
+			print FNAME ":" i ": impossible substitution: " src[i]
 		}
 	}
 }
@@ -341,7 +386,7 @@ BEGIN {
 	}
 	if (ARGC>=3 && ARGV[2]=="-n") {
 		NUMERIC=1
-		for (i=3; i<ARGC; i++) ARGV[i-1]=ARGV[i] 
+		for (i=3; i<ARGC; i++) ARGV[i-1]=ARGV[i]
 		ARGC=ARGC-1
 	}
 }
