@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/ksh
 # -----------
 # $Id$
 # Exit codes:
@@ -22,7 +22,7 @@
 
 VERSION="\
 Build package utility from PLD Linux CVS repository
-v0.16 (C) 1999-2006 Free Penguins".
+v0.17 (C) 1999-2006 Free Penguins".
 PATH="/bin:/usr/bin:/usr/sbin:/sbin:/usr/X11R6/bin"
 
 COMMAND="build"
@@ -39,7 +39,6 @@ NOCVSSPEC=""
 NODIST=""
 NOINIT=""
 UPDATE=""
-UPDATE5=""
 ADD5=""
 NO5=""
 ALWAYS_CVSUP=${ALWAYS_CVSUP:-"yes"}
@@ -79,6 +78,7 @@ CVS_RETRIES=${MAX_CVS_RETRIES:-1000}
 
 CVSTAG=""
 RES_FILE=""
+CVS_FORCE=""
 
 CVS_SERVER="cvs.pld-linux.org"
 DISTFILES_SERVER="://distfiles.pld-linux.org"
@@ -91,6 +91,10 @@ FAIL_IF_NO_SOURCES="yes"
 
 # let get_files skip over files which are present to get those damn files fetched
 SKIP_EXISTING_FILES="no"
+
+TRY_UPGRADE=""
+# should the specfile be restored if upgrade failed?
+REVERT_BROKEN_UPGRADE="yes"
 
 if [ -x /usr/bin/rpm-getdeps ]; then
 	FETCH_BUILD_REQUIRES_RPMGETDEPS="yes"
@@ -189,13 +193,11 @@ usage()
 	if [ -n "$DEBUG" ]; then set -xv; fi
 	echo "\
 Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
-
 [-bb|--build-binary] [-bs|--build-source] [-u|--try-upgrade]
-[{-B|--branch} <branch>] [{-d|--cvsroot} <cvsroot>] [-g|--get]
-[-h|--help] [--http] [{-l,--logtofile} <logfile>] [-m|--mr-proper]
-[-q|--quiet] [--date <yyyy-mm-dd> [-r <cvstag>] [{-T--tag <cvstag>]
-[-Tvs|--tag-version-stable] [-Tvn|--tag-version-nest]
-[-Ts|--tag-stable] [-Tn|--tag-nest] [-Tv|--tag-version]
+[{-cf|--cvs-force}] [{-B|--branch} <branch>] [{-d|--cvsroot} <cvsroot>]
+[-g|--get] [-h|--help] [--http] [{-l|--logtofile} <logfile>] [-m|--mr-proper]
+[-q|--quiet] [--date <yyyy-mm-dd> [-r <cvstag>] [{-T|--tag <cvstag>]
+[-Tvs|--tag-version-stable] [-Ts|--tag-stable] [-Tv|--tag-version]
 [{-Tp|--tag-prefix} <prefix>] [{-tt|--test-tag}]
 [-nu|--no-urls] [-v|--verbose] [--opts <rpm opts>] [--show-bconds]
 [--with/--without <feature>] [--define <macro> <value>] <package>[.spec][:cvstag]
@@ -220,6 +222,7 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
 -B, --branch        - add branch
 -c, --clean         - clean all temporarily created files (in BUILD, SOURCES,
                       SPECS and \$RPM_BUILD_ROOT),
+-cf, --cvs-force	- use -F when tagging (useful when moving branches)
 -d <cvsroot>, --cvsroot <cvsroot>
                     - setup \$CVSROOT,
 --define <macro> <value>
@@ -250,6 +253,7 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
 --date yyyy-mm-dd   - build package using resources from specified CVS date,
 -r <cvstag>, --cvstag <cvstag>
                     - build package using resources from specified CVS tag,
+-A                  - build package using CVS resources as any sticky tags/date/kopts being reset.
 -R, --fetch-build-requires
                     - fetch what is BuildRequired,
 -RB, --remove-build-requires
@@ -277,12 +281,8 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
                     - add cvs tag <cvstag> for files,
 -Tvs, --tag-version-stable
                     - add cvs tags STABLE and NAME-VERSION-RELEASE for files,
--Tvn, --tag-version-nest
-                    - add cvs tags NEST and NAME-VERSION-RELEASE for files,
 -Ts, --tag-stable
                     - add cvs tag STABLE for files,
--Tn, --tag-nest
-                    - add cvs tag NEST for files,
 -Tv, --tag-version
                     - add cvs tag NAME-VERSION-RELEASE for files,
 -Tp, --tag-prefix <prefix>
@@ -302,6 +302,9 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
                     - don't apply <patchnumber>
 --show-bconds       - show available conditional builds, which can be used
                     - with --with and/or --without switches.
+--show-bcond-args   - show active bconds, from ~/.bcondrc. this is used by
+                      ./repackage.sh script. in other words, the output is
+                      parseable by scripts.
 --with/--without <feature>
                     - conditional build package depending on %_with_<feature>/
                       %_without_<feature> macro switch.  You may now use
@@ -360,10 +363,10 @@ set_spec_target() {
 }
 
 cache_rpm_dump () {
-	 if [ -n "$DEBUG" ]; then
-		  set -x;
-		  set -v;
-	 fi
+	if [ -n "$DEBUG" ]; then
+		set -x
+		set -v
+	fi
 
 	update_shell_title "cache_rpm_dump"
 	local rpm_dump
@@ -396,6 +399,8 @@ cache_rpm_dump () {
 %php_major_version ERROR
 %php_api_version ERROR
 %py_ver ERROR
+%perl_vendorarch ERROR
+%perl_vendorlib ERROR
 EOF
 	case "$RPMBUILD" in
 	rpm)
@@ -416,7 +421,7 @@ EOF
 	if [ $? -gt 0 ]; then
 		error=$(echo "$rpm_dump" | sed -ne '/^error:/,$p')
 		echo "$error" >&2
-		Exit_error err_build_fail;
+		Exit_error err_build_fail
 	fi
 
 	# make small dump cache
@@ -432,7 +437,7 @@ EOF
 
 rpm_dump () {
 	if [ -z "$rpm_dump_cache" ] ; then
-		echo "internal error: cache_rpm_dump not called!" 1>&2
+		echo "internal error: cache_rpm_dump not called! (missing %prep?)" 1>&2
 	fi
 	echo "$rpm_dump_cache"
 }
@@ -445,19 +450,19 @@ get_icons()
 		return
 	fi
 
-	rpm_dump_cache="kalasaba" NODIST="yes" UPDATE5= get_files $ICONS
+	rpm_dump_cache="kalasaba" NODIST="yes" get_files $ICONS
 }
 
 parse_spec()
 {
 	update_shell_title "parsing specfile"
 	if [ -n "$DEBUG" ]; then
-		set -x;
-		set -v;
+		set -x
+		set -v
 	fi
 
 	# icons are needed for successful spec parse
-	get_icons;
+	get_icons
 
 	cd $SPECS_DIR
 	cache_rpm_dump
@@ -499,8 +504,8 @@ parse_spec()
 Exit_error()
 {
 	if [ -n "$DEBUG" ]; then
-		set -x;
-		set -v;
+		set -x
+		set -v
 	fi
 
 	cd "$__PWD"
@@ -508,19 +513,19 @@ Exit_error()
 	case "$1" in
 		"err_no_spec_in_cmdl" )
 			remove_build_requires
-			echo "ERROR: spec file name not specified.";
+			echo "ERROR: spec file name not specified."
 			exit 2 ;;
 		"err_no_spec_in_repo" )
 			remove_build_requires
-			echo "Error: spec file not stored in CVS repo.";
+			echo "Error: spec file not stored in CVS repo."
 			exit 3 ;;
 		"err_no_source_in_repo" )
 			remove_build_requires
-			echo "Error: some source, patch or icon files not stored in CVS repo. ($2)";
+			echo "Error: some source, patch or icon files not stored in CVS repo. ($2)"
 			exit 4 ;;
 		"err_build_fail" )
 			remove_build_requires
-			echo "Error: package build failed. (${2:-no more info})";
+			echo "Error: package build failed. (${2:-no more info})"
 			exit 5 ;;
 		"err_no_package_data" )
 			remove_build_requires
@@ -528,27 +533,27 @@ Exit_error()
 			exit 6 ;;
 		"err_tag_exists" )
 			remove_build_requires
-			echo "Tag ${2} already exists (spec release: ${3}).";
+			echo "Tag ${2} already exists (spec release: ${3})."
 			exit 9 ;;
 		"err_fract_rel" )
 			remove_build_requires
-			echo "Release ${2} not integer and not a snapshot.";
+			echo "Release ${2} not integer and not a snapshot."
 			exit 10 ;;
 		"err_branch_exists" )
 			remove_build_requires
-			echo "Tree branch already exists (${2}).";
+			echo "Tree branch already exists (${2})."
 			exit 11 ;;
 
 	esac
-   echo "Unknown error."
-   exit 100
+	echo "Unknown error."
+	exit 100
 }
 
 init_builder()
 {
 	if [ -n "$DEBUG" ]; then
-		set -x;
-		set -v;
+		set -x
+		set -v
 	fi
 
 	if [ "$NOINIT" != "yes" ] ; then
@@ -568,13 +573,13 @@ get_spec()
 	update_shell_title "get_spec"
 
 	if [ -n "$DEBUG" ]; then
-		set -x;
-		set -v;
+		set -x
+		set -v
 	fi
 
 	cd "$SPECS_DIR"
 	if [ ! -f "$SPECFILE" ]; then
-		SPECFILE="`basename $SPECFILE .spec`.spec";
+		SPECFILE="`basename $SPECFILE .spec`.spec"
 	fi
 	if [ "$NOCVSSPEC" != "yes" ]; then
 
@@ -587,7 +592,7 @@ get_spec()
 	fi
 
 	if [ ! -f "$SPECFILE" ]; then
-		Exit_error err_no_spec_in_repo;
+		Exit_error err_no_spec_in_repo
 	fi
 
 	if [ "$CHMOD" = "yes" -a -n "$SPECFILE" ]; then
@@ -625,6 +630,7 @@ find_mirror()
 	echo "$url"
 }
 
+# Warning: unpredictable results if same URL used twice
 src_no ()
 {
 	cd $SPECS_DIR
@@ -634,38 +640,44 @@ src_no ()
 	head -n 1 | xargs
 }
 
-src_md5 ()
+src_md5()
 {
-	[ X"$NO5" = X"yes" ] && return
+	[ "$NO5" = "yes" ] && return
 	no=$(src_no "$1")
 	[ -z "$no" ] && return
 	cd $SPECS_DIR
-	spec_rev=$(grep $SPECFILE CVS/Entries 2>/dev/null | sed -e s:/$SPECFILE/:: -e s:/.*::)
-	if [ -z "$spec_rev" ]; then
-		spec_rev="$(head -n 1 $SPECFILE | sed -e 's/.*\$Revision: \([0-9.]*\).*/\1/')"
-	fi
-	spec="$SPECFILE[0-9.,]*,$(echo $spec_rev | sed 's/\./\\./g')"
-	md5=$(grep -s -v '^#' additional-md5sums | \
-	grep -E "[ 	]$(basename "$1")[ 	]+${spec}([ 	,]|\$)" | \
-	sed -e 's/^\([0-9a-f]\{32\}\).*/\1/' | \
-	grep -E '^[0-9a-f]{32}$')
-	if [ X"$md5" = X"" ] ; then
-		source_md5=`grep -i "#[ 	]*Source$no-md5[ 	]*:" $SPECFILE | sed -e 's/.*://'`
-		if [ ! -z "$source_md5" ] ; then
-			echo $source_md5;
-		else
-			# we have empty SourceX-md5, but it is still possible
-			# that we have NoSourceX-md5 AND NoSource: X
-			nosource_md5=`grep -i "#[	 ]*NoSource$no-md5[	 ]*:" $SPECFILE | sed -e 's/.*://'`
-			if [ ! -z "$nosource_md5" -a ! X"`grep -i "^NoSource:[	 ]*$no$" $SPECFILE`" = X"" ] ; then
-				echo $nosource_md5;
-			fi;
-		fi;
-	else
-		if [ $(echo "$md5" | wc -l) != 1 ] ; then
-			echo "$SPECFILE: more then one entry in additional-md5sums for $1" 1>&2
+	local md5
+
+	if [ -f additional-md5sums ]; then
+		local spec_rev=$(grep $SPECFILE CVS/Entries 2>/dev/null | sed -e s:/$SPECFILE/:: -e s:/.*::)
+		if [ -z "$spec_rev" ]; then
+			spec_rev="$(head -n 1 $SPECFILE | sed -e 's/.*\$Revision: \([0-9.]*\).*/\1/')"
 		fi
-		echo "$md5" | tail -n 1
+		local spec="$SPECFILE[0-9.,]*,$(echo $spec_rev | sed 's/\./\\./g')"
+		md5=$(grep -s -v '^#' additional-md5sums | \
+		grep -E "[ 	]$(basename "$1")[ 	]+${spec}([ 	,]|\$)" | \
+		sed -e 's/^\([0-9a-f]\{32\}\).*/\1/' | \
+		grep -E '^[0-9a-f]{32}$')
+
+		if [ "$md5" ]; then
+			if [ $(echo "$md5" | wc -l) != 1 ] ; then
+				echo "$SPECFILE: more then one entry in additional-md5sums for $1" 1>&2
+			fi
+			echo "$md5" | tail -n 1
+			return
+		fi
+	fi
+
+	source_md5=`grep -i "#[ 	]*Source$no-md5[ 	]*:" $SPECFILE | sed -e 's/.*://'`
+	if [ -n "$source_md5" ]; then
+		echo $source_md5
+	else
+		# we have empty SourceX-md5, but it is still possible
+		# that we have NoSourceX-md5 AND NoSource: X
+		nosource_md5=`grep -i "#[	 ]*NoSource$no-md5[	 ]*:" $SPECFILE | sed -e 's/.*://'`
+		if [ -n "$nosource_md5" -a -n "`grep -i "^NoSource:[	 ]*$no$" $SPECFILE`" ] ; then
+			echo $nosource_md5
+		fi
 	fi
 }
 
@@ -752,13 +764,96 @@ cvsup()
 	return $result
 }
 
+# returns true if "$1" is ftp, http or https protocol url
+is_url()
+{
+	case "$1" in
+	ftp://*|http://*|https://*)
+		return 0
+	;;
+	esac
+	return 1
+}
+
+update_md5()
+{
+	if [ $# -eq 0 ]; then
+		return
+	fi
+
+	update_shell_title "update md5"
+	if [ -n "$DEBUG" ]; then
+		set -x
+		set -v
+	fi
+
+	cd "$SOURCE_DIR"
+
+	# pass 1: check files to be fetched
+	local todo
+	local need_files
+	for i in "$@"; do
+		local fp=$(nourl "$i")
+		local srcno=$(src_no "$i")
+		if [ -n "$ADD5" ]; then
+			[ "$fp" = "$i" ] && continue # FIXME what is this check doing?
+			grep -qiE '^#[ 	]*Source'$srcno'-md5[ 	]*:' $SPECS_DIR/$SPECFILE && continue
+		else
+			grep -qiE '^#[ 	]*Source'$srcno'-md5[ 	]*:' $SPECS_DIR/$SPECFILE || continue
+		fi
+		if [ ! -f "$fp" ] || [ $ALWAYS_CVSUP = "yes" ]; then
+			need_files="$need_files $i"
+		fi
+	done
+
+	# pass 1a: get needed files
+	if [ "$need_files" ]; then
+		get_files $need_files
+	fi
+
+	# pass 2: proceed with md5 adding or updating
+	for i in "$@"; do
+		local fp=$(nourl "$i")
+		local srcno=$(src_no "$i")
+		local md5=$(grep -iE '^#[ 	]*(No)?Source'$srcno'-md5[ 	]*:' $SPECS_DIR/$SPECFILE )
+		if [ -n "$ADD5" ] && is_url $i || [ -n "$md5" ]; then
+			local tag="Source$srcno-md5"
+			if [[ "$md5" == *NoSource* ]]; then
+				tag="NoSource$srcno-md5"
+			fi
+			md5=$(md5sum "$fp" | cut -f1 -d' ')
+			echo "Updating $tag ($md5: $fp)."
+			perl -i -ne '
+				print unless /^\s*#\s*(No)?Source'$srcno'-md5\s*:/i;
+				print "# '$tag':\t'$md5'\n" if /^Source'$srcno'\s*:\s+/;
+			' \
+			$SPECS_DIR/$SPECFILE
+		fi
+	done
+}
+
+check_md5()
+{
+	update_shell_title "check md5"
+
+	for i in "$@"; do
+		if good_md5 "$i" && good_size "$i"; then
+			continue
+		fi
+
+		echo "MD5 sum mismatch or 0 size.  Use -U to refetch sources,"
+		echo "or -5 to update md5 sums, if you're sure files are correct."
+		Exit_error err_no_source_in_repo $i
+	done
+}
+
 get_files()
 {
 	update_shell_title "get_files"
 
 	if [ -n "$DEBUG" ]; then
-		set -x;
-		set -v;
+		set -x
+		set -v
 	fi
 
 	if [ $# -gt 0 ]; then
@@ -777,33 +872,34 @@ get_files()
 			SHELL_TITLE_PREFIX="get_files[$nc/$#]"
 			update_shell_title "$i"
 			local fp=`nourl "$i"`
-			if [ -f "$fp" ] && [ "$SKIP_EXISTING_FILES" = "yes" ]; then
+			if [ "$SKIP_EXISTING_FILES" = "yes" ] && [ -f "$fp" ]; then
 				continue
 			fi
-			if [ -n "$UPDATE5" ]; then
-				if [ -n "$ADD5" ]; then
-					[ "$fp" = "$i" ] && continue
-					grep -qiE '^#[ 	]*Source'$(src_no $i)'-md5[ 	]*:' $SPECS_DIR/$SPECFILE && continue
-				else
-					grep -qiE '^#[ 	]*Source'$(src_no $i)'-md5[ 	]*:' $SPECS_DIR/$SPECFILE || continue
-				fi
-			fi
+
 			FROM_DISTFILES=0
+			local srcmd5=$(src_md5 "$i")
+
+			# we know if source/patch is present in cvs/distfiles
+			# - has md5 (in distfiles)
+			# - in cvs... ideas?
+
+			# CHECK: local file didn't exist or always cvs up (first) requested.
 			if [ ! -f "$fp" ] || [ $ALWAYS_CVSUP = "yes" ]; then
 				if echo $i | grep -vE '(http|ftp|https|cvs|svn)://' | grep -qE '\.(gz|bz2)$']; then
 					echo "Warning: no URL given for $i"
 				fi
 
-				if [ -z "$NODIST" ] && [ -n "$(src_md5 "$i")" ]; then
+				if [ -z "$NODIST" ] && [ -n "$srcmd5" ]; then
 					if good_md5 "$i" && good_size "$i"; then
-						echo "$(nourl "$i") having proper md5sum already exists"
+						echo "$fp having proper md5sum already exists"
 						continue
 					fi
 					target="$fp"
 					url=$(distfiles_url "$i")
 					url_attic=$(distfiles_attic_url "$i")
 					FROM_DISTFILES=1
-					if [ "`echo $url | grep -E '^(\.|/)'`" ]; then
+					# is $url local file?
+					if [[ "$url" = [./]* ]]; then
 						update_shell_title "${GETLOCAL%% *}: $url"
 						${GETLOCAL} $url $target
 					else
@@ -817,7 +913,9 @@ get_files()
 							${GETURI2} ${OUTFILEOPT} "$target" "$url"
 						fi
 					fi
-					if ! test -s "$target"; then
+
+					# is it empty file?
+					if [ ! -s "$target" ]; then
 						rm -f "$target"
 						if [ `echo $url_attic | grep -E '^(\.|/)'` ]; then
 							update_shell_title "${GETLOCAL%% *}: $url_attic"
@@ -834,13 +932,14 @@ get_files()
 							fi
 						fi
 					fi
-					if test -s "$target"; then
+
+					if [ -s "$target" ]; then
 						cvsignore_df $target
 					else
 						rm -f "$target"
 						FROM_DISTFILES=0
 					fi
-				elif [ "$NOCVS" != "yes" -a -z "$(src_md5 "$i")" ]; then
+				elif [ "$NOCVS" != "yes" -a -z "$srcmd5" ]; then
 					if [ $# -gt 1 ]; then
 						get_files_cvs="$get_files_cvs $fp"
 						update_shell_title "$fp (will cvs up later)"
@@ -869,24 +968,13 @@ get_files()
 				fi
 
 			fi
-			srcno=$(src_no $i)
+
+			# the md5 check must be moved elsewhere as if we've called from update_md5 the md5 is wrong.
 			if [ ! -f "$fp" -a "$FAIL_IF_NO_SOURCES" != "no" ]; then
-				Exit_error err_no_source_in_repo $i;
-			elif [ -n "$UPDATE5" ] && \
-				( ( [ -n "$ADD5" ] && echo $i | grep -q -E 'ftp://|http://|https://' && \
-				[ -z "$(grep -E -i '^NoSource[ 	]*:[ 	]*'$i'([ 	]|$)' $SPECS_DIR/$SPECFILE)" ] ) || \
-				grep -q -i -E '^#[ 	]*source'$(src_no $i)'-md5[ 	]*:' $SPECS_DIR/$SPECFILE )
-			then
-				echo "Updating source-$srcno md5."
-				md5=$(md5sum "$fp" | cut -f1 -d' ')
-				perl -i -ne '
-				print unless /^\s*#\s*Source'$srcno'-md5\s*:/i;
-				print "# Source'$srcno'-md5:\t'$md5'\n"
-				if /^Source'$srcno'\s*:\s+/;
-				' \
-				$SPECS_DIR/$SPECFILE
+				Exit_error err_no_source_in_repo $i
 			fi
 
+			# we check md5 here just only to refetch immediately
 			if good_md5 "$i" && good_size "$i"; then
 				:
 			elif [ "$FROM_DISTFILES" = 1 ]; then
@@ -901,7 +989,7 @@ get_files()
 					update_shell_title "${GETURI2%% *}: $url"
 					${GETURI2} ${OUTFILEOPT} "$target" "$url"
 				fi
-				if ! test -s "$target"; then
+				if [ ! -s "$target" ]; then
 					rm -f "$target"
 					update_shell_title "${GETURI%% *}: $url_attic"
 					${GETURI} ${OUTFILEOPT} "$target" "$url_attic" || \
@@ -911,14 +999,6 @@ get_files()
 					fi
 				fi
 				test -s "$target" || rm -f "$target"
-			fi
-
-			if good_md5 "$i" && good_size "$i" ; then
-				:
-			else
-				echo "MD5 sum mismatch or 0 size.  Use -U to refetch sources,"
-				echo "or -5 to update md5 sums, if you're sure files are correct."
-				Exit_error err_no_source_in_repo $i
 			fi
 		done
 		SHELL_TITLE_PREFIX=""
@@ -938,8 +1018,8 @@ get_files()
 
 make_tagver() {
 	if [ -n "$DEBUG" ]; then
-		set -x;
-		set -v;
+		set -x
+		set -v
 	fi
 
 	# Check whether first character of PACKAGE_NAME is legal for tag name
@@ -958,54 +1038,59 @@ tag_files()
 	TAG_FILES="$@"
 
 	if [ -n "$DEBUG" ]; then
-		set -x;
-		set -v;
+		set -x
+		set -v
 	fi
 
-	if [ -n "$1$2$3$4$5$6$7$8$9${10}" ]; then
-		echo "Version: $PACKAGE_VERSION"
-		echo "Release: $PACKAGE_RELEASE"
+	echo "Version: $PACKAGE_VERSION"
+	echo "Release: $PACKAGE_RELEASE"
 
-		TAGVER=`make_tagver`
+	TAGVER=`make_tagver`
 
+	if [ "$TAG_VERSION" = "yes" ]; then
+		echo "CVS tag: $TAGVER"
+	fi
+	if [ -n "$TAG" ]; then
+		echo "CVS tag: $TAG"
+	fi
+
+	local OPTIONS="tag $CVS_FORCE"
+	if [ -n "$CVSROOT" ]; then
+		OPTIONS="-d $CVSROOT $OPTIONS"
+	fi
+
+	cd "$SOURCE_DIR"
+	local tag_files
+	for i in $TAG_FILES; do
+		# don't tag files stored on distfiles
+		[ -n "`src_md5 $i`" ] && continue
+		local fp=`nourl "$i"`
+		if [ -f "$fp" ]; then
+			tag_files="$tag_files $fp"
+		else
+			Exit_error err_no_source_in_repo $i
+		fi
+	done
+
+	if [ "$tag_files" ]; then
 		if [ "$TAG_VERSION" = "yes" ]; then
-			echo "CVS tag: $TAGVER"
+			update_shell_title "tag sources: $TAGVER"
+			cvs $OPTIONS $TAGVER $tag_files
 		fi
 		if [ -n "$TAG" ]; then
-			echo "CVS tag: $TAG"
+			update_shell_title "tag sources: $TAG"
+			cvs $OPTIONS $TAG $tag_files
 		fi
+	fi
 
-		OPTIONS="tag -F"
-		if [ -n "$CVSROOT" ]; then
-			OPTIONS="-d $CVSROOT $OPTIONS"
-		fi
-
-		cd "$SOURCE_DIR"
-		for i in $TAG_FILES
-		do
-			# don't tag files stored on distfiles
-			[ -n "`src_md5 $i`" ] && continue
-			if [ -f "`nourl $i`" ]; then
-				if [ "$TAG_VERSION" = "yes" ]; then
-					cvs $OPTIONS $TAGVER `nourl $i`
-				fi
-				if [ -n "$TAG" ]; then
-					cvs $OPTIONS $TAG `nourl $i`
-				fi
-			else
-				Exit_error err_no_source_in_repo $i
-			fi
-		done
-
-		cd "$SPECS_DIR"
-		if [ "$TAG_VERSION" = "yes" ]; then
-			cvs $OPTIONS $TAGVER $SPECFILE
-		fi
-		if [ -n "$TAG" ]; then
-			cvs $OPTIONS $TAG $SPECFILE
-		fi
-
-		unset OPTIONS
+	cd "$SPECS_DIR"
+	if [ "$TAG_VERSION" = "yes" ]; then
+		update_shell_title "tag spec: $TAGVER"
+		cvs $OPTIONS $TAGVER $SPECFILE
+	fi
+	if [ -n "$TAG" ]; then
+		update_shell_title "tag spec: $TAG"
+		cvs $OPTIONS $TAG $SPECFILE
 	fi
 }
 
@@ -1013,35 +1098,35 @@ branch_files()
 {
 	TAG=$1
 	echo "CVS branch tag: $TAG"
-	shift;
+	shift
 
 	TAG_FILES="$@"
 
 	if [ -n "$DEBUG" ]; then
-		set -x;
-		set -v;
+		set -x
+		set -v
 	fi
 
-	if [ -n "$1$2$3$4$5$6$7$8$9${10}" ]; then
-
-		OPTIONS="tag -b"
-		if [ -n "$CVSROOT" ]; then
-			OPTIONS="-d $CVSROOT $OPTIONS"
+	local OPTIONS="tag $CVS_FORCE -b"
+	if [ -n "$CVSROOT" ]; then
+		OPTIONS="-d $CVSROOT $OPTIONS"
+	fi
+	cd "$SOURCE_DIR"
+	local tag_files
+	for i in $TAG_FILES; do
+		local fp=`nourl "$i"`
+		if [ -f "$fp" ]; then
+			tag_files="$tag_files $fp"
+		else
+			Exit_error err_no_source_in_repo $i
 		fi
-		cd "$SOURCE_DIR"
-		for i in $TAG_FILES
-		do
-			if [ -f `nourl $i` ]; then
-				cvs $OPTIONS $TAG `nourl $i`
-			else
-				Exit_error err_no_source_in_repo $i
-			fi
-		done
-		cd "$SPECS_DIR"
-		cvs $OPTIONS $TAG $SPECFILE
-
-		unset OPTIONS
+	done
+	if [ "$tag_files" ]; then
+		cvs $OPTIONS $TAG $tag_files
 	fi
+
+	cd "$SPECS_DIR"
+	cvs $OPTIONS $TAG $SPECFILE
 }
 
 
@@ -1050,8 +1135,8 @@ build_package()
 {
 	update_shell_title "build_package"
 	if [ -n "$DEBUG" ]; then
-		set -x;
-		set -v;
+		set -x
+		set -v
 	fi
 
 	cd "$SPECS_DIR"
@@ -1069,12 +1154,16 @@ build_package()
 		if [ -n "$TNEWVER" ]; then
 			TOLDVER=`echo $TNOTIFY | awk '{ print $3; }'`
 			echo "New version found, updating spec file to version " $TNEWVER
-			cp -f $SPECFILE $SPECFILE.bak
+			if [ "$REVERT_BROKEN_UPGRADE" = "yes" ]; then
+				cp -f $SPECFILE $SPECFILE.bak
+			fi
 			chmod +w $SPECFILE
 			eval "perl -pi -e 's/Version:\t"$TOLDVER"/Version:\t"$TNEWVER"/gs' $SPECFILE"
 			eval "perl -pi -e 's/Release:\t[1-9]{0,4}/Release:\t0.1/' $SPECFILE"
-			parse_spec;
-			NODIST="yes" UPDATE5="yes" get_files $SOURCES $PATCHES;
+			parse_spec
+			NODIST="yes" get_files $SOURCES $PATCHES
+			update_md5 $SOURCES
+
 			unset TOLDVER TNEWVER TNOTIFY
 		fi
 	fi
@@ -1097,7 +1186,7 @@ build_package()
 		if [ -d "$LOG" ]; then
 			echo "Log file $LOG is a directory."
 			echo "Parse error in the spec?"
-			Exit_error err_build_fail;
+			Exit_error err_build_fail
 		fi
 		if [ -n "$LASTLOG_FILE" ]; then
 			echo "LASTLOG=$LOG" > $LASTLOG_FILE
@@ -1120,9 +1209,11 @@ build_package()
 	if [ "$RETVAL" -ne "0" ]; then
 		if [ -n "$TRY_UPGRADE" ]; then
 			echo "\n!!! Package with new version cannot be built automagically\n"
-			mv -f $SPECFILE.bak $SPECFILE
+			if [ "$REVERT_BROKEN_UPGRADE" = "yes" ]; then
+				mv -f $SPECFILE.bak $SPECFILE
+			fi
 		fi
-		Exit_error err_build_fail;
+		Exit_error err_build_fail
 	fi
 	unset BUILD_SWITCH
 }
@@ -1156,6 +1247,55 @@ find_spec_bcond() {
 	}' $SPEC | LC_ALL=C sort -u
 }
 
+process_bcondrc() {
+	# expand bconds from ~/.bcondrc
+	# The file structure is like gentoo's package.use:
+	# ---
+	# * -selinux
+	# samba -mysql -pgsql
+	# w32codec-installer license_agreement
+	# php +mysqli
+	# ---
+	if ([ -f $HOME/.bcondrc ] || ([ -n $HOME_ETC ] && [ -f $HOME_ETC/.bcondrc ])); then
+		:
+	else
+		return
+	fi
+
+	SN=${SPECFILE%%\.spec}
+
+	local bcondrc=$HOME/.bcondrc
+	[ -n $HOME_ETC ] && [ -f $HOME_ETC/.bcondrc ] && bcondrc=$HOME_ETC/.bcondrc
+
+	local bcond_avail=$(find_spec_bcond $SPECFILE)
+
+	while read pkg flags; do
+		# ignore comments
+		[[ "$pkg" == \#* ]] && continue
+
+		# any package or current package?
+		if [ "$pkg" = "*" ] || [ "$pkg" = "$PACKAGE_NAME" ] || [ "$pkg" = "$SN" ]; then
+			for flag in $flags; do
+				local opt=${flag#[+-]}
+
+				# use only flags which are in this package.
+				if [[ $bcond_avail = *${opt}* ]]; then
+					if [[ $flag = -* ]]; then
+						if [[ $BCOND != *--with?${opt}* ]]; then
+							BCOND="$BCOND --without $opt"
+						fi
+					else
+						if [[ $BCOND != *--without?${opt}* ]]; then
+							BCOND="$BCOND --with $opt"
+						fi
+					fi
+				fi
+			done
+		fi
+	done < $bcondrc
+	update_shell_title "parse ~/.bcondrc: DONE!"
+}
+
 set_bconds_values()
 {
 	update_shell_title "set bcond values"
@@ -1171,43 +1311,7 @@ set_bconds_values()
 	fi
 
 	local bcond_avail=$(find_spec_bcond $SPECFILE)
-
-	# expand bconds from ~/.bcondrc
-	# The file structure is like gentoo's package.use:
-	# ---
-	# * -selinux
-	# samba -mysql -pgsql
-	# w32codec-installer license_agreement
-	# php +mysqli
-	# ---
-	if ([ -f $HOME/.bcondrc ] || ([ -n $HOME_ETC ] && [ -f $HOME_ETC/.bcondrc ])); then
-		SN=${SPECFILE%%\.spec}
-
-		local bcondrc=$HOME/.bcondrc
-		[ -n $HOME_ETC ] && [ -f $HOME_ETC/.bcondrc ] && bcondrc=$HOME_ETC/.bcondrc
-
-		while read pkg flags; do
-			# ignore comments
-			[[ "$pkg" == \#* ]] && continue
-
-			# any package or current package?
-			if [ "$pkg" = "*" ] || [ "$pkg" = "$PACKAGE_NAME" ] || [ "$pkg" = "$SN" ]; then
-				for flag in $flags; do
-					local opt=${flag#[+-]}
-
-					# use only flags which are in this package.
-					if [[ $bcond_avail = *${opt}* ]]; then
-						if [[ $flag = -* ]]; then
-							BCOND="$BCOND --without $opt"
-						else
-							BCOND="$BCOND --with $opt"
-						fi
-					fi
-				done
-			fi
-		done < $bcondrc
-		update_shell_title "parse ~/.bcondrc: DONE!"
-	fi
+	process_bcondrc "$SPECFILE"
 
 	update_shell_title "parse bconds"
 	case "${BCOND_VERSION}" in
@@ -1544,11 +1648,11 @@ fetch_build_requires()
 							if [ "$package_name" = "$package" ]; then
 								echo -ne "Installing BuildRequired package:\t$package_name\n"
 								update_shell_title "Installing BuildRequired package: ${package_name}"
-								install_required_packages $package;
+								install_required_packages $package
 							else
 								echo -ne "Installing (sub)Required package:\t$package_name\n"
 								update_shell_title "Installing (sub)Required package: ${package_name}"
-								install_required_packages $package_name;
+								install_required_packages $package_name
 							fi
 							case $? in
 								0)
@@ -1560,7 +1664,7 @@ fetch_build_requires()
 									echo -ne "Package installation failed:\t$package_name\n"
 									run_sub_builder $package_name
 									if [ $? -eq 0 ]; then
-										install_required_packages $package_name;
+										install_required_packages $package_name
 										case $? in
 											0)
 												INSTALLED_PACKAGES="$package_name $INSTALLED_PACKAGES"
@@ -1580,7 +1684,7 @@ fetch_build_requires()
 						echo -ne "Package installation failed:\t$package\n"
 						run_sub_builder $package
 						if [ $? -eq 0 ]; then
-							install_required_packages $package;
+							install_required_packages $package
 							case $? in
 								0)
 									INSTALLED_PACKAGES="$package_name $INSTALLED_PACKAGES"
@@ -1616,43 +1720,40 @@ init_rpm_dir() {
 
 	mkdir -p $TOP_DIR/{RPMS,BUILD,SRPMS}
 	cd $TOP_DIR
-	cvs -d $CVSROOT co SOURCES/.cvsignore SPECS/{mirrors,adapter{,.awk},fetchsrc_request,builder,repackage.sh}
+	cvs -d $CVSROOT co SOURCES/.cvsignore SPECS/{mirrors,adapter{,.awk},fetchsrc_request,builder,{relup,repackage}.sh}
 
 	init_builder
 
 	echo "To checkout *all* .spec files:"
-   	echo "- remove $SPECS_DIR/CVS/Entries.Static"
-   	echo "- run cvs up in $SPECS_DIR dir"
+	echo "- remove $SPECS_DIR/CVS/Entries.Static"
+	echo "- run cvs up in $SPECS_DIR dir"
 
 	echo ""
 	echo "To commit with your developer account:"
-   	echo "- edit $SPECS_DIR/CVS/Root"
-   	echo "- edit $SOURCE_DIR/CVS/Root"
+	echo "- edit $SPECS_DIR/CVS/Root"
+	echo "- edit $SOURCE_DIR/CVS/Root"
 }
 
 #---------------------------------------------
 # main()
 
-if [ "$#" = 0 ]; then
-	usage;
+if [ $# = 0 ]; then
+	usage
 	exit 1
 fi
 
-while test $# -gt 0
-do
+while [ $# -gt 0 ]; do
 	case "${1}" in
-		-5 | --update-md5 )
-			COMMAND="get";
+		-5 | --update-md5)
+			COMMAND="update_md5"
 			NODIST="yes"
 			NOCVSSPEC="yes"
-			UPDATE5="yes"
 			shift ;;
 		-a5 | --add-md5 )
-			COMMAND="get";
+			COMMAND="update_md5"
 			NODIST="yes"
 			NOCVS="yes"
 			NOCVSSPEC="yes"
-			UPDATE5="yes"
 			ADD5="yes"
 			shift ;;
 		-n5 | --no-md5 )
@@ -1676,6 +1777,8 @@ do
 			COMMAND="branch"; shift; TAG="${1}"; shift;;
 		-c | --clean )
 			CLEAN="--clean --rmspec --rmsource"; shift ;;
+		-cf | --cvs-force )
+			CVS_FORCE="-F"; shift;;
 		-d | --cvsroot )
 			shift; CVSROOT="${1}"; shift ;;
 		-g | --get )
@@ -1719,7 +1822,7 @@ do
 			NOINIT="yes"
 			shift;;
 		--opts )
-			shift; RPMOPTS="$RPM_OPTS ${1}"; shift ;;
+			shift; RPMOPTS="${RPMOPTS} ${1}"; shift ;;
 		--nopatch | -np )
 			shift; RPMOPTS="${RPMOPTS} --define \"patch${1} : ignoring patch${1}; exit 1; \""; shift ;;
 		--with | --without )
@@ -1753,6 +1856,8 @@ do
 			CVSDATE="${2}"; shift 2 ;;
 		-r | --cvstag )
 			shift; CVSTAG="${1}"; shift ;;
+		-A)
+			shift; CVSTAG="HEAD"; ;;
 		-R | --fetch-build-requires)
 			FETCH_BUILD_REQUIRES="yes"
 			NOT_INSTALLED_PACKAGES=
@@ -1779,27 +1884,17 @@ do
 			COMMAND="list-sources-urls"
 			shift ;;
 		-Tvs | --tag-version-stable )
-			COMMAND="tag";
+			COMMAND="tag"
 			TAG="STABLE"
-			TAG_VERSION="yes"
-			shift;;
-		-Tvn | --tag-version-nest )
-			COMMAND="tag";
-			TAG="NEST"
 			TAG_VERSION="yes"
 			shift;;
 		-Ts | --tag-stable )
-			COMMAND="tag";
+			COMMAND="tag"
 			TAG="STABLE"
 			TAG_VERSION="no"
 			shift;;
-		-Tn | --tag-nest )
-			COMMAND="tag";
-			TAG="NEST"
-			TAG_VERSION="no"
-			shift;;
 		-Tv | --tag-version )
-			COMMAND="tag";
+			COMMAND="tag"
 			TAG=""
 			TAG_VERSION="yes"
 			shift;;
@@ -1810,7 +1905,7 @@ do
 			TEST_TAG="yes"
 			shift;;
 		-T | --tag )
-			COMMAND="tag";
+			COMMAND="tag"
 			shift
 			TAG="$1"
 			TAG_VERSION="no"
@@ -1819,17 +1914,16 @@ do
 			INTEGER_RELEASE="yes"
 			shift;;
 		-U | --update )
-			COMMAND="get"
+			COMMAND="update_md5"
 			UPDATE="yes"
 			NOCVSSPEC="yes"
 			NODIST="yes"
-			UPDATE5="yes"
 			shift ;;
 		-Upi | --update-poldek-indexes )
 			UPDATE_POLDEK_INDEXES="yes"
 			shift ;;
 		--init-rpm-dir)
-			COMMAND="init_rpm_dir";
+			COMMAND="init_rpm_dir"
 			shift ;;
 		-u | --try-upgrade )
 			TRY_UPGRADE="1"; shift ;;
@@ -1840,12 +1934,21 @@ do
 		--define)
 			shift
 			MACRO="${1}"
-			VALUE="${2}"
-			shift 2
-			RPMOPTS="${RPMOPTS} --define \"${MACRO} ${VALUE}\""
+			shift
+			if echo "${MACRO}" | grep -q '\W'; then
+				RPMOPTS="${RPMOPTS} --define \"${MACRO}\""
+			else
+				VALUE="${1}"
+				shift
+				RPMOPTS="${RPMOPTS} --define \"${MACRO} ${VALUE}\""
+			fi
 			;;
 		--show-bconds | -show-bconds | -print-bconds | --print-bconds | -display-bconds | --display-bconds )
-			SHOW_BCONDS="yes"
+			COMMAND="show_bconds"
+			shift
+			;;
+		--show-bcond-args)
+			COMMAND="show_bcond_args"
 			shift
 			;;
 		--nodeps)
@@ -1858,16 +1961,26 @@ do
 			SPECFILE="${1}"
 			# check if specname was passed as specname:cvstag
 			if [ "${SPECFILE##*:}" != "${SPECFILE}" ]; then
-				CVSTAG="${SPECFILE##*:}";
-				SPECFILE="${SPECFILE%%:*}";
+				CVSTAG="${SPECFILE##*:}"
+				SPECFILE="${SPECFILE%%:*}"
 			fi
-			shift ;;
+			shift
 	esac
 done
 
+if [ -z "$CVSTAG" ]; then
+	CVSTAG=$(awk -vSPECFILE="${SPECFILE%.spec}.spec" -F/ '$2 == SPECFILE && $6 ~ /^T/{print substr($6, 2)}' CVS/Entries)
+	if [ "$CVSTAG" ]; then
+		echo >&2 "builder: Stick tag $CVSTAG active. Use -r TAGNAME to override."
+	fi
+elif [ "$CVSTAG" = "HEAD" ]; then
+	# assume -r HEAD is same as -A
+	CVSTAG=""
+fi
+
 if [ -n "$DEBUG" ]; then
-	set -x;
-	set -v;
+	set -x
+	set -v
 fi
 
 if [ -n "$TARGET" ]; then
@@ -1887,16 +2000,33 @@ fi
 
 update_shell_title "$COMMAND"
 case "$COMMAND" in
-	"build" | "build-binary" | "build-source" | "build-prep" )
-		init_builder;
+	"show_bconds")
+		init_builder
 		if [ -n "$SPECFILE" ]; then
-			get_spec;
-			parse_spec;
-			set_bconds_values;
-			display_bconds;
-			display_branches;
-			[ X"$SHOW_BCONDS" = X"yes" ] && exit 0
-			fetch_build_requires;
+			get_spec > /dev/null
+			parse_spec
+			set_bconds_values
+			display_bconds
+		fi
+		;;
+	"show_bcond_args")
+		init_builder
+		if [ -n "$SPECFILE" ]; then
+			get_spec > /dev/null
+			parse_spec
+			set_bconds_values
+			echo "$BCOND"
+		fi
+		;;
+	"build" | "build-binary" | "build-source" | "build-prep" )
+		init_builder
+		if [ -n "$SPECFILE" ]; then
+			get_spec
+			parse_spec
+			set_bconds_values
+			display_bconds
+			display_branches
+			fetch_build_requires
 			if [ "$INTEGER_RELEASE" = "yes" ]; then
 				echo "Checking release $PACKAGE_RELEASE..."
 				if echo $PACKAGE_RELEASE | grep -q '^[^.]*\.[^.]*$' 2>/dev/null ; then
@@ -1926,61 +2056,85 @@ case "$COMMAND" in
 			if [ -n "$NOSOURCE0" ] ; then
 				SOURCES=`echo $SOURCES | xargs | sed -e 's/[^ ]*//'`
 			fi
-			get_files $SOURCES $PATCHES;
-			build_package;
+			get_files $SOURCES $PATCHES
+			check_md5 $SOURCES
+			build_package
 			if [ "$UPDATE_POLDEK_INDEXES" = "yes" -a "$COMMAND" != "build-prep" ]; then
 				run_poldek --sdir="${POLDEK_INDEX_DIR}" --mkidxz
 			fi
-			remove_build_requires;
+			remove_build_requires
 		else
-			Exit_error err_no_spec_in_cmdl;
+			Exit_error err_no_spec_in_cmdl
 		fi
 		;;
 	"branch" )
-		init_builder;
+		init_builder
 		if [ -n "$SPECFILE" ]; then
-			get_spec;
-			parse_spec;
-			get_files $SOURCES $PATCHES;
-			branch_files $TAG "$SOURCES $PATCHES $ICONS";
+			get_spec
+			parse_spec
+			# don't fetch sources from remote locations
+			new_SOURCES=""
+			for file in $SOURCES; do
+				[ -n "`src_md5 $file`" ] && continue
+				new_SOURCES="$new_SOURCES $file"
+			done
+			SOURCES="$new_SOURCES"
+			get_files $SOURCES $PATCHES
+			check_md5 $SOURCES
+			branch_files $TAG $SOURCES $PATCHES $ICONS
 		else
-			Exit_error err_no_spec_in_cmdl;
+			Exit_error err_no_spec_in_cmdl
 		fi
 		;;
 	"get" )
-		init_builder;
+		init_builder
 		if [ -n "$SPECFILE" ]; then
-			get_spec;
+			get_spec
 			parse_spec
 
 			if [ -n "$NOSOURCE0" ] ; then
 				SOURCES=`echo $SOURCES | xargs | sed -e 's/[^ ]*//'`
 			fi
 			get_files $SOURCES $PATCHES
+			check_md5 $SOURCES
 		else
-			Exit_error err_no_spec_in_cmdl;
+			Exit_error err_no_spec_in_cmdl
+		fi
+		;;
+	"update_md5" )
+		init_builder
+		if [ -n "$SPECFILE" ]; then
+			get_spec
+			parse_spec
+
+			if [ -n "$NOSOURCE0" ] ; then
+				SOURCES=`echo $SOURCES | xargs | sed -e 's/[^ ]*//'`
+			fi
+			update_md5 $SOURCES
+		else
+			Exit_error err_no_spec_in_cmdl
 		fi
 		;;
 	"tag" )
 		NOURLS=1
 		NODIST="yes"
-		init_builder;
+		init_builder
 		if [ -n "$SPECFILE" ]; then
-			get_spec;
-			parse_spec;
+			get_spec
+			parse_spec
 
 			# don't fetch sources from remote locations
 			new_SOURCES=""
-			for file in $SOURCES
-			do
+			for file in $SOURCES; do
 				[ -n "`src_md5 $file`" ] && continue
 				new_SOURCES="$new_SOURCES $file"
 			done
 			SOURCES="$new_SOURCES"
-			get_files $SOURCES $PATCHES;
-			tag_files "$SOURCES $PATCHES $ICONS";
+			get_files $SOURCES $PATCHES
+			check_md5 $SOURCES
+			tag_files $SOURCES $PATCHES $ICONS
 		else
-			Exit_error err_no_spec_in_cmdl;
+			Exit_error err_no_spec_in_cmdl
 		fi
 		;;
 	"mr-proper" )
@@ -1992,8 +2146,7 @@ case "$COMMAND" in
 		DONT_PRINT_REVISION="yes"
 		get_spec
 		parse_spec
-		SAPS="$SOURCES $PATCHES"
-		for SAP in $SAPS ; do
+		for SAP in $SOURCES $PATCHES; do
 			echo $SAP | awk '{gsub(/.*\//,"") ; print}'
 		done
 		;;
@@ -2014,8 +2167,7 @@ case "$COMMAND" in
 		DONT_PRINT_REVISION="yes"
 		get_spec
 		parse_spec
-		SAPS="$SOURCES $PATCHES"
-		for SAP in $SAPS ; do
+		for SAP in $SOURCES $PATCHES; do
 			echo $SOURCE_DIR/$(echo $SAP | awk '{gsub(/.*\//,"") ; print }')
 		done
 		;;
@@ -2025,8 +2177,7 @@ case "$COMMAND" in
 		DONT_PRINT_REVISION="yes"
 		get_spec
 		parse_spec
-		SAPS="$SOURCES $PATCHES"
-		for SAP in $SAPS ; do
+		for SAP in $SOURCES $PATCHES; do
 			if [ -n "$(src_md5 "$SAP")" ]; then
 				distfiles_path "$SAP"
 			fi
@@ -2038,8 +2189,7 @@ case "$COMMAND" in
 		DONT_PRINT_REVISION="yes"
 		get_spec
 		parse_spec
-		SAPS="$SOURCES $PATCHES"
-		for SAP in $SAPS ; do
+		for SAP in $SOURCES $PATCHES; do
 			if [ -n "$(src_md5 "$SAP")" ]; then
 				distfiles_url "$SAP"
 			fi
@@ -2058,4 +2208,4 @@ if [ -f "`pwd`/.${SPECFILE}_INSTALLED_PACKAGES" -a "$REMOVE_BUILD_REQUIRES" != "
 fi
 cd "$__PWD"
 
-# vi:syntax=sh:ts=4:sw=4
+# vi:syntax=sh:ts=4:sw=4:noet
