@@ -142,6 +142,20 @@ CXXFLAGS="%{rpmcxxflags}" \
 cmake \
 }
 
+# waf. see waf.spec
+# override __waf to add -j1 in your ~/.rpmmacros
+%__waf	/usr/bin/waf
+%waf { \
+# To install waf directories (.waf-version, .wafcache) in building directory. \
+WAF_HOME="%{buildroot}" \
+CC="%{__cc}" \
+CXX="%{__cxx}" \
+CFLAGS="%{rpmcflags}" \
+CXXFLAGS="%{rpmcxxflags}" \
+%{__waf} \
+	--prefix=%{_prefix} %{?debug:debug=full} \
+}
+
 #----------------------------------------------------------------
 %global configure_cache 0
 %configure_cache_file	%{buildroot}.configure.cache
