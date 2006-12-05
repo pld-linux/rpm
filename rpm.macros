@@ -146,8 +146,6 @@ cmake \
 # override __waf to add -j1 in your ~/.rpmmacros
 %__waf	/usr/bin/waf
 %waf { \
-# To install waf directories (.waf-version, .wafcache) in building directory. \
-WAF_HOME="%{buildroot}" \
 CC="%{__cc}" \
 CXX="%{__cxx}" \
 CPP="%{__cpp}" \
