@@ -134,16 +134,24 @@ fi; \
 	%{dependencytracking} \
 }
 
+# override __cmake to add -j4 in your ~/.rpmmacros for parallel make
+%__cmake	/usr/bin/cmake
 %cmake { \
 CC="%{__cc}" \
 CXX="%{__cxx}" \
 CFLAGS="%{rpmcflags}" \
 CXXFLAGS="%{rpmcxxflags}" \
-cmake \
+%{__cmake} \
+}
+
+# override __scons to add -j4 in your ~/.rpmmacros for parallel make
+%__scons	/usr/bin/scons
+%scons { \
+%{__scons} \
 }
 
 # waf. see waf.spec
-# override __waf to add -j1 in your ~/.rpmmacros
+# override __waf to add -j4 in your ~/.rpmmacros for parallel make
 %__waf	/usr/bin/waf
 %waf { \
 CC="%{__cc}" \
