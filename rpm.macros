@@ -150,10 +150,10 @@ cmake \
 WAF_HOME="%{buildroot}" \
 CC="%{__cc}" \
 CXX="%{__cxx}" \
+CPP="%{__cpp}" \
 CFLAGS="%{rpmcflags}" \
 CXXFLAGS="%{rpmcxxflags}" \
 %{__waf} \
-	--prefix=%{_prefix} %{?debug:debug=full} \
 }
 
 #----------------------------------------------------------------
