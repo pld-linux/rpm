@@ -406,14 +406,13 @@ fi; }; __spec_install_post_chrpath } } }
 #%no_install_post_compress_modules	1
 %__spec_install_post_compress_modules { \
 %{!?no_install_post_compress_modules: __spec_install_post_compress_modules() { \
-	if [ -d "$RPM_BUILD_ROOT" ]; then \
-		echo "Compress kernel modules if any."; \
-		if test -d $RPM_BUILD_ROOT/lib/modules ; then \
-			find $RPM_BUILD_ROOT/lib/modules -name \*o -type f -print | \
-			xargs -r %{__gzip} -9nf; \
-			find $RPM_BUILD_ROOT/lib/modules -name \*o -type l -printf "%p %l\n" | \
-			while read a b; do ln -sf $b.gz $a.gz; rm -f $a; done; \
-		fi; \
+	if [ -d $RPM_BUILD_ROOT/lib/modules ]; then \
+		echo "Compress kernel modules"; \
+		q=$(find $RPM_BUILD_ROOT/lib/modules -name '*o' -type f -print); \
+		echo "$q" | xargs -r %{__gzip} -9nf; \
+		printf "%d modules compressed\n" $(echo "$q" | wc -l); \
+		find $RPM_BUILD_ROOT/lib/modules -name '*o' -type l -printf "%p %l\n" | \
+		while read a b; do ln -sf $b.gz $a.gz; rm -f $a; done; \
 	fi; \
 }; __spec_install_post_compress_modules } }
 
