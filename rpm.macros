@@ -198,17 +198,21 @@ CXXFLAGS="%{rpmcxxflags}" \
 # Overloading of some basic macros
 %prep \
 %%prep\
-LANG=C\
-export LANG\
-unset DISPLAY ||:\
+export LC_ALL=C\
+export LANG=C\
 unset LINGUAS ||:\
+unset LANGUAGE ||:\
+unset LC_MESSAGES ||:\
+unset DISPLAY ||:\
 %{nil}
 
 %build %%build\
-LANG=C\
-export LANG\
-unset DISPLAY ||:\
+export LC_ALL=C\
+export LANG=C\
 unset LINGUAS ||:\
+unset LANGUAGE ||:\
+unset LC_MESSAGES ||:\
+unset DISPLAY ||:\
 %{nil}
 
 %install \
@@ -216,10 +220,12 @@ unset LINGUAS ||:\
 %{?buildsubdir:%{debug_package}}\
 %endif\
 %%install\
-LANG=C\
-export LANG\
-unset DISPLAY ||:\
+export LC_ALL=C\
+export LANG=C\
 unset LINGUAS ||:\
+unset LANGUAGE ||:\
+unset LC_MESSAGES ||:\
+unset DISPLAY ||:\
 %{nil}
 
 # Location of autoconf macros
