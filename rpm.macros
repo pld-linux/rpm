@@ -545,7 +545,7 @@ fi \
 
 %php_pear_dir		/usr/share/pear
 %php_extensiondir	%(php-config --extension-dir 2>/dev/null || echo ERROR)
-%php_configdir		%(php-config --config-dir 2>/dev/null || echo ERROR)
+%php_sysconfdir		%(php-config --sysconfdir 2>/dev/null || echo ERROR)
 
 # directory where php includes are installed on system.
 %__php_includedir		/usr/include/php
