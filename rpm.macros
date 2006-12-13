@@ -544,6 +544,8 @@ fi \
 %ruby_mod_ver_requires_eq	Requires:	ruby-modules(ver) = %ruby_version
 
 %php_pear_dir		/usr/share/pear
+%php_extensiondir	%(php-config --extension-dir 2>/dev/null || echo ERROR)
+%php_configdir		%(php-config --config-dir 2>/dev/null || echo ERROR)
 
 # directory where php includes are installed on system.
 %__php_includedir		/usr/include/php
