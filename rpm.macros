@@ -581,12 +581,24 @@ fi \
 %php_webserver_restart \
 [ ! -f /etc/apache/conf.d/??_mod_php.conf ] || %service -q apache restart \
 [ ! -f /etc/httpd/httpd.conf/??_mod_php.conf ] || %service -q httpd restart \
+if [ -f /etc/rc.d/init.d/php-fcgi ]; then \
+	PHP_FCGI_BINARY=; . /etc/sysconfig/php-fcgi 2>/dev/null \
+	if [[ ${PHP_FCGI_BINARY:-php.fcgi} = *php.fcgi* ]]; then \
+		%service -q php-fcgi restart \
+	fi \
+fi \
 %{nil}
 
 # for using php post scripts. for PHP >= 4.0 && PHP < 5.0
 %php4_webserver_restart \
 [ ! -f /etc/apache/conf.d/??_mod_php4.conf ] || %service -q apache restart \
 [ ! -f /etc/httpd/httpd.conf/??_mod_php4.conf ] || %service -q httpd restart \
+if [ -f /etc/rc.d/init.d/php-fcgi ]; then \
+	PHP_FCGI_BINARY=; . /etc/sysconfig/php-fcgi 2>/dev/null \
+	if [[ ${PHP_FCGI_BINARY:-php.fcgi} = *php4.fcgi* ]]; then \
+		%service -q php-fcgi restart \
+	fi \
+fi \
 %{nil}
 
 # Python specific macro definitions.
