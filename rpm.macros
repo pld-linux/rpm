@@ -577,6 +577,18 @@ fi \
 # for php pdo modules (php-pecl-PDO_*)
 %requires_php_pdo_module %{__php_api_requires PDO_API php_pdo_api_version}
 
+# for using PHP post scripts. for PHP >= 5.0
+%php_webserver_restart \
+[ ! -f /etc/apache/conf.d/??_mod_php.conf ] || %service -q apache restart \
+[ ! -f /etc/httpd/httpd.conf/??_mod_php.conf ] || %service -q httpd restart \
+%{nil}
+
+# for using php post scripts. for PHP >= 4.0 && PHP < 5.0
+%php4_webserver_restart \
+[ ! -f /etc/apache/conf.d/??_mod_php4.conf ] || %service -q apache restart \
+[ ! -f /etc/httpd/httpd.conf/??_mod_php4.conf ] || %service -q httpd restart \
+%{nil}
+
 # Python specific macro definitions.
 # python main version
 %py_ver			%(python -c "import sys; print sys.version[:3]")
