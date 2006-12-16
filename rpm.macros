@@ -1253,9 +1253,9 @@ for MODULE in {%{-m*},}; do											\
 		>> %{ModprobeD}/%{-n*}.conf}								\
     %if %{with smp} && %{with dist_kernel}							\
 	install ${MODULE}-smp.ko										\\\
-		%{KernelD}smp/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko				\
+		%{KernelD}/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko				\
 	%{?-s:echo "alias ${MNAME} ${MNAME}-%{-s*}"						\\\
-		>> %{ModprobeD}smp/%{-n*}.conf}								\
+		>> %{ModprobeD}/%{-n*}.conf}								\
     %endif															\
 done																\
 %{nil}
