@@ -352,23 +352,28 @@ unset DISPLAY ||:\
 	if [ -d "$RPM_BUILD_ROOT" ]; then \
 	echo "Strip executable binaries, archives and shared object files."; \
 	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*\.debug" %{?_noautostrip:! -regex "%{_noautostrip}"}`; \
-	elfexelist=`echo $filelist | xargs -r file | \
-		awk '/ELF.*executable/ {print $1}' | cut -d: -f1`; \
-	elfsharedlist=`echo $filelist | xargs -r file | \
-		awk '/LF.*shared object/ {print $1}' | cut -d: -f1`; \
-	elfarchiveslist=`echo $filelist | xargs -r file | \
-		awk '/current ar archive/ {print $1}' | cut -d: -f1`; \
+	printf "Considering %d files\n" $(echo "$filelist" | wc -l); \
+	filetypes=`echo $filelist | xargs -r file` \
+	elfexelist=`echo "$filetypes" | awk '/ELF.*executable/ {print $1}' | cut -d: -f1`; \
+	elfsharedlist=`echo "$filetypes" | awk '/LF.*shared object/ {print $1}' | cut -d: -f1`; \
+	archiveslist=`echo "$filetypes" | awk '/current ar archive/ {print $1}' | cut -d: -f1`; \
 	if [ -n "$elfexelist" ]; then \
+		printf "Stripping %d ELF executables..." $(echo "$elfexelist" | wc -l); \
 		chmod u+w $elfexelist; \
 		%{__strip} --remove-section=.note --remove-section=.comment $elfexelist; \
+		echo "DONE"; \
 	fi; \
 	if [ -n "$elfsharedlist" ]; then \
+		printf "Stripping %d ELF shared libraries..." $(echo "$elfsharedlist" | wc -l); \
 		chmod u+w $elfsharedlist; \
 		%{__strip} --strip-unneeded --remove-section=.note --remove-section=.comment $elfsharedlist; \
+		echo "DONE"; \
 	fi; \
-	if [ -n "$elfarchiveslist" ]; then \
-		chmod u+w $elfarchiveslist; \
-		%{__strip} --strip-debug --remove-section=.note --remove-section=.comment $elfarchiveslist; \
+	if [ -n "$archiveslist" ]; then \
+		printf "Stripping %d ar archives..." $(echo "$elfsharedlist" | wc -l); \
+		chmod u+w $archiveslist; \
+		%{__strip} --strip-debug --remove-section=.note --remove-section=.comment $archiveslist; \
+		echo "DONE"; \
 	fi; \
 fi; }; __spec_install_post_strip } } }
 
