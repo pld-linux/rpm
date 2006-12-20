@@ -1190,6 +1190,7 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 	ln -sf %{_kernelsrcdir}/config-$cfg o/.config					\
 	ln -sf %{_kernelsrcdir}/Module.symvers-$cfg o/Module.symvers	\
 	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h o/include/linux/autoconf.h \
+	ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} o/include/asm \
 																	\
 	set +x															\
 	[ -z "$PATCH_SH" ] || echo "$PATCH_SH" | %__spec_build_shell	\
