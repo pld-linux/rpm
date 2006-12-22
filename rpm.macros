@@ -1289,28 +1289,26 @@ done																\
 # generate SourceX urls from range START STOP
 # Format can be SINGLE format char of %e, %f, %g, see seq(1)
 # The sources start from 10000
-%patchset_source(f:b:) %(\
+%patchset_source(f:b:) %(
 	base=%{-b*}%{!-b*:10000};
-	start=$((%1 + $base)); \
-	end=$((%{?2}%{!?2:%{1}} + $base)); \
-	# we need to call seq twice as it doesn't allow two formats \
-	seq -f 'Patch%g:' $start $end > %{tmpdir}/__ps1; \
-	seq -f '%{-f*}' %1 %{?2}%{!?2:%{1}} > %{tmpdir}/__ps2; \
-	paste %{tmpdir}/__ps{1,2}; \
-	rm -f %{tmpdir}/__ps{1,2}; \
-) \
-%{nil}
+	start=$((%1 + $base));
+	end=$((%{?2}%{!?2:%{1}} + $base));
+	# we need to call seq twice as it doesn't allow two formats
+	seq -f 'Patch%g:' $start $end > %{tmpdir}/__ps1;
+	seq -f '%{-f*}' %1 %{?2}%{!?2:%{1}} > %{tmpdir}/__ps2;
+	paste %{tmpdir}/__ps{1,2};
+	rm -f %{tmpdir}/__ps{1,2};
+) %{nil}
 
 # apply sources from %patchset_source
 # -p specify -pX for %patch line
 # -b base offset: defaults to 10000
 %patchset_patch(f:p:b:) %(
 	base=%{-b*}%{!-b*:10000};
-	start=$((%1 + $base)); \
-	end=$((%{?2}%{!?2:%{1}} + $base)); \
-	echo ": patchset_patch %1%{?2: to %2}"; \
-	seq -f 'patch%g %{-p*:-p%{-p*}}' $start $end | sed -e s,^,%%,; \
-) \
-%{nil}
+	start=$((%1 + $base));
+	end=$((%{?2}%{!?2:%{1}} + $base));
+	echo ": patchset_patch %1%{?2: to %2}";
+	seq -f 'patch%g %{-p*:-p%{-p*}}' $start $end | sed -e s,^,%%,;
+) %{nil}
 
 # vim:ts=4 sw=4 noet syn=spec
