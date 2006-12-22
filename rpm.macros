@@ -349,11 +349,12 @@ unset DISPLAY ||:\
 #%no_install_post_strip	1
 %__spec_install_post_strip {%{!?debug: \
 %{!?no_install_post_strip:__spec_install_post_strip() { \
-	if [ -d "$RPM_BUILD_ROOT" ]; then \
-	echo "Strip executable binaries, archives and shared object files."; \
+if [ -d "$RPM_BUILD_ROOT" ]; then \
 	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*\.debug" %{?_noautostrip:! -regex "%{_noautostrip}"}`; \
-	printf "Considering %d files\n" $(echo "$filelist" | wc -l); \
-	filetypes=`echo $filelist | xargs -r file` \
+	if [ -z "$filelist" ]; then \
+		return; \
+	fi; \
+	filetypes=`echo $filelist | xargs -r file`; \
 	elfexelist=`echo "$filetypes" | awk '/ELF.*executable/ {print $1}' | cut -d: -f1`; \
 	elfsharedlist=`echo "$filetypes" | awk '/LF.*shared object/ {print $1}' | cut -d: -f1`; \
 	archiveslist=`echo "$filetypes" | awk '/current ar archive/ {print $1}' | cut -d: -f1`; \
@@ -386,27 +387,33 @@ fi; }; __spec_install_post_strip } } }
 %__spec_install_post_chrpath {%{!?debug: \
 %{!?no_install_post_chrpath: __spec_install_post_chrpath() { \
 if [ -d "$RPM_BUILD_ROOT" ]; then \
-echo "Remove RPATH from executable binaries and shared object files."; \
-find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*" %{?_noautochrpath:! -regex "%{_noautochrpath}"} | xargs -r file | \
-	awk '/ELF.*(executable.*dynamically linked|shared object)/ {print $1}' | cut -d: -f1 | \
-while read file ; do \
-	rpath= ; \
-	chmod u+w "$file"; \
-	for dir in `chrpath -l "$file" | \
-			awk '/RPATH=/ { gsub(/.*RPATH=/,""); gsub(/:/," "); print $0 }'` ; do \
-			case $dir in \
-			/home/* | /tmp/* | /usr/lib | /usr/lib64 | /lib | /lib64 | /usr/local/lib | /usr/local/lib64 | /usr/X11R6/lib | /usr/X11R6/lib64 ) \
-				echo "remove-rpath: $dir in $file"; \
-				;; \
-			* ) \
-				if [ "$rpath" = "" ] ; then rpath="$dir" ; \
-				else rpath="$rpath:$dir" ; fi ; \
-				;; \
-			esac ; \
-	done ; \
-	if [ "$rpath" = "" ] ; then chrpath -d "$file" > /dev/null ; \
-	else chrpath -r "$rpath" "$file" > /dev/null ; fi ; \
-done; \
+	files=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*" %{?_noautochrpath:! -regex "%{_noautochrpath}"}`; \
+	if [ -n "$files" ]; then \
+		objs=`echo "$files" | xargs -r file | awk '/ELF.*(executable.*dynamically linked|shared object)/ {print $1}' | cut -d: -f1`; \
+	fi
+	#"
+	if [ -n "$objs" ]; then \
+		printf "Remove RPATH from %d executable binaries and shared object files.\n" $(echo "$objs" | wc -l); \
+		echo "$objs" | \
+		while read file; do \
+			rpath= ; \
+			chmod u+w "$file"; \
+			for dir in `chrpath -l "$file" | \
+					awk '/RPATH=/ { gsub(/.*RPATH=/,""); gsub(/:/," "); print $0 }'` ; do \
+					case $dir in \
+					/home/* | /tmp/* | /usr/lib | /usr/lib64 | /lib | /lib64 | /usr/local/lib | /usr/local/lib64 | /usr/X11R6/lib | /usr/X11R6/lib64 ) \
+						echo "remove-rpath: $dir in $file"; \
+						;; \
+					* ) \
+						if [ "$rpath" = "" ] ; then rpath="$dir" ; \
+						else rpath="$rpath:$dir" ; fi ; \
+						;; \
+					esac ; \
+			done ; \
+			if [ "$rpath" = "" ] ; then chrpath -d "$file" > /dev/null ; \
+			else chrpath -r "$rpath" "$file" > /dev/null ; fi ; \
+		done; \
+	fi; \
 fi; }; __spec_install_post_chrpath } } }
 
 #-----------------------------------------------------------------
