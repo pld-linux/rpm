@@ -331,9 +331,9 @@ unset DISPLAY ||:\
 #%no_install_post_compress_docs	1
 %__spec_install_post_compress_docs { \
 %{!?no_install_post_compress_docs:__spec_install_post_compress_docs() { \
-	echo "Compress man and info pages."; \
 	for i in /usr/share/man /usr/X11R6/man /usr/share/info; do \
 		if [ -d "$RPM_BUILD_ROOT$i" ]; then \
+			echo "Compress $(basename $i) pages: $i"; \
 			find "$RPM_BUILD_ROOT$i" -name '*.bz2' -print | xargs -r %{__bzip2} -df; \
 			find "$RPM_BUILD_ROOT$i" -name '*.gz' -print | xargs -r %{__gzip} -dnf; \
 			find "$RPM_BUILD_ROOT$i" -type f -size +%{_min_compress_bytes}c -print | xargs -r %{__gzip} -9nf; \
