@@ -1272,4 +1272,39 @@ for MODULE in {%{-m*},}; do											\
 done																\
 %{nil}
 
+# patchset macros
+# Author: Elan Ruusamäe <glen@pld-linux.org>
+#
+# Usage:
+#   %patchset_source -f <seq(1) format> <start> [<end>]
+#   %patchset_patch <start> [<end>]
+#
+# If <end> is omited, it is assumed to be <start>.
+#
+# For example in preamble:
+#  %patchset_source -f ftp://ftp.vim.org/pub/editors/vim/patches/7.0/7.0.%03g 33 44
+# and in %prep:
+#  %patchset_patch 33 44
+
+# generate SourceX urls from range START STOP
+# Format can be SINGLE format char of %e, %f, %g, see seq(1)
+# The sources start from 10000
+%patchset_source(x:f:) %(\
+	seq -f 'Patch10%03g:' %1 %{?2}%{!?2:%{1}} > %{tmpdir}/__ps1; \
+	seq -f '%{-f*}' %1 %{?2}%{!?2:%{1}} > %{tmpdir}/__ps2; \
+	paste %{tmpdir}/__ps{1,2}; \
+	rm -f %{tmpdir}/__ps{1,2}; \
+) \
+%{nil}
+
+# apply sources from %patchset_source
+# -p specify -pX for %patch line
+# -b base offset: defaults to 10000
+%patchset_patch(f:p:b:) %(
+	echo ": patchset_patch %1%{?2: to %2}"; \
+	seq -f '%g=%{-p*:-p%{-p*}}' %1 %{?2}%{!?2:%{1}} | \
+	awk -vbase=%{-b*}%{!-b*:10000} -F= '{printf(": patchset %d\\n%%%%patch%d %s\\n", $1, $1+base, $2)}'; \
+) \
+%{nil}
+
 # vim:ts=4 sw=4 noet syn=spec
