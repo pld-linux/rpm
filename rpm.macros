@@ -1333,6 +1333,7 @@ done																\
 #   %browser_plugins_add_browser %{name} -p %{_firefoxdir}/plugins
 
 %_browserpluginsconfdir		/etc/browser-plugins
+%_browserpluginsdir			%{_libdir}/browser-plugins
 %update_browser_plugins		/usr/sbin/update-browser-plugins || :
 
 %browser_plugins_add_browser(p:b:) \
