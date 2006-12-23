@@ -1320,4 +1320,27 @@ done																\
 ) \
 %{nil}
 
+# browser plugins v2
+# Author: Elan Ruusamäe <glen@pld-linux.org>
+#
+# Usage:
+#	%browser_plugins_add_browser <name> -p <plugindir>
+#
+#  <name> (required) -- name of the browser. usually %{name}.
+#  -p <plugindir> (required) -- in what directory browser searches for its plugins.
+#
+# Example:
+#   %browser_plugins_add_browser %{name} -p %{_firefoxdir}/plugins
+
+%_browserpluginsconfdir		/etc/browser-plugins
+%update_browser_plugins		/usr/sbin/update-browser-plugins || :
+
+%browser_plugins_add_browser(p:b:) \
+	install -d $RPM_BUILD_ROOT%{_browserpluginsconfdir}/{blacklist,browsers}.d \
+	ln -s %{-p*} $RPM_BUILD_ROOT%{_browserpluginsconfdir}/browsers.d/%1.%{_target_base_arch} \
+	blacklist_file=$RPM_BUILD_ROOT%{_browserpluginsconfdir}/blacklist.d/%1.%{_target_base_arch}.blacklist \
+	echo '# This file format is shell globs at base dir of plugindir' > $blacklist_file \
+	%{-b:cat >> $blacklist_file %{-b*}} \
+%{nil}
+
 # vim:ts=4 sw=4 noet syn=spec
