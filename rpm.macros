@@ -354,10 +354,10 @@ if [ -d "$RPM_BUILD_ROOT" ]; then \
 	if [ -z "$filelist" ]; then \
 		return; \
 	fi; \
-	filetypes=`echo $filelist | xargs -r file`; \
-	elfexelist=`echo "$filetypes" | awk '/ELF.*executable/ {print $1}' | cut -d: -f1`; \
-	elfsharedlist=`echo "$filetypes" | awk '/LF.*shared object/ {print $1}' | cut -d: -f1`; \
-	archiveslist=`echo "$filetypes" | awk '/current ar archive/ {print $1}' | cut -d: -f1`; \
+	filetypes=`echo "$filelist" | xargs -r -d'\\n' file`; \
+	elfexelist=`echo "$filetypes" | awk -F: '/ELF.*executable/ {print $1}'`; \
+	elfsharedlist=`echo "$filetypes" | awk -F: '/LF.*shared object/ {print $1}'`; \
+	archiveslist=`echo "$filetypes" | awk -F '/current ar archive/ {print $1}'`; \
 	if [ -n "$elfexelist" ]; then \
 		printf "Stripping %d ELF executables..." $(echo "$elfexelist" | wc -l); \
 		chmod u+w $elfexelist; \
@@ -389,7 +389,7 @@ fi; }; __spec_install_post_strip } } }
 if [ -d "$RPM_BUILD_ROOT" ]; then \
 	files=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*" %{?_noautochrpath:! -regex "%{_noautochrpath}"}`; \
 	if [ -n "$files" ]; then \
-		objs=`echo "$files" | xargs -r file | awk '/ELF.*(executable.*dynamically linked|shared object)/ {print $1}' | cut -d: -f1`; \
+		objs=`echo "$files" | xargs -r -d'\\n' file | awk -F: '/ELF.*(executable.*dynamically linked|shared object)/ {print $1}'`; \
 	fi
 	#"
 	if [ -n "$objs" ]; then \
