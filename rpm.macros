@@ -350,7 +350,7 @@ unset DISPLAY ||:\
 %__spec_install_post_strip {%{!?debug: \
 %{!?no_install_post_strip:__spec_install_post_strip() { \
 if [ -d "$RPM_BUILD_ROOT" ]; then \
-	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*\.debug" %{?_noautostrip:! -regex "%{_noautostrip}"}`; \
+	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*\.debug" ! -regex ".*%{_docdir}/.*" %{?_noautostrip:! -regex "%{_noautostrip}"}`; \
 	if [ -z "$filelist" ]; then \
 		return; \
 	fi; \
@@ -387,7 +387,7 @@ fi; }; __spec_install_post_strip } } }
 %__spec_install_post_chrpath {%{!?debug: \
 %{!?no_install_post_chrpath: __spec_install_post_chrpath() { \
 if [ -d "$RPM_BUILD_ROOT" ]; then \
-	files=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*" %{?_noautochrpath:! -regex "%{_noautochrpath}"}`; \
+	files=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*" ! -regex ".*%{_docdir}/.*" %{?_noautochrpath:! -regex "%{_noautochrpath}"}`; \
 	if [ -n "$files" ]; then \
 		objs=`echo "$files" | xargs -r -d'\\n' file | awk -F: '/ELF.*(executable.*dynamically linked|shared object)/ {print $1}'`; \
 	fi
