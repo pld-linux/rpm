@@ -956,11 +956,11 @@ if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
 %_jvmcommondatadir	%{_datadir}/jvm-common
 %_jvmcommonsysconfdir	%{_sysconfdir}/jvm-common
 %_jnidir		%{_libdir}/java
-%java_home		%(unset JAVA_HOME; . %{_javadir}-utils/java-functions; set_jvm; echo $JAVA_HOME)
+%java_home		%([ -f %{_javadir}-utils/java-functions ] || { echo ERROR; exit 0; }; unset JAVA_HOME; . %{_javadir}-utils/java-functions; set_jvm; echo ${JAVA_HOME:-ERROR})
 
 %ant			JAVA_HOME=%{java_home} ant
 %jar			%{java_home}/bin/jar
-%java			%(unset JAVACMD; . %{_javadir}-utils/java-functions; set_javacmd; echo $JAVACMD)
+%java			%([ -f %{_javadir}-utils/java-functions ] || { echo ERROR; exit 0; }; unset JAVACMD; . %{_javadir}-utils/java-functions; set_javacmd; echo $JAVACMD)
 %javac			%{java_home}/bin/javac
 %javadoc		%{java_home}/bin/javadoc
 
