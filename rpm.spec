@@ -30,7 +30,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.2
-Release:	37
+Release:	38
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -893,6 +893,8 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep <<EOF
 ^libxkbui.so
 # -- fam / gamin
 ^libfam.so.0
+# -- mDNSResponder-libs / avahi-compat-libdns_sd
+^libdns_sd.so.1
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc <<EOF
 # global list of file masks not to be compressed in DOCDIR
