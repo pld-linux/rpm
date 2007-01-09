@@ -30,7 +30,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.7
-Release:	2
+Release:	3
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -115,6 +115,7 @@ Patch57:	%{name}-as_needed-fix.patch
 Patch58:	%{name}-repackage-wo-lzma.patch
 Patch59:	%{name}-libtool-deps.patch
 Patch60:	%{name}-CVE-2006-5466.patch
+Patch61:	%{name}-build-failure-error.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
@@ -698,6 +699,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch58 -p1
 %patch59 -p1
 %patch60 -p0
+%patch61 -p0
 
 cd scripts
 mv -f perl.req perl.req.in
