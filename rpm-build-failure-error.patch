@@ -1,0 +1,11 @@
+--- build/parsePrep.c.org	2007-01-09 16:59:32.048077000 +0100
++++ build/parsePrep.c	2007-01-09 17:08:34.245962250 +0100
+@@ -588,6 +588,8 @@
+ 
+ 	Rurlfn = rpmGetPath(Rmacro, sp->source, NULL);
+ 	if (Rurlfn == NULL || *Rurlfn == '%' || !strcmp(Lurlfn, Rurlfn)) {
++	    rpmError(RPMERR_BADFILENAME, _("file %s missing: %s\n"),
++	        Lurlfn, strerror(errno));
+ 	    ec++;
+ 	    goto bottom;
+ 	}
