@@ -1328,6 +1328,8 @@ done																\
 #
 #  <name> (required) -- name of the browser. usually %{name}.
 #  -p <plugindir> (required) -- in what directory browser searches for its plugins.
+#  -b -- default blacklists
+#  -a <arch> override arch
 #
 # Example:
 #   %browser_plugins_add_browser %{name} -p %{_firefoxdir}/plugins
@@ -1336,10 +1338,11 @@ done																\
 %_browserpluginsdir			%{_libdir}/browser-plugins
 %update_browser_plugins		/usr/sbin/update-browser-plugins || :
 
-%browser_plugins_add_browser(p:b:) \
+%browser_plugins_add_browser(p:b:a:) \
+	browser=%1.%{!-a:%{_target_base_arch}}%{!-a*} \
 	install -d $RPM_BUILD_ROOT%{_browserpluginsconfdir}/{blacklist,browsers}.d \
-	ln -s %{-p*} $RPM_BUILD_ROOT%{_browserpluginsconfdir}/browsers.d/%1.%{_target_base_arch} \
-	blacklist_file=$RPM_BUILD_ROOT%{_browserpluginsconfdir}/blacklist.d/%1.%{_target_base_arch}.blacklist \
+	ln -s %{-p*} $RPM_BUILD_ROOT%{_browserpluginsconfdir}/browsers.d/$browser \
+	blacklist_file=$RPM_BUILD_ROOT%{_browserpluginsconfdir}/blacklist.d/$browser.blacklist \
 	echo '# This file format is shell globs at base dir of plugindir' > $blacklist_file \
 	%{-b:cat >> $blacklist_file %{-b*}} \
 %{nil}
