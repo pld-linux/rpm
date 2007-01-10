@@ -1339,7 +1339,7 @@ done																\
 %update_browser_plugins		/usr/sbin/update-browser-plugins || :
 
 %browser_plugins_add_browser(p:b:a:) \
-	browser=%1.%{!-a:%{_target_base_arch}}%{!-a*} \
+	browser=%1.%{!-a:%{_target_base_arch}}%{-a*} \
 	install -d $RPM_BUILD_ROOT%{_browserpluginsconfdir}/{blacklist,browsers}.d \
 	ln -s %{-p*} $RPM_BUILD_ROOT%{_browserpluginsconfdir}/browsers.d/$browser \
 	blacklist_file=$RPM_BUILD_ROOT%{_browserpluginsconfdir}/blacklist.d/$browser.blacklist \
