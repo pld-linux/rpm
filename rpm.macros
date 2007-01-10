@@ -262,6 +262,9 @@ unset DISPLAY ||:\
 # Current date
 %date 		%(LC_ALL="C" date +"%a %b %d %Y")
 
+# tmp directory
+%tmpdir		%(echo "${TMPDIR:-/tmp}")
+
 # Example files, programs, scripts...
 %_examplesdir	/usr/src/examples
 
