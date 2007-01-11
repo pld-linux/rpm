@@ -944,18 +944,39 @@ if [ "$1" = "0" ] || [ "$2" = "0" ]; then \
 %service(q) {{%(export quiet=%{-q:1}; /usr/lib/rpm/service_generator.sh %{*}) };}
 
 
-# java macros. based on jpackage macros.java
+# Java macros. based on jpackage macros.java
+#
+# Root directory where all Java VMs/SDK/JREs are installed.
 %_jvmdir		%{_libdir}/jvm
+
+# Root directory where all Java VMs/SDK/JREs expose their jars
 %_jvmjardir		%{_libdir}/jvm-exports
-%_jvmprivdir		%{_libdir}/jvm-private
+
+# Root directory for all Java VM/SDK/JRE's private things.
+%_jvmprivdir	%{_libdir}/jvm-private
+
+# Root directory for all architecture dependent parts of Java VM/SDK/JRE's
 %_jvmlibdir		%{_libdir}/jvm
-%_jvmdatadir		%{_datadir}/jvm
-%_jvmsysconfdir		%{_sysconfdir}/jvm
-# FIXME: are these used?
+
+# Root directory for all architecture independent parts of Java VM/SDK/JRE's
+%_jvmdatadir	%{_datadir}/jvm
+
+# Root directory for all configurations parts of Java VM/SDK/JRE's
+%_jvmsysconfdir	%{_sysconfdir}/jvm
+
+# Root directory for all common architecture dependent parts of Java VM/SDK/JRE's
 %_jvmcommonlibdir	%{_libdir}/jvm-common
+
+# Root directory for all common architecture independent parts of Java VM/SDK/JRE's
 %_jvmcommondatadir	%{_datadir}/jvm-common
+
+# Root directory for all common configurations parts of Java VM/SDK/JRE's
 %_jvmcommonsysconfdir	%{_sysconfdir}/jvm-common
+
+# Directory where arch-specific (JNI) version-independent jars are installed.
 %_jnidir		%{_libdir}/java
+
+
 %java_home		%([ -f %{_javadir}-utils/java-functions ] || { echo ERROR; exit 0; }; unset JAVA_HOME; . %{_javadir}-utils/java-functions; set_jvm; echo ${JAVA_HOME:-ERROR})
 
 %ant			JAVA_HOME=%{java_home} ant
