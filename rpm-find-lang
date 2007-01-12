@@ -147,7 +147,13 @@ s:%lang(.*) .*/gnome/help/[a-zA-Z0-9.\_\-]\+/[a-zA-Z0-9.\_\-]\+/.*::
 s:^\([^%].*\)::
 s:%lang(C) ::' | egrep -v '^$' >> $MO_NAME
 
-{ [ "$ALL_NAME" ] || cat __find.dirs && fgrep $NAME __find.dirs; } | sed '
+(
+	if [ "$ALL_NAME" ]; then
+		fgrep $NAME __find.dirs
+	else
+		cat __find.dirs
+	fi
+) | sed '
 '"$NO_ALL_NAME$KDE"'s:\(.*/doc/kde/HTML/\)\([^/_]\+\)\(.*/'"$NAME"'/\)::
 '"$NO_ALL_NAME$KDE"'s:\(.*/doc/kde/HTML/\)\([^/_]\+\)\(.*/'"$NAME"'\)$:%lang(\2) \1\2\3:
 '"$ALL_NAME$KDE"'s:\(.*/doc/kde/HTML/\)\([^/_]\+\)\(.*/[a-zA-Z0-9.\_\-]\+/\)::
