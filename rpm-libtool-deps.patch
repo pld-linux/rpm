@@ -1,7 +1,16 @@
 diff -urN rpm-4.4.6.org/scripts/libtooldeps.sh rpm-4.4.6/scripts/libtooldeps.sh
 --- rpm-4.4.6.org/scripts/libtooldeps.sh	2005-11-12 22:20:42.000000000 +0100
 +++ rpm-4.4.6/scripts/libtooldeps.sh	2006-11-26 20:06:49.254008750 +0100
-@@ -13,7 +13,8 @@
+@@ -5,6 +5,8 @@
+     exit 0
+ }
+ 
++pkgname="$3"
++
+ case $1 in
+ -P|--provides)
+     shift
+@@ -13,7 +15,8 @@
      do
  	case "$possible" in
  	*.la)
@@ -11,12 +20,43 @@ diff -urN rpm-4.4.6.org/scripts/libtooldeps.sh rpm-4.4.6/scripts/libtooldeps.sh
  		possible="`echo ${possible} | sed -e s,${RPM_BUILD_ROOT}/,/,`"
  		echo "libtool($possible)"
  	    fi
-@@ -30,6 +31,7 @@
- 	    do
- 		case "$dep" in
- 		/*.la)
-+		    dep="`readlink -f "$dep" 2> /dev/null || echo "$dep"`"
- 		    echo "libtool($dep)"
+@@ -22,21 +25,25 @@
+     done
+     ;;
+ -R|--requires)
+-    while read possible ; do
+-	case "$possible" in
+-	*.la)
+-	    for dep in `grep ^dependency_libs= "$possible" 2> /dev/null | \
+-			sed -r -e "s,^dependency_libs='(.*)',\1,g"`
+-	    do
+-		case "$dep" in
+-		/*.la)
+-		    echo "libtool($dep)"
++    case $pkgname in
++    *-devel)
++	    while read possible ; do
++		case "$possible" in
++		*.la)
++		    for dep in `grep ^dependency_libs= "$possible" 2> /dev/null | \
++				sed -r -e "s,^dependency_libs='(.*)',\1,g"`
++		    do
++			case "$dep" in
++			/*.la)
++			    dep="`readlink -f "$dep" 2> /dev/null || echo "$dep"`"
++			    echo "libtool($dep)"
++			    ;;
++			esac
++		    done
  		    ;;
  		esac
+ 	    done
+-	    ;;
+-	esac
+-    done
+-    ;;
++     ;;
++     esac
+ esac
+ exit 0
 
