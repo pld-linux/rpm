@@ -20,7 +20,7 @@ diff -urN rpm-4.4.6.org/scripts/libtooldeps.sh rpm-4.4.6/scripts/libtooldeps.sh
  		possible="`echo ${possible} | sed -e s,${RPM_BUILD_ROOT}/,/,`"
  		echo "libtool($possible)"
  	    fi
-@@ -22,21 +25,25 @@
+@@ -22,21 +25,28 @@
      done
      ;;
  -R|--requires)
@@ -56,7 +56,9 @@ diff -urN rpm-4.4.6.org/scripts/libtooldeps.sh rpm-4.4.6/scripts/libtooldeps.sh
 -    done
 -    ;;
 +     ;;
++     *)
++            cat > /dev/null
++     ;;
 +     esac
  esac
  exit 0
-
