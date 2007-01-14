@@ -30,7 +30,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.7
-Release:	6
+Release:	6.1
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -117,6 +117,7 @@ Patch59:	%{name}-libtool-deps.patch
 Patch60:	%{name}-CVE-2006-5466.patch
 Patch61:	%{name}-build-failure-error.patch
 Patch62:	%{name}-mcontext.patch
+Patch63:	%{name}-FileDigestParameterized.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
@@ -165,8 +166,8 @@ Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	popt >= %{reqpopt_ver}
 %{!?with_static:Obsoletes:	rpm-utils-static}
 Conflicts:	glibc < 2.2.92
-# avoid SEGV caused by mixed db versions
-Conflicts:	poldek < 0.18.1-16
+# ABI changes in rpm, new poldek needed
+Conflicts:	poldek < 0.20.1-0.20070105.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_binary_payload		w9.gzdio
@@ -702,6 +703,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch60 -p0
 %patch61 -p0
 %patch62 -p1
+%patch63 -p0
 
 cd scripts
 mv -f perl.req perl.req.in
