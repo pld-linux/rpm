@@ -3,6 +3,10 @@
 # - python(abi) cap is not provided automatically (because /usr/bin/python matches
 #   ELF first; it should be provided by python-libs not binary anyway)
 # - repackaging when lzma is not installed (todo: fix digest signature of header)
+#   rpmbuild computes digest when writing package to temporary file, then adds a few
+#   tags (incl. digest) and writes whole package to destination file;
+#   repackaging uses unchanged "immutable header" image from original rpm, also
+#   preserving payload format and compressor from original rpm, _not_ current settings
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
