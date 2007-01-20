@@ -54,14 +54,16 @@ diff -Nru rpm-4.1/lib/rpmrc.c rpm-4.1.new/lib/rpmrc.c
  	}
  	strncat(fn, r, sizeof(fn) - (strlen(fn) + 1));
  	fn[sizeof(fn)-1] = '\0';
---- rpm-4.4.7/po/pl.po.org	2006-10-17 21:07:48.889750500 +0200
-+++ rpm-4.4.7/po/pl.po	2006-10-17 21:08:06.594857000 +0200
-@@ -4564,3 +4564,8 @@
+--- rpm-4.4.7/po/pl.po.orig	2007-01-20 16:19:09.775173135 +0100
++++ rpm-4.4.7/po/pl.po	2007-01-20 16:20:18.603095415 +0100
+@@ -3208,6 +3208,10 @@
+ msgid "Cannot expand %s\n"
+ msgstr "Nie mo¿na rozwin±æ %s\n"
  
- #~ msgid "Display brief usage message"
- #~ msgstr "Wy¶wietl skrócony sposób u¿ycia"
-+
 +#: lib/rpmrc.c:1809
 +msgid "Cannot read %s, HOME_ETC is too large.\n"
 +msgstr "Nie mo¿na odczytaæ %s, HOME_ETC jest zbyt du¿e.\n"
 +
+ #: lib/rpmrc.c:1833
+ #, c-format
+ msgid "Cannot read %s, HOME is too large.\n"
