@@ -4,8 +4,22 @@
  
  	Rurlfn = rpmGetPath(Rmacro, sp->source, NULL);
  	if (Rurlfn == NULL || *Rurlfn == '%' || !strcmp(Lurlfn, Rurlfn)) {
-+	    rpmError(RPMERR_BADFILENAME, _("file %s missing: %s\n"),
++	    rpmError(RPMERR_BADFILENAME, _("File %s missing: %s\n"),
 +	        Lurlfn, strerror(errno));
  	    ec++;
  	    goto bottom;
  	}
+--- po/pl.po.orig	2007-01-17 23:56:13.102973000 +0100
++++ po/pl.po	2007-01-20 15:13:06.441315610 +0100
+@@ -1048,6 +1048,11 @@
+ msgid "line %d: Bad arg to %%patch: %s\n"
+ msgstr "linia %d: B³êdny argument dla %%patch: %s\n"
+ 
++#: build/parsePrep.c:591
++#, c-format
++msgid "File %s missing: %s\n"
++msgstr "Brak pliku %s: %s\n"
++
+ #: build/parsePrep.c:597
+ #, c-format
+ msgid "Fetching %s failed: %s\n"
