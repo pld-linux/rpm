@@ -94,7 +94,6 @@ Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
 Patch38:	%{name}-empty-rpmlock-path.patch
 Patch39:	%{name}-pythondeps.patch
-Patch40:	%{name}-print-requires.patch
 Patch41:	%{name}-reduce-stack-usage.patch
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
 Patch43:	%{name}-patch-quote.patch
@@ -680,7 +679,6 @@ install %{SOURCE12} scripts/perl.prov
 %patch37 -p1
 %patch38 -p1
 %patch39 -p1
-%patch40 -p1
 %patch41 -p1
 %patch42 -p1
 %patch43 -p1
