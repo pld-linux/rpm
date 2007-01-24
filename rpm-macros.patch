@@ -1,7 +1,16 @@
 diff -ur rpm-4.4.7.org/macros.in rpm-4.4.7/macros.in
---- rpm-4.4.7.org/macros.in	2007-01-06 18:28:22.094067000 +0100
-+++ rpm-4.4.7/macros.in	2007-01-09 23:55:19.559199000 +0100
-@@ -217,10 +217,11 @@
+--- rpm-4.4.7.org/macros.in	2006-09-24 21:29:28.000000000 +0200
++++ rpm-4.4.7/macros.in	2007-01-24 11:20:36.000000000 +0100
+@@ -181,7 +181,7 @@
+ %endif\
+ %{nil}
+ 
+-%_defaultdocdir		%{_usr}/doc
++%_defaultdocdir		%{_usr}/share/doc
+ 
+ #	The path to the gzip executable (legacy, use %{__gzip} instead).
+ %_gzipbin		%{__gzip}
+@@ -212,10 +212,11 @@
  %_srcrpmdir		%{_topdir}/SRPMS
  
  #	Directory where temporaray files can be created.
@@ -15,7 +24,7 @@ diff -ur rpm-4.4.7.org/macros.in rpm-4.4.7/macros.in
  
  #	The path to the unzip executable (legacy, use %{__unzip} instead).
  %_unzipbin		%{__unzip}
-@@ -233,7 +234,7 @@
+@@ -228,7 +229,7 @@
  #	Configurable build root path, same as BuildRoot: in a specfile.
  #	(Note: the configured macro value will override the spec file value).
  #
@@ -24,7 +33,7 @@ diff -ur rpm-4.4.7.org/macros.in rpm-4.4.7/macros.in
  
  #	The sub-directory (relative to %{_builddir}) where sources are compiled.
  #	This macro is set after processing %setup, either explicitly from the
-@@ -331,8 +332,8 @@
+@@ -326,8 +327,8 @@
  #		"w9.gzdio"	gzip level 9 (default).
  #		"w9.bzdio"	bzip2 level 9.
  #
@@ -35,7 +44,7 @@ diff -ur rpm-4.4.7.org/macros.in rpm-4.4.7/macros.in
  
  #	Archive formats to use for source/binary package payloads.
  #		"cpio"		cpio archive (default)
-@@ -481,7 +482,7 @@
+@@ -473,7 +474,7 @@
  
  #
  # Path to magic file used for file classification.
@@ -44,7 +53,7 @@ diff -ur rpm-4.4.7.org/macros.in rpm-4.4.7/macros.in
  
  #==============================================================================
  # ---- Database configuration macros.
-@@ -929,10 +930,10 @@
+@@ -921,10 +922,10 @@
    export RPM_BUILD_ROOT}\
    %{?_javaclasspath:CLASSPATH=\"%{_javaclasspath}\"\
    export CLASSPATH}\
@@ -57,7 +66,7 @@ diff -ur rpm-4.4.7.org/macros.in rpm-4.4.7/macros.in
    \
    %{verbose:set -x}%{!verbose:exec > /dev/null}\
    umask 022\
-@@ -1091,7 +1092,7 @@
+@@ -1083,7 +1084,7 @@
  %_includedir		%{_prefix}/include
  %_oldincludedir		/usr/include
  %_infodir		%{_prefix}/info
@@ -66,7 +75,7 @@ diff -ur rpm-4.4.7.org/macros.in rpm-4.4.7/macros.in
  
  #==============================================================================
  # ---- config.guess platform macros.
-@@ -1369,7 +1370,25 @@
+@@ -1361,7 +1362,25 @@
  # helpers are also used by @RPMCONFIGDIR@/rpmdeps {--provides|--requires}.
  #%__executable_provides	@RPMCONFIGDIR@/executabledeps.sh --provides
  #%__executable_requires	@RPMCONFIGDIR@/executabledeps.sh --requires
