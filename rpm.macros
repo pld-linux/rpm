@@ -1210,7 +1210,7 @@ compile() {															\
 	L="<"; [[ '%{*}' != *$L$L* ]] || PATCH_SH="set -x -e;$(cat)"	\
 	set -e -x														\
 																	\
-for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do \
+for cfg in %{?with_dist_kernel:%{?with_smp:smp} %{?with_up:up}}%{!?with_dist_kernel:nondist}; do \
 	[ -r "%{_kernelsrcdir}/config-$cfg" ] || exit 1					\
 																	\
 	rm -rf o														\
@@ -1287,14 +1287,21 @@ install -d %{KernelD}{,smp}/%{-d*}									\
 for MODULE in {%{-m*},}; do											\
 	[ -n "${MODULE}" ] || continue									\
 	MNAME=${MODULE##*/}												\
-	install ${MODULE}-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko \\\
+	%if %{without dist_kernel}										\
+		install %{MODULE}.ko										\\\
 		%{KernelD}/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko					\
-	%{?-s:echo "alias ${MNAME} ${MNAME}-%{-s*}"						\\\
+		%{?-s:echo "alias ${MNAME} ${MNAME}-%{-s*}"					\\\
+		>> %{ModprobeD}/%{-n*}.conf}								\
+	%endif															\
+	%if %{with up} && %{with dist_kernel}							\
+		install ${MODULE}-up.ko										\\\
+		%{KernelD}/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko					\
+		%{?-s:echo "alias ${MNAME} ${MNAME}-%{-s*}"					\\\
 		>> %{ModprobeD}/%{-n*}.conf}								\
     %if %{with smp} && %{with dist_kernel}							\
-	install ${MODULE}-smp.ko										\\\
+		install ${MODULE}-smp.ko									\\\
 		%{KernelD}smp/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko				\
-	%{?-s:echo "alias ${MNAME} ${MNAME}-%{-s*}"						\\\
+		%{?-s:echo "alias ${MNAME} ${MNAME}-%{-s*}"					\\\
 		>> %{ModprobeD}smp/%{-n*}.conf}								\
     %endif															\
 done																\
