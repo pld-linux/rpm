@@ -1290,22 +1290,24 @@ for MODULE in {%{-m*},}; do											\
 	[ -n "${MODULE}" ] || continue									\
 	MNAME=${MODULE##*/}												\
 	%if %{without dist_kernel}										\
-		install %{MODULE}.ko										\\\
-		%{KernelD}/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko					\
+		install %{MODULE}-nondist.ko								\\\
+			%{KernelD}/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko				\
 		%{?-s:echo "alias ${MNAME} ${MNAME}-%{-s*}"					\\\
-		>> %{ModprobeD}/%{-n*}.conf}								\
-	%endif															\
-	%if %{with up} && %{with dist_kernel}							\
+			>> %{ModprobeD}/%{-n*}.conf}							\
+	%else															\
+	%if %{with up}													\
 		install ${MODULE}-up.ko										\\\
-		%{KernelD}/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko					\
+			%{KernelD}/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko				\
 		%{?-s:echo "alias ${MNAME} ${MNAME}-%{-s*}"					\\\
-		>> %{ModprobeD}/%{-n*}.conf}								\
-    %if %{with smp} && %{with dist_kernel}							\
+			>> %{ModprobeD}/%{-n*}.conf}							\
+	%endif															\
+	%if %{with smp}													\
 		install ${MODULE}-smp.ko									\\\
-		%{KernelD}smp/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko				\
+			%{KernelD}smp/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko			\
 		%{?-s:echo "alias ${MNAME} ${MNAME}-%{-s*}"					\\\
-		>> %{ModprobeD}smp/%{-n*}.conf}								\
-    %endif															\
+			>> %{ModprobeD}smp/%{-n*}.conf}							\
+	%endif															\
+	%endif															\
 done																\
 %{nil}
 
