@@ -209,7 +209,6 @@ unset DISPLAY ||:\
 %build %%build\
 export LC_ALL=C\
 export LANG=C\
-export LD_SYMBOLIC_FUNCTIONS=1\
 unset LINGUAS ||:\
 unset LANGUAGE ||:\
 unset LC_MESSAGES ||:\
@@ -223,7 +222,6 @@ unset DISPLAY ||:\
 %%install\
 export LC_ALL=C\
 export LANG=C\
-export LD_SYMBOLIC_FUNCTIONS=1\
 unset LINGUAS ||:\
 unset LANGUAGE ||:\
 unset LC_MESSAGES ||:\
