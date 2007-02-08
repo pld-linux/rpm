@@ -49,7 +49,7 @@ Source7:	%{name}-compress-doc
 Source8:	%{name}-check-files
 Source9:	%{name}-php-provides
 Source10:	%{name}-php-requires
-
+Source11:	%{name}.sysinfo
 Source12:	perl.prov
 Source13:	%{name}-user_group.sh
 Source14:	%{name}.sysconfig
@@ -98,12 +98,14 @@ Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
 Patch38:	%{name}-empty-rpmlock-path.patch
 Patch39:	%{name}-pythondeps.patch
+
 Patch41:	%{name}-reduce-stack-usage.patch
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
 Patch43:	%{name}-patch-quote.patch
 Patch44:	%{name}-no-neon.patch
 Patch45:	%{name}-no-sqlite.patch
 Patch46:	%{name}-mono.patch
+
 Patch48:	%{name}-requireseq.patch
 Patch49:	%{name}-p4.patch
 Patch50:	%{name}-macros.patch
@@ -820,6 +822,8 @@ install %{SOURCE31} $RPM_BUILD_ROOT%{_bindir}/adapter.awk
 install %{SOURCE32} $RPM_BUILD_ROOT%{_bindir}/pldnotify.awk
 install %{SOURCE33} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
+install %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
+
 install rpmio/ugid.h $RPM_BUILD_ROOT%{_includedir}/rpm
 
 # obsolete but still installed
@@ -970,6 +974,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo
 
 %{_mandir}/man8/rpm.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
