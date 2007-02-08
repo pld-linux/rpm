@@ -34,7 +34,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.7
-Release:	10.1
+Release:	11
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -98,7 +98,7 @@ Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
 Patch38:	%{name}-empty-rpmlock-path.patch
 Patch39:	%{name}-pythondeps.patch
-
+Patch40:	%{name}-vendor.patch
 Patch41:	%{name}-reduce-stack-usage.patch
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
 Patch43:	%{name}-patch-quote.patch
@@ -684,6 +684,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch37 -p1
 %patch38 -p1
 %patch39 -p1
+%patch40 -p0
 %patch41 -p1
 %patch42 -p1
 %patch43 -p1
@@ -748,9 +749,7 @@ cd ..
 
 # config.guess doesn't handle athlon, so we have to change it by hand.
 # rpm checks for CPU type at runtime, but it looks better
-sed -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' \
-	-e 's|@host_cpu@|%{_target_cpu}|' macros.in > macros.tmp
-mv -f macros.tmp macros.in
+sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu@|%{_target_cpu}|' macros.in
 
 CPPFLAGS="-Dglob=rpm_glob -Dglobfree=rpm_globfree"; export CPPFLAGS
 
