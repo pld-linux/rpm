@@ -102,3 +102,14 @@ diff -ur rpm-4.4.7.org/macros.in rpm-4.4.7/macros.in
  
  # \endverbatim
  #*/
+--- rpm/configure.ac.org	2007-02-08 09:16:46.554623000 +0100
++++ rpm/configure.ac	2007-02-08 09:18:16.386623000 +0100
+@@ -1368,7 +1368,7 @@
+ 	[Full path to rpm system configuration directory (usually /etc/rpm)])
+ AC_SUBST(SYSCONFIGDIR)
+ 
+-MACROFILES="${RPMCONFIGDIR}/macros:${RPMCONFIGDIR}/%{_target}/macros:${SYSCONFIGDIR}/macros.*:${SYSCONFIGDIR}/macros:${SYSCONFIGDIR}/%{_target}/macros:~/.rpmmacros"
++MACROFILES="${RPMCONFIGDIR}/macros:${RPMCONFIGDIR}/macros.build:${RPMCONFIGDIR}/%{_target}/macros:${SYSCONFIGDIR}/macros.*:${SYSCONFIGDIR}/macros:${SYSCONFIGDIR}/%{_target}/macros:~/.rpmmacros"
+ AC_DEFINE_UNQUOTED(MACROFILES, "$MACROFILES",
+ 	[Colon separated paths of macro files to read.])
+ AC_SUBST(MACROFILES)
