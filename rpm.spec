@@ -792,6 +792,8 @@ install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/b
 	pylibdir=%{py_libdir} \
 	pkgbindir="%{_bindir}"
 
+echo "%{_target_cpu}-%{_target_vendor}-linux-gnu" > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+
 %ifarch %{ppc}
 #sed -e '/_target_platform/s/[%]{_target_cpu}/ppc/' \
 #	-i $RPM_BUILD_ROOT%{_rpmlibdir}/ppc74[05]0-linux/macros
@@ -973,7 +975,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo
+# these are ok to be replaced
+%config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo
+%config %verify(not md5 mtime size) %{_sysconfdir}/rpm/platform
+
 
 %{_mandir}/man8/rpm.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
