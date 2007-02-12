@@ -26,12 +26,12 @@
 %define	beecrypt_ver	2:4.1.2-4
 %define	sover	4.4
 Summary:	RPM Package Manager
-Summary(de):	RPM Packet-Manager
-Summary(es):	Gestor de paquetes RPM
-Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
-Summary(pt_BR):	Gerenciador de pacotes RPM
-Summary(ru):	íÅÎÅÄÖÅÒ ÐÁËÅÔÏ× ÏÔ RPM
-Summary(uk):	íÅÎÅÄÖÅÒ ÐÁËÅÔ¦× ×¦Ä RPM
+Summary(de.UTF-8):   RPM Packet-Manager
+Summary(es.UTF-8):   Gestor de paquetes RPM
+Summary(pl.UTF-8):   Aplikacja do zarzÄ…dzania pakietami RPM
+Summary(pt_BR.UTF-8):   Gerenciador de pacotes RPM
+Summary(ru.UTF-8):   ÐœÐµÐ½ÐµÐ´Ð¶ÐµÑ€ Ð¿Ð°ÐºÐµÑ‚Ð¾Ð² Ð¾Ñ‚ RPM
+Summary(uk.UTF-8):   ÐœÐµÐ½ÐµÐ´Ð¶ÐµÑ€ Ð¿Ð°ÐºÐµÑ‚Ñ–Ð² Ð²Ñ–Ð´ RPM
 Name:		rpm
 Version:	4.4.7
 Release:	12
@@ -198,52 +198,52 @@ install, query, verify, update, and uninstall individual software
 packages. A package consists of an archive of files, and package
 information, including name, version, and description.
 
-%description -l de
-RPM ist ein kräftiger Packet-Manager, der verwendet sein kann zur
+%description -l de.UTF-8
+RPM ist ein krÃ¤ftiger Packet-Manager, der verwendet sein kann zur
 Installation, Anfrage, Verifizierung, Aktualisierung und
 Uninstallation individueller Softwarepakete. Ein Paket besteht aus
 einem Archiv Dateien und Paketinformation, inklusive Name, Version und
 Beschreibung.
 
-%description -l es
+%description -l es.UTF-8
 RPM es un poderoso administrador de paquetes, que puede ser usado para
 construir, instalar, pesquisar, verificar, actualizar y desinstalar
 paquetes individuales de software. Un paquete consiste en un
-almacenaje de archivos, y información sobre el paquete, incluyendo
-nombre, versión y descripción.
+almacenaje de archivos, y informaciÃ³n sobre el paquete, incluyendo
+nombre, versiÃ³n y descripciÃ³n.
 
-%description -l pl
-RPM jest doskona³ym programem zarz±dzaj±cym pakietami. Umo¿liwia on
-przebudowanie, instalacjê czy weryfikacjê dowolnego pakietu.
-Informacje dotycz±ce ka¿dego pakietu, takie jak jego opis, lista
-plików wchodz±cych w sk³ad pakietu, zale¿no¶ci od innych pakietów, s±
-przechowywane w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
+%description -l pl.UTF-8
+RPM jest doskonaÅ‚ym programem zarzÄ…dzajÄ…cym pakietami. UmoÅ¼liwia on
+przebudowanie, instalacjÄ™ czy weryfikacjÄ™ dowolnego pakietu.
+Informacje dotyczÄ…ce kaÅ¼dego pakietu, takie jak jego opis, lista
+plikÃ³w wchodzÄ…cych w skÅ‚ad pakietu, zaleÅ¼noÅ›ci od innych pakietÃ³w, sÄ…
+przechowywane w bazie danych i moÅ¼na je uzyskaÄ‡ za pomocÄ… opcji
 odpytywania programu rpm.
 
-%description -l pt_BR
-RPM é um poderoso gerenciador de pacotes, que pode ser usado para
+%description -l pt_BR.UTF-8
+RPM Ã© um poderoso gerenciador de pacotes, que pode ser usado para
 construir, instalar, pesquisar, verificar, atualizar e desinstalar
 pacotes individuais de software. Um pacote consiste de um conjunto de
-arquivos e informações adicionais, incluindo nome, versão e descrição
-do pacote, permissões dos arquivos, etc.
+arquivos e informaÃ§Ãµes adicionais, incluindo nome, versÃ£o e descriÃ§Ã£o
+do pacote, permissÃµes dos arquivos, etc.
 
-%description -l ru
-RPM - ÜÔÏ ÍÏÝÎÙÊ ÍÅÎÅÄÖÅÒ ÐÁËÅÔÏ×, ËÏÔÏÒÙÊ ÍÏÖÅÔ ÂÙÔØ ÉÓÐÏÌØÚÏ×ÁÎ ÄÌÑ
-ÓÏÚÄÁÎÉÑ, ÉÎÓÔÁÌÌÑÃÉÉ, ÚÁÐÒÏÓÏ× (query), ÐÒÏ×ÅÒËÉ, ÏÂÎÏ×ÌÅÎÉÑ É
-ÕÄÁÌÅÎÉÑ ÐÒÏÇÒÁÍÍÎÙÈ ÐÁËÅÔÏ×. ðÁËÅÔ ÓÏÓÔÏÉÔ ÉÚ ÆÁÊÌÏ×ÏÇÏ ÁÒÈÉ×Á É
-ÓÌÕÖÅÂÎÏÊ ÉÎÆÏÒÍÁÃÉÉ, ×ËÌÀÞÁÀÝÅÊ ÎÁÚ×ÁÎÉÅ, ×ÅÒÓÉÀ, ÏÐÉÓÁÎÉÅ É ÄÒÕÇÉÅ
-ÄÁÎÎÙÅ Ï ÐÁËÅÔÅ.
+%description -l ru.UTF-8
+RPM - ÑÑ‚Ð¾ Ð¼Ð¾Ñ‰Ð½Ñ‹Ð¹ Ð¼ÐµÐ½ÐµÐ´Ð¶ÐµÑ€ Ð¿Ð°ÐºÐµÑ‚Ð¾Ð², ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ð¹ Ð¼Ð¾Ð¶ÐµÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ð½ Ð´Ð»Ñ
+ÑÐ¾Ð·Ð´Ð°Ð½Ð¸Ñ, Ð¸Ð½ÑÑ‚Ð°Ð»Ð»ÑÑ†Ð¸Ð¸, Ð·Ð°Ð¿Ñ€Ð¾ÑÐ¾Ð² (query), Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ¸, Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ Ð¸
+ÑƒÐ´Ð°Ð»ÐµÐ½Ð¸Ñ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ð½Ñ‹Ñ… Ð¿Ð°ÐºÐµÑ‚Ð¾Ð². ÐŸÐ°ÐºÐµÑ‚ ÑÐ¾ÑÑ‚Ð¾Ð¸Ñ‚ Ð¸Ð· Ñ„Ð°Ð¹Ð»Ð¾Ð²Ð¾Ð³Ð¾ Ð°Ñ€Ñ…Ð¸Ð²Ð° Ð¸
+ÑÐ»ÑƒÐ¶ÐµÐ±Ð½Ð¾Ð¹ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸, Ð²ÐºÐ»ÑŽÑ‡Ð°ÑŽÑ‰ÐµÐ¹ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ, Ð²ÐµÑ€ÑÐ¸ÑŽ, Ð¾Ð¿Ð¸ÑÐ°Ð½Ð¸Ðµ Ð¸ Ð´Ñ€ÑƒÐ³Ð¸Ðµ
+Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð¾ Ð¿Ð°ÐºÐµÑ‚Ðµ.
 
-%description -l uk
-RPM - ÃÅ ÐÏÔÕÖÎÉÊ ÍÅÎÅÄÖÅÒ ÐÁËÅÔ¦×, ÝÏ ÍÏÖÅ ÂÕÔÉ ×ÉËÏÒÉÓÔÁÎÉÊ ÄÌÑ
-ÓÔ×ÏÒÅÎÎÑ, ¦ÎÓÔÁÌÑÃ¦§, ÚÁÐÉÔ¦× (query), ÐÅÒÅ×¦ÒËÉ, ÐÏÎÏ×ÌÅÎÎÑ ÔÁ
-×ÉÄÁÌÅÎÎÑ ÐÒÏÇÒÁÍÎÉÈ ÐÁËÅÔ¦×. ðÁËÅÔ ÓËÌÁÄÁ¤ÔØÓÑ Ú ÆÁÊÌÏ×ÏÇÏ ÁÒÈ¦×Õ ÔÁ
-ÓÌÕÖÂÏ×Ï§ ¦ÎÆÏÒÍÁÃ¦§, ÝÏ Í¦ÓÔÉÔØ ÎÁÚ×Õ, ×ÅÒÓ¦À, ÏÐÉÓ ÔÁ ¦ÎÛÕ
-¦ÎÆÏÒÍÁÃ¦À ÐÒÏ ÐÁËÅÔ.
+%description -l uk.UTF-8
+RPM - Ñ†Ðµ Ð¿Ð¾Ñ‚ÑƒÐ¶Ð½Ð¸Ð¹ Ð¼ÐµÐ½ÐµÐ´Ð¶ÐµÑ€ Ð¿Ð°ÐºÐµÑ‚Ñ–Ð², Ñ‰Ð¾ Ð¼Ð¾Ð¶Ðµ Ð±ÑƒÑ‚Ð¸ Ð²Ð¸ÐºÐ¾Ñ€Ð¸ÑÑ‚Ð°Ð½Ð¸Ð¹ Ð´Ð»Ñ
+ÑÑ‚Ð²Ð¾Ñ€ÐµÐ½Ð½Ñ, Ñ–Ð½ÑÑ‚Ð°Ð»ÑÑ†Ñ–Ñ—, Ð·Ð°Ð¿Ð¸Ñ‚Ñ–Ð² (query), Ð¿ÐµÑ€ÐµÐ²Ñ–Ñ€ÐºÐ¸, Ð¿Ð¾Ð½Ð¾Ð²Ð»ÐµÐ½Ð½Ñ Ñ‚Ð°
+Ð²Ð¸Ð´Ð°Ð»ÐµÐ½Ð½Ñ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð½Ð¸Ñ… Ð¿Ð°ÐºÐµÑ‚Ñ–Ð². ÐŸÐ°ÐºÐµÑ‚ ÑÐºÐ»Ð°Ð´Ð°Ñ”Ñ‚ÑŒÑÑ Ð· Ñ„Ð°Ð¹Ð»Ð¾Ð²Ð¾Ð³Ð¾ Ð°Ñ€Ñ…Ñ–Ð²Ñƒ Ñ‚Ð°
+ÑÐ»ÑƒÐ¶Ð±Ð¾Ð²Ð¾Ñ— Ñ–Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ñ–Ñ—, Ñ‰Ð¾ Ð¼Ñ–ÑÑ‚Ð¸Ñ‚ÑŒ Ð½Ð°Ð·Ð²Ñƒ, Ð²ÐµÑ€ÑÑ–ÑŽ, Ð¾Ð¿Ð¸Ñ Ñ‚Ð° Ñ–Ð½ÑˆÑƒ
+Ñ–Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ñ–ÑŽ Ð¿Ñ€Ð¾ Ð¿Ð°ÐºÐµÑ‚.
 
 %package base
 Summary:	RPM base package - scripts used by rpm packages themselves
-Summary(pl):	Podstawowy pakiet RPM - skrypty u¿ywane przez same pakiety rpm
+Summary(pl.UTF-8):   Podstawowy pakiet RPM - skrypty uÅ¼ywane przez same pakiety rpm
 Group:		Base
 Requires:	filesystem
 Obsoletes:	vserver-rpm
@@ -255,15 +255,15 @@ These include:
   packages,
 - banner.sh to display %%banner messages from rpm scriptlets.
 
-%description base -l pl
-Pakiet podstawowy RPM zwiera skrypty u¿ywane przez same pakiety rpm.
+%description base -l pl.UTF-8
+Pakiet podstawowy RPM zwiera skrypty uÅ¼ywane przez same pakiety rpm.
 Zawiera on:
-- skrypty dodaj±ce/usuwaj±ce grupy i u¿ytkowników dla pakietów rpm,
-- banner.sh do pokazywania komunikatów %%banner dla skryptletów rpm.
+- skrypty dodajÄ…ce/usuwajÄ…ce grupy i uÅ¼ytkownikÃ³w dla pakietÃ³w rpm,
+- banner.sh do pokazywania komunikatÃ³w %%banner dla skryptletÃ³w rpm.
 
 %package lib
 Summary:	RPMs library
-Summary(pl):	Biblioteki RPM-a
+Summary(pl.UTF-8):   Biblioteki RPM-a
 Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	db >= %{reqdb_ver}
@@ -278,17 +278,17 @@ Suggests:	lzma
 %description lib
 RPMs library.
 
-%description lib -l pl
+%description lib -l pl.UTF-8
 Biblioteki RPM-a.
 
 %package devel
 Summary:	Header files for rpm libraries
-Summary(de):	Header-Dateien für rpm Libraries
-Summary(es):	Archivos de inclusión y bibliotecas para programas de manipulación de paquetes rpm
-Summary(pl):	Pliki nag³ówkowe bibliotek rpm
-Summary(pt_BR):	Arquivos de inclusão e bibliotecas para programas de manipulação de pacotes RPM
-Summary(ru):	èÅÄÅÒÙ É ÂÉÂÌÉÏÔÅËÉ ÄÌÑ ÐÒÏÇÒÁÍÍ, ÒÁÂÏÔÁÀÝÉÈ Ó rpm-ÐÁËÅÔÁÍÉ
-Summary(uk):	èÅÄÅÒÉ ÔÁ Â¦ÂÌ¦ÏÔÅËÉ ÄÌÑ ÐÒÏÇÒÁÍ, ÝÏ ÐÒÁÃÀÀÔØ Ú ÐÁËÅÔÁÍÉ rpm
+Summary(de.UTF-8):   Header-Dateien fÃ¼r rpm Libraries
+Summary(es.UTF-8):   Archivos de inclusiÃ³n y bibliotecas para programas de manipulaciÃ³n de paquetes rpm
+Summary(pl.UTF-8):   Pliki nagÅ‚Ã³wkowe bibliotek rpm
+Summary(pt_BR.UTF-8):   Arquivos de inclusÃ£o e bibliotecas para programas de manipulaÃ§Ã£o de pacotes RPM
+Summary(ru.UTF-8):   Ð¥ÐµÐ´ÐµÑ€Ñ‹ Ð¸ Ð±Ð¸Ð±Ð»Ð¸Ð¾Ñ‚ÐµÐºÐ¸ Ð´Ð»Ñ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼, Ñ€Ð°Ð±Ð¾Ñ‚Ð°ÑŽÑ‰Ð¸Ñ… Ñ rpm-Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸
+Summary(uk.UTF-8):   Ð¥ÐµÐ´ÐµÑ€Ð¸ Ñ‚Ð° Ð±Ñ–Ð±Ð»Ñ–Ð¾Ñ‚ÐµÐºÐ¸ Ð´Ð»Ñ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼, Ñ‰Ð¾ Ð¿Ñ€Ð°Ñ†ÑŽÑŽÑ‚ÑŒ Ð· Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ rpm
 Group:		Development/Libraries
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt-devel >= %{beecrypt_ver}
@@ -307,51 +307,51 @@ creation of graphical package managers and other tools that need
 intimate knowledge of RPM packages. This package contains header files
 for these libraries.
 
-%description devel -l de
-Der RPM-Packensystem enthält eine C-Library, die macht es einfach
-RPM-Pakete und Dateibanken zu manipulieren. Er eignet sich für
+%description devel -l de.UTF-8
+Der RPM-Packensystem enthÃ¤lt eine C-Library, die macht es einfach
+RPM-Pakete und Dateibanken zu manipulieren. Er eignet sich fÃ¼r
 Vereinfachung des Schaffens grafischer Paket-Manager und anderer
 Werkzeuge, die intime Kenntnis von RPM-Paketen brauchen.
 
-%description devel -l es
+%description devel -l es.UTF-8
 El sistema de empaquetado RPM incluye una biblioteca C que vuelve
-fácil la manipulación de paquetes y bases de datos RPM. Su objetivo es
-facilitar la creación de administradores gráficos de paquetes y otras
+fÃ¡cil la manipulaciÃ³n de paquetes y bases de datos RPM. Su objetivo es
+facilitar la creaciÃ³n de administradores grÃ¡ficos de paquetes y otras
 herramientas que necesiten un conocimiento profundo de paquetes RPM.
 
-%description devel -l pl
-System RPM zawiera biblioteki C, które u³atwiaj± manipulowanie
-pakietami RPM oraz bazami danych. W zamiarze ma to upro¶ciæ tworzenie
-graficznych programów zarz±dzaj±cych pakietami oraz innych narzêdzi,
-które wymagaj± szczegó³owej wiedzy na temat pakietów RPM. Ten pakiet
-zawiera pliki nag³ówkowe wspomnianych bibliotek.
+%description devel -l pl.UTF-8
+System RPM zawiera biblioteki C, ktÃ³re uÅ‚atwiajÄ… manipulowanie
+pakietami RPM oraz bazami danych. W zamiarze ma to uproÅ›ciÄ‡ tworzenie
+graficznych programÃ³w zarzÄ…dzajÄ…cych pakietami oraz innych narzÄ™dzi,
+ktÃ³re wymagajÄ… szczegÃ³Å‚owej wiedzy na temat pakietÃ³w RPM. Ten pakiet
+zawiera pliki nagÅ‚Ã³wkowe wspomnianych bibliotek.
 
-%description devel -l pt_BR
-O sistema de empacotamento RPM inclui uma biblioteca C que torna fácil
-a manipulação de pacotes e bases de dados RPM. Seu objetivo é
-facilitar a criação de gerenciadores gráficos de pacotes e outras
+%description devel -l pt_BR.UTF-8
+O sistema de empacotamento RPM inclui uma biblioteca C que torna fÃ¡cil
+a manipulaÃ§Ã£o de pacotes e bases de dados RPM. Seu objetivo Ã©
+facilitar a criaÃ§Ã£o de gerenciadores grÃ¡ficos de pacotes e outras
 ferramentas que precisem de conhecimento profundo de pacotes RPM.
 
-%description devel -l ru
-óÉÓÔÅÍÁ ÕÐÒÁ×ÌÅÎÉÑ ÐÁËÅÔÁÍÉ RPM ÓÏÄÅÒÖÉÔ ÂÉÂÌÉÏÔÅËÕ C, ËÏÔÏÒÁÑ
-ÕÐÒÏÝÁÅÔ ÍÁÎÉÐÕÌÑÃÉÀ ÐÁËÅÔÁÍÉ RPM É ÓÏÏÔ×ÅÔÓÔ×ÕÀÝÉÍÉ ÂÁÚÁÍÉ ÄÁÎÎÙÈ.
-üÔÁ ÂÉÂÌÉÏÔÅËÁ ÐÒÅÄÎÁÚÎÁÞÅÎÁ ÄÌÑ ÏÂÌÅÇÞÅÎÉÑ ÓÏÚÄÁÎÉÑ ÇÒÁÆÉÞÅÓËÉÈ
-ÐÁËÅÔÎÙÈ ÍÅÎÅÄÖÅÒÏ× É ÄÒÕÇÉÈ ÕÔÉÌÉÔ, ËÏÔÏÒÙÍ ÎÅÏÂÈÏÄÉÍÏ ÒÁÂÏÔÁÔØ Ó
-ÐÁËÅÔÁÍÉ RPM.
+%description devel -l ru.UTF-8
+Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð° ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ñ Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM ÑÐ¾Ð´ÐµÑ€Ð¶Ð¸Ñ‚ Ð±Ð¸Ð±Ð»Ð¸Ð¾Ñ‚ÐµÐºÑƒ C, ÐºÐ¾Ñ‚Ð¾Ñ€Ð°Ñ
+ÑƒÐ¿Ñ€Ð¾Ñ‰Ð°ÐµÑ‚ Ð¼Ð°Ð½Ð¸Ð¿ÑƒÐ»ÑÑ†Ð¸ÑŽ Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM Ð¸ ÑÐ¾Ð¾Ñ‚Ð²ÐµÑ‚ÑÑ‚Ð²ÑƒÑŽÑ‰Ð¸Ð¼Ð¸ Ð±Ð°Ð·Ð°Ð¼Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ñ….
+Ð­Ñ‚Ð° Ð±Ð¸Ð±Ð»Ð¸Ð¾Ñ‚ÐµÐºÐ° Ð¿Ñ€ÐµÐ´Ð½Ð°Ð·Ð½Ð°Ñ‡ÐµÐ½Ð° Ð´Ð»Ñ Ð¾Ð±Ð»ÐµÐ³Ñ‡ÐµÐ½Ð¸Ñ ÑÐ¾Ð·Ð´Ð°Ð½Ð¸Ñ Ð³Ñ€Ð°Ñ„Ð¸Ñ‡ÐµÑÐºÐ¸Ñ…
+Ð¿Ð°ÐºÐµÑ‚Ð½Ñ‹Ñ… Ð¼ÐµÐ½ÐµÐ´Ð¶ÐµÑ€Ð¾Ð² Ð¸ Ð´Ñ€ÑƒÐ³Ð¸Ñ… ÑƒÑ‚Ð¸Ð»Ð¸Ñ‚, ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ð¼ Ð½ÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ð¾ Ñ€Ð°Ð±Ð¾Ñ‚Ð°Ñ‚ÑŒ Ñ
+Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM.
 
-%description devel -l uk
-óÉÓÔÅÍÁ ËÅÒÕ×ÁÎÎÑ ÐÁËÅÔÁÍÉ RPM Í¦ÓÔÉÔØ Â¦ÂÌ¦ÏÔÅËÕ C, ËÏÔÒÁ ÓÐÒÏÝÕ¤
-ÒÏÂÏÔÕ Ú ÐÁËÅÔÁÍÉ RPM ÔÁ ×¦ÄÐÏ×¦ÄÎÉÍÉ ÂÁÚÁÍÉ ÄÁÎÉÈ. ãÑ Â¦ÂÌ¦ÏÔÅËÁ
-ÐÒÉÚÎÁÞÅÎÁ ÄÌÑ ÐÏÌÅÇÛÅÎÎÑ ÓÔ×ÏÒÅÎÎÑ ÇÒÁÆ¦ÞÎÉÈ ÐÁËÅÔÎÉÈ ÍÅÎÅÄÖÅÒ¦× ÔÁ
-¦ÎÛÉÈ ÕÔÉÌ¦Ô, ÝÏ ÐÒÁÃÀÀÔØ Ú ÐÁËÅÔÁÍÉ RPM.
+%description devel -l uk.UTF-8
+Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð° ÐºÐµÑ€ÑƒÐ²Ð°Ð½Ð½Ñ Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM Ð¼Ñ–ÑÑ‚Ð¸Ñ‚ÑŒ Ð±Ñ–Ð±Ð»Ñ–Ð¾Ñ‚ÐµÐºÑƒ C, ÐºÐ¾Ñ‚Ñ€Ð° ÑÐ¿Ñ€Ð¾Ñ‰ÑƒÑ”
+Ñ€Ð¾Ð±Ð¾Ñ‚Ñƒ Ð· Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM Ñ‚Ð° Ð²Ñ–Ð´Ð¿Ð¾Ð²Ñ–Ð´Ð½Ð¸Ð¼Ð¸ Ð±Ð°Ð·Ð°Ð¼Ð¸ Ð´Ð°Ð½Ð¸Ñ…. Ð¦Ñ Ð±Ñ–Ð±Ð»Ñ–Ð¾Ñ‚ÐµÐºÐ°
+Ð¿Ñ€Ð¸Ð·Ð½Ð°Ñ‡ÐµÐ½Ð° Ð´Ð»Ñ Ð¿Ð¾Ð»ÐµÐ³ÑˆÐµÐ½Ð½Ñ ÑÑ‚Ð²Ð¾Ñ€ÐµÐ½Ð½Ñ Ð³Ñ€Ð°Ñ„Ñ–Ñ‡Ð½Ð¸Ñ… Ð¿Ð°ÐºÐµÑ‚Ð½Ð¸Ñ… Ð¼ÐµÐ½ÐµÐ´Ð¶ÐµÑ€Ñ–Ð² Ñ‚Ð°
+Ñ–Ð½ÑˆÐ¸Ñ… ÑƒÑ‚Ð¸Ð»Ñ–Ñ‚, Ñ‰Ð¾ Ð¿Ñ€Ð°Ñ†ÑŽÑŽÑ‚ÑŒ Ð· Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM.
 
 %package static
 Summary:	RPM static libraries
-Summary(de):	RPMs statische Libraries
-Summary(pl):	Biblioteki statyczne RPM-a
-Summary(pt_BR):	Bibliotecas estáticas para o desenvolvimento de aplicações RPM
-Summary(ru):	óÔÁÔÉÞÅÓËÁÑ ÂÉÂÌÉÏÔÅËÁ ÄÌÑ ÐÒÏÇÒÁÍÍ, ÒÁÂÏÔÁÀÝÉÈ Ó rpm-ÐÁËÅÔÁÍÉ
-Summary(uk):	óÔÁÔÉÞÎÁ Â¦ÂÌ¦ÏÔÅËÁ ÄÌÑ ÐÒÏÇÒÁÍ, ÝÏ ÐÒÁÃÀÀÔØ Ú ÐÁËÅÔÁÍÉ rpm
+Summary(de.UTF-8):   RPMs statische Libraries
+Summary(pl.UTF-8):   Biblioteki statyczne RPM-a
+Summary(pt_BR.UTF-8):   Bibliotecas estÃ¡ticas para o desenvolvimento de aplicaÃ§Ãµes RPM
+Summary(ru.UTF-8):   Ð¡Ñ‚Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ°Ñ Ð±Ð¸Ð±Ð»Ð¸Ð¾Ñ‚ÐµÐºÐ° Ð´Ð»Ñ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼, Ñ€Ð°Ð±Ð¾Ñ‚Ð°ÑŽÑ‰Ð¸Ñ… Ñ rpm-Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸
+Summary(uk.UTF-8):   Ð¡Ñ‚Ð°Ñ‚Ð¸Ñ‡Ð½Ð° Ð±Ñ–Ð±Ð»Ñ–Ð¾Ñ‚ÐµÐºÐ° Ð´Ð»Ñ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼, Ñ‰Ð¾ Ð¿Ñ€Ð°Ñ†ÑŽÑŽÑ‚ÑŒ Ð· Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ rpm
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	beecrypt-static >= %{beecrypt_ver}
@@ -365,29 +365,29 @@ Requires:	zlib-static
 %description static
 RPM static libraries.
 
-%description static -l de
+%description static -l de.UTF-8
 RPMs statische Libraries.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Biblioteki statyczne RPM-a.
 
-%description static -l pt_BR
-Bibliotecas estáticas para desenvolvimento.
+%description static -l pt_BR.UTF-8
+Bibliotecas estÃ¡ticas para desenvolvimento.
 
-%description static -l ru
-óÉÓÔÅÍÁ ÕÐÒÁ×ÌÅÎÉÑ ÐÁËÅÔÁÍÉ RPM ÓÏÄÅÒÖÉÔ ÂÉÂÌÉÏÔÅËÕ C, ËÏÔÏÒÁÑ
-ÕÐÒÏÝÁÅÔ ÍÁÎÉÐÕÌÑÃÉÀ ÐÁËÅÔÁÍÉ RPM É ÓÏÏÔ×ÅÔÓÔ×ÕÀÝÉÍÉ ÂÁÚÁÍÉ ÄÁÎÎÙÈ.
-üÔÏ ÓÔÁÔÉÞÅÓËÁÑ ÂÉÂÌÉÏÔÅËÁ RPM.
+%description static -l ru.UTF-8
+Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð° ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ñ Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM ÑÐ¾Ð´ÐµÑ€Ð¶Ð¸Ñ‚ Ð±Ð¸Ð±Ð»Ð¸Ð¾Ñ‚ÐµÐºÑƒ C, ÐºÐ¾Ñ‚Ð¾Ñ€Ð°Ñ
+ÑƒÐ¿Ñ€Ð¾Ñ‰Ð°ÐµÑ‚ Ð¼Ð°Ð½Ð¸Ð¿ÑƒÐ»ÑÑ†Ð¸ÑŽ Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM Ð¸ ÑÐ¾Ð¾Ñ‚Ð²ÐµÑ‚ÑÑ‚Ð²ÑƒÑŽÑ‰Ð¸Ð¼Ð¸ Ð±Ð°Ð·Ð°Ð¼Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ñ….
+Ð­Ñ‚Ð¾ ÑÑ‚Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ°Ñ Ð±Ð¸Ð±Ð»Ð¸Ð¾Ñ‚ÐµÐºÐ° RPM.
 
-%description static -l uk
-óÉÓÔÅÍÁ ËÅÒÕ×ÁÎÎÑ ÐÁËÅÔÁÍÉ RPM Í¦ÓÔÉÔØ Â¦ÂÌ¦ÏÔÅËÕ C, ËÏÔÒÁ ÓÐÒÏÝÕ¤
-ÒÏÂÏÔÕ Ú ÐÁËÅÔÁÍÉ RPM ÔÁ ×¦ÄÐÏ×¦ÄÎÉÍÉ ÂÁÚÁÍÉ ÄÁÎÉÈ. ãÅ ÓÔÁÔÉÞÎÁ
-Â¦ÂÌ¦ÏÔÅËÁ RPM.
+%description static -l uk.UTF-8
+Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð° ÐºÐµÑ€ÑƒÐ²Ð°Ð½Ð½Ñ Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM Ð¼Ñ–ÑÑ‚Ð¸Ñ‚ÑŒ Ð±Ñ–Ð±Ð»Ñ–Ð¾Ñ‚ÐµÐºÑƒ C, ÐºÐ¾Ñ‚Ñ€Ð° ÑÐ¿Ñ€Ð¾Ñ‰ÑƒÑ”
+Ñ€Ð¾Ð±Ð¾Ñ‚Ñƒ Ð· Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM Ñ‚Ð° Ð²Ñ–Ð´Ð¿Ð¾Ð²Ñ–Ð´Ð½Ð¸Ð¼Ð¸ Ð±Ð°Ð·Ð°Ð¼Ð¸ Ð´Ð°Ð½Ð¸Ñ…. Ð¦Ðµ ÑÑ‚Ð°Ñ‚Ð¸Ñ‡Ð½Ð°
+Ð±Ñ–Ð±Ð»Ñ–Ð¾Ñ‚ÐµÐºÐ° RPM.
 
 %package utils
 Summary:	Additional utilities for managing rpm packages and database
-Summary(de):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
-Summary(pl):	Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami
+Summary(de.UTF-8):   Zusatzwerkzeuge fÃ¼r Verwaltung RPM-Pakete und Datenbanken
+Summary(pl.UTF-8):   Dodatkowe narzÄ™dzia do zarzÄ…dzania bazÄ… RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
@@ -395,16 +395,16 @@ Requires:	popt >= %{reqpopt_ver}
 %description utils
 Additional utilities for managing rpm packages and database.
 
-%description utils -l de
-Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
+%description utils -l de.UTF-8
+Zusatzwerkzeuge fÃ¼r Verwaltung RPM-Pakete und Datenbanken.
 
-%description utils -l pl
-Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami.
+%description utils -l pl.UTF-8
+Dodatkowe narzÄ™dzia do zarzÄ…dzania bazÄ… RPM-a i pakietami.
 
 %package utils-perl
 Summary:	Additional utilities for managing rpm packages and database
-Summary(de):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
-Summary(pl):	Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami
+Summary(de.UTF-8):   Zusatzwerkzeuge fÃ¼r Verwaltung RPM-Pakete und Datenbanken
+Summary(pl.UTF-8):   Dodatkowe narzÄ™dzia do zarzÄ…dzania bazÄ… RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
@@ -412,15 +412,15 @@ Requires:	popt >= %{reqpopt_ver}
 %description utils-perl
 Additional utilities for managing rpm packages and database.
 
-%description utils-perl -l de
-Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
+%description utils-perl -l de.UTF-8
+Zusatzwerkzeuge fÃ¼r Verwaltung RPM-Pakete und Datenbanken.
 
-%description utils-perl -l pl
-Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami.
+%description utils-perl -l pl.UTF-8
+Dodatkowe narzÄ™dzia do zarzÄ…dzania bazÄ… RPM-a i pakietami.
 
 %package utils-static
 Summary:	Static rpm utilities
-Summary(pl):	Statyczne narzêdzia rpm
+Summary(pl.UTF-8):   Statyczne narzÄ™dzia rpm
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 
@@ -430,20 +430,20 @@ shared libraries used by rpm become broken. Currently it contains rpmi
 binary, which can be used to install/upgrade/remove packages without
 using shared libraries (well, in fact with exception of NSS modules).
 
-%description utils-static -l pl
-Statyczne narzêdzia rpm do naprawy systemu w przypadku zepsucia czego¶
-zwi±zanego z bibliotekami wspó³dzielonymi u¿ywanymi przez rpm-a.
-Aktualnie pakiet zawiera binarkê rpmi, któr± mo¿na u¿yæ do instalacji,
-uaktualniania lub usuwania pakietów bez udzia³u bibliotek statycznych
-(z wyj±tkiem modu³ów NSS).
+%description utils-static -l pl.UTF-8
+Statyczne narzÄ™dzia rpm do naprawy systemu w przypadku zepsucia czegoÅ›
+zwiÄ…zanego z bibliotekami wspÃ³Å‚dzielonymi uÅ¼ywanymi przez rpm-a.
+Aktualnie pakiet zawiera binarkÄ™ rpmi, ktÃ³rÄ… moÅ¼na uÅ¼yÄ‡ do instalacji,
+uaktualniania lub usuwania pakietÃ³w bez udziaÅ‚u bibliotek statycznych
+(z wyjÄ…tkiem moduÅ‚Ã³w NSS).
 
 %package build
 Summary:	Scripts for building binary RPM packages
-Summary(de):	Scripts fürs Bauen binärer RPM-Pakete
-Summary(pl):	Skrypty pomocnicze do budowania binarnych RPM-ów
-Summary(pt_BR):	Scripts e programas executáveis usados para construir pacotes
-Summary(ru):	óËÒÉÐÔÙ É ÕÔÉÌÉÔÙ, ÎÅÏÂÈÏÄÉÍÙÅ ÄÌÑ ÓÂÏÒËÉ ÐÁËÅÔÏ×
-Summary(uk):	óËÒÉÐÔÉ ÔÁ ÕÔÉÌ¦ÔÉ, ÎÅÏÂÈ¦ÄÎ¦ ÄÌÑ ÐÏÂÕÄÏ×É ÐÁËÅÔ¦×
+Summary(de.UTF-8):   Scripts fÃ¼rs Bauen binÃ¤rer RPM-Pakete
+Summary(pl.UTF-8):   Skrypty pomocnicze do budowania binarnych RPM-Ã³w
+Summary(pt_BR.UTF-8):   Scripts e programas executÃ¡veis usados para construir pacotes
+Summary(ru.UTF-8):   Ð¡ÐºÑ€Ð¸Ð¿Ñ‚Ñ‹ Ð¸ ÑƒÑ‚Ð¸Ð»Ð¸Ñ‚Ñ‹, Ð½ÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ñ‹Ðµ Ð´Ð»Ñ ÑÐ±Ð¾Ñ€ÐºÐ¸ Ð¿Ð°ÐºÐµÑ‚Ð¾Ð²
+Summary(uk.UTF-8):   Ð¡ÐºÑ€Ð¸Ð¿Ñ‚Ð¸ Ñ‚Ð° ÑƒÑ‚Ð¸Ð»Ñ–Ñ‚Ð¸, Ð½ÐµÐ¾Ð±Ñ…Ñ–Ð´Ð½Ñ– Ð´Ð»Ñ Ð¿Ð¾Ð±ÑƒÐ´Ð¾Ð²Ð¸ Ð¿Ð°ÐºÐµÑ‚Ñ–Ð²
 Group:		Applications/File
 Requires(pre):	findutils
 Requires:	%{name}-build-macros >= 1.314
@@ -481,31 +481,31 @@ Conflicts:	libtool < 2:1.5-13
 %description build
 Scripts for building binary RPM packages.
 
-%description build -l de
-Scripts fürs Bauen binärer RPM-Pakete.
+%description build -l de.UTF-8
+Scripts fÃ¼rs Bauen binÃ¤rer RPM-Pakete.
 
-%description build -l pl
-Skrypty pomocnicze do budowania binarnych RPM-ów.
+%description build -l pl.UTF-8
+Skrypty pomocnicze do budowania binarnych RPM-Ã³w.
 
-%description build -l pt_BR
-Este pacote contém scripts e programas executáveis que são usados para
+%description build -l pt_BR.UTF-8
+Este pacote contÃ©m scripts e programas executÃ¡veis que sÃ£o usados para
 construir pacotes usando o RPM.
 
-%description build -l ru
-òÁÚÌÉÞÎÙÅ ×ÓÐÏÍÏÇÁÔÅÌØÎÙÅ ÓËÒÉÐÔÙ É ÉÓÐÏÌÎÑÅÍÙÅ ÐÒÏÇÒÁÍÍÙ, ËÏÔÏÒÙÅ
-ÉÓÐÏÌØÚÕÀÔÓÑ ÄÌÑ ÓÂÏÒËÉ RPM'Ï×.
+%description build -l ru.UTF-8
+Ð Ð°Ð·Ð»Ð¸Ñ‡Ð½Ñ‹Ðµ Ð²ÑÐ¿Ð¾Ð¼Ð¾Ð³Ð°Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ðµ ÑÐºÑ€Ð¸Ð¿Ñ‚Ñ‹ Ð¸ Ð¸ÑÐ¿Ð¾Ð»Ð½ÑÐµÐ¼Ñ‹Ðµ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹, ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ðµ
+Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÑŽÑ‚ÑÑ Ð´Ð»Ñ ÑÐ±Ð¾Ñ€ÐºÐ¸ RPM'Ð¾Ð².
 
-%description build -l uk
-ò¦ÚÎÏÍÁÎ¦ÔÎ¦ ÄÏÐÏÍ¦ÖÎ¦ ÓËÒÉÐÔÉ ÔÁ ÕÔÉÌ¦ÔÉ, ÑË¦ ×ÉËÏÒÉÓÔÏ×ÕÀÔØÓÑ ÄÌÑ
-ÐÏÂÕÄÏ×É RPM'¦×.
+%description build -l uk.UTF-8
+Ð Ñ–Ð·Ð½Ð¾Ð¼Ð°Ð½Ñ–Ñ‚Ð½Ñ– Ð´Ð¾Ð¿Ð¾Ð¼Ñ–Ð¶Ð½Ñ– ÑÐºÑ€Ð¸Ð¿Ñ‚Ð¸ Ñ‚Ð° ÑƒÑ‚Ð¸Ð»Ñ–Ñ‚Ð¸, ÑÐºÑ– Ð²Ð¸ÐºÐ¾Ñ€Ð¸ÑÑ‚Ð¾Ð²ÑƒÑŽÑ‚ÑŒÑÑ Ð´Ð»Ñ
+Ð¿Ð¾Ð±ÑƒÐ´Ð¾Ð²Ð¸ RPM'Ñ–Ð².
 
 %package build-tools
 Summary:	Scripts for managing .spec files and building RPM packages
-Summary(de):	Scripts fürs Bauen binärer RPM-Pakete
-Summary(pl):	Skrypty pomocnicze do zarz±dznia plikami .spec i budowania RPM-ów
-Summary(pt_BR):	Scripts e programas executáveis usados para construir pacotes
-Summary(ru):	óËÒÉÐÔÙ É ÕÔÉÌÉÔÙ, ÎÅÏÂÈÏÄÉÍÙÅ ÄÌÑ ÓÂÏÒËÉ ÐÁËÅÔÏ×
-Summary(uk):	óËÒÉÐÔÉ ÔÁ ÕÔÉÌ¦ÔÉ, ÎÅÏÂÈ¦ÄÎ¦ ÄÌÑ ÐÏÂÕÄÏ×É ÐÁËÅÔ¦×
+Summary(de.UTF-8):   Scripts fÃ¼rs Bauen binÃ¤rer RPM-Pakete
+Summary(pl.UTF-8):   Skrypty pomocnicze do zarzÄ…dznia plikami .spec i budowania RPM-Ã³w
+Summary(pt_BR.UTF-8):   Scripts e programas executÃ¡veis usados para construir pacotes
+Summary(ru.UTF-8):   Ð¡ÐºÑ€Ð¸Ð¿Ñ‚Ñ‹ Ð¸ ÑƒÑ‚Ð¸Ð»Ð¸Ñ‚Ñ‹, Ð½ÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ñ‹Ðµ Ð´Ð»Ñ ÑÐ±Ð¾Ñ€ÐºÐ¸ Ð¿Ð°ÐºÐµÑ‚Ð¾Ð²
+Summary(uk.UTF-8):   Ð¡ÐºÑ€Ð¸Ð¿Ñ‚Ð¸ Ñ‚Ð° ÑƒÑ‚Ð¸Ð»Ñ–Ñ‚Ð¸, Ð½ÐµÐ¾Ð±Ñ…Ñ–Ð´Ð½Ñ– Ð´Ð»Ñ Ð¿Ð¾Ð±ÑƒÐ´Ð¾Ð²Ð¸ Ð¿Ð°ÐºÐµÑ‚Ñ–Ð²
 Group:		Applications/File
 Requires:	%{name}-build = %{version}-%{release}
 # these are optional
@@ -515,28 +515,28 @@ Requires:	wget
 %description build-tools
 Scripts for managing .spec files and building RPM packages.
 
-%description build-tools -l de
-Scripts fürs Bauen RPM-Pakete.
+%description build-tools -l de.UTF-8
+Scripts fÃ¼rs Bauen RPM-Pakete.
 
-%description build-tools -l pl
-Skrypty pomocnicze do zarz±dzania plikami .spec i do budowania RPM-ów.
+%description build-tools -l pl.UTF-8
+Skrypty pomocnicze do zarzÄ…dzania plikami .spec i do budowania RPM-Ã³w.
 
-%description build-tools -l pt_BR
-Este pacote contém scripts e programas executáveis que são usados para
+%description build-tools -l pt_BR.UTF-8
+Este pacote contÃ©m scripts e programas executÃ¡veis que sÃ£o usados para
 construir pacotes usando o RPM.
 
-%description build-tools -l ru
-òÁÚÌÉÞÎÙÅ ×ÓÐÏÍÏÇÁÔÅÌØÎÙÅ ÓËÒÉÐÔÙ É ÉÓÐÏÌÎÑÅÍÙÅ ÐÒÏÇÒÁÍÍÙ, ËÏÔÏÒÙÅ
-ÉÓÐÏÌØÚÕÀÔÓÑ ÄÌÑ ÓÂÏÒËÉ RPM'Ï×.
+%description build-tools -l ru.UTF-8
+Ð Ð°Ð·Ð»Ð¸Ñ‡Ð½Ñ‹Ðµ Ð²ÑÐ¿Ð¾Ð¼Ð¾Ð³Ð°Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ðµ ÑÐºÑ€Ð¸Ð¿Ñ‚Ñ‹ Ð¸ Ð¸ÑÐ¿Ð¾Ð»Ð½ÑÐµÐ¼Ñ‹Ðµ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹, ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ðµ
+Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÑŽÑ‚ÑÑ Ð´Ð»Ñ ÑÐ±Ð¾Ñ€ÐºÐ¸ RPM'Ð¾Ð².
 
-%description build-tools -l uk
-ò¦ÚÎÏÍÁÎ¦ÔÎ¦ ÄÏÐÏÍ¦ÖÎ¦ ÓËÒÉÐÔÉ ÔÁ ÕÔÉÌ¦ÔÉ, ÑË¦ ×ÉËÏÒÉÓÔÏ×ÕÀÔØÓÑ ÄÌÑ
-ÐÏÂÕÄÏ×É RPM'¦×.
+%description build-tools -l uk.UTF-8
+Ð Ñ–Ð·Ð½Ð¾Ð¼Ð°Ð½Ñ–Ñ‚Ð½Ñ– Ð´Ð¾Ð¿Ð¾Ð¼Ñ–Ð¶Ð½Ñ– ÑÐºÑ€Ð¸Ð¿Ñ‚Ð¸ Ñ‚Ð° ÑƒÑ‚Ð¸Ð»Ñ–Ñ‚Ð¸, ÑÐºÑ– Ð²Ð¸ÐºÐ¾Ñ€Ð¸ÑÑ‚Ð¾Ð²ÑƒÑŽÑ‚ÑŒÑÑ Ð´Ð»Ñ
+Ð¿Ð¾Ð±ÑƒÐ´Ð¾Ð²Ð¸ RPM'Ñ–Ð².
 
 %package perlprov
 Summary:	Additional utilities for checking perl provides/requires in rpm packages
-Summary(de):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
-Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w pakietach rpm
+Summary(de.UTF-8):   Zusatzwerkzeuge fÃ¼rs Nachsehen Perl-AbhÃ¤ngigkeiten in RPM-Paketen
+Summary(pl.UTF-8):   Dodatkowe narzÄ™dzia do sprawdzenia zaleÅ¼noÅ›ci skryptÃ³w perla w pakietach rpm
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	perl-devel
@@ -546,16 +546,16 @@ Requires:	perl-modules
 Additional utilities for checking perl provides/requires in rpm
 packages.
 
-%description perlprov -l de
-Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen.
+%description perlprov -l de.UTF-8
+Zusatzwerkzeuge fÃ¼rs Nachsehen Perl-AbhÃ¤ngigkeiten in RPM-Paketen.
 
-%description perlprov -l pl
-Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w
+%description perlprov -l pl.UTF-8
+Dodatkowe narzÄ™dzia do sprawdzenia zaleÅ¼noÅ›ci skryptÃ³w perla w
 pakietach rpm.
 
 %package pythonprov
 Summary:	Python macros, which simplifies creation of rpm packages with Python software
-Summary(pl):	Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w Pythonie
+Summary(pl.UTF-8):   Makra uÅ‚atwiajÄ…ce tworzenie pakietÃ³w rpm z programami napisanymi w Pythonie
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	python
@@ -565,13 +565,13 @@ Requires:	python-modules
 Python macros, which simplifies creation of rpm packages with Python
 software.
 
-%description pythonprov -l pl
-Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w
+%description pythonprov -l pl.UTF-8
+Makra uÅ‚atwiajÄ…ce tworzenie pakietÃ³w rpm z programami napisanymi w
 Pythonie.
 
 %package php-pearprov
 Summary:	Additional utilities for managing rpm packages and database
-Summary(pl):	Dodatkowe narzêdzia do sprawdzania zale¿no¶ci skryptów php w rpm
+Summary(pl.UTF-8):   Dodatkowe narzÄ™dzia do sprawdzania zaleÅ¼noÅ›ci skryptÃ³w php w rpm
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	sed >= 4.0
@@ -580,14 +580,14 @@ Requires:	sed >= 4.0
 Additional utilities for checking php pear provides/requires in rpm
 packages.
 
-%description php-pearprov -l pl
-Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów php pear w
+%description php-pearprov -l pl.UTF-8
+Dodatkowe narzÄ™dzia do sprawdzenia zaleÅ¼noÅ›ci skryptÃ³w php pear w
 pakietach rpm.
 
 %package -n python-rpm
 Summary:	Python interface to RPM library
-Summary(pl):	Pythonowy interfejs do biblioteki RPM-a
-Summary(pt_BR):	Módulo Python para aplicativos que manipulam pacotes RPM
+Summary(pl.UTF-8):   Pythonowy interfejs do biblioteki RPM-a
+Summary(pt_BR.UTF-8):   MÃ³dulo Python para aplicativos que manipulam pacotes RPM
 Group:		Development/Languages/Python
 Requires:	%{name} = %{version}-%{release}
 %pyrequires_eq	python
@@ -601,33 +601,33 @@ supplied by RPM (RPM Package Manager) libraries.
 This package should be installed if you want to develop Python
 programs that will manipulate RPM packages and databases.
 
-%description -n python-rpm -l pl
-Pakiet rpm-python zawiera modu³, który pozwala aplikacjom napisanym w
-Pythonie na u¿ywanie interfejsu dostarczanego przez biblioteki RPM-a.
+%description -n python-rpm -l pl.UTF-8
+Pakiet rpm-python zawiera moduÅ‚, ktÃ³ry pozwala aplikacjom napisanym w
+Pythonie na uÅ¼ywanie interfejsu dostarczanego przez biblioteki RPM-a.
 
-Pakiet ten powinien zostaæ zainstalowany, je¶li chcesz pisaæ w
-Pythonie programy manipuluj±ce pakietami i bazami danych rpm.
+Pakiet ten powinien zostaÄ‡ zainstalowany, jeÅ›li chcesz pisaÄ‡ w
+Pythonie programy manipulujÄ…ce pakietami i bazami danych rpm.
 
-%description -n python-rpm -l pt_BR
-O pacote rpm-python contém um módulo que permite que aplicações
+%description -n python-rpm -l pt_BR.UTF-8
+O pacote rpm-python contÃ©m um mÃ³dulo que permite que aplicaÃ§Ãµes
 escritas em Python utilizem a interface fornecida pelas bibliotecas
 RPM (RPM Package Manager).
 
-Esse pacote deve ser instalado se você quiser desenvolver programas em
+Esse pacote deve ser instalado se vocÃª quiser desenvolver programas em
 Python para manipular pacotes e bancos de dados RPM.
 
 %package apidocs
 Summary:	RPM API documentation and guides
-Summary(pl):	Documentacja API RPM-a i przewodniki
+Summary(pl.UTF-8):   Documentacja API RPM-a i przewodniki
 Group:		Documentation
 
 %description apidocs
 Documentation for RPM API and guides in HTML format generated from rpm
 sources by doxygen.
 
-%description apidocs -l pl
+%description apidocs -l pl.UTF-8
 Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
-¼rode³ RPM-a przez doxygen.
+ÅºrodeÅ‚ RPM-a przez doxygen.
 
 %prep
 %setup -q
