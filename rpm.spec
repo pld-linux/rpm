@@ -26,12 +26,12 @@
 %define	beecrypt_ver	2:4.1.2-4
 %define	sover	4.4
 Summary:	RPM Package Manager
-Summary(de.UTF-8):   RPM Packet-Manager
-Summary(es.UTF-8):   Gestor de paquetes RPM
-Summary(pl.UTF-8):   Aplikacja do zarządzania pakietami RPM
-Summary(pt_BR.UTF-8):   Gerenciador de pacotes RPM
-Summary(ru.UTF-8):   Менеджер пакетов от RPM
-Summary(uk.UTF-8):   Менеджер пакетів від RPM
+Summary(de.UTF-8):	RPM Packet-Manager
+Summary(es.UTF-8):	Gestor de paquetes RPM
+Summary(pl.UTF-8):	Aplikacja do zarządzania pakietami RPM
+Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
+Summary(ru.UTF-8):	Менеджер пакетов от RPM
+Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.7
 Release:	13
@@ -244,7 +244,7 @@ RPM - це потужний менеджер пакетів, що може бу�
 
 %package base
 Summary:	RPM base package - scripts used by rpm packages themselves
-Summary(pl.UTF-8):   Podstawowy pakiet RPM - skrypty używane przez same pakiety rpm
+Summary(pl.UTF-8):	Podstawowy pakiet RPM - skrypty używane przez same pakiety rpm
 Group:		Base
 Requires:	filesystem
 Obsoletes:	vserver-rpm
@@ -264,7 +264,7 @@ Zawiera on:
 
 %package lib
 Summary:	RPMs library
-Summary(pl.UTF-8):   Biblioteki RPM-a
+Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	db >= %{reqdb_ver}
@@ -284,12 +284,12 @@ Biblioteki RPM-a.
 
 %package devel
 Summary:	Header files for rpm libraries
-Summary(de.UTF-8):   Header-Dateien für rpm Libraries
-Summary(es.UTF-8):   Archivos de inclusión y bibliotecas para programas de manipulación de paquetes rpm
-Summary(pl.UTF-8):   Pliki nagłówkowe bibliotek rpm
-Summary(pt_BR.UTF-8):   Arquivos de inclusão e bibliotecas para programas de manipulação de pacotes RPM
-Summary(ru.UTF-8):   Хедеры и библиотеки для программ, работающих с rpm-пакетами
-Summary(uk.UTF-8):   Хедери та бібліотеки для програм, що працюють з пакетами rpm
+Summary(de.UTF-8):	Header-Dateien für rpm Libraries
+Summary(es.UTF-8):	Archivos de inclusión y bibliotecas para programas de manipulación de paquetes rpm
+Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek rpm
+Summary(pt_BR.UTF-8):	Arquivos de inclusão e bibliotecas para programas de manipulação de pacotes RPM
+Summary(ru.UTF-8):	Хедеры и библиотеки для программ, работающих с rpm-пакетами
+Summary(uk.UTF-8):	Хедери та бібліотеки для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt-devel >= %{beecrypt_ver}
@@ -348,11 +348,11 @@ ferramentas que precisem de conhecimento profundo de pacotes RPM.
 
 %package static
 Summary:	RPM static libraries
-Summary(de.UTF-8):   RPMs statische Libraries
-Summary(pl.UTF-8):   Biblioteki statyczne RPM-a
-Summary(pt_BR.UTF-8):   Bibliotecas estáticas para o desenvolvimento de aplicações RPM
-Summary(ru.UTF-8):   Статическая библиотека для программ, работающих с rpm-пакетами
-Summary(uk.UTF-8):   Статична бібліотека для програм, що працюють з пакетами rpm
+Summary(de.UTF-8):	RPMs statische Libraries
+Summary(pl.UTF-8):	Biblioteki statyczne RPM-a
+Summary(pt_BR.UTF-8):	Bibliotecas estáticas para o desenvolvimento de aplicações RPM
+Summary(ru.UTF-8):	Статическая библиотека для программ, работающих с rpm-пакетами
+Summary(uk.UTF-8):	Статична бібліотека для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	beecrypt-static >= %{beecrypt_ver}
@@ -387,8 +387,8 @@ Bibliotecas estáticas para desenvolvimento.
 
 %package utils
 Summary:	Additional utilities for managing rpm packages and database
-Summary(de.UTF-8):   Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
-Summary(pl.UTF-8):   Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
+Summary(de.UTF-8):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
+Summary(pl.UTF-8):	Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
@@ -404,8 +404,8 @@ Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami.
 
 %package utils-perl
 Summary:	Additional utilities for managing rpm packages and database
-Summary(de.UTF-8):   Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
-Summary(pl.UTF-8):   Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
+Summary(de.UTF-8):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
+Summary(pl.UTF-8):	Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
@@ -421,7 +421,7 @@ Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami.
 
 %package utils-static
 Summary:	Static rpm utilities
-Summary(pl.UTF-8):   Statyczne narzędzia rpm
+Summary(pl.UTF-8):	Statyczne narzędzia rpm
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 
@@ -440,11 +440,11 @@ uaktualniania lub usuwania pakietów bez udziału bibliotek statycznych
 
 %package build
 Summary:	Scripts for building binary RPM packages
-Summary(de.UTF-8):   Scripts fürs Bauen binärer RPM-Pakete
-Summary(pl.UTF-8):   Skrypty pomocnicze do budowania binarnych RPM-ów
-Summary(pt_BR.UTF-8):   Scripts e programas executáveis usados para construir pacotes
-Summary(ru.UTF-8):   Скрипты и утилиты, необходимые для сборки пакетов
-Summary(uk.UTF-8):   Скрипти та утиліти, необхідні для побудови пакетів
+Summary(de.UTF-8):	Scripts fürs Bauen binärer RPM-Pakete
+Summary(pl.UTF-8):	Skrypty pomocnicze do budowania binarnych RPM-ów
+Summary(pt_BR.UTF-8):	Scripts e programas executáveis usados para construir pacotes
+Summary(ru.UTF-8):	Скрипты и утилиты, необходимые для сборки пакетов
+Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для побудови пакетів
 Group:		Applications/File
 Requires(pre):	findutils
 Requires:	%{name}-build-macros >= 1.314
@@ -502,11 +502,11 @@ construir pacotes usando o RPM.
 
 %package build-tools
 Summary:	Scripts for managing .spec files and building RPM packages
-Summary(de.UTF-8):   Scripts fürs Bauen binärer RPM-Pakete
-Summary(pl.UTF-8):   Skrypty pomocnicze do zarządznia plikami .spec i budowania RPM-ów
-Summary(pt_BR.UTF-8):   Scripts e programas executáveis usados para construir pacotes
-Summary(ru.UTF-8):   Скрипты и утилиты, необходимые для сборки пакетов
-Summary(uk.UTF-8):   Скрипти та утиліти, необхідні для побудови пакетів
+Summary(de.UTF-8):	Scripts fürs Bauen binärer RPM-Pakete
+Summary(pl.UTF-8):	Skrypty pomocnicze do zarządznia plikami .spec i budowania RPM-ów
+Summary(pt_BR.UTF-8):	Scripts e programas executáveis usados para construir pacotes
+Summary(ru.UTF-8):	Скрипты и утилиты, необходимые для сборки пакетов
+Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для побудови пакетів
 Group:		Applications/File
 Requires:	%{name}-build = %{version}-%{release}
 # these are optional
@@ -536,8 +536,8 @@ construir pacotes usando o RPM.
 
 %package perlprov
 Summary:	Additional utilities for checking perl provides/requires in rpm packages
-Summary(de.UTF-8):   Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
-Summary(pl.UTF-8):   Dodatkowe narzędzia do sprawdzenia zależności skryptów perla w pakietach rpm
+Summary(de.UTF-8):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
+Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzenia zależności skryptów perla w pakietach rpm
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	perl-devel
@@ -556,7 +556,7 @@ pakietach rpm.
 
 %package pythonprov
 Summary:	Python macros, which simplifies creation of rpm packages with Python software
-Summary(pl.UTF-8):   Makra ułatwiające tworzenie pakietów rpm z programami napisanymi w Pythonie
+Summary(pl.UTF-8):	Makra ułatwiające tworzenie pakietów rpm z programami napisanymi w Pythonie
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	python
@@ -572,7 +572,7 @@ Pythonie.
 
 %package php-pearprov
 Summary:	Additional utilities for managing rpm packages and database
-Summary(pl.UTF-8):   Dodatkowe narzędzia do sprawdzania zależności skryptów php w rpm
+Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzania zależności skryptów php w rpm
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	sed >= 4.0
@@ -587,8 +587,8 @@ pakietach rpm.
 
 %package -n python-rpm
 Summary:	Python interface to RPM library
-Summary(pl.UTF-8):   Pythonowy interfejs do biblioteki RPM-a
-Summary(pt_BR.UTF-8):   Módulo Python para aplicativos que manipulam pacotes RPM
+Summary(pl.UTF-8):	Pythonowy interfejs do biblioteki RPM-a
+Summary(pt_BR.UTF-8):	Módulo Python para aplicativos que manipulam pacotes RPM
 Group:		Development/Languages/Python
 Requires:	%{name} = %{version}-%{release}
 %pyrequires_eq	python
@@ -619,7 +619,7 @@ Python para manipular pacotes e bancos de dados RPM.
 
 %package apidocs
 Summary:	RPM API documentation and guides
-Summary(pl.UTF-8):   Documentacja API RPM-a i przewodniki
+Summary(pl.UTF-8):	Documentacja API RPM-a i przewodniki
 Group:		Documentation
 
 %description apidocs
