@@ -1184,7 +1184,7 @@ done \
 # Developer note: don't touch it unless you know how to handle '\'.
 # - \ in script expands to nothing
 # - \\\ in script expands to \
-# - \\\ inside definition expands to noting
+# - \\\ inside definition expands to nothing
 # - \\\\\\\ inside definition expands to \
 # - in last line \ has to touch arguments so arguments passing
 #   in new lines (using \) will be supported
