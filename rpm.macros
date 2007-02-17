@@ -1065,7 +1065,7 @@ fi \
 # command invoking pear cli
 %__pear /usr/bin/pear
 
-# the main macro.
+# The main macro.
 # using this macro will append optional-packages.txt to the nocompressdoc list
 # as it's displayed to user after package install. and adding additional gzip
 # dep is just waste ;)
@@ -1097,9 +1097,8 @@ find . -type f -print0 | xargs -0 sed -i -e 's,\\r$,,' \
 %{!?_noautoprov:%global _noautoprov %{nil}}%{expand:%%global _noautoprov %{_noautoprov} 'pear(tests/.*)'} \
 %{nil}
 
-# copies exctracted PEAR package structure to buildroot.
-# also copies PEAR registry file.
-# please use this macro, for future extensions being possible.
+# Copies exctracted PEAR package structure and PEAR registry to buildroot.
+# Author: Elan Ruusamäe <glen@pld-linux.org>
 %pear_package_install() \
 cp -a ./%{php_pear_dir}/{.registry,*} $RPM_BUILD_ROOT%{php_pear_dir} \
 find $RPM_BUILD_ROOT%{php_pear_dir} '(' -name '*~' -o -name '*.orig' ')' | xargs -r rm -v \
