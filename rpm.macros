@@ -1287,7 +1287,7 @@ for MODULE in {%{-m*},}; do											\
 	[ -n "${MODULE}" ] || continue									\
 	MNAME=${MODULE##*/}												\
 	%if %{without dist_kernel}										\
-		install %{MODULE}-nondist.ko								\\\
+		install ${MODULE}-nondist.ko								\\\
 			%{KernelD}/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko				\
 		%{?-s:echo "alias ${MNAME} ${MNAME}-%{-s*}"					\\\
 			>> %{ModprobeD}/%{-n*}.conf}							\
