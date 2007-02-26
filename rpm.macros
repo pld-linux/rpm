@@ -55,7 +55,8 @@ fi; \
 #-----------------------------------------------------------------
 #
 # (re)definition of %{rpm*flags} with %filterout_* support
-# Requires:		awk
+# BuildRequires:	awk
+# BuildRequires:	rpmbuild(macros) >= 1.315
 #
 # Flags specified in %filterout_* are removed from %rpm*flags, exactly:
 # %rpmcflags    = %optflags - %filterout - %filterout_c   - %filterout_ld
