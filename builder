@@ -22,7 +22,7 @@
 
 VERSION="\
 Build package utility from PLD Linux CVS repository
-v0.17 (C) 1999-2006 Free Penguins".
+v0.18 (C) 1999-2007 Free Penguins".
 PATH="/bin:/usr/bin:/usr/sbin:/sbin:/usr/X11R6/bin"
 
 COMMAND="build"
@@ -193,14 +193,15 @@ usage()
 	if [ -n "$DEBUG" ]; then set -xv; fi
 	echo "\
 Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
-[-bb|--build-binary] [-bs|--build-source] [-u|--try-upgrade]
+[-bb|--build-binary] [-bs|--build-source] [-bc] [-bi] [-bl] [-u|--try-upgrade]
 [{-cf|--cvs-force}] [{-B|--branch} <branch>] [{-d|--cvsroot} <cvsroot>]
 [-g|--get] [-h|--help] [--http] [{-l|--logtofile} <logfile>] [-m|--mr-proper]
 [-q|--quiet] [--date <yyyy-mm-dd> [-r <cvstag>] [{-T|--tag <cvstag>]
 [-Tvs|--tag-version-stable] [-Ts|--tag-stable] [-Tv|--tag-version]
 [{-Tp|--tag-prefix} <prefix>] [{-tt|--test-tag}]
-[-nu|--no-urls] [-v|--verbose] [--opts <rpm opts>] [--show-bconds]
-[--with/--without <feature>] [--define <macro> <value>] <package>[.spec][:cvstag]
+[-nu|--no-urls] [-v|--verbose] [--opts <rpm opts>] [--short-circuit]
+[--show-bconds] [--with/--without <feature>] [--define <macro> <value>] 
+<package>[.spec][:cvstag]
 
 -5, --update-md5    - update md5 comments in spec, implies -nd -ncs
 -a5, --add-md5      - add md5 comments to URL sources, implies -nc -nd -ncs
@@ -214,11 +215,12 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
 -bb, --build-binary - get all files from CVS repo or HTTP/FTP and build binary
                       only package from <package>.spec,
 -bp, --build-prep   - execute the %prep phase of <package>.spec,
--bc                 - reserved (not implemented)
--bi                   reserved (not implemented)
+-bc                 - execute the %build phase of <package>.spec,
+-bi                 - execute the %install phase of <package>.spec
+-bl					- execute the %files phase of <package>.spec
 -bs, --build-source - get all files from CVS repo or HTTP/FTP and only pack
                       them into src.rpm,
---short-circuit     - reserved (not implemented)
+--short-circuit     - short-circuit build
 -B, --branch        - add branch
 -c, --clean         - clean all temporarily created files (in BUILD, SOURCES,
                       SPECS and \$RPM_BUILD_ROOT),
@@ -351,10 +353,11 @@ set_spec_target() {
 	if [ -n "$SPECFILE" ] && [ -z "$TARGET" ]; then
 		tmp=$(awk '/^BuildArch:/ { print $NF}' $SPECFILE)
 		if [ "$tmp" ]; then
+				target_platform=$(rpm -E '%{_target_vendor}-%{_target_os}%{?_gnu}')
 				TARGET="$tmp"
 				case "$RPMBUILD" in
 				"rpmbuild")
-					TARGET_SWITCH="--target $TARGET" ;;
+					TARGET_SWITCH="--target ${TARGET}-${target_platform}" ;;
 				"rpm")
 					TARGET_SWITCH="--target=$TARGET" ;;
 				esac
@@ -378,10 +381,16 @@ cache_rpm_dump () {
 	# at the time of this writing macros.build + macros contained 70 "%(...)" macros.
 	macrofiles="/usr/lib/rpm/macros:$SPECS_DIR/.builder-rpmmacros:~/etc/.rpmmacros:~/.rpmmacros"
 	dump='%{echo:dummy: PACKAGE_NAME %{name} }%dump'
-	# FIXME: better ideas than .rpmrc?
-	printf 'include:/usr/lib/rpm/rpmrc\nmacrofiles:%s\n' $macrofiles > .builder-rpmrc
+	if [ -f /usr/lib/rpm/rpmrc ]; then
+		# FIXME: better ideas than .rpmrc?
+		printf 'include:/usr/lib/rpm/rpmrc\nmacrofiles:%s\n' $macrofiles > .builder-rpmrc
+	else
+		printf 'macrofiles:%s\n' $macrofiles > .builder-rpmrc
+	fi
 # TODO: move these to /usr/lib/rpm/macros
 	cat > .builder-rpmmacros <<'EOF'
+%alt_kernel %{nil}
+%_alt_kernel %{nil}
 %requires_releq_kernel_up %{nil}
 %requires_releq_kernel_smp %{nil}
 %requires_releq() %{nil}
@@ -401,6 +410,19 @@ cache_rpm_dump () {
 %py_ver ERROR
 %perl_vendorarch ERROR
 %perl_vendorlib ERROR
+# damn. need it here! - copied from /usr/lib/rpm/macros.build
+%tmpdir		%(echo "${TMPDIR:-/tmp}")
+%patchset_source(f:b:) %(
+	base=%{-b*}%{!-b*:10000};
+	start=$(expr $base + %1);
+	end=$(expr $base + %{?2}%{!?2:%{1}});
+	# we need to call seq twice as it doesn't allow two formats
+	seq -f 'Patch%g:' $start $end > %{tmpdir}/__ps1;
+	seq -f '%{-f*}' %1 %{?2}%{!?2:%{1}} > %{tmpdir}/__ps2;
+	paste %{tmpdir}/__ps{1,2};
+	rm -f %{tmpdir}/__ps{1,2};
+) \
+%{nil}
 EOF
 	case "$RPMBUILD" in
 	rpm)
@@ -515,6 +537,9 @@ Exit_error()
 			remove_build_requires
 			echo "ERROR: spec file name not specified."
 			exit 2 ;;
+		"err_invalid_cmdline" )
+			echo "ERROR: invalid command line arg ($2)."
+			exit 2 ;;
 		"err_no_spec_in_repo" )
 			remove_build_requires
 			echo "Error: spec file not stored in CVS repo."
@@ -543,6 +568,10 @@ Exit_error()
 			remove_build_requires
 			echo "Tree branch already exists (${2})."
 			exit 11 ;;
+		"err_acl_deny" )
+			remove_build_requires
+			echo "Error: conditions reject building this spec (${2})."
+			exit 12 ;;
 
 	esac
 	echo "Unknown error."
@@ -895,7 +924,15 @@ get_files()
 						continue
 					fi
 					target="$fp"
-					url=$(distfiles_url "$i")
+
+					# prefer mirror over distfiles if there's mirror
+					# TODO: build url list and then try each url from the list
+					if [ -z "$NOMIRRORS" ] && im=$(find_mirror "$i") && [ "$im" != "$i" ]; then
+						url="$im"
+					else
+						url=$(distfiles_url "$i")
+					fi
+
 					url_attic=$(distfiles_attic_url "$i")
 					FROM_DISTFILES=1
 					# is $url local file?
@@ -904,9 +941,17 @@ get_files()
 						${GETLOCAL} $url $target
 					else
 						if [ -z "$NOMIRRORS" ]; then
-							url="`find_mirror "$url"`"
+							url=$(find_mirror "$url")
 						fi
-						update_shell_title "${GETURI%% *}: $url"
+
+						local uri=${url}
+						# make shorter message for distfiles urls
+						if [[ "$uri" = ${PROTOCOL}${DISTFILES_SERVER}* ]] || [[ "$uri" = ${PROTOCOL}${ATTICDISTFILES_SERVER}* ]]; then
+							uri=${uri#${PROTOCOL}${DISTFILES_SERVER}/distfiles/by-md5/?/?/*/}
+							uri=${uri#${PROTOCOL}${ATTICDISTFILES_SERVER}/distfiles/by-md5/?/?/*/}
+							uri="df: $uri"
+						fi
+						update_shell_title "${GETURI%% *}: $uri"
 						${GETURI} ${OUTFILEOPT} "$target" "$url" || \
 						if [ "`echo $url | grep -E 'ftp://'`" ]; then
 							update_shell_title "${GETURI2%% *}: $url"
@@ -1178,6 +1223,13 @@ build_package()
 			BUILD_SWITCH="-bs --nodeps" ;;
 		build-prep )
 			BUILD_SWITCH="-bp --nodeps" ;;
+		build-build )
+			BUILD_SWITCH="-bc" ;;
+		build-install )
+			BUILD_SWITCH="-bi" ;;
+		build-list )
+			BUILD_SWITCH="-bl" ;;
+
 	esac
 
 	update_shell_title "build_package: $COMMAND"
@@ -1769,10 +1821,16 @@ while [ $# -gt 0 ]; do
 			COMMAND="build"; shift ;;
 		-bb | --build-binary )
 			COMMAND="build-binary"; shift ;;
-		-bs | --build-source )
-			COMMAND="build-source"; shift ;;
+		-bc )
+			COMMAND="build-build"; shift ;;
+		-bi )
+			COMMAND="build-install"; shift ;;
+		-bl )
+			COMMAND="build-list"; shift ;;
 		-bp | --build-prep )
 			COMMAND="build-prep"; shift ;;
+		-bs | --build-source )
+			COMMAND="build-source"; shift ;;
 		-B | --branch )
 			COMMAND="branch"; shift; TAG="${1}"; shift;;
 		-c | --clean )
@@ -1943,6 +2001,10 @@ while [ $# -gt 0 ]; do
 				RPMOPTS="${RPMOPTS} --define \"${MACRO} ${VALUE}\""
 			fi
 			;;
+		--short-circuit)
+			RPMBUILDOPTS="${RPMBUILDOPTS} --short-circuit"
+			shift
+			;;
 		--show-bconds | -show-bconds | -print-bconds | --print-bconds | -display-bconds | --display-bconds )
 			COMMAND="show_bconds"
 			shift
@@ -1956,7 +2018,11 @@ while [ $# -gt 0 ]; do
 			RPMOPTS="${RPMOPTS} --nodeps"
 			;;
 		-debug)
-			RPMBUILDOPTS="${RPMBUILDOPTS} -debug"; shift ;;
+			RPMBUILDOPTS="${RPMBUILDOPTS} -debug"; shift
+			;;
+		-* )
+			Exit_error err_invalid_cmdline "$1"
+			;;
 		* )
 			SPECFILE="${1}"
 			# check if specname was passed as specname:cvstag
@@ -1968,7 +2034,7 @@ while [ $# -gt 0 ]; do
 	esac
 done
 
-if [ -z "$CVSTAG" ]; then
+if [ -f CVS/Entries ] && [ -z "$CVSTAG" ]; then
 	CVSTAG=$(awk -vSPECFILE="${SPECFILE%.spec}.spec" -F/ '$2 == SPECFILE && $6 ~ /^T/{print substr($6, 2)}' CVS/Entries)
 	if [ "$CVSTAG" ]; then
 		echo >&2 "builder: Stick tag $CVSTAG active. Use -r TAGNAME to override."
@@ -2018,7 +2084,7 @@ case "$COMMAND" in
 			echo "$BCOND"
 		fi
 		;;
-	"build" | "build-binary" | "build-source" | "build-prep" )
+	"build" | "build-binary" | "build-source" | "build-prep" | "build-build" | "build-install" | "build-list")
 		init_builder
 		if [ -n "$SPECFILE" ]; then
 			get_spec
@@ -2034,7 +2100,17 @@ case "$COMMAND" in
 				fi
 			fi
 
+			# ./builder -bs test.spec -r AC-branch -Tp auto-ac- -tt
 			if [ -n "$TEST_TAG" ]; then
+				# - do not allow utf8 encoded specs on AC-branch
+				if [ "$CVSTAG" = "AC-branch-disabled" ]; then
+					local t
+					t=$(grep '^Summary(.*\.UTF-8):' $SPECFILE)
+					if [ "$t" ]; then
+						Exit_error err_acl_deny "UTF-8 .specs not allowed on $CVSTAG"
+					fi
+				fi
+
 				TAGVER=`make_tagver`
 				echo "Searching for tag $TAGVER..."
 				TAGREL=$(cvs status -v $SPECFILE | grep -E "^[[:space:]]*${TAGVER}[[[:space:]]" | sed -e 's#.*(revision: ##g' -e 's#).*##g')
@@ -2051,6 +2127,7 @@ case "$COMMAND" in
 						Exit_error err_branch_exists "$TAG_STATUS"
 					fi
 				fi
+
 			fi
 
 			if [ -n "$NOSOURCE0" ] ; then
