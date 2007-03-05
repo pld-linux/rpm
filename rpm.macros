@@ -316,6 +316,8 @@ unset DISPLAY ||:\
 ; do echo $l; done >> %1 \
 }
 
+# vim - "
+
 # minimum file size needed for compressed documents.
 # just smaller files than this get larger when compressed.
 # some stats:
@@ -351,7 +353,15 @@ unset DISPLAY ||:\
 %__spec_install_post_strip {%{!?debug: \
 %{!?no_install_post_strip:__spec_install_post_strip() { \
 if [ -d "$RPM_BUILD_ROOT" ]; then \
+	if [ -d $RPM_BUILD_ROOT/lib/modules ]; then \
+		modulelist=$(find $RPM_BUILD_ROOT/lib/modules -name '*o' -type f -print); \
+		printf "Stripping %d kernel modules..." $(echo "$modulelist" | wc -l); \
+		echo "$modulelist" | xargs -l512 chmod u+w; \
+		echo "$modulelist" | xargs -l512 %{__strip} --strip-unneeded --remove-section=.comment --remove-section=.note.GNU-stack; \
+		echo "DONE"; \
+	fi; \
 	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*\.debug" ! -regex ".*%{_docdir}/.*" ! -regex ".*%{_includedir}/.*" %{?_noautostrip:! -regex "%{_noautostrip}"}`; \
+	# vim - " \
 	if [ -z "$filelist" ]; then \
 		return; \
 	fi; \
