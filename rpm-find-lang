@@ -32,10 +32,12 @@
 #   * added support for GNOME help files
 #   * start support for KDE help files
 
+PROG=${0##*/}
+
 usage () {
 cat <<EOF
 
-Usage: $0 TOP_DIR PACKAGE_NAME [prefix]
+Usage: $PROG TOP_DIR PACKAGE_NAME [prefix]
 
 where TOP_DIR is
 the top of the tree containing the files to be processed--should be
@@ -56,9 +58,9 @@ exit 1
 if [ -z "$1" ]; then
 	usage
 elif [ $1 = / ]; then
-	echo >&2 "$0: expects non-/ argument for '$1'"
+	echo >&2 "$PROG: expects non-/ argument for '$1'"
 elif [ ! -d $1 ]; then
-	echo "$0: $1: no such directory"
+	echo "$PROG: $1: No such directory"
 	exit 1
 else
 	TOP_DIR="${1%/}"
@@ -82,17 +84,21 @@ while test $# -gt 0 ; do
     case "$1" in
 	--with-gnome)
   		GNOME=''
+		echo >&2 "$PROG: Enabling with GNOME"
 		shift
 		;;
 	--with-kde)
+		echo >&2 "$PROG: Enabling with KDE"
 		KDE=''
 		shift
 		;;
 	--without-mo)
+		echo >&2 "$PROG: Disabling .mo files"
 		MO='#'
 		shift
 		;;
 	--all-name)
+		echo >&2 "$PROG: Enabling with all names"
 		ALL_NAME=''
 		NO_ALL_NAME='#'
 		shift
@@ -111,6 +117,8 @@ if [ ! -f __find.files ]; then
 	sed -e '
 		s/:.*//
 		s:'"$TOP_DIR"'::' > __find.files
+else
+	echo "$PROG: Using cached __find.files"
 fi
 
 (
@@ -128,6 +136,8 @@ s:^\$::' | egrep -v '^$' >> $MO_NAME
 
 if [ ! -f __find.dirs ]; then
 	find $TOP_DIR -type d | sed 's:'"$TOP_DIR"'::' > __find.dirs
+else
+	echo "$PROG: Using cached __find.dirs"
 fi
 
 (
