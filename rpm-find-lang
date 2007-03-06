@@ -59,8 +59,9 @@ if [ -z "$1" ]; then
 	usage
 elif [ $1 = / ]; then
 	echo >&2 "$PROG: expects non-/ argument for '$1'"
+	exit 1
 elif [ ! -d $1 ]; then
-	echo "$PROG: $1: No such directory"
+	echo >&2 "$PROG: $1: No such directory"
 	exit 1
 else
 	TOP_DIR="${1%/}"
@@ -84,21 +85,21 @@ while test $# -gt 0 ; do
     case "$1" in
 	--with-gnome)
   		GNOME=''
-		echo >&2 "$PROG: Enabling with GNOME"
+		echo "$PROG: Enabling with GNOME"
 		shift
 		;;
 	--with-kde)
-		echo >&2 "$PROG: Enabling with KDE"
+		echo "$PROG: Enabling with KDE"
 		KDE=''
 		shift
 		;;
 	--without-mo)
-		echo >&2 "$PROG: Disabling .mo files"
+		echo "$PROG: Disabling .mo files"
 		MO='#'
 		shift
 		;;
 	--all-name)
-		echo >&2 "$PROG: Enabling with all names"
+		echo "$PROG: Enabling with all names"
 		ALL_NAME=''
 		NO_ALL_NAME='#'
 		shift
