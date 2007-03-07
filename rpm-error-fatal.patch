@@ -2,16 +2,14 @@
 | Make sure that an %{error:<msg>} macro really stops further
 | processing. Else it would be nothing more than a %{warn:<msg>}.
 +---------------------------------------------------------------------------
-Index: rpmio/macro.c
---- rpmio/macro.c	15 May 2003 13:42:01 -0000	1.1.1.7
-+++ rpmio/macro.c	22 Jan 2004 21:42:32 -0000	1.2
-@@ -1329,7 +1337,7 @@
+--- rpm-4.4.2/rpmio/macro.c~	2007-03-07 18:50:42.754005171 +0200
++++ rpm-4.4.2/rpmio/macro.c	2007-03-07 18:55:51.040958707 +0200
+@@ -1380,7 +1380,7 @@
  	    STREQ("error", f, fn)) {
  		int waserror = 0;
  		if (STREQ("error", f, fn))
 -			waserror = 1;
 +			waserror = 1, rc = 1;
- 		if (g < ge)
+ 		if (g != NULL && g < ge)
  			doOutput(mb, waserror, g, gn);
  		else
-
