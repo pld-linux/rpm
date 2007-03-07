@@ -113,7 +113,7 @@ done
 
 echo '%defattr(644,root,root,755)' > $MO_NAME
 
-if [ ! -f __find.files ] && [ __find.files -nt "$TOP_DIR" ]; then
+if [ ! -f __find.files ] || [ "$TOP_DIR" -nt __find.files ]; then
 	find $TOP_DIR -type f -name '*.mo' | xargs -r file | egrep -v ', 1 messages$' | \
 	sed -e '
 		s/:.*//
@@ -135,7 +135,7 @@ s:^\([^%].*\)::
 s:%lang(C) ::
 s:^\$::' | egrep -v '^$' >> $MO_NAME
 
-if [ ! -f __find.dirs ] && [ __find.dirs -nt "$TOP_DIR" ]; then
+if [ ! -f __find.dirs ] || [ "$TOP_DIR" -nt __find.dirs ]; then
 	find $TOP_DIR -type d | sed 's:'"$TOP_DIR"'::' > __find.dirs
 else
 	echo "$PROG: Using cached __find.dirs"
