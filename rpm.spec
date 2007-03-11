@@ -123,6 +123,7 @@ Patch61:	%{name}-build-failure-error.patch
 Patch62:	%{name}-mcontext.patch
 Patch63:	%{name}-FileDigestParameterized.patch
 Patch64:	%{name}-iconv-translit.patch
+Patch65:	%{name}-lua_linking.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
@@ -709,6 +710,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch62 -p1
 %patch63 -p0
 %patch64 -p1
+%patch65 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
