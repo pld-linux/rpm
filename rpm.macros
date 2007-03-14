@@ -67,7 +67,7 @@ fi; \
 # as regular expression it must be escaped twice.
 
 %filter_out 						\
-	for (i in I) { 	A=0;			\
+	for (i = 1; i in I; i++) { 	A=0;	\
 		for (f in F) {				\
 			if (I[i] ~ "^" F[f] "$") A=1;	\
 		};							\
