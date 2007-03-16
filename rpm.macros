@@ -282,10 +282,8 @@ unset DISPLAY ||:\
 # Requires name = version-release
 %requires_releq()		%(echo '%*' | LC_ALL="C" xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}-%%{release}\\n' | sed -e 's/ (none):/ /' | grep -v "is not")
 
-%releq_kernel_up()		%((LC_ALL="C" rpm -qf --qf '%%{name}-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h 2>/dev/null || echo ERROR) | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
-%releq_kernel_smp()		%((LC_ALL="C" rpm -qf --qf '%%{name}-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h 2>/dev/null || echo ERROR) | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
-%requires_releq_kernel_up(s:)	Requires%{-s:(%{-s*})}: %releq_kernel_up
-%requires_releq_kernel_smp(s:)	Requires%{-s:(%{-s*})}: %releq_kernel_smp
+%releq_kernel()		%((LC_ALL="C" rpm -qf --qf '%%{name} = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h 2>/dev/null || echo ERROR) | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
+%requires_releq_kernel(s:)	Requires%{-s:(%{-s*})}: %releq_kernel
 
 %requires_eq()		%(echo '%*' | LC_ALL="C" xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
 %requires_eq_to() %(LC_ALL="C" rpm -q --qf 'Requires: %1 = %%{epoch}:%%{version}\\n' %2 | sed -e 's/ (none):/ /' | grep -v "is not")
@@ -1221,7 +1219,7 @@ compile() {															\
 	L="<"; [[ '%{*}' != *$L$L* ]] || PATCH_SH="set -x -e;$(cat)"	\
 	set -e -x														\
 																	\
-for cfg in %{?with_dist_kernel:%{?with_smp:smp} %{?with_up:up}}%{!?with_dist_kernel:nondist}; do \
+for cfg in %{?with_dist_kernel:dist}%{!?with_dist_kernel:nondist}; do \
 	[ -r "%{_kernelsrcdir}/config-$cfg" ] || exit 1					\
 																	\
 	rm -rf o														\
@@ -1292,8 +1290,8 @@ compile %{*}\
 %define KernelD $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}			\
 %define ModprobeD $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{_kernel_ver} \
 																	\
-install -d %{KernelD}{,smp}/%{-d*}									\
-%{?-s:install -d %{ModprobeD}{,smp}}								\
+install -d %{KernelD}/%{-d*}									\
+%{?-s:install -d %{ModprobeD}}								\
 																	\
 for MODULE in {%{-m*},}; do											\
 	[ -n "${MODULE}" ] || continue									\
@@ -1304,18 +1302,10 @@ for MODULE in {%{-m*},}; do											\
 		%{?-s:echo "alias ${MNAME} ${MNAME}-%{-s*}"					\\\
 			>> %{ModprobeD}/%{-n*}.conf}							\
 	%else															\
-	%if %{with up}													\
-		install ${MODULE}-up.ko										\\\
+		install ${MODULE}-dist.ko										\\\
 			%{KernelD}/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko				\
 		%{?-s:echo "alias ${MNAME} ${MNAME}-%{-s*}"					\\\
 			>> %{ModprobeD}/%{-n*}.conf}							\
-	%endif															\
-	%if %{with smp}													\
-		install ${MODULE}-smp.ko									\\\
-			%{KernelD}smp/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko			\
-		%{?-s:echo "alias ${MNAME} ${MNAME}-%{-s*}"					\\\
-			>> %{ModprobeD}smp/%{-n*}.conf}							\
-	%endif															\
 	%endif															\
 done																\
 %{nil}
