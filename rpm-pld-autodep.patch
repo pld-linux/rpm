@@ -1,5 +1,5 @@
---- rpm-4.4.3/build/rpmfc.h.orig	2005-11-18 23:08:14.231293000 +0100
-+++ rpm-4.4.3/build/rpmfc.h	2005-11-18 23:55:16.694214392 +0100
+--- rpm-4.4.8/lib/rpmfc.h.orig	2005-11-18 23:08:14.231293000 +0100
++++ rpm-4.4.8/lib/rpmfc.h	2005-11-18 23:55:16.694214392 +0100
 @@ -1,6 +1,7 @@
  #ifndef _H_RPMFC_
  #define _H_RPMFC_
@@ -20,9 +20,9 @@
  };
  
  /**
---- rpm-4.4.3/build/rpmfc.c.orig	2005-11-19 09:33:23.180067024 +0100
-+++ rpm-4.4.3/build/rpmfc.c	2005-11-19 09:35:29.167913960 +0100
-@@ -9,6 +9,8 @@
+--- rpm-4.4.8/lib/rpmfc.c.orig	2007-04-08 18:54:35.134367044 +0200
++++ rpm-4.4.8/lib/rpmfc.c	2007-04-08 19:10:18.196109070 +0200
+@@ -11,6 +11,8 @@
  #define	_RPMDS_INTERNAL
  #include <rpmds.h>
  #include <rpmfi.h>
@@ -31,7 +31,7 @@
  
  #include "debug.h"
  
-@@ -299,14 +301,83 @@
+@@ -305,14 +307,83 @@
      return buf;
  };
  
@@ -116,7 +116,7 @@
  	/*@globals rpmGlobalMacroContext, h_errno, fileSystem, internalState @*/
  	/*@modifies fc, rpmGlobalMacroContext, fileSystem, internalState @*/
  {
-@@ -392,6 +464,8 @@
+@@ -398,6 +469,8 @@
  	    }
  /*@=branchstate@*/
  
@@ -125,7 +125,7 @@
  
  	    /* Add tracking dependency for versioned Provides: */
  	    if (!fc->tracked && deptype == 'P' && *EVR != '\0') {
-@@ -703,7 +777,7 @@
+@@ -710,7 +783,7 @@
  	*se = '\0';
  	se++;
  
@@ -134,7 +134,7 @@
  	    /* Add to package requires. */
  	    ds = rpmdsSingle(RPMTAG_REQUIRENAME, s, "", RPMSENSE_FIND_REQUIRES);
  	    xx = rpmdsMerge(&fc->requires, ds);
-@@ -731,42 +804,50 @@
+@@ -738,43 +811,51 @@
      (void) fclose(fp);
  
      if (fc->fcolor->vals[fc->ix] & RPMFC_PERL) {
@@ -188,18 +188,19 @@
 -	    xx = rpmfcHelper(fc, 'R', "executable");
 +	if (fc->findreq && is_executable)
 +	    xx = rpmfcHelper(fc, 'R', "executable", fc->noautoreq, fc->noautoreq_c);
-     }
+     } else
      if (fc->fcolor->vals[fc->ix] & RPMFC_PHP) {
--		xx = rpmfcHelper(fc, 'P', "php");
+-	xx = rpmfcHelper(fc, 'P', "php");
++	if (fc->findprov)
++	xx = rpmfcHelper(fc, 'P', "php", fc->noautoprov, fc->noautoprov_c);
+ 	/* not only executable, files run by httpd usually are not */
 -	    xx = rpmfcHelper(fc, 'R', "php");
-+	    if (fc->findprov)
-+		xx = rpmfcHelper(fc, 'P', "php", fc->noautoprov, fc->noautoprov_c);
-+	    if (fc->findreq)
-+	    xx = rpmfcHelper(fc, 'R', "php", fc->noautoreq, fc->noautoreq_c);
- 	}
++	if (fc->findreq)
++	    xx = rpmfcHelper(fc, 'R', "php". fc->noautoreq, fc->noautoreq_c);
+     }
  
      return 0;
-@@ -794,20 +875,26 @@
+@@ -802,20 +883,26 @@
      default:
  	break;
      case RPMTAG_PROVIDENAME:
@@ -226,7 +227,7 @@
  	break;
      }
      return rc;
-@@ -848,6 +935,109 @@
+@@ -856,6 +943,109 @@
      { NULL, 0 }
  };
  
@@ -336,7 +337,7 @@
  int rpmfcApply(rpmfc fc)
  {
      rpmfcApplyTbl fcat;
-@@ -865,6 +1055,26 @@
+@@ -874,6 +1064,26 @@
      int i;
      int xx;
      int skipping;
@@ -363,7 +364,7 @@
  
      /* Generate package and per-file dependencies. */
      for (fc->ix = 0; fc->fn[fc->ix] != NULL; fc->ix++) {
-@@ -1076,9 +1076,43 @@
+@@ -894,9 +1104,43 @@
  	for (fcat = rpmfcApplyTable; fcat->func != NULL; fcat++) {
  	    if (!(fc->fcolor->vals[fc->ix] & fcat->colormask))
  		/*@innercontinue@*/ continue;
@@ -413,7 +414,7 @@
  build/parseSpec.c
  build/poptBT.c
  build/reqprov.c
-+build/rpmfc.c
++lib/rpmfc.c
  build/spec.c
  lib/cpio.c
  lib/depends.c

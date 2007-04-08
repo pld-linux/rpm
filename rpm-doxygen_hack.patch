@@ -1,6 +1,6 @@
---- rpm-4.4.6/Doxyfile.in.orig	2006-03-30 03:31:41.000000000 +0200
-+++ rpm-4.4.6/Doxyfile.in	2006-04-17 18:04:54.724431250 +0200
-@@ -470,29 +470,7 @@
+--- rpm-4.4.8/Doxyfile.in.orig	2007-01-14 21:48:16.000000000 +0100
++++ rpm-4.4.8/Doxyfile.in	2007-04-08 19:17:10.847624739 +0200
+@@ -470,27 +470,7 @@
                           @top_srcdir@/rpmrc \
                           @top_srcdir@/rpm2cpio.c \
                           @top_srcdir@/system.h \
@@ -23,15 +23,13 @@
 -                         @top_srcdir@/build/poptBT.c \
 -                         @top_srcdir@/build/reqprov.c \
 -                         @top_srcdir@/build/rpmbuild.h \
--                         @top_srcdir@/build/rpmfc.c \
--                         @top_srcdir@/build/rpmfc.h \
 -                         @top_srcdir@/build/rpmspec.h \
 -                         @top_srcdir@/build/spec.c \
 +                         @top_srcdir@/build/ \
                           @top_srcdir@/doc/manual/builddependencies \
                           @top_srcdir@/doc/manual/buildroot \
                           @top_srcdir@/doc/manual/conditionalbuilds \
-@@ -507,195 +485,12 @@
+@@ -505,190 +485,12 @@
                           @top_srcdir@/doc/manual/spec \
                           @top_srcdir@/doc/manual/triggers \
                           @top_srcdir@/doc/manual/tsort \
@@ -77,6 +75,8 @@
 -                         @top_srcdir@/lib/rpmcli.h \
 -                         @top_srcdir@/lib/rpmds.c \
 -                         @top_srcdir@/lib/rpmds.h \
+-                         @top_srcdir@/lib/rpmfc.c \
+-                         @top_srcdir@/lib/rpmfc.h \
 -                         @top_srcdir@/lib/rpmfi.c \
 -                         @top_srcdir@/lib/rpmfi.h \
 -                         @top_srcdir@/lib/rpmgi.c \
@@ -156,8 +156,6 @@
 -                         @top_srcdir@/rpmdb/legacy.h \
 -                         @top_srcdir@/rpmdb/merge.c \
 -                         @top_srcdir@/rpmdb/poptDB.c \
--                         @top_srcdir@/rpmdb/rpmhash.c \
--                         @top_srcdir@/rpmdb/rpmhash.h \
 -                         @top_srcdir@/rpmdb/rpmdb.c \
 -                         @top_srcdir@/rpmdb/rpmdb.h \
 -                         @top_srcdir@/rpmdb/tagname.c \
@@ -167,10 +165,13 @@
 -                         @top_srcdir@/rpmio/digest.c \
 -                         @top_srcdir@/rpmio/fts.c \
 -                         @top_srcdir@/rpmio/fts.h \
+-                         @top_srcdir@/rpmio/lookup3.c \
 -                         @top_srcdir@/rpmio/macro.c \
 -                         @top_srcdir@/rpmio/rpmlog.c \
 -                         @top_srcdir@/rpmio/rpmlog.h \
 -                         @top_srcdir@/rpmio/rpmerr.h \
+-                         @top_srcdir@/rpmio/rpmhash.c \
+-                         @top_srcdir@/rpmio/rpmhash.h \
 -                         @top_srcdir@/rpmio/rpmio.c \
 -                         @top_srcdir@/rpmio/rpmio.h \
 -                         @top_srcdir@/rpmio/rpmio_internal.h \
@@ -215,15 +216,7 @@
 -                         @top_srcdir@/python/rpmte-py.h \
 -                         @top_srcdir@/python/rpmts-py.c \
 -                         @top_srcdir@/python/rpmts-py.h \
--                         @top_srcdir@/tools/dumpdb.c \
--                         @top_srcdir@/tools/javadeps.c \
--                         @top_srcdir@/tools/rpmcache.c \
--                         @top_srcdir@/tools/rpmdeps.c \
--                         @top_srcdir@/tools/rpmgraph.c \
--                         @top_srcdir@/tools/rpminject.c \
--                         @top_srcdir@/tools/rpmtool.c \
--                         @top_srcdir@/tools/rpmxml.c \
--                         @top_srcdir@/tools/rpmxp.c
+-                         @top_srcdir@/tools/rpmdeps.c
 +                         @top_srcdir@/lib/ \
 +			 @top_srcdir@/lua/ \
 +                         @top_srcdir@/rpmdb/ \
@@ -233,7 +226,7 @@
  
  # If the value of the INPUT tag contains directories, you can use the 
  # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
-@@ -704,8 +499,8 @@
+@@ -697,8 +499,8 @@
  # *.c *.cc *.cxx *.cpp *.c++ *.java *.ii *.ixx *.ipp *.i++ *.inl *.h *.hh *.hxx 
  # *.hpp *.h++ *.idl *.odl *.cs *.php *.php3 *.inc *.m *.mm *.py
  

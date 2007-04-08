@@ -32,24 +32,24 @@
  #==============================================================================
  rpmd	alias --dbpath		--define '_dbpath !#:+' \
  	--POPTdesc=$"use database in DIRECTORY" \
---- rpm-4.4.2/po/pl.po.orig	2005-07-23 14:59:24.279380584 +0200
-+++ rpm-4.4.2/po/pl.po	2005-07-23 15:08:13.952857976 +0200
-@@ -4387,6 +4387,18 @@
+--- rpm-4.4.8/po/pl.po.orig	2007-04-08 15:56:32.413593481 +0200
++++ rpm-4.4.8/po/pl.po	2007-04-08 15:57:53.630221753 +0200
+@@ -4588,6 +4588,18 @@
  msgid "disable configure <option> for build"
  msgstr "wy³±cz <opcjê> konfiguracji przy budowaniu"
  
-+#: ../rpmpopt:251
++#: rpmpopt:251
 +msgid "make all needed dirs for building binary rpms"
 +msgstr "utwórz wszystkie katalogi potrzebne do budowania binarnych RPM-ów"
 +
-+#: ../rpmpopt:254
++#: rpmpopt:254
 +msgid "build packages with debug information"
 +msgstr "buduj pakiety z informacjami do odpluskwiania"
 +
-+#: ../rpmpopt:257
++#: rpmpopt:257
 +msgid "find all --with/--without values"
 +msgstr "znajd¼ wszystkie warto¶ci --with/--without"
 +
- #: ../rpmpopt:186 ../rpmpopt:201 ../rpmpopt:216 ../rpmpopt:224 ../rpmpopt:232
- #: ../rpmpopt:240 ../rpmpopt:248 ../rpmpopt:256 ../rpmpopt:264 ../rpmpopt:337
- #: ../rpmpopt:409 ../rpmpopt:417
+ #: rpmpopt:262 rpmpopt:277 rpmpopt:295 rpmpopt:303 rpmpopt:311
+ #: rpmpopt:319 rpmpopt:327 rpmpopt:335 rpmpopt:343 rpmpopt:454
+ #: rpmpopt:564 rpmpopt:572
