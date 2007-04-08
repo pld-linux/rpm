@@ -1,25 +1,29 @@
---- rpm-4.4.3/Makefile.am.orig	2005-11-18 22:49:12.762823560 +0100
-+++ rpm-4.4.3/Makefile.am	2005-11-18 22:53:59.748195152 +0100
-@@ -16,7 +16,7 @@
- 	po/*.in po/*.po po/rpm.pot \
- 	rpm.magic rpmpopt-$(VERSION) rpmqv.c rpm.c
+--- rpm-4.4.8/configure.ac.orig	2007-04-08 16:26:29.303992000 +0200
++++ rpm-4.4.8/configure.ac	2007-04-08 16:35:11.461748504 +0200
+@@ -662,7 +662,7 @@
  
--SUBDIRS = intl po misc @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ @WITH_MAGIC_SUBDIR@ @WITH_DB_SUBDIR@ @WITH_SQLITE3_SUBDIR@ @WITH_POPT_SUBDIR@ @WITH_BEECRYPT_SUBDIR@ @WITH_NEON_SUBDIR@ @WITH_SYCK_SUBDIR@ @WITH_LUA_SUBDIR@ rpmio rpmdb lib build @WITH_PYTHON_SUBDIR@ @WITH_PERL_SUBDIR@ tools scripts tests doc .
-+SUBDIRS = intl po misc @WITH_ZLIB_SUBDIR@ @WITH_ELFUTILS_SUBDIR@ @WITH_MAGIC_SUBDIR@ @WITH_SYCK_SUBDIR@ @WITH_LUA_SUBDIR@ rpmio rpmdb lib build @WITH_PYTHON_SUBDIR@ @WITH_PERL_SUBDIR@ tools scripts tests doc .
+ dnl ------------------ with    internal db
+ AC_DEFINE(HAVE_DB3_DB_H, 1, [Define if you have the <db3/db.h> header file])
+-WITH_DB_SUBDIR=db3
++WITH_DB_SUBDIR=
+ WITH_INTERNAL_DB=1
+ DBLIBSRCS="db3.c"
  
- INCLUDES = \
- 	-I$(top_srcdir)/build \
-diff -urN rpm-4.3.org/rpmdb/Makefile.am rpm-4.3/rpmdb/Makefile.am
---- rpm-4.3.org/rpmdb/Makefile.am	2003-12-28 01:33:46.160517288 +0100
-+++ rpm-4.3/rpmdb/Makefile.am	2003-12-28 01:56:22.000000000 +0100
-@@ -25,17 +25,13 @@
+--- rpm-4.4.8/rpmdb/Makefile.am.orig	2007-02-03 19:58:47.000000000 +0100
++++ rpm-4.4.8/rpmdb/Makefile.am	2007-04-08 16:41:48.380367607 +0200
+@@ -25,21 +25,17 @@
+ tjfn_LDADD = librpmdb.la
+ 
+ pkgincdir = $(pkgincludedir)
+-pkginc_HEADERS = db.h header.h hdrinline.h rpmdb.h
++pkginc_HEADERS = header.h hdrinline.h rpmdb.h
  noinst_HEADERS = fprint.h header_internal.h legacy.h
  
- pkgbindir = @RPMCONFIGDIR@
+ pkgbindir = @USRLIBRPM@
 -pkgbin_PROGRAMS = \
--	rpmdb_archive rpmdb_checkpoint rpmdb_deadlock rpmdb_dump rpmdb_load \
--	rpmdb_printlog rpmdb_recover rpmdb_svc rpmdb_stat rpmdb_upgrade \
--	rpmdb_verify 
+-	rpmdb_archive rpmdb_checkpoint rpmdb_deadlock rpmdb_dump \
+-	rpmdb_hotbackup rpmdb_load rpmdb_printlog rpmdb_recover \
+-	rpmdb_svc rpmdb_stat rpmdb_upgrade rpmdb_verify 
  
  mylibs = librpmdb.la
  
@@ -27,16 +31,25 @@ diff -urN rpm-4.3.org/rpmdb/Makefile.am rpm-4.3/rpmdb/Makefile.am
  
  # XXX watchout, ../db3/libdb.la created by this Makefile may surprise
 -libdb_la = $(top_builddir)/$(WITH_DB_SUBDIR)/libdb.la
-+libdb_la = 
++libdb_la =
  
  # XXX grrr, RPM_BUILD_ROOT prevents build pollution if/when -lrpm different
  LDFLAGS = -L$(RPM_BUILD_ROOT)$(usrlibdir) -L$(DESTDIR)$(usrlibdir)
-@@ -52,7 +49,7 @@
- 	$(top_builddir)/rpmio/librpmio.la \
+@@ -56,16 +52,13 @@
  	@WITH_POPT_LIB@ \
+ 	@WITH_SQLITE3_LIB@ \
  	@WITH_LIBELF_LIB@
 -librpmdb_la_LIBADD = $(DBLIBOBJS) $(libdb_la)
-+librpmdb_la_LIBADD = $(DBLIBOBJS) $(libdb_la) -ldb
++librpmdb_la_LIBADD = $(DBLIBOBJS) -ldb
  librpmdb_la_DEPENDENCIES = $(DBLIBOBJS) $(libdb_la)
  
- # XXX make sure that db.h symlink is generated
+ if HAVE_LD_VERSION_SCRIPT
+ librpmdb_la_LDFLAGS += -Wl,--version-script=$(srcdir)/librpmdb.vers
+ endif
+ 
+-# XXX make sure that db.h symlink is generated
+-dbconfig.c $(DBLIBSRCS): db.h
+-
+ dbconfig.o: $(top_srcdir)/dbconfig.c
+ 	$(COMPILE) -o $@ -c $<
+ 
