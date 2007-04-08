@@ -1,5 +1,5 @@
 --- rpm-4.4.8/po/pl.po.orig	2007-02-19 22:45:02.000000000 +0100
-+++ rpm-4.4.8/po/pl.po	2007-04-08 00:43:51.256933009 +0200
++++ rpm-4.4.8/po/pl.po	2007-04-08 15:52:04.798342957 +0200
 @@ -4,7 +4,7 @@
  # get your own copy of PePeSza from http://www.ids.pl/~pkollegu/pepesza.html
  # Wojciech Drapiñski <wojciech.drapinski@zie.pg.gda.pl>, 1999.
@@ -314,7 +314,7 @@
  
  #: rpmio/rpmmalloc.c:15
  #, c-format
-@@ -4454,144 +4450,15 @@
+@@ -4454,144 +4450,173 @@
  msgid "check Requires: against Provides: for dependency closure"
  msgstr "sprawd¼ Requires: wzglêdem Provides: dla dope³nienia zale¿no¶ci"
  
@@ -456,9 +456,166 @@
 -# --- from popt (displayed using rpm domain)
 -#~ msgid "Show this help message"
 -#~ msgstr "Poka¿ tê pomoc"
--
++#: rpmpopt:47 rpmpopt:371 rpmpopt:482
++msgid "list install/erase scriptlets from package(s)"
++msgstr "wypisz skrypty (de)instalacyjne z pakietu(ów)"
++
++#: rpmpopt:51
++msgid "display directories needed, but not provided, by packages"
++msgstr "wy¶wietl katalogi wymagane ale nie dostarczane przez pakiety"
++
++#: rpmpopt:55
++msgid "set permissions of files in a package"
++msgstr "ustaw uprawnienia plików w pakiecie"
++
++#: rpmpopt:60
++msgid "set user/group ownership of files in a package"
++msgstr "ustaw u¿ytkownika/grupê w³a¶ciciela plików w pakiecie"
++
++#: rpmpopt:64 rpmpopt:375 rpmpopt:486
++msgid "list capabilities this package conflicts with"
++msgstr "wypisz w³asno¶ci z którymi ten pakiet jest w konflikcie"
++
++#: rpmpopt:67 rpmpopt:378 rpmpopt:489
++msgid "list other packages removed by installing this package"
++msgstr "wypisz inne pakiety usuwane przy instalacji tego pakietu"
++
++#: rpmpopt:70 rpmpopt:381 rpmpopt:492
++msgid "list capabilities that this package provides"
++msgstr "wypisz w³asno¶ci dostarczane przez ten pakiet"
++
++#: rpmpopt:74 rpmpopt:385 rpmpopt:496
++msgid "list capabilities required by package(s)"
++msgstr "wypisz w³asno¶ci wymagane przez pakiet(y)"
++
++#: rpmpopt:78 rpmpopt:81 rpmpopt:389 rpmpopt:392 rpmpopt:500
++#: rpmpopt:503
++msgid "list enhancements suggested by package(s)"
++msgstr "wypisz rozszerzenia sugerowane przez pakiet(y)"
++
++#: rpmpopt:94 rpmpopt:405 rpmpopt:515
++msgid "list descriptive information from package(s)"
++msgstr "wypisz informacje opisowe z pakietu(ów)"
++
++#: rpmpopt:97 rpmpopt:408 rpmpopt:518
++msgid "list change logs for this package"
++msgstr "wypisz kronikê zmian dla tego pakietu"
++
++#: rpmpopt:100 rpmpopt:411 rpmpopt:521
++msgid "list metadata in xml"
++msgstr "wypisz metadane w formacie xml"
++
++#: rpmpopt:102 rpmpopt:413 rpmpopt:523
++msgid "list metadata in yaml"
++msgstr "wypisz metadane w formacie yaml"
++
++#: rpmpopt:108 rpmpopt:419 rpmpopt:529
++msgid "list trigger scriptlets from package(s)"
++msgstr "wypisz skrypty trigger z pakietu(ów)"
++
++#: rpmpopt:112 rpmpopt:423 rpmpopt:533
++msgid "list package(s) by install time, most recent first"
++msgstr "wypisz pakiet(y) wed³ug czasu instalacji od naj¶wie¿szego"
++
++#: rpmpopt:115 rpmpopt:426 rpmpopt:536
++msgid "list duplicated packages"
++msgstr "wypisz pakiety wielokrotne"
++
++#: rpmpopt:118 rpmpopt:429 rpmpopt:539
++msgid "list all files from each package"
++msgstr "wypisz wszystkie pliki z ka¿dego pakietu"
++
++#: rpmpopt:121 rpmpopt:432 rpmpopt:542
++msgid "list file names with classes"
++msgstr "wypisz nazwy plików z klasami"
++
++#: rpmpopt:124 rpmpopt:435 rpmpopt:545
++msgid "list file names with colors"
++msgstr "wypisz nazwy plików z kolorami"
++
++#: rpmpopt:127
++msgid "list file names with security context from header"
++msgstr "wypisz nazwy plików z kontekstami bezpieczeñstwa z nag³ówka"
++
++#: rpmpopt:130 rpmpopt:441 rpmpopt:551
++msgid "list file names with security context from file system"
++msgstr "wypisz nazwy plików z kontekstami bezpieczeñstwa z systemu plików"
++
++#: rpmpopt:133 rpmpopt:444 rpmpopt:554
++msgid "list file names with security context from policy RE"
++msgstr "wypisz nazwy plików z kontekstami bezpieczeñstwa z RE polityki"
++
++#: rpmpopt:136 rpmpopt:447 rpmpopt:557
++msgid "list file names with provides"
++msgstr "wypisz nazwy plików z dostarczanymi w³asno¶ciami"
++
++#: rpmpopt:139 rpmpopt:450 rpmpopt:560
++msgid "list file names with requires"
++msgstr "wypisz nazwy plików z wymaganiami"
++
++#: rpmpopt:142
++msgid "find package name that contains a provided capability (needs rpmdb-vendor package installed)"
++msgstr "znajd¼ nazwê pakietu, który zawiera dostarczan± w³asno¶æ (wymaga zainstalowanego pakietu rpmdb-vendor)"
++
++#: rpmpopt:145
++msgid "find package name that contains a required capability (needs rpmdb-vendor package installed)"
++msgstr "znajd¼ nazwê pakietu, który zawiera wymagan± w³asno¶æ (wymaga zainstalowanego pakietu rpmdb-vendor)"
++
++#: rpmpopt:150
++msgid "Failed transactions will be rolled back automatically"
++msgstr "Transakcje zakoñczone niepowodzeniem zostan± wycofane automatycznie"
++
++#: rpmpopt:154
++msgid "display package(s) previously installed"
++msgstr "wy¶wietl pakiet(y) zainstalowane wcze¶niej"
++
++#: rpmpopt:157
++msgid "display package(s) which replaced"
++msgstr "wy¶wietl zastêpowane pakiet(y)"
++
++#: rpmpopt:168
++msgid "set buildroot <policy> (e.g. compress man pages)"
++msgstr "ustaw <politykê> buildroot (np. kompresowanie stron manuala)"
++
++#: rpmpopt:169
++msgid "<policy>"
++msgstr "<polityka>"
++
++#: rpmpopt:255 rpmpopt:270 rpmpopt:285
++msgid "enable configure <option> for build"
++msgstr "w³±cz <opcjê> konfiguracji przy budowaniu"
++
++#: rpmpopt:256 rpmpopt:259 rpmpopt:271 rpmpopt:274 rpmpopt:286
++#: rpmpopt:289
++msgid "<option>"
++msgstr "<opcja>"
++
++#: rpmpopt:258 rpmpopt:273 rpmpopt:288
++msgid "disable configure <option> for build"
++msgstr "wy³±cz <opcjê> konfiguracji przy budowaniu"
++
++#: rpmpopt:262 rpmpopt:277 rpmpopt:295 rpmpopt:303 rpmpopt:311
++#: rpmpopt:319 rpmpopt:327 rpmpopt:335 rpmpopt:343 rpmpopt:454
++#: rpmpopt:564 rpmpopt:572
++msgid "use database in DIRECTORY"
++msgstr "u¿yj bazy danych w KATALOGu"
++
++#: rpmpopt:263 rpmpopt:278 rpmpopt:292 rpmpopt:296 rpmpopt:304
++#: rpmpopt:312 rpmpopt:320 rpmpopt:328 rpmpopt:336 rpmpopt:344
++#: rpmpopt:455 rpmpopt:565 rpmpopt:573
++msgid "DIRECTORY"
++msgstr "KATALOG"
+ 
 -#~ msgid "Display brief usage message"
 -#~ msgstr "Wy¶wietl skrócony sposób u¿ycia"
++#: rpmpopt:291
++msgid "override build root"
++msgstr "wymu¶ build root"
++
++#: rpmpopt:438 rpmpopt:548
++msgid "list file names with security context"
++msgstr "wypisz nazwy plików z kontekstami bezpieczeñstwa"
++
 +# --- from popt (still displayed using rpm domain??? need check)
 +#msgid "Options implemented via popt alias/exec:"
 +#msgstr "Opcje zaimplementowane poprzez popt alias/exec:"
