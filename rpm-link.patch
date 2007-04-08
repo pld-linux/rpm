@@ -1,24 +1,24 @@
---- rpm-4.4.3/lib/Makefile.am.orig	2005-11-19 11:30:59.243382000 +0100
-+++ rpm-4.4.3/lib/Makefile.am	2005-11-19 16:15:27.255650088 +0100
-@@ -44,7 +44,6 @@
+--- rpm-4.4.8/lib/Makefile.am.orig	2007-01-13 15:09:49.000000000 +0100
++++ rpm-4.4.8/lib/Makefile.am	2007-04-08 17:28:55.353467622 +0200
+@@ -47,7 +47,6 @@
  	$(top_builddir)/rpmio/librpmio.la \
  	@WITH_POPT_LIB@ \
  	@WITH_SELINUX_LIB@ \
 -	-lresolv \
- 	@INTLLIBS@
+ 	@LTLIBINTL@
  
  if HAVE_LD_VERSION_SCRIPT
---- rpm-4.4.3/rpmio/Makefile.am.orig	2005-11-19 11:30:59.239382000 +0100
-+++ rpm-4.4.3/rpmio/Makefile.am	2005-11-19 16:15:42.181381032 +0100
-@@ -39,7 +39,7 @@
- 	@WITH_LUA_LIB@ \
+--- rpm-4.4.8/rpmio/Makefile.am.orig	2007-04-08 16:55:58.468811386 +0200
++++ rpm-4.4.8/rpmio/Makefile.am	2007-04-08 17:29:16.078648683 +0200
+@@ -49,7 +49,7 @@
+ 	@WITH_SYCK_LIB@ \
  	@WITH_MAGIC_LIB@ \
  	@WITH_ZLIB_LIB@ \
--	-lpthread -lresolv
-+	-lpthread
+-	-lpthread -lresolv \
++	-lpthread \
+ 	@LTLIBINTL@
  librpmio_la_LIBADD = # $(BEECRYPTLOBJS)
  librpmio_la_DEPENDENCIES = # .created
- 
 --- rpm-4.4.3/configure.ac.orig	2005-11-19 11:30:59.197389000 +0100
 +++ rpm-4.4.3/configure.ac	2005-11-19 16:17:10.397970072 +0100
 @@ -439,7 +439,7 @@
