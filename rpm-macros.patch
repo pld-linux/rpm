@@ -1,30 +1,31 @@
-diff -ur rpm-4.4.7.org/macros.in rpm-4.4.7/macros.in
---- rpm-4.4.7.org/macros.in	2006-09-24 21:29:28.000000000 +0200
-+++ rpm-4.4.7/macros.in	2007-01-24 11:20:36.000000000 +0100
-@@ -181,7 +181,7 @@
+--- rpm-4.4.8/macros.in.orig	2007-04-08 20:24:47.206783474 +0200
++++ rpm-4.4.8/macros.in	2007-04-08 20:36:08.925632417 +0200
+@@ -206,7 +206,7 @@
  %endif\
  %{nil}
  
 -%_defaultdocdir		%{_usr}/doc
 +%_defaultdocdir		%{_usr}/share/doc
  
- #	The path to the gzip executable (legacy, use %{__gzip} instead).
- %_gzipbin		%{__gzip}
-@@ -212,10 +212,11 @@
+ #	The path to the pgp executable (legacy, use %{__pgp} instead).
+ %_pgpbin		%{__pgp}
+@@ -233,12 +233,12 @@
+ #	The directory where newly built source packages will be written.
  %_srcrpmdir		%{_topdir}/SRPMS
  
- #	Directory where temporaray files can be created.
+-#	Directory where temporaray files can be created.
 -%_tmppath		%{_var}/tmp
++#	Directory where temporary files can be created.
 +%_tmppath		%(echo "${TMPDIR:-/tmp}")
-+%tmpdir			%{_tmppath}
+ %tmpdir			%{_tmppath}
  
  #	Path to top of build area.
 -%_topdir		%{_usrsrc}/rpm
 +%_topdir		%(echo $HOME)/rpm
  
- #	The path to the unzip executable (legacy, use %{__unzip} instead).
- %_unzipbin		%{__unzip}
-@@ -228,7 +229,7 @@
+ #==============================================================================
+ # ---- Optional rpmrc macros.
+@@ -248,7 +248,7 @@
  #	Configurable build root path, same as BuildRoot: in a specfile.
  #	(Note: the configured macro value will override the spec file value).
  #
@@ -33,9 +34,9 @@ diff -ur rpm-4.4.7.org/macros.in rpm-4.4.7/macros.in
  
  #	The sub-directory (relative to %{_builddir}) where sources are compiled.
  #	This macro is set after processing %setup, either explicitly from the
-@@ -326,8 +327,8 @@
- #		"w9.gzdio"	gzip level 9 (default).
+@@ -347,8 +347,8 @@
  #		"w9.bzdio"	bzip2 level 9.
+ #		"w9.lzdio"	lzma level 9.
  #
 -#%_source_payload	w9.gzdio
 -#%_binary_payload	w9.gzdio
@@ -44,7 +45,7 @@ diff -ur rpm-4.4.7.org/macros.in rpm-4.4.7/macros.in
  
  #	Archive formats to use for source/binary package payloads.
  #		"cpio"		cpio archive (default)
-@@ -473,7 +474,7 @@
+@@ -498,7 +498,7 @@
  
  #
  # Path to magic file used for file classification.
@@ -53,35 +54,37 @@ diff -ur rpm-4.4.7.org/macros.in rpm-4.4.7/macros.in
  
  #==============================================================================
  # ---- Database configuration macros.
-@@ -921,10 +922,10 @@
-   export RPM_BUILD_ROOT}\
-   %{?_javaclasspath:CLASSPATH=\"%{_javaclasspath}\"\
-   export CLASSPATH}\
--  unset PERL_MM_OPT\
-+  unset PERL_MM_OPT || :\
-   LANG=C\
-   export LANG\
--  unset DISPLAY\
-+  unset DISPLAY || :\
-   \
-   %{verbose:set -x}%{!verbose:exec > /dev/null}\
-   umask 022\
-@@ -1083,7 +1084,7 @@
+@@ -1127,17 +1127,17 @@
+ %_exec_prefix		%{_prefix}
+ %_bindir		%{_exec_prefix}/bin
+ %_sbindir		%{_exec_prefix}/sbin
+-%_libexecdir		%{_exec_prefix}/libexec
++%_libexecdir		%{_exec_prefix}/lib
+ %_datadir		%{_prefix}/share
+-%_sysconfdir		%{_prefix}/etc
+-%_sharedstatedir	%{_prefix}/com
+-%_localstatedir		%{_prefix}/var
++%_sysconfdir		/etc
++%_sharedstatedir	/var/lib
++%_localstatedir		/var
+ %_lib			lib
+ %_libdir		%{_exec_prefix}/%{_lib}
  %_includedir		%{_prefix}/include
  %_oldincludedir		/usr/include
- %_infodir		%{_prefix}/info
+-%_infodir		%{_prefix}/info
 -%_mandir		%{_prefix}/man
++%_infodir		%{_prefix}/share/info
 +%_mandir		%{_prefix}/share/man
+ %_localedir		%{_datadir}/locale
  
  #==============================================================================
- # ---- config.guess platform macros.
-@@ -1361,7 +1362,25 @@
- # helpers are also used by @RPMCONFIGDIR@/rpmdeps {--provides|--requires}.
- #%__executable_provides	@RPMCONFIGDIR@/executabledeps.sh --provides
- #%__executable_requires	@RPMCONFIGDIR@/executabledeps.sh --requires
+@@ -1428,7 +1428,25 @@
+ # helpers are also used by %{_usrlibrpm}/rpmdeps {--provides|--requires}.
+ #%__executable_provides	%{_usrlibrpm}/executabledeps.sh --provides
+ #%__executable_requires	%{_usrlibrpm}/executabledeps.sh --requires
 -%__scriptlet_requires	/bin/bash --rpm-requires
 +#%__scriptlet_requires	/bin/bash --rpm-requires
-+
+ 
 +# PLD rpm macros
 +%_enable_debug_packages 1
 +
@@ -99,17 +102,17 @@ diff -ur rpm-4.4.7.org/macros.in rpm-4.4.7/macros.in
 +%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
 +%rpmcxxflags	%{rpmcflags}
 +%rpmldflags	%{!?no_build_with_as_needed:-Wl,--as-needed}
- 
++  
  # \endverbatim
  #*/
---- rpm/configure.ac.org	2007-02-08 09:16:46.554623000 +0100
-+++ rpm/configure.ac	2007-02-08 09:18:16.386623000 +0100
-@@ -1368,7 +1368,7 @@
+--- rpm-4.4.8/configure.ac.orig	2007-04-08 20:24:47.210783702 +0200
++++ rpm-4.4.8/configure.ac	2007-04-08 20:32:18.216485052 +0200
+@@ -1462,7 +1462,7 @@
  	[Full path to rpm system configuration directory (usually /etc/rpm)])
  AC_SUBST(SYSCONFIGDIR)
  
--MACROFILES="${RPMCONFIGDIR}/macros:${RPMCONFIGDIR}/%{_target}/macros:${SYSCONFIGDIR}/macros.*:${SYSCONFIGDIR}/macros:${SYSCONFIGDIR}/%{_target}/macros:~/.rpmmacros"
-+MACROFILES="${RPMCONFIGDIR}/macros:${RPMCONFIGDIR}/macros.build:${RPMCONFIGDIR}/%{_target}/macros:${SYSCONFIGDIR}/macros.*:${SYSCONFIGDIR}/macros:${SYSCONFIGDIR}/%{_target}/macros:~/etc/.rpmmacros:~/.rpmmacros"
+-MACROFILES="${USRLIBRPM}/macros:${USRLIBRPM}/%{_target}/macros:${SYSCONFIGDIR}/macros.*:${SYSCONFIGDIR}/macros:${SYSCONFIGDIR}/%{_target}/macros:~/.rpmmacros"
++MACROFILES="${USRLIBRPM}/macros:${USRLIBRPM}/macros.build:${USRLIBRPM}/%{_target}/macros:${SYSCONFIGDIR}/macros.*:${SYSCONFIGDIR}/macros:${SYSCONFIGDIR}/%{_target}/macros:~/etc/.rpmmacros:~/.rpmmacros"
  AC_DEFINE_UNQUOTED(MACROFILES, "$MACROFILES",
  	[Colon separated paths of macro files to read.])
  AC_SUBST(MACROFILES)
