@@ -2538,7 +2538,15 @@ diff -ur rpm-4.4.7.org/rpmio/tput.c rpm-4.4.7/rpmio/tput.c
   { "urldebug", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_url_debug, -1,
 --- rpm-4.4.8/rpmio/url.c.orig	2007-01-20 21:33:50.000000000 +0100
 +++ rpm-4.4.8/rpmio/url.c	2007-04-08 19:57:45.646376012 +0200
-@@ -348,9 +348,6 @@
+@@ -146,7 +146,6 @@
+ 			(u->scheme ? u->scheme : ""));
+ 	/*@=usereleased@*/
+     }
+-    xx = davFree(u);
+     u->buf = _free(u->buf);
+     u->url = _free(u->url);
+     u->scheme = _free((void *)u->scheme);
+@@ -348,9 +347,6 @@
  } urlstrings[] = {
      { "file://",	URL_IS_PATH },
      { "ftp://",		URL_IS_FTP },
