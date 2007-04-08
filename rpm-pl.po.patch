@@ -616,15 +616,15 @@
 +msgid "list file names with security context"
 +msgstr "wypisz nazwy plików z kontekstami bezpieczeñstwa"
 +
-+# --- from popt (still displayed using rpm domain??? need check)
-+#msgid "Options implemented via popt alias/exec:"
-+#msgstr "Opcje zaimplementowane poprzez popt alias/exec:"
-+#
-+#msgid "Help options:"
-+#msgstr "Opcje pomocy:"
-+#
-+#msgid "Show this help message"
-+#msgstr "Poka¿ tê pomoc"
-+#
-+#msgid "Display brief usage message"
-+#msgstr "Wy¶wietl skrócony sposób u¿ycia"
++# --- from popt (still displayed using rpm domain)
++msgid "Options implemented via popt alias/exec:"
++msgstr "Opcje zaimplementowane poprzez popt alias/exec:"
++
++msgid "Help options:"
++msgstr "Opcje pomocy:"
++
++msgid "Show this help message"
++msgstr "Poka¿ tê pomoc"
++
++msgid "Display brief usage message"
++msgstr "Wy¶wietl skrócony sposób u¿ycia"
