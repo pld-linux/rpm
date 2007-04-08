@@ -1,5 +1,5 @@
---- rpm-4.4.3/rpmrc.in.orig	2005-10-26 03:01:40.000000000 +0200
-+++ rpm-4.4.3/rpmrc.in	2005-11-18 19:24:50.519967824 +0100
+--- rpm-4.4.8/rpmrc.in.orig	2007-02-03 21:02:07.000000000 +0100
++++ rpm-4.4.8/rpmrc.in	2007-04-08 10:43:32.083363453 +0200
 @@ -13,69 +13,67 @@
  # Values for RPM_OPT_FLAGS for various platforms
  
@@ -27,7 +27,7 @@
 -optflags: alphaev67 -O2 -g -mieee -mcpu=ev67
 -
 -optflags: sparc -O2 -g -m32 -mcpu=v7 -mtune=ultrasparc
--optflags: sparcv8 -O2 -g -m32 -mcpu=v8
+-optflags: sparcv8 -O2 -g -m32 -mcpu=v8 -mtune=ultrasparc
 -optflags: sparcv9 -O2 -g -m32 -mcpu=ultrasparc
 -optflags: sparc64 -O2 -g -m64 -mcpu=ultrasparc
 -
@@ -129,12 +129,12 @@
  
  #############################################################
  # Canonical arch names and numbers
-@@ -416,7 +416,7 @@
+@@ -418,7 +416,7 @@
  buildarch_compat: amd64: x86_64
  buildarch_compat: ia32e: x86_64
  
--macrofiles:	@RPMCONFIGDIR@/macros:@RPMCONFIGDIR@/%{_target}/macros:@SYSCONFIGDIR@/macros.*:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/.rpmmacros
-+macrofiles:	@RPMCONFIGDIR@/macros:@RPMCONFIGDIR@/macros.build:@RPMCONFIGDIR@/%{_target}/macros:@SYSCONFIGDIR@/macros.*:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/etc/.rpmmacros:~/.rpmmacros
+-macrofiles:	@USRLIBRPM@/macros:@USRLIBRPM@/%{_target}/macros:@SYSCONFIGDIR@/macros.*:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/etc/.rpmmacros:~/.rpmmacros
++macrofiles:	@USRLIBRPM@/macros:@USRLIBRPM@/macros.build:@USRLIBRPM@/%{_target}/macros:@SYSCONFIGDIR@/macros.*:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/etc/.rpmmacros:~/.rpmmacros
  
  # \endverbatim
  #*/
