@@ -1,6 +1,6 @@
---- rpm-4.4.7/rpmio/strtolocale.c.orig	2005-10-28 04:53:34.000000000 +0200
-+++ rpm-4.4.7/rpmio/strtolocale.c	2007-02-12 19:16:36.000000000 +0100
-@@ -3,129 +3,63 @@
+--- rpm-4.4.8/rpmio/strtolocale.c.orig	2005-10-28 04:53:34.000000000 +0200
++++ rpm-4.4.8/rpmio/strtolocale.c	2007-02-12 19:16:36.000000000 +0100
+@@ -3,130 +3,63 @@
   */
  
  #include "system.h"
@@ -116,6 +116,7 @@
 -	locisutf8 = 0;
 -    if (locisutf8 == strisutf8) {
 -	wstr = _free(wstr);
+-	cc = _free(cc);		/* XXX memory leak plugged. */
 +
 +    if (!str || !*str || locale_encoding_is_utf8)
  	return str;
