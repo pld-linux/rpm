@@ -28,28 +28,3 @@ diff -ur rpm.org/file/src/Makefile.am rpm/file/src/Makefile.am
  
  AM_CPPFLAGS = -DMAGIC='"$(MAGIC)"'
  
-diff -ur rpm.org/tools/Makefile.am rpm/tools/Makefile.am
---- rpm.org/tools/Makefile.am	2004-11-22 00:56:22.484205000 +0100
-+++ rpm/tools/Makefile.am	2004-11-22 01:03:05.178339563 +0100
-@@ -30,7 +30,7 @@
- pkgbindir = @RPMCONFIGDIR@
- pkgbin_PROGRAMS = @WITH_LIBDWARF_DEBUGEDIT@ javadeps \
- 	rpmcache rpmdeps rpmfile
--MAGIC	= $(pkgbindir)/magic
-+MAGIC	= /usr/share/file/magic
- 
- bin_PROGRAMS =	 rpmdigest rpmgraph
- 
-diff -urbB rpm-4.4.2.org/tools/Makefile.am rpm-4.4.2/tools/Makefile.am
---- rpm-4.4.2.org/tools/Makefile.am	2005-09-03 16:35:22.169432000 +0200
-+++ rpm-4.4.2/tools/Makefile.am	2005-09-03 16:36:53.947479736 +0200
-@@ -28,7 +28,7 @@
- noinst_PROGRAMS = dumpdb
- 
- pkgbindir = @RPMCONFIGDIR@
- pkgbin_PROGRAMS = @WITH_LIBDWARF_DEBUGEDIT@ javadeps \
--	rpmcache rpmdeps rpmfile
-+	rpmcache rpmdeps @WITH_RPMFILE@
- MAGIC	= /usr/share/file/magic
- 
- bin_PROGRAMS =	 rpmdigest rpmgraph
