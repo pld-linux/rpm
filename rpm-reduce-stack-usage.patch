@@ -1,6 +1,6 @@
---- rpm-4.4.1/rpmio/macro.c.orig	2005-01-26 04:39:58.000000000 +0100
-+++ rpm-4.4.1/rpmio/macro.c	2005-04-10 23:25:02.000000000 +0200
-@@ -924,7 +924,8 @@
+--- rpm-4.4.8/rpmio/macro.c.orig	2007-01-21 21:37:58.000000000 +0100
++++ rpm-4.4.8/rpmio/macro.c	2007-04-08 19:50:49.214644921 +0200
+@@ -942,7 +942,8 @@
  	/*@globals rpmGlobalMacroContext @*/
  	/*@modifies mb, rpmGlobalMacroContext @*/
  {
@@ -10,7 +10,7 @@
      char aname[16];
      const char *opts, *o;
      int argc = 0;
-@@ -1827,7 +1828,7 @@
+@@ -1850,7 +1851,7 @@
  	return 0;
      if (mc == NULL) mc = rpmGlobalMacroContext;
  
@@ -19,25 +19,15 @@
      memset(tbuf, 0, (slen + 1));
  
      mb->s = sbuf;
-@@ -1847,6 +1848,7 @@
- 
-     tbuf[slen] = '\0';	/* XXX just in case */
-     strncpy(sbuf, tbuf, (slen - mb->nb + 1));
+@@ -1870,6 +1871,7 @@
+ 	rpmError(RPMERR_BADSPEC, _("Macro expansion too big for target buffer\n"));
+     else
+ 	strncpy(sbuf, tbuf, (slen - mb->nb + 1));
 +    free(tbuf);
  
      return rc;
  }
-@@ -2091,7 +2093,8 @@
- char * 
- rpmExpand(const char *arg, ...)
- {
--    char buf[BUFSIZ], *p, *pe;
-+    static char buf[BUFSIZ];
-+    char *p, *pe;
-     const char *s;
-     va_list ap;
- 
-@@ -2229,7 +2232,7 @@
+@@ -2308,7 +2310,7 @@
  const char *
  rpmGetPath(const char *path, ...)
  {
