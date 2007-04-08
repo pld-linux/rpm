@@ -196,7 +196,7 @@
  	/* not only executable, files run by httpd usually are not */
 -	    xx = rpmfcHelper(fc, 'R', "php");
 +	if (fc->findreq)
-+	    xx = rpmfcHelper(fc, 'R', "php". fc->noautoreq, fc->noautoreq_c);
++	    xx = rpmfcHelper(fc, 'R', "php", fc->noautoreq, fc->noautoreq_c);
      }
  
      return 0;
