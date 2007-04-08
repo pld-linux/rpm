@@ -1,69 +1,20 @@
---- rpm-4.4.3/build/rpmfc.c.orig	2005-11-14 23:57:52.000000000 +0100
-+++ rpm-4.4.3/build/rpmfc.c	2005-11-18 22:58:12.581758608 +0100
-@@ -449,6 +449,8 @@
- 
-   { "perl script text",		RPMFC_PERL|RPMFC_INCLUDE },
-   { "Perl5 module source text", RPMFC_PERL|RPMFC_MODULE|RPMFC_INCLUDE },
-+  
-+  { "PHP script text",		RPMFC_PHP|RPMFC_INCLUDE },
- 
-   /* XXX "a /usr/bin/python -t script text executable" */
-   /* XXX "python 2.3 byte-compiled" */
-@@ -629,6 +631,7 @@
- 
- 	fc->sb_java = freeStringBuf(fc->sb_java);
- 	fc->sb_perl = freeStringBuf(fc->sb_perl);
-+	fc->sb_php = freeStringBuf(fc->sb_php);
- 	fc->sb_python = freeStringBuf(fc->sb_python);
- 
+--- rpm-4.4.8/lib/rpmfc.c.orig	2007-02-14 07:31:50.000000000 +0100
++++ rpm-4.4.8/lib/rpmfc.c	2007-04-08 16:48:00.273560592 +0200
+@@ -773,7 +773,7 @@
+     } else
+     if (fc->fcolor->vals[fc->ix] & RPMFC_PHP) {
+ 	xx = rpmfcHelper(fc, 'P', "php");
+-	if (is_executable)
++	/* not only executable, files run by httpd usually are not */
+ 	    xx = rpmfcHelper(fc, 'R', "php");
      }
-@@ -718,6 +721,8 @@
- 	    fc->fcolor->vals[fc->ix] |= RPMFC_PERL;
- 	else if (!strncmp(bn, "python", sizeof("python")-1))
- 	    fc->fcolor->vals[fc->ix] |= RPMFC_PYTHON;
-+	else if (!strcmp(bn, "php"))
-+	    fc->fcolor->vals[fc->ix] |= RPMFC_PHP;
  
- 	break;
-     }
-@@ -759,6 +764,10 @@
- 	if (is_executable)
- 	    xx = rpmfcHelper(fc, 'R', "executable");
-     }
-+    if (fc->fcolor->vals[fc->ix] & RPMFC_PHP) {
-+		xx = rpmfcHelper(fc, 'P', "php");
-+	    xx = rpmfcHelper(fc, 'R', "php");
-+	}
- 
-     return 0;
- }
-@@ -835,7 +844,7 @@
- /*@unchecked@*/
- static struct rpmfcApplyTbl_s rpmfcApplyTable[] = {
-     { rpmfcELF,		RPMFC_ELF },
--    { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL|RPMFC_PYTHON|RPMFC_LIBTOOL|RPMFC_PKGCONFIG|RPMFC_BOURNE|RPMFC_JAVA) },
-+    { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL|RPMFC_PYTHON|RPMFC_LIBTOOL|RPMFC_PKGCONFIG|RPMFC_BOURNE|RPMFC_JAVA|RPMFC_PHP) },
-     { NULL, 0 }
- };
- 
-@@ -1027,6 +1036,10 @@
- 	    else if (slen >= sizeof(".pc") && !strcmp(s+slen-(sizeof(".pc")-1), ".pm"))
+@@ -1056,7 +1056,7 @@
+ 	    else if (_suffix(s, ".pc"))
  		ftype = "pkgconfig file";
  
-+	    /* XXX all files with extension ".php" are PHP modules for now. */
-+	    else if (slen >= sizeof(".php") && !strcmp(s+slen-(sizeof(".php")-1), ".php"))
-+		ftype = "PHP script text";
-+
- 	    /* XXX skip all files in /dev/ which are (or should be) %dev dummies. */
- 	    else if (slen >= fc->brlen+sizeof("/dev/") && !strncmp(s+fc->brlen, "/dev/", sizeof("/dev/")-1))
- 		ftype = "";
---- rpm-4.2/build/rpmfc.h.wiget	Tue Apr  1 10:00:23 2003
-+++ rpm-4.2/build/rpmfc.h	Tue Apr  1 10:01:22 2003
-@@ -40,6 +40,7 @@
-     StringBuf sb_java;	/*!< concatenated list of java colored files. */
-     StringBuf sb_perl;	/*!< concatenated list of perl colored files. */
-     StringBuf sb_python;/*!< concatenated list of python colored files. */
-+    StringBuf sb_php;   /*!< concatenated list of php colored files. */
- 
- };
+-	    /* XXX all files with extension ".php" are pkgconfig for now. */
++	    /* XXX all files with extension ".php" are php scripts now. */
+ 	    else if (_suffix(s, ".php"))
+ 		ftype = "PHP script text";
  
