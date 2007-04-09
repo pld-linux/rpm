@@ -113,6 +113,7 @@ fi; \
  CFLAGS="${CFLAGS:-%rpmcflags}" ; export CFLAGS ; \
  CXXFLAGS="${CXXFLAGS:-%rpmcxxflags}" ; export CXXFLAGS ; \
  FFLAGS="${FFLAGS:-%rpmcflags}" ; export FFLAGS ; \
+ FCFLAGS="${FCFLAGS:-%rpmcflags}" ; export FCFLAGS ; \
  CPPFLAGS="${CPPFLAGS:-}" ; export CPPFLAGS ; \
  %{?__cc:CC="%{__cc}" ; export CC ; } \
  %{?__cxx:CXX="%{__cxx}" ; export CXX ; } \
@@ -173,6 +174,7 @@ CXXFLAGS="%{rpmcxxflags}" \
 	CFLAGS="${CFLAGS:-%rpmcflags}" \
 	CXXFLAGS="${CXXFLAGS:-%rpmcxxflags}" \
 	FFLAGS="${FFLAGS:-%rpmcflags}" \
+	FCFLAGS="${FCFLAGS:-%rpmcflags}" \
 	CPPFLAGS="${CPPFLAGS:-}" \
 	%{?__cc:CC="%{__cc}"} \
 	%{?__cxx:CXX="%{__cxx}"} \
