@@ -1,5 +1,5 @@
---- rpm-4.4.2/build/rpmfc.c~	2007-04-04 13:05:00.398299717 +0300
-+++ rpm-4.4.2/build/rpmfc.c	2007-04-10 23:41:54.141021972 +0300
+--- rpm-4.4.2/build/rpmfc.c	2007-04-10 23:41:54.141021972 +0300
++++ rpm-4.4.2/build/rpmfc.c	2007-04-10 23:47:48.198925787 +0300
 @@ -534,6 +534,8 @@
    /* XXX "python 2.3 byte-compiled" */
    { "python ",			RPMFC_PYTHON|RPMFC_INCLUDE },
@@ -17,3 +17,19 @@
      { rpmfcMONO,	RPMFC_MONO },
      { NULL, 0 }
  };
+@@ -1552,6 +1555,15 @@
+ 	    /* XXX all files with extension ".php" are PHP modules for now. */
+ 	    else if (slen >= sizeof(".php") && !strcmp(s+slen-(sizeof(".php")-1), ".php"))
+ 		ftype = "PHP script text";
++
++	    /* XXX all files with extension ".jar" are java archives for now. */
++	    else if (slen >= sizeof(".jar") && !strcmp(s+slen-(sizeof(".jar")-1), ".jar"))
++		ftype = "Java archive file";
++
++	    /* XXX all files with extension ".class" are java class files for now. */
++	    else if (slen >= sizeof(".class") && !strcmp(s+slen-(sizeof(".class")-1), ".class"))
++		ftype = "Java class file";
++
+ 	    /* XXX skip all files in /dev/ which are (or should be) %dev dummies. */
+ 	    else if (slen >= fc->brlen+sizeof("/dev/") && !strncmp(s+fc->brlen, "/dev/", sizeof("/dev/")-1))
+ 		ftype = "";
