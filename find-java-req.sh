@@ -8,7 +8,7 @@ PATH=${PATH}:$(dirname $0)
 javadeps_args='--requires --rpmformat --keywords'
 
 IGNORE_DEPS="@"
-BUILDROOT="/" 
+BUILDROOT="/"
 
 # Loop over all args
 while :; do
@@ -53,18 +53,23 @@ done
 javaclassversion() {
 	local file="$1"
 
+	# check only files, symlinks could point outside buildroot
+	[ ! -f "$file" -o -L "$file" ] || return
+
 	tmp=$(mktemp -d)
 	unzip -q -d $tmp $file >&2
-	classver=$(find $tmp -name '*.class' | xargs file | grep -o 'compiled Java class data, version [0-9.]*' | awk '{print $NF}' | sort -u)
+	classver=$(find $tmp -type f -name '*.class' | xargs -r -d'\n' file | grep -o 'compiled Java class data, version [0-9.]*' | awk '{print $NF}' | sort -u)
 	rm -rf $tmp
 	[ "$classver" ] || return
-	echo "java(ClassDataVersion) >= $classver"
+	for v in $classver; do
+		echo "java(ClassDataVersion) >= $v"
+	done
 }
 
 for file in $(cat -); do
-	case $file in 
+	case $file in
 	*.jar)
-		javaclassversion $file
+		javaclassversion "$file"
 	;;
 	esac
 done | sort -u | egrep -v \'$IGNORE_DEPS\'
