@@ -83,7 +83,7 @@ Patch21:	%{name}-dontneedutils.patch
 Patch22:	%{name}-provides-dont-obsolete.patch
 Patch23:	%{name}-pkgconfigdeps.patch
 Patch24:	%{name}-po.patch
-
+Patch25:	%{name}-glob.patch
 Patch26:	%{name}-notsc.patch
 Patch27:	%{name}-hack-norpmlibdep.patch
 Patch28:	%{name}-makefile-no_myLDADD_deps.patch
@@ -663,6 +663,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch22 -p1
 %patch23 -p1
 %patch24 -p1
+%patch25 -p1
 %patch26 -p1
 %patch27 -p1
 %patch28 -p1
@@ -731,8 +732,6 @@ cd ..
 # config.guess doesn't handle athlon, so we have to change it by hand.
 # rpm checks for CPU type at runtime, but it looks better
 sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu@|%{_target_cpu}|' macros.in
-
-CPPFLAGS="-Dglob=rpm_glob -Dglobfree=rpm_globfree"; export CPPFLAGS
 
 # pass CC and CXX too in case of building with some older configure macro
 # disable perl-RPM2 build, we have it in separate spec
