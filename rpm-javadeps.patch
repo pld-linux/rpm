@@ -1,5 +1,5 @@
---- rpm-4.4.2/build/rpmfc.c	2007-04-10 23:41:54.141021972 +0300
-+++ rpm-4.4.2/build/rpmfc.c	2007-04-10 23:47:48.198925787 +0300
+--- rpm-4.4.2/build/rpmfc.c	2007-04-10 23:47:48.198925787 +0300
++++ rpm-4.4.2/build/rpmfc.c	2007-04-10 23:51:46.054233914 +0300
 @@ -534,6 +534,8 @@
    /* XXX "python 2.3 byte-compiled" */
    { "python ",			RPMFC_PYTHON|RPMFC_INCLUDE },
@@ -9,7 +9,22 @@
    /* .NET executables and libraries. file(1) cannot differ it from native win32 executables unfortunatelly */
    { "PE executable",		RPMFC_MONO|RPMFC_INCLUDE },
    { "executable PE",		RPMFC_MONO|RPMFC_INCLUDE },
-@@ -1219,6 +1221,7 @@
+@@ -825,7 +827,13 @@
+ 		xx = rpmfcHelper(fc, 'P', "php", noautoprov, noautoprov_c);
+             if (findreq)
+                 xx = rpmfcHelper(fc, 'R', "php", noautoreq, noautoreq_c);
+-	}
++    }
++    if (fc->fcolor->vals[fc->ix] & RPMFC_JAVA) {
++            if (findprov)
++                xx = rpmfcHelper(fc, 'P', "java", noautoprov, noautoprov_c);
++            if (findreq)
++                xx = rpmfcHelper(fc, 'R', "java", noautoreq, noautoreq_c);
++    }
+ 
+     return 0;
+ }
+@@ -1219,6 +1227,7 @@
      { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL) },
      { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PYTHON) },
      { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PHP) },
@@ -17,7 +32,7 @@
      { rpmfcMONO,	RPMFC_MONO },
      { NULL, 0 }
  };
-@@ -1552,6 +1555,15 @@
+@@ -1552,6 +1561,15 @@
  	    /* XXX all files with extension ".php" are PHP modules for now. */
  	    else if (slen >= sizeof(".php") && !strcmp(s+slen-(sizeof(".php")-1), ".php"))
  		ftype = "PHP script text";
