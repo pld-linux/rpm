@@ -48,3 +48,15 @@
  	    /* XXX skip all files in /dev/ which are (or should be) %dev dummies. */
  	    else if (slen >= fc->brlen+sizeof("/dev/") && !strncmp(s+fc->brlen, "/dev/", sizeof("/dev/")-1))
  		ftype = "";
+--- rpm-4.4.2/macros.in~	2007-04-10 23:56:47.370958264 +0300
++++ rpm-4.4.2/macros.in	2007-04-11 01:07:01.215359339 +0300
+@@ -446,6 +446,9 @@
+ %__mono_provides	@RPMCONFIGDIR@/monodeps.sh --provides
+ %__mono_requires	@RPMCONFIGDIR@/monodeps.sh --requires
+ 
++%__java_provides	%{nil}
++%__java_requires	%{nil}
++
+ #
+ # fixowner, fixgroup, and fixperms are run at the end of hardcoded setup
+ # These macros are necessary only for legacy compatibility, and have moved
