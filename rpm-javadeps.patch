@@ -1,0 +1,19 @@
+--- rpm-4.4.2/build/rpmfc.c~	2007-04-04 13:05:00.398299717 +0300
++++ rpm-4.4.2/build/rpmfc.c	2007-04-10 23:41:54.141021972 +0300
+@@ -534,6 +534,8 @@
+   /* XXX "python 2.3 byte-compiled" */
+   { "python ",			RPMFC_PYTHON|RPMFC_INCLUDE },
+ 
++  { "Java ",			RPMFC_JAVA|RPMFC_INCLUDE },
++
+   /* .NET executables and libraries. file(1) cannot differ it from native win32 executables unfortunatelly */
+   { "PE executable",		RPMFC_MONO|RPMFC_INCLUDE },
+   { "executable PE",		RPMFC_MONO|RPMFC_INCLUDE },
+@@ -1219,6 +1221,7 @@
+     { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL) },
+     { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PYTHON) },
+     { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PHP) },
++    { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_JAVA) },
+     { rpmfcMONO,	RPMFC_MONO },
+     { NULL, 0 }
+ };
