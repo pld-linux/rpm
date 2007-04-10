@@ -28,15 +28,52 @@ javajarversion() {
 	rm -rf $tmp
 }
 
-for file in $(cat -); do
-	case $file in
-	*.jar)
-		javajarversion "$file"
-		unzip -p $file | javadeps --requires --rpmformat --keywords -
-	;;
-	*.class)
-		javaclassversion "$file"
-		javadeps --requires --rpmformat --keywords $file
-	;;
-	esac
-done | sort -u
+FILES=$(cat -)
+
+REQUIRES=$(
+	for file in $FILES; do
+		case $file in
+		*.jar)
+			javajarversion "$file"
+			unzip -p $file | javadeps --requires --rpmformat --keywords -
+		;;
+		*.class)
+			javaclassversion "$file"
+			javadeps --requires --rpmformat --keywords $file
+		;;
+		esac
+	done | sort -u
+)
+
+PROVIDES=$(
+	for file in $FILES; do
+		case $file in
+		*.jar)
+			unzip -p $file | javadeps --provides --rpmformat --keywords --starprov -
+		;;
+		*.class)
+			javadeps --provides --rpmformat --keywords --starprov $file
+		;;
+		esac
+	done | sort -u
+)
+
+# This is a little magic trick to get all REQUIRES that are not
+# in PROVIDES. While RPM functions correctly when such deps exist,
+# they make the metadata a bit bloated.
+
+# Filter out dups from both lists
+REQUIRES=$(echo "$REQUIRES" | sort | uniq)
+PROVIDES=$(echo "$PROVIDES" | sort | uniq)
+
+#
+# Get a list of elements that exist in exactly one of PROVIDES or REQUIRES
+#
+UNIQ=$(echo "$PROVIDES
+$REQUIRES" | sort | uniq -u)
+
+#
+# Of those, only choose the ones that are in REQUIRES
+#
+echo "$UNIQ
+$REQUIRES" | sort | uniq -d
