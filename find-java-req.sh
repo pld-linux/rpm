@@ -30,7 +30,7 @@ javajarversion() {
 
 FILES=$(cat -)
 
-REQUIRES=$(
+find_requires() {
 	for file in $FILES; do
 		case $file in
 		*.jar)
@@ -43,9 +43,9 @@ REQUIRES=$(
 		;;
 		esac
 	done | sort -u
-)
+}
 
-PROVIDES=$(
+find_provides() {
 	for file in $FILES; do
 		case $file in
 		*.jar)
@@ -56,7 +56,10 @@ PROVIDES=$(
 		;;
 		esac
 	done | sort -u
-)
+}
+
+REQUIRES=$(find_requires)
+PROVIDES=$(find_provides)
 
 # This is a little magic trick to get all REQUIRES that are not
 # in PROVIDES. While RPM functions correctly when such deps exist,
