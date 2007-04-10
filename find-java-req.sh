@@ -3,9 +3,6 @@
 # information that needs to be included in the package.
 
 export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
-PATH=${PATH}:$(dirname $0)
-
-javadeps_args='--requires --rpmformat --keywords'
 
 IGNORE_DEPS="@"
 BUILDROOT="/"
@@ -51,25 +48,35 @@ while :; do
 done
 
 javaclassversion() {
-	local file="$1"
-
-	# check only files, symlinks could point outside buildroot
-	[ -f "$file" -a ! -L "$file" ] || return
-
-	tmp=$(mktemp -d)
-	unzip -q -d $tmp $file >&2
-	classver=$(find $tmp -type f -name '*.class' | xargs -r -d'\n' file | grep -o 'compiled Java class data, version [0-9.]*' | awk '{print $NF}' | sort -u)
-	rm -rf $tmp
+	local ver
+	classver=$(file "$@" | grep -o 'compiled Java class data, version [0-9.]*' | awk '{print $NF}' | sort -u)
 	[ "$classver" ] || return
 	for v in $classver; do
 		echo "java(ClassDataVersion) >= $v"
 	done
 }
 
+javajarversion() {
+	local jar="$1"
+
+	# check only files, symlinks could point outside buildroot
+	[ -f "$jar" -a ! -L "$jar" ] || return
+
+	tmp=$(mktemp -d)
+	unzip -q -d $tmp $jar >&2
+	javaclassversion $(find $tmp -type f -name '*.class')
+	rm -rf $tmp
+}
+
 for file in $(cat -); do
 	case $file in
 	*.jar)
+		javajarversion "$file"
+		unzip -p $file | javadeps --requires --rpmformat --keywords -
+	;;
+	*.class)
 		javaclassversion "$file"
+		javadeps --requires --rpmformat --keywords $file
 	;;
 	esac
 done | sort -u | egrep -v \'$IGNORE_DEPS\'
