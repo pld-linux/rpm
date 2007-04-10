@@ -54,7 +54,7 @@ javaclassversion() {
 	local file="$1"
 
 	# check only files, symlinks could point outside buildroot
-	[ ! -f "$file" -o -L "$file" ] || return
+	[ -f "$file" -a ! -L "$file" ] || return
 
 	tmp=$(mktemp -d)
 	unzip -q -d $tmp $file >&2
