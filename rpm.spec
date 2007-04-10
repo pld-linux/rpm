@@ -30,7 +30,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.2
-Release:	41.4
+Release:	41.6
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -50,6 +50,7 @@ Source12:	perl.prov
 Source13:	%{name}-user_group.sh
 Source14:	%{name}.sysconfig
 Source15:	%{name}-macros.java
+Source16:	find-java-prov.sh
 
 Source30:	builder
 Source31:	adapter.awk
@@ -815,6 +816,7 @@ install %{SOURCE13} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
 install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 install %{SOURCE11} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
+install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-provides
 install %{SOURCE15} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.java
 install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
 install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
@@ -1157,6 +1159,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/javadeps
 %attr(755,root,root) %{_rpmlibdir}/java-find-requires
+%attr(755,root,root) %{_rpmlibdir}/java-find-provides
 
 %files perlprov
 %defattr(644,root,root,755)
