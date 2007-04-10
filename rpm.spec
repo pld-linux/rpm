@@ -15,6 +15,7 @@
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
 %bcond_without	system_libmagic	# don't use system libmagic
+%bcond_without	suggest_tags	# build without Suggest tag (bootstrapping)
 %bcond_with	neon		# build with HTTP/WebDAV support (neon library)
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
@@ -267,7 +268,7 @@ Requires:	popt >= %{reqpopt_ver}
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
-Suggests:	lzma
+%{?with_suggest_tags:Suggests:	lzma}
 
 %description lib
 RPMs library.
