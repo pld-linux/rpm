@@ -30,7 +30,7 @@ Summary(ru):	íÅÎÅÄÖÅÒ ÐÁËÅÔÏ× ÏÔ RPM
 Summary(uk):	íÅÎÅÄÖÅÒ ÐÁËÅÔ¦× ×¦Ä RPM
 Name:		rpm
 Version:	4.4.2
-Release:	41.3
+Release:	41.4
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -119,6 +119,7 @@ Patch59:	%{name}-CVE-2006-5466.patch
 Patch60:	%{name}-as_needed-fix.patch
 Patch61:	%{name}-locale.patch
 Patch62:	%{name}-cpuinfo.patch
+Patch63:	%{name}-javadeps.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -524,8 +525,21 @@ construir pacotes usando o RPM.
 ò¦ÚÎÏÍÁÎ¦ÔÎ¦ ÄÏÐÏÍ¦ÖÎ¦ ÓËÒÉÐÔÉ ÔÁ ÕÔÉÌ¦ÔÉ, ÑË¦ ×ÉËÏÒÉÓÔÏ×ÕÀÔØÓÑ ÄÌÑ
 ÐÏÂÕÄÏ×É RPM'¦×.
 
+%package javaprov
+Summary:	Additional utilities for checking Java provides/requires in rpm packages
+Group:		Applications/File
+Requires:	%{name} = %{version}-%{release}
+Requires:	file
+Requires:	findutils >= 1:4.2.26
+Requires:	mktemp
+Requires:	unzip
+
+%description javaprov
+Additional utilities for checking Java provides/requires in rpm
+packages.
+
 %package perlprov
-Summary:	Additional utilities for checking perl provides/requires in rpm packages
+Summary:	Additional utilities for checking Perl provides/requires in rpm packages
 Summary(de):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
 Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w pakietach rpm
 Group:		Applications/File
@@ -534,14 +548,14 @@ Requires:	perl-devel
 Requires:	perl-modules
 
 %description perlprov
-Additional utilities for checking perl provides/requires in rpm
+Additional utilities for checking Perl provides/requires in rpm
 packages.
 
 %description perlprov -l de
 Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen.
 
 %description perlprov -l pl
-Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w
+Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów Perla w
 pakietach rpm.
 
 %package pythonprov
@@ -702,6 +716,7 @@ rm -rf file
 %patch60 -p1
 %patch61 -p1
 %patch62 -p1
+%patch63 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
@@ -1123,7 +1138,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%{_rpmlibdir}/tcl.req
 %{_rpmlibdir}/trpm
 
-%attr(755,root,root) %{_bindir}/javadeps
 %attr(755,root,root) %{_bindir}/gendiff
 %attr(755,root,root) %{_bindir}/rpmbuild
 
@@ -1138,6 +1152,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/builder
 %attr(755,root,root) %{_bindir}/adapter.awk
 %attr(755,root,root) %{_bindir}/pldnotify.awk
+
+%files javaprov
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/javadeps
+%attr(755,root,root) %{_rpmlibdir}/java-find-requires
 
 %files perlprov
 %defattr(644,root,root,755)
