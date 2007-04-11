@@ -7,13 +7,4 @@
 
 export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
 
-for file in $(cat -); do
-	case $file in
-	*.jar)
-		unzip -p $file | javadeps --provides --rpmformat --keywords --starprov -
-	;;
-	*.class)
-		javadeps --provides --rpmformat --keywords --starprov $file
-	;;
-	esac
-done | sort -u
+cat > /dev/null
