@@ -8,6 +8,8 @@
 export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
 
 javaclassversion() {
+	[ $# -gt 0 ] || return
+
 	local ver
 	classver=$(file "$@" | grep -o 'compiled Java class data, version [0-9.]*' | awk '{print $NF}' | sort -u)
 	[ "$classver" ] || return
