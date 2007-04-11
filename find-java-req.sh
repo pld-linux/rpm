@@ -11,7 +11,7 @@ javaclassversion() {
 	[ $# -gt 0 ] || return
 
 	local ver
-	classver=$(file "$@" | grep -o 'compiled Java class data, version [0-9.]*' | awk '{print $NF}' | sort -u)
+	classver=$(echo "$@" | xargs -r file | grep -o 'compiled Java class data, version [0-9.]*' | awk '{print $NF}' | sort -u)
 	[ "$classver" ] || return
 	for v in $classver; do
 		echo "java(ClassDataVersion) >= $v"
