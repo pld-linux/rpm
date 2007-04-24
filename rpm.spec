@@ -30,7 +30,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.2
-Release:	42
+Release:	43
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -51,6 +51,7 @@ Source13:	%{name}-user_group.sh
 Source14:	%{name}.sysconfig
 Source15:	%{name}-macros.java
 Source16:	find-java-prov.sh
+Source17:	RPM-GPG-KEY
 
 Source30:	builder
 Source31:	adapter.awk
@@ -183,6 +184,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		__cpp %{?force_cpp}%{!?force_cpp:%{_target_cpu}-pld-linux-gcc -E}
 
 %define		_rpmlibdir /usr/lib/rpm
+%define		_noautocompressdoc	RPM-GPG-KEY
 
 %description
 RPM is a powerful package manager, which can be used to build,
@@ -718,6 +720,7 @@ rm -rf file
 %patch61 -p1
 %patch62 -p1
 %patch63 -p1
+cp %{SOURCE17} RPM-GPG-KEY
 
 cd scripts
 mv -f perl.req perl.req.in
@@ -969,8 +972,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc RPM-PGP-KEY CHANGES manual/*
-
+%doc RPM-GPG-KEY CHANGES manual/*
 %attr(755,root,root) /bin/rpm
 #%attr(755,root,root) %{_bindir}/rpmdb
 #%attr(755,root,root) %{_bindir}/rpmquery
