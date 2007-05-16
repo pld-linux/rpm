@@ -1,6 +1,5 @@
 #!/bin/ksh
 # -----------
-# $Id$
 # Exit codes:
 #	  0 - succesful
 #	  1 - help displayed
@@ -20,9 +19,14 @@
 #	- when Icon: field is present, -5 and -a5 doesn't work
 #	- builder -R skips installing BR if spec is not present before builder invocation (need to run builder twice)
 
-VERSION="\
+RCSID='$Id$'
+r=${RCSID#* * }
+rev=${r%% *}
+VERSION="v0.18/$rev"
+VERSIONSTRING="\
 Build package utility from PLD Linux CVS repository
-v0.18 (C) 1999-2007 Free Penguins".
+$VERSION (C) 1999-2007 Free Penguins".
+
 PATH="/bin:/usr/bin:/usr/sbin:/sbin:/usr/X11R6/bin"
 
 COMMAND="build"
@@ -43,6 +47,9 @@ ADD5=""
 NO5=""
 ALWAYS_CVSUP=${ALWAYS_CVSUP:-"yes"}
 CVSROOT=""
+
+# user agent when fetching files
+USER_AGENT="PLD/Builder($VERSION)"
 
 # It can be used i.e. in log file naming.
 # See LOGFILE example.
@@ -72,6 +79,7 @@ ICONS=""
 PACKAGE_RELEASE=""
 PACKAGE_VERSION=""
 PACKAGE_NAME=""
+ASSUMED_NAME=""
 PROTOCOL="ftp"
 WGET_RETRIES=${MAX_WGET_RETRIES:-0}
 CVS_RETRIES=${MAX_CVS_RETRIES:-1000}
@@ -123,8 +131,10 @@ fi
 SU_SUDO=""
 if [ -n "$HOME_ETC" ]; then
 	USER_CFG="$HOME_ETC/.builderrc"
+	BUILDER_MACROS="$HOME_ETC/.builder-rpmmacros"
 else
 	USER_CFG=~/.builderrc
+	BUILDER_MACROS=~/.builder-rpmmacros
 fi
 
 [ -f "$USER_CFG" ] && . "$USER_CFG"
@@ -149,6 +159,7 @@ else
 	wget --help 2>&1 | grep -q -- ' --no-check-certificate ' && WGET_OPTS="$WGET_OPTS --no-check-certificate"
 	wget --help 2>&1 | grep -q -- ' --inet ' && WGET_OPTS="$WGET_OPTS --inet"
 	wget --help 2>&1 | grep -q -- ' --retry-connrefused ' && WGET_OPTS="$WGET_OPTS --retry-connrefused"
+	WGET_OPTS="$WGET_OPTS --user-agent=$USER_AGENT"
 
 	GETURI="wget --passive-ftp -c -nd -t$WGET_RETRIES $WGET_OPTS"
 	GETURI2="wget -c -nd -t$WGET_RETRIES $WGET_OPTS"
@@ -192,7 +203,7 @@ usage()
 {
 	if [ -n "$DEBUG" ]; then set -xv; fi
 	echo "\
-Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
+Usage: builder [-D|--debug] [-V|--version] [--short-version] [-a|--as_anon] [-b|-ba|--build]
 [-bb|--build-binary] [-bs|--build-source] [-bc] [-bi] [-bl] [-u|--try-upgrade]
 [{-cf|--cvs-force}] [{-B|--branch} <branch>] [{-d|--cvsroot} <cvsroot>]
 [-g|--get] [-h|--help] [--http] [{-l|--logtofile} <logfile>] [-m|--mr-proper]
@@ -200,7 +211,7 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
 [-Tvs|--tag-version-stable] [-Ts|--tag-stable] [-Tv|--tag-version]
 [{-Tp|--tag-prefix} <prefix>] [{-tt|--test-tag}]
 [-nu|--no-urls] [-v|--verbose] [--opts <rpm opts>] [--short-circuit]
-[--show-bconds] [--with/--without <feature>] [--define <macro> <value>] 
+[--show-bconds] [--with/--without <feature>] [--define <macro> <value>]
 <package>[.spec][:cvstag]
 
 -5, --update-md5    - update md5 comments in spec, implies -nd -ncs
@@ -208,7 +219,8 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
 -n5, --no-md5       - ignore md5 comments in spec
 -D, --debug         - enable builder script debugging mode,
 -debug              - produce rpm debug package (same as --opts -debug)
--V, --version       - output builder version
+-V, --version       - output builder version string
+--short-version     - output builder short version
 -a, --as_anon       - get files via pserver as cvs@$CVS_SERVER,
 -b, -ba, --build    - get all files from CVS repo or HTTP/FTP and build package
                       from <package>.spec,
@@ -267,6 +279,7 @@ Usage: builder [-D|--debug] [-V|--version] [-a|--as_anon] [-b|-ba|--build]
 -sd, --source-distfiles - list sources available from distfiles (intended for offline
                       operations; does not work when Icon field is present
                       but icon file is absent),
+-sc, --source-cvs - list sources available from CVS
 -sdp, --source-distfiles-paths - list sources available from distfiles -
                       paths relative to distfiles directory (intended for offline
                       operations; does not work when Icon field is present
@@ -365,40 +378,28 @@ set_spec_target() {
 	fi
 }
 
-cache_rpm_dump () {
-	if [ -n "$DEBUG" ]; then
-		set -x
-		set -v
-	fi
-
-	update_shell_title "cache_rpm_dump"
-	local rpm_dump
-	rpm_dump=`
-
+# runs rpm with minimal macroset
+minirpm() {
 	# we reset macros not to contain macros.build as all the %() macros are
 	# executed here, while none of them are actually needed.
-	# what we need from dump is NAME, VERSION, RELEASE and PATCHES/SOURCES.
 	# at the time of this writing macros.build + macros contained 70 "%(...)" macros.
-	macrofiles="/usr/lib/rpm/macros:$SPECS_DIR/.builder-rpmmacros:~/etc/.rpmmacros:~/.rpmmacros"
-	dump='%{echo:dummy: PACKAGE_NAME %{name} }%dump'
-	if [ -f /usr/lib/rpm/rpmrc ]; then
-		# FIXME: better ideas than .rpmrc?
-		printf 'include:/usr/lib/rpm/rpmrc\nmacrofiles:%s\n' $macrofiles > .builder-rpmrc
-	else
-		printf 'macrofiles:%s\n' $macrofiles > .builder-rpmrc
-	fi
-# TODO: move these to /usr/lib/rpm/macros
-	cat > .builder-rpmmacros <<'EOF'
+	safe_macrofiles=$(rpm --showrc | awk -F: '/^macrofiles/ { gsub(/^macrofiles[ \t]+:/, "", $0); gsub(/:.*macros.build:/, ":", $0); print $0 } ')
+
+	# TODO: move these to /usr/lib/rpm/macros
+	cat > $BUILDER_MACROS <<'EOF'
+%x8664 x86_64 amd64 ia32e
 %alt_kernel %{nil}
 %_alt_kernel %{nil}
 %requires_releq_kernel_up %{nil}
 %requires_releq_kernel_smp %{nil}
+%requires_releq_kernel %{nil}
 %requires_releq() %{nil}
 %pyrequires_eq() %{nil}
 %requires_eq() %{nil}
 %requires_eq_to() %{nil}
 %releq_kernel_up ERROR
 %releq_kernel_smp ERROR
+%releq_kernel ERROR
 %kgcc_package ERROR
 %_fontsdir ERROR
 %ruby_version ERROR
@@ -424,21 +425,35 @@ cache_rpm_dump () {
 ) \
 %{nil}
 EOF
-	case "$RPMBUILD" in
-	rpm)
-		ARGS='-bp'
-		;;
-	rpmbuild)
-		ARGS='--nodigest --nosignature --nobuild'
-		;;
-	esac
 	if [ "$NOINIT" = "yes" ] ; then
-		cat >> .builder-rpmmacros <<'EOF'
+		cat >> $BUILDER_MACROS <<'EOF'
 %_specdir ./
 %_sourcedir ./
 EOF
 	fi
-	$RPMBUILD --rcfile .builder-rpmrc $ARGS $ARGDIRS --nodeps --define "prep $dump" $BCOND $TARGET_SWITCH $SPECFILE 2>&1
+	eval $RPMBUILD --macros "$safe_macrofiles:$BUILDER_MACROS" $QUIET $RPMOPTS $RPMBUILDOPTS $BCOND $TARGET_SWITCH $* 2>&1
+}
+
+cache_rpm_dump() {
+	if [ -n "$DEBUG" ]; then
+		set -x
+		set -v
+	fi
+
+	update_shell_title "cache_rpm_dump"
+	local rpm_dump
+	rpm_dump=`
+		# what we need from dump is NAME, VERSION, RELEASE and PATCHES/SOURCES.
+		dump='%{echo:dummy: PACKAGE_NAME %{name} }%dump'
+		case "$RPMBUILD" in
+		rpm)
+			ARGS='-bp'
+			;;
+		rpmbuild)
+			ARGS='--nodigest --nosignature --nobuild'
+			;;
+		esac
+		minirpm $ARGS --define "'prep $dump'" --nodeps $SPECFILE
 	`
 	if [ $? -gt 0 ]; then
 		error=$(echo "$rpm_dump" | sed -ne '/^error:/,$p')
@@ -457,7 +472,7 @@ EOF
 	update_shell_title "cache_rpm_dump: OK!"
 }
 
-rpm_dump () {
+rpm_dump() {
 	if [ -z "$rpm_dump_cache" ] ; then
 		echo "internal error: cache_rpm_dump not called! (missing %prep?)" 1>&2
 	fi
@@ -499,9 +514,13 @@ parse_spec()
 
 	PATCHES="`rpm_dump | awk '/PATCHURL[0-9]+/ {print $3}'`"
 	ICONS="`awk '/^Icon:/ {print $2}' ${SPECFILE}`"
-	PACKAGE_NAME=$(rpm_dump | awk '$2 == "PACKAGE_NAME" { print $3}')
-	PACKAGE_VERSION=$(rpm_dump | awk '$2 == "PACKAGE_VERSION" { print $3}')
-	PACKAGE_RELEASE=$(rpm_dump | awk '$2 == "PACKAGE_RELEASE" { print $3}')
+	PACKAGE_NAME=$(rpm_dump | awk '$2 == "PACKAGE_NAME" { print $3; exit}')
+	PACKAGE_VERSION=$(rpm_dump | awk '$2 == "PACKAGE_VERSION" { print $3; exit}')
+	PACKAGE_RELEASE=$(rpm_dump | awk '$2 == "PACKAGE_RELEASE" { print $3; exit}')
+
+	if [ "$PACKAGE_NAME" != "$ASSUMED_NAME" ]; then
+		echo "WARNING! Spec name ($ASSUMED_NAME) does not agree with package name ($PACKAGE_NAME)"
+	fi
 
 	if [ -n "$BE_VERBOSE" ]; then
 		echo "- Sources :  `nourl $SOURCES`"
@@ -572,7 +591,6 @@ Exit_error()
 			remove_build_requires
 			echo "Error: conditions reject building this spec (${2})."
 			exit 12 ;;
-
 	esac
 	echo "Unknown error."
 	exit 100
@@ -586,8 +604,8 @@ init_builder()
 	fi
 
 	if [ "$NOINIT" != "yes" ] ; then
-		SOURCE_DIR="`eval $RPM $RPMOPTS --eval '%{_sourcedir}'`"
-		SPECS_DIR="`eval $RPM $RPMOPTS --eval '%{_specdir}'`"
+		SOURCE_DIR="`eval $RPM $RPMOPTS --define '"name $ASSUMED_NAME"' --eval '%{_sourcedir}'`"
+		SPECS_DIR="`eval $RPM $RPMOPTS --define '"name $ASSUMED_NAME"' --eval '%{_specdir}'`"
 	else
 		SOURCE_DIR="."
 		SPECS_DIR="."
@@ -1071,10 +1089,18 @@ make_tagver() {
 	if [ -z "${PACKAGE_NAME##[_0-9]*}" -a -z "$TAG_PREFIX" ]; then
 		TAG_PREFIX=tag_
 	fi
-	TAGVER=$TAG_PREFIX$PACKAGE_NAME-`echo $PACKAGE_VERSION | sed -e "s/\./\_/g" -e "s/@/#/g"`-`echo $PACKAGE_RELEASE | sed -e "s/\./\_/g" -e "s/@/#/g"`
+
+	# NOTE: CVS tags may must not contain the characters `$,.:;@'
+	TAGVER=$(echo $TAG_PREFIX$PACKAGE_NAME-$PACKAGE_VERSION-$PACKAGE_RELEASE | tr '[.@]' '[_#]')
+
 	# Remove #kernel.version_release from TAGVER because tagging sources
 	# could occur with different kernel-headers than kernel-headers used at build time.
-	TAGVER=$(echo "$TAGVER" | sed -e 's/#.*//g')
+	# besides, %{_kernel_ver_str} is not expanded.
+
+	# TAGVER=auto-ac-madwifi-ng-0-0_20070225_1#%{_kernel_ver_str}
+	# TAGVER=auto-ac-madwifi-ng-0-0_20070225_1
+
+	TAGVER=${TAGVER%#*}
 	echo -n "$TAGVER"
 }
 
@@ -1090,9 +1116,9 @@ tag_files()
 	echo "Version: $PACKAGE_VERSION"
 	echo "Release: $PACKAGE_RELEASE"
 
-	TAGVER=`make_tagver`
-
+	local TAGVER
 	if [ "$TAG_VERSION" = "yes" ]; then
+		TAGVER=`make_tagver`
 		echo "CVS tag: $TAGVER"
 	fi
 	if [ -n "$TAG" ]; then
@@ -1120,22 +1146,22 @@ tag_files()
 	if [ "$tag_files" ]; then
 		if [ "$TAG_VERSION" = "yes" ]; then
 			update_shell_title "tag sources: $TAGVER"
-			cvs $OPTIONS $TAGVER $tag_files
+			cvs $OPTIONS $TAGVER $tag_files || exit
 		fi
 		if [ -n "$TAG" ]; then
 			update_shell_title "tag sources: $TAG"
-			cvs $OPTIONS $TAG $tag_files
+			cvs $OPTIONS $TAG $tag_files || exit
 		fi
 	fi
 
 	cd "$SPECS_DIR"
 	if [ "$TAG_VERSION" = "yes" ]; then
 		update_shell_title "tag spec: $TAGVER"
-		cvs $OPTIONS $TAGVER $SPECFILE
+		cvs $OPTIONS $TAGVER $SPECFILE || exit
 	fi
 	if [ -n "$TAG" ]; then
 		update_shell_title "tag spec: $TAG"
-		cvs $OPTIONS $TAG $SPECFILE
+		cvs $OPTIONS $TAG $SPECFILE || exit
 	fi
 }
 
@@ -1167,13 +1193,25 @@ branch_files()
 		fi
 	done
 	if [ "$tag_files" ]; then
-		cvs $OPTIONS $TAG $tag_files
+		cvs $OPTIONS $TAG $tag_files || exit
 	fi
 
 	cd "$SPECS_DIR"
-	cvs $OPTIONS $TAG $SPECFILE
+	cvs $OPTIONS $TAG $SPECFILE || exit
 }
 
+
+# this function should exit early if package can't be built for this arch
+# this avoids unneccessary BR filling.
+check_buildarch() {
+	local out ret
+	out=$(minirpm --short-circuit -bp --define "'prep exit 0'" --nodeps $SPECFILE 2>&1)
+	ret=$?
+	if [ $ret -ne 0 ]; then
+		echo >&2 "$out"
+		exit $ret
+	fi
+}
 
 
 build_package()
@@ -1588,37 +1626,39 @@ fetch_build_requires()
 	if [ "${FETCH_BUILD_REQUIRES}" = "yes" ]; then
 		update_shell_title "fetch build requires"
 		if [ "$FETCH_BUILD_REQUIRES_RPMGETDEPS" = "yes" ]; then
-			local CONF=$(rpm-getdeps $BCOND $SPECFILE 2> /dev/null | awk '/^\-/ { print $3 } ' | _rpm_cnfl_check | xargs)
+			# TODO: Conflicts list doesn't check versions
+			local CNFL=$(rpm-getdeps $BCOND $SPECFILE 2> /dev/null | awk '/^\-/ { print $3 } ' | _rpm_cnfl_check | xargs)
 			local DEPS=$(rpm-getdeps $BCOND $SPECFILE 2> /dev/null | awk '/^\+/ { print $3 } ' | _rpm_prov_check | xargs)
 
-			update_shell_title "poldek: update indexes"
-			if [ -n "$CONF" ] || [ -n "$DEPS" ]; then
+			if [ -n "$CNFL" ] || [ -n "$DEPS" ]; then
+				echo "fetch builderequires: install $DEPS; remove $CNFL"
+				update_shell_title "poldek: install $DEPS; remove $CNFL"
 				$SU_SUDO /usr/bin/poldek -q --update || $SU_SUDO /usr/bin/poldek -q --upa
 			fi
-			if [ -n "$CONF" ]; then
-				update_shell_title "uninstall conflicting packages: $CONF"
-				echo "Trying to uninstall conflicting packages ($CONF):"
-				$SU_SUDO /usr/bin/poldek --noask --nofollow -ev $CONF
+			if [ -n "$CNFL" ]; then
+				update_shell_title "uninstall conflicting packages: $CNFL"
+				echo "Trying to uninstall conflicting packages ($CNFL):"
+				$SU_SUDO /usr/bin/poldek --noask --nofollow -ev $CNFL
 			fi
 
-		while [ "$DEPS" ]; do
-				update_shell_title "install deps: $DEPS"
-				echo "Trying to install dependencies ($DEPS):"
-				local log=.${SPECFILE}_poldek.log
-				$SU_SUDO /usr/bin/poldek --caplookup -uGq $DEPS | tee $log
-				failed=$(awk -F: '/^error:/{print $2}' $log)
-				rm -f $log
-				local ok
-				if [ -n "$failed" ]; then
-					for package in $failed; do
-						# FIXME: sanitise, deps could be not .spec files
-						spawn_sub_builder -bb $package && ok="$ok $package"
-					done
-					DEPS="$ok"
-				else
-					DEPS=""
-				fi
-		done
+			while [ "$DEPS" ]; do
+					update_shell_title "install deps: $DEPS"
+					echo "Trying to install dependencies ($DEPS):"
+					local log=.${SPECFILE}_poldek.log
+					$SU_SUDO /usr/bin/poldek --caplookup -uGq $DEPS | tee $log
+					failed=$(awk -F: '/^error:/{print $2}' $log)
+					rm -f $log
+					local ok
+					if [ -n "$failed" ]; then
+						for package in $failed; do
+							# FIXME: sanitise, deps could be not .spec files
+							spawn_sub_builder -bb $package && ok="$ok $package"
+						done
+						DEPS="$ok"
+					else
+						DEPS=""
+					fi
+			done
 			return
 		fi
 
@@ -1815,6 +1855,8 @@ while [ $# -gt 0 ]; do
 			DEBUG="yes"; shift ;;
 		-V | --version )
 			COMMAND="version"; shift ;;
+		--short-version )
+			COMMAND="short-version"; shift ;;
 		-a | --as_anon )
 			CVSROOT=":pserver:cvs@$CVS_SERVER:/cvsroot"; shift ;;
 		-b | -ba | --build )
@@ -1926,6 +1968,9 @@ while [ $# -gt 0 ]; do
 		-FRB | --force-remove-build-requires)
 			REMOVE_BUILD_REQUIRES="force"
 			shift ;;
+		-sc | --sources-cvs)
+			COMMAND="list-sources-cvs"
+			shift ;;
 		-sd | --sources-distfiles)
 			COMMAND="list-sources-distfiles"
 			shift ;;
@@ -2030,6 +2075,7 @@ while [ $# -gt 0 ]; do
 				CVSTAG="${SPECFILE##*:}"
 				SPECFILE="${SPECFILE%%:*}"
 			fi
+			ASSUMED_NAME="${SPECFILE%%.spec}"
 			shift
 	esac
 done
@@ -2092,6 +2138,9 @@ case "$COMMAND" in
 			set_bconds_values
 			display_bconds
 			display_branches
+			if [ "$COMMAND" != "build-source" ]; then
+				check_buildarch
+			fi
 			fetch_build_requires
 			if [ "$INTEGER_RELEASE" = "yes" ]; then
 				echo "Checking release $PACKAGE_RELEASE..."
@@ -2111,7 +2160,7 @@ case "$COMMAND" in
 					fi
 				fi
 
-				TAGVER=`make_tagver`
+				local TAGVER=`make_tagver`
 				echo "Searching for tag $TAGVER..."
 				TAGREL=$(cvs status -v $SPECFILE | grep -E "^[[:space:]]*${TAGVER}[[[:space:]]" | sed -e 's#.*(revision: ##g' -e 's#).*##g')
 				if [ -n "$TAGREL" ]; then
@@ -2272,13 +2321,30 @@ case "$COMMAND" in
 			fi
 		done
 		;;
+	"list-sources-cvs" )
+		init_builder
+#		NOCVSSPEC="yes"
+		DONT_PRINT_REVISION="yes"
+		get_spec
+		parse_spec
+		for SAP in $SOURCES $PATCHES; do
+			if [ -z "$(src_md5 "$SAP")" ]; then
+				echo $SAP | awk '{gsub(/.*\//,"") ; print}'
+			fi
+		done
+		;;
 	"init_rpm_dir")
 		init_rpm_dir
 		;;
 	"usage" )
-		usage;;
+		usage
+		;;
+	"short-version" )
+		echo "$VERSION"
+		;;
 	"version" )
-		echo "$VERSION";;
+		echo "$VERSIONSTRING"
+		;;
 esac
 if [ -f "`pwd`/.${SPECFILE}_INSTALLED_PACKAGES" -a "$REMOVE_BUILD_REQUIRES" != "" ]; then
 	rm "`pwd`/.${SPECFILE}_INSTALLED_PACKAGES"
