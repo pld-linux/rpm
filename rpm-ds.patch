@@ -1,0 +1,12 @@
+diff -urN rpm-4.4.8.org/lib/rpmds.c rpm-4.4.8/lib/rpmds.c
+--- rpm-4.4.8.org/lib/rpmds.c	2007-01-21 20:47:20.000000000 +0100
++++ rpm-4.4.8/lib/rpmds.c	2007-05-19 21:10:19.142894810 +0200
+@@ -1029,7 +1029,7 @@
+     i = -1;
+     if (l < u) {
+ 	int save = rpmdsSetIx(ds, l-1);
+-	while (rpmdsNext(ds) < u) {
++	while ((l = rpmdsNext(ds)) >= 0 && (l < u)) {
+ 	    if ((i = rpmdsCompare(ods, ds)) != 0)
+ 		break;
+ 	}
