@@ -34,12 +34,12 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	4.4.8
-Release:	0.4
+Version:	4.4.9
+Release:	0.1
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
-# Source0-md5:	dc73bcebf6b206058457c9a90f944c55
+# Source0-md5:	210b768006e7d88dd8a3bcd498ea27f6
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -627,7 +627,8 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 
 %prep
 %setup -q
-%patch0 -p1
+# merged
+#%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -638,7 +639,8 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
-%patch11 -p1
+# obsolete
+#%patch11 -p1
 %patch12 -p1
 %patch13 -p1
 %patch14 -p1
@@ -659,31 +661,42 @@ install %{SOURCE5} scripts/find-lang.sh
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
-%patch19 -p1
+# obsolete
+#%patch19 -p1
 %patch20 -p1
 %patch21 -p1
 %patch22 -p1
 %patch23 -p1
-%patch24 -p1
-%patch25 -p1
+# merged
+#%patch24 -p1
+# merged
+#%patch25 -p1
 %patch26 -p1
 %patch27 -p1
 %patch28 -p1
-%patch29 -p1
-%patch30 -p1
+# merged
+#%patch29 -p1
+# merged
+#%patch30 -p1
 %patch31 -p1
-%patch32 -p1
-%patch33 -p1
+# FIXME!
+# %patch32 -p1
+# merged
+# %patch33 -p1
 %patch34 -p1
 %patch35 -p0
 %patch36 -p1
-%patch37 -p1
-%patch38 -p1
-%patch39 -p1
+# FIXME
+#%patch37 -p1
+# CHECK ME
+#%patch38 -p1
+# obsolete
+#%patch39 -p1
 %patch41 -p1
 %patch42 -p1
 %{!?with_neon:%patch44 -p1}
-%patch45 -p1
+# WTF? this is merged?
+#%patch45 -p1
 %patch46 -p1
 %patch49 -p1
 %patch50 -p1
@@ -693,7 +706,8 @@ install %{SOURCE12} scripts/perl.prov
 %patch57 -p1
 %patch58 -p1
 %patch59 -p1
-%patch64 -p1
+# CHECK ME
+#%patch64 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
