@@ -70,7 +70,7 @@ Patch7:		%{name}-scripts-closefds.patch
 Patch8:		%{name}-python-macros.patch
 Patch9:		%{name}-gettext-in-header.patch
 Patch10:	%{name}-compress-doc.patch
-Patch11:	%{name}-rpmdeps-segv.patch
+
 Patch12:	%{name}-system_libs.patch
 Patch13:	%{name}-bb-and-short-circuit.patch
 Patch14:	%{name}-etc_dir.patch
@@ -88,8 +88,7 @@ Patch25:	%{name}-glob.patch
 Patch26:	%{name}-notsc.patch
 Patch27:	%{name}-hack-norpmlibdep.patch
 Patch28:	%{name}-makefile-no_myLDADD_deps.patch
-Patch29:	%{name}-ds.patch
-Patch30:	%{name}-locale.patch
+
 Patch31:	%{name}-missing-prototypes.patch
 Patch32:	%{name}-pld-autodep.patch
 Patch33:	%{name}-arch-x86_64.patch
@@ -97,8 +96,7 @@ Patch34:	%{name}-epoch0.patch
 Patch35:	%{name}-perl_req-INC_dirs.patch
 Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
-Patch38:	%{name}-empty-rpmlock-path.patch
-Patch39:	%{name}-version.patch
+
 Patch41:	%{name}-reduce-stack-usage.patch
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
 
@@ -116,8 +114,6 @@ Patch55:	%{name}-truncate-cvslog.patch
 Patch57:	%{name}-as_needed-fix.patch
 Patch58:	%{name}-repackage-wo-lzma.patch
 Patch59:	%{name}-libtool-deps.patch
-
-Patch64:	%{name}-iconv-translit.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -627,8 +623,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 
 %prep
 %setup -q
-# merged
-#%patch0 -p1
+%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -639,8 +634,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
-# obsolete
-#%patch11 -p1
 %patch12 -p1
 %patch13 -p1
 %patch14 -p1
@@ -661,41 +654,31 @@ install %{SOURCE5} scripts/find-lang.sh
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
-# obsolete
-#%patch19 -p1
+%patch19 -p1
 %patch20 -p1
 %patch21 -p1
 %patch22 -p1
 %patch23 -p1
-# merged
-#%patch24 -p1
-# merged
+%patch24 -p1
+# obsolete?
 #%patch25 -p1
 %patch26 -p1
 %patch27 -p1
 %patch28 -p1
-# merged
-#%patch29 -p1
-# merged
-#%patch30 -p1
 %patch31 -p1
 # FIXME!
 # %patch32 -p1
-# merged
+# needed? I doubt
 # %patch33 -p1
 %patch34 -p1
 %patch35 -p0
 %patch36 -p1
 # FIXME
 #%patch37 -p1
-# CHECK ME
-#%patch38 -p1
-# obsolete
-#%patch39 -p1
 %patch41 -p1
 %patch42 -p1
 %{!?with_neon:%patch44 -p1}
-# WTF? this is merged?
+# UPDATEME
 #%patch45 -p1
 %patch46 -p1
 %patch49 -p1
@@ -706,8 +689,6 @@ install %{SOURCE12} scripts/perl.prov
 %patch57 -p1
 %patch58 -p1
 %patch59 -p1
-# CHECK ME
-#%patch64 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
