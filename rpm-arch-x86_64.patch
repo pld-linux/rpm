@@ -8,14 +8,3 @@
    *) SUBSTS=y___ ;;
  esac
  
---- rpm/lib/rpmds.c.org	2007-05-19 20:54:35.782330814 +0200
-+++ rpm/lib/rpmds.c	2007-05-19 20:55:12.519874545 +0200
-@@ -2703,7 +2703,7 @@
- 	/*@modifies t @*/
- {
-     *t = '\0';
--#if !defined(__alpha__) && ( !defined(__sun) && !defined(__unix) )
-+#if !defined(__alpha__) && !defined(__sun)
-     if (isElf64) {
- 	if (s[strlen(s)-1] != ')')
- 	(void) stpcpy( stpcpy(t, s), "()(64bit)");
