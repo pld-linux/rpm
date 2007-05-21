@@ -50,6 +50,6 @@
 +msgid "find all --with/--without values"
 +msgstr "znajd¼ wszystkie warto¶ci --with/--without"
 +
- #: rpmpopt:262 rpmpopt:277 rpmpopt:295 rpmpopt:303 rpmpopt:311
- #: rpmpopt:319 rpmpopt:327 rpmpopt:335 rpmpopt:343 rpmpopt:454
- #: rpmpopt:564 rpmpopt:572
+ #~ msgid "use database in DIRECTORY"
+ #~ msgstr "u¿yj bazy danych w KATALOGu"
+ 

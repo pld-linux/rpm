@@ -9,12 +9,4 @@
  	    xx = rpmfcHelper(fc, 'R', "php");
      }
  
-@@ -1056,7 +1056,7 @@
- 	    else if (_suffix(s, ".pc"))
- 		ftype = "pkgconfig file";
- 
--	    /* XXX all files with extension ".php" are pkgconfig for now. */
-+	    /* XXX all files with extension ".php" are php scripts now. */
- 	    else if (_suffix(s, ".php"))
- 		ftype = "PHP script text";
- 
+
