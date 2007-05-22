@@ -32,9 +32,9 @@
  #==============================================================================
  rpmd	alias --dbpath		--define '_dbpath !#:+' \
  	--POPTdesc=$"use database in DIRECTORY" \
---- rpm-4.4.8/po/pl.po.orig	2007-04-08 15:56:32.413593481 +0200
-+++ rpm-4.4.8/po/pl.po	2007-04-08 15:57:53.630221753 +0200
-@@ -4588,6 +4588,18 @@
+--- rpm-4.4.9/po/pl.po.orig	2007-05-22 01:10:34.875893544 +0200
++++ rpm-4.4.9/po/pl.po	2007-05-22 08:08:41.253484731 +0200
+@@ -4509,6 +4509,18 @@
  msgid "disable configure <option> for build"
  msgstr "wy³±cz <opcjê> konfiguracji przy budowaniu"
  
@@ -50,6 +50,6 @@
 +msgid "find all --with/--without values"
 +msgstr "znajd¼ wszystkie warto¶ci --with/--without"
 +
- #~ msgid "use database in DIRECTORY"
- #~ msgstr "u¿yj bazy danych w KATALOGu"
- 
+ #: rpmpopt:262 rpmpopt:277 rpmpopt:295 rpmpopt:303
+ #: rpmpopt:311 rpmpopt:319 rpmpopt:327 rpmpopt:335
+ #: rpmpopt:343 rpmpopt:454 rpmpopt:564 rpmpopt:572
