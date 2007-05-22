@@ -813,7 +813,7 @@ install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
 install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
 install %{SOURCE8} $RPM_BUILD_ROOT%{_rpmlibdir}/check-files
 install %{SOURCE13} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
-install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/find-java-requires
+install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
 install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
@@ -1080,8 +1080,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
 %attr(755,root,root) %{_rpmlibdir}/u_pkg.sh
 %attr(755,root,root) %{_rpmlibdir}/executabledeps.sh
-# needs jar (any jdk), jcf-dump (gcc-java) to work
-%attr(755,root,root) %{_rpmlibdir}/javadeps.sh
 %attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
 # needs hacked pkg-config to return anything
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
@@ -1112,6 +1110,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/x86_64*
 %endif
 # must be here for "Requires: rpm-*prov" to work
+%{_rpmlibdir}/macros.java
 %{_rpmlibdir}/macros.mono
 %{_rpmlibdir}/macros.perl
 %{_rpmlibdir}/macros.php
@@ -1137,6 +1136,12 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/builder
 %attr(755,root,root) %{_bindir}/adapter.awk
 %attr(755,root,root) %{_bindir}/pldnotify.awk
+
+%files javaprov
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_rpmlibdir}/java-find-requires
+# needs jar (any jdk), jcf-dump (gcc-java) to work
+%attr(755,root,root) %{_rpmlibdir}/javadeps.sh
 
 %files perlprov
 %defattr(644,root,root,755)
