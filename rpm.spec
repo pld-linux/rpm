@@ -84,7 +84,7 @@ Patch21:	%{name}-dontneedutils.patch
 Patch22:	%{name}-provides-dont-obsolete.patch
 Patch23:	%{name}-pkgconfigdeps.patch
 Patch24:	%{name}-po.patch
-Patch25:	%{name}-glob.patch
+
 Patch26:	%{name}-notsc.patch
 Patch27:	%{name}-hack-norpmlibdep.patch
 Patch28:	%{name}-makefile-no_myLDADD_deps.patch
@@ -660,26 +660,21 @@ install %{SOURCE12} scripts/perl.prov
 %patch22 -p1
 %patch23 -p1
 %patch24 -p1
-# obsolete?
-#%patch25 -p1
 %patch26 -p1
 %patch27 -p1
 %patch28 -p1
 %patch31 -p1
-# FIXME!
-# %patch32 -p1
+%patch32 -p1
 # needed? I doubt
 # %patch33 -p1
 %patch34 -p1
 %patch35 -p0
 %patch36 -p1
-# FIXME
-#%patch37 -p1
+%patch37 -p1
 %patch41 -p1
 %patch42 -p1
 %{!?with_neon:%patch44 -p1}
-# UPDATEME
-#%patch45 -p1
+%patch45 -p1
 %patch46 -p1
 %patch49 -p1
 %patch50 -p1
