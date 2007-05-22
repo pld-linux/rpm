@@ -179,7 +179,7 @@
  #endif
 -	    xx = rpmfcHelper(fc, 'R', "pkgconfig");
 +	if (fc->findreq)
-+	    xx = rpmfcHelper(fc, 'R', "pkgconfig", fc->findautoreq, fc->findautoreq_c);
++	    xx = rpmfcHelper(fc, 'R', "pkgconfig", fc->noautoreq, fc->noautoreq_c);
      } else
      if (fc->fcolor->vals[fc->ix] & RPMFC_BOURNE) {
  #ifdef	NOTYET
