@@ -54,6 +54,8 @@ Source11:	%{name}.sysinfo
 Source12:	perl.prov
 Source13:	%{name}-user_group.sh
 Source14:	%{name}.sysconfig
+Source15:	%{name}-macros.java
+Source16:	%{name}-java-requires
 Source30:	builder
 Source31:	adapter.awk
 Source32:	pldnotify.awk
@@ -785,6 +787,7 @@ install macros.perl	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.perl
 install macros.python	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.python
 install macros.php	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.php
 install macros.mono	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.mono
+install %{SOURCE15}	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.java
 
 install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
@@ -792,6 +795,7 @@ install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
 install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
 install %{SOURCE8} $RPM_BUILD_ROOT%{_rpmlibdir}/check-files
 install %{SOURCE13} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
+install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/find-java-requires
 install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
