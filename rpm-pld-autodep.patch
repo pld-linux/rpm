@@ -20,9 +20,9 @@
  };
  
  /**
---- rpm-4.4.8/lib/rpmfc.c.orig	2007-04-08 18:54:35.134367044 +0200
-+++ rpm-4.4.8/lib/rpmfc.c	2007-04-08 19:10:18.196109070 +0200
-@@ -11,6 +11,8 @@
+--- rpm-4.4.9/lib/rpmfc.c.orig	2007-05-22 08:11:41.155736775 +0200
++++ rpm-4.4.9/lib/rpmfc.c	2007-05-22 08:23:39.964699364 +0200
+@@ -15,6 +15,8 @@
  #define	_RPMDS_INTERNAL
  #include <rpmds.h>
  #include <rpmfi.h>
@@ -31,7 +31,7 @@
  
  #include "debug.h"
  
-@@ -305,14 +307,83 @@
+@@ -309,14 +311,83 @@
      return buf;
  };
  
@@ -116,7 +116,7 @@
  	/*@globals rpmGlobalMacroContext, h_errno, fileSystem, internalState @*/
  	/*@modifies fc, rpmGlobalMacroContext, fileSystem, internalState @*/
  {
-@@ -398,6 +469,8 @@
+@@ -402,6 +473,8 @@
  	    }
  /*@=branchstate@*/
  
@@ -125,7 +125,7 @@
  
  	    /* Add tracking dependency for versioned Provides: */
  	    if (!fc->tracked && deptype == 'P' && *EVR != '\0') {
-@@ -710,7 +783,7 @@
+@@ -714,7 +787,7 @@
  	*se = '\0';
  	se++;
  
@@ -134,18 +134,19 @@
  	    /* Add to package requires. */
  	    ds = rpmdsSingle(RPMTAG_REQUIRENAME, s, "", RPMSENSE_FIND_REQUIRES);
  	    xx = rpmdsMerge(&fc->requires, ds);
-@@ -738,43 +811,51 @@
-     (void) fclose(fp);
+@@ -743,44 +816,52 @@
  
      if (fc->fcolor->vals[fc->ix] & RPMFC_PERL) {
--	if (fc->fcolor->vals[fc->ix] & RPMFC_MODULE)
--	    xx = rpmfcHelper(fc, 'P', "perl");
--	if (is_executable || (fc->fcolor->vals[fc->ix] & RPMFC_MODULE))
--	    xx = rpmfcHelper(fc, 'R', "perl");
-+	if (fc->findprov && (fc->fcolor->vals[fc->ix] & RPMFC_MODULE))
-+	    xx = rpmfcHelper(fc, 'P', "perl", fc->noautoprov, fc->noautoprov_c);
-+	if (fc->findreq && (is_executable || (fc->fcolor->vals[fc->ix] & RPMFC_MODULE)))
-+	    xx = rpmfcHelper(fc, 'R', "perl", fc->noautoreq, fc->noautoreq_c);
+ 	if (strncmp(fn, "/usr/share/doc/", sizeof("/usr/share/doc/")-1)) {
+-	    if (fc->fcolor->vals[fc->ix] & RPMFC_MODULE)
+-		xx = rpmfcHelper(fc, 'P', "perl");
+-	    if (is_executable || (fc->fcolor->vals[fc->ix] & RPMFC_MODULE))
+-		xx = rpmfcHelper(fc, 'R', "perl");
++	    if (fc->findprov && (fc->fcolor->vals[fc->ix] & RPMFC_MODULE))
++		xx = rpmfcHelper(fc, 'P', "perl", fc->noautoprov, fc->noautoprov_c);
++	    if (fc->findreq && (is_executable || (fc->fcolor->vals[fc->ix] & RPMFC_MODULE)))
++		xx = rpmfcHelper(fc, 'R', "perl", fc->noautoreq, fc->noautoreq_c);
+ 	}
      } else
      if (fc->fcolor->vals[fc->ix] & RPMFC_PYTHON) {
 -	xx = rpmfcHelper(fc, 'P', "python");
@@ -178,7 +179,7 @@
  #endif
 -	    xx = rpmfcHelper(fc, 'R', "pkgconfig");
 +	if (fc->findreq)
-+	    xx = rpmfcHelper(fc, 'R', "pkgconfig", fc->noautoreq, fc->noautoreq_c);
++	    xx = rpmfcHelper(fc, 'R', "pkgconfig", fc->findautoreq, fc->findautoreq_c);
      } else
      if (fc->fcolor->vals[fc->ix] & RPMFC_BOURNE) {
  #ifdef	NOTYET
@@ -200,7 +201,7 @@
      }
  
      return 0;
-@@ -802,20 +883,26 @@
+@@ -808,20 +889,26 @@
      default:
  	break;
      case RPMTAG_PROVIDENAME:
@@ -227,7 +228,7 @@
  	break;
      }
      return rc;
-@@ -856,6 +943,109 @@
+@@ -862,6 +949,109 @@
      { NULL, 0 }
  };
  
@@ -337,7 +338,7 @@
  int rpmfcApply(rpmfc fc)
  {
      rpmfcApplyTbl fcat;
-@@ -874,6 +1064,26 @@
+@@ -880,6 +1070,26 @@
      int i;
      int xx;
      int skipping;
@@ -364,7 +365,7 @@
  
      /* Generate package and per-file dependencies. */
      for (fc->ix = 0; fc->fn[fc->ix] != NULL; fc->ix++) {
-@@ -894,9 +1104,43 @@
+@@ -900,9 +1110,43 @@
  	for (fcat = rpmfcApplyTable; fcat->func != NULL; fcat++) {
  	    if (!(fc->fcolor->vals[fc->ix] & fcat->colormask))
  		/*@innercontinue@*/ continue;
@@ -408,11 +409,11 @@
  
  /*@-boundswrite@*/
      /* Generate per-file indices into package dependencies. */
---- rpm-4.3/po/pl.po.orig	2004-02-01 20:53:10.000000000 +0100
-+++ rpm-4.3/po/pl.po	2004-02-01 21:20:36.532561576 +0100
-@@ -1295,6 +1295,86 @@
- msgid "lookup i18N strings in specfile catalog"
- msgstr "wyszukaj wpisy I18N w katalogu pliku spec"
+--- rpm-4.4.9/po/pl.po.orig	2007-05-22 08:11:40.947724921 +0200
++++ rpm-4.4.9/po/pl.po	2007-05-22 08:24:24.091213990 +0200
+@@ -2937,6 +2937,86 @@
+ msgid "Failed to find %s:\n"
+ msgstr "Nie uda³o siê odnale¼æ %s:\n"
  
 +#: lib/rpmfc.c:334
 +#, c-format
@@ -494,9 +495,9 @@
 +msgid "skipping %s requires detection (matches noautoreqfiles pattern #%i)\n"
 +msgstr "pominiêto wykrywanie w³asno¶ci %s (pasuje do wzorca noautoreqfiles #%i)\n"
 +
- #: build/spec.c:237
+ #: lib/rpmfi.c:622
  #, c-format
- msgid "line %d: Bad number: %s\n"
+ msgid "%s skipped due to missingok flag\n"
 --- rpm/configure.ac.orig	2004-08-22 13:02:30.000000000 +0200
 +++ rpm/configure.ac	2004-08-22 13:25:37.000000000 +0200
 @@ -971,6 +971,18 @@
