@@ -807,8 +807,6 @@ install %{SOURCE33} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
 install %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
 
-install rpmio/ugid.h $RPM_BUILD_ROOT%{_includedir}/rpm
-
 # obsolete but still installed
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/rpmrc
 
