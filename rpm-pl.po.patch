@@ -1,5 +1,5 @@
 --- rpm-4.4.9/po/pl.po.orig	2007-05-21 13:46:34.000000000 +0200
-+++ rpm-4.4.9/po/pl.po	2007-05-22 01:07:43.318117023 +0200
++++ rpm-4.4.9/po/pl.po	2007-05-22 20:01:36.707118912 +0200
 @@ -9,11 +9,11 @@
  #
  msgid ""
@@ -357,7 +357,7 @@
  
  #: lib/transaction.c:1178
  msgid "Invalid number of transaction elements.\n"
-@@ -4375,272 +4363,181 @@
+@@ -4375,274 +4363,183 @@
  msgid "check Requires: against Provides: for dependency closure"
  msgstr "sprawd¼ Requires: wzglêdem Provides: dla dope³nienia zale¿no¶ci"
  
@@ -402,6 +402,9 @@
 -#~ msgstr ""
 -#~ "Przetwarzanie nieudanego elementu instalacji %s do automatycznego "
 -#~ "wycofania.\n"
+-
+-#~ msgid "\tForce adding header to rpmdb.\n"
+-#~ msgstr "\tWymuszenie dodania nag³ówka do rpmdb.\n"
 +#: rpmpopt:47 rpmpopt:371 rpmpopt:482
 +msgid "list install/erase scriptlets from package(s)"
 +msgstr "wypisz skrypty (de)instalacyjne z pakietu(ów)"
@@ -499,9 +502,6 @@
 +msgid "list file names with requires"
 +msgstr "wypisz nazwy plików z wymaganiami"
  
--#~ msgid "\tForce adding header to rpmdb.\n"
--#~ msgstr "\tWymuszenie dodania nag³ówka do rpmdb.\n"
--
 -#~ msgid "\tCould not add failed package header to db!\n"
 -#~ msgstr "\tNie uda³o siê dodaæ nag³ówka nieudanego pakietu do bazy!\n"
 -
@@ -705,6 +705,9 @@
 -
 -#~ msgid "\tMatches found.\n"
 -#~ msgstr "\tPasuj±cych znaleziono.\n"
+-
+-#~ msgid "\tNo matches found.\n"
+-#~ msgstr "\tNie znaleziono pasuj±cych.\n"
 +#: rpmpopt:142
 +msgid ""
 +"find package name that contains a provided capability (needs rpmdb-vendor "
@@ -713,8 +716,8 @@
 +"znajd¼ nazwê pakietu, który zawiera dostarczan± w³asno¶æ (wymaga "
 +"zainstalowanego pakietu rpmdb-vendor)"
  
--#~ msgid "\tNo matches found.\n"
--#~ msgstr "\tNie znaleziono pasuj±cych.\n"
+-#~ msgid "\tREMOVETID matched INSTALLTID.\n"
+-#~ msgstr "\tREMOVETID dopasowano do INSTALLTID.\n"
 +#: rpmpopt:145
 +msgid ""
 +"find package name that contains a required capability (needs rpmdb-vendor "
@@ -723,8 +726,8 @@
 +"znajd¼ nazwê pakietu, który zawiera wymagan± w³asno¶æ (wymaga "
 +"zainstalowanego pakietu rpmdb-vendor)"
  
--#~ msgid "\tREMOVETID matched INSTALLTID.\n"
--#~ msgstr "\tREMOVETID dopasowano do INSTALLTID.\n"
+-#~ msgid "Couldn't download nosource %s: %s\n"
+-#~ msgstr "Nie mo¿na ¶ci±gn±æ pliku nosource %s: %s\n"
 +#: rpmpopt:150
 +msgid "Failed transactions will be rolled back automatically"
 +msgstr "Transakcje zakoñczone niepowodzeniem zostan± wycofane automatycznie"
@@ -771,8 +774,9 @@
 +msgid "DIRECTORY"
 +msgstr "KATALOG"
  
--#~ msgid "Couldn't download nosource %s: %s\n"
--#~ msgstr "Nie mo¿na ¶ci±gn±æ pliku nosource %s: %s\n"
+-# --- from popt/po/pl.po (in popt.h, not in .pot) ---
+-#~ msgid "Options implemented via popt alias/exec:"
+-#~ msgstr "Opcje zaimplementowane poprzez popt alias/exec:"
 +#: rpmpopt:291
 +msgid "override build root"
 +msgstr "wymu¶ build root"
@@ -780,10 +784,8 @@
 +#: rpmpopt:438 rpmpopt:548
 +msgid "list file names with security context"
 +msgstr "wypisz nazwy plików z kontekstami bezpieczeñstwa"
- 
- # --- from popt/po/pl.po (in popt.h, not in .pot) ---
--#~ msgid "Options implemented via popt alias/exec:"
--#~ msgstr "Opcje zaimplementowane poprzez popt alias/exec:"
++
++# --- from popt/po/pl.po (in popt.h, displayed using rpm domain)
 +msgid "Options implemented via popt alias/exec:"
 +msgstr "Opcje zaimplementowane poprzez popt alias/exec:"
  
@@ -792,8 +794,13 @@
 +msgid "Help options:"
 +msgstr "Opcje pomocy:"
  
--# --- from popt (displayed using rpm domain)
-+# --- from popt (check if still displayed using rpm domain)
- #~ msgid "Show this help message"
- #~ msgstr "Poka¿ tê pomoc"
+ # --- from popt (displayed using rpm domain)
+-#~ msgid "Show this help message"
+-#~ msgstr "Poka¿ tê pomoc"
++msgid "Show this help message"
++msgstr "Poka¿ tê pomoc"
  
+-#~ msgid "Display brief usage message"
+-#~ msgstr "Wy¶wietl skrócony sposób u¿ycia"
++msgid "Display brief usage message"
++msgstr "Wy¶wietl skrócony sposób u¿ycia"
