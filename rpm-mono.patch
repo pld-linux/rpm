@@ -72,53 +72,9 @@ diff -ruN rpm-4.4.2./macros.in rpm-4.4.2/macros.in
  %__python_provides	@RPMCONFIGDIR@/pythondeps.sh --provides
  %__python_requires	@RPMCONFIGDIR@/pythondeps.sh --requires
  
-+%__mono_provides	@RPMCONFIGDIR@/monodeps.sh --provides
-+%__mono_requires	@RPMCONFIGDIR@/monodeps.sh --requires
++%__mono_provides	%{nil}
++%__mono_requires	%{nil}
 +
  #
  # fixowner, fixgroup, and fixperms are run at the end of hardcoded setup
  # These macros are necessary only for legacy compatibility, and have moved
-diff -ruN rpm-4.4.2./configure.ac rpm-4.4.2/configure.ac
---- rpm-4.4.2./configure.ac	2005-08-11 17:36:01.000000000 +0200
-+++ rpm-4.4.2/configure.ac	2005-08-11 18:11:15.449385328 +0200
-@@ -1355,7 +1355,7 @@
- 	scripts/php.req scripts/php.prov
- 	rpmio/Makefile rpmdb/Makefile lib/Makefile build/Makefile
- 	scripts/Makefile scripts/brp-redhat
--	scripts/macros.perl scripts/macros.php scripts/macros.python
-+	scripts/macros.perl scripts/macros.php scripts/macros.python scripts/macros.mono
- 	tools/Makefile
- 	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
- 	misc/Makefile intl/Makefile po/Makefile.in
-diff -ruN rpm-4.4.2./scripts/macros.mono rpm-4.4.2/scripts/macros.mono
---- rpm-4.4.2./scripts/macros.mono	1970-01-01 01:00:00.000000000 +0100
-+++ rpm-4.4.2/scripts/macros.mono	2005-08-11 18:14:44.387621888 +0200
-@@ -0,0 +1,6 @@
-+# Mono specific macro definitions.
-+# To make use of these macros insert the following line into your spec file:
-+# %include /usr/lib/rpm/macros.mono
-+
-+%define		__find_requires	/usr/bin/mono-find-requires
-+%define		__find_provides	/usr/bin/mono-find-provides
-diff -ruN rpm-4.4.2./scripts/macros.mono.in rpm-4.4.2/scripts/macros.mono.in
---- rpm-4.4.2./scripts/macros.mono.in	1970-01-01 01:00:00.000000000 +0100
-+++ rpm-4.4.2/scripts/macros.mono.in	2005-08-11 18:15:49.420735352 +0200
-@@ -0,0 +1,6 @@
-+# Mono specific macro definitions.
-+# To make use of these macros insert the following line into your spec file:
-+# %include @RPMCONFIGDIR@/macros.mono
-+
-+%define		__find_requires	/usr/bin/mono-find-requires
-+%define		__find_provides	/usr/bin/mono-find-provides
-diff -ruN rpm-4.4.2./scripts/Makefile.am rpm-4.4.2/scripts/Makefile.am
---- rpm-4.4.2./scripts/Makefile.am	2005-07-13 14:19:13.000000000 +0200
-+++ rpm-4.4.2/scripts/Makefile.am	2005-08-11 18:13:19.998450992 +0200
-@@ -16,7 +16,7 @@
- 	rpm.daily rpm.log rpm.xinetd rpm2cpio.sh \
- 	sql.prov sql.req tcl.req tgpg trpm u_pkg.sh \
- 	vpkg-provides.sh vpkg-provides2.sh \
--	macros.perl* macros.python* \
-+	macros.perl* macros.python* macros.mono* \
- 	macros.php* find-*.php find-php-*
- 
- installprefix = $(DESTDIR)
