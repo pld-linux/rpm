@@ -16,8 +16,8 @@
 --- rpm-4.4.9/macros.in.orig	2007-05-22 20:22:01.924940000 +0200
 +++ rpm-4.4.9/macros.in	2007-05-22 22:13:06.612739010 +0200
 @@ -444,6 +444,9 @@
- %__mono_provides	@RPMCONFIGDIR@/monodeps.sh --provides
- %__mono_requires	@RPMCONFIGDIR@/monodeps.sh --requires
+ %__mono_provides	%{nil}
+ %__mono_requires	%{nil}
  
 +%__java_provides	%{nil}
 +%__java_requires	%{nil}
