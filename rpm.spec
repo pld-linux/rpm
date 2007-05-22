@@ -105,6 +105,7 @@ Patch42:	%{name}-old-fileconflicts-behaviour.patch
 Patch44:	%{name}-no-neon.patch
 Patch45:	%{name}-no-sqlite.patch
 Patch46:	%{name}-mono.patch
+Patch47:	%{name}-javadeps.patch
 
 Patch49:	%{name}-p4.patch
 Patch50:	%{name}-macros.patch
@@ -379,7 +380,7 @@ Bibliotecas estáticas para desenvolvimento.
 бібліотека RPM.
 
 %package utils
-Summary:	Additional utilities for managing rpm packages and database
+Summary:	Additional utilities for managing RPM packages and database
 Summary(de.UTF-8):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
 Summary(pl.UTF-8):	Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
 Group:		Applications/File
@@ -387,7 +388,7 @@ Requires:	%{name} = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
 
 %description utils
-Additional utilities for managing rpm packages and database.
+Additional utilities for managing RPM packages and database.
 
 %description utils -l de.UTF-8
 Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
@@ -396,7 +397,7 @@ Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
 Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami.
 
 %package utils-perl
-Summary:	Additional utilities for managing rpm packages and database
+Summary:	Additional utilities for managing RPM packages and database
 Summary(de.UTF-8):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
 Summary(pl.UTF-8):	Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
 Group:		Applications/File
@@ -404,7 +405,7 @@ Requires:	%{name}-utils = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
 
 %description utils-perl
-Additional utilities for managing rpm packages and database.
+Additional utilities for managing RPM packages and database.
 
 %description utils-perl -l de.UTF-8
 Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
@@ -527,56 +528,74 @@ construir pacotes usando o RPM.
 Різноманітні допоміжні скрипти та утиліти, які використовуються для
 побудови RPM'ів.
 
+%package javaprov
+Summary:	Additional utilities for checking Java provides/requires in RPM packages
+Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzania zależności kodu w Javie w pakietach RPM
+Group:		Applications/File
+Requires:	%{name} = %{version}-%{release}
+Requires:	file
+Requires:	findutils >= 1:4.2.26
+Requires:	mktemp
+Requires:	unzip
+
+%description javaprov
+Additional utilities for checking Java provides/requires in RPM
+packages.
+
+%description javaprov -l pl.UTF-8
+Dodatkowe narzędzia do sprawdzania zależności kodu w Javie w pakietach
+RPM.
+
 %package perlprov
-Summary:	Additional utilities for checking perl provides/requires in rpm packages
+Summary:	Additional utilities for checking Perl provides/requires in RPM packages
 Summary(de.UTF-8):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
-Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzenia zależności skryptów perla w pakietach rpm
+Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzenia zależności skryptów Perla w pakietach RPM
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	perl-devel
 Requires:	perl-modules
 
 %description perlprov
-Additional utilities for checking perl provides/requires in rpm
+Additional utilities for checking Perl provides/requires in RPM
 packages.
 
 %description perlprov -l de.UTF-8
 Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen.
 
 %description perlprov -l pl.UTF-8
-Dodatkowe narzędzia do sprawdzenia zależności skryptów perla w
-pakietach rpm.
+Dodatkowe narzędzia do sprawdzenia zależności skryptów Perla w
+pakietach RPM.
 
 %package pythonprov
-Summary:	Python macros, which simplifies creation of rpm packages with Python software
-Summary(pl.UTF-8):	Makra ułatwiające tworzenie pakietów rpm z programami napisanymi w Pythonie
+Summary:	Python macros, which simplifies creation of RPM packages with Python software
+Summary(pl.UTF-8):	Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w Pythonie
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	python
 Requires:	python-modules
 
 %description pythonprov
-Python macros, which simplifies creation of rpm packages with Python
+Python macros, which simplifies creation of RPM packages with Python
 software.
 
 %description pythonprov -l pl.UTF-8
-Makra ułatwiające tworzenie pakietów rpm z programami napisanymi w
+Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w
 Pythonie.
 
 %package php-pearprov
-Summary:	Additional utilities for managing rpm packages and database
-Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzania zależności skryptów php w rpm
+Summary:	Additional utilities for checking PHP PEAR provides/requires in RPM packages
+Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzania zależności skryptów php w RPM
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	sed >= 4.0
 
 %description php-pearprov
-Additional utilities for checking php pear provides/requires in rpm
+Additional utilities for checking PHP PEAR provides/requires in RPM
 packages.
 
 %description php-pearprov -l pl.UTF-8
-Dodatkowe narzędzia do sprawdzenia zależności skryptów php pear w
-pakietach rpm.
+Dodatkowe narzędzia do sprawdzenia zależności skryptów PHP PEAR w
+pakietach RPM.
 
 %package -n python-rpm
 Summary:	Python interface to RPM library
@@ -678,6 +697,7 @@ install %{SOURCE12} scripts/perl.prov
 %{!?with_neon:%patch44 -p1}
 %patch45 -p1
 %patch46 -p1
+%patch47 -p1
 %patch49 -p1
 %patch50 -p1
 %patch51 -p1
