@@ -777,8 +777,6 @@ sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu
 	debugedit_LDADD="\$(WITH_LIBELF_LIB) -lpopt" \
 	staticLDFLAGS=%{?with_static:-all-static}
 
-%{?with_apidocs:%{__make} doxygen}
-
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner}
