@@ -117,6 +117,7 @@ Patch55:	%{name}-truncate-cvslog.patch
 Patch57:	%{name}-as_needed-fix.patch
 Patch58:	%{name}-repackage-wo-lzma.patch
 Patch59:	%{name}-libtool-deps.patch
+Patch60:	%{name}-obsolete-rpmrc.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -706,6 +707,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch57 -p1
 %patch58 -p1
 %patch59 -p1
+%patch60 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
