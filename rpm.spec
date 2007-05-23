@@ -72,7 +72,7 @@ Patch7:		%{name}-scripts-closefds.patch
 Patch8:		%{name}-python-macros.patch
 Patch9:		%{name}-gettext-in-header.patch
 Patch10:	%{name}-compress-doc.patch
-
+Patch11:	%{name}-Nmalloc.patch
 Patch12:	%{name}-system_libs.patch
 Patch13:	%{name}-bb-and-short-circuit.patch
 Patch14:	%{name}-etc_dir.patch
@@ -656,6 +656,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 %patch12 -p1
 %patch13 -p1
 %patch14 -p1
@@ -687,8 +688,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch28 -p1
 %patch31 -p1
 %patch32 -p1
-# needed? I doubt
-# %patch33 -p1
+%patch33 -p1
 %patch34 -p1
 %patch35 -p0
 %patch36 -p1
