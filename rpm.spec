@@ -166,7 +166,7 @@ Requires:	popt >= %{reqpopt_ver}
 %{!?with_static:Obsoletes:	rpm-utils-static}
 Conflicts:	glibc < 2.2.92
 # ABI changes in rpm, new poldek needed
-Conflicts:	poldek < 0.20.1-0.20070105.0
+Conflicts:	poldek < 0.20.1-0.20070108.1.4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_binary_payload		w9.gzdio
