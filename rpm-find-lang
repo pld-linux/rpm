@@ -173,6 +173,6 @@ s:^\([^%].*\)::
 s:%lang(C) ::' | egrep -v '^$' >> $MO_NAME
 
 if [ "$(egrep -v '(^%defattr|^$)' $MO_NAME | wc -l)" -le 0 ]; then
-	echo 'Error: international files not found !'
+	echo >&2 "Error: international files not found for $NAME!"
 	exit 1
 fi
