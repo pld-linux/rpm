@@ -1109,6 +1109,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/sparc*
 %endif
 %ifarch %{x8664}
+%{_rpmlibdir}/amd64*
+%{_rpmlibdir}/ia32e*
 %{_rpmlibdir}/x86_64*
 %endif
 # must be here for "Requires: rpm-*prov" to work
