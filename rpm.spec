@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	0.2
+Release:	0.3
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -790,6 +790,52 @@ install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/b
 	pkgbindir="%{_bindir}"
 
 echo "%{_target_cpu}-%{_target_vendor}-linux-gnu" > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+
+# x86_64 things
+%ifarch x86_64
+echo "x86_64-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+
+%ifarch amd64
+echo "amd64-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "x86_64-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+
+%ifarch ia32e
+echo "ia32e-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "x86_64-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+
+# x86 things
+%ifarch athlon
+echo "athlon-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+%ifarch pentium4 athlon
+echo "pentium4-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+%ifarch pentium3 pentium4 athlon
+echo "pentium3-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+%ifarch i686 pentium3 pentium4 athlon
+echo "i686-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+%ifarch i586 i686 pentium3 pentium4 athlon
+echo "i586-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+%ifarch i486 i586 i686 pentium3 pentium4 athlon
+echo "i486-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+%ifarch %{ix86}
+echo "i386-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+
+# ppc
+%ifarch ppc
+echo "ppc-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+
+# noarch
+echo "noarch-[^-]*-.*" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 
 %ifarch %{ppc}
 #sed -e '/_target_platform/s/[%]{_target_cpu}/ppc/' \
