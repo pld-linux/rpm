@@ -793,45 +793,45 @@ echo "%{_target_cpu}-%{_target_vendor}-linux-gnu" > $RPM_BUILD_ROOT%{_sysconfdir
 
 # x86_64 things
 %ifarch x86_64
-echo "x86_64-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "x86_64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 
 %ifarch amd64
-echo "amd64-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-echo "x86_64-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "amd64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "x86_64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 
 %ifarch ia32e
-echo "ia32e-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-echo "x86_64-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "ia32e-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "x86_64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 
 # x86 things
 %ifarch athlon
-echo "athlon-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "athlon-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 %ifarch pentium4 athlon
-echo "pentium4-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "pentium4-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 %ifarch pentium3 pentium4 athlon
-echo "pentium3-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "pentium3-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 %ifarch i686 pentium3 pentium4 athlon
-echo "i686-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "i686-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 %ifarch i586 i686 pentium3 pentium4 athlon
-echo "i586-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "i586-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 %ifarch i486 i586 i686 pentium3 pentium4 athlon
-echo "i486-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "i486-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 %ifarch %{ix86}
-echo "i386-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "i386-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 
 # ppc
 %ifarch ppc
-echo "ppc-[^-]*-linux(-gnu?)" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "ppc-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 
 # noarch
