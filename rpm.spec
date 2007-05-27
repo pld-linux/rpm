@@ -789,7 +789,7 @@ install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/b
 	pylibdir=%{py_libdir} \
 	pkgbindir="%{_bindir}"
 
-echo "%{_target_cpu}-%{_target_vendor}-linux-gnu" > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "%{_target_cpu}-%{_target_vendor}-linux(-gnu)?" > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 
 # x86_64 things
 %ifarch x86_64
