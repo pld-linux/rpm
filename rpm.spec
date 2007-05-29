@@ -38,7 +38,7 @@ Version:	4.4.9
 Release:	0.3
 License:	GPL
 Group:		Base
-Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
+Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
 # Source0-md5:	210b768006e7d88dd8a3bcd498ea27f6
 Source1:	%{name}.groups
 Source2:	%{name}.platform
@@ -118,7 +118,7 @@ Patch57:	%{name}-as_needed-fix.patch
 Patch58:	%{name}-repackage-wo-lzma.patch
 Patch59:	%{name}-libtool-deps.patch
 Patch60:	%{name}-obsolete-rpmrc.patch
-URL:		http://wraptastic.org/
+URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
