@@ -808,25 +808,25 @@ echo "x86_64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 
 # x86 things
-%ifarch athlon
+%ifarch athlon %{x8664}
 echo "athlon-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
-%ifarch pentium4 athlon
+%ifarch pentium4 athlon %{x8664}
 echo "pentium4-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
-%ifarch pentium3 pentium4 athlon
+%ifarch pentium3 pentium4 athlon %{x8664}
 echo "pentium3-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
-%ifarch i686 pentium3 pentium4 athlon
+%ifarch i686 pentium3 pentium4 athlon %{x8664}
 echo "i686-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
-%ifarch i586 i686 pentium3 pentium4 athlon
+%ifarch i586 i686 pentium3 pentium4 athlon %{x8664}
 echo "i586-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
-%ifarch i486 i586 i686 pentium3 pentium4 athlon
+%ifarch i486 i586 i686 pentium3 pentium4 athlon %{x8664}
 echo "i486-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
-%ifarch %{ix86}
+%ifarch %{ix86} %{x8664}
 echo "i386-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 
