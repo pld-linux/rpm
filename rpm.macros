@@ -343,11 +343,11 @@ unset DISPLAY ||:\
 			find "$RPM_BUILD_ROOT$i" -type f -size +%{_min_compress_bytes}c -print | xargs -r %{__gzip} -9nf; \
 		fi; \
 	done; \
-	if [ -d "$RPM_BUILD_ROOT$i" ]; then \
-		echo "Compress info pages: $i"; \
-		find "$RPM_BUILD_ROOT$i" -name '*.bz2' -print | xargs -r %{__bzip2} -df; \
-		find "$RPM_BUILD_ROOT$i" -name '*.gz' -print | xargs -r %{__gzip} -dnf; \
-		find "$RPM_BUILD_ROOT$i" -name '*.info*' -type f -size +%{_min_compress_bytes}c -print | xargs -r %{__gzip} -9nf; \
+	if [ -d "$RPM_BUILD_ROOT%{_infodir}" ]; then \
+		echo "Compress info pages: %{_infodir}"; \
+		find "$RPM_BUILD_ROOT%{_infodir}" -name '*.bz2' -print | xargs -r %{__bzip2} -df; \
+		find "$RPM_BUILD_ROOT%{_infodir}" -name '*.gz' -print | xargs -r %{__gzip} -dnf; \
+		find "$RPM_BUILD_ROOT%{_infodir}" -name '*.info*' -type f -size +%{_min_compress_bytes}c -print | xargs -r %{__gzip} -9nf; \
 	fi; \
 }; __spec_install_post_compress_docs } }
 
