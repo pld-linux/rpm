@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	0.3
+Release:	0.4
 License:	GPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -790,7 +790,7 @@ install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/b
 	pkgbindir="%{_bindir}"
 
 # first platform file entry can't contain regexps
-echo "%{_target_cpu}-%{_target_vendor}-linux-gnu" > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "%{_target_cpu}-%{_target_vendor}-linux" > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 
 # x86_64 things
 %ifarch x86_64
