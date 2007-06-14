@@ -147,10 +147,18 @@ CXXFLAGS="%{rpmcxxflags}" \
 }
 
 # override __scons to add -j4 in your ~/.rpmmacros for parallel make
-# TODO: find way to pass CC/CXX and CC/CXXFLAGS
 %__scons	/usr/bin/scons
 %scons { \
 %{__scons} \
+	LDFLAGS="${LDFLAGS:-%rpmldflags}" \
+	CFLAGS="${CFLAGS:-%rpmcflags}" \
+	CXXFLAGS="${CXXFLAGS:-%rpmcxxflags}" \
+	FFLAGS="${FFLAGS:-%rpmcflags}" \
+	CPPFLAGS="${CPPFLAGS:-}" \
+	%{?__cc:CC="%{__cc}"} \
+	%{?__cxx:CXX="%{__cxx}"} \
+	libsuffix=%{_lib} \
+	prefix=%{_prefix} \
 }
 
 # waf. see waf.spec
