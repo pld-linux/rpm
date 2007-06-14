@@ -122,6 +122,7 @@ Patch60:	%{name}-as_needed-fix.patch
 Patch61:	%{name}-locale.patch
 Patch62:	%{name}-cpuinfo.patch
 Patch63:	%{name}-javadeps.patch
+Patch64:	http://wraptastic.org/pub/jbj/%{name}-4.4.2-suggests.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -720,6 +721,7 @@ rm -rf file
 %patch61 -p1
 %patch62 -p1
 %patch63 -p1
+%patch64 -p1
 cp %{SOURCE17} RPM-GPG-KEY
 
 cd scripts
