@@ -1,0 +1,45 @@
+--- rpm-4.4.2/lib/rpmlib.h.suggests	2007-06-14 16:26:47.000000000 -0400
++++ rpm-4.4.2/lib/rpmlib.h	2007-06-14 16:28:19.000000000 -0400
+@@ -447,6 +447,16 @@ typedef enum rpmTag_e {
+     RPMTAG_PRIORITY		= 1162, /* i   extension placeholder */
+     RPMTAG_CVSID		= 1163, /* s */
+ #define	RPMTAG_SVNID	RPMTAG_CVSID	/* s */
++    RPMTAG_BLINKPKGID		= 1164, /* s[] */
++    RPMTAG_BLINKHDRID		= 1165, /* s[] */
++    RPMTAG_BLINKNEVRA		= 1166, /* s[] */
++    RPMTAG_FLINKPKGID		= 1167, /* s[] */
++    RPMTAG_FLINKHDRID		= 1168, /* s[] */
++    RPMTAG_FLINKNEVRA		= 1169, /* s[] */
++    RPMTAG_PACKAGEORIGIN	= 1170, /* s */
++    RPMTAG_TRIGGERPREIN		= 1171, /* internal */
++    RPMTAG_BUILDSUGGESTS	= 1172, /* internal */
++    RPMTAG_BUILDENHANCES	= 1173, /* internal */
+ 
+ /*@-enummemuse@*/
+     RPMTAG_FIRSTFREE_TAG	/*!< internal */
+--- rpm-4.4.2/build/parsePreamble.c.suggests	2007-06-14 15:54:21.000000000 -0400
++++ rpm-4.4.2/build/parsePreamble.c	2007-06-14 16:26:05.000000000 -0400
+@@ -684,6 +684,12 @@ static int handlePreambleTag(Spec spec, 
+ 	if ((rc = parseRCPOT(spec, pkg, field, tag, 0, tagflags)))
+ 	    return rc;
+ 	break;
++    case RPMTAG_BUILDSUGGESTS:
++    case RPMTAG_BUILDENHANCES:
++	break;
++    case RPMTAG_SUGGESTSFLAGS:
++    case RPMTAG_ENHANCESFLAGS:
++	break;
+     case RPMTAG_BUILDCONFLICTS:
+     case RPMTAG_CONFLICTFLAGS:
+     case RPMTAG_OBSOLETEFLAGS:
+@@ -783,6 +789,10 @@ static struct PreambleRec_s preambleList
+     {RPMTAG_DISTTAG,		0, 0, 0, "disttag"},
+     {RPMTAG_CVSID,		0, 0, 0, "cvsid"},
+     {RPMTAG_SVNID,		0, 0, 0, "svnid"},
++    {RPMTAG_SUGGESTSFLAGS,	0, 0, 0, "suggests"},
++    {RPMTAG_ENHANCESFLAGS,	0, 0, 0, "enhances"},
++    {RPMTAG_BUILDSUGGESTS,	0, 0, 0, "buildsuggests"},
++    {RPMTAG_BUILDENHANCES,	0, 0, 0, "buildenhances"},
+     /*@-nullassign@*/	/* LCL: can't add null annotation */
+     {0, 0, 0, 0, 0}
+     /*@=nullassign@*/
