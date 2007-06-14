@@ -1,0 +1,84 @@
+diff -urN rpm.org/configure.ac rpm/configure.ac
+--- rpm.org/configure.ac	2004-06-14 11:46:10.220092656 +0200
++++ rpm/configure.ac	2004-06-14 11:47:13.499472728 +0200
+@@ -1203,7 +1215,7 @@
+ dnl # XXX Propagate -lucb to popt ...
+ dnl export LIBS INCPATH CONFIG_SITE
+ 
+-AC_CONFIG_SUBDIRS(popt zlib file sqlite db3)
++AC_CONFIG_SUBDIRS(file)
+ 
+ AC_CONFIG_FILES([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
+ 	scripts/perl.req scripts/perl.prov
+@@ -1227,7 +1239,7 @@
+ 	python/rpmdb/test/Makefile
+  	lua/Makefile
+   ])
+-AC_CONFIG_COMMANDS([default],[[	echo timestamp > popt/stamp-h.in
++AC_CONFIG_COMMANDS([default],[[	
+ 	echo timestamp > stamp-h.in
+   
+ ]],[[]])
+diff -urN rpm.org/Makefile.am rpm/Makefile.am
+--- rpm.org/Makefile.am	2004-06-14 11:46:04.409975928 +0200
++++ rpm/Makefile.am	2004-06-14 11:48:04.236759488 +0200
+@@ -107,7 +106,6 @@
+ 	    -load lib/rpmlib.lcd \
+ 	    -load rpmdb/rpmdb.lcd \
+ 	    -load rpmio/rpmio.lcd \
+-	    -load popt/popt.lcd \
+ 		$(DEFS) $(INCLUDES) rpmqv.c $(rpmb_SOURCES)
+ 
+ .PHONY:	lint
+--- rpm.org/rpmio/Makefile.am.org	2004-11-18 17:42:53.756263795 +0100
++++ rpm.org/rpmio/Makefile.am	2004-11-18 17:43:09.526885309 +0100
+@@ -82,39 +82,39 @@
+ 
+ tdir_SOURCES = tdir.c
+ tdir_LDFLAGS = @LDFLAGS_STATIC@
+-tdir_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++tdir_LDADD = librpmio.la -lpopt
+ 
+ tfts_SOURCES = tfts.c
+ tfts_LDFLAGS = @LDFLAGS_STATIC@
+-tfts_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++tfts_LDADD = librpmio.la -lpopt
+ 
+ tget_SOURCES = tget.c
+ tget_LDFLAGS = @LDFLAGS_STATIC@
+-tget_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++tget_LDADD = librpmio.la -lpopt
+ 
+ thkp_SOURCES = thkp.c
+ thkp_LDFLAGS = @LDFLAGS_STATIC@
+-thkp_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++thkp_LDADD = librpmio.la -lpopt
+ 
+ tput_SOURCES = tput.c
+ tput_LDFLAGS = @LDFLAGS_STATIC@
+-tput_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++tput_LDADD = librpmio.la -lpopt
+ 
+ 
+ tglob_SOURCES = tglob.c
+ tglob_LDFLAGS = @LDFLAGS_STATIC@
+-tglob_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++tglob_LDADD = librpmio.la -lpopt
+ 
+ tinv_SOURCES = tinv.c
+ tinv_LDFLAGS = @LDFLAGS_STATIC@
+-tinv_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++tinv_LDADD = librpmio.la -lpopt
+ 
+ tkey_SOURCES = tkey.c
+ tkey_LDFLAGS = @LDFLAGS_STATIC@
+-tkey_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++tkey_LDADD = librpmio.la -lpopt
+ 
+ trpmio_SOURCES = trpmio.c
+-trpmio_LDADD = librpmio.la $(top_builddir)/popt/libpopt.la
++trpmio_LDADD = librpmio.la -lpopt
+ 
+ tsw_SOURCES = tsw.c
+ tsw_LDFLAGS = librpmio.la
+

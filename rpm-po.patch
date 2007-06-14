@@ -1,0 +1,11 @@
+--- rpm-4.4.3/configure.ac.orig	2005-11-18 23:04:14.916675328 +0100
++++ rpm-4.4.3/configure.ac	2005-11-18 23:05:28.163540112 +0100
+@@ -42,7 +42,7 @@
+ AC_SUBST(LT_AGE, 0)
+ 
+ dnl Set of available languages.
+-ALL_LINGUAS="cs da de fi fr gl is ja ko no pl pt pt_BR ro ru sk sl sr sv tr uk"
++ALL_LINGUAS="cs da de fi fr gl id is it ja ko nb pl pt pt_BR ro ru sk sl sr@Latn sv tr uk"
+ 
+ dnl Checks for programs.
+ AC_PROG_CXX

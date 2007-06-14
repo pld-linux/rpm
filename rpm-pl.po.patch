@@ -1,0 +1,806 @@
+--- rpm-4.4.9/po/pl.po.orig	2007-05-21 13:46:34.000000000 +0200
++++ rpm-4.4.9/po/pl.po	2007-05-22 20:01:36.707118912 +0200
+@@ -9,11 +9,11 @@
+ #
+ msgid ""
+ msgstr ""
+-"Project-Id-Version: rpm 4.4.8\n"
++"Project-Id-Version: rpm 4.4.9\n"
+ "Report-Msgid-Bugs-To: <rpm-devel@lists.dulug.duke.edu>\n"
+ "POT-Creation-Date: 2007-05-21 07:46-0400\n"
+-"PO-Revision-Date: 2006-02-28 20:20+0100\n"
+-"Last-Translator: Arkadiusz Miskiewicz <arekm@pld-linux.org>\n"
++"PO-Revision-Date: 2007-05-22 00:13+0200\n"
++"Last-Translator: Jakub Bogusz <qboosh@pld-linux.org>\n"
+ "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=ISO-8859-2\n"
+@@ -505,7 +505,7 @@
+ #: build/files.c:1029
+ #, c-format
+ msgid "illegal _docdir_fmt: %s\n"
+-msgstr ""
++msgstr "niedozwolony _docdir_fmt: %s\n"
+ 
+ #: build/files.c:1307
+ #, c-format
+@@ -882,12 +882,12 @@
+ 
+ #: build/parsePreamble.c:376
+ msgid "No icon file in sources\n"
+-msgstr ""
++msgstr "Brak pliku ikony w ¼ród³ach\n"
+ 
+ #: build/parsePreamble.c:393
+-#, fuzzy, c-format
++#, c-format
+ msgid "Invalid icon URL: %s\n"
+-msgstr "B³êdny znak %s: %s\n"
++msgstr "B³±dny URL ikony: %s\n"
+ 
+ #: build/parsePreamble.c:400
+ #, c-format
+@@ -902,7 +902,7 @@
+ #: build/parsePreamble.c:414
+ #, c-format
+ msgid "Icon %s is too big (max. %d bytes)\n"
+-msgstr ""
++msgstr "Ikona %s jest zbyt du¿a (maksimum to %d bajtów)\n"
+ 
+ #: build/parsePreamble.c:424
+ #, c-format
+@@ -927,7 +927,7 @@
+ #: build/parsePreamble.c:544 build/parsePreamble.c:551
+ #, c-format
+ msgid "line %d: Illegal char '-' in %s: %s\n"
+-msgstr "linia %d: Nielegalny znak '-' w %s: %s\n"
++msgstr "linia %d: Niedozwolony znak '-' w %s: %s\n"
+ 
+ #: build/parsePreamble.c:584
+ #, c-format
+@@ -1049,14 +1049,14 @@
+ msgstr "linia %d: B³êdny argument dla %%patch: %s\n"
+ 
+ #: build/parsePrep.c:624
+-#, fuzzy, c-format
++#, c-format
+ msgid "Missing %s%d %s: %s\n"
+-msgstr "Brak %s w %s %s\n"
++msgstr "Brak %s%d %s: %s\n"
+ 
+ #: build/parsePrep.c:632
+-#, fuzzy, c-format
++#, c-format
+ msgid "file %s missing: %s\n"
+-msgstr "plik %s: %s\n"
++msgstr "brak pliku %s: %s\n"
+ 
+ #: build/parsePrep.c:640
+ #, c-format
+@@ -1406,56 +1406,48 @@
+ msgstr "(zbuforowane)"
+ 
+ #: lib/depends.c:606
+-#, fuzzy
+ msgid "(function probe)"
+-msgstr "(test makra)"
++msgstr "(test funkcji)"
+ 
+ #: lib/depends.c:625
+ msgid "(user lookup)"
+-msgstr ""
++msgstr "(wyszukiwanie u¿ytkownika)"
+ 
+ #: lib/depends.c:642
+ msgid "(group lookup)"
+-msgstr ""
++msgstr "(wyszukiwanie grupy)"
+ 
+ #: lib/depends.c:651
+ msgid "(access probe)"
+ msgstr "(test dostêpu)"
+ 
+ #: lib/depends.c:673
+-#, fuzzy
+ msgid "(mtab probe)"
+-msgstr "(test makra)"
++msgstr "(test mtab)"
+ 
+ #: lib/depends.c:728
+-#, fuzzy
+ msgid "(diskspace probe)"
+-msgstr "(test dostêpu)"
++msgstr "(test miejsca na dysku)"
+ 
+ #: lib/depends.c:758
+-#, fuzzy
+ msgid "(digest probe)"
+-msgstr "(test dostêpu)"
++msgstr "(test skrótu)"
+ 
+ #: lib/depends.c:771
+-#, fuzzy
+ msgid "(gnupg probe)"
+-msgstr "(test makra)"
++msgstr "(test gnupg)"
+ 
+ #: lib/depends.c:784
+-#, fuzzy
+ msgid "(macro probe)"
+ msgstr "(test makra)"
+ 
+ #: lib/depends.c:812
+-#, fuzzy
+ msgid "(envvar probe)"
+-msgstr "(test makra)"
++msgstr "(test zmiennej ¶rodowiskowej)"
+ 
+ #: lib/depends.c:839
+-#, fuzzy
+ msgid "(running probe)"
+-msgstr "(test makra)"
++msgstr "(test uruchomienia)"
+ 
+ #: lib/depends.c:852
+ msgid "(sysinfo provides)"
+@@ -2293,9 +2285,8 @@
+ msgstr "<spec>"
+ 
+ #: lib/poptQV.c:144
+-#, fuzzy
+ msgid "query source metadata from spec file parse"
+-msgstr "buduj tylko pakiet ¼ród³owy z <pliku spec>"
++msgstr "odpytaj metadane ¼ród³owe z analizy pliku spec"
+ 
+ #: lib/poptQV.c:146
+ msgid "query/verify package(s) from install transaction"
+@@ -2689,9 +2680,9 @@
+ msgstr "%s: Fwrite nie powiod³o siê: %s\n"
+ 
+ #: lib/rpmchecksig.c:122
+-#, fuzzy, c-format
++#, c-format
+ msgid "%s: Fflush failed: %s\n"
+-msgstr "%s: Fseek nie powiod³o siê: %s\n"
++msgstr "%s: Fflush nie powiod³o siê: %s\n"
+ 
+ #: lib/rpmchecksig.c:216 lib/rpmchecksig.c:755
+ #, c-format
+@@ -2836,28 +2827,27 @@
+ msgstr "dane pakietu mog± byæ w formacie archiwum tara ustar."
+ 
+ #: lib/rpmds.c:1452
+-#, fuzzy
+ msgid "package payload can be compressed using lzma."
+-msgstr "dane pakietu mog± byæ skompresowane bzipem2."
++msgstr "dane pakietu mog± byæ skompresowane przy u¿yciu lzma."
+ 
+ #: lib/rpmds.c:1455
+ msgid "file digests can be other than MD5."
+-msgstr ""
++msgstr "skróty plików mog± byæ inne ni¿ MD5."
+ 
+ #: lib/rpmds.c:1545 lib/rpmds.c:3535
+-#, fuzzy, c-format
++#, c-format
+ msgid "%s:%d \"%s\" has invalid name. Skipping ...\n"
+-msgstr "%s ma b³êdn± warto¶æ liczbow±, pominiêto\n"
++msgstr "%s:%d \"%s\" ma b³êdn± nazwê. Pomijanie...\n"
+ 
+ #: lib/rpmds.c:1569 lib/rpmds.c:3553
+-#, fuzzy, c-format
++#, c-format
+ msgid "%s:%d \"%s\" has no comparison operator. Skipping ...\n"
+-msgstr "\tlinia %d: \"%s\" nie ma operatora porównania. Pomijanie...\n"
++msgstr "%s:%d \"%s\" nie ma operatora porównania. Pomijanie...\n"
+ 
+ #: lib/rpmds.c:1580 lib/rpmds.c:3568
+-#, fuzzy, c-format
++#, c-format
+ msgid "%s:%d \"%s\" has no EVR string. Skipping ...\n"
+-msgstr "\tlinia %d: \"%s\" nie ma operatora porównania. Pomijanie...\n"
++msgstr "%s:%d \"%s\" nie ma ³añcucha EVR. Pomijanie...\n"
+ 
+ #: lib/rpmds.c:3534 lib/rpmds.c:3552 lib/rpmds.c:3564
+ #, c-format
+@@ -2893,59 +2883,59 @@
+ msgstr "pakiet %s ma niespe³nione %s: %s\n"
+ 
+ #: lib/rpmfc.c:93
+-#, fuzzy, c-format
++#, c-format
+ msgid "\texecv(%s) pid %d\n"
+-msgstr "%s: %s(%s-%s-%s.%s)\texecv(%s) pid %d\n"
++msgstr "\texecv(%s) pid %d\n"
+ 
+ #: lib/rpmfc.c:99
+-#, fuzzy, c-format
++#, c-format
+ msgid "Couldn't exec %s: %s\n"
+ msgstr "Nie mo¿na uruchomiæ %s: %s\n"
+ 
+ #: lib/rpmfc.c:104
+-#, fuzzy, c-format
++#, c-format
+ msgid "Couldn't fork %s: %s\n"
+-msgstr "Nie mo¿na otworzyæ %s: %s\n"
++msgstr "Nie mo¿na wykonaæ fork na %s: %s\n"
+ 
+ #: lib/rpmfc.c:189
+-#, fuzzy, c-format
++#, c-format
+ msgid "\twaitpid(%d) rc %d status %x\n"
+-msgstr "%s: waitpid(%d) rc %d status %x secs %u.%03u\n"
++msgstr "\twaitpid(%d) rc %d status %x\n"
+ 
+ #: lib/rpmfc.c:196
+ #, c-format
+ msgid "Command \"%s\" failed, exit(%d)\n"
+-msgstr ""
++msgstr "Polecenie \"%s\" nie powiod³o siê, zakoñczenie (z kodem %d)\n"
+ 
+ #: lib/rpmfc.c:201
+-#, fuzzy, c-format
++#, c-format
+ msgid "failed to write all data to %s\n"
+-msgstr "Nie mo¿na zapisaæ danych do %s: %s\n"
++msgstr "nie uda³o siê zapisaæ wszystkich danych do %s\n"
+ 
+ #: lib/rpmfc.c:1003
+-#, fuzzy, c-format
++#, c-format
+ msgid "magic_open(0x%x) failed: %s\n"
+-msgstr "otwarcie %s nie powiod³o siê: %s\n"
++msgstr "magic_open(0x%x) nie powiod³o siê: %s\n"
+ 
+ #: lib/rpmfc.c:1011
+-#, fuzzy, c-format
++#, c-format
+ msgid "magic_load(ms, \"%s\") failed: %s\n"
+-msgstr "%s rmdir %s nie powiod³o siê: %s\n"
++msgstr "magic_load(ms, \"%s\") nie powiod³o siê: %s\n"
+ 
+ #: lib/rpmfc.c:1077
+ #, c-format
+ msgid "magic_file(ms, \"%s\") failed: mode %06o %s\n"
+-msgstr ""
++msgstr "magic_file(ms, \"%s\") nie powiod³o siê: uprawnienia %06o %s\n"
+ 
+ #: lib/rpmfc.c:1295
+-#, fuzzy, c-format
++#, c-format
+ msgid "Finding  %s: %s\n"
+-msgstr "Plik %s: %s\n"
++msgstr "Szukanie  %s: %s\n"
+ 
+ #: lib/rpmfc.c:1301 lib/rpmfc.c:1312
+-#, fuzzy, c-format
++#, c-format
+ msgid "Failed to find %s:\n"
+-msgstr "Odczytanie %s nie powiod³o siê: %s.\n"
++msgstr "Nie uda³o siê odnale¼æ %s:\n"
+ 
+ #: lib/rpmfi.c:622
+ #, c-format
+@@ -3070,9 +3060,9 @@
+ msgstr "\tdodano pakiet binarny [%d]\n"
+ 
+ #: lib/rpminstall.c:605
+-#, fuzzy, c-format
++#, c-format
+ msgid "package file %s was skipped\n"
+-msgstr "pakiet %s ma niespe³nione %s: %s\n"
++msgstr "plik pakietu %s zosta³ pominiêty\n"
+ 
+ #: lib/rpminstall.c:609
+ #, c-format
+@@ -3143,9 +3133,9 @@
+ msgstr "pakiet %s jest ju¿ zainstalowany"
+ 
+ #: lib/rpmps.c:219
+-#, fuzzy, c-format
++#, c-format
+ msgid "re-packaged package with %s: %s is missing"
+-msgstr "\tPrzepakowany Pakiet %s...\n"
++msgstr "przepakowany pakiet z %s: brak %s"
+ 
+ #: lib/rpmps.c:224
+ #, c-format
+@@ -3318,17 +3308,16 @@
+ msgstr "Cechy dostarczane przez bie¿±ce uname:\n"
+ 
+ #: lib/rpmrollback.c:389
+-#, fuzzy
+ msgid "Failed dependencies"
+-msgstr "Niespe³nione zale¿no¶ci:\n"
++msgstr "Niespe³nione zale¿no¶ci"
+ 
+ #: lib/rpmrollback.c:394
+ msgid "Ordering problems"
+-msgstr ""
++msgstr "Problemy z kolejno¶ci±"
+ 
+ #: lib/rpmrollback.c:399
+ msgid "Rollback problems"
+-msgstr ""
++msgstr "Problemy z wycofywaniem"
+ 
+ #: lib/rpmrollback.c:518
+ #, c-format
+@@ -3336,9 +3325,8 @@
+ msgstr "Wy³±czanie TID z wycofania: %-24.24s (0x%08x)\n"
+ 
+ #: lib/rpmrollback.c:620
+-#, fuzzy
+ msgid "Missing re-packaged package(s)"
+-msgstr "Wykryto brakuj±ce przepakowane pakiety:\n"
++msgstr "Brak przepakowywanych pakietów"
+ 
+ #: lib/rpmrollback.c:628
+ #, c-format
+@@ -3601,14 +3589,14 @@
+ msgstr "wy³±czanie katalogu %s\n"
+ 
+ #: lib/transaction.c:1013
+-#, fuzzy, c-format
++#, c-format
+ msgid "rpmdb erase failed. NEVRA: %s\n"
+-msgstr "%s rmdir %s nie powiod³o siê: %s\n"
++msgstr "usuwanie z rpmdb nie powiod³o siê. NEVRA: %s\n"
+ 
+ #: lib/transaction.c:1031
+-#, fuzzy, c-format
++#, c-format
+ msgid "Rollback to %-24.24s (0x%08x)\n"
+-msgstr "Cel wycofania:  %-24.24s (0x%08x)\n"
++msgstr "Wycofanie do %-24.24s (0x%08x)\n"
+ 
+ #: lib/transaction.c:1178
+ msgid "Invalid number of transaction elements.\n"
+@@ -4375,274 +4363,183 @@
+ msgid "check Requires: against Provides: for dependency closure"
+ msgstr "sprawd¼ Requires: wzglêdem Provides: dla dope³nienia zale¿no¶ci"
+ 
+-#~ msgid "Rolling back successful transactions to %-24.24s (0x%08x).\n"
+-#~ msgstr "Cofanie udanych transakcji do %-24.24s (0x%08x).\n"
+-
+-#~ msgid "Transaction failed...rolling back\n"
+-#~ msgstr "Transakcja nie powiod³a siê... wycofywanie\n"
+-
+-#, fuzzy
+-#~ msgid "Failed transaction:  %-24.24s(0x%08x)\n"
+-#~ msgstr "Nieudana transakcja:  %-24.24s(0x%08x)\n"
+-
+-#~ msgid "Could not resolve semaphore_backout macro!\n"
+-#~ msgstr "Nie uda³o siê rozwi±zaæ makra semaphore_backout!\n"
+-
+-#~ msgid "Creating semaphore %s...\n"
+-#~ msgstr "Tworzenie semafora %s...\n"
+-
+-#~ msgid "Could not order auto-rollback transaction!\n"
+-#~ msgstr "Nie uda³o siê wykonaæ transakcji automatycznego wycofania!\n"
+-
+-#~ msgid "Rolling back successful transactions to %-24.24s (0x%08x)\n"
+-#~ msgstr "Cofanie udanych transakcji do %-24.24s (0x%08x)\n"
+-
+-#~ msgid "Removing semaphore %s...\n"
+-#~ msgstr "Usuwanie semafora %s...\n"
+-
+-#~ msgid "Getting repackaged header from transaction element\n"
+-#~ msgstr "Pobieranie przepakowanego nag³ówka z elementu transakcji\n"
+-
+-#~ msgid "\tLooking for %s...\n"
+-#~ msgstr "\tPoszukiwanie %s...\n"
+-
+-#~ msgid "\tRepackaged package not found!.\n"
+-#~ msgstr "\tPrzepakowany pakiet nie znaleziony!.\n"
+-
+-#~ msgid "\t\tName:  %s.\n"
+-#~ msgstr "\t\tNazwa:  %s.\n"
+-
+-#~ msgid "Processing failed install element %s for autorollback.\n"
+-#~ msgstr ""
+-#~ "Przetwarzanie nieudanego elementu instalacji %s do automatycznego "
+-#~ "wycofania.\n"
+-
+-#~ msgid "\tForce adding header to rpmdb.\n"
+-#~ msgstr "\tWymuszenie dodania nag³ówka do rpmdb.\n"
++#: rpmpopt:47 rpmpopt:371 rpmpopt:482
++msgid "list install/erase scriptlets from package(s)"
++msgstr "wypisz skrypty (de)instalacyjne z pakietu(ów)"
++
++#: rpmpopt:51
++msgid "display directories needed, but not provided, by packages"
++msgstr "wy¶wietl katalogi wymagane ale nie dostarczane przez pakiety"
++
++#: rpmpopt:55
++msgid "set permissions of files in a package"
++msgstr "ustaw uprawnienia plików w pakiecie"
++
++#: rpmpopt:60
++msgid "set user/group ownership of files in a package"
++msgstr "ustaw u¿ytkownika/grupê w³a¶ciciela plików w pakiecie"
++
++#: rpmpopt:64 rpmpopt:375 rpmpopt:486
++msgid "list capabilities this package conflicts with"
++msgstr "wypisz w³asno¶ci z którymi ten pakiet jest w konflikcie"
++
++#: rpmpopt:67 rpmpopt:378 rpmpopt:489
++msgid "list other packages removed by installing this package"
++msgstr "wypisz inne pakiety usuwane przy instalacji tego pakietu"
++
++#: rpmpopt:70 rpmpopt:381 rpmpopt:492
++msgid "list capabilities that this package provides"
++msgstr "wypisz w³asno¶ci dostarczane przez ten pakiet"
++
++#: rpmpopt:74 rpmpopt:385 rpmpopt:496
++msgid "list capabilities required by package(s)"
++msgstr "wypisz w³asno¶ci wymagane przez pakiet(y)"
++
++#: rpmpopt:78 rpmpopt:81 rpmpopt:389 rpmpopt:392
++#: rpmpopt:500 rpmpopt:503
++msgid "list enhancements suggested by package(s)"
++msgstr "wypisz rozszerzenia sugerowane przez pakiet(y)"
++
++#: rpmpopt:94 rpmpopt:405 rpmpopt:515
++msgid "list descriptive information from package(s)"
++msgstr "wypisz informacje opisowe z pakietu(ów)"
++
++#: rpmpopt:97 rpmpopt:408 rpmpopt:518
++msgid "list change logs for this package"
++msgstr "wypisz kronikê zmian dla tego pakietu"
++
++#: rpmpopt:100 rpmpopt:411 rpmpopt:521
++msgid "list metadata in xml"
++msgstr "wypisz metadane w formacie xml"
++
++#: rpmpopt:102 rpmpopt:413 rpmpopt:523
++msgid "list metadata in yaml"
++msgstr "wypisz metadane w formacie yaml"
++
++#: rpmpopt:108 rpmpopt:419 rpmpopt:529
++msgid "list trigger scriptlets from package(s)"
++msgstr "wypisz skrypty trigger z pakietu(ów)"
++
++#: rpmpopt:112 rpmpopt:423 rpmpopt:533
++msgid "list package(s) by install time, most recent first"
++msgstr "wypisz pakiet(y) wed³ug czasu instalacji od naj¶wie¿szego"
++
++#: rpmpopt:115 rpmpopt:426 rpmpopt:536
++msgid "list duplicated packages"
++msgstr "wypisz pakiety wielokrotne"
++
++#: rpmpopt:118 rpmpopt:429 rpmpopt:539
++msgid "list all files from each package"
++msgstr "wypisz wszystkie pliki z ka¿dego pakietu"
++
++#: rpmpopt:121 rpmpopt:432 rpmpopt:542
++msgid "list file names with classes"
++msgstr "wypisz nazwy plików z klasami"
++
++#: rpmpopt:124 rpmpopt:435 rpmpopt:545
++msgid "list file names with colors"
++msgstr "wypisz nazwy plików z kolorami"
++
++#: rpmpopt:127
++msgid "list file names with security context from header"
++msgstr "wypisz nazwy plików z kontekstami bezpieczeñstwa z nag³ówka"
++
++#: rpmpopt:130 rpmpopt:441 rpmpopt:551
++msgid "list file names with security context from file system"
++msgstr "wypisz nazwy plików z kontekstami bezpieczeñstwa z systemu plików"
++
++#: rpmpopt:133 rpmpopt:444 rpmpopt:554
++msgid "list file names with security context from policy RE"
++msgstr "wypisz nazwy plików z kontekstami bezpieczeñstwa z RE polityki"
++
++#: rpmpopt:136 rpmpopt:447 rpmpopt:557
++msgid "list file names with provides"
++msgstr "wypisz nazwy plików z dostarczanymi w³asno¶ciami"
++
++#: rpmpopt:139 rpmpopt:450 rpmpopt:560
++msgid "list file names with requires"
++msgstr "wypisz nazwy plików z wymaganiami"
+ 
+-#~ msgid "\tCould not add failed package header to db!\n"
+-#~ msgstr "\tNie uda³o siê dodaæ nag³ówka nieudanego pakietu do bazy!\n"
+-
+-#~ msgid "%s: Unknown transaction element type!\n"
+-#~ msgstr "%s: Nieznany typ elementu transakcji!\n"
+-
+-#~ msgid "TYPE:  %d\n"
+-#~ msgstr "RODZAJ:  %d\n"
+-
+-#~ msgid "Processing install element for autorollback...\n"
+-#~ msgstr "Przetwarzanie elementu instalacji do automatycznego wycofania...\n"
+-
+-#~ msgid "\tNEVRA: %s\n"
+-#~ msgstr "\tNEVRA: %s\n"
+-
+-#~ msgid "Could not get install element database instance!\n"
+-#~ msgstr "Nie uda³o siê uzyskaæ instancji bazy danych elementu instalacji!\n"
+-
+-#~ msgid "Could not get header for auto-rollback transaction!\n"
+-#~ msgstr ""
+-#~ "Nie uda³o siê uzyskaæ nag³ówka do transakcji automatycznego wycofania!\n"
+-
+-#~ msgid "\tAdded repackaged package header: %s.\n"
+-#~ msgstr "\tDodano przepakowany nag³ówek pakietu: %s.\n"
+-
+-#~ msgid "\tAdded erase element.\n"
+-#~ msgstr "\tDodano element usuniêcia.\n"
+-
+-#~ msgid "Could not get repackaged header for auto-rollback transaction!\n"
+-#~ msgstr ""
+-#~ "Nie uda³o siê uzyskaæ przepakowanego nag³ówka do transakcji "
+-#~ "automatycznego wycofania!\n"
+-
+-#~ msgid "Processing erase element for autorollback...\n"
+-#~ msgstr "Przetwarzanie elementu usuniêcia do automatycznego wycofania...\n"
+-
+-#~ msgid "\tErase element(s) already added.\n"
+-#~ msgstr "\tElement(y) usuniêcia ju¿ dodane.\n"
+-
+-#~ msgid "\tAdded repackaged package %s.\n"
+-#~ msgstr "\tDodano przepakowany pakiet %s.\n"
+-
+-#~ msgid "Could not add erase element to auto-rollback transaction.\n"
+-#~ msgstr ""
+-#~ "Nie uda³o siê dodaæ elementu usuniêcia do transakcji automatycznego "
+-#~ "wycofania.\n"
+-
+-#~ msgid "\tNo repackaged package...nothing to do.\n"
+-#~ msgstr "\tNie ma przepakowanych pakietów... nie ma nic do zrobienia.\n"
+-
+-#~ msgid "Failure reading repackaged package!\n"
+-#~ msgstr "B³±d podczas odczytu przepakowanego pakietu!\n"
+-
+-#~ msgid "Creating auto-rollback transaction\n"
+-#~ msgstr "Tworzenie transakcji automatycznego wycofania\n"
+-
+-#~ msgid "Adding %s to autorollback transaction.\n"
+-#~ msgstr "Dodawanie %s do transakcji automatycznego wycofania.\n"
+-
+-#~ msgid "Could not add transaction element to autorollback!.\n"
+-#~ msgstr ""
+-#~ "Nie uda³o siê dodaæ elementu transakcji do automatycznego wycofania!\n"
+-
+-#~ msgid "%s:%d \"%s\" must begin with alphanumeric, '_', '/' or '%%'.\n"
+-#~ msgstr "%s:%d \"%s\" musi zaczynaæ siê liter±, cyfr±, '_', '/' lub '%%'.\n"
+-
+-#~ msgid "%s:%d No comparison operator found.\n"
+-#~ msgstr "%s:%d Brak operatora porównania.\n"
+-
+-#~ msgid "%s:%d No EVR comparison value found.\n"
+-#~ msgstr "%s:%d Nie znaleziono warto¶ci do porównania EVR.\n"
+-
+-#~ msgid ""
+-#~ "\tline %d: \"%s\" must begin with alphanumeric, '_', '/' or '%%'. "
+-#~ "Skipping ...\n"
+-#~ msgstr ""
+-#~ "\tlinia %d: \"%s\" musi zaczynaæ siê liter±, cyfr±, '_', '/' lub '%%'. "
+-#~ "Pomijanie...\n"
+-
+-#~ msgid "argument is not an RPM package\n"
+-#~ msgstr "argument nie jest pakietem RPM\n"
+-
+-#~ msgid "error reading header from package\n"
+-#~ msgstr "b³±d odczytu nag³ówka z pakietu\n"
+-
+-#~ msgid "cannot re-open payload: %s\n"
+-#~ msgstr "nie mo¿na ponownie otworzyæ danych: %s\n"
+-
+-#, fuzzy
+-#~ msgid "%s failed\n"
+-#~ msgstr "%s nie powiod³o siê: %s\n"
+-
+-#~ msgid "package %s is intended for a %s operating system"
+-#~ msgstr "pakiet %s jest przeznaczony dla systemu operacyjnego %s"
+-
+-#~ msgid "error reading from file %s\n"
+-#~ msgstr "b³±d czytania z pliku %s\n"
+-
+-#~ msgid "list install/erase scriptlets from package(s)"
+-#~ msgstr "wypisz skrypty (de)instalacyjne z pakietu(ów)"
+-
+-#~ msgid "set permissions of files in a package"
+-#~ msgstr "ustaw uprawnienia plików w pakiecie"
+-
+-#~ msgid "set user/group ownership of files in a package"
+-#~ msgstr "ustaw u¿ytkownika/grupê w³a¶ciciela plików w pakiecie"
+-
+-#~ msgid "list capabilities this package conflicts with"
+-#~ msgstr "wypisz w³asno¶ci z którymi ten pakiet jest w konflikcie"
+-
+-#~ msgid "list other packages removed by installing this package"
+-#~ msgstr "wypisz inne pakiety usuwane przy instalacji tego pakietu"
+-
+-#~ msgid "list capabilities that this package provides"
+-#~ msgstr "wypisz w³asno¶ci dostarczane przez ten pakiet"
+-
+-#~ msgid "list capabilities required by package(s)"
+-#~ msgstr "wypisz w³asno¶ci wymagane przez pakiet(y)"
+-
+-#~ msgid "list descriptive information from package(s)"
+-#~ msgstr "wypisz informacje opisowe z pakietu(ów)"
+-
+-#~ msgid "list change logs for this package"
+-#~ msgstr "wypisz kronikê zmian dla tego pakietu"
+-
+-#~ msgid "list trigger scriptlets from package(s)"
+-#~ msgstr "wypisz skrypty trigger z pakietu(ów)"
+-
+-#~ msgid "list package(s) by install time, most recent first"
+-#~ msgstr "wypisz pakiet(y) wed³ug czasu instalacji od naj¶wie¿szego"
+-
+-#~ msgid "list all files from each package"
+-#~ msgstr "wypisz wszystkie pliki z ka¿dego pakietu"
+-
+-#~ msgid ""
+-#~ "find package name that contains a provided capability (needs rpmdb-redhat "
+-#~ "package installed)"
+-#~ msgstr ""
+-#~ "znajd¼ nazwê pakietu, który dostarcza w³asno¶æ (wymaga zainstalowanego "
+-#~ "pakietu rpmdb-redhat)"
+-
+-#~ msgid "set buildroot <policy> (e.g. compress man pages)"
+-#~ msgstr "ustaw <politykê> buildroot (np. kompresowanie stron manuala)"
+-
+-#~ msgid "<policy>"
+-#~ msgstr "<polityka>"
+-
+-#~ msgid "enable configure <option> for build"
+-#~ msgstr "w³±cz <opcjê> konfiguracji przy budowaniu"
+-
+-#~ msgid "<option>"
+-#~ msgstr "<opcja>"
+-
+-#~ msgid "disable configure <option> for build"
+-#~ msgstr "wy³±cz <opcjê> konfiguracji przy budowaniu"
+-
+-#~ msgid "use database in DIRECTORY"
+-#~ msgstr "u¿yj bazy danych w KATALOGu"
+-
+-#~ msgid "DIRECTORY"
+-#~ msgstr "KATALOG"
+-
+-#~ msgid "don't verify header+payload signature"
+-#~ msgstr "nie sprawdzaj sygnatury nag³ówka+danych"
+-
+-#~ msgid "don't update cache database, only print package paths"
+-#~ msgstr "nie uaktualniaj bazy danych bufora, tylko wypisz ¶cie¿ki pakietu"
+-
+-#~ msgid "File tree walk options:"
+-#~ msgstr "Opcje przechodzenia po drzewie plików:"
+-
+-#~ msgid "%s: %%{_cache_dbpath} macro is mis-configured.\n"
+-#~ msgstr "%s: makro %%{_cache_dbpath} jest b³êdnie skonfigurowane.\n"
+-
+-#~ msgid "%s: cache operation failed: ec %d.\n"
+-#~ msgstr "%s: operacja na cache nie powiod³a siê: ec %d.\n"
+-
+-#~ msgid "%s: read manifest failed: %s\n"
+-#~ msgstr "%s: odczyt \"manifestu\" nie powiód³ siê: %s\n"
+-
+-#~ msgid "Spec file can't use BuildRoot\n"
+-#~ msgstr "Plik spec nie mo¿e u¿ywaæ BuildRoot\n"
+-
+-#~ msgid "buildroot already specified, ignoring %s\n"
+-#~ msgstr "buildroot by³ ju¿ wcze¶niej podany, %s jest ignorowany\n"
+-
+-#~ msgid "override build root"
+-#~ msgstr "wymu¶ build root"
+-
+-#~ msgid "    %s[%d]: %s\n"
+-#~ msgstr "    %s[%d]: %s\n"
+-
+-#~ msgid "Target buffer overflow\n"
+-#~ msgstr "Przepe³nienie bufora docelowego\n"
+-
+-#~ msgid "Building for target %s\n"
+-#~ msgstr "Budowanie dla %s\n"
+-
+-#~ msgid "Internal error in argument processing (%d) :-(\n"
+-#~ msgstr "B³±d wewnêtrzny w przetwarzaniu argumentu (%d) :-(\n"
+-
+-#~ msgid "\tMatches found.\n"
+-#~ msgstr "\tPasuj±cych znaleziono.\n"
+-
+-#~ msgid "\tNo matches found.\n"
+-#~ msgstr "\tNie znaleziono pasuj±cych.\n"
++#: rpmpopt:142
++msgid ""
++"find package name that contains a provided capability (needs rpmdb-vendor "
++"package installed)"
++msgstr ""
++"znajd¼ nazwê pakietu, który zawiera dostarczan± w³asno¶æ (wymaga "
++"zainstalowanego pakietu rpmdb-vendor)"
+ 
+-#~ msgid "\tREMOVETID matched INSTALLTID.\n"
+-#~ msgstr "\tREMOVETID dopasowano do INSTALLTID.\n"
++#: rpmpopt:145
++msgid ""
++"find package name that contains a required capability (needs rpmdb-vendor "
++"package installed)"
++msgstr ""
++"znajd¼ nazwê pakietu, który zawiera wymagan± w³asno¶æ (wymaga "
++"zainstalowanego pakietu rpmdb-vendor)"
+ 
+-#~ msgid "Couldn't download nosource %s: %s\n"
+-#~ msgstr "Nie mo¿na ¶ci±gn±æ pliku nosource %s: %s\n"
++#: rpmpopt:150
++msgid "Failed transactions will be rolled back automatically"
++msgstr "Transakcje zakoñczone niepowodzeniem zostan± wycofane automatycznie"
++
++#: rpmpopt:154
++msgid "display package(s) previously installed"
++msgstr "wy¶wietl pakiet(y) zainstalowane wcze¶niej"
++
++#: rpmpopt:157
++msgid "display package(s) which replaced"
++msgstr "wy¶wietl zastêpowane pakiet(y)"
++
++#: rpmpopt:168
++msgid "set buildroot <policy> (e.g. compress man pages)"
++msgstr "ustaw <politykê> buildroot (np. kompresowanie stron manuala)"
++
++#: rpmpopt:169
++msgid "<policy>"
++msgstr "<polityka>"
++
++#: rpmpopt:255 rpmpopt:270 rpmpopt:285
++msgid "enable configure <option> for build"
++msgstr "w³±cz <opcjê> konfiguracji przy budowaniu"
++
++#: rpmpopt:256 rpmpopt:259 rpmpopt:271 rpmpopt:274
++#: rpmpopt:286 rpmpopt:289
++msgid "<option>"
++msgstr "<opcja>"
++
++#: rpmpopt:258 rpmpopt:273 rpmpopt:288
++msgid "disable configure <option> for build"
++msgstr "wy³±cz <opcjê> konfiguracji przy budowaniu"
++
++#: rpmpopt:262 rpmpopt:277 rpmpopt:295 rpmpopt:303
++#: rpmpopt:311 rpmpopt:319 rpmpopt:327 rpmpopt:335
++#: rpmpopt:343 rpmpopt:454 rpmpopt:564 rpmpopt:572
++msgid "use database in DIRECTORY"
++msgstr "u¿yj bazy danych w KATALOGu"
++
++#: rpmpopt:263 rpmpopt:278 rpmpopt:292 rpmpopt:296
++#: rpmpopt:304 rpmpopt:312 rpmpopt:320 rpmpopt:328
++#: rpmpopt:336 rpmpopt:344 rpmpopt:455 rpmpopt:565
++#: rpmpopt:573
++msgid "DIRECTORY"
++msgstr "KATALOG"
+ 
+-# --- from popt/po/pl.po (in popt.h, not in .pot) ---
+-#~ msgid "Options implemented via popt alias/exec:"
+-#~ msgstr "Opcje zaimplementowane poprzez popt alias/exec:"
++#: rpmpopt:291
++msgid "override build root"
++msgstr "wymu¶ build root"
++
++#: rpmpopt:438 rpmpopt:548
++msgid "list file names with security context"
++msgstr "wypisz nazwy plików z kontekstami bezpieczeñstwa"
++
++# --- from popt/po/pl.po (in popt.h, displayed using rpm domain)
++msgid "Options implemented via popt alias/exec:"
++msgstr "Opcje zaimplementowane poprzez popt alias/exec:"
+ 
+-#~ msgid "Help options:"
+-#~ msgstr "Opcje pomocy:"
++msgid "Help options:"
++msgstr "Opcje pomocy:"
+ 
+ # --- from popt (displayed using rpm domain)
+-#~ msgid "Show this help message"
+-#~ msgstr "Poka¿ tê pomoc"
++msgid "Show this help message"
++msgstr "Poka¿ tê pomoc"
+ 
+-#~ msgid "Display brief usage message"
+-#~ msgstr "Wy¶wietl skrócony sposób u¿ycia"
++msgid "Display brief usage message"
++msgstr "Wy¶wietl skrócony sposób u¿ycia"

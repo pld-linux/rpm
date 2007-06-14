@@ -1,0 +1,26 @@
+--- rpm-4.4.9/Doxyfile.in.orig	2007-05-13 05:20:43.000000000 +0200
++++ rpm-4.4.9/Doxyfile.in	2007-05-22 17:41:12.107028314 +0200
+@@ -504,23 +504,6 @@
+                          @top_srcdir@/doc/manual/spec \
+                          @top_srcdir@/doc/manual/triggers \
+                          @top_srcdir@/doc/manual/tsort \
+-                         @top_srcdir@/file/src/apprentice.c \
+-                         @top_srcdir@/file/src/apptype.c \
+-                         @top_srcdir@/file/src/ascmagic.c \
+-                         @top_srcdir@/file/src/compress.c \
+-                         @top_srcdir@/file/src/file.c \
+-                         @top_srcdir@/file/src/file.h \
+-                         @top_srcdir@/file/src/fsmagic.c \
+-                         @top_srcdir@/file/src/funcs.c \
+-                         @top_srcdir@/file/src/is_tar.c \
+-                         @top_srcdir@/file/src/magic.c \
+-                         @top_srcdir@/file/src/magic.h \
+-                         @top_srcdir@/file/src/names.h \
+-                         @top_srcdir@/file/src/print.c \
+-                         @top_srcdir@/file/src/readelf.c \
+-                         @top_srcdir@/file/src/readelf.h \
+-                         @top_srcdir@/file/src/softmagic.c \
+-                         @top_srcdir@/file/src/tar.h \
+                          @top_srcdir@/lib/cpio.c \
+                          @top_srcdir@/lib/cpio.h \
+                          @top_srcdir@/lib/depends.c \
