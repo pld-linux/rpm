@@ -15,7 +15,6 @@
 %__autopoint		autopoint --force
 
 %__gettextize { \
-if ! gettextize --version | grep -q '0\.10\.' ; then \
 	if grep -qs 'AM_GNU_GETTEXT.*external' configure.{ac,in} ; then \
 		gettextize --copy --force --no-changelog; \
 	else \
@@ -24,9 +23,6 @@ if ! gettextize --version | grep -q '0\.10\.' ; then \
 	if [ ! -f po/Makevars ]; then \
 		cp -f po/Makevars{.template,}; \
 	fi; \
-else \
-	gettextize --copy --force; \
-fi; \
 }
 
 %__glib_gettextize	glib-gettextize --copy --force
