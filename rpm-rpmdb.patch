@@ -1,0 +1,21 @@
+--- rpm-4.4.9/rpmdb/rpmdb.c.orig	2007-06-18 20:32:27.000000000 +0200
++++ rpm-4.4.9/rpmdb/rpmdb.c	2007-06-18 20:34:07.000000000 +0200
+@@ -3088,7 +3088,6 @@
+     HAE_t hae = (HAE_t) headerAddEntry;
+     HFD_t hfd = headerFreeData;
+     sigset_t signalMask;
+-    uint32_t hcolor = 0;
+     const char ** baseNames;
+     rpmTagType bnt;
+     const char ** dirNames;
+@@ -3122,8 +3121,8 @@
+     }
+ 
+     /* Add the package color if not present. */
+-    if (!hge(h, RPMTAG_PACKAGECOLOR, &bnt, (void **) &hcolor, &count)) {
+-	hcolor = hGetColor(h);
++    if (!headerIsEntry(h, RPMTAG_PACKAGECOLOR)) {
++	uint32_t hcolor = hGetColor(h);
+ 	xx = hae(h, RPMTAG_PACKAGECOLOR, RPM_INT32_TYPE, &hcolor, 1);
+     }
+ 
