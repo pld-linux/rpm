@@ -126,6 +126,10 @@ BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	db-devel >= %{reqdb_ver}
 BuildRequires:	elfutils-devel >= 0.108
+%ifnarch sparc64
+# -fPIE/-pie
+BuildRequires:	gcc >= 5:3.4
+%endif
 BuildRequires:	gettext-devel >= 0.11.4-2
 %{?with_system_libmagic:BuildRequires:	libmagic-devel}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
