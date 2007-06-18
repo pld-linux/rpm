@@ -119,6 +119,7 @@ Patch58:	%{name}-repackage-wo-lzma.patch
 Patch59:	%{name}-libtool-deps.patch
 Patch60:	%{name}-obsolete-rpmrc.patch
 Patch61:	%{name}-sparc64.patch
+Patch62:	%{name}-rpmdb.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -717,6 +718,7 @@ install %{SOURCE12} scripts/perl.prov
 %ifarch sparc64
 %patch61 -p1
 %endif
+%patch62 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
