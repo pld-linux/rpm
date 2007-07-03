@@ -1087,16 +1087,7 @@ fi \
 # command invoking pear cli
 %__pear /usr/bin/pear
 
-# The main macro.
-# using this macro will append optional-packages.txt to the nocompressdoc list
-# as it's displayed to user after package install. and adding additional gzip
-# dep is just waste ;)
-%pear_package_setup(a:n:zD) \
-%define srcdir %{-n*}%{!-n:%{_pearname}-%{version}} \
-%define builddir %{_builddir}/%{srcdir} \
-%setup -q -c -T %{-D:-D} -n %{srcdir} \
-%{-z:tar zxf %{S:0}; %{-a:tar zxf %{S:%{-a*}}}} \
-%{-z:_P=package2.xml; [ -f $_P ] || _P=package.xml; _N=%{srcdir}; mv $_P $_N; cd $_N} \
+%pear_install(a:n:zD) \
 %__pear \\\
 	-c pearrc \\\
 	-d doc_dir=/docs \\\
@@ -1109,7 +1100,20 @@ fi \
 	--offline \\\
 	--nodeps \\\
 	%{-f:--force} \\\
-	%{!-z:%{S:%{-a*}%{!-a:0}}}%{-z:$_P} > .install.log || { c=$?; cat .install.log; exit $c; } \
+	%{!-z:%{S:%{-a*}%{!-a:0}}}%{-z:$_P} > .install.log || { c=$?; cat .install.log; exit $c; }; \
+%{nil}
+
+# The main macro.
+# using this macro will append optional-packages.txt to the nocompressdoc list
+# as it's displayed to user after package install. and adding additional gzip
+# dep is just waste ;)
+%pear_package_setup(a:n:zD) \
+%define srcdir %{-n*}%{!-n:%{_pearname}-%{version}} \
+%define builddir %{_builddir}/%{srcdir} \
+%setup -q -c -T %{-D:-D} -n %{srcdir} \
+%{-z:tar zxf %{S:0}; %{-a:tar zxf %{S:%{-a*}}}} \
+%{-z:_P=package2.xml; [ -f $_P ] || _P=package.xml; _N=%{srcdir}; mv $_P $_N; cd $_N} \
+%pear_install \
 %{-z:cd ..} \
 cat %{-z:$_N/}.install.log | %__pear_install_log \
 \
