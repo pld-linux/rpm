@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	2
+Release:	3
 License:	GPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -806,6 +806,7 @@ echo "%{_target_cpu}-%{_target_vendor}-linux" > $RPM_BUILD_ROOT%{_sysconfdir}/rp
 
 # x86_64 things
 %ifarch x86_64
+echo "amd64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 echo "x86_64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 
