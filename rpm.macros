@@ -486,14 +486,16 @@ fi \
 %update_desktop_database_post() {{ \
 	umask 022; \
 	/usr/bin/update-desktop-database -q; \
-}}
+}} \
+%{nil}
 
 %update_desktop_database_postun() {{ \
 if [ $1 = 0 ]; then \
 	umask 022; \
 	/usr/bin/update-desktop-database -q; \
 fi \
-}}
+}} \
+%{nil}
 
 #-----------------------------------------------------------------
 # Update shared MIME info database
@@ -502,7 +504,8 @@ fi \
 %update_mime_database() {{ \
 	umask 022; \
 	/usr/bin/update-mime-database %{_datadir}/mime; \
-}}
+}} \
+%{nil}
 
 #-----------------------------------------------------------------
 # Update icon cache
@@ -511,7 +514,8 @@ fi \
 %update_icon_cache() {{ \
 	umask 022; \
 	/usr/bin/gtk-update-icon-cache -qf %{_datadir}/icons/%1; \
-}}
+}} \
+%{nil}
 
 #-----------------------------------------------------------------
 # Update scrollkeeper database
