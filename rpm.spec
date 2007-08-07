@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	5
+Release:	6
 License:	GPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -98,7 +98,7 @@ Patch34:	%{name}-epoch0.patch
 Patch35:	%{name}-perl_req-INC_dirs.patch
 Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
-
+Patch38:	%{name}-rpm5-patchset-8021.patch
 Patch41:	%{name}-reduce-stack-usage.patch
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
 
@@ -701,6 +701,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch35 -p0
 %patch36 -p1
 %patch37 -p1
+%patch38 -p1
 %patch41 -p1
 %patch42 -p1
 %{!?with_neon:%patch44 -p1}
