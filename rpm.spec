@@ -30,7 +30,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.2
-Release:	45
+Release:	46
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -52,12 +52,8 @@ Source14:	%{name}.sysconfig
 Source15:	%{name}-macros.java
 Source16:	find-java-prov.sh
 Source17:	RPM-GPG-KEY
-
-Source30:	builder
-Source31:	adapter.awk
-Source32:	pldnotify.awk
 # http://svn.pld-linux.org/banner.sh/
-Source33:	banner.sh
+Source18:	banner.sh
 Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
@@ -495,40 +491,6 @@ construir pacotes usando o RPM.
 Р╕зноман╕тн╕ допом╕жн╕ скрипти та утил╕ти, як╕ використовуються для
 побудови RPM'╕в.
 
-%package build-tools
-Summary:	Scripts for managing .spec files and building RPM packages
-Summary(de):	Scripts fЭrs Bauen binДrer RPM-Pakete
-Summary(pl):	Skrypty pomocnicze do zarz╠dznia plikami .spec i budowania RPM-Сw
-Summary(pt_BR):	Scripts e programas executАveis usados para construir pacotes
-Summary(ru):	Скрипты и утилиты, необходимые для сборки пакетов
-Summary(uk):	Скрипти та утил╕ти, необх╕дн╕ для побудови пакет╕в
-Group:		Applications/File
-Requires:	%{name}-build = %{version}-%{release}
-# these are optional
-#Requires:	cvs
-Requires:	wget
-
-%description build-tools
-Scripts for managing .spec files and building RPM packages.
-
-%description build-tools -l de
-Scripts fЭrs Bauen RPM-Pakete.
-
-%description build-tools -l pl
-Skrypty pomocnicze do zarz╠dzania plikami .spec i do budowania RPM-Сw.
-
-%description build-tools -l pt_BR
-Este pacote contИm scripts e programas executАveis que sЦo usados para
-construir pacotes usando o RPM.
-
-%description build-tools -l ru
-Различные вспомогательные скрипты и исполняемые программы, которые
-используются для сборки RPM'ов.
-
-%description build-tools -l uk
-Р╕зноман╕тн╕ допом╕жн╕ скрипти та утил╕ти, як╕ використовуються для
-побудови RPM'╕в.
-
 %package javaprov
 Summary:	Additional utilities for checking Java provides/requires in rpm packages
 Group:		Applications/File
@@ -826,10 +788,7 @@ install %{SOURCE15} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.java
 install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
 install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
-install %{SOURCE30} $RPM_BUILD_ROOT%{_bindir}/builder
-install %{SOURCE31} $RPM_BUILD_ROOT%{_bindir}/adapter.awk
-install %{SOURCE32} $RPM_BUILD_ROOT%{_bindir}/pldnotify.awk
-install %{SOURCE33} $RPM_BUILD_ROOT%{_bindir}/banner.sh
+install %{SOURCE18} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
 install rpmio/ugid.h $RPM_BUILD_ROOT%{_includedir}/rpm
 
@@ -1152,12 +1111,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %lang(ja) %{_mandir}/ja/man8/rpmbuild.8*
 %lang(pl) %{_mandir}/pl/man1/gendiff.1*
 %lang(pl) %{_mandir}/pl/man8/rpmbuild.8*
-
-%files build-tools
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/builder
-%attr(755,root,root) %{_bindir}/adapter.awk
-%attr(755,root,root) %{_bindir}/pldnotify.awk
 
 %files javaprov
 %defattr(644,root,root,755)
