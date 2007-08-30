@@ -22,7 +22,7 @@
 RCSID='$Id$'
 r=${RCSID#* * }
 rev=${r%% *}
-VERSION="v0.18/$rev"
+VERSION="v0.19/$rev"
 VERSIONSTRING="\
 Build package utility from PLD Linux CVS repository
 $VERSION (C) 1999-2007 Free Penguins".
@@ -42,11 +42,13 @@ NOCVS=""
 NOCVSSPEC=""
 NODIST=""
 NOINIT=""
+PREFMIRRORS=""
 UPDATE=""
 ADD5=""
 NO5=""
 ALWAYS_CVSUP=${ALWAYS_CVSUP:-"yes"}
 CVSROOT=""
+GREEDSRC=""
 
 # user agent when fetching files
 USER_AGENT="PLD/Builder($VERSION)"
@@ -209,7 +211,7 @@ Usage: builder [-D|--debug] [-V|--version] [--short-version] [-a|--as_anon] [-b|
 [-g|--get] [-h|--help] [--http] [{-l|--logtofile} <logfile>] [-m|--mr-proper]
 [-q|--quiet] [--date <yyyy-mm-dd> [-r <cvstag>] [{-T|--tag <cvstag>]
 [-Tvs|--tag-version-stable] [-Ts|--tag-stable] [-Tv|--tag-version]
-[{-Tp|--tag-prefix} <prefix>] [{-tt|--test-tag}]
+[{-Tp|--tag-prefix} <prefix>] [{-tt|--test-tag}] [--use-greed-sources]
 [-nu|--no-urls] [-v|--verbose] [--opts <rpm opts>] [--short-circuit]
 [--show-bconds] [--with/--without <feature>] [--define <macro> <value>]
 <package>[.spec][:cvstag]
@@ -259,6 +261,7 @@ Usage: builder [-D|--debug] [-V|--version] [--short-version] [-a|--as_anon] [-b|
 -ns, --no-srcs      - don't download Sources
 -ns0, --no-source0  - don't download Source0
 -nn, --no-net       - don't download anything from the net
+-pm, --prefer-mirrors - prefer mirrors (if any) over distfiles for SOURCES
 --no-init           - don't initialize builder paths (SPECS and SOURCES)
 -ske,
 --skip-existing-files - skip existing files in get_files
@@ -310,6 +313,9 @@ Usage: builder [-D|--debug] [-V|--version] [--short-version] [-a|--as_anon] [-b|
 -u, --try-upgrade   - check version, and try to upgrade package
 -un, --try-upgrade-with-float-version
                     - as above, but allow float version
+--use-greed-sources
+                    - try download source from tag head if don't find it in
+                      current tag	
 -U, --update        - refetch sources, don't use distfiles, and update md5 comments
 -Upi, --update-poldek-indexes
                     - refresh or make poldek package index files.
@@ -519,7 +525,7 @@ parse_spec()
 	PACKAGE_RELEASE=$(rpm_dump | awk '$2 == "PACKAGE_RELEASE" { print $3; exit}')
 
 	if [ "$PACKAGE_NAME" != "$ASSUMED_NAME" ]; then
-		echo "WARNING! Spec name ($ASSUMED_NAME) does not agree with package name ($PACKAGE_NAME)"
+		echo >&2 "WARNING! Spec name ($ASSUMED_NAME) does not agree with package name ($PACKAGE_NAME)"
 	fi
 
 	if [ -n "$BE_VERBOSE" ]; then
@@ -604,8 +610,12 @@ init_builder()
 	fi
 
 	if [ "$NOINIT" != "yes" ] ; then
-		SOURCE_DIR="`eval $RPM $RPMOPTS --define '"name $ASSUMED_NAME"' --eval '%{_sourcedir}'`"
-		SPECS_DIR="`eval $RPM $RPMOPTS --define '"name $ASSUMED_NAME"' --eval '%{_specdir}'`"
+		local extra
+		if [ "$ASSUMED_NAME" ]; then
+			extra="--define 'name $ASSUMED_NAME'"
+		fi
+		SOURCE_DIR="`eval $RPM $RPMOPTS $extra --eval '%{_sourcedir}'`"
+		SPECS_DIR="`eval $RPM $RPMOPTS $extra --eval '%{_specdir}'`"
 	else
 		SOURCE_DIR="."
 		SPECS_DIR="."
@@ -943,9 +953,9 @@ get_files()
 					fi
 					target="$fp"
 
-					# prefer mirror over distfiles if there's mirror
+					# optionally prefer mirror over distfiles if there's mirror
 					# TODO: build url list and then try each url from the list
-					if [ -z "$NOMIRRORS" ] && im=$(find_mirror "$i") && [ "$im" != "$i" ]; then
+					if [ -n "$PREFMIRRORS" ] && [ -z "$NOMIRRORS" ] && im=$(find_mirror "$i") && [ "$im" != "$i" ]; then
 						url="$im"
 					else
 						url=$(distfiles_url "$i")
@@ -1034,7 +1044,11 @@ get_files()
 
 			# the md5 check must be moved elsewhere as if we've called from update_md5 the md5 is wrong.
 			if [ ! -f "$fp" -a "$FAIL_IF_NO_SOURCES" != "no" ]; then
-				Exit_error err_no_source_in_repo $i
+				if [ -n "GREEDSRC" ]; then
+					get_greed_sources $i
+				else
+					Exit_error err_no_source_in_repo $i
+				fi
 			fi
 
 			# we check md5 here just only to refetch immediately
@@ -1138,6 +1152,8 @@ tag_files()
 		local fp=`nourl "$i"`
 		if [ -f "$fp" ]; then
 			tag_files="$tag_files $fp"
+		elif [ -n "GREEDSRC" ]; then
+			get_greed_sources $i
 		else
 			Exit_error err_no_source_in_repo $i
 		fi
@@ -1188,6 +1204,8 @@ branch_files()
 		local fp=`nourl "$i"`
 		if [ -f "$fp" ]; then
 			tag_files="$tag_files $fp"
+		elif [ -n "GREEDSRC" ]; then
+			get_greed_sources $i
 		else
 			Exit_error err_no_source_in_repo $i
 		fi
@@ -1631,8 +1649,8 @@ fetch_build_requires()
 			local DEPS=$(rpm-getdeps $BCOND $SPECFILE 2> /dev/null | awk '/^\+/ { print $3 } ' | _rpm_prov_check | xargs)
 
 			if [ -n "$CNFL" ] || [ -n "$DEPS" ]; then
-				echo "fetch builderequires: install $DEPS; remove $CNFL"
-				update_shell_title "poldek: install $DEPS; remove $CNFL"
+				echo "fetch builderequires: install [$DEPS]; remove [$CNFL]"
+				update_shell_title "poldek: install [$DEPS]; remove [$CNFL]"
 				$SU_SUDO /usr/bin/poldek -q --update || $SU_SUDO /usr/bin/poldek -q --upa
 			fi
 			if [ -n "$CNFL" ]; then
@@ -1826,6 +1844,18 @@ init_rpm_dir() {
 	echo "- edit $SOURCE_DIR/CVS/Root"
 }
 
+get_greed_sources() {
+	CVSROOT=":pserver:cvs@$CVS_SERVER:/cvsroot"
+	if [ -n "BE_VERBOSE" ]; then
+		echo "Try greed download: $1 from: $CVSROOT"
+	fi
+	cvs -d $CVSROOT get SOURCES/$1
+	if [ $? != 0 ]; then
+		Exit_error err_no_source_in_repo $1
+	fi
+	
+}
+
 #---------------------------------------------
 # main()
 
@@ -1917,6 +1947,9 @@ while [ $# -gt 0 ]; do
 			NOURLS="yes"
 			NOSRCS="yes"
 			ALWAYS_CVSUP="no"
+			shift;;
+		-pm | --prefer-mirrors )
+			PREFMIRRORS="yes"
 			shift;;
 		--no-init )
 			NOINIT="yes"
@@ -2028,6 +2061,9 @@ while [ $# -gt 0 ]; do
 		--init-rpm-dir)
 			COMMAND="init_rpm_dir"
 			shift ;;
+		--use-greed-sources )
+			GREEDSRC="1"
+			shift;;
 		-u | --try-upgrade )
 			TRY_UPGRADE="1"; shift ;;
 		-un | --try-upgrade-with-float-version )
@@ -2075,7 +2111,7 @@ while [ $# -gt 0 ]; do
 				CVSTAG="${SPECFILE##*:}"
 				SPECFILE="${SPECFILE%%:*}"
 			fi
-			ASSUMED_NAME="${SPECFILE%%.spec}"
+			ASSUMED_NAME="$(basename ${SPECFILE%%.spec})"
 			shift
 	esac
 done
