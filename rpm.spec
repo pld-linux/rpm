@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	7
+Release:	8
 License:	GPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -56,11 +56,8 @@ Source13:	%{name}-user_group.sh
 Source14:	%{name}.sysconfig
 Source15:	%{name}-macros.java
 Source16:	%{name}-java-requires
-Source30:	builder
-Source31:	adapter.awk
-Source32:	pldnotify.awk
 # http://svn.pld-linux.org/banner.sh/
-Source33:	banner.sh
+Source17:	banner.sh
 Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
@@ -501,40 +498,6 @@ construir pacotes usando o RPM.
 Різноманітні допоміжні скрипти та утиліти, які використовуються для
 побудови RPM'ів.
 
-%package build-tools
-Summary:	Scripts for managing .spec files and building RPM packages
-Summary(de.UTF-8):	Scripts fürs Bauen binärer RPM-Pakete
-Summary(pl.UTF-8):	Skrypty pomocnicze do zarządznia plikami .spec i budowania RPM-ów
-Summary(pt_BR.UTF-8):	Scripts e programas executáveis usados para construir pacotes
-Summary(ru.UTF-8):	Скрипты и утилиты, необходимые для сборки пакетов
-Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для побудови пакетів
-Group:		Applications/File
-Requires:	%{name}-build = %{version}-%{release}
-# these are optional
-#Requires:	cvs
-Requires:	wget
-
-%description build-tools
-Scripts for managing .spec files and building RPM packages.
-
-%description build-tools -l de.UTF-8
-Scripts fürs Bauen RPM-Pakete.
-
-%description build-tools -l pl.UTF-8
-Skrypty pomocnicze do zarządzania plikami .spec i do budowania RPM-ów.
-
-%description build-tools -l pt_BR.UTF-8
-Este pacote contém scripts e programas executáveis que são usados para
-construir pacotes usando o RPM.
-
-%description build-tools -l ru.UTF-8
-Различные вспомогательные скрипты и исполняемые программы, которые
-используются для сборки RPM'ов.
-
-%description build-tools -l uk.UTF-8
-Різноманітні допоміжні скрипти та утиліти, які використовуються для
-побудови RPM'ів.
-
 %package javaprov
 Summary:	Additional utilities for checking Java provides/requires in RPM packages
 Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzania zależności kodu w Javie w pakietach RPM
@@ -882,10 +845,7 @@ install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
-install %{SOURCE30} $RPM_BUILD_ROOT%{_bindir}/builder
-install %{SOURCE31} $RPM_BUILD_ROOT%{_bindir}/adapter.awk
-install %{SOURCE32} $RPM_BUILD_ROOT%{_bindir}/pldnotify.awk
-install %{SOURCE33} $RPM_BUILD_ROOT%{_bindir}/banner.sh
+install %{SOURCE17} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
 install %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
 
@@ -1196,12 +1156,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %lang(ja) %{_mandir}/ja/man8/rpmbuild.8*
 %lang(pl) %{_mandir}/pl/man1/gendiff.1*
 %lang(pl) %{_mandir}/pl/man8/rpmbuild.8*
-
-%files build-tools
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/builder
-%attr(755,root,root) %{_bindir}/adapter.awk
-%attr(755,root,root) %{_bindir}/pldnotify.awk
 
 %files javaprov
 %defattr(644,root,root,755)
