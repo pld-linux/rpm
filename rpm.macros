@@ -643,11 +643,11 @@ fi \
 # X.org helper macros
 %__xorg_abi_requires() Requires: xorg-xserver-server(%{expand:%1}-abi) = %{expand:%{%{!?2:%{1}}%{?2}}}
 #
-%xorg_xserver_ansic_abi		%(awk '/#define ABI_ANSIC_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' %{_includedir}/xorg/xf86Module.h)
-%xorg_xserver_extension_abi	%(awk '/#define ABI_EXTENSION_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' %{_includedir}/xorg/xf86Module.h)
-%xorg_xserver_font_abi		%(awk '/#define ABI_FONT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' %{_includedir}/xorg/xf86Module.h)
-%xorg_xserver_videodrv_abi	%(awk '/#define ABI_VIDEODRV_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' %{_includedir}/xorg/xf86Module.h)
-%xorg_xserver_xinput_abi		%(awk '/#define ABI_XINPUT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' %{_includedir}/xorg/xf86Module.h)
+%xorg_xserver_ansic_abi		%(awk '/#define ABI_ANSIC_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h)
+%xorg_xserver_extension_abi	%(awk '/#define ABI_EXTENSION_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h)
+%xorg_xserver_font_abi		%(awk '/#define ABI_FONT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h)
+%xorg_xserver_videodrv_abi	%(awk '/#define ABI_VIDEODRV_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h)
+%xorg_xserver_xinput_abi		%(awk '/#define ABI_XINPUT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h)
 
 %requires_xorg_xserver_extension %{__xorg_abi_requires ansic xorg_xserver_ansic_abi} \
 %{__xorg_abi_requires extension xorg_xserver_extension_abi}
