@@ -366,10 +366,13 @@ unset DISPLAY ||:\
 if [ -d "$RPM_BUILD_ROOT" ]; then \
 	if [ -d $RPM_BUILD_ROOT/lib/modules ]; then \
 		modulelist=$(find $RPM_BUILD_ROOT/lib/modules -name '*o' -type f -print); \
-		printf "Stripping %d kernel modules..." $(echo "$modulelist" | wc -l); \
-		echo "$modulelist" | xargs -l512 chmod u+w; \
-		echo "$modulelist" | xargs -l512 %{__strip} --strip-unneeded --remove-section=.comment --remove-section=.note.GNU-stack; \
-		echo "DONE"; \
+		modulecount=$(echo -n "$modulelist" | wc -l); \
+		if [ "$modulecount" -gt 0 ]; then \
+			printf "Stripping %d kernel modules..."; \
+			echo "$modulelist" | xargs -l512 chmod u+w; \
+			echo "$modulelist" | xargs -l512 %{__strip} --strip-unneeded --remove-section=.comment --remove-section=.note.GNU-stack; \
+			echo "DONE"; \
+		fi; \
 	fi; \
 	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*\.debug" ! -regex ".*%{_docdir}/.*" ! -regex ".*%{_includedir}/.*" %{?_noautostrip:! -regex "%{_noautostrip}"}`; \
 	# vim - " \
