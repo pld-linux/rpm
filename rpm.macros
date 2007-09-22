@@ -587,17 +587,16 @@ fi \
 %php_pear_dir		/usr/share/pear
 %php_extensiondir	%(php-config --extension-dir 2>/dev/null || echo ERROR)
 %php_sysconfdir		%(php-config --sysconfdir 2>/dev/null || echo ERROR)
+%php_includedir		%(php-config --include-dir 2>/dev/null || echo ERROR)
 
-# directory where php includes are installed on system.
-%__php_includedir		/usr/include/php
 # extract php/zend api versions
-%php_major_version		%(awk '/#define PHP_MAJOR_VERSION/{print $3}' %{__php_includedir}/main/php_version.h 2>/dev/null || echo ERROR)
-%php_api_version		%(awk '/#define PHP_API_VERSION/{print $3}' %{__php_includedir}/main/php.h 2>/dev/null || echo ERROR)
-%php_pdo_api_version	%(awk '/#define PDO_DRIVER_API/{print $3}' %{__php_includedir}/ext/pdo/php_pdo_driver.h 2>/dev/null || echo ERROR)
-%php_debug				%(awk '/#define ZEND_DEBUG/{print $3}' %{__php_includedir}/main/php_config.h 2>/dev/null || echo ERROR)
-%zend_module_api		%(awk '/#define ZEND_MODULE_API_NO/{print $3}' %{__php_includedir}/Zend/zend_modules.h 2>/dev/null || echo ERROR)
-%zend_extension_api		%(awk '/#define ZEND_EXTENSION_API_NO/{print $3}' %{__php_includedir}/Zend/zend_extensions.h 2>/dev/null || echo ERROR)
-%zend_zts				%(Z=$(grep -sc '^#define ZTS 1' %{__php_includedir}/main/php_config.h); echo ${Z:-ERROR})
+%php_major_version		%(awk '/#define PHP_MAJOR_VERSION/{print $3}' %{php_includedir}/main/php_version.h 2>/dev/null || echo ERROR)
+%php_api_version		%(awk '/#define PHP_API_VERSION/{print $3}' %{php_includedir}/main/php.h 2>/dev/null || echo ERROR)
+%php_pdo_api_version	%(awk '/#define PDO_DRIVER_API/{print $3}' %{php_includedir}/ext/pdo/php_pdo_driver.h 2>/dev/null || echo ERROR)
+%php_debug				%(awk '/#define ZEND_DEBUG/{print $3}' %{php_includedir}/main/php_config.h 2>/dev/null || echo ERROR)
+%zend_module_api		%(awk '/#define ZEND_MODULE_API_NO/{print $3}' %{php_includedir}/Zend/zend_modules.h 2>/dev/null || echo ERROR)
+%zend_extension_api		%(awk '/#define ZEND_EXTENSION_API_NO/{print $3}' %{php_includedir}/Zend/zend_extensions.h 2>/dev/null || echo ERROR)
+%zend_zts				%(Z=$(grep -sc '^#define ZTS 1' %{php_includedir}/main/php_config.h); echo ${Z:-ERROR})
 
 # helper macro
 %__php_api_requires(v:) Requires: php%{-v*}(%{expand:%1}) = %{expand:%{%{!?2:%{1}}%{?2}}}
