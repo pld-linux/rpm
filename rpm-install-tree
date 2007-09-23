@@ -1,3 +1,0 @@
-#!/bin/sh
-
-install -d `rpm --eval "%{_rpmdir}  %{_specdir} %{_sourcedir} %{_srcrpmdir}  %{_builddir}"`
