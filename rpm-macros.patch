@@ -54,6 +54,15 @@
  
  #==============================================================================
  # ---- Database configuration macros.
+@@ -757,7 +757,7 @@
+ 
+ #	Open all indices before doing chroot(2).
+ #
+-%_openall_before_chroot	0
++%_openall_before_chroot	1
+ 
+ #	The path to the dependency universe database. The default value
+ #	is the rpmdb-vendor location. The macro is usually defined in
 @@ -1127,17 +1127,17 @@
  %_exec_prefix		%{_prefix}
  %_bindir		%{_exec_prefix}/bin
