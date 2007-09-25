@@ -132,7 +132,6 @@ fi
 if [ ! -f __omf.files ] || [ "$TOP_DIR" -nt __omf.files ]; then
 	find $TOP_DIR -type f -name '*.omf' | \
 	sed -e '
-		s/:.*//
 		s:'"$TOP_DIR"'::' > __omf.files
 else
 	echo "$PROG: Using cached __omf.files"
