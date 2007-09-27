@@ -10,13 +10,12 @@
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
-%bcond_without	apidocs		# don't generate documentation with doxygen
 %bcond_with	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
-%bcond_without	system_libmagic	# don't use system libmagic
 %bcond_without	suggest_tags	# build without Suggest tag (bootstrapping)
 %bcond_with	neon		# build with HTTP/WebDAV support (neon library)
+%bcond_with	sqlite		# build with SQLite support
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
@@ -25,7 +24,7 @@
 %define	reqdb_ver	4.6.18
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
-%define	sover	4.4
+%define	sover	5.0
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
 Summary(es.UTF-8):	Gestor de paquetes RPM
@@ -34,12 +33,12 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	4.4.9
-Release:	9
+Version:	5.0
+Release:	0.1
 License:	GPL
 Group:		Base
-Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
-# Source0-md5:	210b768006e7d88dd8a3bcd498ea27f6
+Source0:	rpm-20070927.tar.gz
+# Source0-md5:	cf0bda3a41b74d68b36ef078edfafc6d
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -129,7 +128,7 @@ BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gcc >= 5:3.4
 %endif
 BuildRequires:	gettext-devel >= 0.11.4-2
-%{?with_system_libmagic:BuildRequires:	libmagic-devel}
+BuildRequires:	libmagic-devel
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
@@ -144,13 +143,8 @@ BuildRequires:	popt-devel >= %{reqpopt_ver}
 BuildRequires:	python-modules >= 1:2.5
 BuildRequires:	rpm-perlprov
 %{?with_python:BuildRequires:	rpm-pythonprov}
+%{?with_sqlite:BuildRequires:	sqlite3-devel}
 BuildRequires:	zlib-devel
-%if %{with apidocs}
-BuildRequires:	doxygen
-BuildRequires:	ghostscript
-BuildRequires:	graphviz
-BuildRequires:	tetex-pdftex
-%endif
 %if %{with static}
 # Require static library only for static build
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
@@ -158,7 +152,7 @@ BuildRequires:	bzip2-static >= 1.0.2-17
 BuildRequires:	db-static >= %{reqdb_ver}
 BuildRequires:	elfutils-static
 BuildRequires:	glibc-static >= 2.2.94
-%{?with_system_libmagic:BuildRequires:	libmagic-static}
+BuildRequires:	libmagic-static
 %{?with_selinux:BuildRequires:	libselinux-static >= 1.18}
 BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
@@ -267,9 +261,10 @@ Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	db >= %{reqdb_ver}
 %{?with_selinux:Requires:	libselinux >= 1.18}
-%{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
+Requires:	libmagic >= 1.15-2
 Requires:	popt >= %{reqpopt_ver}
 Obsoletes:	rpm-libs
+Obsoletes:	rpm-apidocs
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
 %{?with_suggest_tags:Suggests:	lzma}
@@ -294,7 +289,7 @@ Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
 Requires:	db-devel >= %{reqdb_ver}
 Requires:	elfutils-devel
-%{?with_system_libmagic:Requires:	libmagic-devel}
+Requires:	libmagic-devel
 %{?with_selinux:Requires:	libselinux-devel}
 Requires:	popt-devel >= %{reqpopt_ver}
 Requires:	zlib-devel
@@ -357,7 +352,7 @@ Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
 Requires:	db-static >= %{reqdb_ver}
 Requires:	elfutils-static
-%{?with_system_libmagic:Requires:	libmagic-static}
+Requires:	libmagic-static
 Requires:	popt-static >= %{reqpopt_ver}
 Requires:	zlib-static
 
@@ -599,40 +594,49 @@ RPM (RPM Package Manager).
 Esse pacote deve ser instalado se você quiser desenvolver programas em
 Python para manipular pacotes e bancos de dados RPM.
 
-%package apidocs
-Summary:	RPM API documentation and guides
-Summary(pl.UTF-8):	Documentacja API RPM-a i przewodniki
-Group:		Documentation
-
-%description apidocs
-Documentation for RPM API and guides in HTML format generated from rpm
-sources by doxygen.
-
-%description apidocs -l pl.UTF-8
-Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
-źrodeł RPM-a przez doxygen.
-
 %prep
-%setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
+%setup -q -n %{name}
+sed -i -e 's# no # nb #g' configure.ac
+mv po/no.po po/nb.po
+sed -i -e 's# sr # sr@Latn #g' configure.ac
+mv -f po/{sr,sr@Latn}.po
+
+sed -i -e 's#${prefix}/lib/python@WITH_PYTHON_VERSION@#@WITH_PYTHON_LIBDIR@#g' python/rpm/Makefile.am
+
+# APPLIED ALREADY?
+#%patch0 -p1
+# no rpmrc?
+#%patch1 -p1
+# no rpmrc?
+#%patch2 -p1
+# CHECK ME
+#%patch3 -p1
+# CHECK ME
+#%patch4 -p1
+# CHECK ME
+#%patch5 -p1
 %patch6 -p1
 %patch7 -p1
-%patch8 -p1
+# CHECK ME
+#%patch8 -p1
 %patch9 -p1
-%patch10 -p1
-%patch11 -p1
-%patch12 -p1
-%patch13 -p1
-%patch14 -p1
-%patch15 -p1
+# CHECK ME
+#%patch10 -p1
+# APPLIED ALREADY?
+#%patch11 -p1
+# CHECK ME
+#%patch12 -p1
+# APPLIED ALREADY?
+#%patch13 -p1
+# CHECK ME
+#%patch14 -p1
+# CHECK ME
+#%patch15 -p1
 %patch16 -p1
-%patch17 -p1
-%patch18 -p1
+# CHECK ME
+#%patch17 -p1
+# CHECK ME 
+#%patch18 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 #cp -f platform.in macros.pld.in # what for?
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
@@ -646,79 +650,89 @@ install %{SOURCE5} scripts/find-lang.sh
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
-%patch19 -p1
-%patch20 -p1
-%patch21 -p1
-%patch22 -p1
+# CHECK ME
+#%patch19 -p1
+# NO INTERNAL FILE
+#%patch20 -p1
+# CHECK ME
+#%patch21 -p1
+# CHECK ME
+#%patch22 -p1
 %patch23 -p1
-%patch24 -p1
+# CHECK ME
+#%patch24 -p1
 %patch25 -p1
-%patch26 -p1
+# CHECK ME, possibly drop since we don't support i386 anymore
+# %patch26 -p1
 %patch27 -p1
-%patch28 -p1
-%patch29 -p1
-%patch31 -p1
-%patch32 -p1
-%patch33 -p1
+# CHECK ME
+#%patch28 -p1
+# SHOULD BE OBSOLETE
+#%patch29 -p1
+# CHECK ME
+#%patch31 -p1
+# CHECK ME
+#%patch32 -p1
+# CHECK ME
+#%patch33 -p1
 %patch34 -p1
-%patch35 -p0
-%patch36 -p1
+# CHECK ME
+#%patch35 -p0
+# CHECK ME
+#%patch36 -p1
 %patch37 -p1
-%patch38 -p1
-%patch41 -p1
-%patch42 -p1
-%{!?with_neon:%patch44 -p1}
-%patch45 -p1
-%patch46 -p1
-%patch47 -p1
-%patch49 -p1
-%patch50 -p1
-%patch51 -p1
+# OBSOLETE
+#%patch38 -p1
+# CHECK ME
+#%patch41 -p1
+# CHECK ME
+#%patch42 -p1
+# CHECK ME
+#%{!?with_neon:%patch44 -p1}
+# CHECK ME
+#%patch45 -p1
+# CHECK ME
+#%patch46 -p1
+# CHECK ME
+#%patch47 -p1
+# CHECK ME
+#%patch49 -p1
+# CHECK ME
+#%patch50 -p1
+# CHECK ME
+#%patch51 -p1
+# OLD COMMENTED OUT
 #%patch52 -p1
 %patch55 -p1
-%patch57 -p1
+# CHECK ME
+#%patch57 -p1
 %patch58 -p1
 %patch59 -p1
-%patch60 -p1
+# OBSOLETE
+#%patch60 -p1
 %ifarch sparc64
 %patch61 -p1
 %endif
-%patch62 -p1
+# OBSOLETE
+#%patch62 -p1
 
-cd scripts
-mv -f perl.req perl.req.in
-mv -f perl.prov perl.prov.in
-cd ..
-
-mv -f po/{no,nb}.po
-mv -f po/{sr,sr@Latn}.po
-
-rm -rf sqlite zlib db db3 popt rpmdb/db.h
+#cd scripts
+#mv -f perl.req perl.req.in
+#mv -f perl.prov perl.prov.in
+#cd ..
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
 
 # update macros paths
-for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
-	sed -e 's@lib/rpm/redhat@lib/rpm/pld@g' $f > ${f}.tmp
-	mv -f ${f}.tmp $f
-done
+#for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
+#	sed -e 's@lib/rpm/redhat@lib/rpm/pld@g' $f > ${f}.tmp
+#	mv -f ${f}.tmp $f
+#done
 
 %build
-%if %{with system_libmagic}
-rm -rf file
-%else
-cd file
 %{__libtoolize}
-%{__aclocal}
-%{__autoheader}
-%{__autoconf}
-%{__automake}
-cd ..
-%endif
-
-%{__libtoolize}
-%{__gettextize}
+%{__autopoint}
 %{__aclocal}
 %{__autoheader}
 %{__autoconf}
@@ -726,7 +740,7 @@ cd ..
 
 # config.guess doesn't handle athlon, so we have to change it by hand.
 # rpm checks for CPU type at runtime, but it looks better
-sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu@|%{_target_cpu}|' macros.in
+#sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu@|%{_target_cpu}|' macros.in
 
 # pass CC and CXX too in case of building with some older configure macro
 # disable perl-RPM2 build, we have it in separate spec
@@ -738,32 +752,37 @@ sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu
 	%{?with_autoreqdep:--enable-adding-packages-names-in-autogenerated-dependancies} \
 	--enable-shared \
 	--enable-static \
-	%{!?with_apidocs:--without-apidocs} \
-	%{?with_python:--with-python=2.5} \
+	%{?with_python:--with-python=2.5 --with-python-lib-dir=%{py_libdir}} \
 	%{!?with_python:--without-python} \
-	%{!?with_selinux:--without-selinux} \
-	--without-db
+	--with%{!?with_selinux:out}-selinux \
+	--with-libelf \
+	--with-zlib=external \
+	--with-bzip2=external \
+	--with-beecrypt=external \
+	--with-neon=%{?with_neon:external}%{!?with_neon:no} \
+	--with-file=external \
+	--with-popt=external \
+	--with-db=external \
+	--with-sqlite=%{?with_sqlite:external}%{!?with_sqlite:no} \
+	--with-dbapi=db \
+	--with-lua=none \
+	--with-pcre=external \
+	--with-keyutils=none \
+	--without-path-versioned \
+	--with-bugreport="http://bugs.pld-linux.org/"
 
-# file_LDFLAGS, debugedit_LDADD - no need to link "file" and "debugedit" statically
 %{__make} \
 	CC="%{__cc}" \
 	CXX="%{__cxx}" \
-	CPP="%{__cpp}" \
-	pylibdir=%{py_libdir} \
-	myLDFLAGS="%{rpmldflags}" \
-	file_LDFLAGS= \
-	debugedit_LDADD="\$(WITH_LIBELF_LIB) -lpopt" \
-	staticLDFLAGS=%{?with_static:-all-static}
+	CPP="%{__cpp}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner}
+install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner}
 
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT \
-	staticLDFLAGS=%{?with_static:-all-static} \
-	pylibdir=%{py_libdir} \
-	pkgbindir="%{_bindir}"
+	pkgconfigdir=%{_pkgconfigdir} \
+	DESTDIR=$RPM_BUILD_ROOT
 
 # first platform file entry can't contain regexps
 echo "%{_target_cpu}-%{_target_vendor}-linux" > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
@@ -848,9 +867,6 @@ install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 install %{SOURCE17} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
 install %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
-
-# obsolete but still installed
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/rpmrc
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # customized rpm macros - global for host
@@ -947,30 +963,30 @@ EOF
 install -d $RPM_BUILD_ROOT/var/{spool/repackage,lock/rpm}
 touch $RPM_BUILD_ROOT/var/lock/rpm/transaction
 
+# mov rpm to /bin
+mv -f $RPM_BUILD_ROOT%{_bindir}/rpm $RPM_BUILD_ROOT/bin
 # move libs to /lib
-for a in librpm-%{sover}.so librpmdb-%{sover}.so librpmio-%{sover}.so ; do
+for a in librpm-%{sover}.so librpmdb-%{sover}.so librpmio-%{sover}.so librpmbuild-%{sover}.so; do
 	mv -f $RPM_BUILD_ROOT%{_libdir}/$a $RPM_BUILD_ROOT/%{_lib}
 	ln -s /%{_lib}/$a $RPM_BUILD_ROOT%{_libdir}/$a
 done
 
 # remove arch dependant macros which have no use on noarch
-%{__sed} -i -e '
-/{__spec_install_post_strip}/d
-/{__spec_install_post_chrpath}/d
-/{__spec_install_post_compress_modules}/d
-' $RPM_BUILD_ROOT%{_rpmlibdir}/noarch-linux/macros
+#%{__sed} -i -e '
+#/{__spec_install_post_strip}/d
+#/{__spec_install_post_chrpath}/d
+#/{__spec_install_post_compress_modules}/d
+#' $RPM_BUILD_ROOT%{_rpmlibdir}/noarch-linux/macros
 
 %py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
 %py_comp $RPM_BUILD_ROOT%{py_sitedir}
 
-rm -f $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,a,py}
+rm $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,a,py}
 
-# (currently) not used or supported in PLD
-rm -f $RPM_BUILD_ROOT%{_rpmlibdir}/{Specfile.pm,cpanflute,cpanflute2,find-provides,find-requires,freshen.sh,http.req,magic.prov,magic.req,perldeps.pl,sql.prov,sql.req,tcl.req}
 # wrong location, not used anyway
-rm -f $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log,xinetd}
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log,xinetd}
 # manuals for utils dropped in 4.4.8 (?)
-#rm -f $RPM_BUILD_ROOT%{_mandir}/{,*/}/man8/{rpmcache,rpmgraph}.8
+#rm $RPM_BUILD_ROOT%{_mandir}/{,*/}/man8/{rpmcache,rpmgraph}.8
 
 %find_lang %{name}
 
@@ -989,7 +1005,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc CHANGES CREDITS README wdj/JBJ-GPG-KEY manual/*
+%doc CHANGES CREDITS README pubkeys/JBJ-GPG-KEY manual/*
 
 %attr(755,root,root) /bin/rpm
 #%attr(755,root,root) %{_bindir}/rpmdb
@@ -1042,6 +1058,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %defattr(644,root,root,755)
 %{_includedir}/rpm
 %{_libdir}/librpm*.la
+%{_pkgconfigdir}/*.pc
 %attr(755,root,root) %{_libdir}/librpm.so
 %attr(755,root,root) %{_libdir}/librpm-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmio.so
@@ -1056,10 +1073,13 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files utils
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/debugedit
+%attr(755,root,root) %{_bindir}/rpmconstant
 %attr(755,root,root) %{_bindir}/rpm2cpio
-%attr(755,root,root) %{_bindir}/rpmdeps
-%{!?with_system_libmagic:%attr(755,root,root) %{_bindir}/rpmfile}
+%attr(755,root,root) %{_rpmlibdir}/rpmcache
+%attr(755,root,root) %{_rpmlibdir}/rpmcmp
+%attr(755,root,root) %{_rpmlibdir}/rpmdeps
+%attr(755,root,root) %{_rpmlibdir}/debugedit
+%attr(755,root,root) %{_rpmlibdir}/rpmdigest
 %attr(755,root,root) %{_rpmlibdir}/find-debuginfo.sh
 %attr(755,root,root) %{_rpmlibdir}/tgpg
 %attr(755,root,root) %{_rpmlibdir}/rpmdb_loadcvt
@@ -1095,7 +1115,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/check-files
 # %attr(755,root,root) %{_rpmlibdir}/check-prereqs
 %attr(755,root,root) %{_rpmlibdir}/compress-doc
-%attr(755,root,root) %{_rpmlibdir}/config.*
+#%attr(755,root,root) %{_rpmlibdir}/config.*
 %attr(755,root,root) %{_rpmlibdir}/cross-build
 %attr(755,root,root) %{_rpmlibdir}/find-spec-bcond
 %attr(755,root,root) %{_rpmlibdir}/find-lang.sh
@@ -1107,8 +1127,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
 # needs hacked pkg-config to return anything
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
-%attr(755,root,root) %{_rpmlibdir}/rpmb
-%attr(755,root,root) %{_rpmlibdir}/rpmt
+#%attr(755,root,root) %{_rpmlibdir}/rpmb
+#%attr(755,root,root) %{_rpmlibdir}/rpmt
+# XXX FIXME FIXME FIXME XXX
+%if 0
 %{_rpmlibdir}/noarch-*
 %ifarch %{ix86}
 %{_rpmlibdir}/i?86*
@@ -1134,6 +1156,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/amd64*
 %{_rpmlibdir}/ia32e*
 %{_rpmlibdir}/x86_64*
+%endif
 %endif
 # must be here for "Requires: rpm-*prov" to work
 %{_rpmlibdir}/macros.java
@@ -1189,10 +1212,4 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %dir %{py_sitedir}/rpm
 %attr(755,root,root) %{py_sitedir}/rpm/*.so
 %{py_sitedir}/rpm/*.py[co]
-%endif
-
-%if %{with apidocs}
-%files apidocs
-%defattr(644,root,root,755)
-%doc apidocs
 %endif
