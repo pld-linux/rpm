@@ -1,14 +1,14 @@
 diff -urN rpm-4.3.org/configure.ac rpm-4.3/configure.ac
 --- rpm-4.3.org/configure.ac	2004-01-07 01:51:35.251160244 +0100
 +++ rpm-4.3/configure.ac	2004-01-07 01:55:53.198560246 +0100
-@@ -1196,6 +1196,7 @@
- AC_CONFIG_SUBDIRS(popt beecrypt zlib elfutils file db3)
- 
- AC_CONFIG_FILES([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
-+	scripts/perl.req scripts/perl.prov
- 	rpmio/Makefile rpmdb/Makefile lib/Makefile build/Makefile
- 	scripts/Makefile scripts/brp-redhat
- 	scripts/macros.perl scripts/macros.php scripts/macros.python
+@@ -1313,6 +1313,7 @@
+     Doxyfile Makefile macros rpmpopt rpm.spec
+     rpmio/Makefile rpmdb/Makefile lib/Makefile build/Makefile
+     scripts/Makefile scripts/macros.perl scripts/macros.php
++    scripts/perl.req scripts/perl.prov
+     scripts/macros.python tools/Makefile misc/Makefile doc/Makefile
+     doc/manual/Makefile doc/fr/Makefile doc/ja/Makefile doc/ko/Makefile
+     doc/pl/Makefile doc/ru/Makefile doc/sk/Makefile python/Makefile
 diff -urN rpm-4.3.org/scripts/perl.req rpm-4.3/scripts/perl.req
 --- rpm-4.3.org/scripts/perl.req	2004-01-07 01:51:04.911464416 +0100
 +++ rpm-4.3/scripts/perl.req	2004-01-07 01:55:17.030076058 +0100
