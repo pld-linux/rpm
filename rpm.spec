@@ -58,64 +58,52 @@ Source16:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source17:	banner.sh
 Patch0:		%{name}-pl.po.patch
-Patch1:		%{name}-rpmrc.patch
-Patch2:		%{name}-arch.patch
+
 Patch3:		%{name}-rpmpopt.patch
 Patch4:		%{name}-perl-macros.patch
 Patch5:		%{name}-perl-req-perlfile.patch
 Patch6:		%{name}-noexpand.patch
 Patch7:		%{name}-scripts-closefds.patch
-Patch8:		%{name}-python-macros.patch
+Patch8:		%{name}-php-macros.patch
 Patch9:		%{name}-gettext-in-header.patch
 Patch10:	%{name}-compress-doc.patch
-Patch11:	%{name}-Nmalloc.patch
-Patch12:	%{name}-system_libs.patch
-Patch13:	%{name}-bb-and-short-circuit.patch
+
 Patch14:	%{name}-etc_dir.patch
-Patch15:	%{name}-system_libs-more.patch
 Patch16:	%{name}-php-deps.patch
-Patch17:	%{name}-ldconfig-always.patch
+
 Patch18:	%{name}-perl_req.patch
-Patch19:	%{name}-link.patch
-Patch20:	%{name}-magic-usesystem.patch
+
 Patch21:	%{name}-dontneedutils.patch
 Patch22:	%{name}-provides-dont-obsolete.patch
 Patch23:	%{name}-pkgconfigdeps.patch
-Patch24:	%{name}-po.patch
+
 Patch25:	%{name}-rpm2cpio-payload.patch
 Patch26:	%{name}-notsc.patch
 Patch27:	%{name}-hack-norpmlibdep.patch
-Patch28:	%{name}-makefile-no_myLDADD_deps.patch
-Patch29:	%{name}-macros-dbhash.patch
+
 Patch31:	%{name}-missing-prototypes.patch
 Patch32:	%{name}-pld-autodep.patch
-Patch33:	%{name}-arch-x86_64.patch
 Patch34:	%{name}-epoch0.patch
 Patch35:	%{name}-perl_req-INC_dirs.patch
 Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
-Patch38:	%{name}-rpm5-patchset-8021.patch
+
 Patch41:	%{name}-reduce-stack-usage.patch
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
 
-Patch44:	%{name}-no-neon.patch
-Patch45:	%{name}-no-sqlite.patch
 Patch46:	%{name}-mono.patch
 Patch47:	%{name}-javadeps.patch
 
-Patch49:	%{name}-p4.patch
 Patch50:	%{name}-macros.patch
-Patch51:	%{name}-cleanlibdirs.patch
+
 Patch52:	%{name}-morearchs.patch
 
 Patch55:	%{name}-truncate-cvslog.patch
 
-Patch57:	%{name}-as_needed-fix.patch
 Patch58:	%{name}-repackage-wo-lzma.patch
 Patch59:	%{name}-libtool-deps.patch
-Patch60:	%{name}-obsolete-rpmrc.patch
+
 Patch61:	%{name}-sparc64.patch
-Patch62:	%{name}-rpmdb.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -605,38 +593,20 @@ sed -i -e 's#${prefix}/lib/python@WITH_PYTHON_VERSION@#@WITH_PYTHON_LIBDIR@#g' p
 
 # APPLIED ALREADY?
 #%patch0 -p1
-# no rpmrc?
-#%patch1 -p1
-# no rpmrc?
-#%patch2 -p1
 # CHECK ME
 #%patch3 -p1
-# CHECK ME
-#%patch4 -p1
-# CHECK ME
-#%patch5 -p1
+%patch4 -p1
+%patch5 -p1
 %patch6 -p1
 %patch7 -p1
-# CHECK ME
-#%patch8 -p1
+%patch8 -p1
 %patch9 -p1
 # CHECK ME
 #%patch10 -p1
-# APPLIED ALREADY?
-#%patch11 -p1
-# CHECK ME
-#%patch12 -p1
-# APPLIED ALREADY?
-#%patch13 -p1
 # CHECK ME
 #%patch14 -p1
-# CHECK ME
-#%patch15 -p1
 %patch16 -p1
-# CHECK ME
-#%patch17 -p1
-# CHECK ME 
-#%patch18 -p1
+%patch18 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 #cp -f platform.in macros.pld.in # what for?
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
@@ -651,75 +621,46 @@ install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
 # CHECK ME
-#%patch19 -p1
-# NO INTERNAL FILE
-#%patch20 -p1
-# CHECK ME
 #%patch21 -p1
 # CHECK ME
 #%patch22 -p1
 %patch23 -p1
-# CHECK ME
-#%patch24 -p1
 %patch25 -p1
 # CHECK ME, possibly drop since we don't support i386 anymore
 # %patch26 -p1
 %patch27 -p1
 # CHECK ME
-#%patch28 -p1
-# SHOULD BE OBSOLETE
-#%patch29 -p1
-# CHECK ME
 #%patch31 -p1
 # CHECK ME
 #%patch32 -p1
-# CHECK ME
-#%patch33 -p1
 %patch34 -p1
-# CHECK ME
-#%patch35 -p0
+%patch35 -p0
 # CHECK ME
 #%patch36 -p1
 %patch37 -p1
-# OBSOLETE
-#%patch38 -p1
 # CHECK ME
 #%patch41 -p1
 # CHECK ME
 #%patch42 -p1
 # CHECK ME
-#%{!?with_neon:%patch44 -p1}
-# CHECK ME
-#%patch45 -p1
-# CHECK ME
 #%patch46 -p1
 # CHECK ME
 #%patch47 -p1
-# CHECK ME
-#%patch49 -p1
-# CHECK ME
+# CHECK ME, replace part by --with-path-macros
 #%patch50 -p1
-# CHECK ME
-#%patch51 -p1
 # OLD COMMENTED OUT
 #%patch52 -p1
 %patch55 -p1
-# CHECK ME
-#%patch57 -p1
 %patch58 -p1
 %patch59 -p1
-# OBSOLETE
-#%patch60 -p1
 %ifarch sparc64
 %patch61 -p1
 %endif
-# OBSOLETE
-#%patch62 -p1
 
-#cd scripts
-#mv -f perl.req perl.req.in
-#mv -f perl.prov perl.prov.in
-#cd ..
+cd scripts
+mv -f perl.req perl.req.in
+mv -f perl.prov perl.prov.in
+cd ..
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
