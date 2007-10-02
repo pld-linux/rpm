@@ -20,7 +20,7 @@
  %tmpdir			%{_tmppath}
  
  #	Path to top of build area.
--%_topdir		%{_usrsrc}/rpm
+-%_topdir		@PKGSRCDIR_MACRO@
 +%_topdir		%(echo $HOME)/rpm
  
  #==============================================================================
@@ -49,7 +49,7 @@
  
  #
  # Path to magic file used for file classification.
--%_rpmfc_magic_path	%{_usr}/lib/rpm/magic
+-%_rpmfc_magic_path	%{_rpmhome}/magic
 +%_rpmfc_magic_path	/usr/share/file/magic
  
  #==============================================================================
@@ -79,9 +79,9 @@
  
  #==============================================================================
 @@ -1428,7 +1428,25 @@
- # helpers are also used by %{_usrlibrpm}/rpmdeps {--provides|--requires}.
- #%__executable_provides	%{_usrlibrpm}/executabledeps.sh --provides
- #%__executable_requires	%{_usrlibrpm}/executabledeps.sh --requires
+ # helpers are also used by %{_rpmhome}/rpmdeps {--provides|--requires}.
+ #%__executable_provides	%{_rpmhome}/executabledeps.sh --provides
+ #%__executable_requires	%{_rpmhome}/executabledeps.sh --requires
 -%__scriptlet_requires	/bin/bash --rpm-requires
 +#%__scriptlet_requires	/bin/bash --rpm-requires
  
