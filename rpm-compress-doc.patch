@@ -17,16 +17,17 @@
  	}
      }
  
-diff -ur rpm-4.0.4/platform.in rpm-4.0.4-/platform.in
---- rpm-4.0.4/platform.in	Fri May 17 11:18:12 2002
-+++ rpm-4.0.4-/platform.in	Fri May 17 11:17:44 2002
-@@ -102,6 +102,9 @@
-     %{__os_install_post}\
- %{nil}
+diff -ur rpm-4.0.4/macros.in rpm-4.0.4-/macros.in
+--- rpm-4.0.4/macros.in	Fri May 17 11:18:12 2002
++++ rpm-4.0.4-/macros.in	Fri May 17 11:17:44 2002
+@@ -1208,6 +1208,9 @@
+ #%__spec_triggerin_pre		%{nil}
+ #%__spec_triggerin_post		%{nil}
  
 +# Executed at after copying %doc to DOCDIR, with $DOCDIR set
-+%__compress_doc		@prefix@/lib/rpm/compress-doc%{?_noautocompressdoc: --noautocompressdoc='%{_noautocompressdoc}'}
++%__compress_doc                @prefix@/lib/rpm/compress-doc%{?_noautocompressdoc: --noautocompressdoc='%{_noautocompressdoc}'}
 +
- @redhat@#---------------------------------------------------------------------
- @redhat@#	Expanded at end of %prep
- @redhat@#
+ #==============================================================================
+ # ---- configure macros.
+ #	Macro(s) slavishly copied from autoconf's config.status.
+
