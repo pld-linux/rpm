@@ -651,7 +651,7 @@ install %{SOURCE12} scripts/perl.prov
 #%patch46 -p1
 # CHECK ME
 #%patch47 -p1
-# CHECK ME, replace part by --with-path-macros
+# CHECK ME
 #%patch50 -p1
 # OLD COMMENTED OUT
 #%patch52 -p1
@@ -715,6 +715,7 @@ awk -f %{SOURCE6} %{SOURCE1}
 	--with-pcre=external \
 	--with-keyutils=none \
 	--without-path-versioned \
+	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.build:%{_rpmlibdir}/%%{_target}/macros:%{_sysconfdir}/macros.*:%{_sysconfdir}/macros:%{_sysconfdir}/%%{_target}/macros:~/etc/rpmmacros:~/etc/.rpmmacros:~/.rpmmacros' \
 	--with-bugreport="http://bugs.pld-linux.org/"
 
 %{__make} \
