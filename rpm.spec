@@ -85,7 +85,6 @@ Patch16:	%{name}-php-deps.patch
 
 Patch18:	%{name}-perl_req.patch
 
-Patch21:	%{name}-dontneedutils.patch
 Patch22:	%{name}-provides-dont-obsolete.patch
 Patch23:	%{name}-pkgconfigdeps.patch
 
@@ -605,16 +604,14 @@ sed -i -e 's#${prefix}/lib/python@WITH_PYTHON_VERSION@#@WITH_PYTHON_LIBDIR@#g' p
 
 # APPLIED ALREADY?
 #%patch0 -p1
-# CHECK ME
-#%patch3 -p1
+%patch3 -p1
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
-# CHECK ME
-#%patch10 -p1
+%patch10 -p1
 # CHECK ME
 #%patch14 -p1
 %patch16 -p1
@@ -632,9 +629,7 @@ install %{SOURCE5} scripts/find-lang.sh
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
-# CHECK ME
-#%patch21 -p1
-# CHECK ME
+# CHECK ME. REPLACE WITH MACRO %_upgrade_tag name
 #%patch22 -p1
 %patch23 -p1
 %patch25 -p1
@@ -643,8 +638,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch27 -p1
 # CHECK ME
 #%patch31 -p1
-# CHECK ME
-#%patch32 -p1
+%patch32 -p1
 %patch34 -p1
 %patch35 -p0
 # CHECK ME
@@ -652,9 +646,8 @@ install %{SOURCE12} scripts/perl.prov
 %patch37 -p1
 # CHECK ME
 #%patch41 -p1
-# CHECK ME
-#%patch42 -p1
-# CHECK ME
+%patch42 -p1
+# CHECK ME, PROBABLY WILL NEED TO HANLE IN OTHER WAY since rpmfcSCRIPT already handles mono
 #%patch46 -p1
 # CHECK ME
 #%patch47 -p1
