@@ -69,6 +69,7 @@ Source15:	%{name}-macros.java
 Source16:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source17:	banner.sh
+Source18:	%{name}-pld.macros
 Patch0:		%{name}-pl.po.patch
 
 Patch3:		%{name}-rpmpopt.patch
@@ -103,8 +104,6 @@ Patch42:	%{name}-old-fileconflicts-behaviour.patch
 
 Patch46:	%{name}-mono.patch
 Patch47:	%{name}-javadeps.patch
-
-Patch50:	%{name}-macros.patch
 
 Patch52:	%{name}-morearchs.patch
 
@@ -615,8 +614,6 @@ sed -i -e 's#${prefix}/lib/python@WITH_PYTHON_VERSION@#@WITH_PYTHON_LIBDIR@#g' p
 #%patch14 -p1
 %patch16 -p1
 %patch18 -p1
-sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
-#cp -f platform.in macros.pld.in # what for?
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
 echo '%%define	__perl_requires	%%{__perl} /usr/lib/rpm/perl.req' >> macros.perl
 echo '# obsoleted file' > macros.python
@@ -640,8 +637,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch32 -p1
 %patch34 -p1
 %patch35 -p0
-# CHECK ME
-#%patch36 -p1
+%patch36 -p1
 %patch37 -p1
 # CHECK ME
 #%patch41 -p1
@@ -649,7 +645,6 @@ install %{SOURCE12} scripts/perl.prov
 # CHECK ME, PROBABLY WILL NEED TO HANLE IN OTHER WAY since rpmfcSCRIPT already handles mono
 #%patch46 -p1
 %patch47 -p1
-%patch50 -p1
 # OLD COMMENTED OUT
 #%patch52 -p1
 %patch55 -p1
@@ -796,6 +791,7 @@ install macros.python	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.python
 install macros.php	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.php
 install macros.mono	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.mono
 install %{SOURCE15}	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.java
+install %{SOURCE18}	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.pld
 
 install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
@@ -984,6 +980,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/macros
+%{_rpmlibdir}/macros.pld
 
 %files base
 %defattr(644,root,root,755)
