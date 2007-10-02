@@ -85,7 +85,6 @@ Patch16:	%{name}-php-deps.patch
 
 Patch18:	%{name}-perl_req.patch
 
-Patch22:	%{name}-provides-dont-obsolete.patch
 Patch23:	%{name}-pkgconfigdeps.patch
 
 Patch25:	%{name}-rpm2cpio-payload.patch
@@ -629,12 +628,12 @@ install %{SOURCE5} scripts/find-lang.sh
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
-# CHECK ME. REPLACE WITH MACRO %_upgrade_tag name
-#%patch22 -p1
 %patch23 -p1
 %patch25 -p1
-# CHECK ME, possibly drop since we don't support i386 anymore
-# %patch26 -p1
+%ifarch i386
+# disable TSC
+%patch26 -p1
+%endif
 %patch27 -p1
 # CHECK ME
 #%patch31 -p1
