@@ -1,6 +1,7 @@
---- rpm-4.4.8/macros.in.orig	2007-04-08 20:24:47.206783474 +0200
-+++ rpm-4.4.8/macros.in	2007-04-08 20:36:08.925632417 +0200
-@@ -208,7 +208,7 @@
+diff -urN rpm.org/macros.in rpm/macros.in
+--- rpm.org/macros.in	2007-10-02 20:46:56.430390000 +0200
++++ rpm/macros.in	2007-10-02 20:49:01.480941544 +0200
+@@ -213,7 +213,7 @@
  %endif\
  %{nil}
  
@@ -9,7 +10,7 @@
  
  #	The path to the pgp executable (legacy, use %{__pgp} instead).
  %_pgpbin		%{__pgp}
-@@ -237,12 +237,12 @@
+@@ -242,12 +242,12 @@
  #	The directory where newly built source packages will be written.
  %_srcrpmdir		%{_topdir}/SRPMS
  
@@ -25,7 +26,7 @@
  
  #==============================================================================
  # ---- Optional rpmrc macros.
-@@ -252,7 +252,7 @@
+@@ -257,7 +257,7 @@
  #	Configurable build root path, same as BuildRoot: in a specfile.
  #	(Note: the configured macro value will override the spec file value).
  #
@@ -34,7 +35,7 @@
  
  #	The sub-directory (relative to %{_builddir}) where sources are compiled.
  #	This macro is set after processing %setup, either explicitly from the
-@@ -351,8 +351,8 @@
+@@ -356,8 +356,8 @@
  #		"w9.bzdio"	bzip2 level 9.
  #		"w9.lzdio"	lzma level 9.
  #
@@ -45,7 +46,7 @@
  
  #	Archive formats to use for source/binary package payloads.
  #		"cpio"		cpio archive (default)
-@@ -517,7 +517,7 @@
+@@ -522,7 +522,7 @@
  
  #
  # Path to magic file used for file classification.
@@ -54,7 +55,7 @@
  
  #==============================================================================
  # ---- Database configuration macros.
-@@ -1219,17 +1219,17 @@
+@@ -1224,17 +1224,17 @@
  %_exec_prefix		%{_prefix}
  %_bindir		%{_exec_prefix}/bin
  %_sbindir		%{_exec_prefix}/sbin
@@ -78,7 +79,7 @@
  %_localedir		%{_datadir}/locale
  
  #==============================================================================
-@@ -1530,7 +1530,28 @@
+@@ -1535,7 +1535,33 @@
  # helpers are also used by %{_rpmhome}/rpmdeps {--provides|--requires}.
  #%__executable_provides	%{_rpmhome}/executabledeps.sh --provides
  #%__executable_requires	%{_rpmhome}/executabledeps.sh --requires
@@ -105,7 +106,11 @@
 +%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
 +%rpmcxxflags	%{rpmcflags}
 +%rpmldflags	%{!?no_build_with_as_needed:-Wl,--as-needed}
++
++# arch macros
++%ix86	i386 i486 i586 i686 pentium3 pentium4 athlon
++%x8664	x86_64 amd64 ia32e
++%ppc	ppc ppc7400 ppc7450
 +  
  # \endverbatim
  #*/
-
