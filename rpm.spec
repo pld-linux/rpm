@@ -7,6 +7,7 @@
 #   tags (incl. digest) and writes whole package to destination file;
 #   repackaging uses unchanged "immutable header" image from original rpm, also
 #   preserving payload format and compressor from original rpm, _not_ current settings
+# - TODO: add macros for some ppc, mipsel, alpha and sparc
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
@@ -27,7 +28,7 @@
 %endif
 
 %if %{without db} && %{without sqlite}
-%{error: Need db or sqlite}
+%{error:Need db or sqlite}
 ERROR
 %endif
 
@@ -49,7 +50,7 @@ Version:	5.0
 Release:	0.1
 License:	GPL
 Group:		Base
-Source0:	rpm-20070927.tar.gz
+Source0:	%{name}-20070927.tar.gz
 # Source0-md5:	cf0bda3a41b74d68b36ef078edfafc6d
 Source1:	%{name}.groups
 Source2:	%{name}.platform
@@ -70,6 +71,21 @@ Source16:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source17:	banner.sh
 Source18:	%{name}-pld.macros
+
+Source100:	%{name}-macros-athlon
+Source101:	%{name}-macros-i386
+Source102:	%{name}-macros-i486
+Source103:	%{name}-macros-i586
+Source104:	%{name}-macros-i686
+Source105:	%{name}-macros-noarch
+Source106:	%{name}-macros.patch
+Source107:	%{name}-macros-pentium3
+Source108:	%{name}-macros-pentium4
+Source109:	%{name}-macros-ppc
+Source110:	%{name}-macros-x86_64
+Source111:	%{name}-macros-ia32e
+Source112:	%{name}-macros-amd64
+
 Patch0:		%{name}-pl.po.patch
 
 Patch3:		%{name}-rpmpopt.patch
@@ -707,7 +723,7 @@ awk -f %{SOURCE6} %{SOURCE1}
 	--with-pcre=external \
 	--with-keyutils=none \
 	--without-path-versioned \
-	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.build:%{_rpmlibdir}/%%{_target}/macros:%{_sysconfdir}/macros.*:%{_sysconfdir}/macros:%{_sysconfdir}/%%{_target}/macros:~/etc/rpmmacros:~/etc/.rpmmacros:~/.rpmmacros' \
+	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.pld:%{_rpmlibdir}/macros.build:%{_rpmlibdir}/%%{_target}/macros:%{_sysconfdir}/macros.*:%{_sysconfdir}/macros:%{_sysconfdir}/%%{_target}/macros:~/etc/rpmmacros:~/etc/.rpmmacros:~/.rpmmacros' \
 	--with-bugreport="http://bugs.pld-linux.org/"
 
 %{__make} \
@@ -722,6 +738,33 @@ install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/
 %{__make} install \
 	pkgconfigdir=%{_pkgconfigdir} \
 	DESTDIR=$RPM_BUILD_ROOT
+
+# install ARCH macros
+install -d $RPM_BUILD_ROOT%{_rpmlibdir}/noarch-linux
+install %{SOURCE105} $RPM_BUILD_ROOT%{_rpmlibdir}/noarch-linux/macros
+
+%ifarch %{ix86}
+install -d $RPM_BUILD_ROOT%{_rpmlibdir}/{i386,i486,i586,i686,athlon,pentium3,pentium4}-linux
+install %{SOURCE100} $RPM_BUILD_ROOT%{_rpmlibdir}/athlon-linux/macros
+install %{SOURCE101} $RPM_BUILD_ROOT%{_rpmlibdir}/i386-linux/macros
+install %{SOURCE102} $RPM_BUILD_ROOT%{_rpmlibdir}/i486-linux/macros
+install %{SOURCE103} $RPM_BUILD_ROOT%{_rpmlibdir}/i586-linux/macros
+install %{SOURCE104} $RPM_BUILD_ROOT%{_rpmlibdir}/i686-linux/macros
+install %{SOURCE107} $RPM_BUILD_ROOT%{_rpmlibdir}/pentium3-linux/macros
+install %{SOURCE110} $RPM_BUILD_ROOT%{_rpmlibdir}/pentium4-linux/macros
+%endif
+
+%ifarch %{x8664}
+install -d $RPM_BUILD_ROOT%{_rpmlibdir}/{x86_64,ia32e,amd64}-linux
+install %{SOURCE110} $RPM_BUILD_ROOT%{_rpmlibdir}/x86_64-linux/macros
+install %{SOURCE111} $RPM_BUILD_ROOT%{_rpmlibdir}/ia32e-linux/macros
+install %{SOURCE112} $RPM_BUILD_ROOT%{_rpmlibdir}/amd64-linux/macros
+%endif
+
+%ifarch %{ppc}
+install -d $RPM_BUILD_ROOT%{_rpmlibdir}/ppc-linux
+install %{SOURCE109} $RPM_BUILD_ROOT%{_rpmlibdir}/ppc-linux/macros
+%endif
 
 # first platform file entry can't contain regexps
 echo "%{_target_cpu}-%{_target_vendor}-linux" > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
@@ -1070,8 +1113,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
 #%attr(755,root,root) %{_rpmlibdir}/rpmb
 #%attr(755,root,root) %{_rpmlibdir}/rpmt
-# XXX FIXME FIXME FIXME XXX
-%if 0
 %{_rpmlibdir}/noarch-*
 %ifarch %{ix86}
 %{_rpmlibdir}/i?86*
@@ -1097,7 +1138,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/amd64*
 %{_rpmlibdir}/ia32e*
 %{_rpmlibdir}/x86_64*
-%endif
 %endif
 # must be here for "Requires: rpm-*prov" to work
 %{_rpmlibdir}/macros.java
