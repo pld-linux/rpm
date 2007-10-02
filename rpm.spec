@@ -78,13 +78,12 @@ Source102:	%{name}-macros-i486
 Source103:	%{name}-macros-i586
 Source104:	%{name}-macros-i686
 Source105:	%{name}-macros-noarch
-Source106:	%{name}-macros.patch
-Source107:	%{name}-macros-pentium3
-Source108:	%{name}-macros-pentium4
-Source109:	%{name}-macros-ppc
-Source110:	%{name}-macros-x86_64
-Source111:	%{name}-macros-ia32e
-Source112:	%{name}-macros-amd64
+Source106:	%{name}-macros-pentium3
+Source107:	%{name}-macros-pentium4
+Source108:	%{name}-macros-ppc
+Source109:	%{name}-macros-x86_64
+Source110:	%{name}-macros-ia32e
+Source111:	%{name}-macros-amd64
 
 Patch0:		%{name}-pl.po.patch
 
@@ -750,20 +749,20 @@ install %{SOURCE101} $RPM_BUILD_ROOT%{_rpmlibdir}/i386-linux/macros
 install %{SOURCE102} $RPM_BUILD_ROOT%{_rpmlibdir}/i486-linux/macros
 install %{SOURCE103} $RPM_BUILD_ROOT%{_rpmlibdir}/i586-linux/macros
 install %{SOURCE104} $RPM_BUILD_ROOT%{_rpmlibdir}/i686-linux/macros
-install %{SOURCE107} $RPM_BUILD_ROOT%{_rpmlibdir}/pentium3-linux/macros
-install %{SOURCE110} $RPM_BUILD_ROOT%{_rpmlibdir}/pentium4-linux/macros
+install %{SOURCE106} $RPM_BUILD_ROOT%{_rpmlibdir}/pentium3-linux/macros
+install %{SOURCE107} $RPM_BUILD_ROOT%{_rpmlibdir}/pentium4-linux/macros
 %endif
 
 %ifarch %{x8664}
 install -d $RPM_BUILD_ROOT%{_rpmlibdir}/{x86_64,ia32e,amd64}-linux
-install %{SOURCE110} $RPM_BUILD_ROOT%{_rpmlibdir}/x86_64-linux/macros
-install %{SOURCE111} $RPM_BUILD_ROOT%{_rpmlibdir}/ia32e-linux/macros
-install %{SOURCE112} $RPM_BUILD_ROOT%{_rpmlibdir}/amd64-linux/macros
+install %{SOURCE109} $RPM_BUILD_ROOT%{_rpmlibdir}/x86_64-linux/macros
+install %{SOURCE110} $RPM_BUILD_ROOT%{_rpmlibdir}/ia32e-linux/macros
+install %{SOURCE111} $RPM_BUILD_ROOT%{_rpmlibdir}/amd64-linux/macros
 %endif
 
 %ifarch %{ppc}
 install -d $RPM_BUILD_ROOT%{_rpmlibdir}/ppc-linux
-install %{SOURCE109} $RPM_BUILD_ROOT%{_rpmlibdir}/ppc-linux/macros
+install %{SOURCE108} $RPM_BUILD_ROOT%{_rpmlibdir}/ppc-linux/macros
 %endif
 
 # first platform file entry can't contain regexps
