@@ -649,10 +649,8 @@ install %{SOURCE12} scripts/perl.prov
 %patch42 -p1
 # CHECK ME, PROBABLY WILL NEED TO HANLE IN OTHER WAY since rpmfcSCRIPT already handles mono
 #%patch46 -p1
-# CHECK ME
-#%patch47 -p1
-# CHECK ME
-#%patch50 -p1
+%patch47 -p1
+%patch50 -p1
 # OLD COMMENTED OUT
 #%patch52 -p1
 %patch55 -p1
