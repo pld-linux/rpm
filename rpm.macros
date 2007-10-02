@@ -47,6 +47,9 @@
 #	and that both p and q are package names (i.e. no version/release).
 %_dependency_whiteout	%{nil}
 
+%_smp_mflags %([ -z "$RPM_BUILD_NCPUS" ] \\\
+	&& RPM_BUILD_NCPUS="`/usr/bin/getconf _NPROCESSORS_ONLN`"; \\\
+	[ "$RPM_BUILD_NCPUS" -gt 1 ] && echo "-j$RPM_BUILD_NCPUS")
 
 #-----------------------------------------------------------------
 #
