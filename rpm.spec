@@ -15,11 +15,23 @@
 %bcond_without	selinux		# build without selinux support
 %bcond_without	suggest_tags	# build without Suggest tag (bootstrapping)
 %bcond_with	neon		# build with HTTP/WebDAV support (neon library)
+%bcond_without	db		# BerkeleyDB
 %bcond_with	sqlite		# build with SQLite support
+%bcond_with	sqlite_dbapi	# default database backend is sqlite
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
+#
+%if %{with sqlite_dbapi}
+%define	with_sqlite	1
+%endif
 
+%if %{without db} && %{without sqlite}
+%{error: Need db or sqlite}
+ERROR
+%endif
+
+#
 # versions of required libraries
 %define	reqdb_ver	4.6.18
 %define	reqpopt_ver	1.10.8
@@ -109,7 +121,7 @@ BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.2-17
-BuildRequires:	db-devel >= %{reqdb_ver}
+%{?with_db:BuildRequires:	db-devel >= %{reqdb_ver}}
 BuildRequires:	elfutils-devel >= 0.108
 %ifnarch sparc64
 # -fPIE/-pie
@@ -137,7 +149,7 @@ BuildRequires:	zlib-devel
 # Require static library only for static build
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
 BuildRequires:	bzip2-static >= 1.0.2-17
-BuildRequires:	db-static >= %{reqdb_ver}
+%{?with_db:BuildRequires:	db-static >= %{reqdb_ver}}
 BuildRequires:	elfutils-static
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	libmagic-static
@@ -247,7 +259,7 @@ Summary:	RPMs library
 Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
-Requires:	db >= %{reqdb_ver}
+%{?with_db:Requires:	db >= %{reqdb_ver}}
 %{?with_selinux:Requires:	libselinux >= 1.18}
 Requires:	libmagic >= 1.15-2
 Requires:	popt >= %{reqpopt_ver}
@@ -275,7 +287,7 @@ Group:		Development/Libraries
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
-Requires:	db-devel >= %{reqdb_ver}
+%{?with_db:Requires:	db-devel >= %{reqdb_ver}}
 Requires:	elfutils-devel
 Requires:	libmagic-devel
 %{?with_selinux:Requires:	libselinux-devel}
@@ -338,7 +350,7 @@ Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
-Requires:	db-static >= %{reqdb_ver}
+%{?with_db:Requires:	db-static >= %{reqdb_ver}}
 Requires:	elfutils-static
 Requires:	libmagic-static
 Requires:	popt-static >= %{reqpopt_ver}
@@ -703,9 +715,9 @@ awk -f %{SOURCE6} %{SOURCE1}
 	--with-neon=%{?with_neon:external}%{!?with_neon:no} \
 	--with-file=external \
 	--with-popt=external \
-	--with-db=external \
+	--with-db=%{?with_db:external}%{!?with_db:no} \
 	--with-sqlite=%{?with_sqlite:external}%{!?with_sqlite:no} \
-	--with-dbapi=db \
+	--with-dbapi=%{!?sqlite_dbapi:db}%{?sqlite_dbapi:sqlite} \
 	--with-lua=none \
 	--with-pcre=external \
 	--with-keyutils=none \
