@@ -642,7 +642,7 @@ install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
 %patch23 -p1
 %patch25 -p1
-%ifarch i386
+%ifarch i386 i486
 # disable TSC
 %patch26 -p1
 %endif
