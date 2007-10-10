@@ -377,7 +377,7 @@ if [ -d "$RPM_BUILD_ROOT" ]; then \
 			echo "DONE"; \
 		fi; \
 	fi; \
-	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*\.debug" ! -regex ".*%{_docdir}/.*" ! -regex ".*%{_includedir}/.*" %{?_noautostrip:! -regex "%{_noautostrip}"}`; \
+	filelist=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*libpthread-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*\.debug" ! -regex ".*%{_docdir}/.*" ! -regex ".*%{_includedir}/.*" %{?_noautostrip:! -regex "%{_noautostrip}"}`; \
 	# vim - " \
 	if [ -z "$filelist" ]; then \
 		return; \
