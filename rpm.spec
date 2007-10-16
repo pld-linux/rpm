@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	9
+Release:	9.1
 License:	GPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -117,6 +117,7 @@ Patch59:	%{name}-libtool-deps.patch
 Patch60:	%{name}-obsolete-rpmrc.patch
 Patch61:	%{name}-sparc64.patch
 Patch62:	%{name}-rpmdb.patch
+Patch63:	%{name}-lzma-size_t.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -684,6 +685,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch61 -p1
 %endif
 %patch62 -p1
+%patch63 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
