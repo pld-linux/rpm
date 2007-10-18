@@ -689,7 +689,7 @@ fi \
 %__spec_install_post_py_hardlink {\
 %{!?no_install_post_py_hardlink: __spec_install_post_py_hardlink() { \
 [ ! -d "$RPM_BUILD_ROOT" ] || find "$RPM_BUILD_ROOT" -name '*.pyc' | while read a; do \
-	b="$(echo $a|sed -e 's/.pyc$/.pyo/')"; \
+	b="${a%.pyc}.pyo"; \
 	if cmp -s "$a" "$b"; then \
 		ln -f "$a" "$b"; \
 	fi; \
