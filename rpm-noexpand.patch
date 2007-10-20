@@ -12,7 +12,7 @@
 --- rpm-4.3/build/parseSpec.c.wiget	Thu May 15 18:15:51 2003
 +++ rpm-4.3/build/parseSpec.c	Fri May 16 00:08:57 2003
 @@ -156,12 +156,16 @@
- 	ofi->readPtr = from;
+ /*@=mods@*/
  
  	/* Don't expand macros (eg. %define) in false branch of %if clause */
 +	/* Also don't expand macros in %changelog where we set STRIP_NOEXPAND flag */
@@ -20,9 +20,9 @@
 +	if (!(strip & STRIP_NOEXPAND)) {
  	if (spec->readStack->reading &&
  	    expandMacros(spec, spec->macros, spec->lbuf, sizeof(spec->lbuf))) {
- 		rpmError(RPMERR_BADSPEC, _("line %d: %s\n"),
+ 		rpmlog(RPMLOG_ERR, _("line %d: %s\n"),
  			spec->lineNum, spec->lbuf);
- 		return RPMERR_BADSPEC;
+ 		return RPMRC_FAIL;
  	}
 +	}	
  	spec->nextline = spec->lbuf;
