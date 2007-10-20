@@ -50,8 +50,8 @@ Version:	5.0
 Release:	0.1
 License:	GPL
 Group:		Base
-Source0:	%{name}-20070927.tar.gz
-# Source0-md5:	cf0bda3a41b74d68b36ef078edfafc6d
+Source0:	%{name}-20071020.tar.bz2
+# Source0-md5:	970449fa9fd1b206d4745b4f6893fca0
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -608,12 +608,6 @@ Python para manipular pacotes e bancos de dados RPM.
 
 %prep
 %setup -q -n %{name}
-sed -i -e 's# no # nb #g' configure.ac
-mv po/no.po po/nb.po
-sed -i -e 's# sr # sr@Latn #g' configure.ac
-mv -f po/{sr,sr@Latn}.po
-
-sed -i -e 's#${prefix}/lib/python@WITH_PYTHON_VERSION@#@WITH_PYTHON_LIBDIR@#g' python/rpm/Makefile.am
 
 # APPLIED ALREADY?
 #%patch0 -p1
