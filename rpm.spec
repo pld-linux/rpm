@@ -51,7 +51,7 @@ Release:	0.1
 License:	GPL
 Group:		Base
 Source0:	%{name}-20071020.tar.bz2
-# Source0-md5:	970449fa9fd1b206d4745b4f6893fca0
+# Source0-md5:	35d63697b6c7ff752473f43822f9d010
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -103,7 +103,6 @@ Patch18:	%{name}-perl_req.patch
 
 Patch23:	%{name}-pkgconfigdeps.patch
 
-Patch25:	%{name}-rpm2cpio-payload.patch
 Patch26:	%{name}-notsc.patch
 Patch27:	%{name}-hack-norpmlibdep.patch
 
@@ -635,7 +634,7 @@ install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
 %patch23 -p1
-%patch25 -p1
+
 %ifarch i386 i486
 # disable TSC
 %patch26 -p1
