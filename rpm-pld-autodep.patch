@@ -417,18 +417,6 @@ diff -ur rpm.org/lib/rpmfc.c rpm/lib/rpmfc.c
  
  /*@-boundswrite@*/
      /* Generate per-file indices into package dependencies. */
-diff -ur rpm.org/lib/rpmfc.c.orig rpm/lib/rpmfc.c.orig
---- rpm.org/lib/rpmfc.c.orig	2007-09-22 22:37:16.000000000 +0200
-+++ rpm/lib/rpmfc.c.orig	2007-10-02 14:48:58.244068387 +0200
-@@ -783,7 +783,7 @@
-     } else
-     if (fc->fcolor->vals[fc->ix] & RPMFC_PHP) {
- 	xx = rpmfcHelper(fc, 'P', "php");
--	if (is_executable)
-+	/* not only executable, files run by httpd usually are not */
- 	    xx = rpmfcHelper(fc, 'R', "php");
-     } else
-     if (fc->fcolor->vals[fc->ix] & RPMFC_MONO) {
 diff -ur rpm.org/lib/rpmfc.h rpm/lib/rpmfc.h
 --- rpm.org/lib/rpmfc.h	2007-07-14 05:22:44.000000000 +0200
 +++ rpm/lib/rpmfc.h	2007-10-02 14:49:18.731230377 +0200
