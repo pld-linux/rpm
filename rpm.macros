@@ -1167,8 +1167,9 @@ done \
 compile() {															\
 	L="<"; [[ '%{*}' != *$L$L* ]] || PATCH_SH="set -x -e;$(cat)"	\
 	set -e -x														\
+	local cfgs='%{?with_dist_kernel:dist}%{!?with_dist_kernel:nondist}'	\
 																	\
-for cfg in %{?with_dist_kernel:dist}%{!?with_dist_kernel:nondist}; do \
+for cfg in $cfgs; do												\
 	[ -r "%{_kernelsrcdir}/config-$cfg" ] || exit 1					\
 																	\
 	rm -rf o														\
@@ -1179,7 +1180,7 @@ for cfg in %{?with_dist_kernel:dist}%{!?with_dist_kernel:nondist}; do \
 %ifarch ppc ppc64													\
 	install -d o/include/asm										\
 	[ ! -d %{_kernelsrcdir}/include/asm-%{_target_base_arch} ] || ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch}/* o/include/asm \
-	[ ! -d %{_kernelsrcdir}/include/asm-powerpc ] || ln -snf %{_kernelsrcdir}/include/asm-powerpc/* o/include/asm	\
+	[ ! -d %{_kernelsrcdir}/include/asm-powerpc ] || ln -snf %{_kernelsrcdir}/include/asm-powerpc/* o/include/asm \
 %else																\
 	ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} o/include/asm \
 %endif																\
@@ -1229,7 +1230,7 @@ compile %{*}\
 #  -s <suffix> -- suffix to use when installing modules, useful when module
 #		with same name exists in kernel already
 #  -n <file> -- name of modprobe config file to use (without .conf extension)
-#		for definig aliases, only useful with -s
+#		for defining aliases, only useful with -s
 
 %install_kernel_modules(m:d:s:n:)									\
 %{!?-m:%{error:%{0}: Required module name (-m) missing}exit 1}		\
