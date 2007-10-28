@@ -1179,7 +1179,7 @@ for cfg in $cfgs; do												\
 	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h o/include/linux/autoconf.h \
 %ifarch ppc ppc64													\
 	install -d o/include/asm										\
-	[ ! -d %{_kernelsrcdir}/include/asm-%{_target_base_arch} ] || ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch}/* o/include/asm \
+	[ ! -d %{_kernelsrcdir}/include/asm-%{_target_base_arch} ] || ln -snf %{_kernelsrcdir}/include/asm-%{_target_base_arch}/* o/include/asm \
 	[ ! -d %{_kernelsrcdir}/include/asm-powerpc ] || ln -snf %{_kernelsrcdir}/include/asm-powerpc/* o/include/asm \
 %else																\
 	ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} o/include/asm \
