@@ -51,7 +51,7 @@ Release:	0.1
 License:	GPL
 Group:		Base
 Source0:	%{name}-20071029.tar.bz2
-# Source0-md5:	35d63697b6c7ff752473f43822f9d010
+# Source0-md5:	572527ed1757842b2d8cb264473d2dea
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
