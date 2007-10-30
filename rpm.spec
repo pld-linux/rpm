@@ -1037,8 +1037,12 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_pkgconfigdir}/*.pc
 %attr(755,root,root) %{_libdir}/librpm.so
 %attr(755,root,root) %{_libdir}/librpm-%{sover}.so
+%attr(755,root,root) %{_libdir}/librpmconstant.so
+%attr(755,root,root) %{_libdir}/librpmconstant-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmio.so
 %attr(755,root,root) %{_libdir}/librpmio-%{sover}.so
+%attr(755,root,root) %{_libdir}/librpmmisc.so
+%attr(755,root,root) %{_libdir}/librpmmisc-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmdb.so
 %attr(755,root,root) %{_libdir}/librpmdb-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmbuild.so
