@@ -47,7 +47,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.0
-Release:	0.1
+Release:	0.2
 License:	GPL
 Group:		Base
 Source0:	%{name}-20071029.tar.bz2
@@ -711,8 +711,8 @@ awk -f %{SOURCE6} %{SOURCE1}
 	--with-db=%{?with_db:external}%{!?with_db:no} \
 	--with-sqlite=%{?with_sqlite:external}%{!?with_sqlite:no} \
 	--with-dbapi=%{!?sqlite_dbapi:db}%{?sqlite_dbapi:sqlite} \
-	--with-lua=none \
-	--with-pcre=external \
+	--with-lua=internal \
+	--with-pcre=no \
 	--with-keyutils=none \
 	--without-path-versioned \
 	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.pld:%{_rpmlibdir}/macros.build:%{_rpmlibdir}/%%{_target}/macros:%{_sysconfdir}/macros.*:%{_sysconfdir}/macros:%{_sysconfdir}/%%{_target}/macros:~/etc/rpmmacros:~/etc/.rpmmacros:~/.rpmmacros' \
