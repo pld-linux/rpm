@@ -347,6 +347,12 @@ unset DISPLAY ||:\
 			echo "Compress man pages: $i"; \
 			find "$RPM_BUILD_ROOT$i" -name '*.bz2' -print | xargs -r %{__bzip2} -df; \
 			find "$RPM_BUILD_ROOT$i" -name '*.gz' -print | xargs -r %{__gzip} -dnf; \
+			find $RPM_BUILD_ROOT$i -type l | while read a; do \
+				m=$(readlink $a); \
+				rm -f $a; \
+				echo .so ${m##*/} > $a; \
+				echo >&2 "Converted ${a#$RPM_BUILD_ROOT} from symlink to man link: ${m##*/}"; \
+			done; \
 			find "$RPM_BUILD_ROOT$i" -type f -size +%{_min_compress_bytes}c -print | xargs -r %{__gzip} -9nf; \
 		fi; \
 	done; \
