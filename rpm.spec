@@ -110,7 +110,7 @@ Patch51:	%{name}-cleanlibdirs.patch
 Patch52:	%{name}-morearchs.patch
 
 Patch55:	%{name}-truncate-cvslog.patch
-
+Patch56:	%{name}-rpm5-patchset-8413.patch
 Patch57:	%{name}-as_needed-fix.patch
 Patch58:	%{name}-repackage-wo-lzma.patch
 Patch59:	%{name}-libtool-deps.patch
@@ -677,6 +677,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch51 -p1
 #%patch52 -p1
 %patch55 -p1
+%patch56 -p1
 %patch57 -p1
 %patch58 -p1
 %patch59 -p1
