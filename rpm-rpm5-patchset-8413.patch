@@ -1,0 +1,158 @@
+Index: rpm/rpmdb/db3.c
+RCS File: /v/rpm/cvs/rpm/rpmdb/db3.c,v
+rcsdiff -q -kk '-r1.71' '-r1.72' -u '/v/rpm/cvs/rpm/rpmdb/db3.c,v' 2>/dev/null
+--- db3.c	2007/08/18 23:40:36	1.71
++++ db3.c	2007/09/24 02:38:57	1.72
+@@ -275,12 +275,21 @@
+ 		fileSystem @*/
+ 	/*@modifies dbi, *dbenvp, fileSystem @*/
+ {
++    static int oneshot = 0;
+     rpmdb rpmdb = dbi->dbi_rpmdb;
+     DB_ENV *dbenv = NULL;
+     int eflags;
+     int rc;
+     int xx;
+ 
++    if (!oneshot) {
++#if (DB_VERSION_MAJOR == 3 && DB_VERSION_MINOR != 0) || (DB_VERSION_MAJOR == 4)
++	xx = db_env_set_func_open(Open);
++	xx = cvtdberr(dbi, "db_env_set_func_open", xx, _debug);
++#endif
++	oneshot++;
++    }
++
+     if (dbenvp == NULL)
+ 	return 1;
+ 
+Index: rpm/rpmdb/rpmdb.c
+RCS File: /v/rpm/cvs/rpm/rpmdb/rpmdb.c,v
+rcsdiff -q -kk '-r1.158' '-r1.159' -u '/v/rpm/cvs/rpm/rpmdb/rpmdb.c,v' 2>/dev/null
+--- rpmdb.c	2007/09/09 19:06:51	1.158
++++ rpmdb.c	2007/09/24 02:38:57	1.159
+@@ -3618,8 +3618,9 @@
+     if (db == NULL) return 0;
+ 
+     mi = rpmdbInitIterator(db, RPMTAG_BASENAMES, NULL, 0);
+-    if (mi == NULL)	/* XXX should  never happen */
+-	return 0;
++assert(mi);	/* XXX will never happen. */
++    if (mi == NULL)
++	return 2;
+ 
+ key = &mi->mi_key;
+ data = &mi->mi_data;
+Index: rpm/rpmio/librpmio.vers
+RCS File: /v/rpm/cvs/rpm/rpmio/librpmio.vers,v
+rcsdiff -q -kk '-r2.12' '-r2.13' -u '/v/rpm/cvs/rpm/rpmio/librpmio.vers,v' 2>/dev/null
+--- librpmio.vers	2007/09/09 20:32:43	2.12
++++ librpmio.vers	2007/09/24 02:38:57	2.13
+@@ -140,6 +140,8 @@
+     _Mknod;
+     Mount;
+     noLibio;
++    Open;
++    _Open;
+     Opendir;
+     _Opendir;
+     pgpArmorKeyTbl;
+Index: rpm/rpmio/rpmio.h
+RCS File: /v/rpm/cvs/rpm/rpmio/rpmio.h,v
+rcsdiff -q -kk '-r1.57' '-r1.58' -u '/v/rpm/cvs/rpm/rpmio/rpmio.h,v' 2>/dev/null
+--- rpmio.h	2007/08/28 20:45:49	1.57
++++ rpmio.h	2007/09/24 02:38:57	1.58
+@@ -342,11 +342,22 @@
+ 	/*@globals errno, h_errno, fileSystem, internalState @*/
+ 	/*@modifies errno, fileSystem, internalState @*/;
+ 
++/*@unchecked@*/ /*@observer@*/ /*@null@*/
++extern const char * _chroot_prefix;
++
+ /**
+  * chroot(2) clone.
+  * @todo Implement remotely.
+  */
+ int Chroot(const char * path)
++	/*@globals _chroot_prefix, errno, fileSystem, internalState @*/
++	/*@modifies _chroot_prefix, errno, fileSystem, internalState @*/;
++
++/**
++ * open(2) clone.
++ * @todo Implement remotely.
++ */
++int Open(const char * path, int flags, mode_t mode)
+ 	/*@globals errno, fileSystem, internalState @*/
+ 	/*@modifies errno, fileSystem, internalState @*/;
+ 
+Index: rpm/rpmio/rpmrpc.c
+RCS File: /v/rpm/cvs/rpm/rpmio/rpmrpc.c,v
+rcsdiff -q -kk '-r2.54' '-r2.55' -u '/v/rpm/cvs/rpm/rpmio/rpmrpc.c,v' 2>/dev/null
+--- rpmrpc.c	2007/07/10 18:00:30	2.54
++++ rpmrpc.c	2007/09/24 02:38:57	2.55
+@@ -160,6 +160,9 @@
+     return rmdir(path);
+ }
+ 
++/*@unchecked@*/
++const char * _chroot_prefix = NULL;
++
+ int Chroot(const char * path)
+ {
+     const char * lpath;
+@@ -183,11 +186,56 @@
+ 	return -2;
+ 	/*@notreached@*/ break;
+     }
++
++    _chroot_prefix = _free(_chroot_prefix);
++    if (strcmp(path, "."))
++	_chroot_prefix = rpmGetPath(path, NULL);
++
+ /*@-superuser@*/
+     return chroot(path);
+ /*@=superuser@*/
+ }
+ 
++int Open(const char * path, int flags, mode_t mode)
++{
++    const char * lpath;
++    int ut = urlPath(path, &lpath);
++
++if (_rpmio_debug)
++fprintf(stderr, "*** Open(%s, 0x%x, 0%o)\n", path, flags, mode);
++    switch (ut) {
++    case URL_IS_PATH:
++	path = lpath;
++	/*@fallthrough@*/
++    case URL_IS_UNKNOWN:
++	break;
++    case URL_IS_DASH:
++    case URL_IS_HKP:
++    case URL_IS_FTP:		/* XXX TODO: implement. */
++    case URL_IS_HTTPS:		/* XXX TODO: implement. */
++    case URL_IS_HTTP:		/* XXX TODO: implement. */
++    default:
++	errno = EINVAL;		/* XXX W2DO? */
++	return -2;
++	/*@notreached@*/ break;
++    }
++
++    if (_chroot_prefix && _chroot_prefix[0] == '/' && _chroot_prefix[1] != '\0')
++    {
++	size_t nb = strlen(_chroot_prefix);
++	size_t ob = strlen(path);
++	while (nb > 0 && _chroot_prefix[nb-1] == '/')
++	    nb--;
++	if (ob > nb && !strncmp(path, _chroot_prefix, nb) && path[nb] == '/')
++	    path += nb;
++    }
++#ifdef	NOTYET	/* XXX likely sane default. */
++    if (mode == 0)
++	mode = 0644;
++#endif
++    return open(path, flags, mode);
++}
++
+ /* XXX rpmdb.c: analogue to rename(2). */
+ 
+ int Rename (const char * oldpath, const char * newpath)
