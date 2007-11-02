@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	9
+Release:	10
 License:	GPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -47,7 +47,7 @@ Source4:	%{name}-find-spec-bcond
 Source5:	%{name}-find-lang
 Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
-Source8:	%{name}-check-files
+
 Source9:	%{name}-php-provides
 Source10:	%{name}-php-requires
 Source11:	%{name}.sysinfo
@@ -98,7 +98,7 @@ Patch37:	%{name}-doxygen_hack.patch
 Patch38:	%{name}-rpm5-patchset-8021.patch
 Patch41:	%{name}-reduce-stack-usage.patch
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
-
+Patch43:	%{name}-rpm5-patchset-8637.patch
 Patch44:	%{name}-no-neon.patch
 Patch45:	%{name}-no-sqlite.patch
 Patch46:	%{name}-mono.patch
@@ -110,13 +110,14 @@ Patch51:	%{name}-cleanlibdirs.patch
 Patch52:	%{name}-morearchs.patch
 
 Patch55:	%{name}-truncate-cvslog.patch
-
+Patch56:	%{name}-rpm5-patchset-8413.patch
 Patch57:	%{name}-as_needed-fix.patch
 Patch58:	%{name}-repackage-wo-lzma.patch
 Patch59:	%{name}-libtool-deps.patch
 Patch60:	%{name}-obsolete-rpmrc.patch
 Patch61:	%{name}-sparc64.patch
 Patch62:	%{name}-rpmdb.patch
+Patch63:	%{name}-lzma-size_t.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -667,6 +668,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch38 -p1
 %patch41 -p1
 %patch42 -p1
+%patch43 -p1
 %{!?with_neon:%patch44 -p1}
 %patch45 -p1
 %patch46 -p1
@@ -676,6 +678,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch51 -p1
 #%patch52 -p1
 %patch55 -p1
+%patch56 -p1
 %patch57 -p1
 %patch58 -p1
 %patch59 -p1
@@ -684,6 +687,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch61 -p1
 %endif
 %patch62 -p1
+%patch63 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
@@ -838,7 +842,6 @@ install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
 install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
 install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
-install %{SOURCE8} $RPM_BUILD_ROOT%{_rpmlibdir}/check-files
 install %{SOURCE13} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
 install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
 install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}

@@ -1,0 +1,12 @@
+Index: rpm/rpmdb/rpmdb.c
+--- rpm/rpmdb/rpmdb.c	2007/10/22 02:48:42	1.195
++++ rpm/rpmdb/rpmdb.c	2007/11/02 03:07:46	1.196
+@@ -3917,7 +3917,7 @@
+     }
+     dbpath = rootdbpath = rpmGetPath(prefix, tfn, NULL);
+     if (!(prefix[0] == '/' && prefix[1] == '\0'))
+-	dbpath += strlen(prefix) - 1;
++	dbpath += strlen(prefix);
+     tfn = _free(tfn);
+ 
+     /*@-nullpass@*/
