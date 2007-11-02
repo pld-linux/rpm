@@ -98,7 +98,7 @@ Patch37:	%{name}-doxygen_hack.patch
 Patch38:	%{name}-rpm5-patchset-8021.patch
 Patch41:	%{name}-reduce-stack-usage.patch
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
-
+Patch43:	%{name}-rpm5-patchset-8637.patch
 Patch44:	%{name}-no-neon.patch
 Patch45:	%{name}-no-sqlite.patch
 Patch46:	%{name}-mono.patch
@@ -668,6 +668,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch38 -p1
 %patch41 -p1
 %patch42 -p1
+%patch43 -p1
 %{!?with_neon:%patch44 -p1}
 %patch45 -p1
 %patch46 -p1
