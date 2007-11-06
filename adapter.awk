@@ -1,16 +1,17 @@
-#!/bin/awk -f
+#!/usr/bin/gawk -f
 #
 # This is adapter v0.28. Adapter adapts .spec files for PLD Linux.
 # $Id$
 #
-# Copyright (C) 1999-2006 PLD-Team <feedback@pld-linux.org>
+# Copyright (C) 1999-2007 PLD-Team <feedback@pld-linux.org>
 # Authors:
-# 	Micha≥ Kuratczyk <kura@pld.org.pl>
+# 	Micha≈Ç Kuratczyk <kura@pld.org.pl>
 # 	Sebastian Zagrodzki <s.zagrodzki@mimuw.edu.pl>
-# 	Tomasz K≥oczko <kloczek@rudy.mif.pg.gda.pl>
+# 	Tomasz K≈Çoczko <kloczek@rudy.mif.pg.gda.pl>
 # 	Artur Frysiak <wiget@pld-linux.org>
 # 	Michal Kochanowicz <mkochano@pld.org.pl>
-# 	Elan Ruusam‰§e <glen@pld-linux.org>
+#	Jakub Bogusz <qboosh@pld-linux.org>
+# 	Elan Ruusam√§e <glen@pld-linux.org>
 #
 # See cvs log adapter{,.awk} for list of contributors
 #
@@ -28,7 +29,7 @@ BEGIN {
 	RPM_SECTIONS = "package|build|changelog|clean|description|install|post|posttrans|postun|pre|prep|pretrans|preun|triggerin|triggerpostun|triggerun|verifyscript|check"
 	SECTIONS = "^%(" RPM_SECTIONS ")"
 
-	PREAMBLE_TAGS = "(Summary|Name|Version|Release|Epoch|License|Group|URL|BuildArch|BuildRoot|Obsoletes|Conflicts|Provides|ExclusiveArch|ExcludeArch|Pre[Rr]eq|(Build)?Requires)"
+	PREAMBLE_TAGS = "(R|BR|Summary|Name|Version|Release|Epoch|License|Group|URL|BuildArch|BuildRoot|Obsoletes|Conflicts|Provides|ExclusiveArch|ExcludeArch|Pre[Rr]eq|(Build)?Requires|Suggests)"
 
 	preamble = 1	# Is it part of preamble? Default - yes
 	boc = 4			# Beginning of %changelog
@@ -36,7 +37,7 @@ BEGIN {
 	tw = 70			# Descriptions width
 
 	b_idx = 0		# index of BR/R arrays
-    BR_count = 0   # number of additional BuildRequires
+	BR_count = 0	# number of additional BuildRequires
 
 	# If variable removed, then 1 (for removing it from export)
 	removed["LDFLAGS"] = 0
@@ -72,6 +73,7 @@ BEGIN {
 	"rpm --eval %_infodir"	| getline infodir
 	"rpm --eval %_examplesdir"	| getline examplesdir
 	"rpm --eval %_defaultdocdir"	| getline docdir
+	"rpm --eval %_kdedocdir"	| getline kdedocdir
 	"rpm --eval %_desktopdir" | getline desktopdir
 	"rpm --eval %_pixmapsdir" | getline pixmapsdir
 
@@ -121,31 +123,33 @@ defattr == 1 {
 function b_makekey(a, b,	s) {
 	s = a "" b;
 	# kill bcond
-    gsub(/[#%]+{[!?]+[_a-zA-Z0-9]+:/, "", s);
+	gsub(/[#%]+{[!?]+[_a-zA-Z0-9]+:/, "", s);
 
 	# kill commented out items
-    gsub(/^#[ \t]*/, "", s);
+	gsub(/^#[ \t]*/, "", s);
 
 	# force order
-    gsub(/^Summary\(/, "11Summary(", s);
-    gsub(/^Summary/, "10Summary", s);
-    gsub(/^Name/, "2Name", s);
-    gsub(/^Version/, "3Version", s);
-    gsub(/^Release/, "4Release", s);
-    gsub(/^Epoch/, "5Epoch", s);
-    gsub(/^License/, "5License", s);
-    gsub(/^Group/, "6Group", s);
-    gsub(/^URL/, "7URL", s);
+	gsub(/^Summary\(/, "11Summary(", s);
+	gsub(/^Summary/, "10Summary", s);
+	gsub(/^Name/, "2Name", s);
+	gsub(/^Version/, "3Version", s);
+	gsub(/^Release/, "4Release", s);
+	gsub(/^Epoch/, "5Epoch", s);
+	gsub(/^License/, "5License", s);
+	gsub(/^Group/, "6Group", s);
+	gsub(/^URL/, "7URL", s);
 
-    gsub(/^BuildRequires/, "B1BuildRequires", s);
-    gsub(/^BuildConflicts/, "B2BuildConflicts", s);
-    gsub(/^Provides/, "X1Provides", s);
-    gsub(/^Obsoletes/, "X2Obsoletes", s);
-    gsub(/^Conflicts/, "X3Conflicts", s);
-    gsub(/^BuildArch/, "X4BuildArch", s);
-    gsub(/^ExclusiveArch/, "X6ExclusiveArch", s);
-    gsub(/^ExcludeArch/, "X7ExcludeArch", s);
-    gsub(/^BuildRoot/, "X9BuildRoot", s);
+	gsub(/^BuildRequires/, "B1BuildRequires", s);
+	gsub(/^BuildConflicts/, "B2BuildConflicts", s);
+
+	gsub(/^Suggests/, "X1Suggests", s);
+	gsub(/^Provides/, "X2Provides", s);
+	gsub(/^Obsoletes/, "X3Obsoletes", s);
+	gsub(/^Conflicts/, "X4Conflicts", s);
+	gsub(/^BuildArch/, "X5BuildArch", s);
+	gsub(/^ExclusiveArch/, "X6ExclusiveArch", s);
+	gsub(/^ExcludeArch/, "X7ExcludeArch", s);
+	gsub(/^BuildRoot/, "X9BuildRoot", s);
 
 #	printf("%s -> %s\n", a""b, s);
 	return s;
@@ -346,7 +350,7 @@ function b_makekey(a, b,	s) {
 	if (/^%setup/ && /-n %{name}-%{version}( |$)/) {
 		$0 = fixedsub(" -n %{name}-%{version}", "", $0)
 	}
-    sub("^%patch ", "%patch0 ");
+	sub("^%patch ", "%patch0 ");
 
 	# invalid in %prep
 	sub("^rm -rf \$RPM_BUILD_ROOT.*", "");
@@ -417,6 +421,7 @@ function b_makekey(a, b,	s) {
 	$0 = fixedsub("automake --add-missing --copy", "%{__automake}", $0);
 	$0 = fixedsub("automake -a --foreign --copy", "%{__automake}", $0);
 	$0 = fixedsub("automake -a -c --foreign", "%{__automake}", $0);
+	$0 = fixedsub("automake -a -c", "%{__automake}", $0);
 	$0 = fixedsub("libtoolize --force --automake --copy", "%{__libtoolize}", $0);
 	$0 = fixedsub("libtoolize -c -f --automake", "%{__libtoolize}", $0);
 
@@ -424,6 +429,7 @@ function b_makekey(a, b,	s) {
 	sub(/^autoheader$/, "%{__autoheader}");
 	sub(/^autoconf$/, "%{__autoconf}");
 	sub(/^automake$/, "%{__automake}");
+	sub(/^libtoolize$/, "%{__libtoolize}");
 
 	# atrpms
 	$0 = fixedsub("%perl_configure", "%{__perl} Makefile.PL \\\n\tINSTALLDIRS=vendor", $0);
@@ -436,7 +442,7 @@ function b_makekey(a, b,	s) {
 /^%clean/, (!/^%clean/ && $0 ~ SECTIONS) {
 	did_clean = 1
 
-    use_macros()
+	use_macros()
 }
 
 ############
@@ -448,8 +454,8 @@ function b_makekey(a, b,	s) {
 
 	# foreign rpms
 	sub("^%{__rm} -rf %{buildroot}", "rm -rf $RPM_BUILD_ROOT")
-    sub("%buildroot", "$RPM_BUILD_ROOT");
-    sub("%{buildroot}", "$RPM_BUILD_ROOT");
+	sub("%buildroot", "$RPM_BUILD_ROOT");
+	sub("%{buildroot}", "$RPM_BUILD_ROOT");
 
 	if (/^[ \t]*rm([ \t]+-[rf]+)*[ \t]+(\${?RPM_BUILD_ROOT}?|%{?buildroot}?)/ && did_rmroot==0) {
 		did_rmroot=1
@@ -462,14 +468,14 @@ function b_makekey(a, b,	s) {
 		did_rmroot=1
 	}
 
-    if (tmpdir) {
-        buildroot = tmpdir "/" name "-" version "-root-" ENVIRON["USER"]
+	if (tmpdir) {
+		buildroot = tmpdir "/" name "-" version "-root-" ENVIRON["USER"]
 		gsub(buildroot, "$RPM_BUILD_ROOT")
-    }
+	}
 
-    if (!/%{_lib}/) {
-        sub("\$RPM_BUILD_ROOT/%", "$RPM_BUILD_ROOT%")
-    }
+	if (!/%{_lib}/) {
+		sub("\$RPM_BUILD_ROOT/%", "$RPM_BUILD_ROOT%")
+	}
 
 	use_macros()
 
@@ -478,7 +484,7 @@ function b_makekey(a, b,	s) {
 		sub(/mkdir -p/, "install -d")
 
 	# cp -a already implies cp -r
-    sub(/^cp -ar/, "cp -a")
+	sub(/^cp -ar/, "cp -a")
 
 	# No '-u root' or '-g root' for 'install'
 	if (/^install/ && /-[ug][ \t]*root/)
@@ -521,24 +527,27 @@ function b_makekey(a, b,	s) {
 	skip = 0
 	# There should be some CVS keywords on the first line of %changelog.
 	if (boc == 3) {
-		if ($0 !~ _cvsmailfeedback)
+		if ($0 !~ _cvsmailfeedback) {
 			print "* %{date} " _cvsmailfeedback > changelog_file
-		else
+		} else {
 			skip = 1
+		}
 		boc = 2
 	}
 	if (boc == 2 && !skip) {
 		if (!/All persons listed below/) {
 			printf "All persons listed below can be reached at " > changelog_file
 			print "<cvs_login>" _cvsmaildomain "\n" > changelog_file
-		} else
+		} else {
 			skip = 1
+		}
 		boc = 1
 	}
 	if (boc == 1 && !skip) {
 		if (!/^$/) {
-			if (!/\$.*Log:.*\$/)
+			if (!/\$.*Log:.*\$/) {
 				print "$" "Log:$" > changelog_file
+			}
 			boc = 0
 		}
 	}
@@ -552,11 +561,19 @@ function b_makekey(a, b,	s) {
 		boc = 3
 	}
 
-	sub(/[ \t]+$/, "")
-	if (!/^%[a-z]+$/ || /changelog/)
+	sub(/[ \t]+$/, "");
+	if (!/^%[a-z]+$/ || /changelog/) {
+		# stop changelog if "real" changelog starts
+		if (boc == 0 && /^\* /) {
+			boc = -1
+		}
+		if (boc == -1) {
+			next;
+		}
 		print > changelog_file
-	else
+	} else {
 		print
+	}
 	next
 }
 
@@ -586,7 +603,7 @@ function b_makekey(a, b,	s) {
 }
 /^%preun/, (!/^%preun/ && $0 ~ SECTIONS) {
 	preamble = 0
-	use_script_macros()
+	use_macros()
 }
 /^%postun/, (!/^%postun/ && $0 ~ SECTIONS) {
 	preamble = 0
@@ -637,7 +654,7 @@ preamble == 1 {
 
 	field = tolower($1)
 	fieldnlower = $1
-	if (field ~ /summary:/ && !/etc\.$/) {
+	if (field ~ /summary:/ && !/etc\.$/ && !/Inc\.$/) {
 		sub(/\.$/, "", $0);
 	}
 	if (field ~ /group(\([^)]+\)):/)
@@ -679,6 +696,12 @@ preamble == 1 {
 		sub(/^Text Processing\/Markup\/XML$/, "Applications/Text", group)
 		sub(/^Web\/Database$/, "Applications/WWW", group)
 		sub(/^System Environment\/Base$/, "Base", group)
+		sub(/^System$/, "Base", group)
+		sub(/^Applications\/Productivity$/, "X11/Applications", group)
+		sub(/^Database$/, "Applications/Databases", group)
+		sub(/^Development\/Code Generators$/, "Development", group)
+		sub(/^Emulators$/, "Applications/Emulators", group)
+		sub(/^System\/Libraries$/, "Libraries", group)
 
 		$0 = "Group:\t\t" group
 
@@ -713,7 +736,7 @@ preamble == 1 {
 		value = substr($0, index($0, $2));
 		$0 = format_requires($1, value);
 	}
-    
+
 	# BR: tar (and others) is to common (rpm-build requires it)
 	if (field ~ /^buildrequires:/) {
 		l = substr($0, index($0, $2));
@@ -737,23 +760,25 @@ preamble == 1 {
 			next
 		}
 
-        # perhaps we have common known name?
+		# perhaps we have common known name?
 
-        # jpackages
+		# jpackages
 		sub(/^java-devel$/, "jdk", $2);
 		sub(/^log4j$/, "jakarta-log4j", $2);
 		sub(/^oro$/, "jakarta-oro", $2);
+		sub(/^jakarta-ant$/, "ant", $2);
 		sub(/^xerces-j2$/, "xerces-j", $2);
-		sub(/^ant-junit$/, "jakarta-ant", $2);
 		sub(/^ldapjdk$/, "ldapsdk", $2);
 		sub(/^saxon-scripts$/, "saxon", $2);
+		sub(/^xalan-j2$/, "xalan-j", $2);
+		sub(/^xerces-j2$/, "xerces-j", $2);
 
-        replace_php_virtual_deps();
+		replace_php_virtual_deps();
 	}
 
 	if (field ~ /^requires:/) {
-        replace_php_virtual_deps();
-    }
+		replace_php_virtual_deps();
+	}
 
 
 	# obsolete/unwanted tags
@@ -901,6 +926,9 @@ preamble == 1 {
 		sub("^http://.*\.dl\.sourceforge\.net/", "http://dl.sourceforge.net/", $2)
 		sub("^http://dl\.sourceforge\.net/sourceforge/", "http://dl.sourceforge.net/", $2)
 		sub("^http://dl\.sf\.net/", "http://dl.sourceforge.net/", $2)
+
+		sub("^ftp://ftp\.gnome\.org/", "http://ftp.gnome.org/", $2)
+		sub("^http://ftp\.gnome\.org/pub/gnome/", "http://ftp.gnome.org/pub/GNOME/", $2)
 	}
 
 
@@ -929,12 +957,18 @@ preamble == 1 {
 #
 # NOTES:
 # - mixing BR/R and anything else confuses this (all will be sorted together)
-#   so don't do that.
+#	so don't do that.
 # - comments leading the BR/R can not be associated,
-#   so don't adapterize when the BR/R are mixed with comments
+#	so don't adapterize when the BR/R are mixed with comments
 ENVIRON["SKIP_SORTBR"] != 1 && preamble == 1 && $0 ~ PREAMBLE_TAGS, $0 ~ PREAMBLE_TAGS {
 	if ($1 ~ /Pre[Rr]eq:/) {
 		sub(/Pre[Rr]eq:/, "Requires:", $1);
+	}
+	if ($1 == "BR:" ) {
+		$1 = "BuildRequires:"
+	}
+	if ($1 == "R:" ) {
+		$1 = "Requires:"
 	}
 	format_preamble()
 #	kill_preamble_macros(); # breaks tabbing
@@ -997,12 +1031,12 @@ END {
 	if (do_not_touch_anything)
 		exit 0
 
-    # TODO: need to output these in proper place
-    if (BR_count > 0) {
-        for (i = 0; i <= BR_count; i++) {
-            print BR[i];
-        }
-    }
+	# TODO: need to output these in proper place
+	if (BR_count > 0) {
+		for (i = 0; i <= BR_count; i++) {
+			print BR[i];
+		}
+	}
 
 	close(changelog_file)
 	while ((getline < changelog_file) > 0)
@@ -1022,18 +1056,18 @@ END {
 
 	if (has_changelog == 0) {
 		print "%changelog"
-    }
+	}
 
 	if (boc > 2) {
 		print "* %{date} PLD Team <feedback@pld-linux.org>"
-    }
+	}
 	if (boc > 1) {
 		printf "All persons listed below can be reached at "
 		print "<cvs_login>@pld-linux.org\n"
 	}
 	if (boc > 0) {
 		print "$" "Log:$"
-    }
+	}
 }
 
 function fixedsub(s1,s2,t, ind) {
@@ -1050,11 +1084,12 @@ function format_preamble()
 		return;
 	}
 	sub(/:[ \t]*/, ":")
-	if (match($0, /[A-Za-z0-9(),#_ \t]+[ \t]*:[ \t]*/) == 1) {
-		if (RLENGTH < 8)
+	if (match($0, /[A-Za-z0-9(),#_ \t.-]+[ \t]*:[ \t]*/) == 1) {
+		if (RLENGTH < 8) {
 			sub(/:/, ":\t\t")
-		else
+		} else {
 			sub(/:/, ":\t")
+		}
 	}
 }
 
@@ -1071,9 +1106,9 @@ function use_macros()
 		return;
 	}
 
-    sub("%{_defaultdocdir}", "%{_docdir}");
-    sub("%{_bindir}/perl", "%{__perl}");
-    sub("%{_bindir}/python", "%{__python}");
+	sub("%{_defaultdocdir}", "%{_docdir}");
+	sub("%{_bindir}/perl", "%{__perl}");
+	sub("%{_bindir}/python", "%{__python}");
 
 	gsub(infodir, "%{_infodir}")
 
@@ -1098,6 +1133,8 @@ function use_macros()
 
 	gsub("%{_datadir}/applications", "%{_desktopdir}")
 	gsub("%{_datadir}/pixmaps", "%{_pixmapsdir}")
+
+	gsub(libdir, "%{_libdir}")
 
 	gsub(bindir, "%{_bindir}")
 	gsub("%{prefix}/bin", "%{_bindir}")
@@ -1168,9 +1205,14 @@ function use_macros()
 			continue;
 		if ($c ~ sysconfdir "/shells")
 			continue;
+		if ($c ~ sysconfdir "/ppp")
+			continue;
+		if ($c ~ sysconfdir "/dbus-1")
+			continue;
 		gsub(sysconfdir, "%{_sysconfdir}", $c)
 	}
 
+	gsub(kdedocdir, "%{_kdedocdir}")
 	gsub(docdir, "%{_docdir}")
 	gsub(php_pear_dir, "%{php_pear_dir}")
 
@@ -1277,10 +1319,11 @@ function use_macros()
 	gsub("%{compat_perl_vendorarch}", "%{perl_vendorarch}")
 
 	gsub("^%{__make} install DESTDIR=\$RPM_BUILD_ROOT", "%{__make} install \\\n\tDESTDIR=$RPM_BUILD_ROOT")
-	gsub("^fix-info-dir$", "[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>\&1")
+	gsub("^fix-info-dir$", "[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>\\&1")
 	$0 = fixedsub("%buildroot", "$RPM_BUILD_ROOT", $0)
 	$0 = fixedsub("%{buildroot}", "$RPM_BUILD_ROOT", $0)
 	$0 = fixedsub("CXXFLAGS=%{rpmcflags} %configure", "CXXFLAGS=%{rpmcflags}\n%configure", $0);
+	$0 = fixedsub("%__install", "install", $0);
 
 	# split configure line to multiple lines
 	if (/%configure / && !/\\$/) {
@@ -1293,22 +1336,22 @@ function use_macros()
 	gsub("%_sbindir", "%{_sbindir}")
 	gsub("%_mandir", "%{_mandir}")
 	gsub("%name", "%{name}")
-    gsub(/%__rm/, "rm");
-    gsub(/%__mkdir_p/, "install -d");
-    gsub(/%__cp/, "cp");
-    gsub(/%__ln_s/, "ln -s");
-    gsub(/%__sed/, "%{__sed}");
-    gsub(/%__cat/, "cat");
-    gsub(/%__chmod/, "chmod");
+	gsub(/%__rm/, "rm");
+	gsub(/%__mkdir_p/, "install -d");
+	gsub(/%__cp/, "cp");
+	gsub(/%__ln_s/, "ln -s");
+	gsub(/%__sed/, "%{__sed}");
+	gsub(/%__cat/, "cat");
+	gsub(/%__chmod/, "chmod");
 
 	gsub("/usr/src/linux", "%{_kernelsrcdir}")
 	gsub("%{_prefix}/src/linux", "%{_kernelsrcdir}")
 
 	if (/^ant /) {
 		sub(/^ant/, "%ant")
-        add_br("BuildRequires:  jpackage-utils");
-        add_br("BuildRequires:  rpmbuild(macros) >= 1.294");
-    }
+		add_br("BuildRequires:  jpackage-utils");
+		add_br("BuildRequires:  rpmbuild(macros) >= 1.300");
+	}
 
 }
 
@@ -1372,6 +1415,7 @@ function use_files_macros(	i, n, t, a)
 	gsub("%{_sysconfdir}/sysconfig", "/etc/sysconfig")
 	gsub("%{_sysconfdir}/certs", "/etc/certs")
 	gsub("%{_sysconfdir}/init.d", "/etc/init.d")
+	gsub("%{_sysconfdir}/dbus-1", "/etc/dbus-1")
 
 	# /etc/init.d -> /etc/rc.d/init.d
 	if (!/^\/etc\/init\.d$/) {
@@ -1421,11 +1465,15 @@ function use_files_macros(	i, n, t, a)
 		gsub("%attr\\(0", "%attr(")
 	}
 
-    # kill default attrs
-    gsub(/%dir %attr\(755,root,root\)/, "%dir");
-    if (!/%dir/) {
-        gsub(/%attr\(644,root,root\) /, "");
-    }
+	# kill leading whitespace
+	gsub(/^ +/, "");
+
+	# kill default attrs
+	gsub(/%dir %attr\(755,root,root\)/, "%dir");
+	gsub(/%attr\(755,root,root\) %dir/, "%dir");
+	if (!/%dir/) {
+		gsub(/%attr\(644,root,root\) /, "");
+	}
 
 	# sort %verify attrs
 	if (match($0, /%verify\(not([^)]+)\)/)) {
@@ -1610,37 +1658,37 @@ function use_tabs()
 
 function add_br(br)
 {
-    BR[BR_count++] = br
+	BR[BR_count++] = br
 }
 
 # php virtual deps as discussed in devel-en
 function replace_php_virtual_deps()
 {
-    pkg = $2
-#    if (pkg == "php-program") {
-#        $0 = $1 "\t/usr/bin/php"
-#        return
-#    }
+	pkg = $2
+#	if (pkg == "php-program") {
+#		$0 = $1 "\t/usr/bin/php"
+#		return
+#	}
 
-    if (pkg ~ /^php-/ && pkg !~ /^php-(pear|common|cli|devel|fcgi|cgi|dirs|program|ZendOptimizer|pecl-)/) {
-        sub(/^php-/, "php(", pkg);
-        sub(/$/, ")", pkg);
-        $2 = pkg
-    }
+#	if (pkg ~ /^php-[a-z]/ && pkg !~ /^php-(pear|common|cli|devel|fcgi|cgi|dirs|program|pecl-)/) {
+#		sub(/^php-/, "php(", pkg);
+#		sub(/$/, ") # verify this correctness -- it may be wanted to use specific not virtual dep", pkg);
+#		$2 = pkg
+#	}
 
-    if (pkg ~/^php$/) {
-        $2 = "webserver(php)";
-        if ($4 ~ /^[0-9]:/) {
-            $4 = substr($4, 3);
-        }
-    }
+	if (pkg ~/^php$/) {
+		$2 = "webserver(php)";
+		if ($4 ~ /^[0-9]:/) {
+			$4 = substr($4, 3);
+		}
+	}
 
-    if (pkg ~/^php4$/) {
-        $2 = "webserver(php)";
-        if ($4 ~ /^[0-9]:/) {
-            $4 = substr($4, 3);
-        }
-    }
+	if (pkg ~/^php4$/) {
+		$2 = "webserver(php)";
+		if ($4 ~ /^[0-9]:/) {
+			$4 = substr($4, 3);
+		}
+	}
 }
 
-# vim:ts=4:sw=4:et
+# vim:ts=4:sw=4
