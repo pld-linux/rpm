@@ -1246,23 +1246,16 @@ compile %{*}\
 %define KernelD $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}			\
 %define ModprobeD $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{_kernel_ver} \
 																	\
-install -d %{KernelD}/%{-d*}									\
-%{?-s:install -d %{ModprobeD}}								\
+install -d %{KernelD}/%{-d*}										\
+%{?-s:install -d %{ModprobeD}}										\
 																	\
 for MODULE in {%{-m*},}; do											\
 	[ -n "${MODULE}" ] || continue									\
 	MNAME=${MODULE##*/}												\
-	%if %{without dist_kernel}										\
-		install ${MODULE}-nondist.ko								\\\
-			%{KernelD}/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko				\
-		%{?-s:echo "alias ${MNAME} ${MNAME}-%{-s*}"					\\\
-			>> %{ModprobeD}/%{-n*}.conf}							\
-	%else															\
-		install ${MODULE}-dist.ko										\\\
-			%{KernelD}/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko				\
-		%{?-s:echo "alias ${MNAME} ${MNAME}-%{-s*}"					\\\
-			>> %{ModprobeD}/%{-n*}.conf}							\
-	%endif															\
+	install ${MODULE}-%{!?with_dist_kernel:non}dist.ko
+		%{KernelD}/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko					\
+	%{?-s:echo "alias ${MNAME} ${MNAME}-%{-s*}"						\\\
+		>> %{ModprobeD}/%{-n*}.conf}								\
 done																\
 %{nil}
 
