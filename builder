@@ -1,4 +1,8 @@
 #!/bin/ksh
+# 
+# This program is free software, distributed under the terms of
+# the GNU General Public License Version 2.
+#
 # -----------
 # Exit codes:
 #	  0 - succesful
@@ -22,7 +26,7 @@
 RCSID='$Id$'
 r=${RCSID#* * }
 rev=${r%% *}
-VERSION="v0.19/$rev"
+VERSION="v0.20/$rev"
 VERSIONSTRING="\
 Build package utility from PLD Linux CVS repository
 $VERSION (C) 1999-2007 Free Penguins".
@@ -414,6 +418,10 @@ minirpm() {
 %__php_api_requires() %{nil}
 %php_major_version ERROR
 %php_api_version ERROR
+%requires_xorg_xserver_extension %{nil}
+%requires_xorg_xserver_xinput %{nil}
+%requires_xorg_xserver_font %{nil}
+%requires_xorg_xserver_videodrv %{nil}
 %py_ver ERROR
 %perl_vendorarch ERROR
 %perl_vendorlib ERROR
@@ -1162,11 +1170,18 @@ tag_files()
 	if [ "$tag_files" ]; then
 		if [ "$TAG_VERSION" = "yes" ]; then
 			update_shell_title "tag sources: $TAGVER"
+			printf "Tagging %d files\n" $(echo $tag_files | wc -w)
 			cvs $OPTIONS $TAGVER $tag_files || exit
 		fi
 		if [ -n "$TAG" ]; then
 			update_shell_title "tag sources: $TAG"
-			cvs $OPTIONS $TAG $tag_files || exit
+
+			while [ "$tag_files" ]; do
+				local chunk=$(echo $tag_files | tr ' ' '\n' | head -n 100)
+				printf "Tagging %d files\n" $(echo $chunk | wc -w)
+				cvs $OPTIONS $TAG $chunk || exit
+				tag_files=$(echo $tag_files | tr ' ' '\n' | tail +101)
+			done
 		fi
 	fi
 
@@ -1908,7 +1923,7 @@ while [ $# -gt 0 ]; do
 		-c | --clean )
 			CLEAN="--clean --rmspec --rmsource"; shift ;;
 		-cf | --cvs-force )
-			CVS_FORCE="-F"; shift;;
+			CVS_FORCE="-F -B"; shift;;
 		-d | --cvsroot )
 			shift; CVSROOT="${1}"; shift ;;
 		-g | --get )
