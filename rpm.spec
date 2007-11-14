@@ -265,6 +265,8 @@ Zawiera on:
 Summary:	RPMs library
 Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
+# for BDB robustness patch: http://www.mail-archive.com/pld-devel-en@lists.pld-linux.org/msg03329.html
+Requires:	uname(release) >= 2.6.17
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	db >= %{reqdb_ver}
 %{?with_selinux:Requires:	libselinux >= 1.18}
