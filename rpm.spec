@@ -98,7 +98,7 @@ Patch37:	%{name}-doxygen_hack.patch
 Patch38:	%{name}-rpm5-patchset-8021.patch
 Patch41:	%{name}-reduce-stack-usage.patch
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
-
+Patch43:	%{name}-bdb-cc.patch
 Patch44:	%{name}-no-neon.patch
 Patch45:	%{name}-no-sqlite.patch
 Patch46:	%{name}-mono.patch
@@ -669,6 +669,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch38 -p1
 %patch41 -p1
 %patch42 -p1
+%patch43 -p1
 %{!?with_neon:%patch44 -p1}
 %patch45 -p1
 %patch46 -p1
@@ -1006,6 +1007,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_bindir}/rpmquery
 #%attr(755,root,root) %{_bindir}/rpmsign
 #%attr(755,root,root) %{_bindir}/rpmverify
+
+# for /var/lib/rpm conversion we need some stuff from rpmdb_*
+%attr(755,root,root) %{_bindir}/rpmdb_*
 
 %dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
