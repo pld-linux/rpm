@@ -103,7 +103,7 @@ Patch44:	%{name}-no-neon.patch
 Patch45:	%{name}-no-sqlite.patch
 Patch46:	%{name}-mono.patch
 Patch47:	%{name}-javadeps.patch
-
+Patch48:	%{name}-nopie.patch
 Patch49:	%{name}-p4.patch
 Patch50:	%{name}-macros.patch
 Patch51:	%{name}-cleanlibdirs.patch
