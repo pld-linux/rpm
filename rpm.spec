@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	11
+Release:	12
 License:	GPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -103,12 +103,12 @@ Patch44:	%{name}-no-neon.patch
 Patch45:	%{name}-no-sqlite.patch
 Patch46:	%{name}-mono.patch
 Patch47:	%{name}-javadeps.patch
-
+Patch48:	%{name}-nopie.patch
 Patch49:	%{name}-p4.patch
 Patch50:	%{name}-macros.patch
 Patch51:	%{name}-cleanlibdirs.patch
 Patch52:	%{name}-morearchs.patch
-
+Patch53:	%{name}-chroot-hack.patch
 Patch55:	%{name}-truncate-cvslog.patch
 Patch56:	%{name}-rpm5-patchset-8413.patch
 Patch57:	%{name}-as_needed-fix.patch
@@ -674,10 +674,12 @@ install %{SOURCE12} scripts/perl.prov
 %patch45 -p1
 %patch46 -p1
 %patch47 -p1
+%patch48 -p1
 %patch49 -p1
 %patch50 -p1
 %patch51 -p1
 #%patch52 -p1
+%patch53 -p1
 %patch55 -p1
 %patch56 -p1
 %patch57 -p1
