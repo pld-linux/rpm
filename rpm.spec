@@ -272,6 +272,8 @@ Requires:	db >= %{reqdb_ver}
 %{?with_selinux:Requires:	libselinux >= 1.18}
 %{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
 Requires:	popt >= %{reqpopt_ver}
+# for %%pre check
+Requires(pre):	file
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
@@ -994,6 +996,15 @@ rm -f manual/Makefile*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+# make sure no one install this rpm over old rpm using system db 4.6
+%pre lib
+if (%{_bindir}/file /var/lib/rpm/* 2> /dev/null | /bin/grep -q 'Hash, version 9'); then
+	echo >&2 "BDB Hash 9 detected. Unsupported by this version. Please convert"
+	echo >&2 "your rpm database to Btree format and then upgrade rpm tool."
+	echo >&2 "See http://www.pld-linux.org/Th-RPM for instructions."
+	exit 1
+fi
 
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
