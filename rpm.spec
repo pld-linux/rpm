@@ -118,6 +118,7 @@ Patch60:	%{name}-obsolete-rpmrc.patch
 Patch61:	%{name}-sparc64.patch
 Patch62:	%{name}-rpmdb.patch
 Patch63:	%{name}-lzma-size_t.patch
+Patch64:	%{name}-tar_as_secondary_source.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -694,6 +695,7 @@ install %{SOURCE12} scripts/perl.prov
 %endif
 %patch62 -p1
 %patch63 -p1
+%patch64 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
