@@ -1259,7 +1259,7 @@ for MODULE in {%{-m*},}; do											\
 		MNAME=${MODULE##*/}											\
 		install -D ${MODULE}-$cfg.ko								\\\
 			%{KernelD}$suf/%{-d*}/${MNAME}%{-s:-%{-s*}}.ko			\
-		%{?-s:install -d %{ModprobeD}								\\\
+		%{?-s:install -d %{ModprobeD}								\
 			echo "alias ${MNAME} ${MNAME}-%{-s*}"					\\\
 			>> %{ModprobeD}$suf/%{-n*}.conf}						\
 	done															\
