@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	12
+Release:	13
 License:	GPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -88,6 +88,7 @@ Patch26:	%{name}-notsc.patch
 Patch27:	%{name}-hack-norpmlibdep.patch
 Patch28:	%{name}-makefile-no_myLDADD_deps.patch
 Patch29:	%{name}-macros-dbhash.patch
+Patch30:	%{name}-rpm5-patchset-8784.patch
 Patch31:	%{name}-missing-prototypes.patch
 Patch32:	%{name}-pld-autodep.patch
 Patch33:	%{name}-arch-x86_64.patch
@@ -659,6 +660,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch27 -p1
 %patch28 -p1
 %patch29 -p1
+%patch30 -p1
 %patch31 -p1
 %patch32 -p1
 %patch33 -p1
