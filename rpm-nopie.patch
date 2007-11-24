@@ -1,0 +1,11 @@
+diff -urN rpm-4.4.9.org/configure.ac rpm-4.4.9/configure.ac
+--- rpm-4.4.9.org/configure.ac	2007-05-19 21:26:29.000000000 +0200
++++ rpm-4.4.9/configure.ac	2007-11-15 01:11:58.263879867 +0100
+@@ -35,7 +35,6 @@
+ AC_SUBST(AS)
+ if test "$ac_cv_c_compiler_gnu" = yes; then
+     CFLAGS="$CFLAGS -fPIC -DPIC -D_GNU_SOURCE -D_REENTRANT -Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes -Wno-char-subscripts"
+-    LDFLAGS="-pie"
+ fi
+ export CFLAGS LDFLAGS
+ 
