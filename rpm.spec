@@ -47,7 +47,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.0
-Release:	0.2
+Release:	0.3
 License:	GPL
 Group:		Base
 Source0:	%{name}-20071029.tar.bz2
@@ -86,7 +86,7 @@ Source110:	%{name}-macros-ia32e
 Source111:	%{name}-macros-amd64
 
 Patch0:		%{name}-pl.po.patch
-
+Patch1:		%{name}-man_pl.patch
 Patch3:		%{name}-rpmpopt.patch
 Patch4:		%{name}-perl-macros.patch
 Patch5:		%{name}-perl-req-perlfile.patch
@@ -610,6 +610,7 @@ Python para manipular pacotes e bancos de dados RPM.
 
 # APPLIED ALREADY?
 #%patch0 -p1
+%patch1 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
