@@ -30,7 +30,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.2
-Release:	46
+Release:	47
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -119,6 +119,7 @@ Patch61:	%{name}-locale.patch
 Patch62:	%{name}-cpuinfo.patch
 Patch63:	%{name}-javadeps.patch
 Patch64:	http://wraptastic.org/pub/jbj/%{name}-4.4.2-suggests.patch
+Patch65:	%{name}-man_pl.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -684,6 +685,7 @@ rm -rf file
 %patch62 -p1
 %patch63 -p1
 %patch64 -p1
+%patch65 -p1
 cp %{SOURCE17} RPM-GPG-KEY
 
 cd scripts
