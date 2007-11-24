@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	10.4
+Release:	13
 License:	GPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -99,7 +99,7 @@ Patch37:	%{name}-doxygen_hack.patch
 Patch38:	%{name}-rpm5-patchset-8021.patch
 Patch41:	%{name}-reduce-stack-usage.patch
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
-Patch43:	%{name}-bdb-cc.patch
+Patch43:	%{name}-rpm5-patchset-8637.patch
 Patch44:	%{name}-no-neon.patch
 Patch45:	%{name}-no-sqlite.patch
 Patch46:	%{name}-mono.patch
@@ -109,7 +109,7 @@ Patch49:	%{name}-p4.patch
 Patch50:	%{name}-macros.patch
 Patch51:	%{name}-cleanlibdirs.patch
 Patch52:	%{name}-morearchs.patch
-
+Patch53:	%{name}-chroot-hack.patch
 Patch55:	%{name}-truncate-cvslog.patch
 Patch56:	%{name}-rpm5-patchset-8413.patch
 Patch57:	%{name}-as_needed-fix.patch
@@ -188,7 +188,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # stabilize new build environment
 %define		__newcc %{?force_cc}%{!?force_cc:%{_target_cpu}-pld-linux-gcc}
 %define		__newcxx %{?force_cxx}%{!?force_cxx:%{_target_cpu}-pld-linux-g++}
-%define		__newcpp %{?force_cpp}%{!?force_cpp:cpp}
+%define		__newcpp %{?force_cpp}%{!?force_cpp:%{_target_cpu}-pld-linux-gcc -E}
 
 %define		_rpmlibdir /usr/lib/rpm
 
@@ -267,15 +267,11 @@ Zawiera on:
 Summary:	RPMs library
 Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
-# for BDB robustness patch: http://www.mail-archive.com/pld-devel-en@lists.pld-linux.org/msg03329.html
-Requires:	uname(release) >= 2.6.17
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	db >= %{reqdb_ver}
 %{?with_selinux:Requires:	libselinux >= 1.18}
 %{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
 Requires:	popt >= %{reqpopt_ver}
-# for %%pre check
-Requires(pre):	file
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
@@ -636,8 +632,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch12 -p1
 %patch13 -p1
 %patch14 -p1
-# internal bdb
-#%patch15 -p1
+%patch15 -p1
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
@@ -686,6 +681,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch50 -p1
 %patch51 -p1
 #%patch52 -p1
+%patch53 -p1
 %patch55 -p1
 %patch56 -p1
 %patch57 -p1
@@ -707,7 +703,7 @@ cd ..
 mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
 
-rm -rf sqlite zlib popt
+rm -rf sqlite zlib db db3 popt rpmdb/db.h
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
@@ -719,13 +715,6 @@ for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
 done
 
 %build
-cd db/dist
-cp -f /usr/share/aclocal/libtool.m4 aclocal/libtool.ac
-cp -f /usr/share/automake/config.sub .
-cp -f /usr/share/libtool/ltmain.sh .
-sh s_config
-cd ../..
-
 %if %{with system_libmagic}
 rm -rf file
 %else
@@ -1001,15 +990,6 @@ rm -f manual/Makefile*
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-# make sure no one install this rpm over old rpm using system db 4.6
-%pre lib
-if (%{_bindir}/file /var/lib/rpm/* 2> /dev/null | /bin/grep -q 'Hash, version 9'); then
-	echo >&2 "BDB Hash 9 detected. Unsupported by this version. Please convert"
-	echo >&2 "your rpm database to Btree format and then upgrade rpm tool."
-	echo >&2 "See http://www.pld-linux.org/Th-RPM for instructions."
-	exit 1
-fi
-
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
 
@@ -1025,9 +1005,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_bindir}/rpmquery
 #%attr(755,root,root) %{_bindir}/rpmsign
 #%attr(755,root,root) %{_bindir}/rpmverify
-
-# for /var/lib/rpm conversion we need some stuff from rpmdb_*
-%attr(755,root,root) %{_bindir}/rpmdb_*
 
 %dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
