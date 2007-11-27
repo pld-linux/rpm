@@ -14,14 +14,14 @@ fi
 if [ "$1" = user -o "$1" = group ]; then
 	MODE=$1
 else
-	echo ERROR | $BANNERCMD $BANNERPARA
+	echo ERROR
 	exit 2
 fi
 shift
 
 bannercmd()
 {
-	if [ "$BANNERCMD" == cat ]; then
+	if [ "$BANNERCMD" = cat ]; then
 		echo cat
 	else
 		if [ "$RPM_SCRIPTVERBOSITY" -lt 2 ]; then
@@ -34,7 +34,7 @@ bannercmd()
 
 testrm()
 {
-	[ "$RPM_USERDEL" != yes ] && return 1
+	[ "$RPM_USERDEL" != yes ] || [ ! -x /bin/rpm ] && return 1
 	[ -z "$1" ] && return 2
 	rpm -q --whatprovides "${MODE}($1)" >/dev/null 2>&1
 	# no package Provides it (strange)
@@ -51,14 +51,27 @@ elif [ "$1" = del ]; then
 	if testrm $2; then
 		echo "Removing $MODE $2" | `bannercmd "${MODE}del-$2"`
 		/usr/sbin/${MODE}del $2 || :
+		if [ -x /usr/sbin/nscd ]; then
+		case "${MODE}" in
+		user)
+			/usr/sbin/nscd -i passwd
+			;;
+		group)
+			/usr/sbin/nscd -i group
+			;;
+		esac
+		fi
 	fi
 elif [ "$MODE" = "user" -a "$1" = "addtogroup" ]; then
-	USER=$2
-	GROUP=$3
-	GROUPS=`id -n -G $USER | sed -e's/^[^ ]* //;s/ /,/g'`
-	if ! echo ",$GROUPS," | grep -q ",$GROUP," ; then
-	    echo "Adding user $USER to group $GROUP" | `bannercmd "${MODE}mod-$USER"`
-	    usermod -G "$GROUPS,$GROUP" $USER
+	user="$2"
+	group="$3"
+	groups=$(id -n -G $user)
+	if [[ " $groups " != *\ $group\ * ]]; then
+	    echo "Adding user $user to group $group" | `bannercmd "${MODE}mod-$user"`
+		for grp in $groups $group; do
+			new="$new${new:+,}$grp"
+		done
+	    usermod -G "$new" $user
 	fi
 else
 	echo ERROR

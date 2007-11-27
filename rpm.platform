@@ -31,6 +31,7 @@
 %{__spec_install_post_compress_docs}\
 %{__spec_install_post_compress_modules}\
 %{__spec_install_post_py_hardlink}\
+%{__spec_install_post_perl_clean}\
 %{__arch_install_post}\
 %{nil}
 

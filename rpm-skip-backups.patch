@@ -1,0 +1,20 @@
+--- rpm-4.4.2/rpmio/macro.c~	2006-04-27 00:49:59.000000000 +0300
++++ rpm-4.4.2/rpmio/macro.c	2006-04-27 00:50:04.000000000 +0300
+@@ -2000,8 +2000,15 @@
+ 	    continue;
+ 
+ 	/* Read macros from each file. */
+-	for (i = 0; i < ac; i++)
+-	    (void) rpmLoadMacroFile(mc, av[i]);
++	for (i = 0; i < ac; i++) {
++	    size_t slen = strlen(av[i]);
++	    if ((av[i])[slen-1] != '~' &&
++		(slen < 8 || strcmp((av[i] + slen - 7), ".rpmnew")) &&
++		(slen < 9 || (strcmp((av[i] + slen - 8), ".rpmorig") &&
++			      strcmp((av[i] + slen - 8), ".rpmsave")))) {
++		(void) rpmLoadMacroFile(mc, av[i]);
++	    }
++	}
+ 	av = _free(av);
+     }
+     mfiles = _free(mfiles);
