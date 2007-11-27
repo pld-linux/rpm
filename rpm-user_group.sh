@@ -14,14 +14,14 @@ fi
 if [ "$1" = user -o "$1" = group ]; then
 	MODE=$1
 else
-	echo ERROR
+	echo ERROR | $BANNERCMD $BANNERPARA
 	exit 2
 fi
 shift
 
 bannercmd()
 {
-	if [ "$BANNERCMD" = cat ]; then
+	if [ "$BANNERCMD" == cat ]; then
 		echo cat
 	else
 		if [ "$RPM_SCRIPTVERBOSITY" -lt 2 ]; then
@@ -63,15 +63,12 @@ elif [ "$1" = del ]; then
 		fi
 	fi
 elif [ "$MODE" = "user" -a "$1" = "addtogroup" ]; then
-	user="$2"
-	group="$3"
-	groups=$(id -n -G $user)
-	if [[ " $groups " != *\ $group\ * ]]; then
-	    echo "Adding user $user to group $group" | `bannercmd "${MODE}mod-$user"`
-		for grp in $groups $group; do
-			new="$new${new:+,}$grp"
-		done
-	    usermod -G "$new" $user
+	USER=$2
+	GROUP=$3
+	GROUPS=`id -n -G $USER | sed -e's/^[^ ]* //;s/ /,/g'`
+	if ! echo ",$GROUPS," | grep -q ",$GROUP," ; then
+	    echo "Adding user $USER to group $GROUP" | `bannercmd "${MODE}mod-$USER"`
+	    usermod -G "$GROUPS,$GROUP" $USER
 	fi
 else
 	echo ERROR
