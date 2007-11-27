@@ -474,6 +474,7 @@ Requires:	sed
 Requires:	sh-utils
 Requires:	tar
 Requires:	textutils
+Provides:	rpmbuild(find_lang) = 1.23
 Provides:	rpmbuild(monoautodeps)
 Provides:	rpmbuild(noauto) = 3
 %ifarch %{x8664}
