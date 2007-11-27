@@ -1,5 +1,5 @@
---- rpm-4.4.2/macros.in~	2006-01-17 20:55:45.000000000 +0200
-+++ rpm-4.4.2/macros.in	2006-01-17 20:57:51.000000000 +0200
+--- ./macros.in~	2005-10-30 16:24:30.000000000 +0200
++++ ./macros.in	2005-10-30 16:24:32.000000000 +0200
 @@ -223,7 +223,7 @@
  %_tmppath		%{_var}/tmp
  
@@ -9,25 +9,27 @@
  
  #	The path to the unzip executable (legacy, use %{__unzip} instead).
  %_unzipbin		%{__unzip}
-@@ -327,8 +327,8 @@
- #		"w9.gzdio"	gzip level 9 (default).
- #		"w9.bzdio"	bzip2 level 9.
+@@ -1276,5 +1276,18 @@
  #
--#%_source_payload	w9.gzdio
--#%_binary_payload	w9.gzdio
-+%_source_payload	w9.gzdio
-+%_binary_payload	w9.bzdio
+ %find_lang	@RPMCONFIGDIR@/find-lang.sh %{buildroot}
  
- #	The signature to use and the location of configuration files for
- #	signing packages with PGP.
-@@ -1019,6 +1019,7 @@
- %_oldincludedir		/usr/include
- %_infodir		%{_prefix}/info
- %_mandir		%{_prefix}/man
-+%_x_libraries	/usr/X11R6/%{_lib}
- 
- #==============================================================================
- # ---- config.guess platform macros.
++# PLD rpm macros
++%_enable_debug_packages 0
++
++#-----------------------------------------------------------------
++# CFLAGS and LDFLAGS used to build
++
++%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -ggdb}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
++
++%debugcflags	-O0 -g -Wall
++%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
++%rpmcxxflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
++%rpmldflags	%{nil}
++
+ # \endverbatim
+ #*/
+--- rpm-4.4.2/macros.in~	2006-01-17 20:55:45.000000000 +0200
++++ rpm-4.4.2/macros.in	2006-01-17 20:57:51.000000000 +0200
 @@ -1157,36 +1157,6 @@
    %{-C:cd ${_mydir}; unset _mydir}
  
@@ -65,21 +67,13 @@
  # arch macro for all Intel i?86 compatibile processors
  #  (Note: This macro (and it's analogues) will probably be obsoleted when
  #   rpm can use regular expressions against target platforms in macro
-@@ -1277,4 +1277,17 @@
- %find_lang	@RPMCONFIGDIR@/find-lang.sh %{buildroot}
+--- rpm-4.4.2/macros.in~	2006-02-05 18:16:32.000000000 +0200
++++ rpm-4.4.2/macros.in	2006-02-05 18:19:54.000000000 +0200
+@@ -1019,6 +1019,7 @@
+ %_oldincludedir		/usr/include
+ %_infodir		%{_prefix}/info
+ %_mandir		%{_prefix}/man
++%_x_libraries	/usr/X11R6/%{_lib}
  
-+# PLD rpm macros
-+%_enable_debug_packages 0
-+
-+#-----------------------------------------------------------------
-+# CFLAGS and LDFLAGS used to build
-+
-+%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -ggdb}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
-+
-+%debugcflags	-O0 -g -Wall
-+%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
-+%rpmcxxflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
-+%rpmldflags	%{nil}
-+
- # \endverbatim
- #*/
+ #==============================================================================
+ # ---- config.guess platform macros.
