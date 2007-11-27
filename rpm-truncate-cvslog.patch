@@ -19,7 +19,7 @@
  
      s = getStringBuf(sb);
  
-@@ -197,6 +202,42 @@
+@@ -197,6 +202,43 @@
  	while ((s > text) && xisspace(*s)) {
  	    *s-- = '\0';
  	}
@@ -28,11 +28,13 @@
 +	    /* find end of line */
 +	    while(*s && *s != '\n') s++;
 +	    if (!*s) {
-+		goto out;
++		rpmError(RPMERR_BADSPEC, _("incomplete %%changelog entry\n"));
++		return RPMERR_BADSPEC;
 +	    }
 +	    s++;
 +	    if (!*s) {
-+		goto out;
++		rpmError(RPMERR_BADSPEC, _("incomplete %%changelog entry\n"));
++		return RPMERR_BADSPEC;
 +	    }
 +
 +	    /* we reached place where first Revisions should be */
@@ -58,7 +60,6 @@
 +		}
 +	    }
 +	}
-+out:
  	
  	addChangelogEntry(h, time, name, text);
  	s = next;
