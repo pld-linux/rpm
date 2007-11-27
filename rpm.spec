@@ -21,6 +21,7 @@
 %define	reqpopt_ver	1.10.2
 %define	beecrypt_ver	2:4.1.2-4
 %define	sover	4.4
+%define	find_lang_rev	1.23
 Summary:	RPM Package Manager
 Summary(de):	RPM Packet-Manager
 Summary(es):	Gestor de paquetes RPM
@@ -30,7 +31,7 @@ Summary(ru):	Менеджер пакетов от RPM
 Summary(uk):	Менеджер пакет╕в в╕д RPM
 Name:		rpm
 Version:	4.4.2
-Release:	47
+Release:	48
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -464,6 +465,7 @@ Requires:	sed
 Requires:	sh-utils
 Requires:	tar
 Requires:	textutils
+Provides:	rpmbuild(find_lang) = %{find_lang_rev}
 Provides:	rpmbuild(monoautodeps)
 Provides:	rpmbuild(noauto) = 3
 %ifarch %{x8664}
@@ -687,6 +689,7 @@ rm -rf file
 %patch64 -p1
 %patch65 -p1
 cp %{SOURCE17} RPM-GPG-KEY
+install %{SOURCE5} scripts/find-lang.sh
 
 cd scripts
 mv -f perl.req perl.req.in
@@ -708,7 +711,13 @@ for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
 done
 
 %build
-%if ! %{with system_libmagic}
+rev=$(awk '/^#.*Id:.*/{print $4}' scripts/find-lang.sh)
+if [ "$rev" != "%find_lang_rev" ]; then
+	: Update find_lang_rev define to $rev, and retry
+	exit 1
+fi
+
+%if %{without system_libmagic}
 cd file
 %{__libtoolize}
 %{__aclocal}
@@ -787,7 +796,6 @@ install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 install %{SOURCE11} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
 install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-provides
 install %{SOURCE15} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.java
-install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
 install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
 install %{SOURCE18} $RPM_BUILD_ROOT%{_bindir}/banner.sh
