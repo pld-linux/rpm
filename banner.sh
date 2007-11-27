@@ -64,24 +64,24 @@ Help()
 --all       - all banners
 --delete    - delete wanted banners
 -e
---exclude   - exclude following banners (useful with -a)
+--exclude   - exclude following banners (usefull with -a)
 -h
---help      - show this help
+--help      - shows this help
 -i
---include   - cancel effect of -e (EXCLUDED banners will remain excluded)
+--include   - cancels effect of -e (EXCLUDED banners will remain excluded)
 -m
---make      - make a brand-new banner named as following parameter [1] (from stdin)
+--make      - makes a brand-new banner named as following para [1] (from stdin)
 -M          - same as above, but append if file exists
 -n
---names     - show names of the banners
---newer     - all choosen banners should be newer than following parameter in seconds
---older     - all choosen banners should be older than following parameter in seconds
+--names     - shows names of the banners
+--newer     - all choosen banners should be newer than following para in seconds
+--older     - all choosen banners should be older than following para in seconds
 -s
---show      - show wanted banners
+--show      - shows wanted banners
 --stderr    - send banner to stderr instead of stdout (or other)
 --stdout    - send banner to stdout instead of stderr (or other)
 -u
---usage     - show short help
+--usage     - shows short help
 
 [1] - if there will be no slash ('/') in name then config dir will be used,
       else -- specified.
@@ -94,7 +94,10 @@ Unknown parameter $1
 EOF
 	Help
 }
-
+check_banner_name()
+{
+	echo "$1"|sed 's,.*/,,'
+}
 check_banners_mtime()
 {
 	BANNERS="$1"
@@ -142,17 +145,14 @@ make_banner()
 {
 	BANNER="$1"
 	SHOW="$2"
-	if [ ! -d "${BANNER%/*}" ]; then
-		mkdir -p "${BANNER%/*}"
-	fi
-	data=$(cat)
+	mkdir -p $(echo $BANNER|sed 's,/[^/]*$,,')
 	if [ $NEW_APPEND -eq 0 ]; then
-		echo "$data" > $BANNER
+		cat > $BANNER
 	else
-		echo "$data" >> $BANNER
+		cat >> $BANNER
 	fi
 	if [ $SHOW -eq 1 ];then
-		echo "$data"
+		cat $BANNER
 	fi
 }
 show_banner()
@@ -187,8 +187,8 @@ while [ ! -z $1 ]; do
 			;;
 		-m|--make|-M)
 			NEED_BANNER_LIST=0
-			if [[ $2 != */* ]]; then
-				NEW_BANNER="$BANNERDIR/${2##*/}"
+			if [ "$(check_banner_name $2)" == "$2" ]; then
+				NEW_BANNER=$BANNERDIR/$(check_banner_name "$2")
 			else
 				NEW_BANNER="$2"
 			fi
@@ -247,9 +247,9 @@ while [ ! -z $1 ]; do
 			;;
 		*)
 			if [ $EXCLUDE_FLAG -eq 0 ];then
-				BANNERS="$BANNERS ${1##*/}"
+				BANNERS="$BANNERS $(check_banner_name $1)"
 			else
-				NOBANNERS="$NOBANNERS ${1##*/}"
+				NOBANNERS="$NOBANNERS $(check_banner_name $1)"
 			fi
 			;;
 	esac
