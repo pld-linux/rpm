@@ -4,8 +4,8 @@
  	goto unsatisfied;
      }
  
-+    /* Ignore cpuinfo() and uname() deps */
-+    if (!strncmp(Name, "cpuinfo(", sizeof("cpuinfo(")-1) || !strncmp(Name, "uname(", sizeof("uname(")-1))
++    /* Ignore cpuinfo() deps */
++    if (!strncmp(Name, "cpuinfo(", sizeof("cpuinfo(")-1))
 +	    goto exit;
 +
      /* Search added packages for the dependency. */
