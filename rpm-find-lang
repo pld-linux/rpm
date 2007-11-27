@@ -32,12 +32,10 @@
 #   * added support for GNOME help files
 #   * start support for KDE help files
 
-PROG=${0##*/}
-
 usage () {
 cat <<EOF
 
-Usage: $PROG TOP_DIR PACKAGE_NAME [prefix]
+Usage: $0 TOP_DIR PACKAGE_NAME [prefix]
 
 where TOP_DIR is
 the top of the tree containing the files to be processed--should be
@@ -49,7 +47,6 @@ to \$3.
 Additional options:
   --with-gnome		find GNOME help files
   --with-kde		find KDE help files
-  --with-omf		find OMF files
   --all-name		match all package/domain names
   --without-mo		skip *.mo locale files
 EOF
@@ -59,10 +56,9 @@ exit 1
 if [ -z "$1" ]; then
 	usage
 elif [ $1 = / ]; then
-	echo >&2 "$PROG: expects non-/ argument for '$1'"
-	exit 1
+	echo >&2 "$0: expects non-/ argument for '$1'"
 elif [ ! -d $1 ]; then
-	echo >&2 "$PROG: $1: No such directory"
+	echo "$0: $1: no such directory"
 	exit 1
 else
 	TOP_DIR="${1%/}"
@@ -78,7 +74,6 @@ shift
 
 GNOME='#'
 KDE='#'
-OMF='#'
 MO=''
 MO_NAME=$NAME.lang
 ALL_NAME='#'
@@ -87,26 +82,17 @@ while test $# -gt 0 ; do
     case "$1" in
 	--with-gnome)
   		GNOME=''
-		echo "$PROG: Enabling with GNOME"
 		shift
 		;;
 	--with-kde)
-		echo "$PROG: Enabling with KDE"
 		KDE=''
 		shift
 		;;
-	--with-omf)
-		echo "$PROG: Enabling with OMF"
-		OMF=''
-		shift
-		;;
 	--without-mo)
-		echo "$PROG: Disabling .mo files"
 		MO='#'
 		shift
 		;;
 	--all-name)
-		echo "$PROG: Enabling with all names"
 		ALL_NAME=''
 		NO_ALL_NAME='#'
 		shift
@@ -120,21 +106,11 @@ done
 
 echo '%defattr(644,root,root,755)' > $MO_NAME
 
-if [ ! -f __find.files ] || [ "$TOP_DIR" -nt __find.files ]; then
+if [ ! -f __find.files ]; then
 	find $TOP_DIR -type f -name '*.mo' | xargs -r file | egrep -v ', 1 messages$' | \
 	sed -e '
 		s/:.*//
 		s:'"$TOP_DIR"'::' > __find.files
-else
-	echo "$PROG: Using cached __find.files"
-fi
-
-if [ ! -f __omf.files ] || [ "$TOP_DIR" -nt __omf.files ]; then
-	find $TOP_DIR -type f -name '*.omf' | \
-	sed -e '
-		s:'"$TOP_DIR"'::' > __omf.files
-else
-	echo "$PROG: Using cached __omf.files"
 fi
 
 (
@@ -150,23 +126,8 @@ s:^\([^%].*\)::
 s:%lang(C) ::
 s:^\$::' | egrep -v '^$' >> $MO_NAME
 
-(
-	if [ "$ALL_NAME" ]; then
-		fgrep $NAME __omf.files
-	else
-		cat __omf.files
-	fi
-) | sed '
-'"$ALL_NAME$OMF"'s:\(.*/omf/[a-zA-Z0-9.\_\-]\+\)\(.*\-\)\(.*\)\(.*\.omf\):%lang(\3) \1\2\3\4:
-'"$NO_ALL_NAME$OMF"'s:\(.*/omf/'"$NAME"'\)\(.*\-\)\(.*\)\(.*\.omf\):%lang(\3) \1\2\3\4:
-s:^\([^%].*\)::
-s:%lang(C) ::
-s:^\$::' | egrep -v '^$' >> $MO_NAME
-
-if [ ! -f __find.dirs ] || [ "$TOP_DIR" -nt __find.dirs ]; then
+if [ ! -f __find.dirs ]; then
 	find $TOP_DIR -type d | sed 's:'"$TOP_DIR"'::' > __find.dirs
-else
-	echo "$PROG: Using cached __find.dirs"
 fi
 
 (
@@ -186,13 +147,7 @@ s:%lang(.*) .*/gnome/help/[a-zA-Z0-9.\_\-]\+/[a-zA-Z0-9.\_\-]\+/.*::
 s:^\([^%].*\)::
 s:%lang(C) ::' | egrep -v '^$' >> $MO_NAME
 
-(
-	if [ "$ALL_NAME" ]; then
-		fgrep $NAME __find.dirs
-	else
-		cat __find.dirs
-	fi
-) | sed '
+{ [ "$ALL_NAME" ] || cat __find.dirs && fgrep $NAME __find.dirs; } | sed '
 '"$NO_ALL_NAME$KDE"'s:\(.*/doc/kde/HTML/\)\([^/_]\+\)\(.*/'"$NAME"'/\)::
 '"$NO_ALL_NAME$KDE"'s:\(.*/doc/kde/HTML/\)\([^/_]\+\)\(.*/'"$NAME"'\)$:%lang(\2) \1\2\3:
 '"$ALL_NAME$KDE"'s:\(.*/doc/kde/HTML/\)\([^/_]\+\)\(.*/[a-zA-Z0-9.\_\-]\+/\)::
@@ -200,19 +155,7 @@ s:%lang(C) ::' | egrep -v '^$' >> $MO_NAME
 s:^\([^%].*\)::
 s:%lang(C) ::' | egrep -v '^$' >> $MO_NAME
 
-(
-	if [ "$ALL_NAME" ]; then
-		fgrep $NAME __find.dirs
-	else
-		cat __find.dirs
-	fi
-) | sed '
-'"$NO_ALL_NAME$OMF"'s:\(.*/omf/'"$NAME"'$\):%dir \1:
-'"$ALL_NAME$OMF"'s:\(.*/omf/[a-zA-Z0-9.\_\-]\+$\):%dir \1:
-s:^\([^%].*\)::
-s:%lang(C) ::' | egrep -v '^$' >> $MO_NAME
-
 if [ "$(egrep -v '(^%defattr|^$)' $MO_NAME | wc -l)" -le 0 ]; then
-	echo >&2 "Error: international files not found for $NAME!"
+	echo 'Error: international files not found !'
 	exit 1
 fi
