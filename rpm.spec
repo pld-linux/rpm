@@ -2,7 +2,7 @@
 # TODO:
 # - python(abi) cap is not provided automatically (because /usr/bin/python matches
 #   ELF first; it should be provided by python-libs not binary anyway)
-#
+# 
 # Conditional build:
 %bcond_with	static		# build static rpmi (not supported at the moment)
 %bcond_without	apidocs		# don't generate documentation with doxygen
@@ -20,18 +20,18 @@
 %define	reqdb_ver	4.2.52-10
 %define	reqpopt_ver	1.10.2
 %define	beecrypt_ver	2:4.1.2-4
-%define	sover	4.4
-%define	find_lang_rev	1.23
+%define	rpm_macros_rev	1.239
 Summary:	RPM Package Manager
-Summary(de.UTF-8):	RPM Packet-Manager
-Summary(es.UTF-8):	Gestor de paquetes RPM
-Summary(pl.UTF-8):	Aplikacja do zarzÄ…dzania pakietami RPM
-Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
-Summary(ru.UTF-8):	ÐœÐµÐ½ÐµÐ´Ð¶ÐµÑ€ Ð¿Ð°ÐºÐµÑ‚Ð¾Ð² Ð¾Ñ‚ RPM
-Summary(uk.UTF-8):	ÐœÐµÐ½ÐµÐ´Ð¶ÐµÑ€ Ð¿Ð°ÐºÐµÑ‚Ñ–Ð² Ð²Ñ–Ð´ RPM
+Summary(de):	RPM Packet-Manager
+Summary(es):	Gestor de paquetes RPM
+Summary(pl):	Aplikacja do zarz±dzania pakietami RPM
+Summary(pt_BR):	Gerenciador de pacotes RPM
+Summary(ru):	íÅÎÅÄÖÅÒ ÐÁËÅÔÏ× ÏÔ RPM
+Summary(uk):	íÅÎÅÄÖÅÒ ÐÁËÅÔ¦× ×¦Ä RPM
 Name:		rpm
+%define	sover	4.4
 Version:	4.4.2
-Release:	48
+Release:	13
 License:	GPL
 Group:		Base
 Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
@@ -46,15 +46,16 @@ Source7:	%{name}-compress-doc
 Source8:	%{name}-check-files
 Source9:	%{name}-php-provides
 Source10:	%{name}-php-requires
-Source11:	find-java-req.sh
+Source11:	%{name}.macros
 Source12:	perl.prov
 Source13:	%{name}-user_group.sh
 Source14:	%{name}.sysconfig
-Source15:	%{name}-macros.java
-Source16:	find-java-prov.sh
-Source17:	RPM-GPG-KEY
+Source30:	builder
+Source31:	adapter.awk
+Source32:	pldnotify.awk
 # http://svn.pld-linux.org/banner.sh/
-Source18:	banner.sh
+Source33:	banner.sh
+Source34:	php-pear-build-macros
 Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
@@ -74,7 +75,6 @@ Patch15:	%{name}-system_libs-more.patch
 Patch16:	%{name}-php-deps.patch
 Patch17:	%{name}-ldconfig-always.patch
 Patch18:	%{name}-perl_req.patch
-Patch19:	%{name}-error-fatal.patch
 Patch20:	%{name}-magic-usesystem.patch
 Patch21:	%{name}-dontneedutils.patch
 Patch22:	%{name}-provides-dont-obsolete.patch
@@ -104,24 +104,8 @@ Patch45:	%{name}-no-sqlite.patch
 Patch46:	%{name}-mono.patch
 Patch47:	%{name}-posttrans.patch
 Patch48:	%{name}-requireseq.patch
-Patch49:	%{name}-p4.patch
-Patch50:	%{name}-macros.patch
-Patch51:	%{name}-cleanlibdirs.patch
-Patch52:	%{name}-dep_whiteout.patch
-Patch53:	%{name}-doxygen_no_file.patch
-Patch54:	%{name}-truncate-cvslog.patch
-Patch55:	%{name}-bug-146549.patch
-Patch56:	%{name}-skip-backups.patch
-Patch57:	%{name}-lzma.patch
-Patch58:	%{name}-lzma2.patch
-Patch59:	%{name}-CVE-2006-5466.patch
-Patch60:	%{name}-as_needed-fix.patch
-Patch61:	%{name}-locale.patch
-Patch62:	%{name}-cpuinfo.patch
-Patch63:	%{name}-javadeps.patch
-Patch64:	http://wraptastic.org/pub/jbj/%{name}-4.4.2-suggests.patch
-Patch65:	%{name}-man_pl.patch
 URL:		http://wraptastic.org/
+Icon:		rpm.gif
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
@@ -129,6 +113,7 @@ BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	db-devel >= %{reqdb_ver}
 %{?with_apidocs:BuildRequires:	doxygen}
 BuildRequires:	elfutils-devel >= 0.108
+BuildRequires:	findutils
 BuildRequires:	gettext-devel >= 0.11.4-2
 %{?with_system_libmagic:BuildRequires:	libmagic-devel}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
@@ -152,17 +137,16 @@ BuildRequires:	zlib-devel
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
 BuildRequires:	bzip2-static >= 1.0.2-17
 BuildRequires:	db-static >= %{reqdb_ver}
-BuildRequires:	elfutils-static
 BuildRequires:	glibc-static >= 2.2.94
-%{?with_system_libmagic:BuildRequires:	libmagic-static}
+BuildRequires:	elfutils-static
+%{with_system_libmagic:BuildRequires:	libmagic-static}
 %{?with_selinux:BuildRequires:	libselinux-static >= 1.18}
 BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
 %endif
-Requires:	%{name}-base = %{version}-%{release}
-Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	popt >= %{reqpopt_ver}
+Requires:	%{name}-lib = %{version}-%{release}
 %{!?with_static:Obsoletes:	rpm-utils-static}
 Conflicts:	glibc < 2.2.92
 # avoid SEGV caused by mixed db versions
@@ -183,7 +167,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		__cpp %{?force_cpp}%{!?force_cpp:%{_target_cpu}-pld-linux-gcc -E}
 
 %define		_rpmlibdir /usr/lib/rpm
-%define		_noautocompressdoc	RPM-GPG-KEY
 
 %description
 RPM is a powerful package manager, which can be used to build,
@@ -191,76 +174,57 @@ install, query, verify, update, and uninstall individual software
 packages. A package consists of an archive of files, and package
 information, including name, version, and description.
 
-%description -l de.UTF-8
-RPM ist ein krÃ¤ftiger Packet-Manager, der verwendet sein kann zur
+%description -l de
+RPM ist ein kräftiger Packet-Manager, der verwendet sein kann zur
 Installation, Anfrage, Verifizierung, Aktualisierung und
 Uninstallation individueller Softwarepakete. Ein Paket besteht aus
 einem Archiv Dateien und Paketinformation, inklusive Name, Version und
 Beschreibung.
 
-%description -l es.UTF-8
+%description -l es
 RPM es un poderoso administrador de paquetes, que puede ser usado para
 construir, instalar, pesquisar, verificar, actualizar y desinstalar
 paquetes individuales de software. Un paquete consiste en un
-almacenaje de archivos, y informaciÃ³n sobre el paquete, incluyendo
-nombre, versiÃ³n y descripciÃ³n.
+almacenaje de archivos, y información sobre el paquete, incluyendo
+nombre, versión y descripción.
 
-%description -l pl.UTF-8
-RPM jest doskonaÅ‚ym programem zarzÄ…dzajÄ…cym pakietami. UmoÅ¼liwia on
-przebudowanie, instalacjÄ™ czy weryfikacjÄ™ dowolnego pakietu.
-Informacje dotyczÄ…ce kaÅ¼dego pakietu, takie jak jego opis, lista
-plikÃ³w wchodzÄ…cych w skÅ‚ad pakietu, zaleÅ¼noÅ›ci od innych pakietÃ³w, sÄ…
-przechowywane w bazie danych i moÅ¼na je uzyskaÄ‡ za pomocÄ… opcji
+%description -l pl
+RPM jest doskona³ym programem zarz±dzaj±cym pakietami. Umo¿liwia on
+przebudowanie, instalacjê czy weryfikacjê dowolnego pakietu.
+Informacje dotycz±ce ka¿dego pakietu, takie jak jego opis, lista
+plików wchodz±cych w sk³ad pakietu, zale¿no¶ci od innych pakietów, s±
+przechowywane w bazie danych i mo¿na je uzyskaæ za pomoc± opcji
 odpytywania programu rpm.
 
-%description -l pt_BR.UTF-8
-RPM Ã© um poderoso gerenciador de pacotes, que pode ser usado para
+%description -l pt_BR
+RPM é um poderoso gerenciador de pacotes, que pode ser usado para
 construir, instalar, pesquisar, verificar, atualizar e desinstalar
 pacotes individuais de software. Um pacote consiste de um conjunto de
-arquivos e informaÃ§Ãµes adicionais, incluindo nome, versÃ£o e descriÃ§Ã£o
-do pacote, permissÃµes dos arquivos, etc.
+arquivos e informações adicionais, incluindo nome, versão e descrição
+do pacote, permissões dos arquivos, etc.
 
-%description -l ru.UTF-8
-RPM - ÑÑ‚Ð¾ Ð¼Ð¾Ñ‰Ð½Ñ‹Ð¹ Ð¼ÐµÐ½ÐµÐ´Ð¶ÐµÑ€ Ð¿Ð°ÐºÐµÑ‚Ð¾Ð², ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ð¹ Ð¼Ð¾Ð¶ÐµÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ð½ Ð´Ð»Ñ
-ÑÐ¾Ð·Ð´Ð°Ð½Ð¸Ñ, Ð¸Ð½ÑÑ‚Ð°Ð»Ð»ÑÑ†Ð¸Ð¸, Ð·Ð°Ð¿Ñ€Ð¾ÑÐ¾Ð² (query), Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ¸, Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ Ð¸
-ÑƒÐ´Ð°Ð»ÐµÐ½Ð¸Ñ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ð½Ñ‹Ñ… Ð¿Ð°ÐºÐµÑ‚Ð¾Ð². ÐŸÐ°ÐºÐµÑ‚ ÑÐ¾ÑÑ‚Ð¾Ð¸Ñ‚ Ð¸Ð· Ñ„Ð°Ð¹Ð»Ð¾Ð²Ð¾Ð³Ð¾ Ð°Ñ€Ñ…Ð¸Ð²Ð° Ð¸
-ÑÐ»ÑƒÐ¶ÐµÐ±Ð½Ð¾Ð¹ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸, Ð²ÐºÐ»ÑŽÑ‡Ð°ÑŽÑ‰ÐµÐ¹ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ, Ð²ÐµÑ€ÑÐ¸ÑŽ, Ð¾Ð¿Ð¸ÑÐ°Ð½Ð¸Ðµ Ð¸ Ð´Ñ€ÑƒÐ³Ð¸Ðµ
-Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð¾ Ð¿Ð°ÐºÐµÑ‚Ðµ.
+%description -l ru
+RPM - ÜÔÏ ÍÏÝÎÙÊ ÍÅÎÅÄÖÅÒ ÐÁËÅÔÏ×, ËÏÔÏÒÙÊ ÍÏÖÅÔ ÂÙÔØ ÉÓÐÏÌØÚÏ×ÁÎ ÄÌÑ
+ÓÏÚÄÁÎÉÑ, ÉÎÓÔÁÌÌÑÃÉÉ, ÚÁÐÒÏÓÏ× (query), ÐÒÏ×ÅÒËÉ, ÏÂÎÏ×ÌÅÎÉÑ É
+ÕÄÁÌÅÎÉÑ ÐÒÏÇÒÁÍÍÎÙÈ ÐÁËÅÔÏ×. ðÁËÅÔ ÓÏÓÔÏÉÔ ÉÚ ÆÁÊÌÏ×ÏÇÏ ÁÒÈÉ×Á É
+ÓÌÕÖÅÂÎÏÊ ÉÎÆÏÒÍÁÃÉÉ, ×ËÌÀÞÁÀÝÅÊ ÎÁÚ×ÁÎÉÅ, ×ÅÒÓÉÀ, ÏÐÉÓÁÎÉÅ É ÄÒÕÇÉÅ
+ÄÁÎÎÙÅ Ï ÐÁËÅÔÅ.
 
-%description -l uk.UTF-8
-RPM - Ñ†Ðµ Ð¿Ð¾Ñ‚ÑƒÐ¶Ð½Ð¸Ð¹ Ð¼ÐµÐ½ÐµÐ´Ð¶ÐµÑ€ Ð¿Ð°ÐºÐµÑ‚Ñ–Ð², Ñ‰Ð¾ Ð¼Ð¾Ð¶Ðµ Ð±ÑƒÑ‚Ð¸ Ð²Ð¸ÐºÐ¾Ñ€Ð¸ÑÑ‚Ð°Ð½Ð¸Ð¹ Ð´Ð»Ñ
-ÑÑ‚Ð²Ð¾Ñ€ÐµÐ½Ð½Ñ, Ñ–Ð½ÑÑ‚Ð°Ð»ÑÑ†Ñ–Ñ—, Ð·Ð°Ð¿Ð¸Ñ‚Ñ–Ð² (query), Ð¿ÐµÑ€ÐµÐ²Ñ–Ñ€ÐºÐ¸, Ð¿Ð¾Ð½Ð¾Ð²Ð»ÐµÐ½Ð½Ñ Ñ‚Ð°
-Ð²Ð¸Ð´Ð°Ð»ÐµÐ½Ð½Ñ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð½Ð¸Ñ… Ð¿Ð°ÐºÐµÑ‚Ñ–Ð². ÐŸÐ°ÐºÐµÑ‚ ÑÐºÐ»Ð°Ð´Ð°Ñ”Ñ‚ÑŒÑÑ Ð· Ñ„Ð°Ð¹Ð»Ð¾Ð²Ð¾Ð³Ð¾ Ð°Ñ€Ñ…Ñ–Ð²Ñƒ Ñ‚Ð°
-ÑÐ»ÑƒÐ¶Ð±Ð¾Ð²Ð¾Ñ— Ñ–Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ñ–Ñ—, Ñ‰Ð¾ Ð¼Ñ–ÑÑ‚Ð¸Ñ‚ÑŒ Ð½Ð°Ð·Ð²Ñƒ, Ð²ÐµÑ€ÑÑ–ÑŽ, Ð¾Ð¿Ð¸Ñ Ñ‚Ð° Ñ–Ð½ÑˆÑƒ
-Ñ–Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ñ–ÑŽ Ð¿Ñ€Ð¾ Ð¿Ð°ÐºÐµÑ‚.
-
-%package base
-Summary:	RPM base package - scripts used by rpm packages themselves
-Summary(pl.UTF-8):	Podstawowy pakiet RPM - skrypty uÅ¼ywane przez same pakiety rpm
-Group:		Base
-Obsoletes:	vserver-rpm
-
-%description base
-The RPM base package contains scripts used by rpm packages themselves.
-These include:
-- scripts for adding/removing groups and users needed for rpm
-  packages,
-- banner.sh to display %%banner messages from rpm scriptlets.
-
-%description base -l pl.UTF-8
-Pakiet podstawowy RPM zwiera skrypty uÅ¼ywane przez same pakiety rpm.
-Zawiera on:
-- skrypty dodajÄ…ce/usuwajÄ…ce grupy i uÅ¼ytkownikÃ³w dla pakietÃ³w rpm,
-- banner.sh do pokazywania komunikatÃ³w %%banner dla skryptletÃ³w rpm.
+%description -l uk
+RPM - ÃÅ ÐÏÔÕÖÎÉÊ ÍÅÎÅÄÖÅÒ ÐÁËÅÔ¦×, ÝÏ ÍÏÖÅ ÂÕÔÉ ×ÉËÏÒÉÓÔÁÎÉÊ ÄÌÑ
+ÓÔ×ÏÒÅÎÎÑ, ¦ÎÓÔÁÌÑÃ¦§, ÚÁÐÉÔ¦× (query), ÐÅÒÅ×¦ÒËÉ, ÐÏÎÏ×ÌÅÎÎÑ ÔÁ
+×ÉÄÁÌÅÎÎÑ ÐÒÏÇÒÁÍÎÉÈ ÐÁËÅÔ¦×. ðÁËÅÔ ÓËÌÁÄÁ¤ÔØÓÑ Ú ÆÁÊÌÏ×ÏÇÏ ÁÒÈ¦×Õ ÔÁ
+ÓÌÕÖÂÏ×Ï§ ¦ÎÆÏÒÍÁÃ¦§, ÝÏ Í¦ÓÔÉÔØ ÎÁÚ×Õ, ×ÅÒÓ¦À, ÏÐÉÓ ÔÁ ¦ÎÛÕ
+¦ÎÆÏÒÍÁÃ¦À ÐÒÏ ÐÁËÅÔ.
 
 %package lib
 Summary:	RPMs library
-Summary(pl.UTF-8):	Biblioteki RPM-a
+Summary(pl):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	db >= %{reqdb_ver}
-%{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
 %{?with_selinux:Requires:	libselinux >= 1.18}
+%{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
 Requires:	popt >= %{reqpopt_ver}
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
@@ -269,25 +233,25 @@ Conflicts:	poldek < 0.18.1-16
 %description lib
 RPMs library.
 
-%description lib -l pl.UTF-8
+%description lib -l pl
 Biblioteki RPM-a.
 
 %package devel
 Summary:	Header files for rpm libraries
-Summary(de.UTF-8):	Header-Dateien fÃ¼r rpm Libraries
-Summary(es.UTF-8):	Archivos de inclusiÃ³n y bibliotecas para programas de manipulaciÃ³n de paquetes rpm
-Summary(pl.UTF-8):	Pliki nagÅ‚Ã³wkowe bibliotek rpm
-Summary(pt_BR.UTF-8):	Arquivos de inclusÃ£o e bibliotecas para programas de manipulaÃ§Ã£o de pacotes RPM
-Summary(ru.UTF-8):	Ð¥ÐµÐ´ÐµÑ€Ñ‹ Ð¸ Ð±Ð¸Ð±Ð»Ð¸Ð¾Ñ‚ÐµÐºÐ¸ Ð´Ð»Ñ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼, Ñ€Ð°Ð±Ð¾Ñ‚Ð°ÑŽÑ‰Ð¸Ñ… Ñ rpm-Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸
-Summary(uk.UTF-8):	Ð¥ÐµÐ´ÐµÑ€Ð¸ Ñ‚Ð° Ð±Ñ–Ð±Ð»Ñ–Ð¾Ñ‚ÐµÐºÐ¸ Ð´Ð»Ñ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼, Ñ‰Ð¾ Ð¿Ñ€Ð°Ñ†ÑŽÑŽÑ‚ÑŒ Ð· Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ rpm
+Summary(de):	Header-Dateien für rpm Libraries
+Summary(es):	Archivos de inclusión y bibliotecas para programas de manipulación de paquetes rpm
+Summary(pl):	Pliki nag³ówkowe bibliotek rpm
+Summary(pt_BR):	Arquivos de inclusão e bibliotecas para programas de manipulação de pacotes RPM
+Summary(ru):	èÅÄÅÒÙ É ÂÉÂÌÉÏÔÅËÉ ÄÌÑ ÐÒÏÇÒÁÍÍ, ÒÁÂÏÔÁÀÝÉÈ Ó rpm-ÐÁËÅÔÁÍÉ
+Summary(uk):	èÅÄÅÒÉ ÔÁ Â¦ÂÌ¦ÏÔÅËÉ ÄÌÑ ÐÒÏÇÒÁÍ, ÝÏ ÐÒÁÃÀÀÔØ Ú ÐÁËÅÔÁÍÉ rpm
 Group:		Development/Libraries
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
 Requires:	db-devel >= %{reqdb_ver}
 Requires:	elfutils-devel
-%{?with_system_libmagic:Requires:	libmagic-devel}
 %{?with_selinux:Requires:	libselinux-devel}
+%{?with_system_libmagic:Requires:	libmagic-devel}
 Requires:	popt-devel >= %{reqpopt_ver}
 Requires:	zlib-devel
 
@@ -298,51 +262,51 @@ creation of graphical package managers and other tools that need
 intimate knowledge of RPM packages. This package contains header files
 for these libraries.
 
-%description devel -l de.UTF-8
-Der RPM-Packensystem enthÃ¤lt eine C-Library, die macht es einfach
-RPM-Pakete und Dateibanken zu manipulieren. Er eignet sich fÃ¼r
+%description devel -l de
+Der RPM-Packensystem enthält eine C-Library, die macht es einfach
+RPM-Pakete und Dateibanken zu manipulieren. Er eignet sich für
 Vereinfachung des Schaffens grafischer Paket-Manager und anderer
 Werkzeuge, die intime Kenntnis von RPM-Paketen brauchen.
 
-%description devel -l es.UTF-8
+%description devel -l es
 El sistema de empaquetado RPM incluye una biblioteca C que vuelve
-fÃ¡cil la manipulaciÃ³n de paquetes y bases de datos RPM. Su objetivo es
-facilitar la creaciÃ³n de administradores grÃ¡ficos de paquetes y otras
+fácil la manipulación de paquetes y bases de datos RPM. Su objetivo es
+facilitar la creación de administradores gráficos de paquetes y otras
 herramientas que necesiten un conocimiento profundo de paquetes RPM.
 
-%description devel -l pl.UTF-8
-System RPM zawiera biblioteki C, ktÃ³re uÅ‚atwiajÄ… manipulowanie
-pakietami RPM oraz bazami danych. W zamiarze ma to uproÅ›ciÄ‡ tworzenie
-graficznych programÃ³w zarzÄ…dzajÄ…cych pakietami oraz innych narzÄ™dzi,
-ktÃ³re wymagajÄ… szczegÃ³Å‚owej wiedzy na temat pakietÃ³w RPM. Ten pakiet
-zawiera pliki nagÅ‚Ã³wkowe wspomnianych bibliotek.
+%description devel -l pl
+System RPM zawiera biblioteki C, które u³atwiaj± manipulowanie
+pakietami RPM oraz bazami danych. W zamiarze ma to upro¶ciæ tworzenie
+graficznych programów zarz±dzaj±cych pakietami oraz innych narzêdzi,
+które wymagaj± szczegó³owej wiedzy na temat pakietów RPM. Ten pakiet
+zawiera pliki nag³ówkowe wspomnianych bibliotek.
 
-%description devel -l pt_BR.UTF-8
-O sistema de empacotamento RPM inclui uma biblioteca C que torna fÃ¡cil
-a manipulaÃ§Ã£o de pacotes e bases de dados RPM. Seu objetivo Ã©
-facilitar a criaÃ§Ã£o de gerenciadores grÃ¡ficos de pacotes e outras
+%description devel -l pt_BR
+O sistema de empacotamento RPM inclui uma biblioteca C que torna fácil
+a manipulação de pacotes e bases de dados RPM. Seu objetivo é
+facilitar a criação de gerenciadores gráficos de pacotes e outras
 ferramentas que precisem de conhecimento profundo de pacotes RPM.
 
-%description devel -l ru.UTF-8
-Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð° ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ñ Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM ÑÐ¾Ð´ÐµÑ€Ð¶Ð¸Ñ‚ Ð±Ð¸Ð±Ð»Ð¸Ð¾Ñ‚ÐµÐºÑƒ C, ÐºÐ¾Ñ‚Ð¾Ñ€Ð°Ñ
-ÑƒÐ¿Ñ€Ð¾Ñ‰Ð°ÐµÑ‚ Ð¼Ð°Ð½Ð¸Ð¿ÑƒÐ»ÑÑ†Ð¸ÑŽ Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM Ð¸ ÑÐ¾Ð¾Ñ‚Ð²ÐµÑ‚ÑÑ‚Ð²ÑƒÑŽÑ‰Ð¸Ð¼Ð¸ Ð±Ð°Ð·Ð°Ð¼Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ñ….
-Ð­Ñ‚Ð° Ð±Ð¸Ð±Ð»Ð¸Ð¾Ñ‚ÐµÐºÐ° Ð¿Ñ€ÐµÐ´Ð½Ð°Ð·Ð½Ð°Ñ‡ÐµÐ½Ð° Ð´Ð»Ñ Ð¾Ð±Ð»ÐµÐ³Ñ‡ÐµÐ½Ð¸Ñ ÑÐ¾Ð·Ð´Ð°Ð½Ð¸Ñ Ð³Ñ€Ð°Ñ„Ð¸Ñ‡ÐµÑÐºÐ¸Ñ…
-Ð¿Ð°ÐºÐµÑ‚Ð½Ñ‹Ñ… Ð¼ÐµÐ½ÐµÐ´Ð¶ÐµÑ€Ð¾Ð² Ð¸ Ð´Ñ€ÑƒÐ³Ð¸Ñ… ÑƒÑ‚Ð¸Ð»Ð¸Ñ‚, ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ð¼ Ð½ÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ð¾ Ñ€Ð°Ð±Ð¾Ñ‚Ð°Ñ‚ÑŒ Ñ
-Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM.
+%description devel -l ru
+óÉÓÔÅÍÁ ÕÐÒÁ×ÌÅÎÉÑ ÐÁËÅÔÁÍÉ RPM ÓÏÄÅÒÖÉÔ ÂÉÂÌÉÏÔÅËÕ C, ËÏÔÏÒÁÑ
+ÕÐÒÏÝÁÅÔ ÍÁÎÉÐÕÌÑÃÉÀ ÐÁËÅÔÁÍÉ RPM É ÓÏÏÔ×ÅÔÓÔ×ÕÀÝÉÍÉ ÂÁÚÁÍÉ ÄÁÎÎÙÈ.
+üÔÁ ÂÉÂÌÉÏÔÅËÁ ÐÒÅÄÎÁÚÎÁÞÅÎÁ ÄÌÑ ÏÂÌÅÇÞÅÎÉÑ ÓÏÚÄÁÎÉÑ ÇÒÁÆÉÞÅÓËÉÈ
+ÐÁËÅÔÎÙÈ ÍÅÎÅÄÖÅÒÏ× É ÄÒÕÇÉÈ ÕÔÉÌÉÔ, ËÏÔÏÒÙÍ ÎÅÏÂÈÏÄÉÍÏ ÒÁÂÏÔÁÔØ Ó
+ÐÁËÅÔÁÍÉ RPM.
 
-%description devel -l uk.UTF-8
-Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð° ÐºÐµÑ€ÑƒÐ²Ð°Ð½Ð½Ñ Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM Ð¼Ñ–ÑÑ‚Ð¸Ñ‚ÑŒ Ð±Ñ–Ð±Ð»Ñ–Ð¾Ñ‚ÐµÐºÑƒ C, ÐºÐ¾Ñ‚Ñ€Ð° ÑÐ¿Ñ€Ð¾Ñ‰ÑƒÑ”
-Ñ€Ð¾Ð±Ð¾Ñ‚Ñƒ Ð· Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM Ñ‚Ð° Ð²Ñ–Ð´Ð¿Ð¾Ð²Ñ–Ð´Ð½Ð¸Ð¼Ð¸ Ð±Ð°Ð·Ð°Ð¼Ð¸ Ð´Ð°Ð½Ð¸Ñ…. Ð¦Ñ Ð±Ñ–Ð±Ð»Ñ–Ð¾Ñ‚ÐµÐºÐ°
-Ð¿Ñ€Ð¸Ð·Ð½Ð°Ñ‡ÐµÐ½Ð° Ð´Ð»Ñ Ð¿Ð¾Ð»ÐµÐ³ÑˆÐµÐ½Ð½Ñ ÑÑ‚Ð²Ð¾Ñ€ÐµÐ½Ð½Ñ Ð³Ñ€Ð°Ñ„Ñ–Ñ‡Ð½Ð¸Ñ… Ð¿Ð°ÐºÐµÑ‚Ð½Ð¸Ñ… Ð¼ÐµÐ½ÐµÐ´Ð¶ÐµÑ€Ñ–Ð² Ñ‚Ð°
-Ñ–Ð½ÑˆÐ¸Ñ… ÑƒÑ‚Ð¸Ð»Ñ–Ñ‚, Ñ‰Ð¾ Ð¿Ñ€Ð°Ñ†ÑŽÑŽÑ‚ÑŒ Ð· Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM.
+%description devel -l uk
+óÉÓÔÅÍÁ ËÅÒÕ×ÁÎÎÑ ÐÁËÅÔÁÍÉ RPM Í¦ÓÔÉÔØ Â¦ÂÌ¦ÏÔÅËÕ C, ËÏÔÒÁ ÓÐÒÏÝÕ¤
+ÒÏÂÏÔÕ Ú ÐÁËÅÔÁÍÉ RPM ÔÁ ×¦ÄÐÏ×¦ÄÎÉÍÉ ÂÁÚÁÍÉ ÄÁÎÉÈ. ãÑ Â¦ÂÌ¦ÏÔÅËÁ
+ÐÒÉÚÎÁÞÅÎÁ ÄÌÑ ÐÏÌÅÇÛÅÎÎÑ ÓÔ×ÏÒÅÎÎÑ ÇÒÁÆ¦ÞÎÉÈ ÐÁËÅÔÎÉÈ ÍÅÎÅÄÖÅÒ¦× ÔÁ
+¦ÎÛÉÈ ÕÔÉÌ¦Ô, ÝÏ ÐÒÁÃÀÀÔØ Ú ÐÁËÅÔÁÍÉ RPM.
 
 %package static
 Summary:	RPM static libraries
-Summary(de.UTF-8):	RPMs statische Libraries
-Summary(pl.UTF-8):	Biblioteki statyczne RPM-a
-Summary(pt_BR.UTF-8):	Bibliotecas estÃ¡ticas para o desenvolvimento de aplicaÃ§Ãµes RPM
-Summary(ru.UTF-8):	Ð¡Ñ‚Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ°Ñ Ð±Ð¸Ð±Ð»Ð¸Ð¾Ñ‚ÐµÐºÐ° Ð´Ð»Ñ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼, Ñ€Ð°Ð±Ð¾Ñ‚Ð°ÑŽÑ‰Ð¸Ñ… Ñ rpm-Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸
-Summary(uk.UTF-8):	Ð¡Ñ‚Ð°Ñ‚Ð¸Ñ‡Ð½Ð° Ð±Ñ–Ð±Ð»Ñ–Ð¾Ñ‚ÐµÐºÐ° Ð´Ð»Ñ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼, Ñ‰Ð¾ Ð¿Ñ€Ð°Ñ†ÑŽÑŽÑ‚ÑŒ Ð· Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ rpm
+Summary(de):	RPMs statische Libraries
+Summary(pl):	Biblioteki statyczne RPM-a
+Summary(pt_BR):	Bibliotecas estáticas para o desenvolvimento de aplicações RPM
+Summary(ru):	óÔÁÔÉÞÅÓËÁÑ ÂÉÂÌÉÏÔÅËÁ ÄÌÑ ÐÒÏÇÒÁÍÍ, ÒÁÂÏÔÁÀÝÉÈ Ó rpm-ÐÁËÅÔÁÍÉ
+Summary(uk):	óÔÁÔÉÞÎÁ Â¦ÂÌ¦ÏÔÅËÁ ÄÌÑ ÐÒÏÇÒÁÍ, ÝÏ ÐÒÁÃÀÀÔØ Ú ÐÁËÅÔÁÍÉ rpm
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	beecrypt-static >= %{beecrypt_ver}
@@ -356,29 +320,29 @@ Requires:	zlib-static
 %description static
 RPM static libraries.
 
-%description static -l de.UTF-8
+%description static -l de
 RPMs statische Libraries.
 
-%description static -l pl.UTF-8
+%description static -l pl
 Biblioteki statyczne RPM-a.
 
-%description static -l pt_BR.UTF-8
-Bibliotecas estÃ¡ticas para desenvolvimento.
+%description static -l pt_BR
+Bibliotecas estáticas para desenvolvimento.
 
-%description static -l ru.UTF-8
-Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð° ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ñ Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM ÑÐ¾Ð´ÐµÑ€Ð¶Ð¸Ñ‚ Ð±Ð¸Ð±Ð»Ð¸Ð¾Ñ‚ÐµÐºÑƒ C, ÐºÐ¾Ñ‚Ð¾Ñ€Ð°Ñ
-ÑƒÐ¿Ñ€Ð¾Ñ‰Ð°ÐµÑ‚ Ð¼Ð°Ð½Ð¸Ð¿ÑƒÐ»ÑÑ†Ð¸ÑŽ Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM Ð¸ ÑÐ¾Ð¾Ñ‚Ð²ÐµÑ‚ÑÑ‚Ð²ÑƒÑŽÑ‰Ð¸Ð¼Ð¸ Ð±Ð°Ð·Ð°Ð¼Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ñ….
-Ð­Ñ‚Ð¾ ÑÑ‚Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ°Ñ Ð±Ð¸Ð±Ð»Ð¸Ð¾Ñ‚ÐµÐºÐ° RPM.
+%description static -l ru
+óÉÓÔÅÍÁ ÕÐÒÁ×ÌÅÎÉÑ ÐÁËÅÔÁÍÉ RPM ÓÏÄÅÒÖÉÔ ÂÉÂÌÉÏÔÅËÕ C, ËÏÔÏÒÁÑ
+ÕÐÒÏÝÁÅÔ ÍÁÎÉÐÕÌÑÃÉÀ ÐÁËÅÔÁÍÉ RPM É ÓÏÏÔ×ÅÔÓÔ×ÕÀÝÉÍÉ ÂÁÚÁÍÉ ÄÁÎÎÙÈ.
+üÔÏ ÓÔÁÔÉÞÅÓËÁÑ ÂÉÂÌÉÏÔÅËÁ RPM.
 
-%description static -l uk.UTF-8
-Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð° ÐºÐµÑ€ÑƒÐ²Ð°Ð½Ð½Ñ Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM Ð¼Ñ–ÑÑ‚Ð¸Ñ‚ÑŒ Ð±Ñ–Ð±Ð»Ñ–Ð¾Ñ‚ÐµÐºÑƒ C, ÐºÐ¾Ñ‚Ñ€Ð° ÑÐ¿Ñ€Ð¾Ñ‰ÑƒÑ”
-Ñ€Ð¾Ð±Ð¾Ñ‚Ñƒ Ð· Ð¿Ð°ÐºÐµÑ‚Ð°Ð¼Ð¸ RPM Ñ‚Ð° Ð²Ñ–Ð´Ð¿Ð¾Ð²Ñ–Ð´Ð½Ð¸Ð¼Ð¸ Ð±Ð°Ð·Ð°Ð¼Ð¸ Ð´Ð°Ð½Ð¸Ñ…. Ð¦Ðµ ÑÑ‚Ð°Ñ‚Ð¸Ñ‡Ð½Ð°
-Ð±Ñ–Ð±Ð»Ñ–Ð¾Ñ‚ÐµÐºÐ° RPM.
+%description static -l uk
+óÉÓÔÅÍÁ ËÅÒÕ×ÁÎÎÑ ÐÁËÅÔÁÍÉ RPM Í¦ÓÔÉÔØ Â¦ÂÌ¦ÏÔÅËÕ C, ËÏÔÒÁ ÓÐÒÏÝÕ¤
+ÒÏÂÏÔÕ Ú ÐÁËÅÔÁÍÉ RPM ÔÁ ×¦ÄÐÏ×¦ÄÎÉÍÉ ÂÁÚÁÍÉ ÄÁÎÉÈ. ãÅ ÓÔÁÔÉÞÎÁ
+Â¦ÂÌ¦ÏÔÅËÁ RPM.
 
 %package utils
 Summary:	Additional utilities for managing rpm packages and database
-Summary(de.UTF-8):	Zusatzwerkzeuge fÃ¼r Verwaltung RPM-Pakete und Datenbanken
-Summary(pl.UTF-8):	Dodatkowe narzÄ™dzia do zarzÄ…dzania bazÄ… RPM-a i pakietami
+Summary(de):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
+Summary(pl):	Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
@@ -386,16 +350,16 @@ Requires:	popt >= %{reqpopt_ver}
 %description utils
 Additional utilities for managing rpm packages and database.
 
-%description utils -l de.UTF-8
-Zusatzwerkzeuge fÃ¼r Verwaltung RPM-Pakete und Datenbanken.
+%description utils -l de
+Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
 
-%description utils -l pl.UTF-8
-Dodatkowe narzÄ™dzia do zarzÄ…dzania bazÄ… RPM-a i pakietami.
+%description utils -l pl
+Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami.
 
 %package utils-perl
 Summary:	Additional utilities for managing rpm packages and database
-Summary(de.UTF-8):	Zusatzwerkzeuge fÃ¼r Verwaltung RPM-Pakete und Datenbanken
-Summary(pl.UTF-8):	Dodatkowe narzÄ™dzia do zarzÄ…dzania bazÄ… RPM-a i pakietami
+Summary(de):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
+Summary(pl):	Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
@@ -403,15 +367,15 @@ Requires:	popt >= %{reqpopt_ver}
 %description utils-perl
 Additional utilities for managing rpm packages and database.
 
-%description utils-perl -l de.UTF-8
-Zusatzwerkzeuge fÃ¼r Verwaltung RPM-Pakete und Datenbanken.
+%description utils-perl -l de
+Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
 
-%description utils-perl -l pl.UTF-8
-Dodatkowe narzÄ™dzia do zarzÄ…dzania bazÄ… RPM-a i pakietami.
+%description utils-perl -l pl
+Dodatkowe narzêdzia do zarz±dzania baz± RPM-a i pakietami.
 
 %package utils-static
 Summary:	Static rpm utilities
-Summary(pl.UTF-8):	Statyczne narzÄ™dzia rpm
+Summary(pl):	Statyczne narzêdzia rpm
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 
@@ -421,23 +385,22 @@ shared libraries used by rpm become broken. Currently it contains rpmi
 binary, which can be used to install/upgrade/remove packages without
 using shared libraries (well, in fact with exception of NSS modules).
 
-%description utils-static -l pl.UTF-8
-Statyczne narzÄ™dzia rpm do naprawy systemu w przypadku zepsucia czegoÅ›
-zwiÄ…zanego z bibliotekami wspÃ³Å‚dzielonymi uÅ¼ywanymi przez rpm-a.
-Aktualnie pakiet zawiera binarkÄ™ rpmi, ktÃ³rÄ… moÅ¼na uÅ¼yÄ‡ do instalacji,
-uaktualniania lub usuwania pakietÃ³w bez udziaÅ‚u bibliotek statycznych
-(z wyjÄ…tkiem moduÅ‚Ã³w NSS).
+%description utils-static -l pl
+Statyczne narzêdzia rpm do naprawy systemu w przypadku zepsucia czego¶
+zwi±zanego z bibliotekami wspó³dzielonymi u¿ywanymi przez rpm-a.
+Aktualnie pakiet zawiera binarkê rpmi, któr± mo¿na u¿yæ do instalacji,
+uaktualniania lub usuwania pakietów bez udzia³u bibliotek statycznych
+(z wyj±tkiem modu³ów NSS).
 
 %package build
 Summary:	Scripts for building binary RPM packages
-Summary(de.UTF-8):	Scripts fÃ¼rs Bauen binÃ¤rer RPM-Pakete
-Summary(pl.UTF-8):	Skrypty pomocnicze do budowania binarnych RPM-Ã³w
-Summary(pt_BR.UTF-8):	Scripts e programas executÃ¡veis usados para construir pacotes
-Summary(ru.UTF-8):	Ð¡ÐºÑ€Ð¸Ð¿Ñ‚Ñ‹ Ð¸ ÑƒÑ‚Ð¸Ð»Ð¸Ñ‚Ñ‹, Ð½ÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ñ‹Ðµ Ð´Ð»Ñ ÑÐ±Ð¾Ñ€ÐºÐ¸ Ð¿Ð°ÐºÐµÑ‚Ð¾Ð²
-Summary(uk.UTF-8):	Ð¡ÐºÑ€Ð¸Ð¿Ñ‚Ð¸ Ñ‚Ð° ÑƒÑ‚Ð¸Ð»Ñ–Ñ‚Ð¸, Ð½ÐµÐ¾Ð±Ñ…Ñ–Ð´Ð½Ñ– Ð´Ð»Ñ Ð¿Ð¾Ð±ÑƒÐ´Ð¾Ð²Ð¸ Ð¿Ð°ÐºÐµÑ‚Ñ–Ð²
+Summary(de):	Scripts fürs Bauen binärer RPM-Pakete
+Summary(pl):	Skrypty pomocnicze do budowania binarnych RPM-ów
+Summary(pt_BR):	Scripts e programas executáveis usados para construir pacotes
+Summary(ru):	óËÒÉÐÔÙ É ÕÔÉÌÉÔÙ, ÎÅÏÂÈÏÄÉÍÙÅ ÄÌÑ ÓÂÏÒËÉ ÐÁËÅÔÏ×
+Summary(uk):	óËÒÉÐÔÉ ÔÁ ÕÔÉÌ¦ÔÉ, ÎÅÏÂÈ¦ÄÎ¦ ÄÌÑ ÐÏÂÕÄÏ×É ÐÁËÅÔ¦×
 Group:		Applications/File
 Requires(pre):	findutils
-Requires:	%{name}-build-macros >= 1.302
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
@@ -465,71 +428,93 @@ Requires:	sed
 Requires:	sh-utils
 Requires:	tar
 Requires:	textutils
-Provides:	rpmbuild(find_lang) = %{find_lang_rev}
+Provides:	rpmbuild(macros) = %{rpm_macros_rev}
 Provides:	rpmbuild(monoautodeps)
 Provides:	rpmbuild(noauto) = 3
 %ifarch %{x8664}
 Conflicts:	automake < 1:1.7.9-2
 Conflicts:	libtool < 2:1.5-13
 %endif
+Obsoletes:	rpmbuild(macros) < %{rpm_macros_rev}
 
 %description build
 Scripts for building binary RPM packages.
 
-%description build -l de.UTF-8
-Scripts fÃ¼rs Bauen binÃ¤rer RPM-Pakete.
+%description build -l de
+Scripts fürs Bauen binärer RPM-Pakete.
 
-%description build -l pl.UTF-8
-Skrypty pomocnicze do budowania binarnych RPM-Ã³w.
+%description build -l pl
+Skrypty pomocnicze do budowania binarnych RPM-ów.
 
-%description build -l pt_BR.UTF-8
-Este pacote contÃ©m scripts e programas executÃ¡veis que sÃ£o usados para
+%description build -l pt_BR
+Este pacote contém scripts e programas executáveis que são usados para
 construir pacotes usando o RPM.
 
-%description build -l ru.UTF-8
-Ð Ð°Ð·Ð»Ð¸Ñ‡Ð½Ñ‹Ðµ Ð²ÑÐ¿Ð¾Ð¼Ð¾Ð³Ð°Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ðµ ÑÐºÑ€Ð¸Ð¿Ñ‚Ñ‹ Ð¸ Ð¸ÑÐ¿Ð¾Ð»Ð½ÑÐµÐ¼Ñ‹Ðµ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹, ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ðµ
-Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÑŽÑ‚ÑÑ Ð´Ð»Ñ ÑÐ±Ð¾Ñ€ÐºÐ¸ RPM'Ð¾Ð².
+%description build -l ru
+òÁÚÌÉÞÎÙÅ ×ÓÐÏÍÏÇÁÔÅÌØÎÙÅ ÓËÒÉÐÔÙ É ÉÓÐÏÌÎÑÅÍÙÅ ÐÒÏÇÒÁÍÍÙ, ËÏÔÏÒÙÅ
+ÉÓÐÏÌØÚÕÀÔÓÑ ÄÌÑ ÓÂÏÒËÉ RPM'Ï×.
 
-%description build -l uk.UTF-8
-Ð Ñ–Ð·Ð½Ð¾Ð¼Ð°Ð½Ñ–Ñ‚Ð½Ñ– Ð´Ð¾Ð¿Ð¾Ð¼Ñ–Ð¶Ð½Ñ– ÑÐºÑ€Ð¸Ð¿Ñ‚Ð¸ Ñ‚Ð° ÑƒÑ‚Ð¸Ð»Ñ–Ñ‚Ð¸, ÑÐºÑ– Ð²Ð¸ÐºÐ¾Ñ€Ð¸ÑÑ‚Ð¾Ð²ÑƒÑŽÑ‚ÑŒÑÑ Ð´Ð»Ñ
-Ð¿Ð¾Ð±ÑƒÐ´Ð¾Ð²Ð¸ RPM'Ñ–Ð².
+%description build -l uk
+ò¦ÚÎÏÍÁÎ¦ÔÎ¦ ÄÏÐÏÍ¦ÖÎ¦ ÓËÒÉÐÔÉ ÔÁ ÕÔÉÌ¦ÔÉ, ÑË¦ ×ÉËÏÒÉÓÔÏ×ÕÀÔØÓÑ ÄÌÑ
+ÐÏÂÕÄÏ×É RPM'¦×.
 
-%package javaprov
-Summary:	Additional utilities for checking Java provides/requires in rpm packages
+%package build-tools
+Summary:	Scripts for managing .spec files and building RPM packages
+Summary(de):	Scripts fürs Bauen binärer RPM-Pakete
+Summary(pl):	Skrypty pomocnicze do zarz±dznia plikami .spec i budowania RPM-ów
+Summary(pt_BR):	Scripts e programas executáveis usados para construir pacotes
+Summary(ru):	óËÒÉÐÔÙ É ÕÔÉÌÉÔÙ, ÎÅÏÂÈÏÄÉÍÙÅ ÄÌÑ ÓÂÏÒËÉ ÐÁËÅÔÏ×
+Summary(uk):	óËÒÉÐÔÉ ÔÁ ÕÔÉÌ¦ÔÉ, ÎÅÏÂÈ¦ÄÎ¦ ÄÌÑ ÐÏÂÕÄÏ×É ÐÁËÅÔ¦×
 Group:		Applications/File
-Requires:	%{name} = %{version}-%{release}
-Requires:	file
-Requires:	findutils >= 1:4.2.26
-Requires:	mktemp
-Requires:	unzip
+Requires:	%{name}-build = %{version}-%{release}
+# these are optional
+#Requires:	cvs
+Requires:	wget
 
-%description javaprov
-Additional utilities for checking Java provides/requires in rpm
-packages.
+%description build-tools
+Scripts for managing .spec files and building RPM packages.
+
+%description build-tools -l de
+Scripts fürs Bauen RPM-Pakete.
+
+%description build-tools -l pl
+Skrypty pomocnicze do zarz±dzania plikami .spec i do budowania RPM-ów.
+
+%description build-tools -l pt_BR
+Este pacote contém scripts e programas executáveis que são usados para
+construir pacotes usando o RPM.
+
+%description build-tools -l ru
+òÁÚÌÉÞÎÙÅ ×ÓÐÏÍÏÇÁÔÅÌØÎÙÅ ÓËÒÉÐÔÙ É ÉÓÐÏÌÎÑÅÍÙÅ ÐÒÏÇÒÁÍÍÙ, ËÏÔÏÒÙÅ
+ÉÓÐÏÌØÚÕÀÔÓÑ ÄÌÑ ÓÂÏÒËÉ RPM'Ï×.
+
+%description build-tools -l uk
+ò¦ÚÎÏÍÁÎ¦ÔÎ¦ ÄÏÐÏÍ¦ÖÎ¦ ÓËÒÉÐÔÉ ÔÁ ÕÔÉÌ¦ÔÉ, ÑË¦ ×ÉËÏÒÉÓÔÏ×ÕÀÔØÓÑ ÄÌÑ
+ÐÏÂÕÄÏ×É RPM'¦×.
 
 %package perlprov
-Summary:	Additional utilities for checking Perl provides/requires in rpm packages
-Summary(de.UTF-8):	Zusatzwerkzeuge fÃ¼rs Nachsehen Perl-AbhÃ¤ngigkeiten in RPM-Paketen
-Summary(pl.UTF-8):	Dodatkowe narzÄ™dzia do sprawdzenia zaleÅ¼noÅ›ci skryptÃ³w perla w pakietach rpm
+Summary:	Additional utilities for checking perl provides/requires in rpm packages
+Summary(de):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
+Summary(pl):	Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w pakietach rpm
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	perl-devel
 Requires:	perl-modules
 
 %description perlprov
-Additional utilities for checking Perl provides/requires in rpm
+Additional utilities for checking perl provides/requires in rpm
 packages.
 
-%description perlprov -l de.UTF-8
-Zusatzwerkzeuge fÃ¼rs Nachsehen Perl-AbhÃ¤ngigkeiten in RPM-Paketen.
+%description perlprov -l de
+Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen.
 
-%description perlprov -l pl.UTF-8
-Dodatkowe narzÄ™dzia do sprawdzenia zaleÅ¼noÅ›ci skryptÃ³w Perla w
+%description perlprov -l pl
+Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów perla w
 pakietach rpm.
 
 %package pythonprov
 Summary:	Python macros, which simplifies creation of rpm packages with Python software
-Summary(pl.UTF-8):	Makra uÅ‚atwiajÄ…ce tworzenie pakietÃ³w rpm z programami napisanymi w Pythonie
+Summary(pl):	Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w Pythonie
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	python
@@ -539,29 +524,37 @@ Requires:	python-modules
 Python macros, which simplifies creation of rpm packages with Python
 software.
 
-%description pythonprov -l pl.UTF-8
-Makra uÅ‚atwiajÄ…ce tworzenie pakietÃ³w rpm z programami napisanymi w
+%description pythonprov -l pl
+Makra u³atwiaj±ce tworzenie pakietów rpm z programami napisanymi w
 Pythonie.
 
 %package php-pearprov
 Summary:	Additional utilities for managing rpm packages and database
-Summary(pl.UTF-8):	Dodatkowe narzÄ™dzia do sprawdzania zaleÅ¼noÅ›ci skryptÃ³w php w rpm
+Summary(pl):	Dodatkowe narzêdzia do sprawdzania zale¿no¶ci skryptów php w rpm
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
+Requires:	php-pear-PEAR >= 1:1.4.0-0.b1.3
+Requires:	php-zlib
 Requires:	sed >= 4.0
 
 %description php-pearprov
 Additional utilities for checking php pear provides/requires in rpm
 packages.
 
-%description php-pearprov -l pl.UTF-8
-Dodatkowe narzÄ™dzia do sprawdzenia zaleÅ¼noÅ›ci skryptÃ³w php pear w
+This package provides rpm macros and dependencies to help building
+PEAR packages.
+
+%description php-pearprov -l pl
+Dodatkowe narzêdzia do sprawdzenia zale¿no¶ci skryptów php pear w
 pakietach rpm.
+
+Ten pakiet dostarcza makra rpm-a i zale¿no¶ci pomagaj±ce przy
+budowaniu pakietów PEAR-a.
 
 %package -n python-rpm
 Summary:	Python interface to RPM library
-Summary(pl.UTF-8):	Pythonowy interfejs do biblioteki RPM-a
-Summary(pt_BR.UTF-8):	MÃ³dulo Python para aplicativos que manipulam pacotes RPM
+Summary(pl):	Pythonowy interfejs do biblioteki RPM-a
+Summary(pt_BR):	Módulo Python para aplicativos que manipulam pacotes RPM
 Group:		Development/Languages/Python
 Requires:	%{name} = %{version}-%{release}
 %pyrequires_eq	python
@@ -575,33 +568,33 @@ supplied by RPM (RPM Package Manager) libraries.
 This package should be installed if you want to develop Python
 programs that will manipulate RPM packages and databases.
 
-%description -n python-rpm -l pl.UTF-8
-Pakiet rpm-python zawiera moduÅ‚, ktÃ³ry pozwala aplikacjom napisanym w
-Pythonie na uÅ¼ywanie interfejsu dostarczanego przez biblioteki RPM-a.
+%description -n python-rpm -l pl
+Pakiet rpm-python zawiera modu³, który pozwala aplikacjom napisanym w
+Pythonie na u¿ywanie interfejsu dostarczanego przez biblioteki RPM-a.
 
-Pakiet ten powinien zostaÄ‡ zainstalowany, jeÅ›li chcesz pisaÄ‡ w
-Pythonie programy manipulujÄ…ce pakietami i bazami danych rpm.
+Pakiet ten powinien zostaæ zainstalowany, je¶li chcesz pisaæ w
+Pythonie programy manipuluj±ce pakietami i bazami danych rpm.
 
-%description -n python-rpm -l pt_BR.UTF-8
-O pacote rpm-python contÃ©m um mÃ³dulo que permite que aplicaÃ§Ãµes
+%description -n python-rpm -l pt_BR
+O pacote rpm-python contém um módulo que permite que aplicações
 escritas em Python utilizem a interface fornecida pelas bibliotecas
 RPM (RPM Package Manager).
 
-Esse pacote deve ser instalado se vocÃª quiser desenvolver programas em
+Esse pacote deve ser instalado se você quiser desenvolver programas em
 Python para manipular pacotes e bancos de dados RPM.
 
 %package apidocs
 Summary:	RPM API documentation and guides
-Summary(pl.UTF-8):	Documentacja API RPM-a i przewodniki
-Group:		Documentation
+Summary(pl):	Documentacja API RPM-a i przewodniki
+Group:		Documentation	
 
 %description apidocs
-Documentation for RPM API and guides in HTML format generated from rpm
-sources by doxygen.
+Documentation for RPM API and guides in HTML format generated
+from rpm sources by doxygen.
 
-%description apidocs -l pl.UTF-8
-Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
-ÅºrodeÅ‚ RPM-a przez doxygen.
+%description apidocs -l pl
+Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane
+ze ¼rode³ RPM-a przez doxygen.
 
 %prep
 %setup -q
@@ -624,19 +617,19 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
-#%patch19 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
-#cp -f platform.in macros.pld.in # what for?
+cp -f platform.in macros.pld.in
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
 echo '%%define	__perl_requires	%%{__perl} /usr/lib/rpm/perl.req' >> macros.perl
 echo '# obsoleted file' > macros.python
-echo '%%define	__php_provides	/usr/lib/rpm/php.prov' > macros.php
-echo '%%define	__php_requires	/usr/lib/rpm/php.req' >> macros.php
+install %{SOURCE34} macros.php
 echo '%%define	__mono_provides	/usr/lib/rpm/mono-find-provides' > macros.mono
 echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
+install %{SOURCE5} scripts/find-lang.sh
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
+cat %{SOURCE11} >> macros.in
 %patch20 -p1
 %patch21 -p1
 %patch22 -p1
@@ -666,30 +659,8 @@ install %{SOURCE12} scripts/perl.prov
 %patch46 -p1
 %patch47 -p1
 %patch48 -p1
-%patch49 -p1
-%patch50 -p1
-%patch51 -p1
-%patch52 -p1
 %patch0 -p1
 %patch3 -p1
-%if %{with system_libmagic}
-rm -rf file
-%patch53 -p1
-%endif
-%patch54 -p1
-%patch55 -p1
-%patch56 -p1
-%patch57 -p1
-%patch58 -p1
-%patch59 -p0
-%patch60 -p1
-%patch61 -p1
-%patch62 -p1
-%patch63 -p1
-%patch64 -p1
-%patch65 -p1
-cp %{SOURCE17} RPM-GPG-KEY
-install %{SOURCE5} scripts/find-lang.sh
 
 cd scripts
 mv -f perl.req perl.req.in
@@ -711,13 +682,9 @@ for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
 done
 
 %build
-rev=$(awk '/^#.*Id:.*/{print $4}' scripts/find-lang.sh)
-if [ "$rev" != "%find_lang_rev" ]; then
-	: Update find_lang_rev define to $rev, and retry
-	exit 1
-fi
-
-%if %{without system_libmagic}
+%if %{with system_libmagic}
+rm -rf file
+%else
 cd file
 %{__libtoolize}
 %{__aclocal}
@@ -760,7 +727,7 @@ CPPFLAGS="-Dglob=rpm_glob -Dglobfree=rpm_globfree"; export CPPFLAGS
 %{__make} \
 	pylibdir=%{py_libdir} \
 	myLDFLAGS="%{rpmldflags}" \
-	file_LDFLAGS="" \
+	file_LDFLAGS= \
 	debugedit_LDADD="\$(WITH_LIBELF_LIB) -lpopt"
 
 #	%{!?with_static:rpm_LDFLAGS="\$(myLDFLAGS)"} \
@@ -769,7 +736,7 @@ CPPFLAGS="-Dglob=rpm_glob -Dglobfree=rpm_globfree"; export CPPFLAGS
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner}
+install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -793,12 +760,12 @@ install %{SOURCE8} $RPM_BUILD_ROOT%{_rpmlibdir}/check-files
 install %{SOURCE13} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
 install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
-install %{SOURCE11} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
-install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-provides
-install %{SOURCE15} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.java
 install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
-install %{SOURCE18} $RPM_BUILD_ROOT%{_bindir}/banner.sh
+install %{SOURCE30} $RPM_BUILD_ROOT%{_bindir}/builder
+install %{SOURCE31} $RPM_BUILD_ROOT%{_bindir}/adapter.awk
+install %{SOURCE32} $RPM_BUILD_ROOT%{_bindir}/pldnotify.awk
+install %{SOURCE33} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
 install rpmio/ugid.h $RPM_BUILD_ROOT%{_includedir}/rpm
 
@@ -818,9 +785,6 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # SELinux file contexts policy instead of one stored in packages payload
 %%_install_file_context_path	%%{nil}
 %%_verify_file_context_path	%%{nil}
-
-# If non-zero, all erasures will be automagically repackaged.
-#%%_repackage_all_erasures    1
 EOF
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF
@@ -831,8 +795,8 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov <<EOF
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles <<EOF
 # global list of files (regexps) which don't generate Requires
-^%{_examplesdir}/
-^%{_docdir}/
+^/usr/src/examples/
+^/usr/share/doc/
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq <<EOF
 # global list of script capabilities (regexps) not to be used in Requires
@@ -894,8 +858,6 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep <<EOF
 ^libxkbui.so
 # -- fam / gamin
 ^libfam.so.0
-# -- mDNSResponder-libs / avahi-compat-libdns_sd
-^libdns_sd.so.1
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc <<EOF
 # global list of file masks not to be compressed in DOCDIR
@@ -912,7 +874,7 @@ for a in librpm-%{sover}.so librpmdb-%{sover}.so librpmio-%{sover}.so ; do
 done
 
 # remove arch dependant macros which have no use on noarch
-%{__sed} -i -e '
+sed -i -e '
 /{__spec_install_post_strip}/d
 /{__spec_install_post_chrpath}/d
 /{__spec_install_post_compress_modules}/d
@@ -921,11 +883,9 @@ done
 %py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
 %py_comp $RPM_BUILD_ROOT%{py_sitedir}
 
-for f in $RPM_BUILD_ROOT%{_datadir}/locale/{en_RN,eu_ES,gl,hu,ro,wa,zh,zh_CN.GB2312}/LC_MESSAGES/rpm.mo; do
-	[ -f "$f" ] || continue
+for f in $RPM_BUILD_ROOT%{_datadir}/locale/{en_RN,eu_ES,gl,hu,ro,wa,zh,zh_CN.GB2312}/LC_MESSAGES/rpm.mo ; do
 	[ "`file $f | sed -e 's/.*,//' -e 's/message.*//'`" -le 1 ] && rm -f $f
 done
-
 %find_lang %{name}
 
 rm -rf manual
@@ -943,7 +903,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc RPM-GPG-KEY CHANGES manual/*
+%doc RPM-PGP-KEY CHANGES manual
+
 %attr(755,root,root) /bin/rpm
 #%attr(755,root,root) %{_bindir}/rpmdb
 #%attr(755,root,root) %{_bindir}/rpmquery
@@ -951,7 +912,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_bindir}/rpmverify
 
 %dir %{_sysconfdir}/rpm
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpm/macros
+%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/rpm
 
 %{_mandir}/man8/rpm.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
@@ -966,24 +928,20 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %dir /var/lock/rpm
 /var/lock/rpm/transaction
 
+%dir %{_rpmlibdir}
 #%attr(755,root,root) %{_rpmlibdir}/rpmd
 #%{!?with_static:%attr(755,root,root) %{_rpmlibdir}/rpm[eiu]}
 #%attr(755,root,root) %{_rpmlibdir}/rpmk
 #%attr(755,root,root) %{_rpmlibdir}/rpm[qv]
 
 %doc %attr(755,root,root) %{_rpmlibdir}/convertrpmrc.sh
+%attr(755,root,root) %{_rpmlibdir}/user_group.sh
+
+%attr(755,root,root) %{_bindir}/banner.sh
 
 %{_rpmlibdir}/rpmrc
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/macros
-
-%files base
-%defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rpm
-%dir %{_rpmlibdir}
-%attr(755,root,root) %{_bindir}/banner.sh
-%attr(755,root,root) %{_rpmlibdir}/user_group.sh
-%dir /var/lib/banner
 
 %files lib
 %defattr(644,root,root,755)
@@ -1049,7 +1007,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files build
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/noauto*
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/rpm/noauto*
 %attr(755,root,root) %{_rpmlibdir}/compress-doc
 %attr(755,root,root) %{_rpmlibdir}/cross-build
 #%attr(755,root,root) %{_rpmlibdir}/find-provides
@@ -1103,7 +1061,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros.mono
 %{_rpmlibdir}/macros.perl
 %{_rpmlibdir}/macros.php
-%{_rpmlibdir}/macros.java
 # not used yet ... these six depend on perl
 #%attr(755,root,root) %{_rpmlibdir}/http.req
 #%attr(755,root,root) %{_rpmlibdir}/magic.prov
@@ -1113,6 +1070,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%{_rpmlibdir}/tcl.req
 %{_rpmlibdir}/trpm
 
+%attr(755,root,root) %{_bindir}/javadeps
 %attr(755,root,root) %{_bindir}/gendiff
 %attr(755,root,root) %{_bindir}/rpmbuild
 
@@ -1122,11 +1080,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %lang(pl) %{_mandir}/pl/man1/gendiff.1*
 %lang(pl) %{_mandir}/pl/man8/rpmbuild.8*
 
-%files javaprov
+%files build-tools
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/javadeps
-%attr(755,root,root) %{_rpmlibdir}/java-find-requires
-%attr(755,root,root) %{_rpmlibdir}/java-find-provides
+%attr(755,root,root) %{_bindir}/builder
+%attr(755,root,root) %{_bindir}/adapter.awk
+%attr(755,root,root) %{_bindir}/pldnotify.awk
 
 %files perlprov
 %defattr(644,root,root,755)
@@ -1159,5 +1117,5 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
-%doc apidocs/html/*
+%doc apidocs
 %endif
