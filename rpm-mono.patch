@@ -1,18 +1,17 @@
 diff -ruN rpm-4.4.2./build/rpmfc.c rpm-4.4.2/build/rpmfc.c
 --- rpm-4.4.2./build/rpmfc.c	2005-08-11 13:11:54.000000000 +0200
 +++ rpm-4.4.2/build/rpmfc.c	2005-08-11 15:33:47.000000000 +0200
-@@ -534,6 +534,10 @@
+@@ -534,6 +534,9 @@
    /* XXX "python 2.3 byte-compiled" */
    { "python ",			RPMFC_PYTHON|RPMFC_INCLUDE },
  
 +  /* .NET executables and libraries. file(1) cannot differ it from native win32 executables unfortunatelly */
 +  { "PE executable",		RPMFC_MONO|RPMFC_INCLUDE },
-+  { "executable PE",		RPMFC_MONO|RPMFC_INCLUDE },
 +
    { "current ar archive",	RPMFC_STATIC|RPMFC_LIBRARY|RPMFC_ARCHIVE|RPMFC_INCLUDE },
  
    { "Zip archive data",		RPMFC_COMPRESSED|RPMFC_ARCHIVE|RPMFC_INCLUDE },
-@@ -827,6 +831,42 @@
+@@ -827,6 +830,42 @@
  }
  
  /**
@@ -55,7 +54,7 @@ diff -ruN rpm-4.4.2./build/rpmfc.c rpm-4.4.2/build/rpmfc.c
   * Extract Elf dependencies.
   * @param fc		file classifier
   * @param findprov	1 to enable provides
-@@ -1179,6 +1219,7 @@
+@@ -1179,6 +1218,7 @@
      { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL) },
      { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PYTHON) },
      { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PHP) },
