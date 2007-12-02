@@ -941,7 +941,6 @@ fi \
 # Directory where arch-specific (JNI) version-independent jars are installed.
 %_jnidir		%{_libdir}/java
 
-
 %java_home		%([ -f %{_javadir}-utils/java-functions ] || { echo ERROR; exit 0; }; unset JAVA_HOME; . %{_javadir}-utils/java-functions; set_jvm; echo ${JAVA_HOME:-ERROR})
 
 %ant			JAVA_HOME=%{java_home} ant
@@ -988,6 +987,53 @@ set_options $BASE_OPTIONS\
 # Let's start\
 run "$@"\
 EOF
+
+# jpackage 1.7
+# Directory for maven depmaps
+#
+%_mavendepmapdir /etc/maven
+%_mavendepmapfragdir /etc/maven/fragments
+
+#
+# add_to_depmap adds an entry to the depmap. The arguments are:
+#
+# %1 the original groupid
+# %2 the original artifact id
+# %3 the version
+# %4 the new groupid
+# %5 the new artifactid
+#
+
+%add_to_maven_depmap() \
+install -dm 755 $RPM_BUILD_ROOT/%{_mavendepmapfragdir}\
+cat >>$RPM_BUILD_ROOT/%{_mavendepmapfragdir}/%{name}<< EOF\
+<dependency>\
+    <maven>\
+        <groupId>%1</groupId>\
+        <artifactId>%2</artifactId>\
+        <version>%3</version>\
+    </maven>\
+    <jpp>\
+        <groupId>%4</groupId>\
+        <artifactId>%5</artifactId>\
+        <version>%3</version>\
+    </jpp>\
+</dependency>\
+\
+EOF\
+%{nil}
+
+#==============================================================================
+#
+# update_maven_depmap updates the main maven depmap
+#
+%update_maven_depmap() \
+echo -e "<dependencies>\\n" > %{_mavendepmapdir}/maven2-depmap.xml\
+if [ -d %{_mavendepmapfragdir} ] && [ -n "`find %{_mavendepmapfragdir} -type f`" ]; then\
+cat %{_mavendepmapfragdir}/* >> %{_mavendepmapdir}/maven2-depmap.xml\
+fi\
+echo -e "</dependencies>\\n" >> %{_mavendepmapdir}/maven2-depmap.xml
+
 
 # PEAR install macros
 # Author: Elan Ruusamäe <glen@pld-linux.org>
