@@ -19,6 +19,6 @@ diff -u -u -r1.2 -r1.2.2.1
 +    BZh)      dd if="$pkg" ibs=$o skip=1 2>/dev/null | bunzip2 ;;
 +    "$gz"*)   dd if="$pkg" ibs=$o skip=1 2>/dev/null | gunzip ;;
 +    # no magic in old lzma format, if unknown we assume that's lzma for now
-+    *)        dd if="$pkg" ibs=$o skip=1 2>/dev/null | lzma -dc ;;
++    *)        dd if="$pkg" ibs=$o skip=1 2>/dev/null | lzma -dc - ;;
 +    #*)        echo "Unrecognized rpm file: $pkg"; return 1 ;;
 +esac
