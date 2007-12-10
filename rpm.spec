@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	11
+Release:	12
 License:	GPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -121,6 +121,7 @@ Patch62:	%{name}-rpmdb.patch
 Patch63:	%{name}-lzma-size_t.patch
 Patch64:	%{name}-tar_as_secondary_source.patch
 Patch65:	%{name}-man_pl.patch
+Patch66:	%{name}-lzma-tukaani.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -276,7 +277,7 @@ Requires:	popt >= %{reqpopt_ver}
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
-%{?with_suggest_tags:Suggests:	lzma}
+%{?with_suggest_tags:Suggests:	lzma >= 1:4.42.0}
 
 %description lib
 RPMs library.
@@ -697,6 +698,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch63 -p1
 %patch64 -p1
 %patch65 -p1
+%patch66 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
