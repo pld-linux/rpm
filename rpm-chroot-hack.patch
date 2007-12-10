@@ -1,0 +1,21 @@
+diff -urN rpm-4.4.9.org/rpmdb/db3.c rpm-4.4.9/rpmdb/db3.c
+--- rpm-4.4.9.org/rpmdb/db3.c	2007-04-25 03:48:42.000000000 +0200
++++ rpm-4.4.9/rpmdb/db3.c	2007-11-12 20:01:29.761434045 +0100
+@@ -1329,6 +1329,8 @@
+ 	} else {
+ assert(rpmdb && rpmdb->db_dbenv);
+ 	    dbenv = rpmdb->db_dbenv;
++	    if (rpmdb->db_chrootDone)
++		    dbenv->set_data_dir(dbenv, dbhome);
+ 	    rpmdb->db_opens++;
+ 	}
+ 	/*@=mods@*/
+@@ -1496,7 +1498,7 @@
+ 		if (dbfile)
+ 		    t = stpcpy( stpcpy( t, "/"), dbfile);
+ /*@=boundswrite@*/
+-#ifdef	HACK	/* XXX necessary to support dbsubfile */
++#if 1
+ 		dbpath = (!dbi->dbi_use_dbenv && !dbi->dbi_temporary)
+ 			? dbfullpath : dbfile;
+ #else
