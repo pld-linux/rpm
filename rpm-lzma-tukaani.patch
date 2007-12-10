@@ -1,0 +1,12 @@
+diff -urN rpm-4.4.9.org/rpmio/rpmio.c rpm-4.4.9/rpmio/rpmio.c
+--- rpm-4.4.9.org/rpmio/rpmio.c	2007-03-31 13:33:15.000000000 +0200
++++ rpm-4.4.9/rpmio/rpmio.c	2007-12-10 12:50:56.678906501 +0100
+@@ -2879,7 +2879,7 @@
+         xx = dup2(fdno, 1);
+         for (i = 3; i < 1024; i++)
+ 	    xx = close(i);
+-        if (execl("/usr/bin/lzma", "lzma", "e", "-si", "-so", NULL))
++        if (execl("/usr/bin/lzma", "lzma", "--format=alone", "-zc", "-", NULL))
+             _exit(1);
+     }
+     return NULL; /* warning */
