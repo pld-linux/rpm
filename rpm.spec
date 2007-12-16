@@ -274,10 +274,12 @@ Requires:	db >= %{reqdb_ver}
 %{?with_selinux:Requires:	libselinux >= 1.18}
 %{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
 Requires:	popt >= %{reqpopt_ver}
+%{?with_suggest_tags:Suggests:	lzma >= 1:4.42.0}
 Obsoletes:	rpm-libs
+# avoid installing with incompatible (non-tukaani) lzma
+Conflicts:	lzma < 1:4.42.0
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
-%{?with_suggest_tags:Suggests:	lzma >= 1:4.42.0}
 
 %description lib
 RPMs library.
