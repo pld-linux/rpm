@@ -1,14 +1,9 @@
-diff -durN -x '*~' rpm-4.3.orig/Makefile.am rpm-4.3/Makefile.am
---- rpm-4.3.orig/Makefile.am	2004-12-19 12:44:01.000000000 +0100
-+++ rpm-4.3/Makefile.am	2004-12-19 12:44:44.217070104 +0100
-@@ -124,18 +124,18 @@
+--- rpm-4.4.2.2/Makefile.am~	2007-12-18 01:27:19.505225370 +0200
++++ rpm-4.4.2.2/Makefile.am	2007-12-18 01:28:56.411002420 +0200
+@@ -121,14 +121,14 @@
  
  install-data-local:
  	@$(mkinstalldirs) $(DESTDIR)$(varprefix)/lib/rpm
--	@rm -f $(DESTDIR)$(libdir)/rpmrc
--	@@LN_S@ rpm/rpmrc $(DESTDIR)$(libdir)/rpmrc
--	@rm -f $(DESTDIR)$(libdir)/rpmpopt
--	@@LN_S@ rpm/rpmpopt $(DESTDIR)$(libdir)/rpmpopt
 -	@rm -f $(DESTDIR)$(libdir)/rpm/rpmt
 -	@@LN_S@ rpmb $(DESTDIR)$(libdir)/rpm/rpmt
 -	@rm -f $(DESTDIR)$(libdir)/rpm/rpme
@@ -17,10 +12,6 @@ diff -durN -x '*~' rpm-4.3.orig/Makefile.am rpm-4.3/Makefile.am
 -	@@LN_S@ rpmi $(DESTDIR)$(libdir)/rpm/rpmu
 -	@rm -f $(DESTDIR)$(libdir)/rpm/rpmv
 -	@@LN_S@ rpmq $(DESTDIR)$(libdir)/rpm/rpmv
-+	@rm -f $(DESTDIR)$(libdir)/rpmrc
-+	@@LN_S@ rpm/rpmrc $(DESTDIR)$(libdir)/rpmrc
-+	@rm -f $(DESTDIR)$(libdir)/rpmpopt
-+	@@LN_S@ rpm/rpmpopt $(DESTDIR)$(libdir)/rpmpopt
 +	@rm -f $(DESTDIR)$(pkglibdir)/rpm/rpmt
 +	@@LN_S@ rpmb $(DESTDIR)$(pkglibdir)/rpmt
 +	@rm -f $(DESTDIR)$(pkglibdir)/rpm/rpme

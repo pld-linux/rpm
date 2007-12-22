@@ -1,5 +1,5 @@
---- rpm-4.3/build/rpmfc.c.orig	Wed May 19 11:30:29 2004
-+++ rpm-4.3/build/rpmfc.c	Wed May 19 17:03:01 2004
+--- rpm-4.4.2.2/build/rpmfc.c~	2007-12-18 01:29:54.308479370 +0200
++++ rpm-4.4.2.2/build/rpmfc.c	2007-12-18 01:34:31.886383109 +0200
 @@ -1,6 +1,7 @@
  #include "system.h"
  
@@ -138,7 +138,7 @@
  	    /* Add to package requires. */
  	    ds = rpmdsSingle(RPMTAG_REQUIRENAME, s, "", RPMSENSE_FIND_REQUIRES);
  	    xx = rpmdsMerge(&fc->requires, ds);
-@@ -718,21 +799,22 @@
+@@ -814,17 +814,16 @@
      (void) fclose(fp);
  
      if (fc->fcolor->vals[fc->ix] & RPMFC_PERL) {
@@ -162,16 +162,23 @@
 +	if (findreq)
 +	    xx = rpmfcHelper(fc, 'R', "python", noautoreq, noautoreq_c);
      }
+     if (fc->fcolor->vals[fc->ix] & RPMFC_MONO) {
+         xx = rpmfcHelper(fc, 'P', "mono");
+@@ -832,9 +831,11 @@
+             xx = rpmfcHelper(fc, 'R', "mono");
+     }
      if (fc->fcolor->vals[fc->ix] & RPMFC_PHP) {
 -		xx = rpmfcHelper(fc, 'P', "php");
 -	    xx = rpmfcHelper(fc, 'R', "php");
-+            if (findprov)
-+		xx = rpmfcHelper(fc, 'P', "php", noautoprov, noautoprov_c);
-+            if (findreq)
-+                xx = rpmfcHelper(fc, 'R', "php", noautoreq, noautoreq_c);
- 	}
+-	}
++	if (findprov)
++	    xx = rpmfcHelper(fc, 'P', "php", noautoprov, noautoprov_c);
++	if (findreq)
++	    xx = rpmfcHelper(fc, 'R', "php", noautoreq, noautoreq_c);
++    }
  
      return 0;
+ }
 @@ -739,9 +823,16 @@
  /**
   * Extract Elf dependencies.
@@ -525,16 +532,6 @@
  /*@-boundswrite@*/
      /* Generate per-file indices into package dependencies. */
      nddict = argvCount(fc->ddict);
---- rpm-4.3/po/POTFILES.in.orig	2004-01-04 03:13:02.000000000 +0100
-+++ rpm-4.3/po/POTFILES.in	2004-02-01 21:05:50.567248776 +0100
-@@ -22,6 +22,7 @@
- build/parseSpec.c
- build/poptBT.c
- build/reqprov.c
-+build/rpmfc.c
- build/spec.c
- lib/cpio.c
- lib/depends.c
 --- rpm-4.3/po/pl.po.orig	2004-02-01 20:53:10.000000000 +0100
 +++ rpm-4.3/po/pl.po	2004-02-01 21:20:36.532561576 +0100
 @@ -1295,6 +1295,127 @@

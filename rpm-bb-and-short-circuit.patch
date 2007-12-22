@@ -9,19 +9,18 @@
  	    /*@fallthrough@*/
  	case 'i':
  	    ba->buildAmount |= RPMBUILD_INSTALL;
-diff -Nura rpm-4.3/doc/pl/rpmbuild.8 rpm-4.3.aft/doc/pl/rpmbuild.8
---- rpm-4.3/doc/pl/rpmbuild.8	2004-05-20 14:13:22.000000000 +0200
-+++ rpm-4.3.aft/doc/pl/rpmbuild.8	2004-05-20 14:10:43.000000000 +0200
+--- rpm-4.4.2.2/doc/pl/rpmbuild.8~	2007-12-18 00:55:21.608803258 +0200
++++ rpm-4.4.2.2/doc/pl/rpmbuild.8	2007-12-18 00:55:23.688712620 +0200
 @@ -145,7 +145,8 @@
  .TP
  \fB--short-circuit\fR
  Przechodzi wprost do podanego etapu (tzn. pomija wszystkie etapy
--prowadz±ce do podanego). Prawid³owe tylko z \fB-bc\fR i \fB-bi\fR.
-+prowadz±ce do podanego). Prawid³owe tylko z \fB-bc\fR, \fB-bi\fR
-+i \fB-bb\fR (-bb --short-circuit odnosi siê do PLD i jest niezalecane).
+-prowadzÄ…ce do podanego). PrawidÅ‚owe tylko z \fB-bc\fR i \fB-bi\fR.
++prowadzÄ…ce do podanego). PrawidÅ‚owe tylko z \fB-bc\fR, \fB-bi\fR
++i \fB-bb\fR (-bb --short-circuit odnosi siÄ™ do PLD i jest niezalecane).
  .TP
  \fB--sign\fR
- Osadza w pakiecie sygnaturê GPG. Sygnatura ta mo¿e byæ u¿ywana do
+ Osadza w pakiecie sygnaturÄ™ GPG. Sygnatura ta moÅ¼e byÄ‡ uÅ¼ywana do
 diff -Nura rpm-4.3/doc/rpmbuild.8 rpm-4.3.aft/doc/rpmbuild.8
 --- rpm-4.3/doc/rpmbuild.8	2004-05-20 14:13:22.000000000 +0200
 +++ rpm-4.3.aft/doc/rpmbuild.8	2004-05-20 14:10:13.000000000 +0200

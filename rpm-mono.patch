@@ -55,25 +55,6 @@ diff -ruN rpm-4.4.2./build/rpmfc.c rpm-4.4.2/build/rpmfc.c
   * Extract Elf dependencies.
   * @param fc		file classifier
   * @param findprov	1 to enable provides
-@@ -1179,6 +1219,7 @@
-     { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL) },
-     { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PYTHON) },
-     { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PHP) },
-+    { rpmfcMONO,	RPMFC_MONO },
-     { NULL, 0 }
- };
- 
-diff -ruN rpm-4.4.2./build/rpmfc.h rpm-4.4.2/build/rpmfc.h
---- rpm-4.4.2./build/rpmfc.h	2005-08-11 13:11:54.000000000 +0200
-+++ rpm-4.4.2/build/rpmfc.h	2005-08-11 14:10:33.000000000 +0200
-@@ -78,6 +78,7 @@
-     RPMFC_PYTHON		= (1 << 26),
-     RPMFC_PHP			= (1 << 27),
-     RPMFC_TCL			= (1 << 28),
-+    RPMFC_MONO			= (1 <<  6),
- 
-     RPMFC_WHITE			= (1 << 29),
-     RPMFC_INCLUDE		= (1 << 30),
 diff -ruN rpm-4.4.2./macros.in rpm-4.4.2/macros.in
 --- rpm-4.4.2./macros.in	2005-08-11 13:11:54.000000000 +0200
 +++ rpm-4.4.2/macros.in	2005-08-11 17:20:46.276790376 +0200
@@ -87,18 +68,17 @@ diff -ruN rpm-4.4.2./macros.in rpm-4.4.2/macros.in
  #
  # fixowner, fixgroup, and fixperms are run at the end of hardcoded setup
  # These macros are necessary only for legacy compatibility, and have moved
-diff -ruN rpm-4.4.2./configure.ac rpm-4.4.2/configure.ac
---- rpm-4.4.2./configure.ac	2005-08-11 17:36:01.000000000 +0200
-+++ rpm-4.4.2/configure.ac	2005-08-11 18:11:15.449385328 +0200
-@@ -1355,7 +1355,7 @@
- 	scripts/php.req scripts/php.prov
- 	rpmio/Makefile rpmdb/Makefile lib/Makefile build/Makefile
- 	scripts/Makefile scripts/brp-redhat
--	scripts/macros.perl scripts/macros.php scripts/macros.python
-+	scripts/macros.perl scripts/macros.php scripts/macros.python scripts/macros.mono
- 	tools/Makefile
- 	tests/Makefile tests/rpmrc tests/macros tests/hello-test/Makefile
- 	misc/Makefile intl/Makefile po/Makefile.in
+--- rpm-4.4.2.2/scripts/Makefile.am~	2007-12-19 17:28:11.746068907 +0200
++++ rpm-4.4.2.2/scripts/Makefile.am	2007-12-19 17:29:14.343341050 +0200
+@@ -20,7 +20,7 @@
+ 	rpm.daily rpm.log rpm.xinetd rpm2cpio.sh \
+ 	sql.prov sql.req tcl.req tgpg trpm u_pkg.sh \
+ 	vpkg-provides.sh vpkg-provides2.sh \
+-	macros.perl* macros.python* \
++	macros.perl* macros.python* macros.mono* \
+ 	macros.php* find-*.php find-php-* mono-find*
+ 
+ installprefix = $(DESTDIR)
 diff -ruN rpm-4.4.2./scripts/macros.mono rpm-4.4.2/scripts/macros.mono
 --- rpm-4.4.2./scripts/macros.mono	1970-01-01 01:00:00.000000000 +0100
 +++ rpm-4.4.2/scripts/macros.mono	2005-08-11 18:14:44.387621888 +0200
@@ -119,15 +99,3 @@ diff -ruN rpm-4.4.2./scripts/macros.mono.in rpm-4.4.2/scripts/macros.mono.in
 +
 +%define		__find_requires	/usr/bin/mono-find-requires
 +%define		__find_provides	/usr/bin/mono-find-provides
-diff -ruN rpm-4.4.2./scripts/Makefile.am rpm-4.4.2/scripts/Makefile.am
---- rpm-4.4.2./scripts/Makefile.am	2005-07-13 14:19:13.000000000 +0200
-+++ rpm-4.4.2/scripts/Makefile.am	2005-08-11 18:13:19.998450992 +0200
-@@ -16,7 +16,7 @@
- 	rpm.daily rpm.log rpm.xinetd rpm2cpio.sh \
- 	sql.prov sql.req tcl.req tgpg trpm u_pkg.sh \
- 	vpkg-provides.sh vpkg-provides2.sh \
--	macros.perl* macros.python* \
-+	macros.perl* macros.python* macros.mono* \
- 	macros.php* find-*.php find-php-*
- 
- installprefix = $(DESTDIR)

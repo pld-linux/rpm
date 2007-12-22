@@ -9,27 +9,27 @@
    /* .NET executables and libraries. file(1) cannot differ it from native win32 executables unfortunatelly */
    { "PE executable",		RPMFC_MONO|RPMFC_INCLUDE },
    { "executable PE",		RPMFC_MONO|RPMFC_INCLUDE },
-@@ -825,7 +827,13 @@
- 		xx = rpmfcHelper(fc, 'P', "php", noautoprov, noautoprov_c);
-             if (findreq)
-                 xx = rpmfcHelper(fc, 'R', "php", noautoreq, noautoreq_c);
--	}
-+    }
+--- rpm-4.4.2.2/build/rpmfc.c~	2007-12-20 01:36:05.506558726 +0200
++++ rpm-4.4.2.2/build/rpmfc.c	2007-12-20 01:38:13.090998865 +0200
+@@ -842,6 +842,12 @@
+ 	if (findreq)
+ 	    xx = rpmfcHelper(fc, 'R', "php", noautoreq, noautoreq_c);
+     }
 +    if (fc->fcolor->vals[fc->ix] & RPMFC_JAVA) {
-+            if (findprov)
-+                xx = rpmfcHelper(fc, 'P', "java", noautoprov, noautoprov_c);
-+            if (findreq)
-+                xx = rpmfcHelper(fc, 'R', "java", noautoreq, noautoreq_c);
++	if (findprov)
++	    xx = rpmfcHelper(fc, 'P', "java", noautoprov, noautoprov_c);
++	if (findreq)
++	    xx = rpmfcHelper(fc, 'R', "java", noautoreq, noautoreq_c);
 +    }
  
      return 0;
  }
-@@ -1219,6 +1227,7 @@
+@@ -1255,6 +1261,7 @@
      { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL) },
      { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PYTHON) },
      { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PHP) },
 +    { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_JAVA) },
-     { rpmfcMONO,	RPMFC_MONO },
+     { rpmfcSCRIPT,      RPMFC_MONO },
      { NULL, 0 }
  };
 @@ -1552,6 +1561,15 @@

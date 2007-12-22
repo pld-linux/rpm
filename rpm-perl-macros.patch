@@ -1,10 +1,9 @@
-diff -urN rpm-4.3.org/configure.ac rpm-4.3/configure.ac
---- rpm-4.3.org/configure.ac	2004-01-07 01:51:35.251160244 +0100
-+++ rpm-4.3/configure.ac	2004-01-07 01:55:53.198560246 +0100
-@@ -1196,6 +1196,7 @@
- AC_CONFIG_SUBDIRS(popt beecrypt zlib elfutils file db3)
+--- rpm-4.4.2.2/configure.ac~	2007-12-18 00:48:06.737754023 +0200
++++ rpm-4.4.2.2/configure.ac	2007-12-18 00:48:45.356071118 +0200
+@@ -1305,6 +1305,7 @@
+ AC_CONFIG_SUBDIRS(popt file db3)
  
- AC_CONFIG_FILES([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
+ AC_CONFIG_FILES([ Doxyfile Makefile rpmrc macros platform rpmpopt
 +	scripts/perl.req scripts/perl.prov
  	rpmio/Makefile rpmdb/Makefile lib/Makefile build/Makefile
  	scripts/Makefile scripts/brp-redhat

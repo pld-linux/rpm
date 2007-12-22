@@ -1,5 +1,5 @@
---- rpm-4.4.2/lib/depends.c.orig	2005-10-07 13:39:39.000000000 +0200
-+++ rpm-4.4.2/lib/depends.c	2005-10-07 13:45:07.000000000 +0200
+--- rpm-4.4.2.2/lib/depends.c~	2007-12-18 01:46:31.245034974 +0200
++++ rpm-4.4.2.2/lib/depends.c	2007-12-18 01:48:39.299454632 +0200
 @@ -966,8 +966,6 @@
  static inline /*@observer@*/ const char * const identifyDepend(int_32 f)
  	/*@*/
@@ -18,23 +18,21 @@
  	    rpmMessage(msglvl,
  			_("removing %s \"%s\" from tsort relations.\n"),
  			(rpmteNEVRA(p) ?  rpmteNEVRA(p) : "???"), dp);
-@@ -1297,15 +1295,15 @@
+@@ -1289,13 +1289,13 @@
  
  	    switch (rpmteType(p)) {
  	    case TR_REMOVED:
 -		/* Skip if not %preun/%postun requires or legacy prereq. */
+-		if (!( isErasePreReq(Flags) || isLegacyPreReq(Flags) ) )
 +		/* Skip if not %preun/%postun requires */
- 		if (isInstallPreReq(Flags)
--		 || !( isErasePreReq(Flags) || isLegacyPreReq(Flags) ) )
-+		 || !( isErasePreReq(Flags) ) )
++  		if (isInstallPreReq(Flags) || !( isErasePreReq(Flags) ) )
  		    /*@innercontinue@*/ continue;
  		/*@switchbreak@*/ break;
  	    case TR_ADDED:
 -		/* Skip if not %pre/%post requires or legacy prereq. */
+-		if (!( isInstallPreReq(Flags) || isLegacyPreReq(Flags) ) )
 +		/* Skip if not %pre/%post requires */
- 		if (isErasePreReq(Flags)
--		 || !( isInstallPreReq(Flags) || isLegacyPreReq(Flags) ) )
-+		 || !( isInstallPreReq(Flags) ) )
++  		if (isErasePreReq(Flags) || !( isInstallPreReq(Flags) ) )
  		    /*@innercontinue@*/ continue;
  		/*@switchbreak@*/ break;
  	    }

@@ -59,16 +59,16 @@ diff -Nru rpm-4.1/lib/rpmrc.c rpm-4.1.new/lib/rpmrc.c
  	/* Read another rcfile */
  	fd = Fopen(fn, "r.fpio");
  	if (fd == NULL || Ferror(fd)) {
---- rpm-4.3/po/pl.po.orig	2003-06-10 23:59:11.000000000 +0200
-+++ rpm-4.3/po/pl.po	2003-06-11 00:06:16.000000000 +0200
-@@ -2834,6 +2834,10 @@
- msgid "Please contact rpm-list@redhat.com\n"
- msgstr "Proszê skontaktowaæ siê z rpm-list@redhat.com\n"
+--- rpm-4.4.2.2/po/pl.po~	2007-12-18 00:58:42.210061478 +0200
++++ rpm-4.4.2.2/po/pl.po	2007-12-18 01:01:39.542333710 +0200
+@@ -3120,6 +3120,10 @@
+ msgid "Please contact rpm-maint@lists.rpm.org\n"
+ msgstr "ProszÄ™ skontaktowaÄ‡ siÄ™ z rpm-maint@lists.rpm.org\n"
  
 +#: lib/rpmrc.c:1764
 +msgid "Cannot read %s, HOME_ETC is too large.\n"
-+msgstr "Nie mo¿na odczytaæ %s, HOME_ETC jest zbyt du¿e.\n"
++msgstr "Nie moÅ¼na odczytaÄ‡ %s, HOME_ETC jest zbyt duÅ¼e.\n"
 +
- #: lib/rpmrc.c:1813
+ #: lib/rpmrc.c:1801
  #, c-format
  msgid "Cannot expand %s\n"

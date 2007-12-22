@@ -1,10 +1,9 @@
-diff -urN rpm-4.3.org/build/files.c rpm-4.3/build/files.c
---- rpm-4.3.org/build/files.c	2003-12-27 23:56:47.496088736 +0100
-+++ rpm-4.3/build/files.c	2003-12-28 00:28:14.088283128 +0100
-@@ -1982,10 +1982,12 @@
-     fl.docDirs[fl.docDirCount++] = xstrdup("/usr/share/doc");
+--- rpm-4.4.2.2/build/files.c~	2007-12-18 01:15:59.584854868 +0200
++++ rpm-4.4.2.2/build/files.c	2007-12-18 01:17:06.891921768 +0200
+@@ -2042,10 +2042,12 @@
      fl.docDirs[fl.docDirCount++] = xstrdup("/usr/share/man");
      fl.docDirs[fl.docDirCount++] = xstrdup("/usr/share/info");
+     fl.docDirs[fl.docDirCount++] = xstrdup("/usr/share/gtk-doc/html");
 +    fl.docDirs[fl.docDirCount++] = xstrdup("/usr/src/examples");
      fl.docDirs[fl.docDirCount++] = rpmGetPath("%{_docdir}", NULL);
      fl.docDirs[fl.docDirCount++] = rpmGetPath("%{_mandir}", NULL);

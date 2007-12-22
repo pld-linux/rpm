@@ -1,14 +1,13 @@
-diff -urN rpm.org/configure.ac rpm/configure.ac
---- rpm.org/configure.ac	2004-06-14 11:46:10.220092656 +0200
-+++ rpm/configure.ac	2004-06-14 11:47:13.499472728 +0200
-@@ -1203,7 +1215,7 @@
+--- rpm-4.4.2.2/configure.ac~	2007-12-18 00:49:49.233287483 +0200
++++ rpm-4.4.2.2/configure.ac	2007-12-18 00:50:20.891907867 +0200
+@@ -1302,7 +1302,7 @@
  dnl # XXX Propagate -lucb to popt ...
  dnl export LIBS INCPATH CONFIG_SITE
  
--AC_CONFIG_SUBDIRS(popt zlib file sqlite db3)
+-AC_CONFIG_SUBDIRS(popt file db3)
 +AC_CONFIG_SUBDIRS(file)
  
- AC_CONFIG_FILES([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
+ AC_CONFIG_FILES([ Doxyfile Makefile rpmrc macros platform rpmpopt
  	scripts/perl.req scripts/perl.prov
 @@ -1227,7 +1239,7 @@
  	python/rpmdb/test/Makefile

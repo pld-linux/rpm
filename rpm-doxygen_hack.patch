@@ -1,5 +1,5 @@
---- rpm-4.4.2/Doxyfile.in.orig	2005-07-04 21:00:46.000000000 +0200
-+++ rpm-4.4.2/Doxyfile.in	2005-07-23 14:02:43.454384568 +0200
+--- rpm-4.4.2.2/Doxyfile.in~	2007-12-18 01:43:38.192576236 +0200
++++ rpm-4.4.2.2/Doxyfile.in	2007-12-18 01:45:29.897708361 +0200
 @@ -383,29 +383,7 @@
                           @top_srcdir@/rpmrc \
                           @top_srcdir@/rpm2cpio.c \
@@ -31,7 +31,7 @@
                           @top_srcdir@/doc/manual/builddependencies \
                           @top_srcdir@/doc/manual/buildroot \
                           @top_srcdir@/doc/manual/conditionalbuilds \
-@@ -420,195 +398,13 @@
+@@ -398,194 +398,13 @@
                           @top_srcdir@/doc/manual/spec \
                           @top_srcdir@/doc/manual/triggers \
                           @top_srcdir@/doc/manual/tsort \
@@ -214,7 +214,6 @@
 -                         @top_srcdir@/python/rpmte-py.h \
 -                         @top_srcdir@/python/rpmts-py.c \
 -                         @top_srcdir@/python/rpmts-py.h \
--                         @top_srcdir@/tools/dump.c \
 -                         @top_srcdir@/tools/dumpdb.c \
 -                         @top_srcdir@/tools/javadeps.c \
 -                         @top_srcdir@/tools/rpmcache.c \
@@ -224,12 +223,12 @@
 -                         @top_srcdir@/tools/rpmtool.c \
 -                         @top_srcdir@/tools/rpmxml.c \
 -                         @top_srcdir@/tools/rpmxp.c
-+                         @top_srcdir@/file/src/ \
-+                         @top_srcdir@/lib/ \
-+			 @top_srcdir@/lua/ \
-+                         @top_srcdir@/rpmdb/ \
-+                         @top_srcdir@/rpmio/ \
-+                         @top_srcdir@/python/ \
++                         @top_srcdir@/file/src/
++                         @top_srcdir@/lib/
++						 @top_srcdir@/lua/
++                         @top_srcdir@/rpmdb/
++                         @top_srcdir@/rpmio/
++                         @top_srcdir@/python/
 +                         @top_srcdir@/tools/
  
  # If the value of the INPUT tag contains directories, you can use the 

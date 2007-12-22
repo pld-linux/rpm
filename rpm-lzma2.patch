@@ -27,13 +27,12 @@ diff -ruN rpm-4.4.2./lib/psm.c rpm-4.4.2/lib/psm.c
  	rc = RPMRC_OK;
      }	break;
  
-diff -ruN rpm-4.4.2./lib/rpmlibprov.c rpm-4.4.2/lib/rpmlibprov.c
---- rpm-4.4.2./lib/rpmlibprov.c	2004-03-16 22:58:29.000000000 +0100
-+++ rpm-4.4.2/lib/rpmlibprov.c	2006-05-23 18:21:13.235174856 +0200
-@@ -54,6 +54,9 @@
-     { "rpmlib(BuiltinLuaScripts)",    "4.2.2-1",
+--- rpm-4.4.2.2/lib/rpmlibprov.c~	2007-12-20 01:30:51.040262506 +0200
++++ rpm-4.4.2.2/lib/rpmlibprov.c	2007-12-20 01:33:38.102982264 +0200
+@@ -56,6 +56,9 @@
  	(                RPMSENSE_EQUAL),
      N_("internal support for lua scripts.") },
+ #endif
 +    { "rpmlib(PayloadIsLzma)",		"4.4.6-1",
 +	(		 RPMSENSE_EQUAL),
 +    N_("package payload can be compressed using lzma.") },

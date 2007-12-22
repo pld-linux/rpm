@@ -1,5 +1,5 @@
---- rpm-4.4.2/build/rpmfc.c.orig	2005-07-21 03:04:55.000000000 +0200
-+++ rpm-4.4.2/build/rpmfc.c	2005-07-23 13:48:23.419129800 +0200
+--- rpm-4.4.2.2/build/rpmfc.c~	2007-12-18 01:07:19.917500877 +0200
++++ rpm-4.4.2.2/build/rpmfc.c	2007-12-18 01:10:27.989305104 +0200
 @@ -451,6 +451,8 @@
  
    { "perl script text",		RPMFC_PERL|RPMFC_INCLUDE },
@@ -37,14 +37,14 @@
  
      return 0;
  }
-@@ -1059,6 +1068,7 @@
+@@ -1102,6 +1102,7 @@
      { rpmfcELF,		RPMFC_ELF },
      { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL) },
      { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PYTHON) },
 +    { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PHP) },
+     { rpmfcSCRIPT,      RPMFC_MONO },
      { NULL, 0 }
  };
- 
 @@ -1228,6 +1238,9 @@
  /*@-branchstate@*/
  	    if (slen >= sizeof(".pm") && !strcmp(s+slen-(sizeof(".pm")-1), ".pm"))
