@@ -30,12 +30,12 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	4.4.2
-Release:	48
+Version:	4.4.2.2
+Release:	0.2
 License:	GPL
 Group:		Base
-Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
-# Source0-md5:	e24ce468082479fe850c9d6563f56db5
+Source0:	http://www.rpm.org/releases/rpm-4.4.x/%{name}-%{version}.tar.gz
+# Source0-md5:	15faa7ebd9791ade1a2f8181821ac259
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -72,15 +72,15 @@ Patch13:	%{name}-bb-and-short-circuit.patch
 Patch14:	%{name}-etc_dir.patch
 Patch15:	%{name}-system_libs-more.patch
 Patch16:	%{name}-php-deps.patch
-Patch17:	%{name}-ldconfig-always.patch
+
 Patch18:	%{name}-perl_req.patch
 Patch19:	%{name}-error-fatal.patch
 Patch20:	%{name}-magic-usesystem.patch
 Patch21:	%{name}-dontneedutils.patch
-Patch22:	%{name}-provides-dont-obsolete.patch
+
 Patch23:	%{name}-examplesaredoc.patch
-Patch24:	%{name}-po.patch
-Patch25:	%{name}-getcwd.patch
+
+
 Patch26:	%{name}-notsc.patch
 Patch27:	%{name}-hack-norpmlibdep.patch
 Patch28:	%{name}-makefile-no_myLDADD_deps.patch
@@ -99,7 +99,7 @@ Patch40:	%{name}-print-requires.patch
 Patch41:	%{name}-reduce-stack-usage.patch
 Patch42:	%{name}-amd64.patch
 Patch43:	%{name}-patch-quote.patch
-Patch44:	%{name}-no-neon.patch
+
 Patch45:	%{name}-no-sqlite.patch
 Patch46:	%{name}-mono.patch
 Patch47:	%{name}-posttrans.patch
@@ -107,14 +107,14 @@ Patch48:	%{name}-requireseq.patch
 Patch49:	%{name}-p4.patch
 Patch50:	%{name}-macros.patch
 Patch51:	%{name}-cleanlibdirs.patch
-Patch52:	%{name}-dep_whiteout.patch
+
 Patch53:	%{name}-doxygen_no_file.patch
 Patch54:	%{name}-truncate-cvslog.patch
-Patch55:	%{name}-bug-146549.patch
+
 Patch56:	%{name}-skip-backups.patch
 Patch57:	%{name}-lzma.patch
 Patch58:	%{name}-lzma2.patch
-Patch59:	%{name}-CVE-2006-5466.patch
+
 Patch60:	%{name}-as_needed-fix.patch
 Patch61:	%{name}-locale.patch
 Patch62:	%{name}-cpuinfo.patch
@@ -622,7 +622,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch14 -p1
 %patch15 -p1
 %patch16 -p1
-%patch17 -p1
+
 %patch18 -p1
 #%patch19 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
@@ -639,10 +639,10 @@ install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
 %patch20 -p1
 %patch21 -p1
-%patch22 -p1
+
 %patch23 -p1
-%patch24 -p1
-%patch25 -p1
+
+
 %patch26 -p1
 %patch27 -p1
 %patch28 -p1
@@ -661,7 +661,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch41 -p1
 %patch42 -p1
 %patch43 -p1
-%{!?with_neon:%patch44 -p1}
+
 %patch45 -p1
 %patch46 -p1
 %patch47 -p1
@@ -669,19 +669,19 @@ install %{SOURCE12} scripts/perl.prov
 %patch49 -p1
 %patch50 -p1
 %patch51 -p1
-%patch52 -p1
-%patch0 -p1
+
+#%patch0 -p1
 %patch3 -p1
 %if %{with system_libmagic}
 rm -rf file
 %patch53 -p1
 %endif
 %patch54 -p1
-%patch55 -p1
+
 %patch56 -p1
 %patch57 -p1
 %patch58 -p1
-%patch59 -p0
+
 %patch60 -p1
 %patch61 -p1
 %patch62 -p1
