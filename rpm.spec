@@ -97,6 +97,7 @@ Patch35:	%{name}-perl_req-INC_dirs.patch
 Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
 Patch38:	%{name}-rpm5-patchset-8021.patch
+Patch39:	%{name}-popt-coreutils.patch
 Patch41:	%{name}-reduce-stack-usage.patch
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
 Patch43:	%{name}-rpm5-patchset-8637.patch
@@ -674,6 +675,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch36 -p1
 %patch37 -p1
 %patch38 -p1
+%patch39 -p1
 %patch41 -p1
 %patch42 -p1
 %patch43 -p1
