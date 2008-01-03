@@ -591,6 +591,8 @@ fi \
 %ruby_archdir		%(ruby -r rbconfig -e 'print Config::CONFIG["archdir"]' 2>/dev/null || echo ERROR)
 %ruby_ridir			%(ruby -r rbconfig -e 'include Config; print File.join(CONFIG["datadir"], "ri", CONFIG["ruby_version"], "system")' 2>/dev/null || echo ERROR)
 %ruby_rubylibdir	%(ruby -r rbconfig -e 'print Config::CONFIG["rubylibdir"]' 2>/dev/null || echo ERROR)
+%ruby_vendorarchdir	%(ruby -r rbconfig -e 'print Config::CONFIG["vendorarchdir"]' 2>/dev/null || echo ERROR)
+%ruby_vendorlibdir	%(ruby -r rbconfig -e 'print Config::CONFIG["vendorlibdir"]' 2>/dev/null || echo ERROR)
 %ruby_sitearchdir	%(ruby -r rbconfig -e 'print Config::CONFIG["sitearchdir"]' 2>/dev/null || echo ERROR)
 %ruby_sitelibdir	%(ruby -r rbconfig -e 'print Config::CONFIG["sitelibdir"]' 2>/dev/null || echo ERROR)
 %ruby_version		%(ruby -r rbconfig -e 'print Config::CONFIG["ruby_version"]' 2>/dev/null || echo ERROR)
