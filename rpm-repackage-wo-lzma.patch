@@ -3,9 +3,9 @@
 @@ -6,6 +6,7 @@
  #include "system.h"
  
- #include <rpmio_internal.h>
+ #include <rpmio_internal.h>	/* XXX FDSTAT_READ */
 +#include <header_internal.h>
- #include <rpmlib.h>
+ #include <rpmcb.h>		/* XXX fnpyKey */
  #include <rpmmacro.h>
  #include <rpmurl.h>
 @@ -1403,6 +1404,19 @@

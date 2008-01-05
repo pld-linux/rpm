@@ -343,7 +343,7 @@ diff -ur rpm.org/lib/rpmfc.c rpm/lib/rpmfc.c
 +    return 0;
 +}
 +
- int rpmfcApply(rpmfc fc)
+ rpmRC rpmfcApply(rpmfc fc)
  {
      rpmfcApplyTbl fcat;
 @@ -888,6 +1082,26 @@
