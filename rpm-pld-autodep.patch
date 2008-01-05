@@ -58,7 +58,7 @@ diff -ur rpm.org/lib/rpmfc.c rpm/lib/rpmfc.c
 +	r=regcomp(&compiled[j],patterns[i],REG_NOSUB);
 +	if (r==0) j++;
 +	else {
-+		rpmMessage(RPMMESS_NORMAL, 
++		rpmlog(RPMLOG_NOTICE, 
 +			_("Compilation of regular expresion '%s'"
 +		        " (expanded from '%s') failed. Skipping it.\n"),
 +			patterns[i],str);
@@ -78,10 +78,10 @@ diff -ur rpm.org/lib/rpmfc.c rpm/lib/rpmfc.c
 +{
 +    int j;
 +    for(j = 0; j < count; j++) {
-+	rpmMessage(RPMMESS_DEBUG,
++	rpmlog(RPMLOG_DEBUG,
 +	    _("Checking %c: '%s' against _noauto expr. #%i\n"), deptype, str, j);
 +	if (!regexec(&regexps[j], str, 0, NULL, 0)) {
-+	    rpmMessage(RPMMESS_NORMAL,
++	    rpmlog(RPMLOG_NOTICE,
 +		_("Skipping %c: '%s' as it matches _noauto expr. #%i\n"), deptype, str, j);
 +	    return 1;
 +	}
@@ -248,7 +248,7 @@ diff -ur rpm.org/lib/rpmfc.c rpm/lib/rpmfc.c
 +    rpmds ds;
 +    const char * N;
 +    const char * EVR;
-+    int_32 Flags;
++    int32_t Flags;
 +    unsigned char deptype;
 +    int nddict;
 +    int previx;
@@ -267,7 +267,7 @@ diff -ur rpm.org/lib/rpmfc.c rpm/lib/rpmfc.c
 +    
 +    ts = rpmtsCreate(); /* XXX ts created in main() should be used */
 +    
-+    rpmMessage(RPMMESS_NORMAL, _("Searching for required packages....\n"));
++    rpmlog(RPMLOG_NOTICE, _("Searching for required packages....\n"));
 +
 +    nddict = argvCount(fc->ddict);
 +    previx = -1;
@@ -291,31 +291,31 @@ diff -ur rpm.org/lib/rpmfc.c rpm/lib/rpmfc.c
 +
 +        if (deptype!='R') continue;
 +
-+        rpmMessage(RPMMESS_DEBUG, _("#%i requires: %s,%s,%i\n"),ix,N,EVR,Flags);
++        rpmlog(RPMLOG_DEBUG, _("#%i requires: %s,%s,%i\n"),ix,N,EVR,Flags);
 +        if (EVR && EVR[0]) {
-+            rpmMessage(RPMMESS_DEBUG, _("skipping #%i require\n"));
++            rpmlog(RPMLOG_DEBUG, _("skipping #%i require\n"));
 +            continue;
 +        }
 +        for(j=0;j<noautoreqdep_c;j++) 
 +            if (!regexec(&noautoreqdep[j],N,0,NULL,0)) {
-+                rpmMessage(RPMMESS_NORMAL, 
++                rpmlog(RPMLOG_NOTICE, 
 +                        _("skipping %s requirement processing"
 +			" (matches noautoreqdep pattern #%i)\n"),N,j);
 +                break;
 +            }
 +        if (j<noautoreqdep_c) continue;
 +        if (N[0]=='/') {
-+            rpmMessage(RPMMESS_DEBUG, _("skipping #%i require (is file requirement)\n"));
++            rpmlog(RPMLOG_DEBUG, _("skipping #%i require (is file requirement)\n"));
 +            continue;
 +        }
 +        it=rpmtsInitIterator(ts, RPMTAG_PROVIDENAME, N, 0);
 +        if (!it) {
-+            rpmMessage(RPMMESS_DEBUG, _("%s -> not found\n"),N);
++            rpmlog(RPMLOG_DEBUG, _("%s -> not found\n"),N);
 +            continue;
 +        }
-+        rpmMessage(RPMMESS_DEBUG, _("Iterator: %p\n"),it);
++        rpmlog(RPMLOG_DEBUG, _("Iterator: %p\n"),it);
 +        if (rpmdbGetIteratorCount(it)>1) {
-+            rpmMessage(RPMMESS_DEBUG, _("%s -> multiple (skipping)\n"),N);
++            rpmlog(RPMLOG_DEBUG, _("%s -> multiple (skipping)\n"),N);
 +            rpmdbFreeIterator(it);
 +            continue;
 +        }
@@ -324,12 +324,12 @@ diff -ur rpm.org/lib/rpmfc.c rpm/lib/rpmfc.c
 +        r=headerGetEntry(hdr,RPMTAG_NAME,NULL,(void **)&hname, NULL);
 +        assert(r<2);
 +        if (!strcmp(hname,N)) {
-+            rpmMessage(RPMMESS_DEBUG, _("%s -> %s (skipping)\n"),N,hname);
++            rpmlog(RPMLOG_DEBUG, _("%s -> %s (skipping)\n"),N,hname);
 +            rpmdbFreeIterator(it);
 +            continue;
 +        }
 +            
-+        rpmMessage(RPMMESS_DEBUG, "%s -> %s\n",N,hname);
++        rpmlog(RPMLOG_DEBUG, "%s -> %s\n",N,hname);
 +        
 +       	ds = rpmdsSingle(RPMTAG_REQUIRENAME, hname, "", RPMSENSE_FIND_REQUIRES);
 +		xx = rpmdsMerge(&fc->requires, ds);
@@ -368,8 +368,8 @@ diff -ur rpm.org/lib/rpmfc.c rpm/lib/rpmfc.c
 +    noautoreqfiles = rpmfcExpandRegexps("%{__noautoreqfiles}", &noautoreqfiles_c);
 +    fc->noautoprov = rpmfcExpandRegexps("%{__noautoprov}", &fc->noautoprov_c);
 +    fc->noautoreq = rpmfcExpandRegexps("%{__noautoreq}", &fc->noautoreq_c);
-+    rpmMessage(RPMMESS_DEBUG, _("%i _noautoprov patterns.\n"), fc->noautoprov_c);
-+    rpmMessage(RPMMESS_DEBUG, _("%i _noautoreq patterns.\n"), fc->noautoreq_c);
++    rpmlog(RPMLOG_DEBUG, _("%i _noautoprov patterns.\n"), fc->noautoprov_c);
++    rpmlog(RPMLOG_DEBUG, _("%i _noautoreq patterns.\n"), fc->noautoreq_c);
  
  /* Make sure something didn't go wrong previously! */
  assert(fc->fn != NULL);
@@ -383,7 +383,7 @@ diff -ur rpm.org/lib/rpmfc.c rpm/lib/rpmfc.c
 +		    for(j = 0; j < noautoprovfiles_c; j++) {
 +			    if (!regexec(&noautoprovfiles[j],
 +						    fc->fn[fc->ix] + buildroot_l, 0, NULL, 0)) {
-+				    rpmMessage(RPMMESS_NORMAL,
++				    rpmlog(RPMLOG_NOTICE,
 +						    _("skipping %s provides detection"
 +							    " (matches noautoprovfiles pattern #%i)\n"),
 +						    fc->fn[fc->ix], j);
@@ -394,7 +394,7 @@ diff -ur rpm.org/lib/rpmfc.c rpm/lib/rpmfc.c
 +		    for(j = 0; j < noautoreqfiles_c; j++) {
 +			    if (!regexec(&noautoreqfiles[j],
 +						    fc->fn[fc->ix] + buildroot_l, 0, NULL, 0)) {
-+				    rpmMessage(RPMMESS_NORMAL,
++				    rpmlog(RPMLOG_NOTICE,
 +						    _("skipping %s requires detection"
 +							    " (matches noautoreqfiles pattern #%i)\n"),
 +						    fc->fn[fc->ix], j);
