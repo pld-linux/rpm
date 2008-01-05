@@ -46,12 +46,12 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.0
-Release:	0.3
+Version:	5.0.0
+Release:	0.1
 License:	GPL
 Group:		Base
-Source0:	%{name}-20071029.tar.bz2
-# Source0-md5:	572527ed1757842b2d8cb264473d2dea
+Source0:	http://rpm5.org/files/rpm/rpm-5.0/%{name}-%{version}.tar.gz
+# Source0-md5:	4866053828c7258213f5711f3ca1dcd5
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -607,7 +607,7 @@ Esse pacote deve ser instalado se você quiser desenvolver programas em
 Python para manipular pacotes e bancos de dados RPM.
 
 %prep
-%setup -q -n %{name}
+%setup -q
 
 # APPLIED ALREADY?
 #%patch0 -p1
