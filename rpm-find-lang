@@ -121,8 +121,9 @@ done
 echo '%defattr(644,root,root,755)' > $MO_NAME
 
 if [ ! -f __find.files ] || [ "$TOP_DIR" -nt __find.files ]; then
-	find $TOP_DIR -type f -name '*.mo' | xargs -r file | egrep -v ', 1 messages$' | \
+	find $TOP_DIR -xtype f -name '*.mo' | xargs -r file -L | \
 	sed -e '
+		/, 1 messages$/d
 		s/:.*//
 		s:'"$TOP_DIR"'::' > __find.files
 else
@@ -144,11 +145,10 @@ fi
 		cat __find.files
 	fi
 ) | sed '
-'"$ALL_NAME$MO"'s:\(.*/share/locale/\)\([^/_]\+\)\(.*\.mo$\):%lang(\2) \1\2\3:
-'"$NO_ALL_NAME$MO"'s:\(.*/share/locale/\)\([^/]\+\)\(.*/'"$NAME"'\.mo$\):%lang(\2) \1\2\3:
-s:^\([^%].*\)::
-s:%lang(C) ::
-s:^\$::' | egrep -v '^$' >> $MO_NAME
+'"$ALL_NAME$MO"'s:\(.*/share/locale/\)\([^/]\+\)\(/.*\.mo$\):%lang(\2) \1\2\3:
+'"$NO_ALL_NAME$MO"'s:\(.*/share/locale/\)\([^/]\+\)\(/.*/'"$NAME"'\.mo$\):%lang(\2) \1\2\3:
+/^[^%]/d
+s:%lang(C) ::' >> $MO_NAME
 
 (
 	if [ "$ALL_NAME" ]; then
@@ -157,14 +157,13 @@ s:^\$::' | egrep -v '^$' >> $MO_NAME
 		cat __omf.files
 	fi
 ) | sed '
-'"$ALL_NAME$OMF"'s:\(.*/omf/[a-zA-Z0-9.\_\-]\+\)\(.*\-\)\(.*\)\(.*\.omf\):%lang(\3) \1\2\3\4:
-'"$NO_ALL_NAME$OMF"'s:\(.*/omf/'"$NAME"'\)\(.*\-\)\(.*\)\(.*\.omf\):%lang(\3) \1\2\3\4:
-s:^\([^%].*\)::
-s:%lang(C) ::
-s:^\$::' | egrep -v '^$' >> $MO_NAME
+'"$ALL_NAME$OMF"'s:\(.*/share/omf/[^/]\+/\)\(.*-\)\([^-]*\)\(\.omf\):%lang(\3) \1\2\3\4:
+'"$NO_ALL_NAME$OMF"'s:\(.*/share/omf/'"$NAME"'/\)\(.*-\)\([^-]*\)\(\.omf\):%lang(\3) \1\2\3\4:
+/^[^%]/d
+s:%lang(C) ::' >> $MO_NAME
 
 if [ ! -f __find.dirs ] || [ "$TOP_DIR" -nt __find.dirs ]; then
-	find $TOP_DIR -type d | sed 's:'"$TOP_DIR"'::' > __find.dirs
+	find $TOP_DIR -mindepth 1 -type d | sed 's:'"$TOP_DIR"'::' > __find.dirs
 else
 	echo "$PROG: Using cached __find.dirs"
 fi
@@ -177,14 +176,11 @@ fi
 	fi
 ) | sed '
 '"$NO_ALL_NAME$GNOME"'s:\(.*/gnome/help/'"$NAME"'$\):%dir \1:
-'"$NO_ALL_NAME$GNOME"'s:\(.*/gnome/help/'"$NAME"'/[a-zA-Z0-9.\_\-]/.\+\)::
-'"$NO_ALL_NAME$GNOME"'s:\(.*/gnome/help/'"$NAME"'\/\)\([^/]\+\):%lang(\2) \1\2:
-'"$ALL_NAME$GNOME"'s:\(.*/gnome/help/[a-zA-Z0-9.\_\-]\+$\):%dir \1:
-'"$ALL_NAME$GNOME"'s:\(.*/gnome/help/[a-zA-Z0-9.\_\-]\+/[a-zA-Z0-9.\_\-]/.\+\)::
-'"$ALL_NAME$GNOME"'s:\(.*/gnome/help/[a-zA-Z0-9.\_\-]\+\/\)\([^/]\+\):%lang(\2) \1\2:
-s:%lang(.*) .*/gnome/help/[a-zA-Z0-9.\_\-]\+/[a-zA-Z0-9.\_\-]\+/.*::
-s:^\([^%].*\)::
-s:%lang(C) ::' | egrep -v '^$' >> $MO_NAME
+'"$NO_ALL_NAME$GNOME"'s:\(.*/gnome/help/'"$NAME"'/\)\([^/]\+\)$:%lang(\2) \1\2:
+'"$ALL_NAME$GNOME"'s:\(.*/gnome/help/[^/]\+$\):%dir \1:
+'"$ALL_NAME$GNOME"'s:\(.*/gnome/help/[^/]\+/\)\([^/]\+\)$:%lang(\2) \1\2:
+/^[^%]/d
+s:%lang(C) ::' >> $MO_NAME
 
 (
 	if [ "$ALL_NAME" ]; then
@@ -193,12 +189,10 @@ s:%lang(C) ::' | egrep -v '^$' >> $MO_NAME
 		cat __find.dirs
 	fi
 ) | sed '
-'"$NO_ALL_NAME$KDE"'s:\(.*/doc/kde/HTML/\)\([^/_]\+\)\(.*/'"$NAME"'/\)::
-'"$NO_ALL_NAME$KDE"'s:\(.*/doc/kde/HTML/\)\([^/_]\+\)\(.*/'"$NAME"'\)$:%lang(\2) \1\2\3:
-'"$ALL_NAME$KDE"'s:\(.*/doc/kde/HTML/\)\([^/_]\+\)\(.*/[a-zA-Z0-9.\_\-]\+/\)::
-'"$ALL_NAME$KDE"'s:\(.*/doc/kde/HTML/\)\([^/_]\+\)\(.*/[a-zA-Z0-9.\_\-]\+$\):%lang(\2) \1\2\3:
-s:^\([^%].*\)::
-s:%lang(C) ::' | egrep -v '^$' >> $MO_NAME
+'"$NO_ALL_NAME$KDE"'s:\(.*/doc/kde/HTML/\)\([^/]\+\)\(/'"$NAME"'\)$:%lang(\2) \1\2\3:
+'"$ALL_NAME$KDE"'s:\(.*/doc/kde/HTML/\)\([^/]\+\)\(/[^/]\+\)$:%lang(\2) \1\2\3:
+/^[^%]/d
+s:%lang(C) ::' >> $MO_NAME
 
 (
 	if [ "$ALL_NAME" ]; then
@@ -207,10 +201,10 @@ s:%lang(C) ::' | egrep -v '^$' >> $MO_NAME
 		cat __find.dirs
 	fi
 ) | sed '
-'"$NO_ALL_NAME$OMF"'s:\(.*/omf/'"$NAME"'$\):%dir \1:
-'"$ALL_NAME$OMF"'s:\(.*/omf/[a-zA-Z0-9.\_\-]\+$\):%dir \1:
-s:^\([^%].*\)::
-s:%lang(C) ::' | egrep -v '^$' >> $MO_NAME
+'"$NO_ALL_NAME$OMF"'s:\(.*/share/omf/'"$NAME"'$\):%dir \1:
+'"$ALL_NAME$OMF"'s:\(.*/share/omf/[^/]\+$\):%dir \1:
+/^[^%]/d
+s:%lang(C) ::' >> $MO_NAME
 
 if [ "$(egrep -v '(^%defattr|^$)' $MO_NAME | wc -l)" -le 0 ]; then
 	echo >&2 "Error: international files not found for $NAME!"
