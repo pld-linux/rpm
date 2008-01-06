@@ -412,9 +412,9 @@ if [ -d "$RPM_BUILD_ROOT" ]; then \
 			echo "DONE"; \
 		fi; \
 	fi; \
-    filelist_all=%{?_autostripall:`find $RPM_BUILD_ROOT -type f -regex "%{_autostripall}"} \
-    filelist_unneeded=%{?_autostripunneeded:`find $RPM_BUILD_ROOT -type f -regex "%{_autostripunneeded}"} \
-    filelist_debug=%{?_autostripdebug:`find $RPM_BUILD_ROOT -type f -regex "%{_autostripdebug}"} \
+    filelist_all=%{?_autostripall:`find $RPM_BUILD_ROOT -type f -regex "%{_autostripall}"`}; \
+    filelist_unneeded=%{?_autostripunneeded:`find $RPM_BUILD_ROOT -type f -regex "%{_autostripunneeded}"`}; \
+    filelist_debug=%{?_autostripdebug:`find $RPM_BUILD_ROOT -type f -regex "%{_autostripdebug}"`}; \
 	if [ -n "$filelist_all" ]; then \
 		printf "Stripping everything from %d additional files..." $(echo "$filelist_all" | wc -l); \
 		chmod u+w $elfexelist; \
