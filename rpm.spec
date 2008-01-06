@@ -173,7 +173,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_noPayloadPrefix	1
 
 # don't require very fresh rpm.macros to build
-%define		__gettextize gettextize --copy --force --intl ; cp -f po/Makevars{.template,}
+%define		__gettextize gettextize --copy --force --no-changelog; cp -f po/Makevars{.template,}
 %define		ix86	i386 i486 i586 i686 athlon pentium3 pentium4
 %define		x8664	amd64 ia32e x86_64
 
