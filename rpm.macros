@@ -373,7 +373,13 @@ unset DISPLAY ||:\
 #
 # Requires: find, awk, strip, cut, xargs
 #
-#%no_install_post_strip	1
+# Special macros which affect this process:
+#%no_install_post_strip	1		# disable stripping at all
+#%_noautostrip			regexp	# exclude files matching (anchored!) regex from stripping
+#%_autostripall			regexp	# strip files matching (anchored!) regex using plain strip
+#%_autostripunneeded	regexp	# strip files matching (anchored!) regex using strip --strip-unneeded
+#%_autostripdebug		regexp	# strip files matching (anchored!) regex using strip --strip-debug
+#
 %__spec_install_post_strip {%{!?debug: \
 %{!?no_install_post_strip:__spec_install_post_strip() { \
 if [ -d "$RPM_BUILD_ROOT" ]; then \
@@ -392,7 +398,7 @@ if [ -d "$RPM_BUILD_ROOT" ]; then \
 		filetypes=`echo "$filelist" | xargs -r -d'\\n' file`; \
 		elfexelist=`echo "$filetypes" | awk -F: '/ELF.*executable/ {print $1}'`; \
 		elfsharedlist=`echo "$filetypes" | awk -F: '/LF.*shared object/ {print $1}'`; \
-		archiveslist=`echo "$filetypes" | awk -F '/current ar archive/ {print $1}'`; \
+		archiveslist=`echo "$filetypes" | awk -F: '/current ar archive/ {print $1}'`; \
 		if [ -n "$elfexelist" ]; then \
 			printf "Stripping %d ELF executables..." $(echo "$elfexelist" | wc -l); \
 			chmod u+w $elfexelist; \
@@ -406,7 +412,7 @@ if [ -d "$RPM_BUILD_ROOT" ]; then \
 			echo "DONE"; \
 		fi; \
 		if [ -n "$archiveslist" ]; then \
-			printf "Stripping %d ar archives..." $(echo "$elfsharedlist" | wc -l); \
+			printf "Stripping %d ar archives..." $(echo "$archiveslist" | wc -l); \
 			chmod u+w $archiveslist; \
 			%{__strip} --strip-debug --remove-section=.note --remove-section=.comment $archiveslist; \
 			echo "DONE"; \
@@ -417,19 +423,19 @@ if [ -d "$RPM_BUILD_ROOT" ]; then \
     filelist_debug=%{?_autostripdebug:`find $RPM_BUILD_ROOT -type f -regex "%{_autostripdebug}"`}; \
 	if [ -n "$filelist_all" ]; then \
 		printf "Stripping everything from %d additional files..." $(echo "$filelist_all" | wc -l); \
-		chmod u+w $elfexelist; \
+		chmod u+w $filelist_all; \
 		%{__strip} --remove-section=.note --remove-section=.comment $filelist_all; \
 		echo "DONE"; \
 	fi; \
 	if [ -n "$filelist_unneeded" ]; then \
 		printf "Stripping unneeded from %d additional files..." $(echo "$filelist_unneeded" | wc -l); \
-		chmod u+w $elfsharedlist; \
+		chmod u+w $filelist_unneeded; \
 		%{__strip} --strip-unneeded --remove-section=.note --remove-section=.comment $filelist_unneeded; \
 		echo "DONE"; \
 	fi; \
 	if [ -n "$filelist_debug" ]; then \
 		printf "Stripping debuginfo from %d additional files..." $(echo "$filelist_debug" | wc -l); \
-		chmod u+w $archiveslist; \
+		chmod u+w $filelist_debug; \
 		%{__strip} --strip-debug --remove-section=.note --remove-section=.comment $filelist_debug; \
 		echo "DONE"; \
 	fi; \
@@ -440,7 +446,10 @@ fi; }; __spec_install_post_strip } } }
 #
 # Requires: find, awk, cut, xargs, chrpath, uname
 #
-#%no_install_post_chrpath	1
+# Special macros which affect this process
+#%no_install_post_chrpath	1	# disable chrpath at all
+#%_noautochrpath	regex		# exclude files matching (anchored!) regex from chrpath
+#
 %__spec_install_post_chrpath {%{!?debug: \
 %{!?no_install_post_chrpath: __spec_install_post_chrpath() { \
 if [ -d "$RPM_BUILD_ROOT" ]; then \
