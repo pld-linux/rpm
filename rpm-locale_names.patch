@@ -1,0 +1,14 @@
+removed es, pl
+s/no/nb/
+s/sr/sr@Latn/
+--- rpm-4.4.2.2/configure.ac.orig	2008-01-07 13:12:26.291234077 +0100
++++ rpm-4.4.2.2/configure.ac	2008-01-07 13:15:02.767362661 +0100
+@@ -7,7 +7,7 @@
+ AM_INIT_AUTOMAKE([foreign tar-ustar])
+ 
+ dnl Set of available languages.
+-ALL_LINGUAS="cs da de es fi fr gl is it ja ko no pl pt pt_BR ro ru sk sl sr sv tr zh_TW"
++ALL_LINGUAS="cs da de fi fr gl is it ja ko nb pt pt_BR ro ru sk sl sr@Latn sv tr zh_TW"
+ 
+ AC_AIX
+ AC_MINIX
