@@ -72,7 +72,7 @@ Patch13:	%{name}-bb-and-short-circuit.patch
 Patch14:	%{name}-etc_dir.patch
 Patch15:	%{name}-system_libs-more.patch
 Patch16:	%{name}-php-deps.patch
-
+Patch17:	%{name}-locale_names.patch
 Patch18:	%{name}-perl_req.patch
 Patch19:	%{name}-error-fatal.patch
 Patch20:	%{name}-magic-usesystem.patch
@@ -622,7 +622,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch14 -p1
 %patch15 -p1
 %patch16 -p1
-
+%patch17 -p1
 %patch18 -p1
 #%patch19 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
