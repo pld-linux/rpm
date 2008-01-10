@@ -995,6 +995,18 @@ rm -f $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log,xinetd}
 # manuals for utils dropped in 4.4.8 (?)
 #rm -f $RPM_BUILD_ROOT%{_mandir}/{,*/}/man8/{rpmcache,rpmgraph}.8
 
+# unpackaged in 4.4.9, reasons unknown
+rm $RPM_BUILD_ROOT%{_bindir}/rpm{db,e,i,query,sign,u,verify}
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/rpm{d,e,i,k,q,u,v}
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/symclash.{sh,py}
+rm $RPM_BUILD_ROOT%{perl_archlib}/perllocal.pod
+rm $RPM_BUILD_ROOT%{perl_sitearch}/RPM.pm
+rm $RPM_BUILD_ROOT%{perl_sitearch}/auto/RPM/.packlist
+rm $RPM_BUILD_ROOT%{perl_sitearch}/auto/RPM/RPM.bs
+rm $RPM_BUILD_ROOT%{perl_sitearch}/auto/RPM/RPM.so
+rm $RPM_BUILD_ROOT%{_prefix}/local/man/man3/RPM.3pm
+rm $RPM_BUILD_ROOT%{_mandir}/{,ja,pl}/man8/rpm{cache,graph}.8
+
 %find_lang %{name}
 
 rm -rf manual
