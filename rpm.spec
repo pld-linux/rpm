@@ -1016,6 +1016,9 @@ rm -f manual/Makefile*
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post
+rm -f /var/lib/rpm/__db*
+
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
 
