@@ -758,7 +758,7 @@ sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu
 	--enable-shared \
 	--enable-static \
 	%{!?with_apidocs:--without-apidocs} \
-	%{?with_python:--with-python=2.5} \
+	%{?with_python:--with-python=%{py_ver}} \
 	%{!?with_python:--without-python} \
 	%{!?with_selinux:--without-selinux} \
 	--without-db
