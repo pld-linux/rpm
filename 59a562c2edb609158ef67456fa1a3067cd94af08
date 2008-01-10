@@ -1,0 +1,1 @@
+- detect libtool files using file binary; fixes libqt-mt.la missdetection
