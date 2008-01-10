@@ -1,0 +1,8 @@
+- rel 12; On athlon machine used as i486 builder:
+  rpmbuild -bb test.spec --without x --target=i486-pld-linux
+  makes rpm set optflags: -O2 -fno-strict-aliasing -fwrapv -march=athlon
+
+  rpmbuild -bb test.spec --target=i486-pld-linux  --without x
+  makes rpm set optflags: -O2 -fno-strict-aliasing -fwrapv -march=i486
+
+  Added /etc/rpm/platform fixes that.
