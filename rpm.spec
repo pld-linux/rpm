@@ -1016,7 +1016,7 @@ rm -f manual/Makefile*
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
+%triggerpostun lib -- %{name}-lib < %{version}
 rm -f /var/lib/rpm/__db*
 
 %post	lib -p /sbin/ldconfig
