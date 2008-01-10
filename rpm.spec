@@ -37,6 +37,7 @@ ERROR
 %define	reqdb_ver	4.6.18
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
+%define	find_lang_rev	1.25
 %define	sover	5.0
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
@@ -476,7 +477,7 @@ Requires:	sed
 Requires:	sh-utils
 Requires:	tar
 Requires:	textutils
-Provides:	rpmbuild(find_lang) = 1.25
+Provides:	rpmbuild(find_lang) = %{find_lang_rev}
 Provides:	rpmbuild(monoautodeps)
 Provides:	rpmbuild(noauto) = 3
 %ifarch %{x8664}
@@ -679,6 +680,12 @@ awk -f %{SOURCE6} %{SOURCE1}
 #done
 
 %build
+rev=$(awk '/^#.*Id:.*/{print $4}' scripts/find-lang.sh)
+if [ "$rev" != "%find_lang_rev" ]; then
+	: Update find_lang_rev define to $rev, and retry
+	exit 1
+fi
+
 %{__libtoolize}
 %{__autopoint}
 %{__aclocal}
