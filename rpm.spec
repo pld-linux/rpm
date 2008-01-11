@@ -1019,6 +1019,13 @@ rm -rf $RPM_BUILD_ROOT
 %triggerpostun lib -- %{name}-lib < %{version}
 rm -f /var/lib/rpm/__db*
 
+%pretrans
+# this needs to be a dir
+if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
+	mv %{_sysconfdir}/rpm/sysinfo{,.rpmsave}
+	mkdir %{_sysconfdir}/rpm/sysinfo
+fi
+
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
 
