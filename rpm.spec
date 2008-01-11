@@ -870,7 +870,14 @@ install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
 install %{SOURCE17} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
-install %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
+
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Conflictname
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Dirnames
+install %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Obsoletename
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Providename
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
 
 # obsolete but still installed
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/rpmrc
@@ -1044,8 +1051,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
+%dir %{_sysconfdir}/rpm/sysinfo
 # these are ok to be replaced
-%config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo
+%config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo/*
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/platform
 
 
