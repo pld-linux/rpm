@@ -49,7 +49,7 @@ Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.0.0
 Release:	0.1
-License:	GPL
+License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.0/%{name}-%{version}.tar.gz
 # Source0-md5:	4866053828c7258213f5711f3ca1dcd5
