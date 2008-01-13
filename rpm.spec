@@ -37,7 +37,7 @@ Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
 Release:	20
-License:	GPL
+License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
 # Source0-md5:	210b768006e7d88dd8a3bcd498ea27f6
