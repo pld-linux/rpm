@@ -174,6 +174,7 @@ Requires:	%{name}-base = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	popt >= %{reqpopt_ver}
+Obsoletes:	rpm-getdeps
 %{!?with_static:Obsoletes:	rpm-utils-static}
 Conflicts:	glibc < 2.2.92
 # db4.6 poldek needed
