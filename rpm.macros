@@ -811,6 +811,11 @@ fi; \
 # -e   - send to stderr instead of stdout
 # -n   - no show banner (overrides -t)
 # -t   - show only, if RPM_SCRIPTVERBOSITY >= n; default n=5
+#
+# Tests:
+# (rpm -E '%banner -e banner <<EOF'; echo -e 'hi\nEOF') > m; sh -x m
+# rpm -E 'date | %banner -e banner' > m; sh -x m
+#
 %banner(aent:) ( \
 RPM_SCRIPTVERBOSITY=5 \
 [ -r /etc/sysconfig/rpm ] && . /etc/sysconfig/rpm \
@@ -819,7 +824,8 @@ if [ -x /usr/bin/banner.sh ]; then \
 else \
 	CMD="cat%{-e: >&2}" \
 fi \
-eval $CMD %{?2:%2}%{?3: %3})%{nil}
+eval $CMD %{?2:%2}%{?3: %3}) \
+%{nil}
 
 # useradd/groupadd macros
 # Author: Elan Ruusamäe <glen@pld-linux.org>
