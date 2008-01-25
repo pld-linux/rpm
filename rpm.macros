@@ -205,40 +205,6 @@ CXXFLAGS="%{rpmcxxflags}" \
 	%{?configure_cache:--cache-file=%{configure_cache_file:-%{buildroot}.configure.cache}} \
 }
 
-# ------------------------------------------------------------------------
-# Overloading of some basic macros
-%prep \
-%%prep\
-export LC_ALL=C\
-export LANG=C\
-unset LINGUAS ||:\
-unset LANGUAGE ||:\
-unset LC_MESSAGES ||:\
-unset DISPLAY ||:\
-%{nil}
-
-%build %%build\
-export LC_ALL=C\
-export LANG=C\
-unset LINGUAS ||:\
-unset LANGUAGE ||:\
-unset LC_MESSAGES ||:\
-unset DISPLAY ||:\
-%{nil}
-
-%install \
-%if 0%{?_enable_debug_packages}\
-%{?buildsubdir:%{debug_package}}\
-%endif\
-%%install\
-export LC_ALL=C\
-export LANG=C\
-unset LINGUAS ||:\
-unset LANGUAGE ||:\
-unset LC_MESSAGES ||:\
-unset DISPLAY ||:\
-%{nil}
-
 # Location of autoconf macros
 %_aclocaldir	%(aclocal --print-ac-dir)
 
