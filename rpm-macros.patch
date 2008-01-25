@@ -1,5 +1,5 @@
---- rpm-4.4.8/macros.in.orig	2007-04-08 20:24:47.206783474 +0200
-+++ rpm-4.4.8/macros.in	2007-04-08 20:36:08.925632417 +0200
+--- rpm-4.4.8/macros.in	2007-04-08 20:36:08.925632417 +0200
++++ rpm-4.4.9/macros.in	2008-01-25 02:16:46.248708080 +0200
 @@ -206,7 +206,7 @@
  %endif\
  %{nil}
@@ -54,7 +54,23 @@
  
  #==============================================================================
  # ---- Database configuration macros.
-@@ -1127,17 +1127,17 @@
+@@ -991,9 +991,12 @@
+   %{?_javaclasspath:CLASSPATH=\"%{_javaclasspath}\"\
+   export CLASSPATH}\
+   unset PERL_MM_OPT || :\
+-  LANG=C\
+-  export LANG\
+-  unset DISPLAY || :\
++  export LC_ALL=C\
++  export LANG=C\
++  unset LINGUAS ||:\
++  unset LANGUAGE ||:\
++  unset LC_MESSAGES ||:\
++  unset DISPLAY ||:\
+   \
+   %{verbose:set -x}%{!verbose:exec > /dev/null}\
+   umask 022\
+@@ -1127,17 +1130,17 @@
  %_exec_prefix		%{_prefix}
  %_bindir		%{_exec_prefix}/bin
  %_sbindir		%{_exec_prefix}/sbin
@@ -78,8 +94,7 @@
  %_localedir		%{_datadir}/locale
  
  #==============================================================================
-@@ -1428,7 +1428,25 @@
- # helpers are also used by %{_usrlibrpm}/rpmdeps {--provides|--requires}.
+@@ -1429,6 +1432,24 @@
  #%__executable_provides	%{_usrlibrpm}/executabledeps.sh --provides
  #%__executable_requires	%{_usrlibrpm}/executabledeps.sh --requires
 -%__scriptlet_requires	/bin/bash --rpm-requires
