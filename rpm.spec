@@ -25,6 +25,7 @@
 %define	reqdb_ver	4.5.20
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
+%define	find_lang_rev	1.25
 %define	sover	4.4
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
@@ -35,8 +36,8 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	13
-License:	GPL
+Release:	14
+License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
 # Source0-md5:	210b768006e7d88dd8a3bcd498ea27f6
@@ -97,6 +98,7 @@ Patch35:	%{name}-perl_req-INC_dirs.patch
 Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
 Patch38:	%{name}-rpm5-patchset-8021.patch
+Patch39:	%{name}-popt-coreutils.patch
 Patch41:	%{name}-reduce-stack-usage.patch
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
 Patch43:	%{name}-rpm5-patchset-8637.patch
@@ -172,6 +174,7 @@ Requires:	%{name}-base = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	popt >= %{reqpopt_ver}
+Obsoletes:	rpm-getdeps
 %{!?with_static:Obsoletes:	rpm-utils-static}
 Conflicts:	glibc < 2.2.92
 # db4.6 poldek needed
@@ -274,10 +277,12 @@ Requires:	db >= %{reqdb_ver}
 %{?with_selinux:Requires:	libselinux >= 1.18}
 %{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
 Requires:	popt >= %{reqpopt_ver}
+%{?with_suggest_tags:Suggests:	lzma >= 1:4.42.0}
 Obsoletes:	rpm-libs
+# avoid installing with incompatible (non-tukaani) lzma
+Conflicts:	lzma < 1:4.42.0
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
-%{?with_suggest_tags:Suggests:	lzma >= 1:4.42.0}
 
 %description lib
 RPMs library.
@@ -450,12 +455,10 @@ Summary(ru.UTF-8):	Скрипты и утилиты, необходимые дл
 Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для побудови пакетів
 Group:		Applications/File
 Requires(pre):	findutils
-Requires:	%{name}-build-macros >= 1.314
+Requires:	%{name}-build-macros >= 1.417
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
-# we need fixed binutils for -feliminate-dwarf2-dups
-Requires:	binutils >= 3:2.17.50.0.3-2
 Requires:	bzip2
 Requires:	chrpath >= 0.10-4
 Requires:	cpio
@@ -475,7 +478,7 @@ Requires:	sed
 Requires:	sh-utils
 Requires:	tar
 Requires:	textutils
-Provides:	rpmbuild(find_lang) = 1.23
+Provides:	rpmbuild(find_lang) = %{find_lang_rev}
 Provides:	rpmbuild(monoautodeps)
 Provides:	rpmbuild(noauto) = 3
 %ifarch %{x8664}
@@ -672,6 +675,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch36 -p1
 %patch37 -p1
 %patch38 -p1
+%patch39 -p1
 %patch41 -p1
 %patch42 -p1
 %patch43 -p1
@@ -720,6 +724,12 @@ for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
 done
 
 %build
+rev=$(awk '/^#.*Id:.*/{print $4}' scripts/find-lang.sh)
+if [ "$rev" != "%find_lang_rev" ]; then
+	: Update find_lang_rev define to $rev, and retry
+	exit 1
+fi
+
 %if %{with system_libmagic}
 rm -rf file
 %else
@@ -754,7 +764,7 @@ sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu
 	--enable-shared \
 	--enable-static \
 	%{!?with_apidocs:--without-apidocs} \
-	%{?with_python:--with-python=2.5} \
+	%{?with_python:--with-python=%{py_ver}} \
 	%{!?with_python:--without-python} \
 	%{!?with_selinux:--without-selinux} \
 	--without-db
@@ -861,7 +871,14 @@ install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
 install %{SOURCE17} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
-install %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
+
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Conflictname
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Dirnames
+install %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Obsoletename
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Providename
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
 
 # obsolete but still installed
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/rpmrc
@@ -986,6 +1003,18 @@ rm -f $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log,xinetd}
 # manuals for utils dropped in 4.4.8 (?)
 #rm -f $RPM_BUILD_ROOT%{_mandir}/{,*/}/man8/{rpmcache,rpmgraph}.8
 
+# unpackaged in 4.4.9, reasons unknown
+rm $RPM_BUILD_ROOT%{_bindir}/rpm{db,e,i,query,sign,u,verify}
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/rpm{d,e,i,k,q,u,v}
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/symclash.{sh,py}
+rm $RPM_BUILD_ROOT%{perl_archlib}/perllocal.pod
+rm $RPM_BUILD_ROOT%{perl_sitearch}/RPM.pm
+rm $RPM_BUILD_ROOT%{perl_sitearch}/auto/RPM/.packlist
+rm $RPM_BUILD_ROOT%{perl_sitearch}/auto/RPM/RPM.bs
+rm $RPM_BUILD_ROOT%{perl_sitearch}/auto/RPM/RPM.so
+rm $RPM_BUILD_ROOT%{_prefix}/local/man/man3/RPM.3pm
+rm $RPM_BUILD_ROOT%{_mandir}/{,ja,pl}/man8/rpm{cache,graph}.8
+
 %find_lang %{name}
 
 rm -rf manual
@@ -994,6 +1023,16 @@ rm -f manual/Makefile*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%triggerpostun lib -- %{name}-lib < %{version}
+rm -f /var/lib/rpm/__db*
+
+%pretrans
+# this needs to be a dir
+if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
+	mv -f %{_sysconfdir}/rpm/sysinfo{,.rpmsave}
+	mkdir %{_sysconfdir}/rpm/sysinfo
+fi
 
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
@@ -1013,8 +1052,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
+%dir %{_sysconfdir}/rpm/sysinfo
 # these are ok to be replaced
-%config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo
+%config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo/*
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/platform
 
 
