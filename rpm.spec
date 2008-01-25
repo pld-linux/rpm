@@ -119,7 +119,8 @@ Patch60:	%{name}-as_needed-fix.patch
 Patch61:	%{name}-locale.patch
 Patch62:	%{name}-cpuinfo.patch
 Patch63:	%{name}-javadeps.patch
-Patch64:	http://wraptastic.org/pub/jbj/%{name}-4.4.2-suggests.patch
+# http://wraptastic.org/pub/jbj/%{name}-4.4.2-suggests.patch
+Patch64:	%{name}-4.4.2-suggests.patch
 Patch65:	%{name}-man_pl.patch
 URL:		http://wraptastic.org/
 BuildRequires:	autoconf >= 2.52
