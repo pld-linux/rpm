@@ -1,5 +1,5 @@
---- rpm-4.4.2/macros.in~	2006-01-17 20:55:45.000000000 +0200
-+++ rpm-4.4.2/macros.in	2006-01-17 20:57:51.000000000 +0200
+--- rpm-4.4.2/macros.in	2006-01-17 20:57:51.000000000 +0200
++++ rpm-4.4.2/macros.in	2008-01-25 02:28:21.000000000 +0200
 @@ -223,7 +223,7 @@
  %_tmppath		%{_var}/tmp
  
@@ -20,7 +20,26 @@
  
  #	The signature to use and the location of configuration files for
  #	signing packages with PGP.
-@@ -1019,6 +1019,7 @@
+@@ -863,10 +863,17 @@
+   export RPM_BUILD_ROOT}\
+   %{?_javaclasspath:CLASSPATH=\"%{_javaclasspath}\"\
+   export CLASSPATH}\
++  unset PERL_MM_OPT || :\
++  export LC_ALL=C\
++  export LANG=C\
++  unset LINGUAS ||:\
++  unset LANGUAGE ||:\
++  unset LC_MESSAGES ||:\
++  unset DISPLAY ||:\
+   \
+   %{verbose:set -x}%{!verbose:exec > /dev/null}\
+   umask 022\
+-  cd %{u2p:%{_builddir}}\
++  cd '%{u2p:%{_builddir}}'\
+ 
+ 
+ #%___build_body		%{nil}
+@@ -1019,6 +1026,7 @@
  %_oldincludedir		/usr/include
  %_infodir		%{_prefix}/info
  %_mandir		%{_prefix}/man
@@ -28,7 +47,7 @@
  
  #==============================================================================
  # ---- config.guess platform macros.
-@@ -1157,36 +1157,6 @@
+@@ -1156,36 +1164,6 @@
    %{-C:cd ${_mydir}; unset _mydir}
  
  #------------------------------------------------------------------------------
@@ -65,7 +84,7 @@
  # arch macro for all Intel i?86 compatibile processors
  #  (Note: This macro (and it's analogues) will probably be obsoleted when
  #   rpm can use regular expressions against target platforms in macro
-@@ -1277,4 +1277,17 @@
+@@ -1306,4 +1284,17 @@
  %find_lang	@RPMCONFIGDIR@/find-lang.sh %{buildroot}
  
 +# PLD rpm macros
