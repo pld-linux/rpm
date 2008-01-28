@@ -124,6 +124,7 @@ Patch63:	%{name}-lzma-size_t.patch
 Patch64:	%{name}-tar_as_secondary_source.patch
 Patch65:	%{name}-man_pl.patch
 Patch66:	%{name}-lzma-tukaani.patch
+Patch67:	%{name}-v3-support.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -703,6 +704,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch64 -p1
 %patch65 -p1
 %patch66 -p1
+%patch67 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
