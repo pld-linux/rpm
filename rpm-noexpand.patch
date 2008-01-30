@@ -9,8 +9,17 @@
  	    nextPart = PART_NONE;
  	    break;
  	}
---- rpm-4.3/build/parseSpec.c.wiget	Thu May 15 18:15:51 2003
-+++ rpm-4.3/build/parseSpec.c	Fri May 16 00:08:57 2003
+--- rpm-4.3/build/parseSpec.c	Fri May 16 00:08:57 2003
++++ rpm-5.0.1/build/parseSpec.c	2008-01-31 00:43:18.388524335 +0200
+@@ -168,7 +168,7 @@
+ 
+ /**
+  */
+-static int copyNextLineFromOFI(Spec spec, OFI_t * ofi)
++static int copyNextLineFromOFI(Spec spec, OFI_t * ofi, int strip)
+ 	/*@globals rpmGlobalMacroContext, h_errno,
+ 		fileSystem @*/
+ 	/*@modifies spec->nextline, spec->nextpeekc, spec->lbuf, spec->line,
 @@ -230,12 +230,16 @@
  /*@=mods@*/
  
@@ -36,6 +45,15 @@
      if (!spec->readStack->reading && !strncmp("%if", s, sizeof("%if")-1)) {
  	match = 0;
      } else if (! strncmp("%ifarch", s, sizeof("%ifarch")-1)) {
+@@ -346,7 +351,7 @@
+ 
+       /* Copy next file line into the spec line buffer */
+ 
+-      if ((rc = copyNextLineFromOFI(spec, ofi)) != 0) {
++      if ((rc = copyNextLineFromOFI(spec, ofi, strip)) != 0) {
+ 	if (rc == RPMRC_FAIL)
+ 	    goto retry;
+ 	return rc;
 @@ -354,6 +359,7 @@
  	ofi = spec->fileStack;
  	goto retry;
