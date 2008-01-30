@@ -86,7 +86,7 @@ Source109:	%{name}-macros-x86_64
 Source110:	%{name}-macros-ia32e
 Source111:	%{name}-macros-amd64
 
-Patch0:		%{name}-pl.po.patch
+#Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-man_pl.patch
 Patch3:		%{name}-rpmpopt.patch
 Patch4:		%{name}-perl-macros.patch
@@ -107,14 +107,12 @@ Patch23:	%{name}-pkgconfigdeps.patch
 Patch26:	%{name}-notsc.patch
 Patch27:	%{name}-hack-norpmlibdep.patch
 
-Patch31:	%{name}-missing-prototypes.patch
 Patch32:	%{name}-pld-autodep.patch
 Patch34:	%{name}-epoch0.patch
 Patch35:	%{name}-perl_req-INC_dirs.patch
 Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
 
-Patch41:	%{name}-reduce-stack-usage.patch
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
 
 Patch46:	%{name}-mono.patch
@@ -610,7 +608,7 @@ Python para manipular pacotes e bancos de dados RPM.
 %prep
 %setup -q
 
-# APPLIED ALREADY?
+# APPLIED ALREADY? translationproject.org is used now
 #%patch0 -p1
 %patch1 -p1
 %patch3 -p1
@@ -621,7 +619,7 @@ Python para manipular pacotes e bancos de dados RPM.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
-# CHECK ME
+# CHECK ME - macrofiles: ~/etc could be used
 #%patch14 -p1
 %patch16 -p1
 %patch18 -p1
@@ -643,18 +641,13 @@ install %{SOURCE12} scripts/perl.prov
 %patch26 -p1
 %endif
 %patch27 -p1
-# CHECK ME
-#%patch31 -p1
 %patch32 -p1
 %patch34 -p1
 %patch35 -p0
 %patch36 -p1
 %patch37 -p1
-# CHECK ME
-#%patch41 -p1
 %patch42 -p1
-# CHECK ME, PROBABLY WILL NEED TO HANLE IN OTHER WAY since rpmfcSCRIPT already handles mono
-#%patch46 -p1
+%patch46 -p1
 %patch47 -p1
 # OLD COMMENTED OUT
 #%patch52 -p1
