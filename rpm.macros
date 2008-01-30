@@ -1233,13 +1233,6 @@ for cfg in ${cfgs:-dist}; do                                        \
 	ln -sf %{_kernelsrcdir}/config-$cfg o/.config					\
 	ln -sf %{_kernelsrcdir}/Module.symvers-$cfg o/Module.symvers	\
 	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h o/include/linux/autoconf.h \
-%ifarch ppc ppc64													\
-	install -d o/include/asm										\
-	[ ! -d %{_kernelsrcdir}/include/asm-%{_target_base_arch} ] || ln -snf %{_kernelsrcdir}/include/asm-%{_target_base_arch}/* o/include/asm \
-	[ ! -d %{_kernelsrcdir}/include/asm-powerpc ] || ln -snf %{_kernelsrcdir}/include/asm-powerpc/* o/include/asm \
-%else																\
-	ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} o/include/asm \
-%endif																\
 																	\
 	set +x															\
 	[ -z "$PATCH_SH" ] || echo "$PATCH_SH" | %__spec_build_shell	\
