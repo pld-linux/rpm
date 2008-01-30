@@ -1,6 +1,6 @@
---- rpm-4.4.3/build/parseChangelog.c.orig	2005-11-12 01:20:12.000000000 +0100
-+++ rpm-4.4.3/build/parseChangelog.c	2005-11-18 19:46:50.357322048 +0100
-@@ -255,7 +255,7 @@
+--- rpm-5.0.1.noexpand/build/parseChangelog.c	2008-01-31 01:18:18.506330692 +0200
++++ rpm-5.0.1/build/parseChangelog.c	2008-01-31 01:20:45.467027848 +0200
+@@ -318,7 +318,7 @@
  	line = xstrtolocale(line);
  	appendStringBuf(sb, spec->line);
  	line = _free(line);
@@ -9,8 +9,8 @@
  	    nextPart = PART_NONE;
  	    break;
  	}
---- rpm-4.3/build/parseSpec.c	Fri May 16 00:08:57 2003
-+++ rpm-5.0.1/build/parseSpec.c	2008-01-31 00:43:18.388524335 +0200
+--- rpm-5.0.1.noexpand/build/parseSpec.c	2008-01-31 01:18:18.509664191 +0200
++++ rpm-5.0.1/build/parseSpec.c	2008-01-31 01:20:45.073674806 +0200
 @@ -168,7 +168,7 @@
  
  /**
@@ -37,15 +37,7 @@
  	spec->nextline = spec->lbuf;
      }
      return 0;
-@@ -273,6 +277,7 @@
-     SKIPSPACE(s);
- 
-     match = -1;
-+    if (! (strip & STRIP_NOEXPAND)) {
-     if (!spec->readStack->reading && !strncmp("%if", s, sizeof("%if")-1)) {
- 	match = 0;
-     } else if (! strncmp("%ifarch", s, sizeof("%ifarch")-1)) {
-@@ -346,7 +351,7 @@
+@@ -347,7 +351,7 @@
  
        /* Copy next file line into the spec line buffer */
  
@@ -54,7 +46,15 @@
  	if (rc == RPMRC_FAIL)
  	    goto retry;
  	return rc;
-@@ -354,6 +359,7 @@
+@@ -360,6 +364,7 @@
+     SKIPSPACE(s);
+ 
+     match = -1;
++    if (! (strip & STRIP_NOEXPAND)) {
+     if (!spec->readStack->reading && !strncmp("%if", s, sizeof("%if")-1)) {
+ 	match = 0;
+     } else if (! strncmp("%ifarch", s, sizeof("%ifarch")-1)) {
+@@ -441,6 +446,7 @@
  	ofi = spec->fileStack;
  	goto retry;
      }
@@ -62,13 +62,13 @@
  
      if (match != -1) {
  	rl = xmalloc(sizeof(*rl));
---- rpm-4.3/build/rpmbuild.h.wiget	Sat May 10 17:19:33 2003
-+++ rpm-4.3/build/rpmbuild.h	Fri May 16 00:06:47 2003
-@@ -75,6 +75,7 @@
+--- rpm-5.0.1.noexpand/build/rpmbuild.h	2008-01-31 01:18:18.509664191 +0200
++++ rpm-5.0.1/build/rpmbuild.h	2008-01-31 01:20:45.073674806 +0200
+@@ -83,6 +83,7 @@
  #define STRIP_NOTHING             0
  #define STRIP_TRAILINGSPACE (1 << 0)
  #define STRIP_COMMENTS      (1 << 1)
 +#define STRIP_NOEXPAND      (1 << 2)
  
- #ifdef __cplusplus
- extern "C" {
+ /*@unchecked@*/
+ extern int _rpmbuildFlags;
