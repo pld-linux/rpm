@@ -173,7 +173,7 @@ CXXFLAGS="%{rpmcxxflags}" \
 }
 
 #----------------------------------------------------------------
-%global configure_cache 0
+#%configure_cache 0
 %configure_cache_file	%{buildroot}.configure.cache
 
 %configure {./configure \
@@ -202,7 +202,7 @@ CXXFLAGS="%{rpmcxxflags}" \
 	--infodir=%{_infodir} \
 	--x-libraries=%{?_x_libraries}%{!?_x_libraries:%{_libdir}} \
 	%{dependencytracking} \
-	%{?configure_cache:--cache-file=%{configure_cache_file:-%{buildroot}.configure.cache}} \
+	%{?configure_cache:--cache-file=%{configure_cache_file}} \
 }
 
 # overload to insert debuginfo package
