@@ -36,7 +36,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	22
+Release:	23
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -125,6 +125,7 @@ Patch64:	%{name}-tar_as_secondary_source.patch
 Patch65:	%{name}-man_pl.patch
 Patch66:	%{name}-lzma-tukaani.patch
 Patch67:	%{name}-v3-support.patch
+Patch68:	%{name}-cleanbody.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -705,6 +706,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch65 -p1
 %patch66 -p1
 %patch67 -p1
+%patch68 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
