@@ -351,8 +351,8 @@ CXXFLAGS="%{rpmcxxflags}" \
 if [ -d "$RPM_BUILD_ROOT" ]; then \
 	if [ -d $RPM_BUILD_ROOT/lib/modules ]; then \
 		modulelist=$(find $RPM_BUILD_ROOT/lib/modules -name '*o' -type f -print); \
-		modulecount=$(echo -n "$modulelist" | wc -l); \
-		if [ "$modulecount" -gt 0 ]; then \
+		if [ "$modulelist" ]; then \
+			modulecount=$(echo "$modulelist" | wc -l); \
 			printf "Stripping %d kernel modules..." $modulecount; \
 			echo "$modulelist" | xargs -l512 chmod u+w; \
 			echo "$modulelist" | xargs -l512 %{__strip} --strip-unneeded --remove-section=.comment --remove-section=.note.GNU-stack; \
@@ -366,19 +366,19 @@ if [ -d "$RPM_BUILD_ROOT" ]; then \
 		elfsharedlist=`echo "$filetypes" | awk -F: '/LF.*shared object/ {print $1}'`; \
 		archiveslist=`echo "$filetypes" | awk -F: '/current ar archive/ {print $1}'`; \
 		if [ -n "$elfexelist" ]; then \
-			printf "Stripping %d ELF executables..." $(echo -n "$elfexelist" | wc -l); \
+			printf "Stripping %d ELF executables..." $(echo "$elfexelist" | wc -l); \
 			chmod u+w $elfexelist; \
 			%{__strip} --remove-section=.note --remove-section=.comment $elfexelist; \
 			echo "DONE"; \
 		fi; \
 		if [ -n "$elfsharedlist" ]; then \
-			printf "Stripping %d ELF shared libraries..." $(echo -n "$elfsharedlist" | wc -l); \
+			printf "Stripping %d ELF shared libraries..." $(echo "$elfsharedlist" | wc -l); \
 			chmod u+w $elfsharedlist; \
 			%{__strip} --strip-unneeded --remove-section=.note --remove-section=.comment $elfsharedlist; \
 			echo "DONE"; \
 		fi; \
 		if [ -n "$archiveslist" ]; then \
-			printf "Stripping %d ar archives..." $(echo -n "$archiveslist" | wc -l); \
+			printf "Stripping %d ar archives..." $(echo "$archiveslist" | wc -l); \
 			chmod u+w $archiveslist; \
 			%{__strip} --strip-debug --remove-section=.note --remove-section=.comment $archiveslist; \
 			echo "DONE"; \
@@ -388,19 +388,19 @@ if [ -d "$RPM_BUILD_ROOT" ]; then \
     filelist_unneeded=%{?_autostripunneeded:`find $RPM_BUILD_ROOT -type f -regex "%{_autostripunneeded}"`}; \
     filelist_debug=%{?_autostripdebug:`find $RPM_BUILD_ROOT -type f -regex "%{_autostripdebug}"`}; \
 	if [ -n "$filelist_all" ]; then \
-		printf "Stripping everything from %d additional files..." $(echo -n "$filelist_all" | wc -l); \
+		printf "Stripping everything from %d additional files..." $(echo "$filelist_all" | wc -l); \
 		chmod u+w $filelist_all; \
 		%{__strip} --remove-section=.note --remove-section=.comment $filelist_all; \
 		echo "DONE"; \
 	fi; \
 	if [ -n "$filelist_unneeded" ]; then \
-		printf "Stripping unneeded from %d additional files..." $(echo -n "$filelist_unneeded" | wc -l); \
+		printf "Stripping unneeded from %d additional files..." $(echo "$filelist_unneeded" | wc -l); \
 		chmod u+w $filelist_unneeded; \
 		%{__strip} --strip-unneeded --remove-section=.note --remove-section=.comment $filelist_unneeded; \
 		echo "DONE"; \
 	fi; \
 	if [ -n "$filelist_debug" ]; then \
-		printf "Stripping debuginfo from %d additional files..." $(echo -n "$filelist_debug" | wc -l); \
+		printf "Stripping debuginfo from %d additional files..." $(echo "$filelist_debug" | wc -l); \
 		chmod u+w $filelist_debug; \
 		%{__strip} --strip-debug --remove-section=.note --remove-section=.comment $filelist_debug; \
 		echo "DONE"; \
@@ -424,7 +424,7 @@ if [ -d "$RPM_BUILD_ROOT" ]; then \
 		objs=`echo "$files" | xargs -r -d'\\n' file | awk -F: '/ELF.*(executable.*dynamically linked|shared object)/ {print $1}'`; \
 	fi; \
 	if [ -n "$objs" ]; then \
-		printf "Remove RPATH from %d executable binaries and shared object files.\n" $(echo -n "$objs" | wc -l); \
+		printf "Remove RPATH from %d executable binaries and shared object files.\n" $(echo "$objs" | wc -l); \
 		echo "$objs" | \
 		while read file; do \
 			rpath= ; \
@@ -457,11 +457,13 @@ fi; }; __spec_install_post_chrpath } } }
 %{!?no_install_post_compress_modules: __spec_install_post_compress_modules() { \
 	if [ -d $RPM_BUILD_ROOT/lib/modules ]; then \
 		q=$(find $RPM_BUILD_ROOT/lib/modules -name '*o' -type f -print); \
-		printf "Compress %d kernel modules..." $(echo -n "$q" | wc -l); \
-		echo "$q" | xargs -r %{__gzip} -9nf; \
-		echo "DONE"; \
-		find $RPM_BUILD_ROOT/lib/modules -name '*o' -type l -printf "%p %l\n" | \
-		while read a b; do ln -sf $b.gz $a.gz; rm -f $a; done; \
+		if [ "$q" ]; then \
+			printf "Compress %d kernel modules..." $(echo "$q" | wc -l); \
+			echo "$q" | xargs -r %{__gzip} -9nf; \
+			echo "DONE"; \
+			find $RPM_BUILD_ROOT/lib/modules -name '*o' -type l -printf "%p %l\n" | \
+			while read a b; do ln -sf $b.gz $a.gz; rm -f $a; done; \
+		fi; \
 	fi; \
 }; __spec_install_post_compress_modules } }
 
