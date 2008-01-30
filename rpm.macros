@@ -205,6 +205,14 @@ CXXFLAGS="%{rpmcxxflags}" \
 	%{?configure_cache:--cache-file=%{configure_cache_file:-%{buildroot}.configure.cache}} \
 }
 
+# overload to insert debuginfo package
+%prep \
+%if 0%{?_enable_debug_packages}\
+%{debug_package}\
+%endif\
+%%prep\
+%{nil}
+
 # Location of autoconf macros
 %_aclocaldir	%(aclocal --print-ac-dir)
 
