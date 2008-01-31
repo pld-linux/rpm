@@ -28,7 +28,7 @@
 %_oldincludedir		/usr/include
 %_infodir		/usr/share/info
 %_mandir		/usr/share/man
-%_initrddir		%{_sysconfdir}/rc.d/init.d
+%_initrddir		/etc/rc.d/init.d
 
 #---------------------------------------------------------------------
 #	Multilibs
