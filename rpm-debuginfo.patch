@@ -1,6 +1,6 @@
---- rpm-4.4.6.org/macros.in	2006-04-08 21:04:54.000000000 +0200
-+++ rpm-4.4.6/macros.in	2006-06-30 22:03:15.076727750 +0200
-@@ -168,15 +168,20 @@
+--- rpm-4.4.9.orig/macros.in	2008-01-31 19:20:08.798315963 +0200
++++ rpm-4.4.9/macros.in	2008-01-31 19:20:50.850567944 +0200
+@@ -188,15 +188,21 @@
  %debug_package \
  %ifnarch noarch\
  %global __debug_package 1\
@@ -9,6 +9,7 @@
  Summary: Debug information for package %{name}\
 +Summary(pl.UTF-8): Informacje dla debuggera dla pakietu %{name}\
  Group: Development/Debug\
++Requires: filesystem-debuginfo >= 3.0-16
  AutoReqProv: 0\
 -%description debug\
 +%description debuginfo\
@@ -24,8 +25,8 @@
  %defattr(-,root,root)\
  %endif\
  %{nil}
-@@ -961,7 +966,7 @@
- %__spec_install_pre	%{___build_pre}
+@@ -1046,7 +1052,7 @@
+ %{?buildroot:%{__rm} -rf '%{buildroot}'}
  %__spec_install_body	%{___build_body}
  %__spec_install_post\
 -%{?__debug_package:%{__debug_install_post}}\
@@ -33,8 +34,8 @@
  %{__arch_install_post}\
  %{__os_install_post}\
  %{nil}
---- rpm-4.4.6.org/platform.in	2006-06-30 22:01:46.743207000 +0200
-+++ rpm-4.4.6/platform.in	2006-06-30 22:03:15.080728000 +0200
+--- rpm-4.4.9.orig/platform.in	2008-01-31 19:20:08.676303626 +0200
++++ rpm-4.4.9/platform.in	2008-01-31 19:20:50.844567337 +0200
 @@ -61,7 +61,7 @@
  %{nil}
  
@@ -44,8 +45,8 @@
      %{__arch_install_post}\
      %{__os_install_post}\
  %{nil}
---- rpm-4.4.9/scripts/find-debuginfo.sh~	2008-01-31 02:10:36.032662759 +0200
-+++ rpm-4.4.9/scripts/find-debuginfo.sh	2008-01-31 02:11:05.000000000 +0200
+--- rpm-4.4.9.orig/scripts/find-debuginfo.sh	2006-02-12 16:59:51.000000000 +0200
++++ rpm-4.4.9/scripts/find-debuginfo.sh	2008-01-31 19:20:50.852568146 +0200
 @@ -1,36 +1,49 @@
  #!/bin/sh
 -#find-debuginfo.sh - automagically generate debug info and file list
@@ -114,7 +115,7 @@
  
  	# A binary already copied into /usr/lib/debug doesn't get stripped,
  	# just has its file names collected and adjusted.
-@@ -38,20 +51,22 @@
+@@ -38,20 +51,27 @@
  	/usr/lib/debug/*) continue ;;
  	esac
  
@@ -132,15 +133,21 @@
  done
  
 -mkdir -p ${RPM_BUILD_ROOT}/usr/src/debug
+-cat $SOURCEFILE | (cd $RPM_BUILD_DIR; LANG=C sort -z -u | cpio -pd0mL ${RPM_BUILD_ROOT}/usr/src/debug)
 +mkdir -p $RPM_BUILD_ROOT/usr/src/debug
- cat $SOURCEFILE | (cd $RPM_BUILD_DIR; LANG=C sort -z -u | cpio -pd0mL ${RPM_BUILD_ROOT}/usr/src/debug)
++cat $SOURCEFILE | (cd $RPM_BUILD_DIR; LANG=C sort -z -u | cpio -pd0mL $RPM_BUILD_ROOT/usr/src/debug)
  # stupid cpio creates new directories in mode 0700, fixup
 -find ${RPM_BUILD_ROOT}/usr/src/debug -type d -print0 | xargs -0 chmod a+rx
 +find $RPM_BUILD_ROOT/usr/src/debug -type d -print0 | xargs -0 chmod a+rx
-+
-+find $RPM_BUILD_ROOT/usr/lib/debug -type f | sed -n -e "s#^$RPM_BUILD_ROOT##p" > $LISTFILE
-+find $RPM_BUILD_ROOT/usr/lib/debug -mindepth 1 -type d | sed -n -e "s#^$RPM_BUILD_ROOT#%dir #p" >> $LISTFILE
-+find $RPM_BUILD_ROOT/usr/src/debug -mindepth 1 -maxdepth 1 | sed -n -e "s#^$RPM_BUILD_ROOT##p" >> $LISTFILE
  
 -find ${RPM_BUILD_ROOT}/usr/lib/debug -type f | sed -n -e "s#^$RPM_BUILD_ROOT##p" > $LISTFILE
 -find ${RPM_BUILD_ROOT}/usr/src/debug -mindepth 1 -maxdepth 1 | sed -n -e "s#^$RPM_BUILD_ROOT##p" >> $LISTFILE
++find $RPM_BUILD_ROOT/usr/lib/debug -type f | sed -n -e "s#^$RPM_BUILD_ROOT##p" > $LISTFILE
++find $RPM_BUILD_ROOT/usr/lib/debug -mindepth 1 -type d | sed -n -e "s#^$RPM_BUILD_ROOT#%dir #p" >> $LISTFILE
++find $RPM_BUILD_ROOT/usr/src/debug -mindepth 1 -maxdepth 1 | sed -n -e "s#^$RPM_BUILD_ROOT##p" >> $LISTFILE
++
++# add dirs already in filesystem-debuginfo package to exclude
++cat /usr/src/debug/filesystem-debuginfo.files | while read dir; do
++	[ -d $RPM_BUILD_ROOT$dir ] || continue
++	echo "%exclude %dir $dir"
++done >> $LISTFILE
