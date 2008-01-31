@@ -869,7 +869,6 @@ install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
 install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
 install %{SOURCE13} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
 install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
-install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
@@ -1239,7 +1238,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files php-pearprov
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_rpmlibdir}/php*
-%attr(755,root,root) %{_rpmlibdir}/find-php*
 
 %if %{with python}
 %files -n python-rpm
