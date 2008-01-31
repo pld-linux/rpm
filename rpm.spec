@@ -25,7 +25,7 @@
 %define	reqdb_ver	4.6.18
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
-%define	find_lang_rev	1.25
+%define	find_lang_rev	1.26
 %define	sover	4.4
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
@@ -36,7 +36,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	24
+Release:	25
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -402,6 +402,7 @@ Summary(pl.UTF-8):	Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
+Requires:	filesystem-debuginfo >= 3.0-16
 
 %description utils
 Additional utilities for managing RPM packages and database.
@@ -708,14 +709,10 @@ install %{SOURCE12} scripts/perl.prov
 %patch67 -p1
 %patch68 -p1
 
-cd scripts
-mv -f perl.req perl.req.in
-mv -f perl.prov perl.prov.in
-cd ..
-
+mv -f scripts/{perl.req,perl.req.in}
+mv -f scripts/{perl.prov,perl.prov.in}
 mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
-
 rm -rf sqlite zlib db db3 popt rpmdb/db.h
 
 # generate Group translations to *.po
