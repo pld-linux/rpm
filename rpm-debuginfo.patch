@@ -9,7 +9,7 @@
  Summary: Debug information for package %{name}\
 +Summary(pl.UTF-8): Informacje dla debuggera dla pakietu %{name}\
  Group: Development/Debug\
-+Requires: filesystem-debuginfo >= 3.0-16
++Requires: filesystem-debuginfo >= 3.0-16\
  AutoReqProv: 0\
 -%description debug\
 +%description debuginfo\
