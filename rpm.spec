@@ -25,7 +25,7 @@
 %define	reqdb_ver	4.6.18
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
-%define	find_lang_rev	1.26
+%define	find_lang_rev	1.27
 %define	sover	4.4
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
@@ -36,7 +36,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	28
+Release:	29
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
