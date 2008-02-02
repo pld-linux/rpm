@@ -25,7 +25,7 @@
 %define	reqdb_ver	4.5.20
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
-%define	find_lang_rev	1.25
+%define	find_lang_rev	1.27
 %define	sover	4.4
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
@@ -36,7 +36,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	14
+Release:	15
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -124,6 +124,8 @@ Patch63:	%{name}-lzma-size_t.patch
 Patch64:	%{name}-tar_as_secondary_source.patch
 Patch65:	%{name}-man_pl.patch
 Patch66:	%{name}-lzma-tukaani.patch
+Patch67:	%{name}-v3-support.patch
+Patch68:	%{name}-cleanbody.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -703,15 +705,13 @@ install %{SOURCE12} scripts/perl.prov
 %patch64 -p1
 %patch65 -p1
 %patch66 -p1
+%patch67 -p1
+%patch68 -p1
 
-cd scripts
-mv -f perl.req perl.req.in
-mv -f perl.prov perl.prov.in
-cd ..
-
+mv -f scripts/{perl.req,perl.req.in}
+mv -f scripts/{perl.prov,perl.prov.in}
 mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
-
 rm -rf sqlite zlib db db3 popt rpmdb/db.h
 
 # generate Group translations to *.po
@@ -865,7 +865,6 @@ install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
 install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
 install %{SOURCE13} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
 install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
-install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
@@ -1235,7 +1234,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files php-pearprov
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_rpmlibdir}/php*
-%attr(755,root,root) %{_rpmlibdir}/find-php*
 
 %if %{with python}
 %files -n python-rpm
