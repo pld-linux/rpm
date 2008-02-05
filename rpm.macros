@@ -32,6 +32,9 @@
 %__intltoolize		intltoolize --copy --force
 %__libtoolize		libtoolize --copy --force
 
+#	Path to top of build area.
+%_topdir		%(test -d ../SPECS && (cd ..; pwd) || echo $HOME/rpm)
+
 #	The number of cvs changelog entries kept when building package.
 %_buildchangelogtruncate 20
 
