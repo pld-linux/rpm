@@ -14,7 +14,7 @@ http://rpm5.org/cvs/chngview?cn=9486
  
      xx = headerAddEntry(fi->h, RPMTAG_INSTALLTIME, RPM_INT32_TYPE,
  			&installTime, 1);
-@@ -1530,6 +1526,32 @@
+@@ -1530,6 +1526,28 @@
      return 0;
  }
  
@@ -34,11 +34,7 @@ http://rpm5.org/cvs/chngview?cn=9486
 +    int xx = 1;
 +
 +    if (fi->fstates != NULL && fc > 0) {
-+	he->tag = RPMTAG_FILESTATES;
-+	he->t = RPM_UINT8_TYPE;
-+	he->p.ui8p = fi->fstates;
-+	he->c = fc;
-+	xx = headerPut(fi->h, he, 0);
++	xx = headerAddEntry(fi->h, RPMTAG_FILESTATES, RPM_CHAR_TYPE, fi->fstates, fc);
 +    }
 +
 +    return 0;
