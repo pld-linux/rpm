@@ -1,0 +1,11 @@
+--- rpm-4.4.9/lib/poptALL.c~	2007-05-10 00:38:02.000000000 +0300
++++ rpm-4.4.9/lib/poptALL.c	2008-01-10 20:25:45.386026293 +0200
+@@ -301,7 +301,7 @@
+ };
+ 
+ /*@unchecked@*/
+-int global_depFlags;
++int global_depFlags = (RPMDEPS_FLAG_NOLINKTOS|RPMDEPS_FLAG_NOPARENTDIRS);
+ 
+ /*@unchecked@*/
+ struct poptOption rpmcliDepFlagsPoptTable[] = {

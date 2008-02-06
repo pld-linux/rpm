@@ -1,0 +1,10 @@
+--- rpm-4.4.9/macros.in~	2008-01-15 03:02:22.239766677 +0200
++++ rpm-4.4.9/macros.in	2008-01-21 21:07:36.760528341 +0200
+@@ -1156,6 +1156,7 @@
+ %_infodir		%{_prefix}/share/info
+ %_mandir		%{_prefix}/share/man
+ %_localedir		%{_datadir}/locale
++%_x_libraries	/usr/X11R6/%{_lib}
+ 
+ #==============================================================================
+ # ---- config.guess platform macros.
