@@ -11,7 +11,7 @@
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
 %bcond_without	apidocs		# don't generate documentation with doxygen
-%bcond_with	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
+%bcond_without	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
 %bcond_without	system_libmagic	# don't use system libmagic
@@ -22,7 +22,7 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
 # versions of required libraries
-%define	reqdb_ver	4.6.18
+%define	reqdb_ver	4.5.20-3
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
 %define	find_lang_rev	1.27
@@ -36,7 +36,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	30
+Release:	31
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -59,6 +59,11 @@ Source15:	%{name}-macros.java
 Source16:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source17:	banner.sh
+Patch1067:	%{name}-disable-features.patch
+Patch1068:	%{name}-rpmrc-ac.patch
+Patch1069:	%{name}-parentdirs.patch
+Patch1070:	%{name}-macros-ac.patch
+
 Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
@@ -134,10 +139,6 @@ BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	db-devel >= %{reqdb_ver}
 BuildRequires:	elfutils-devel >= 0.108
-%ifnarch sparc64
-# -fPIE/-pie
-BuildRequires:	gcc >= 5:3.4
-%endif
 BuildRequires:	gettext-devel >= 0.11.4-2
 %{?with_system_libmagic:BuildRequires:	libmagic-devel}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
@@ -150,8 +151,8 @@ BuildRequires:	neon-devel >= 0.25.5
 %endif
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
-%{?with_python:BuildRequires:	python-devel >= 1:2.5}
-BuildRequires:	python-modules >= 1:2.5
+%{?with_python:BuildRequires:	python-devel >= 1:2.3}
+BuildRequires:	python-modules >= 1:2.3
 BuildRequires:	rpm-perlprov
 %{?with_python:BuildRequires:	rpm-pythonprov}
 BuildRequires:	zlib-devel
@@ -180,8 +181,8 @@ Requires:	popt >= %{reqpopt_ver}
 Obsoletes:	rpm-getdeps
 %{!?with_static:Obsoletes:	rpm-utils-static}
 Conflicts:	glibc < 2.2.92
-# db4.6 poldek needed
-Conflicts:	poldek < 0.21-0.20070703.00.3
+# poldek with version dep on rpm needed
+Conflicts:	poldek < 0.20-21
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_binary_payload		w9.gzdio
@@ -471,7 +472,11 @@ Requires:	elfutils
 Requires:	file >= 4.17
 Requires:	fileutils
 Requires:	findutils
-Requires:	gcc >= 5:3.4
+%ifarch athlon
+Requires:	gcc >= 3.0.3
+%else
+Requires:	gcc
+%endif
 Requires:	glibc-devel
 Requires:	grep
 Requires:	gzip
@@ -711,11 +716,18 @@ install %{SOURCE12} scripts/perl.prov
 %patch68 -p1
 %patch69 -p1
 
+
+rm -rf sqlite zlib db db3 popt rpmdb/db.h
+
+%patch1067 -p1
+%patch1068 -p1
+%patch1069 -p1
+%patch1070 -p1
+
 mv -f scripts/{perl.req,perl.req.in}
 mv -f scripts/{perl.prov,perl.prov.in}
 mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
-rm -rf sqlite zlib db db3 popt rpmdb/db.h
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
