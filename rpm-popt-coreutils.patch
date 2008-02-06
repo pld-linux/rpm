@@ -1,0 +1,13 @@
+--- rpm-4.4.9/rpmpopt.in~	2007-12-22 19:32:34.458262026 +0200
++++ rpm-4.4.9/rpmpopt.in	2007-12-22 17:29:07.000000000 +0200
+@@ -55,8 +55,8 @@
+ 	--POPTdesc=$"set permissions of files in a package"
+ 
+ rpm	alias --setugids -q --qf \
+-        '[ch %{FILEUSERNAME:shescape} %{FILEGROUPNAME:shescape} %{FILENAMES:shescape}\n]' \
+-        --pipe "(echo 'ch() { chown -- \"$1\" \"$3\";chgrp -- \"$2\" \"$3\"; }';grep -v \(none\))|sh" \
++        '[chown %{FILEUSERNAME:shescape}:%{FILEGROUPNAME:shescape} %{FILENAMES:shescape}\n]' \
++        --pipe "grep -v '(none)' | sh" \
+ 	--POPTdesc=$"set user/group ownership of files in a package"
+ 
+ rpm	alias --conflicts	--qf \
