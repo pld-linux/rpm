@@ -1,5 +1,6 @@
 #
 # TODO:
+# - manuals are not compressed
 # - python(abi) cap is not provided automatically because /usr/lib*/libpython2*.so.*
 #   matches ELF first
 # - repackaging when lzma is not installed (todo: fix digest signature of header)
