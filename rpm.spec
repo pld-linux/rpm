@@ -19,13 +19,13 @@
 #   /usr/lib/rpm/symclash.py
 #   /usr/lib/rpm/symclash.sh
 #   /usr/lib/rpm/vcheck
-#   /usr/share/man/ja/man8/rpmcache.8.gz
-#   /usr/share/man/ja/man8/rpmgraph.8.gz
-#   /usr/share/man/man8/rpmcache.8.gz
-#   /usr/share/man/man8/rpmconstant.8.gz
-#   /usr/share/man/man8/rpmgraph.8.gz
-#   /usr/share/man/pl/man8/rpmcache.8.gz
-#   /usr/share/man/pl/man8/rpmgraph.8.gz
+#   /usr/share/man/ja/man8/rpmcache.8
+#   /usr/share/man/ja/man8/rpmgraph.8
+#   /usr/share/man/man8/rpmcache.8
+#   /usr/share/man/man8/rpmconstant.8
+#   /usr/share/man/man8/rpmgraph.8
+#   /usr/share/man/pl/man8/rpmcache.8
+#   /usr/share/man/pl/man8/rpmgraph.8
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
@@ -55,7 +55,7 @@ ERROR
 %define	reqdb_ver	4.6.18
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
-%define	find_lang_rev	1.25
+%define	find_lang_rev	1.27
 %define	sover	5.0
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
@@ -65,12 +65,12 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.0.1
+Version:	5.0.2
 Release:	0.1
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.0/%{name}-%{version}.tar.gz
-# Source0-md5:	4a19c36b9fd99aca2a96ee5408af4fe3
+# Source0-md5:	596aaf5cd9dea7195f625530bc89e684
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -126,7 +126,6 @@ Patch26:	%{name}-notsc.patch
 Patch27:	%{name}-hack-norpmlibdep.patch
 
 Patch32:	%{name}-pld-autodep.patch
-#Patch34:	%{name}-epoch0.patch
 Patch35:	%{name}-perl_req-INC_dirs.patch
 Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
@@ -627,7 +626,7 @@ Python para manipular pacotes e bancos de dados RPM.
 %setup -q
 
 # APPLIED ALREADY? translationproject.org is used now
-#%patch0 -p1
+#%%patch0 -p1
 %patch1 -p1
 %patch3 -p1
 %patch4 -p1
@@ -638,7 +637,7 @@ Python para manipular pacotes e bancos de dados RPM.
 %patch9 -p1
 %patch10 -p1
 # CHECK ME - macrofiles: ~/etc could be used
-#%patch14 -p1
+#%%patch14 -p1
 %patch16 -p1
 %patch18 -p1
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
@@ -660,7 +659,6 @@ install %{SOURCE12} scripts/perl.prov
 %endif
 %patch27 -p1
 %patch32 -p1
-#%patch34 -p1 # %{epoch} 0 in rpm macros should do this
 %patch35 -p0
 %patch36 -p1
 %patch37 -p1
@@ -668,7 +666,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch46 -p1
 %patch47 -p1
 # OLD COMMENTED OUT
-#%patch52 -p1
+#%%patch52 -p1
 %patch55 -p1
 %patch58 -p1
 %patch59 -p1
