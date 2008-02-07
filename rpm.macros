@@ -1222,14 +1222,14 @@ done \
 %define Opts 														\\\\\\\
 %if "%{_target_base_arch}" != "%{_arch}"							\\\
 	%if "%{_arch}" == "x86_64" && "%{_target_base_arch}" == "i386"	\\\
-	CC="%{__cc}" CPP="%{__cpp}" ARCH=%{_target_base_arch}			\\\
+	CC="%{kgcc}" ARCH=%{_target_base_arch}							\\\
 	%else															\\\
 	ARCH=%{_target_base_arch} CROSS_COMPILE=%{_target_cpu}-pld-linux- \\\
 	%endif															\\\
 %else																\\\
-	CC="%{__cc}" CPP="%{__cpp}"										\\\
+	CC="%{kgcc}" 													\\\
 %endif																\
-%define	MakeOpts HOSTCC="%{__cc}" SYSSRC=%{_kernelsrcdir} SYSOUT=$PWD/o \\\\\\\
+%define	MakeOpts HOSTCC="%{kgcc}" SYSSRC=%{_kernelsrcdir} SYSOUT=$PWD/o \\\\\\\
 		O=$PWD/o %{?with_verbose:V=1} %{Opts}						\
 																	\
 %{?-C:cd %{-C*}}													\
