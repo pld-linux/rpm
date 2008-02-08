@@ -8,6 +8,8 @@
 %kgcc		%{__cc}
 %kgcc_package	gcc
 
+%__rm			/bin/rm --interactive=never
+
 # Build system path macros.
 #
 %__autoconf		autoconf %{?debug:-Wall}
