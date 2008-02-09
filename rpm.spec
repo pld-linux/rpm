@@ -467,11 +467,8 @@ Requires:	elfutils
 Requires:	file >= 4.17
 Requires:	fileutils
 Requires:	findutils
-%ifarch athlon
-Requires:	gcc >= 3.0.3
-%else
-Requires:	gcc
-%endif
+# rpmrc patch adds flags specific to gcc >= 3.4
+Requires:	gcc >= 5:3.4
 Requires:	glibc-devel
 Requires:	grep
 Requires:	gzip
