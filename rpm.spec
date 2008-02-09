@@ -36,7 +36,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	33
+Release:	34
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -717,7 +717,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch69 -p1
 
 rm -rf sqlite zlib db db3 popt rpmdb/db.h
-cp %{SOURCE17} RPM-GPG-KEY
+cp %{SOURCE8} RPM-GPG-KEY
 
 %patch1067 -p1
 %patch1068 -p1
