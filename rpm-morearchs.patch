@@ -76,17 +76,16 @@ diff -ur rpm-4.4.4/rpmrc.in rpm-4.4.4.morearchs/rpmrc.in
  arch_canon:	ppc8260:	ppc8260	5
  arch_canon:	ppc8560:	ppc8560	5
  arch_canon:	ppc32dy4:	ppc32dy4	5
-@@ -212,7 +216,8 @@
- buildarchtranslate: sun4u: sparc64
+@@ -213,6 +217,8 @@
  buildarchtranslate: sparc64: sparc64
  
--buildarchtranslate: osfmach3_ppc: ppc
+ buildarchtranslate: osfmach3_ppc: ppc
 +buildarchtranslate: ppc7400: ppc7400
 +buildarchtranslate: ppc7450: ppc7450
  buildarchtranslate: powerpc: ppc
  buildarchtranslate: powerppc: ppc
  buildarchtranslate: ppc8260: ppc
-@@ -263,6 +268,8 @@
+@@ -263,6 +269,8 @@
  arch_compat: osfmach3_i486: i486 osfmach3_i386
  arch_compat: osfmach3_i386: i486
  
@@ -95,7 +94,7 @@ diff -ur rpm-4.4.4/rpmrc.in rpm-4.4.4.morearchs/rpmrc.in
  arch_compat: osfmach3_ppc: ppc
  arch_compat: powerpc: ppc
  arch_compat: powerppc: ppc
-@@ -375,6 +382,8 @@
+@@ -375,6 +383,8 @@
  
  buildarch_compat: m68k: noarch
  
