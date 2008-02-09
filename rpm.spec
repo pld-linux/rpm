@@ -36,7 +36,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	32
+Release:	33
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -824,6 +824,10 @@ echo "ia32e-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 echo "x86_64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 
+%ifarch alpha
+echo "alpha-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+
 # x86 things
 %ifarch athlon %{x8664}
 echo "athlon-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
@@ -855,11 +859,6 @@ echo "powerpc-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 
 # noarch
 echo "noarch-[^-]*-.*" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-
-%ifarch %{ppc}
-#sed -e '/_target_platform/s/[%]{_target_cpu}/ppc/' \
-#	-i $RPM_BUILD_ROOT%{_rpmlibdir}/ppc74[05]0-linux/macros
-%endif
 
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/vpkg-provides*
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{prov,req}.pl
