@@ -36,7 +36,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	31
+Release:	32
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -48,7 +48,7 @@ Source4:	%{name}-find-spec-bcond
 Source5:	%{name}-find-lang
 Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
-
+Source8:	RPM-GPG-KEY
 Source9:	%{name}-php-provides
 Source10:	%{name}-php-requires
 Source11:	%{name}.sysinfo
@@ -716,8 +716,8 @@ install %{SOURCE12} scripts/perl.prov
 %patch68 -p1
 %patch69 -p1
 
-
 rm -rf sqlite zlib db db3 popt rpmdb/db.h
+cp %{SOURCE17} RPM-GPG-KEY
 
 %patch1067 -p1
 %patch1068 -p1
@@ -1057,6 +1057,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc CHANGES CREDITS README wdj/JBJ-GPG-KEY manual/*
+%doc RPM-GPG-KEY
 
 %attr(755,root,root) /bin/rpm
 #%attr(755,root,root) %{_bindir}/rpmdb
