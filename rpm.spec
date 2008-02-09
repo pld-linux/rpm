@@ -1,6 +1,11 @@
 #
 # TODO:
 # - manuals are not compressed
+# - %{_arch} = i686 not as used to be i386:
+#   5.0.2: rpm -E '%_target_base_arch %_arch'
+#          i386 i686
+#   4.4.9: rpm -E '%_target_base_arch %_arch'
+#          i386 i386
 # - python(abi) cap is not provided automatically because /usr/lib*/libpython2*.so.*
 #   matches ELF first
 # - repackaging when lzma is not installed (todo: fix digest signature of header)
