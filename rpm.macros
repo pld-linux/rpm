@@ -1388,4 +1388,52 @@ done																\
 	%{-b:cat >> $blacklist_file %{-b*}} \
 %{nil}
 
+# Helper for LUA.
+# split string separated by space into quoted list
+#
+# Author: Elan Ruusamäe <glen@pld-linux.org>
+#
+# %__lua_split /bin/sh /bin/pdksh -> "/bin/sh", "/bin/pdksh"
+%__lua_split() %(echo "%*" | awk '{for (i=1;i<=NF;i++) printf("\\"%%s\\"%%s", $i, i == NF ? "" : ", ")}')
+
+# adjust /etc/shells by adding and removing shells from there
+# Author: Elan Ruusamäe <glen@pld-linux.org>
+#
+# Usage:
+#   %post	-p %add_etc_shells -p /bin/sh /bin/pdksh
+#   %preun	-p %remove_etc_shells -p /bin/sh /bin/pdksh
+#
+#  -p (optional) -- specifies that result is embeded %post script (prepends <lua> as first line)
+
+%add_etc_shells(p) %{-p:<lua>}\
+t = {}\
+f = io.open("/etc/shells", "r")\
+if f then\
+	for l in f:lines() do t[l]=l; end\
+	f:close()\
+end\
+for _, s in ipairs({%{expand:%%__lua_split %*}}) do\
+	if not t[s] then\
+		f = io.open("/etc/shells", "a"); f:write(s.."\\n"); f:close()\
+	end\
+end\
+%{nil}
+
+%remove_etc_shells(p) %{-p:<lua>}\
+t = {}\
+f = io.open("/etc/shells", "r")\
+if f then\
+	for l in f:lines() do t[l]=l; end\
+	f:close()\
+end\
+for _, l in pairs({%{expand:%%__lua_split %*}}) do\
+	t[l] = nil\
+end\
+s=""\
+for _, l in pairs(t) do\
+	s=s..l.."\\n"\
+end\
+io.open("/etc/shells", "w"):write(s)\
+%{nil}
+
 # vim:ts=4 sw=4 noet syn=spec
