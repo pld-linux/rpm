@@ -808,7 +808,7 @@ eval $CMD %{?2:%2}%{?3: %3}) \
 %{nil}
 
 # useradd/groupadd macros
-# Author: Elan Ruusam‰e <glen@pld-linux.org>
+# Author: Elan Ruusam√§e <glen@pld-linux.org>
 #
 # Usage:
 #   %useradd [-P package] [-u uid] [-d home_dir] [-s shell] [-c comment]
@@ -872,7 +872,7 @@ else \
 fi;
 
 # webapp macros
-# Author: Elan Ruusam‰e <glen@pld-linux.org>
+# Author: Elan Ruusam√§e <glen@pld-linux.org>
 #
 # The config is installed/removed inside trigger, this means that you can any
 # time install apache1/apache/lighttpd package and the configuration file is
@@ -910,7 +910,7 @@ fi \
 %{nil}
 
 # service macro.
-# Author: Elan Ruusam‰e <glen@pld-linux.org>
+# Author: Elan Ruusam√§e <glen@pld-linux.org>
 #
 # calls usual service restart on package %post, but skips the restart if
 # administrator has disabled automatic service restarts in either global
@@ -1051,7 +1051,7 @@ echo -e "</dependencies>\\n" >> %{_mavendepmapdir}/maven2-depmap.xml
 
 
 # PEAR install macros
-# Author: Elan Ruusam‰e <glen@pld-linux.org>
+# Author: Elan Ruusam√§e <glen@pld-linux.org>
 #
 # Usage:
 #	%%pear_package_setup [-a #] [-n FMT]
@@ -1128,7 +1128,7 @@ find . -type f -print0 | xargs -0 sed -i -e 's,\\r$,,' \
 %{nil}
 
 # Copies exctracted PEAR package structure and PEAR registry to buildroot.
-# Author: Elan Ruusam‰e <glen@pld-linux.org>
+# Author: Elan Ruusam√§e <glen@pld-linux.org>
 %pear_package_install() \
 cp -a ./%{php_pear_dir}/{.registry,*} $RPM_BUILD_ROOT%{php_pear_dir} \
 find $RPM_BUILD_ROOT%{php_pear_dir} '(' -name '*~' -o -name '*.orig' ')' | xargs -r rm -v \
@@ -1141,7 +1141,7 @@ fi \
 
 
 # Register OpenLDAP schema.
-# Author: Elan Ruusam‰e <glen@pld-linux.org>
+# Author: Elan Ruusam√§e <glen@pld-linux.org>
 #
 # Usage:
 #   %%openldap_schema_register [-d core,nis] %{schemadir}/horde.schema
@@ -1168,7 +1168,7 @@ fi \
 %{nil}
 
 # Unregister OpenLDAP schema.
-# Author: Elan Ruusam‰e <glen@pld-linux.org>
+# Author: Elan Ruusam√§e <glen@pld-linux.org>
 #
 # Usage:
 #   %%openldap_schema_unregister %{schemadir}/horde.schema
@@ -1321,7 +1321,7 @@ done																\
 %{nil}
 
 # patchset macros
-# Author: Elan Ruusam‰e <glen@pld-linux.org>
+# Author: Elan Ruusam√§e <glen@pld-linux.org>
 #
 # Usage:
 #   %patchset_source -f <seq(1) format> <start> [<end>]
@@ -1362,7 +1362,7 @@ done																\
 %{nil}
 
 # browser plugins v2
-# Author: Elan Ruusam‰e <glen@pld-linux.org>
+# Author: Elan Ruusam√§e <glen@pld-linux.org>
 #
 # Usage:
 #	%browser_plugins_add_browser <name> -p <plugindir>
@@ -1391,13 +1391,13 @@ done																\
 # Helper for LUA.
 # split string separated by space into quoted list
 #
-# Author: Elan Ruusam‰e <glen@pld-linux.org>
+# Author: Elan Ruusam√§e <glen@pld-linux.org>
 #
 # %__lua_split /bin/sh /bin/pdksh -> "/bin/sh", "/bin/pdksh"
 %__lua_split() %(echo "%*" | awk '{for (i=1;i<=NF;i++) printf("\\"%%s\\"%%s", $i, i == NF ? "" : ", ")}')
 
 # adjust /etc/shells by adding and removing shells from there
-# Author: Elan Ruusam‰e <glen@pld-linux.org>
+# Author: Elan Ruusam√§e <glen@pld-linux.org>
 #
 # Usage:
 #   %post	-p %add_etc_shells -p /bin/sh /bin/pdksh
