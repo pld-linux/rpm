@@ -1420,20 +1420,22 @@ end\
 %{nil}
 
 %remove_etc_shells(p) %{-p:<lua>}\
-t = {}\
-f = io.open("/etc/shells", "r")\
-if f then\
-	for l in f:lines() do t[l]=l; end\
-	f:close()\
-end\
-for _, l in pairs({%{expand:%%__lua_split %*}}) do\
-	t[l] = nil\
-end\
-s=""\
-for _, l in pairs(t) do\
-	s=s..l.."\\n"\
-end\
-io.open("/etc/shells", "w"):write(s)\
+%{-p:if arg[2] == "0" then}\
+	t = {}\
+	f = io.open("/etc/shells", "r")\
+	if f then\
+		for l in f:lines() do t[l]=l; end\
+		f:close()\
+	end\
+	for _, l in pairs({%{expand:%%__lua_split %*}}) do\
+		t[l] = nil\
+	end\
+	s=""\
+	for _, l in pairs(t) do\
+		s=s..l.."\\n"\
+	end\
+	io.open("/etc/shells", "w"):write(s)\
+%{-p:end} \
 %{nil}
 
 # vim:ts=4 sw=4 noet syn=spec
