@@ -1414,13 +1414,14 @@ if f then\
 end\
 for _, s in ipairs({%{expand:%%__lua_split %*}}) do\
 	if not t[s] then\
+		print("Adding "..s.." to /etc/shells")\
 		f = io.open("/etc/shells", "a"); f:write(s.."\\n"); f:close()\
 	end\
 end\
 %{nil}
 
 %remove_etc_shells(p) %{-p:<lua>}\
-%{-p:if arg[2] == "0" then}\
+%{-p:if arg[2] == 0 then}\
 	t = {}\
 	f = io.open("/etc/shells", "r")\
 	if f then\
@@ -1428,6 +1429,7 @@ end\
 		f:close()\
 	end\
 	for _, l in pairs({%{expand:%%__lua_split %*}}) do\
+		print("Removing "..l.." from /etc/shells")\
 		t[l] = nil\
 	end\
 	s=""\
