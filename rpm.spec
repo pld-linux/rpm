@@ -473,7 +473,7 @@ Summary(ru.UTF-8):	Скрипты и утилиты, необходимые дл
 Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для побудови пакетів
 Group:		Applications/File
 Requires(pre):	findutils
-Requires:	%{name}-build-macros >= 1.314
+Requires:	%{name}-build-macros >= 1.417
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
@@ -1024,6 +1024,16 @@ rm -f manual/Makefile*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%triggerpostun lib -- %{name}-lib < %{version}
+rm -f /var/lib/rpm/__db*
+
+%pretrans
+# this needs to be a dir
+if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
+	mv -f %{_sysconfdir}/rpm/sysinfo{,.rpmsave}
+	mkdir %{_sysconfdir}/rpm/sysinfo
+fi
 
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
