@@ -1028,7 +1028,7 @@ rm -rf $RPM_BUILD_ROOT
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
 
-%pre build
+%pretrans build
 find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files -f %{name}.lang
