@@ -372,7 +372,7 @@ if [ -d "$RPM_BUILD_ROOT" ]; then \
 			echo "DONE"; \
 		fi; \
 	fi; \
-	filelist=$(find $RPM_BUILD_ROOT -type f ! '(' -perm -0100 -or -perm -0010 -or -perm -0001 ')' -regex ".*/usr/lib[0-9]*/debug/.*\.debug" ! -regex ".*/lib/modules/.*" ! -regex ".*%{_docdir}/.*" ! -regex ".*%{_includedir}/.*" %{?_noautostrip:! -regex "%{_noautostrip}"} %{?_autostripall:! -regex "%{_autostripall}"} %{?_autostripunneeded:! -regex "%{_autostripunneeded}"} %{?_autostripdebug:! -regex "%{_autostripdebug}"}); \
+	filelist=$(find $RPM_BUILD_ROOT -type f ! -regex ".*/usr/lib[0-9]*/debug/.*\.debug" ! -regex ".*/lib/modules/.*" ! -regex ".*%{_docdir}/.*" ! -regex ".*%{_includedir}/.*" %{?_noautostrip:! -regex "%{_noautostrip}"} %{?_autostripall:! -regex "%{_autostripall}"} %{?_autostripunneeded:! -regex "%{_autostripunneeded}"} %{?_autostripdebug:! -regex "%{_autostripdebug}"}); \
 	if [ -n "$filelist" ]; then \
 		filetypes=`echo "$filelist" | xargs -r -d'\\n' file`; \
 		elfexelist=`echo "$filetypes" | awk -F: '/ELF.*executable/ {print $1}'`; \
@@ -397,9 +397,9 @@ if [ -d "$RPM_BUILD_ROOT" ]; then \
 			echo "DONE"; \
 		fi; \
 	fi; \
-    filelist_all=%{?_autostripall:$(find $RPM_BUILD_ROOT -type f '(' -perm -0100 -or -perm -0010 -or -perm -0001 ')' -regex "%{_autostripall}")}; \
-    filelist_unneeded=%{?_autostripunneeded:$(find $RPM_BUILD_ROOT -type f '(' -perm -0100 -or -perm -0010 -or -perm -0001 ')' -regex "%{_autostripunneeded}")}; \
-    filelist_debug=%{?_autostripdebug:$(find $RPM_BUILD_ROOT -type f '(' -perm -0100 -or -perm -0010 -or -perm -0001 ')' -regex "%{_autostripdebug}")}; \
+    filelist_all=%{?_autostripall:$(find $RPM_BUILD_ROOT -type f -regex "%{_autostripall}")}; \
+    filelist_unneeded=%{?_autostripunneeded:$(find $RPM_BUILD_ROOT -type f -regex "%{_autostripunneeded}")}; \
+    filelist_debug=%{?_autostripdebug:$(find $RPM_BUILD_ROOT -type f -regex "%{_autostripdebug}")}; \
 	if [ -n "$filelist_all" ]; then \
 		printf "Stripping everything from %d additional files..." $(echo "$filelist_all" | wc -l); \
 		chmod u+w $filelist_all; \
@@ -432,7 +432,7 @@ fi; }; __spec_install_post_strip } } }
 %__spec_install_post_chrpath {%{!?debug: \
 %{!?no_install_post_chrpath: __spec_install_post_chrpath() { \
 if [ -d "$RPM_BUILD_ROOT" ]; then \
-	files=`find $RPM_BUILD_ROOT -type f '(' -perm -0100 -or -perm -0010 -or -perm -0001 ')' ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*" ! -regex ".*/lib/modules/.*" ! -regex ".*%{_docdir}/.*" ! -regex ".*%{_includedir}/.*" %{?_noautochrpath:! -regex "%{_noautochrpath}"}`; \
+	files=`find $RPM_BUILD_ROOT -type f ! -regex ".*ld-[0-9.]*so.*" ! -regex ".*/usr/lib[0-9]*/debug/.*" ! -regex ".*/lib/modules/.*" ! -regex ".*%{_docdir}/.*" ! -regex ".*%{_includedir}/.*" %{?_noautochrpath:! -regex "%{_noautochrpath}"}`; \
 	if [ -n "$files" ]; then \
 		objs=`echo "$files" | xargs -r -d'\\n' file | awk -F: '/ELF.*(executable.*dynamically linked|shared object)/ {print $1}'`; \
 	fi; \
