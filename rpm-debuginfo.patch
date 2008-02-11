@@ -151,3 +151,17 @@
 +	[ -d $RPM_BUILD_ROOT$dir ] || continue
 +	echo "%exclude %dir $dir"
 +done >> $LISTFILE
+--- rpm-4.4.9.orig/scripts/find-debuginfo.sh	2008-02-11 18:51:12.304461614 +0200
++++ rpm-4.4.9/scripts/find-debuginfo.sh	2008-02-11 18:50:17.000000000 +0200
+@@ -20,6 +20,11 @@
+   objcopy --add-gnu-debuglink="$1" "$2"
+ }
+ 
++if [ ! -d $RPM_BUILD_ROOT ]; then
++	# no buildroot, exit
++	exit 0
++fi
++
+ filelist=$(find $RPM_BUILD_ROOT ! -path "$RPM_BUILD_ROOT/usr/lib/debug/*.debug" -type f '(' -perm -0100 -or -perm -0010 -or -perm -0001 ')')
+ if [ -z "$filelist" ]; then
+ 	# no files, exit
