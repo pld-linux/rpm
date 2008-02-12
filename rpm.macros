@@ -268,24 +268,25 @@ CXXFLAGS="%{rpmcxxflags}" \
 %_rpmfilename		%%{NAME}-%%{VERSION}-%%{RELEASE}%{?debug:dbg}.%%{ARCH}.rpm
 
 # Requires name = version-release
-%requires_releq()		%(echo '%*' | LC_ALL="C" xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}-%%{release}\\n' | sed -e 's/ (none):/ /' | grep -v "is not")
+%requires_releq()		%(echo '%*' | LC_ALL="C" xargs -r rpm -q --qf 'Requires: %{N} = %|E?{%{E}:}|%{V}-%{R}\\n' | grep -v 'is not')
 
-%releq_kernel()			%((LC_ALL="C" rpm -qf --qf '%%{name} = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h 2>/dev/null || echo ERROR) | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
-%releq_kernel_up()		%((LC_ALL="C" rpm -qf --qf '%%{name}-up = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h 2>/dev/null || echo ERROR) | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
-%releq_kernel_smp()		%((LC_ALL="C" rpm -qf --qf '%%{name}-smp = %%{epoch}:%%{version}-%%{release}\\n' %{_kernelsrcdir}/include/linux/version.h 2>/dev/null || echo ERROR) | sed -e 's/ (none):/ /' | sed -e 's:-headers::' | grep -vE "(is not|no such)")
+%releq_kernel()			%(R=$(LC_ALL=C rpm -q --qf '%{N} = %|E?{%{E}:}|%{V}-%{R}' -f %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | grep -v 'is not' | sed -e 's:-headers::;s:-config::'); echo ${R:-ERROR})
+%releq_kernel_up()		%(R=$(LC_ALL=C rpm -q --qf '%{N}-up = %|E?{%{E}:}|%{V}-%{R}' -f %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | grep -v 'is not' | sed -e 's:-headers::;s:-config::'); echo ${R:-ERROR})
+%releq_kernel_smp()		%(R=$(LC_ALL=C rpm -q --qf '%{N}-smp = %|E?{%{E}:}|%{V}-%{R}' -f %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | grep -v 'is not' | sed -e 's:-headers::;s:-config::'); echo ${R:-ERROR})
 %requires_releq_kernel(s:)		Requires%{-s:(%{-s*})}: %releq_kernel
 %requires_releq_kernel_up(s:)	Requires%{-s:(%{-s*})}: %releq_kernel_up
 %requires_releq_kernel_smp(s:)	Requires%{-s:(%{-s*})}: %releq_kernel_smp
 
-%requires_eq()		%(echo '%*' | LC_ALL="C" xargs -r rpm -q --qf 'Requires: %%{name} = %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
-%requires_eq_to() %(LC_ALL="C" rpm -q --qf 'Requires: %1 = %%{epoch}:%%{version}\\n' %2 | sed -e 's/ (none):/ /' | grep -v "is not")
+# XXX: why epoch 0 is stripped?
+%requires_eq()		%(echo '%*' | LC_ALL="C" xargs -r rpm -q --qf 'Requires: %{N} = %|E?{%{E}:}|%{V}\\n' | sed -e 's/ 0:/ /' | grep -v 'is not')
+%requires_eq_to() %(LC_ALL="C" rpm -q --qf 'Requires: %1 = %|E?{%{E}:}|%{V}' %2 | grep -v "is not")
 
 %apache_modules_api %(awk '/#define MODULE_MAGIC_NUMBER_MAJOR/ {print $3}' /usr/include/apache/ap_mmn.h 2>/dev/null || echo ERROR)
 
 # kernel version-release handling
 %__kernel_ver	%( VER_H=%{_kernelsrcdir}/include/linux/utsrelease.h; [ -f $VER_H ] || VER_H=%{_kernelsrcdir}/include/linux/version.h; [ -f $VER_H ] && (grep UTS_RELEASE $VER_H 2>/dev/null | head -n 1 | cut -d'"' -f2) || (awk '/^VERSION/ { ver = $0; gsub(/VERSION.*=/, NIL, ver); } /^PATCHLEVEL/ { plev = $0; gsub(/PATCHLEVEL.*=/, NIL, plev); } /^SUBLEVEL/ { slev = $0; gsub(/SUBLEVEL.*=/, NIL, slev); } /^EXTRAVERSION/ { ever = $0; gsub(/EXTRAVERSION.*=/, NIL, ever); gsub(/ /, NIL, ever); } END { printf("%d.%d.%d%s", ver, plev, slev, ever); }' %{_kernelsrcdir}/Makefile 2> /dev/null))
-%__kernel_rel	%(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{RELEASE}" | grep -v "is not")
-%__kernel_rpmvr	%(LC_ALL="C" rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{VERSION}-%{RELEASE}" | grep -v "is not")
+%__kernel_rel	%(LC_ALL=C rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{R}" | grep -v "is not")
+%__kernel_rpmvr	%(LC_ALL=C rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{V}-%{R}" | grep -v "is not")
 %_kernel_ver	%{__kernel_ver}%{?with_dist_kernel:%(echo %{__kernel_ver} | grep -q -e - || echo -%{__kernel_rel})}
 %_kernel_ver_str %(echo %{!?_without_dist_kernel:%{__kernel_rpmvr}}%{?_without_dist_kernel:%{__kernel_ver}} | sed -e 's/-/_/g')
 
