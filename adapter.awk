@@ -1,6 +1,6 @@
 #!/usr/bin/gawk -f
 #
-# This is adapter v0.28. Adapter adapts .spec files for PLD Linux.
+# This is adapter v0.29. Adapter adapts .spec files for PLD Linux.
 # $Id$
 #
 # Copyright (C) 1999-2007 PLD-Team <feedback@pld-linux.org>
@@ -30,6 +30,8 @@ BEGIN {
 	SECTIONS = "^%(" RPM_SECTIONS ")"
 
 	PREAMBLE_TAGS = "(R|BR|Summary|Name|Version|Release|Epoch|License|Group|URL|BuildArch|BuildRoot|Obsoletes|Conflicts|Provides|ExclusiveArch|ExcludeArch|Pre[Rr]eq|(Build)?Requires|Suggests)"
+
+	usedigest = 0	# Enable to switch to rpm 4.4.6+ md5 digests
 
 	preamble = 1	# Is it part of preamble? Default - yes
 	boc = 4			# Beginning of %changelog
@@ -168,7 +170,11 @@ function b_makekey(a, b,	s) {
 	# Generally, comments are printed without touching
 	sub(/[ \t]+$/, "")
 
-	if (/Source.*md5/) {
+	if (/#[ \t]*Source.*md5/) {
+		if (usedigest == 1) {
+			sub(/^#[ \t]*Source/, "BuildRequires:\tdigest(%SOURCE", $0)
+			sub(/-md5[ \t]*:[ \t]*/, ") = ", $0)
+		}
 		print $0
 		next
 	}
@@ -244,6 +250,8 @@ function b_makekey(a, b,	s) {
 		_pre = $3
 	if ($2 ~ /^_snap$/)
 		_snap = $3
+	if ($2 ~ /^subver$/)
+		subver = $3
 
 	# these are used usually when adapterizing external spec
 	if ($2 ~ /^name$/)
@@ -344,6 +352,9 @@ function b_makekey(a, b,	s) {
 		}
 		if (_snap) {
 			$0 = fixedsub(_snap, "%{_snap}", $0);
+		}
+		if (subver) {
+			$0 = fixedsub(subver, "%{subver}", $0);
 		}
 	}
 
@@ -664,44 +675,48 @@ preamble == 1 {
 		group = $0;
 		sub(/^[^ \t]*[ \t]*/, "", group);
 
-		sub(/^Utilities\//,"Applications/", group)
-		sub(/^Games/,"Applications/Games", group)
-		sub(/^X11\/Games/,"X11/Applications/Games", group)
-		sub(/^X11\/GNOME\/Development\/Libraries/,"X11/Development/Libraries", group)
-		sub(/^X11\/GNOME\/Applications/,"X11/Applications", group)
-		sub(/^X11\/GNOME/,"X11/Applications", group)
-		sub(/^X11\/Utilities/,"X11/Applications", group)
-		sub(/^X11\/Games\/Strategy/,"X11/Applications/Games/Strategy", group)
-		sub(/^X11\/Library/,"X11/Libraries", group)
-		sub(/^Shells/,"Applications/Shells", group)
-		sub(/^System Environment\/Libraries$/, "Libraries", group)
-		sub(/^Library\/Development$/, "Development/Libraries", group)
-		sub(/^System Environment\/Daemons$/, "Daemons", group)
-		sub(/^Applications\/Internet$/, "Applications/Networking", group)
-		sub(/^Applications\/Daemons$/, "Daemons", group)
+		sub(/^Amusements\/Games\/Strategy\/Real Time/, "X11/Applications/Games/Strategy", group)
 		sub(/^Application\/Multimedia$/, "Applications/Multimedia", group)
-		sub(/^System\/Servers$/, "Daemons", group)
-		sub(/^X11\/Xserver$/, "X11/Servers", group)
-		sub(/^X11\/XFree86/, "X11", group)
 		sub(/^Applications\/Compilers$/, "Development/Languages", group)
+		sub(/^Applications\/Daemons$/, "Daemons", group)
+		sub(/^Applications\/Internet$/, "Applications/Networking", group)
 		sub(/^Applications\/Internet\/Peer to Peer/, "Applications/Networking", group)
-		sub(/^Networking\/Deamons$/, "Networking/Daemons", group)
-		sub(/^Development\/Docs$/, "Documentation", group)
-		sub(/^Development\/Documentation$/, "Documentation", group)
-		sub(/^System Environment\/Kernel$/, "Base/Kernel", group)
-		sub(/^Development\/Libraries\/Java$/, "Development/Languages/Java", group)
-		sub(/^Development\/Java/, "Development/Languages/Java", group)
-		sub(/^Development\/Testing$/, "Development", group)
-		sub(/^Text Processing\/Markup\/HTML$/, "Applications/Text", group)
-		sub(/^Text Processing\/Markup\/XML$/, "Applications/Text", group)
-		sub(/^Web\/Database$/, "Applications/WWW", group)
-		sub(/^System Environment\/Base$/, "Base", group)
-		sub(/^System$/, "Base", group)
 		sub(/^Applications\/Productivity$/, "X11/Applications", group)
 		sub(/^Database$/, "Applications/Databases", group)
 		sub(/^Development\/Code Generators$/, "Development", group)
+		sub(/^Development\/Docs$/, "Documentation", group)
+		sub(/^Development\/Documentation$/, "Documentation", group)
+		sub(/^Development\/Java/, "Development/Languages/Java", group)
+		sub(/^Development\/Libraries\/C and C\+\+$/, "Development/Libraries", group)
+		sub(/^Development\/Libraries\/Java$/, "Development/Languages/Java", group)
+		sub(/^Development\/Other/,"Development", group)
+		sub(/^Development\/Testing$/, "Development", group)
 		sub(/^Emulators$/, "Applications/Emulators", group)
+		sub(/^Games/,"Applications/Games", group)
+		sub(/^Library\/Development$/, "Development/Libraries", group)
+		sub(/^Networking\/Deamons$/, "Networking/Daemons", group)
+		sub(/^Shells/,"Applications/Shells", group)
+		sub(/^System Environment\/Base$/, "Base", group)
+		sub(/^System Environment\/Daemons$/, "Daemons", group)
+		sub(/^System Environment\/Kernel$/, "Base/Kernel", group)
+		sub(/^System Environment\/Libraries$/, "Libraries", group)
+		sub(/^System$/, "Base", group)
+		sub(/^System\/Base$/, "Base", group)
 		sub(/^System\/Libraries$/, "Libraries", group)
+		sub(/^System\/Servers$/, "Daemons", group)
+		sub(/^Text Processing\/Markup\/HTML$/, "Applications/Text", group)
+		sub(/^Text Processing\/Markup\/XML$/, "Applications/Text", group)
+		sub(/^Utilities\//,"Applications/", group)
+		sub(/^Web\/Database$/, "Applications/WWW", group)
+		sub(/^X11\/GNOME/,"X11/Applications", group)
+		sub(/^X11\/GNOME\/Applications/,"X11/Applications", group)
+		sub(/^X11\/GNOME\/Development\/Libraries/,"X11/Development/Libraries", group)
+		sub(/^X11\/Games/,"X11/Applications/Games", group)
+		sub(/^X11\/Games\/Strategy/,"X11/Applications/Games/Strategy", group)
+		sub(/^X11\/Library/,"X11/Libraries", group)
+		sub(/^X11\/Utilities/,"X11/Applications", group)
+		sub(/^X11\/XFree86/, "X11", group)
+		sub(/^X11\/Xserver$/, "X11/Servers", group)
 
 		$0 = "Group:\t\t" group
 
@@ -760,24 +775,11 @@ preamble == 1 {
 			next
 		}
 
-		# perhaps we have common known name?
-
-		# jpackages
-		sub(/^java-devel$/, "jdk", $2);
-		sub(/^log4j$/, "jakarta-log4j", $2);
-		sub(/^oro$/, "jakarta-oro", $2);
-		sub(/^jakarta-ant$/, "ant", $2);
-		sub(/^xerces-j2$/, "xerces-j", $2);
-		sub(/^ldapjdk$/, "ldapsdk", $2);
-		sub(/^saxon-scripts$/, "saxon", $2);
-		sub(/^xalan-j2$/, "xalan-j", $2);
-		sub(/^xerces-j2$/, "xerces-j", $2);
-
-		replace_php_virtual_deps();
+		replace_requires();
 	}
 
 	if (field ~ /^requires:/) {
-		replace_php_virtual_deps();
+		replace_requires();
 	}
 
 
@@ -800,6 +802,18 @@ preamble == 1 {
 		l = substr($0, index($0, $2));
 		if (l == "Python Software Foundation License") {
 			l = "PSF"
+		}
+		if (l == "Apache License 2.0" || l == "Apache 2.0" || l == "Apache License Version 2.0" || l == "Apache License, Version 2.0" || l == "Apache Software License v2") {
+			l = "Apache v2.0"
+		}
+		if (l == "Apache Group License" || l == "Apache Software License" || l == "Apache License") {
+			l = "Apache"
+		}
+		if (l == "Apache-style License" || l == "Apache-style Software License") {
+			l = "Apache-like"
+		}
+		if (l == "Apache Software License 1.1" || l == "Apache 1.1") {
+			l = "Apache v1.1"
 		}
 		$0 = "License:\t" l;
 	}
@@ -908,6 +922,9 @@ preamble == 1 {
 			if (_snap) {
 				url[n] = fixedsub(_snap, "%{_snap}", url[n])
 			}
+			if (subver) {
+				url[n] = fixedsub(subver, "%{subver}", url[n])
+			}
 		}
 		# assigning to $2 kills preamble formatting
 		$2 = fixedsub(filename, url[n], $2)
@@ -921,6 +938,7 @@ preamble == 1 {
 
 		sub("^http://prdownloads\.sourceforge\.net/", "http://dl.sourceforge.net/", $2)
 		sub("^http://download\.sf\.net/", "http://dl.sourceforge.net/", $2)
+		sub("^http://download\.sourceforge\.net/", "http://dl.sourceforge.net/", $2)
 		sub("^http://downloads\.sourceforge\.net/", "http://dl.sourceforge.net/", $2)
 
 		sub("^http://.*\.dl\.sourceforge\.net/", "http://dl.sourceforge.net/", $2)
@@ -929,6 +947,9 @@ preamble == 1 {
 
 		sub("^ftp://ftp\.gnome\.org/", "http://ftp.gnome.org/", $2)
 		sub("^http://ftp\.gnome\.org/pub/gnome/", "http://ftp.gnome.org/pub/GNOME/", $2)
+
+		# apache urls
+		sub("^http://apache.zone-h.org/", "http://www.apache.org/dist/", $2)
 	}
 
 
@@ -1305,6 +1326,7 @@ function use_macros()
 	gsub("^make$", "%{__make}")
 	gsub("^make ", "%{__make} ")
 	gsub("^gcc ", "%{__cc} ")
+	gsub("^rm --interactive=never ", "%{__rm} ")
 
 	# mandrake specs
 	gsub("^%make$", "%{__make}")
@@ -1314,7 +1336,6 @@ function use_macros()
 	gsub("^%makeinstall", "%{__make} install \\\n\tDESTDIR=$RPM_BUILD_ROOT")
 	gsub("^%{__rm} -rf %{buildroot}", "rm -rf $RPM_BUILD_ROOT")
 	gsub("^%{__install}", "install")
-	gsub("^%{__rm}", "rm")
 	gsub("%optflags", "%{rpmcflags}")
 	gsub("%{compat_perl_vendorarch}", "%{perl_vendorarch}")
 
@@ -1597,6 +1618,9 @@ function demacroize(str)
 	if (_snap) {
 		sub("%{_snap}", _snap, str);
 	}
+	if (subver) {
+		sub("%{subver}", subver, str);
+	}
 	return str;
 }
 
@@ -1659,6 +1683,30 @@ function use_tabs()
 function add_br(br)
 {
 	BR[BR_count++] = br
+}
+
+function replace_requires()
+{
+
+	# jpackages
+	sub(/^java-devel$/, "jdk", $2);
+	sub(/^log4j$/, "logging-log4j", $2);
+	sub(/^jakarta-log4j$/, "logging-log4j", $2);
+	sub(/^oro$/, "jakarta-oro", $2);
+	sub(/^jakarta-ant$/, "ant", $2);
+	sub(/^xerces-j2$/, "xerces-j", $2);
+	sub(/^ldapjdk$/, "ldapsdk", $2);
+	sub(/^saxon-scripts$/, "saxon", $2);
+	sub(/^xalan-j2$/, "xalan-j", $2);
+	sub(/^xerces-j2$/, "xerces-j", $2);
+	sub(/^gnu-regexp$/, "gnu.regexp", $2);
+
+	# redhat virtual
+	sub(/^tftp-server$/, "tftpdaemon", $2);
+
+	sub(/^gcc-c\+\+$/, "libstdc++-devel", $2);
+
+	replace_php_virtual_deps()
 }
 
 # php virtual deps as discussed in devel-en
