@@ -1,5 +1,5 @@
 #!/bin/ksh
-# 
+#
 # This program is free software, distributed under the terms of
 # the GNU General Public License Version 2.
 #
@@ -26,7 +26,7 @@
 RCSID='$Id$'
 r=${RCSID#* * }
 rev=${r%% *}
-VERSION="v0.20/$rev"
+VERSION="v0.21/$rev"
 VERSIONSTRING="\
 Build package utility from PLD Linux CVS repository
 $VERSION (C) 1999-2007 Free Penguins".
@@ -53,6 +53,9 @@ NO5=""
 ALWAYS_CVSUP=${ALWAYS_CVSUP:-"yes"}
 CVSROOT=""
 GREEDSRC=""
+
+# use rpm 4.4.6+ digest format instead of comments if non-zero
+USEDIGEST=
 
 # user agent when fetching files
 USER_AGENT="PLD/Builder($VERSION)"
@@ -110,11 +113,18 @@ TRY_UPGRADE=""
 # should the specfile be restored if upgrade failed?
 REVERT_BROKEN_UPGRADE="yes"
 
-if [ -x /usr/bin/rpm-getdeps ]; then
-	FETCH_BUILD_REQUIRES_RPMGETDEPS="yes"
-else
+if rpm --specsrpm 2>/dev/null; then
+	FETCH_BUILD_REQUIRES_RPMSPECSRPM="yes"
 	FETCH_BUILD_REQUIRES_RPMGETDEPS="no"
+else
+	FETCH_BUILD_REQUIRES_RPMSPECSRPM="no"
+	if [ -x /usr/bin/rpm-getdeps ]; then
+		FETCH_BUILD_REQUIRES_RPMGETDEPS="yes"
+	else
+		FETCH_BUILD_REQUIRES_RPMGETDEPS="no"
+	fi
 fi
+
 
 # Here we load saved user environment used to
 # predefine options set above, or passed to builder
@@ -241,12 +251,17 @@ Usage: builder [-D|--debug] [-V|--version] [--short-version] [-a|--as_anon] [-b|
 --short-circuit     - short-circuit build
 -B, --branch        - add branch
 -c, --clean         - clean all temporarily created files (in BUILD, SOURCES,
-                      SPECS and \$RPM_BUILD_ROOT),
+                      SPECS and \$RPM_BUILD_ROOT and CVS/Entries) after rpmbuild commands.
+-m, --mr-proper     - clean all temporarily created files (in BUILD, SOURCES,
+					  SPECS and \$RPM_BUILD_ROOT and CVS/Entries). Doesn't run
+					  any rpm building.
 -cf, --cvs-force	- use -F when tagging (useful when moving branches)
 -d <cvsroot>, --cvsroot <cvsroot>
                     - setup \$CVSROOT,
 --define <macro> <value>
                     - define a macro <macro> with value <value>,
+--alt_kernel <kernel>
+                    - same as --define 'alt_kernel <kernel>'
 --nodeps            - rpm won't check any dependences
 -g, --get           - get <package>.spec and all related files from CVS repo
                       or HTTP/FTP,
@@ -254,8 +269,6 @@ Usage: builder [-D|--debug] [-V|--version] [--short-version] [-a|--as_anon] [-b|
 --http              - use http instead of ftp,
 -l <logfile>, --logtofile <logfile>
                     - log all to file,
--m, --mr-proper     - only remove all files related to spec file and all work
-                      resources,
 -nc, --no-cvs       - don't download sources from CVS, if source URL is given,
 -ncs, --no-cvs-specs
                     - don't check specs in CVS
@@ -339,6 +352,16 @@ Usage: builder [-D|--debug] [-V|--version] [--short-version] [-a|--as_anon] [-b|
                      - build for platform <platform>.
 --init-rpm-dir       - initialize ~/rpm directory structure
 "
+}
+
+# change dependency to specname
+# common changes:
+# - perl(Package::Name) -> perl-Package-Name
+depspecname() {
+	local package="$1"
+
+	package=$(echo "$package" | sed -e '/perl(.*)/{s,perl(\(.*\)),perl-\1,;s,::,-,g}')
+	echo "$package"
 }
 
 update_shell_title() {
@@ -455,33 +478,37 @@ cache_rpm_dump() {
 	fi
 
 	update_shell_title "cache_rpm_dump"
-	local rpm_dump
-	rpm_dump=`
-		# what we need from dump is NAME, VERSION, RELEASE and PATCHES/SOURCES.
-		dump='%{echo:dummy: PACKAGE_NAME %{name} }%dump'
-		case "$RPMBUILD" in
-		rpm)
-			ARGS='-bp'
-			;;
-		rpmbuild)
-			ARGS='--nodigest --nosignature --nobuild'
-			;;
-		esac
-		minirpm $ARGS --define "'prep $dump'" --nodeps $SPECFILE
-	`
-	if [ $? -gt 0 ]; then
-		error=$(echo "$rpm_dump" | sed -ne '/^error:/,$p')
-		echo "$error" >&2
-		Exit_error err_build_fail
-	fi
+	if [ -x /usr/bin/rpm-specdump ]; then
+		rpm_dump_cache=`rpm-specdump $BCOND $TARGET_SWITCH $SPECFILE`
+	else
+		local rpm_dump
+		rpm_dump=`
+			# what we need from dump is NAME, VERSION, RELEASE and PATCHES/SOURCES.
+			dump='%{echo:dummy: PACKAGE_NAME %{name} }%dump'
+			case "$RPMBUILD" in
+			rpm)
+				ARGS='-bp'
+				;;
+			rpmbuild)
+				ARGS='--nodigest --nosignature --nobuild'
+				;;
+			esac
+			minirpm $ARGS --define "'prep $dump'" --nodeps $SPECFILE
+		`
+		if [ $? -gt 0 ]; then
+			error=$(echo "$rpm_dump" | sed -ne '/^error:/,$p')
+			echo "$error" >&2
+			Exit_error err_build_fail
+		fi
 
-	# make small dump cache
-	rpm_dump_cache=`echo "$rpm_dump" | awk '
-		$2 ~ /^SOURCEURL/ {print}
-		$2 ~ /^PATCHURL/  {print}
-		$2 ~ /^nosource/ {print}
-		$2 ~ /^PACKAGE_/ {print}
-	'`
+		# make small dump cache
+		rpm_dump_cache=`echo "$rpm_dump" | awk '
+			$2 ~ /^SOURCEURL/ {print}
+			$2 ~ /^PATCHURL/  {print}
+			$2 ~ /^nosource/ {print}
+			$2 ~ /^PACKAGE_/ {print}
+		'`
+	fi
 
 	update_shell_title "cache_rpm_dump: OK!"
 }
@@ -515,7 +542,7 @@ parse_spec()
 	# icons are needed for successful spec parse
 	get_icons
 
-	cd $SPECS_DIR
+	cd $SPEC_DIR
 	cache_rpm_dump
 
 	if [ "$NOSRCS" != "yes" ]; then
@@ -623,10 +650,10 @@ init_builder()
 			extra="--define 'name $ASSUMED_NAME'"
 		fi
 		SOURCE_DIR="`eval $RPM $RPMOPTS $extra --eval '%{_sourcedir}'`"
-		SPECS_DIR="`eval $RPM $RPMOPTS $extra --eval '%{_specdir}'`"
+		SPEC_DIR="`eval $RPM $RPMOPTS $extra --eval '%{_specdir}'`"
 	else
 		SOURCE_DIR="."
-		SPECS_DIR="."
+		SPEC_DIR="."
 	fi
 
 	__PWD="`pwd`"
@@ -642,7 +669,7 @@ get_spec()
 		set -v
 	fi
 
-	cd "$SPECS_DIR"
+	cd "$SPEC_DIR"
 	if [ ! -f "$SPECFILE" ]; then
 		SPECFILE="`basename $SPECFILE .spec`.spec"
 	fi
@@ -671,7 +698,7 @@ get_spec()
 
 find_mirror()
 {
-	cd "$SPECS_DIR"
+	cd "$SPEC_DIR"
 	local url="$1"
 	if [ ! -f "mirrors" -a "$NOCVSSPEC" != "yes" ] ; then
 		cvs update mirrors >&2
@@ -698,7 +725,7 @@ find_mirror()
 # Warning: unpredictable results if same URL used twice
 src_no ()
 {
-	cd $SPECS_DIR
+	cd $SPEC_DIR
 	rpm_dump | \
 	grep "SOURCEURL[0-9]*[ 	]*$1""[ 	]*$" | \
 	sed -e 's/.*SOURCEURL\([0-9][0-9]*\).*/\1/' | \
@@ -710,7 +737,7 @@ src_md5()
 	[ "$NO5" = "yes" ] && return
 	no=$(src_no "$1")
 	[ -z "$no" ] && return
-	cd $SPECS_DIR
+	cd $SPEC_DIR
 	local md5
 
 	if [ -f additional-md5sums ]; then
@@ -737,11 +764,16 @@ src_md5()
 	if [ -n "$source_md5" ]; then
 		echo $source_md5
 	else
-		# we have empty SourceX-md5, but it is still possible
-		# that we have NoSourceX-md5 AND NoSource: X
-		nosource_md5=`grep -i "#[	 ]*NoSource$no-md5[	 ]*:" $SPECFILE | sed -e 's/.*://'`
-		if [ -n "$nosource_md5" -a -n "`grep -i "^NoSource:[	 ]*$no$" $SPECFILE`" ] ; then
-			echo $nosource_md5
+		source_md5=`grep -i "BuildRequires:[ 	]*digest(%SOURCE$no)[ 	]*=" $SPECFILE | sed -e 's/.*=//'`
+		if [ -n "$source_md5" ]; then
+			echo $source_md5
+		else
+			# we have empty SourceX-md5, but it is still possible
+			# that we have NoSourceX-md5 AND NoSource: X
+			nosource_md5=`grep -i "#[	 ]*NoSource$no-md5[	 ]*:" $SPECFILE | sed -e 's/.*://'`
+			if [ -n "$nosource_md5" -a -n "`grep -i "^NoSource:[	 ]*$no$" $SPECFILE`" ] ; then
+				echo $nosource_md5
+			fi
 		fi
 	fi
 }
@@ -862,9 +894,10 @@ update_md5()
 		local srcno=$(src_no "$i")
 		if [ -n "$ADD5" ]; then
 			[ "$fp" = "$i" ] && continue # FIXME what is this check doing?
-			grep -qiE '^#[ 	]*Source'$srcno'-md5[ 	]*:' $SPECS_DIR/$SPECFILE && continue
+			grep -qiE '^#[ 	]*Source'$srcno'-md5[ 	]*:' $SPEC_DIR/$SPECFILE && continue
+			grep -qiE '^BuildRequires:[ 	]*digest[(]%SOURCE'$srcno'[)][ 	]*=' $SPEC_DIR/$SPECFILE && continue
 		else
-			grep -qiE '^#[ 	]*Source'$srcno'-md5[ 	]*:' $SPECS_DIR/$SPECFILE || continue
+			grep -qiE '^#[ 	]*Source'$srcno'-md5[ 	]*:' $SPEC_DIR/$SPECFILE || grep -qiE '^BuildRequires:[ 	]*digest[(]%SOURCE'$srcno'[)][ 	]*=' $SPEC_DIR/$SPECFILE || continue
 		fi
 		if [ ! -f "$fp" ] || [ $ALWAYS_CVSUP = "yes" ]; then
 			need_files="$need_files $i"
@@ -880,19 +913,24 @@ update_md5()
 	for i in "$@"; do
 		local fp=$(nourl "$i")
 		local srcno=$(src_no "$i")
-		local md5=$(grep -iE '^#[ 	]*(No)?Source'$srcno'-md5[ 	]*:' $SPECS_DIR/$SPECFILE )
+		local md5=$(grep -iE '^#[ 	]*(No)?Source'$srcno'-md5[ 	]*:' $SPEC_DIR/$SPECFILE )
+		if [ -z "$md5" ]; then
+			md5=$(grep -iE '^[ 	]*BuildRequires:[ 	]*digest[(]%SOURCE'$srcno'[)][ 	]*=' $SPEC_DIR/$SPECFILE )
+		fi
 		if [ -n "$ADD5" ] && is_url $i || [ -n "$md5" ]; then
-			local tag="Source$srcno-md5"
+			local tag="# Source$srcno-md5:\t"
 			if [[ "$md5" == *NoSource* ]]; then
-				tag="NoSource$srcno-md5"
+				tag="# NoSource$srcno-md5:\t"
+			elif [ -n "$USEDIGEST" ]; then
+				tag="BuildRequires:\tdigest(%SOURCE$srcno) = "
 			fi
 			md5=$(md5sum "$fp" | cut -f1 -d' ')
-			echo "Updating $tag ($md5: $fp)."
+			echo "Updating Source$srcno ($md5: $fp)."
 			perl -i -ne '
-				print unless /^\s*#\s*(No)?Source'$srcno'-md5\s*:/i;
-				print "# '$tag':\t'$md5'\n" if /^Source'$srcno'\s*:\s+/;
+				print unless (/^\s*#\s*(No)?Source'$srcno'-md5\s*:/i or /^\s*BuildRequires:\s*digest\(%SOURCE'$srcno'\)/i);
+				print "'"$tag$md5"'\n" if /^Source'$srcno'\s*:\s+/;
 			' \
-			$SPECS_DIR/$SPECFILE
+			$SPEC_DIR/$SPECFILE
 		fi
 	done
 }
@@ -1185,7 +1223,7 @@ tag_files()
 		fi
 	fi
 
-	cd "$SPECS_DIR"
+	cd "$SPEC_DIR"
 	if [ "$TAG_VERSION" = "yes" ]; then
 		update_shell_title "tag spec: $TAGVER"
 		cvs $OPTIONS $TAGVER $SPECFILE || exit
@@ -1229,7 +1267,7 @@ branch_files()
 		cvs $OPTIONS $TAG $tag_files || exit
 	fi
 
-	cd "$SPECS_DIR"
+	cd "$SPEC_DIR"
 	cvs $OPTIONS $TAG $SPECFILE || exit
 }
 
@@ -1255,7 +1293,7 @@ build_package()
 		set -v
 	fi
 
-	cd "$SPECS_DIR"
+	cd "$SPEC_DIR"
 
 	if [ -n "$TRY_UPGRADE" ]; then
 		update_shell_title "build_package: try_upgrade"
@@ -1283,7 +1321,7 @@ build_package()
 			unset TOLDVER TNEWVER TNOTIFY
 		fi
 	fi
-	cd "$SPECS_DIR"
+	cd "$SPEC_DIR"
 
 	case "$COMMAND" in
 		build )
@@ -1536,12 +1574,12 @@ run_sub_builder()
 	parent_spec_name=''
 
 	# Istnieje taki spec? ${package}.spec
-	if [ -f "${SPECS_DIR}/${package}.spec" ]; then
+	if [ -f "${SPEC_DIR}/${package}.spec" ]; then
 		parent_spec_name=${package}.spec
-	elif [ -f "${SPECS_DIR}/`echo ${package_name} | sed -e s,-devel.*,,g -e s,-static,,g`.spec" ]; then
+	elif [ -f "${SPEC_DIR}/`echo ${package_name} | sed -e s,-devel.*,,g -e s,-static,,g`.spec" ]; then
 		parent_spec_name="`echo ${package_name} | sed -e s,-devel.*,,g -e s,-static,,g`.spec"
 	else
-		for provides_line in `grep ^Provides:.*$package  ${SPECS_DIR} -R`
+		for provides_line in `grep ^Provides:.*$package  ${SPEC_DIR} -R`
 		do
 			echo $provides_line
 		done
@@ -1571,7 +1609,7 @@ spawn_sub_builder()
 		sub_builder_opts="${sub_builder_opts} -Upi"
 	fi
 
-	cd "${SPECS_DIR}"
+	cd "${SPEC_DIR}"
 	./builder ${sub_builder_opts} "$@"
 }
 
@@ -1588,7 +1626,7 @@ remove_build_requires()
 			*)
 				echo You may want to manually remove following BuildRequires fetched:
 				echo $INSTALLED_PACKAGES
-				echo Try poldek -e \`cat `pwd`/.${SPECFILE}_INSTALLED_PACKAGES\`
+				echo "Try poldek -e \`cat $(pwd)/.${SPECFILE}_INSTALLED_PACKAGES\`"
 				;;
 		esac
 	fi
@@ -1658,10 +1696,16 @@ fetch_build_requires()
 {
 	if [ "${FETCH_BUILD_REQUIRES}" = "yes" ]; then
 		update_shell_title "fetch build requires"
-		if [ "$FETCH_BUILD_REQUIRES_RPMGETDEPS" = "yes" ]; then
-			# TODO: Conflicts list doesn't check versions
-			local CNFL=$(rpm-getdeps $BCOND $SPECFILE 2> /dev/null | awk '/^\-/ { print $3 } ' | _rpm_cnfl_check | xargs)
-			local DEPS=$(rpm-getdeps $BCOND $SPECFILE 2> /dev/null | awk '/^\+/ { print $3 } ' | _rpm_prov_check | xargs)
+		if [ "$FETCH_BUILD_REQUIRES_RPMGETDEPS" = "yes" ] || [ "$FETCH_BUILD_REQUIRES_RPMSPECSRPM" = "yes" ]; then
+			if [ "$FETCH_BUILD_REQUIRES_RPMGETDEPS" = "yes" ]; then
+				# TODO: Conflicts list doesn't check versions
+				local CNFL=$(rpm-getdeps $BCOND $SPECFILE 2> /dev/null | awk '/^\-/ { print $3 } ' | _rpm_cnfl_check | xargs)
+				local DEPS=$(rpm-getdeps $BCOND $SPECFILE 2> /dev/null | awk '/^\+/ { print $3 } ' | _rpm_prov_check | xargs)
+			fi
+			if [ "$FETCH_BUILD_REQUIRES_RPMSPECSRPM" = "yes" ]; then
+				local CNFL=$(rpm -q --specsrpm --conflicts $BCOND $SPECFILE | awk '{print $1}' | _rpm_cnfl_check | xargs)
+				local DEPS=$(rpm -q --specsrpm --requires $BCOND $SPECFILE | awk '{print $1}' | _rpm_prov_check | xargs)
+			fi
 
 			if [ -n "$CNFL" ] || [ -n "$DEPS" ]; then
 				echo "fetch builderequires: install [$DEPS]; remove [$CNFL]"
@@ -1679,13 +1723,12 @@ fetch_build_requires()
 					echo "Trying to install dependencies ($DEPS):"
 					local log=.${SPECFILE}_poldek.log
 					$SU_SUDO /usr/bin/poldek --caplookup -uGq $DEPS | tee $log
-					failed=$(awk -F: '/^error:/{print $2}' $log)
+					failed=$(awk '/^error:/{a=$2; sub(/^error: /, "", a); sub(/:$/, "", a); print a}' $log)
 					rm -f $log
 					local ok
 					if [ -n "$failed" ]; then
 						for package in $failed; do
-							# FIXME: sanitise, deps could be not .spec files
-							spawn_sub_builder -bb $package && ok="$ok $package"
+							spawn_sub_builder -bb $(depspecname $package) && ok="$ok $package"
 						done
 						DEPS="$ok"
 					else
@@ -1845,17 +1888,17 @@ init_rpm_dir() {
 
 	mkdir -p $TOP_DIR/{RPMS,BUILD,SRPMS}
 	cd $TOP_DIR
-	cvs -d $CVSROOT co SOURCES/.cvsignore SPECS/{mirrors,adapter{,.awk},fetchsrc_request,builder,{relup,compile,repackage}.sh}
+	cvs -d $CVSROOT co SOURCES/.cvsignore SPECS/{mirrors,md5,adapter{,.awk},fetchsrc_request,builder,{relup,compile,repackage}.sh}
 
 	init_builder
 
 	echo "To checkout *all* .spec files:"
-	echo "- remove $SPECS_DIR/CVS/Entries.Static"
-	echo "- run cvs up in $SPECS_DIR dir"
+	echo "- remove $SPEC_DIR/CVS/Entries.Static"
+	echo "- run cvs up in $SPEC_DIR dir"
 
 	echo ""
 	echo "To commit with your developer account:"
-	echo "- edit $SPECS_DIR/CVS/Root"
+	echo "- edit $SPEC_DIR/CVS/Root"
 	echo "- edit $SOURCE_DIR/CVS/Root"
 }
 
@@ -1869,6 +1912,37 @@ get_greed_sources() {
 		Exit_error err_no_source_in_repo $1
 	fi
 	
+}
+
+# remove entries from CVS/Entries
+cvs_entry_remove() {
+	local cvsdir="$1"; shift
+	if [ ! -d "$cvsdir" ]; then
+		echo >&2 "cvs_entry_remove: $cvsdir is not a directory"
+		exit 1
+	fi
+
+	for file in "$@"; do
+		rm -f $cvsdir/CVS/Entries.new || return 1
+		awk -ve="${file##*/}" -F/ '$2 != e {print}' $cvsdir/CVS/Entries > $cvsdir/CVS/Entries.new || return 1
+		mv -f $cvsdir/CVS/Entries.new $cvsdir/CVS/Entries || return 1
+	done
+	return 0
+}
+
+mr_proper() {
+	init_builder
+	NOCVSSPEC="yes"
+	DONT_PRINT_REVISION="yes"
+	get_spec
+	parse_spec
+
+	# remove from CVS/Entries
+	cvs_entry_remove $SPEC_DIR $SPECFILE
+	cvs_entry_remove $SOURCE_DIR $SOURCES $PATCHES
+
+	# remove spec and sources
+	$RPMBUILD --clean --rmsource --rmspec --nodeps $SPECFILE
 }
 
 #---------------------------------------------
@@ -1923,7 +1997,7 @@ while [ $# -gt 0 ]; do
 		-c | --clean )
 			CLEAN="--clean --rmspec --rmsource"; shift ;;
 		-cf | --cvs-force )
-			CVS_FORCE="-F -B"; shift;;
+			CVS_FORCE="-F"; shift;;
 		-d | --cvsroot )
 			shift; CVSROOT="${1}"; shift ;;
 		-g | --get )
@@ -2097,6 +2171,11 @@ while [ $# -gt 0 ]; do
 				RPMOPTS="${RPMOPTS} --define \"${MACRO} ${VALUE}\""
 			fi
 			;;
+		--alt_kernel)
+			shift
+			RPMOPTS="${RPMOPTS} --define \"alt_kernel $1\""
+			shift
+			;;
 		--short-circuit)
 			RPMBUILDOPTS="${RPMBUILDOPTS} --short-circuit"
 			shift
@@ -2202,15 +2281,6 @@ case "$COMMAND" in
 
 			# ./builder -bs test.spec -r AC-branch -Tp auto-ac- -tt
 			if [ -n "$TEST_TAG" ]; then
-				# - do not allow utf8 encoded specs on AC-branch
-				if [ "$CVSTAG" = "AC-branch-disabled" ]; then
-					local t
-					t=$(grep '^Summary(.*\.UTF-8):' $SPECFILE)
-					if [ "$t" ]; then
-						Exit_error err_acl_deny "UTF-8 .specs not allowed on $CVSTAG"
-					fi
-				fi
-
 				local TAGVER=`make_tagver`
 				echo "Searching for tag $TAGVER..."
 				TAGREL=$(cvs status -v $SPECFILE | grep -E "^[[:space:]]*${TAGVER}[[[:space:]]" | sed -e 's#.*(revision: ##g' -e 's#).*##g')
@@ -2315,7 +2385,7 @@ case "$COMMAND" in
 		fi
 		;;
 	"mr-proper" )
-		$RPM --clean --rmsource --rmspec --force --nodeps $SPECFILE
+		mr_proper
 		;;
 	"list-sources-files" )
 		init_builder
