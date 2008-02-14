@@ -36,7 +36,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	33
+Release:	34
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -48,7 +48,8 @@ Source4:	%{name}-find-spec-bcond
 Source5:	%{name}-find-lang
 Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
-
+Source8:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
+# Source8-md5:	08b29584dd349aac9caa7610131a0a88
 Source9:	%{name}-php-provides
 Source10:	%{name}-php-requires
 Source11:	%{name}.sysinfo
@@ -195,6 +196,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		__newcpp %{?force_cpp}%{!?force_cpp:%{_target_cpu}-pld-linux-gcc -E}
 
 %define		_rpmlibdir /usr/lib/rpm
+%define		_noautocompressdoc	RPM-GPG-KEY
 
 %define		specflags	-fno-strict-aliasing
 
@@ -713,6 +715,7 @@ mv -f scripts/{perl.prov,perl.prov.in}
 mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib db db3 popt rpmdb/db.h
+cp %{SOURCE8} RPM-GPG-KEY
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
