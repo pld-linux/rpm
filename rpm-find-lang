@@ -35,6 +35,7 @@
 #   * start support for KDE help files
 
 PROG=${0##*/}
+REVISION='$Revision$'
 
 usage () {
 cat <<EOF
