@@ -161,6 +161,7 @@ BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gcc >= 5:3.4
 %endif
 BuildRequires:	gettext-devel >= 0.11.4-2
+BuildRequires:	gettext-autopoint >= 0.11.4-2
 BuildRequires:	libmagic-devel
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
