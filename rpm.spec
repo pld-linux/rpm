@@ -36,7 +36,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	34
+Release:	35
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -1069,6 +1069,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc CHANGES CREDITS README wdj/JBJ-GPG-KEY manual/*
+%doc RPM-GPG-KEY
 
 %attr(755,root,root) /bin/rpm
 #%attr(755,root,root) %{_bindir}/rpmdb
