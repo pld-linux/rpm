@@ -35,11 +35,10 @@
 #   * start support for KDE help files
 
 PROG=${0##*/}
-REVISION='$Revision$'
+VERSION=$(set -- $Revision$; echo $2)
 
 usage () {
 cat <<EOF
-
 Usage: $PROG TOP_DIR PACKAGE_NAME [prefix]
 
 where TOP_DIR is
@@ -78,6 +77,8 @@ else
    	NAME=$1
 fi
 shift
+
+echo "$PROG $VERSION: find-lang for $NAME"
 
 GNOME='#'
 KDE='#'
