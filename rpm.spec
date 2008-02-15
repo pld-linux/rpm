@@ -25,7 +25,6 @@
 %define	reqdb_ver	4.5.20-3
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
-%define	find_lang_rev	1.27
 %define	sover	4.4
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
@@ -36,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	36
+Release:	37
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -45,7 +44,6 @@ Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
 Source4:	%{name}-find-spec-bcond
-Source5:	%{name}-find-lang
 Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
 Source8:	RPM-GPG-KEY
@@ -189,6 +187,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # don't require very fresh rpm.macros to build
 %define		__gettextize gettextize --copy --force --intl ; cp -f po/Makevars{.template,}
+%define		find_lang sh ./scripts/find-lang.sh $RPM_BUILD_ROOT
 %define		ix86	i386 i486 i586 i686 athlon pentium3 pentium4
 %define		ppc	ppc ppc7400 ppc7450
 %define		x8664	amd64 ia32e x86_64
@@ -460,7 +459,7 @@ Summary(ru.UTF-8):	Скрипты и утилиты, необходимые дл
 Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для побудови пакетів
 Group:		Applications/File
 Requires(pre):	findutils
-Requires:	%{name}-build-macros >= 1.417
+Requires:	%{name}-build-macros >= 1.433-2
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
@@ -487,7 +486,6 @@ Requires:	sed
 Requires:	sh-utils
 Requires:	tar
 Requires:	textutils
-Provides:	rpmbuild(find_lang) = %{find_lang_rev}
 Provides:	rpmbuild(monoautodeps)
 Provides:	rpmbuild(noauto) = 3
 %ifarch %{x8664}
@@ -660,7 +658,6 @@ echo '%%define	__php_provides	/usr/lib/rpm/php.prov' > macros.php
 echo '%%define	__php_requires	/usr/lib/rpm/php.req' >> macros.php
 echo '%%define	__mono_provides	/usr/lib/rpm/mono-find-provides' > macros.mono
 echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
-install %{SOURCE5} scripts/find-lang.sh
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
@@ -739,12 +736,6 @@ for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
 done
 
 %build
-rev=$(awk '/^#.*Id:.*/{print $4}' scripts/find-lang.sh)
-if [ "$rev" != "%find_lang_rev" ]; then
-	: Update find_lang_rev define to $rev, and retry
-	exit 1
-fi
-
 %if %{with system_libmagic}
 rm -rf file
 %else
