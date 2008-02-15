@@ -160,8 +160,8 @@ BuildRequires:	elfutils-devel >= 0.108
 # -fPIE/-pie
 BuildRequires:	gcc >= 5:3.4
 %endif
-BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	gettext-autopoint >= 0.11.4-2
+BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	libmagic-devel
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
@@ -294,14 +294,14 @@ Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
 %{?with_db:Requires:	db >= %{reqdb_ver}}
-%{?with_selinux:Requires:	libselinux >= 1.18}
 Requires:	libmagic >= 1.15-2
+%{?with_selinux:Requires:	libselinux >= 1.18}
 Requires:	popt >= %{reqpopt_ver}
-Obsoletes:	rpm-libs
+%{?with_suggest_tags:Suggests:	lzma}
 Obsoletes:	rpm-apidocs
+Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
-%{?with_suggest_tags:Suggests:	lzma}
 
 %description lib
 RPMs library.
@@ -495,6 +495,7 @@ Requires:	gzip
 Requires:	lzma
 Requires:	make
 Requires:	patch
+Requires:	rpm-specdump >= 0.3
 Requires:	sed
 Requires:	sh-utils
 Requires:	tar
