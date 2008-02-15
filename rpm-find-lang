@@ -54,6 +54,8 @@ Additional options:
   --with-omf		find OMF files
   --all-name		match all package/domain names
   --without-mo		skip *.mo locale files
+  -o NAME			output will be saved to NAME
+  -a NAME			output will be appended to NAME
 EOF
 exit 1
 }
@@ -78,8 +80,6 @@ else
 fi
 shift
 
-echo "$PROG $VERSION: find-lang for '$NAME'"
-
 GNOME='#'
 KDE='#'
 OMF='#'
@@ -87,6 +87,7 @@ MO=''
 MO_NAME=$NAME.lang
 ALL_NAME='#'
 NO_ALL_NAME=''
+APPEND=''
 while test $# -gt 0 ; do
     case "$1" in
 	--with-gnome)
@@ -115,14 +116,27 @@ while test $# -gt 0 ; do
 		NO_ALL_NAME='#'
 		shift
 		;;
-	* )
+	-o)
+		shift
+		MO_NAME=$1
+		shift
+		;;
+	-a)
+		shift
+		MO_NAME=$1
+		APPEND='>'
+		shift
+		;;
+	*)
 		MO_NAME=$1
 		shift
 		;;
     esac
-done    
+done
 
-echo '%defattr(644,root,root,755)' > $MO_NAME
+echo "$PROG/$VERSION: find-lang '$NAME' $APPEND> $MO_NAME"
+
+[ -z "$APPEND" ] && echo '%defattr(644,root,root,755)' > $MO_NAME
 
 if [ ! -f __find.files ] || [ "$TOP_DIR" -nt __find.files ]; then
 	find $TOP_DIR -xtype f -name '*.mo' | xargs -r file -L | \
