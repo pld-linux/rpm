@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	37
+Release:	38
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -1031,6 +1031,20 @@ rm -rf $RPM_BUILD_ROOT
 
 %triggerpostun lib -- %{name}-lib < %{version}
 rm -f /var/lib/rpm/__db*
+# TODO: poldek should abort if it can't reopen rpmdb after rpm exec:
+#Installing set #3
+#rpmdb: Program version 4.2 doesn't match environment version
+#error: db4 error(22) from dbenv->open: Invalid argument
+#error: cannot open Packages index using db3 - Invalid argument (22)
+#error: //var/lib/rpm: open rpm database failed
+#Processing dependencies...
+#There are more than one package which provide "/bin/sh":
+# if poldek is running, kill it so it will not attempt to fill whole rpmdb
+p=$(/sbin/pidof poldek)
+if [ "$p" ]; then
+	echo >&2 "Killing poldek ($p), don't panic :)"
+	kill $p
+fi
 
 %pretrans
 # this needs to be a dir
