@@ -252,6 +252,7 @@ Summary:	RPM base package - scripts used by rpm packages themselves
 Summary(pl.UTF-8):	Podstawowy pakiet RPM - skrypty używane przez same pakiety rpm
 Group:		Base
 Requires:	filesystem
+Obsoletes:	rpm-scripts
 Obsoletes:	vserver-rpm
 
 %description base
@@ -885,7 +886,7 @@ install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
 install %{SOURCE17} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
 
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Conflictname
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Dirnames
