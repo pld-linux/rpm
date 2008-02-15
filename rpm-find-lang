@@ -78,7 +78,7 @@ else
 fi
 shift
 
-echo "$PROG $VERSION: find-lang for $NAME"
+echo "$PROG $VERSION: find-lang for '$NAME'"
 
 GNOME='#'
 KDE='#'
@@ -211,6 +211,6 @@ s:%lang(C) ::' >> $MO_NAME
 s:%lang(C) ::' >> $MO_NAME
 
 if [ "$(egrep -v '(^%defattr|^$)' $MO_NAME | wc -l)" -le 0 ]; then
-	echo >&2 "Error: international files not found for $NAME!"
+	echo >&2 "$PROG: Error: international files not found for '$NAME'!"
 	exit 1
 fi
