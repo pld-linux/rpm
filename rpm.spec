@@ -117,15 +117,14 @@ Patch57:	%{name}-as_needed-fix.patch
 Patch58:	%{name}-repackage-wo-lzma.patch
 Patch59:	%{name}-libtool-deps.patch
 Patch60:	%{name}-obsolete-rpmrc.patch
-Patch61:	%{name}-sparc64.patch
-Patch62:	%{name}-rpmdb.patch
-Patch63:	%{name}-lzma-size_t.patch
-Patch64:	%{name}-tar_as_secondary_source.patch
-Patch65:	%{name}-man_pl.patch
-Patch66:	%{name}-lzma-tukaani.patch
-Patch67:	%{name}-v3-support.patch
-Patch68:	%{name}-cleanbody.patch
-Patch69:	%{name}-rpm5-patchset-9486.patch
+Patch61:	%{name}-rpmdb.patch
+Patch62:	%{name}-lzma-size_t.patch
+Patch63:	%{name}-tar_as_secondary_source.patch
+Patch64:	%{name}-man_pl.patch
+Patch65:	%{name}-lzma-tukaani.patch
+Patch66:	%{name}-v3-support.patch
+Patch67:	%{name}-cleanbody.patch
+Patch68:	%{name}-rpm5-patchset-9486.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -695,9 +694,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch58 -p1
 %patch59 -p1
 %patch60 -p1
-%ifarch sparc64
 %patch61 -p1
-%endif
 %patch62 -p1
 %patch63 -p1
 %patch64 -p1
@@ -705,7 +702,6 @@ install %{SOURCE12} scripts/perl.prov
 %patch66 -p1
 %patch67 -p1
 %patch68 -p1
-%patch69 -p1
 
 mv -f scripts/{perl.req,perl.req.in}
 mv -f scripts/{perl.prov,perl.prov.in}
