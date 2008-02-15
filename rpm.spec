@@ -854,6 +854,7 @@ echo "noarch-[^-]*-.*" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/vpkg-provides*
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{prov,req}.pl
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{provides,requires}.perl
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
 
 # not installed since 4.4.8 (-tools-perl subpackage)
 install scripts/rpmdiff scripts/rpmdiff.cgi $RPM_BUILD_ROOT%{_rpmlibdir}
@@ -1157,7 +1158,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/config.*
 %attr(755,root,root) %{_rpmlibdir}/cross-build
 %attr(755,root,root) %{_rpmlibdir}/find-spec-bcond
-%attr(755,root,root) %{_rpmlibdir}/find-lang.sh
 %attr(755,root,root) %{_rpmlibdir}/getpo.sh
 %attr(755,root,root) %{_rpmlibdir}/install-build-tree
 %attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
