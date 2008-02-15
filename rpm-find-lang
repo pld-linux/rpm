@@ -84,7 +84,7 @@ GNOME='#'
 KDE='#'
 OMF='#'
 MO=''
-MO_NAME=$NAME.lang
+OUTPUT=$NAME.lang
 ALL_NAME='#'
 NO_ALL_NAME=''
 APPEND=''
@@ -118,25 +118,26 @@ while test $# -gt 0 ; do
 		;;
 	-o)
 		shift
-		MO_NAME=$1
+		OUTPUT=$1
 		shift
 		;;
 	-a)
 		shift
-		MO_NAME=$1
+		OUTPUT=$1
 		APPEND='>'
 		shift
 		;;
 	*)
-		MO_NAME=$1
+		OUTPUT=$1
 		shift
 		;;
     esac
 done
 
-echo "$PROG/$VERSION: find-lang '$NAME' $APPEND> $MO_NAME"
+echo "$PROG/$VERSION: find-lang '$NAME' $APPEND> $OUTPUT"
 
-[ -z "$APPEND" ] && echo '%defattr(644,root,root,755)' > $MO_NAME
+MO_NAME=.$OUTPUT.tmp~
+echo '%defattr(644,root,root,755)' > $MO_NAME
 
 if [ ! -f __find.files ] || [ "$TOP_DIR" -nt __find.files ]; then
 	find $TOP_DIR -xtype f -name '*.mo' | xargs -r file -L | \
@@ -227,4 +228,11 @@ s:%lang(C) ::' >> $MO_NAME
 if [ "$(egrep -v '(^%defattr|^$)' $MO_NAME | wc -l)" -le 0 ]; then
 	echo >&2 "$PROG: Error: international files not found for '$NAME'!"
 	exit 1
+fi
+
+if [ "$APPEND" ]; then
+	cat $MO_NAME >> $OUTPUT
+	rm -f $MO_NAME
+else
+	mv -f $MO_NAME $OUTPUT
 fi
