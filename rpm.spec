@@ -121,15 +121,14 @@ Patch57:	%{name}-as_needed-fix.patch
 Patch58:	%{name}-repackage-wo-lzma.patch
 Patch59:	%{name}-libtool-deps.patch
 Patch60:	%{name}-obsolete-rpmrc.patch
-Patch61:	%{name}-sparc64.patch
-Patch62:	%{name}-rpmdb.patch
-Patch63:	%{name}-lzma-size_t.patch
-Patch64:	%{name}-tar_as_secondary_source.patch
-Patch65:	%{name}-man_pl.patch
-Patch66:	%{name}-lzma-tukaani.patch
-Patch67:	%{name}-v3-support.patch
-Patch68:	%{name}-cleanbody.patch
-Patch69:	%{name}-rpm5-patchset-9486.patch
+Patch61:	%{name}-rpmdb.patch
+Patch62:	%{name}-lzma-size_t.patch
+Patch63:	%{name}-tar_as_secondary_source.patch
+Patch64:	%{name}-man_pl.patch
+Patch65:	%{name}-lzma-tukaani.patch
+Patch66:	%{name}-v3-support.patch
+Patch67:	%{name}-cleanbody.patch
+Patch68:	%{name}-rpm5-patchset-9486.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -702,9 +701,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch58 -p1
 %patch59 -p1
 %patch60 -p1
-%ifarch sparc64
 %patch61 -p1
-%endif
 %patch62 -p1
 %patch63 -p1
 %patch64 -p1
@@ -712,8 +709,11 @@ install %{SOURCE12} scripts/perl.prov
 %patch66 -p1
 %patch67 -p1
 %patch68 -p1
-%patch69 -p1
 
+mv -f scripts/{perl.req,perl.req.in}
+mv -f scripts/{perl.prov,perl.prov.in}
+mv -f po/{no,nb}.po
+mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib db db3 popt rpmdb/db.h
 cp %{SOURCE8} RPM-GPG-KEY
 
@@ -721,11 +721,6 @@ cp %{SOURCE8} RPM-GPG-KEY
 %patch1068 -p1
 %patch1069 -p1
 %patch1070 -p1
-
-mv -f scripts/{perl.req,perl.req.in}
-mv -f scripts/{perl.prov,perl.prov.in}
-mv -f po/{no,nb}.po
-mv -f po/{sr,sr@Latn}.po
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
@@ -805,19 +800,13 @@ echo "%{_target_cpu}-%{_target_vendor}-linux" > $RPM_BUILD_ROOT%{_sysconfdir}/rp
 echo "amd64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 echo "x86_64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
-
 %ifarch amd64
 echo "amd64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 echo "x86_64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
-
 %ifarch ia32e
 echo "ia32e-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 echo "x86_64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-%endif
-
-%ifarch alpha
-echo "alpha-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 
 # x86 things
@@ -843,10 +832,41 @@ echo "i486-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 echo "i386-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 
-# ppc
-%ifarch ppc
-echo "ppc-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%ifarch alpha
+echo "alpha-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+
+%ifarch ia64
+echo "ia64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+
+%ifarch ppc64
+echo "powerpc64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "ppc64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+%ifarch ppc ppc64
 echo "powerpc-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "ppc-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+
+%ifarch s390x
+echo "s390x-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+%ifarch s390 s390x
+echo "s390-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+
+%ifarch sparc64
+echo "sparc64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "sparcv8-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "sparcv9-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+%ifarch sparcv9
+echo "sparcv8-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "sparcv9-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+%ifarch sparc sparcv9 sparc64
+echo "sparc-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 
 # noarch
