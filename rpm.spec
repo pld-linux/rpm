@@ -25,7 +25,6 @@
 %define	reqdb_ver	4.5.20
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
-%define	find_lang_rev	1.27
 %define	sover	4.4
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
@@ -36,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	15
+Release:	16
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -45,10 +44,8 @@ Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
 Source4:	%{name}-find-spec-bcond
-Source5:	%{name}-find-lang
 Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
-
 Source9:	%{name}-php-provides
 Source10:	%{name}-php-requires
 Source11:	%{name}.sysinfo
@@ -118,14 +115,14 @@ Patch57:	%{name}-as_needed-fix.patch
 Patch58:	%{name}-repackage-wo-lzma.patch
 Patch59:	%{name}-libtool-deps.patch
 Patch60:	%{name}-obsolete-rpmrc.patch
-Patch61:	%{name}-sparc64.patch
-Patch62:	%{name}-rpmdb.patch
-Patch63:	%{name}-lzma-size_t.patch
-Patch64:	%{name}-tar_as_secondary_source.patch
-Patch65:	%{name}-man_pl.patch
-Patch66:	%{name}-lzma-tukaani.patch
-Patch67:	%{name}-v3-support.patch
-Patch68:	%{name}-cleanbody.patch
+Patch61:	%{name}-rpmdb.patch
+Patch62:	%{name}-lzma-size_t.patch
+Patch63:	%{name}-tar_as_secondary_source.patch
+Patch64:	%{name}-man_pl.patch
+Patch65:	%{name}-lzma-tukaani.patch
+Patch66:	%{name}-v3-support.patch
+Patch67:	%{name}-cleanbody.patch
+Patch68:	%{name}-rpm5-patchset-9486.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -133,10 +130,6 @@ BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	db-devel >= %{reqdb_ver}
 BuildRequires:	elfutils-devel >= 0.108
-%ifnarch sparc64
-# -fPIE/-pie
-BuildRequires:	gcc >= 5:3.4
-%endif
 BuildRequires:	gettext-devel >= 0.11.4-2
 %{?with_system_libmagic:BuildRequires:	libmagic-devel}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
@@ -188,6 +181,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # don't require very fresh rpm.macros to build
 %define		__gettextize gettextize --copy --force --intl ; cp -f po/Makevars{.template,}
+%define		find_lang sh ./scripts/find-lang.sh $RPM_BUILD_ROOT
 %define		ix86	i386 i486 i586 i686 athlon pentium3 pentium4
 %define		ppc	ppc ppc7400 ppc7450
 %define		x8664	amd64 ia32e x86_64
@@ -255,6 +249,7 @@ Summary:	RPM base package - scripts used by rpm packages themselves
 Summary(pl.UTF-8):	Podstawowy pakiet RPM - skrypty używane przez same pakiety rpm
 Group:		Base
 Requires:	filesystem
+Obsoletes:	rpm-scripts
 Obsoletes:	vserver-rpm
 
 %description base
@@ -457,7 +452,7 @@ Summary(ru.UTF-8):	Скрипты и утилиты, необходимые дл
 Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для побудови пакетів
 Group:		Applications/File
 Requires(pre):	findutils
-Requires:	%{name}-build-macros >= 1.417
+Requires:	%{name}-build-macros >= 1.433-2
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
@@ -469,6 +464,7 @@ Requires:	elfutils
 Requires:	file >= 4.17
 Requires:	fileutils
 Requires:	findutils
+# rpmrc patch adds flags specific to gcc >= 3.4
 Requires:	gcc >= 5:3.4
 Requires:	glibc-devel
 Requires:	grep
@@ -480,7 +476,6 @@ Requires:	sed
 Requires:	sh-utils
 Requires:	tar
 Requires:	textutils
-Provides:	rpmbuild(find_lang) = %{find_lang_rev}
 Provides:	rpmbuild(monoautodeps)
 Provides:	rpmbuild(noauto) = 3
 %ifarch %{x8664}
@@ -653,7 +648,6 @@ echo '%%define	__php_provides	/usr/lib/rpm/php.prov' > macros.php
 echo '%%define	__php_requires	/usr/lib/rpm/php.req' >> macros.php
 echo '%%define	__mono_provides	/usr/lib/rpm/mono-find-provides' > macros.mono
 echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
-install %{SOURCE5} scripts/find-lang.sh
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
@@ -697,9 +691,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch58 -p1
 %patch59 -p1
 %patch60 -p1
-%ifarch sparc64
 %patch61 -p1
-%endif
 %patch62 -p1
 %patch63 -p1
 %patch64 -p1
@@ -724,12 +716,6 @@ for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
 done
 
 %build
-rev=$(awk '/^#.*Id:.*/{print $4}' scripts/find-lang.sh)
-if [ "$rev" != "%find_lang_rev" ]; then
-	: Update find_lang_rev define to $rev, and retry
-	exit 1
-fi
-
 %if %{with system_libmagic}
 rm -rf file
 %else
@@ -798,12 +784,10 @@ echo "%{_target_cpu}-%{_target_vendor}-linux" > $RPM_BUILD_ROOT%{_sysconfdir}/rp
 echo "amd64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 echo "x86_64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
-
 %ifarch amd64
 echo "amd64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 echo "x86_64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
-
 %ifarch ia32e
 echo "ia32e-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 echo "x86_64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
@@ -832,23 +816,50 @@ echo "i486-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 echo "i386-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 
-# ppc
-%ifarch ppc
-echo "ppc-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%ifarch alpha
+echo "alpha-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+
+%ifarch ia64
+echo "ia64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+
+%ifarch ppc64
+echo "powerpc64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "ppc64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+%ifarch ppc ppc64
 echo "powerpc-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "ppc-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+
+%ifarch s390x
+echo "s390x-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+%ifarch s390 s390x
+echo "s390-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+
+%ifarch sparc64
+echo "sparc64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "sparcv8-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "sparcv9-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+%ifarch sparcv9
+echo "sparcv8-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+echo "sparcv9-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%endif
+%ifarch sparc sparcv9 sparc64
+echo "sparc-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
 
 # noarch
 echo "noarch-[^-]*-.*" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 
-%ifarch %{ppc}
-#sed -e '/_target_platform/s/[%]{_target_cpu}/ppc/' \
-#	-i $RPM_BUILD_ROOT%{_rpmlibdir}/ppc74[05]0-linux/macros
-%endif
-
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/vpkg-provides*
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{prov,req}.pl
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{provides,requires}.perl
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
 
 # not installed since 4.4.8 (-tools-perl subpackage)
 install scripts/rpmdiff scripts/rpmdiff.cgi $RPM_BUILD_ROOT%{_rpmlibdir}
@@ -870,7 +881,7 @@ install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
 install %{SOURCE17} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
 
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Conflictname
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Dirnames
@@ -1039,7 +1050,7 @@ fi
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
 
-%pre build
+%pretrans build
 find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files -f %{name}.lang
@@ -1154,7 +1165,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/config.*
 %attr(755,root,root) %{_rpmlibdir}/cross-build
 %attr(755,root,root) %{_rpmlibdir}/find-spec-bcond
-%attr(755,root,root) %{_rpmlibdir}/find-lang.sh
 %attr(755,root,root) %{_rpmlibdir}/getpo.sh
 %attr(755,root,root) %{_rpmlibdir}/install-build-tree
 %attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
