@@ -21,17 +21,8 @@
 #   /usr/lib/rpm/mono-find-requires
 #   /usr/lib/rpm/osgideps.pl
 #   /usr/lib/rpm/perldeps.pl
-#   /usr/lib/rpm/rpm2cpio
-#   /usr/lib/rpm/symclash.py
-#   /usr/lib/rpm/symclash.sh
 #   /usr/lib/rpm/vcheck
-#   /usr/share/man/ja/man8/rpmcache.8
-#   /usr/share/man/ja/man8/rpmgraph.8
-#   /usr/share/man/man8/rpmcache.8
-#   /usr/share/man/man8/rpmconstant.8
-#   /usr/share/man/man8/rpmgraph.8
-#   /usr/share/man/pl/man8/rpmcache.8
-#   /usr/share/man/pl/man8/rpmgraph.8
+#   /usr/share/man/man8/rpmconstant.8.gz
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
@@ -61,7 +52,6 @@ ERROR
 %define	reqdb_ver	4.6.18
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
-%define	find_lang_rev	1.27
 %define	sover	5.0
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
@@ -72,7 +62,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.0.2
-Release:	0.1
+Release:	0.2
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.0/%{name}-%{version}.tar.gz
@@ -81,7 +71,6 @@ Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
 Source4:	%{name}-find-spec-bcond
-Source5:	%{name}-find-lang
 Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
 Source8:	%{name}-check-files
@@ -132,6 +121,7 @@ Patch26:	%{name}-notsc.patch
 Patch27:	%{name}-hack-norpmlibdep.patch
 
 Patch32:	%{name}-pld-autodep.patch
+Patch34:	%{name}-epoch0.patch
 Patch35:	%{name}-perl_req-INC_dirs.patch
 Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
@@ -156,10 +146,6 @@ BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.2-17
 %{?with_db:BuildRequires:	db-devel >= %{reqdb_ver}}
 BuildRequires:	elfutils-devel >= 0.108
-%ifnarch sparc64
-# -fPIE/-pie
-BuildRequires:	gcc >= 5:3.4
-%endif
 BuildRequires:	gettext-autopoint >= 0.11.4-2
 BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	libmagic-devel
@@ -173,8 +159,8 @@ BuildRequires:	neon-devel >= 0.25.5
 %endif
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
-%{?with_python:BuildRequires:	python-devel >= 1:2.5}
-BuildRequires:	python-modules >= 1:2.5
+%{?with_python:BuildRequires:	python-devel >= 1:2.3}
+BuildRequires:	python-modules >= 1:2.3
 BuildRequires:	rpm-perlprov
 %{?with_python:BuildRequires:	rpm-pythonprov}
 %{?with_sqlite:BuildRequires:	sqlite3-devel}
@@ -206,6 +192,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # don't require very fresh rpm.macros to build
 %define		__gettextize gettextize --copy --force --intl ; cp -f po/Makevars{.template,}
+%define		find_lang sh ./scripts/find-lang.sh $RPM_BUILD_ROOT
 %define		ix86	i386 i486 i586 i686 athlon pentium3 pentium4
 %define		ppc	ppc ppc7400 ppc7450
 %define		x8664	amd64 ia32e x86_64
@@ -216,6 +203,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		__newcpp %{?force_cpp}%{!?force_cpp:%{_target_cpu}-pld-linux-gcc -E}
 
 %define		_rpmlibdir /usr/lib/rpm
+%define		_noautocompressdoc	RPM-GPG-KEY
 
 %define		specflags	-fno-strict-aliasing
 
@@ -273,6 +261,7 @@ Summary:	RPM base package - scripts used by rpm packages themselves
 Summary(pl.UTF-8):	Podstawowy pakiet RPM - skrypty używane przez same pakiety rpm
 Group:		Base
 Requires:	filesystem
+Obsoletes:	rpm-scripts
 Obsoletes:	vserver-rpm
 
 %description base
@@ -419,6 +408,7 @@ Summary(pl.UTF-8):	Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
+Conflicts:	filesystem-debuginfo < 3.0-16
 
 %description utils
 Additional utilities for managing RPM packages and database.
@@ -474,7 +464,7 @@ Summary(ru.UTF-8):	Скрипты и утилиты, необходимые дл
 Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для побудови пакетів
 Group:		Applications/File
 Requires(pre):	findutils
-Requires:	%{name}-build-macros >= 1.417
+Requires:	%{name}-build-macros >= 1.433-2
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
@@ -488,7 +478,11 @@ Requires:	elfutils
 Requires:	file >= 4.17
 Requires:	fileutils
 Requires:	findutils
-Requires:	gcc >= 5:3.4
+%ifarch athlon
+Requires:	gcc >= 3.0.3
+%else
+Requires:	gcc
+%endif
 Requires:	glibc-devel
 Requires:	grep
 Requires:	gzip
@@ -499,7 +493,6 @@ Requires:	sed
 Requires:	sh-utils
 Requires:	tar
 Requires:	textutils
-Provides:	rpmbuild(find_lang) = %{find_lang_rev}
 Provides:	rpmbuild(monoautodeps)
 Provides:	rpmbuild(noauto) = 3
 %ifarch %{x8664}
@@ -654,7 +647,6 @@ echo '%%define	__php_provides	/usr/lib/rpm/php.prov' > macros.php
 echo '%%define	__php_requires	/usr/lib/rpm/php.req' >> macros.php
 echo '%%define	__mono_provides	/usr/lib/rpm/mono-find-provides' > macros.mono
 echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
-install %{SOURCE5} scripts/find-lang.sh
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
@@ -666,6 +658,7 @@ install %{SOURCE12} scripts/perl.prov
 %endif
 %patch27 -p1
 %patch32 -p1
+%patch34 -p1
 %patch35 -p0
 %patch36 -p1
 %patch37 -p1
@@ -673,7 +666,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch46 -p1
 %patch47 -p1
 # OLD COMMENTED OUT
-#%%patch52 -p1
+#%%patch52 -p1 -- morearchs (rpmrc patch) adds ppc7400, ppc7400
 %patch55 -p1
 %patch58 -p1
 %patch59 -p1
@@ -696,12 +689,6 @@ awk -f %{SOURCE6} %{SOURCE1}
 #done
 
 %build
-rev=$(awk '/^#.*Id:.*/{print $4}' scripts/find-lang.sh)
-if [ "$rev" != "%find_lang_rev" ]; then
-	: Update find_lang_rev define to $rev, and retry
-	exit 1
-fi
-
 %{__libtoolize}
 %{__autopoint}
 %{__aclocal}
@@ -735,7 +722,7 @@ fi
 	--with-popt=external \
 	--with-db=%{?with_db:external}%{!?with_db:no} \
 	--with-sqlite=%{?with_sqlite:external}%{!?with_sqlite:no} \
-	--with-dbapi=%{!?sqlite_dbapi:db}%{?sqlite_dbapi:sqlite} \
+	--with-dbapi=%{!?with_sqlite_dbapi:db}%{?with_sqlite_dbapi:sqlite} \
 	--with-lua=internal \
 	--with-pcre=no \
 	--with-keyutils=none \
@@ -835,7 +822,7 @@ echo "ia64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 echo "powerpc64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 echo "ppc64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
-%ifarch ppc
+%ifarch %{ppc} ppc64
 echo "powerpc-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 echo "ppc-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %endif
@@ -871,6 +858,7 @@ echo "noarch-[^-]*-.*" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/vpkg-provides*
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{prov,req}.pl
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{provides,requires}.perl
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
 
 # not installed since 4.4.8 (-tools-perl subpackage)
 install scripts/rpmdiff scripts/rpmdiff.cgi $RPM_BUILD_ROOT%{_rpmlibdir}
@@ -895,7 +883,14 @@ install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
 install %{SOURCE17} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
-install %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
+
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Conflictname
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Dirnames
+install %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Obsoletename
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Providename
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # customized rpm macros - global for host
@@ -992,9 +987,9 @@ EOF
 install -d $RPM_BUILD_ROOT/var/{spool/repackage,lock/rpm}
 touch $RPM_BUILD_ROOT/var/lock/rpm/transaction
 
-# mov rpm to /bin
-mv -f $RPM_BUILD_ROOT%{_bindir}/rpm $RPM_BUILD_ROOT/bin
-# move libs to /lib
+# move rpm to /bin
+mv $RPM_BUILD_ROOT%{_bindir}/rpm $RPM_BUILD_ROOT/bin
+# move essential libs to /lib (libs that /bin/rpm links to)
 for a in librpm-%{sover}.so librpmdb-%{sover}.so librpmio-%{sover}.so librpmbuild-%{sover}.so; do
 	mv -f $RPM_BUILD_ROOT%{_libdir}/$a $RPM_BUILD_ROOT/%{_lib}
 	ln -s /%{_lib}/$a $RPM_BUILD_ROOT%{_libdir}/$a
@@ -1007,6 +1002,9 @@ done
 #/{__spec_install_post_compress_modules}/d
 #' $RPM_BUILD_ROOT%{_rpmlibdir}/noarch-linux/macros
 
+# Bourne shell script vs ELF executable linked with rpm,rpmdb,rpmio
+mv $RPM_BUILD_ROOT{%{_rpmlibdir},%{_bindir}}/rpm2cpio
+
 %py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
 %py_comp $RPM_BUILD_ROOT%{py_sitedir}
 
@@ -1014,8 +1012,10 @@ rm $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,a,py}
 
 # wrong location, not used anyway
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log,xinetd}
-# manuals for utils dropped in 4.4.8 (?)
-#rm $RPM_BUILD_ROOT%{_mandir}/{,*/}/man8/{rpmcache,rpmgraph}.8
+# utils dropped in 4.4.8 -- their manuals
+rm $RPM_BUILD_ROOT%{_mandir}/{,*/}/man8/rpmgraph.8
+# unpackaged in 4.4.9, reasons unknown
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/symclash.{sh,py}
 
 %find_lang %{name}
 
@@ -1054,8 +1054,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
+%dir %{_sysconfdir}/rpm/sysinfo
 # these are ok to be replaced
-%config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo
+%config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo/*
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/platform
 
 
@@ -1091,25 +1092,28 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files lib
 %defattr(644,root,root,755)
-%attr(755,root,root) /%{_lib}/librpm*-*.so
-%attr(755,root,root) %{_libdir}/librpm*-*.so
+%attr(755,root,root) /%{_lib}/librpm-%{sover}.so
+%attr(755,root,root) /%{_lib}/librpmdb-%{sover}.so
+%attr(755,root,root) /%{_lib}/librpmio-%{sover}.so
+%attr(755,root,root) /%{_lib}/librpmbuild-%{sover}.so
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/rpm
-%{_libdir}/librpm*.la
-%{_pkgconfigdir}/*.pc
 %attr(755,root,root) %{_libdir}/librpm.so
 %attr(755,root,root) %{_libdir}/librpm-%{sover}.so
+%attr(755,root,root) %{_libdir}/librpmbuild.so
+%attr(755,root,root) %{_libdir}/librpmbuild-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmconstant.so
 %attr(755,root,root) %{_libdir}/librpmconstant-%{sover}.so
+%attr(755,root,root) %{_libdir}/librpmdb.so
+%attr(755,root,root) %{_libdir}/librpmdb-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmio.so
 %attr(755,root,root) %{_libdir}/librpmio-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmmisc.so
 %attr(755,root,root) %{_libdir}/librpmmisc-%{sover}.so
-%attr(755,root,root) %{_libdir}/librpmdb.so
-%attr(755,root,root) %{_libdir}/librpmdb-%{sover}.so
-%attr(755,root,root) %{_libdir}/librpmbuild.so
+%{_libdir}/librpm*.la
+%{_includedir}/rpm
+%{_pkgconfigdir}/*.pc
 
 %files static
 %defattr(644,root,root,755)
@@ -1128,17 +1132,14 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/tgpg
 %attr(755,root,root) %{_rpmlibdir}/rpmdb_loadcvt
 %{_mandir}/man8/rpm2cpio.8*
+%{_mandir}/man8/rpmcache.8*
 %{_mandir}/man8/rpmdeps.8*
-#%{_mandir}/man8/rpmcache.8*
-#%{_mandir}/man8/rpmgraph.8*
 %lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
-#%lang(ja) %{_mandir}/ja/man8/rpmcache.8*
-#%lang(ja) %{_mandir}/ja/man8/rpmgraph.8*
+%lang(ja) %{_mandir}/ja/man8/rpmcache.8*
 %lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
 %lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
+%lang(pl) %{_mandir}/pl/man8/rpmcache.8*
 %lang(pl) %{_mandir}/pl/man8/rpmdeps.8*
-#%lang(pl) %{_mandir}/pl/man8/rpmcache.8*
-#%lang(pl) %{_mandir}/pl/man8/rpmgraph.8*
 %lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
 
 %files utils-perl
@@ -1162,7 +1163,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_rpmlibdir}/config.*
 %attr(755,root,root) %{_rpmlibdir}/cross-build
 %attr(755,root,root) %{_rpmlibdir}/find-spec-bcond
-%attr(755,root,root) %{_rpmlibdir}/find-lang.sh
 %attr(755,root,root) %{_rpmlibdir}/getpo.sh
 %attr(755,root,root) %{_rpmlibdir}/install-build-tree
 %attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
