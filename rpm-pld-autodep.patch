@@ -16,7 +16,6 @@ diff -ur rpm.org/configure.ac rpm/configure.ac
  dnl # figure out what root's primary group is
  AC_MSG_CHECKING([root's primary group])
  AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <stdio.h>
-diff -ur rpm.org/lib/rpmfc.c rpm/lib/rpmfc.c
 --- rpm.org/lib/rpmfc.c	2007-10-02 14:48:58.244068000 +0200
 +++ rpm/lib/rpmfc.c	2007-10-02 14:52:24.222380740 +0200
 @@ -17,6 +17,8 @@
@@ -236,10 +235,11 @@ diff -ur rpm.org/lib/rpmfc.c rpm/lib/rpmfc.c
  	break;
      }
      return rc;
-@@ -870,6 +961,109 @@
+@@ -870,6 +961,111 @@
      { NULL, 0 }
  };
  
++#ifdef AUTODEP_PKGNAMES /* define to use package names in R */
 +static int rpmfcFindRequiredPackages(rpmfc fc) 
 +{
 +    rpmts ts=NULL;
@@ -342,11 +342,12 @@ diff -ur rpm.org/lib/rpmfc.c rpm/lib/rpmfc.c
 +    ts = rpmtsFree(ts);
 +    return 0;
 +}
++#endif
 +
  rpmRC rpmfcApply(rpmfc fc)
  {
      rpmfcApplyTbl fcat;
-@@ -888,6 +1082,26 @@
+@@ -888,6 +1084,26 @@
      int i;
      int xx;
      int skipping;
@@ -373,7 +374,7 @@ diff -ur rpm.org/lib/rpmfc.c rpm/lib/rpmfc.c
  
  /* Make sure something didn't go wrong previously! */
  assert(fc->fn != NULL);
-@@ -911,9 +1125,43 @@
+@@ -911,9 +1127,43 @@
  	for (fcat = rpmfcApplyTable; fcat->func != NULL; fcat++) {
  	    if (!(fc->fcolor->vals[fc->ix] & fcat->colormask))
  		/*@innercontinue@*/ continue;
@@ -417,7 +418,6 @@ diff -ur rpm.org/lib/rpmfc.c rpm/lib/rpmfc.c
  
  /*@-boundswrite@*/
      /* Generate per-file indices into package dependencies. */
-diff -ur rpm.org/lib/rpmfc.h rpm/lib/rpmfc.h
 --- rpm.org/lib/rpmfc.h	2007-07-14 05:22:44.000000000 +0200
 +++ rpm/lib/rpmfc.h	2007-10-02 14:49:18.731230377 +0200
 @@ -98,6 +98,11 @@
