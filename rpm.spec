@@ -468,8 +468,6 @@ Requires:	%{name}-build-macros >= 1.433-2
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
-# we need fixed binutils for -feliminate-dwarf2-dups
-Requires:	binutils >= 3:2.17.50.0.3-2
 Requires:	bzip2
 Requires:	chrpath >= 0.10-4
 Requires:	cpio
