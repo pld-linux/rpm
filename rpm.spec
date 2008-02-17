@@ -495,7 +495,6 @@ Requires:	gzip
 Requires:	lzma
 Requires:	make
 Requires:	patch
-Requires:	rpm-specdump >= 0.3
 Requires:	sed
 Requires:	sh-utils
 Requires:	tar
