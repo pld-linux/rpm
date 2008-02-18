@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	40
+Release:	41
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -1061,6 +1061,22 @@ rm -f /var/lib/rpm/__db*
 #Processing dependencies...
 #There are more than one package which provide "/bin/sh":
 # if poldek is running, kill it so it will not attempt to fill whole rpmdb
+p=$(/sbin/pidof poldek)
+if [ "$p" ]; then
+	echo >&2 "Killing poldek ($p), don't panic :)"
+	kill $p
+fi
+
+%triggerpostun lib -- db4.5 < %{reqdb_ver}
+rm -f /var/lib/rpm/__db*
+p=$(/sbin/pidof poldek)
+if [ "$p" ]; then
+	echo >&2 "Killing poldek ($p), don't panic :)"
+	kill $p
+fi
+
+%triggerpostun lib -- db < %{reqdb_ver}
+rm -f /var/lib/rpm/__db*
 p=$(/sbin/pidof poldek)
 if [ "$p" ]; then
 	echo >&2 "Killing poldek ($p), don't panic :)"
