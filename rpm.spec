@@ -22,7 +22,7 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
 # versions of required libraries
-%define	reqdb_ver	4.5.20-5
+%define	reqdb_ver	4.5.20-6
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
 %define	sover	4.4
@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	41
+Release:	42
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -1050,7 +1050,8 @@ rm -f manual/Makefile*
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%triggerpostun lib -- %{name}-lib < %{version}
+%triggerpostun lib -- %{name}-lib < %{version}, db < %{reqdb_ver}, db4.5 < %{reqdb_ver}
+echo >&2 "Removing /var/lib/rpm/__db* from older rpmdb version"
 rm -f /var/lib/rpm/__db*
 # TODO: poldek should abort if it can't reopen rpmdb after rpm exec:
 #Installing set #3
@@ -1066,22 +1067,7 @@ if [ "$p" ]; then
 	echo >&2 "Killing poldek ($p), don't panic :)"
 	kill $p
 fi
-
-%triggerpostun lib -- db4.5 < %{reqdb_ver}
-rm -f /var/lib/rpm/__db*
-p=$(/sbin/pidof poldek)
-if [ "$p" ]; then
-	echo >&2 "Killing poldek ($p), don't panic :)"
-	kill $p
-fi
-
-%triggerpostun lib -- db < %{reqdb_ver}
-rm -f /var/lib/rpm/__db*
-p=$(/sbin/pidof poldek)
-if [ "$p" ]; then
-	echo >&2 "Killing poldek ($p), don't panic :)"
-	kill $p
-fi
+echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
 
 %pretrans
 # this needs to be a dir
