@@ -1,0 +1,1 @@
+- rpm must have conflicts < poldek, and poldek must have requires > rpm for upgrade to work; rel 36
