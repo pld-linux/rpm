@@ -1,0 +1,11 @@
+--- rpm-5.0.2/configure.ac~	2008-02-19 20:09:59.000000000 +0200
++++ rpm-5.0.2/configure.ac	2008-02-19 20:21:41.000000000 +0200
+@@ -1042,7 +1042,7 @@
+ WITH_LUA_SUBDIR_LIB=""
+ RPM_CHECK_LIB(
+     [Lua], [lua],
+-    [lua], [lua_newstate], [lua.h],
++    [lua51], [lua_newstate], [lua.h],
+     [no,internal:external:none], [lua:local],
+     [ if test ".$RPM_CHECK_LIB_LOCATION" = .internal; then
+           AC_CHECK_LIB(m, fabs)
