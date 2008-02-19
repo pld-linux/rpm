@@ -34,7 +34,7 @@
 %bcond_without	db		# BerkeleyDB
 %bcond_with	sqlite		# build with SQLite support
 %bcond_with	sqlite_dbapi	# default database backend is sqlite
-%bcond_with	system_lua		# use system lua
+%bcond_without	system_lua		# use system lua
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
@@ -63,7 +63,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.0.2
-Release:	0.3
+Release:	0.5
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.0/%{name}-%{version}.tar.gz
@@ -111,6 +111,7 @@ Patch8:		%{name}-php-macros.patch
 Patch9:		%{name}-gettext-in-header.patch
 Patch10:	%{name}-compress-doc.patch
 Patch11:	%{name}-lua.patch
+Patch12:	%{name}-scaremem.patch
 
 Patch14:	%{name}-etc_dir.patch
 Patch16:	%{name}-php-deps.patch
@@ -638,6 +639,7 @@ Python para manipular pacotes e bancos de dados RPM.
 %patch9 -p1
 %patch10 -p1
 %{?with_system_lua:%patch11 -p1}
+%patch12 -p1
 # CHECK ME - macrofiles: ~/etc could be used
 #%%patch14 -p1
 %patch16 -p1
