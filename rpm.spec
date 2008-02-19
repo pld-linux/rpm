@@ -34,6 +34,7 @@
 %bcond_without	db		# BerkeleyDB
 %bcond_with	sqlite		# build with SQLite support
 %bcond_with	sqlite_dbapi	# default database backend is sqlite
+%bcond_with	system_lua		# use system lua
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
@@ -62,7 +63,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.0.2
-Release:	0.2
+Release:	0.3
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.0/%{name}-%{version}.tar.gz
@@ -109,6 +110,7 @@ Patch7:		%{name}-scripts-closefds.patch
 Patch8:		%{name}-php-macros.patch
 Patch9:		%{name}-gettext-in-header.patch
 Patch10:	%{name}-compress-doc.patch
+Patch11:	%{name}-lua.patch
 
 Patch14:	%{name}-etc_dir.patch
 Patch16:	%{name}-php-deps.patch
@@ -140,7 +142,7 @@ Patch59:	%{name}-libtool-deps.patch
 
 Patch61:	%{name}-sparc64.patch
 URL:		http://rpm5.org/
-BuildRequires:	autoconf >= 2.57
+BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1.4
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.2-17
@@ -159,6 +161,7 @@ BuildRequires:	neon-devel >= 0.25.5
 %endif
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
+%{?with_system_lua:BuildRequires:	lua51-devel >= 5.1.2}
 %{?with_python:BuildRequires:	python-devel >= 1:2.3}
 BuildRequires:	python-modules >= 1:2.3
 BuildRequires:	rpm-perlprov
@@ -634,6 +637,7 @@ Python para manipular pacotes e bancos de dados RPM.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%{?with_system_lua:%patch11 -p1}
 # CHECK ME - macrofiles: ~/etc could be used
 #%%patch14 -p1
 %patch16 -p1
@@ -698,8 +702,8 @@ awk -f %{SOURCE6} %{SOURCE1}
 # rpm checks for CPU type at runtime, but it looks better
 #sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu@|%{_target_cpu}|' macros.in
 
+%{?with_system_lua:CPPFLAGS=-I/usr/include/lua51}
 # pass CC and CXX too in case of building with some older configure macro
-# disable perl-RPM2 build, we have it in separate spec
 %configure \
 	CC="%{__newcc}" \
 	CXX="%{__newcxx}" \
@@ -721,7 +725,7 @@ awk -f %{SOURCE6} %{SOURCE1}
 	--with-db=%{?with_db:external}%{!?with_db:no} \
 	--with-sqlite=%{?with_sqlite:external}%{!?with_sqlite:no} \
 	--with-dbapi=%{!?with_sqlite_dbapi:db}%{?with_sqlite_dbapi:sqlite} \
-	--with-lua=internal \
+	--with-lua=%{!?with_system_lua:internal}%{?with_system_lua:external} \
 	--with-pcre=no \
 	--with-keyutils=none \
 	--without-path-versioned \
