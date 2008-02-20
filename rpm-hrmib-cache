@@ -1,9 +1,12 @@
 #!/bin/sh
+# skip if no rpm(1) or touch(1)
+[ -x /bin/rpm -a -x /bin/touch ] || exit 0
+
 export LC_ALL=C
 umask 002
 
 mydir=/var/cache/hrmib
-mkdir -p $mydir || exit 1
+mkdir -p $mydir || exit 0
 rm -f $mydir/*
 
 buf=$(rpm --nodigest --nosignature  -qa --qf '%{name}-%{version}-%{release}.%{arch} %{installtime:date}\n')
@@ -17,3 +20,5 @@ echo "$buf" | while read nvra idate; do
    esac
 done
 touch $mydir
+
+exit 0
