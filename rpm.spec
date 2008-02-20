@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	43.10
+Release:	44
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -894,6 +894,7 @@ install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
 install %{SOURCE13} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
 install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
+install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
 install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
 install %{SOURCE17} $RPM_BUILD_ROOT%{_bindir}/banner.sh
@@ -1052,7 +1053,6 @@ rm -f manual/Makefile*
 rm -rf $RPM_BUILD_ROOT
 
 %triggerpostun lib -- %{name}-lib < %{version}
-echo >&2 "rpmlib upgrade 1[$1] 2[$2]"
 echo >&2 "Removing /var/lib/rpm/__db* from older rpmdb version"
 rm -f /var/lib/rpm/__db*
 # TODO: poldek should abort if it can't reopen rpmdb after rpm exec:
@@ -1072,7 +1072,6 @@ fi
 echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
 
 %triggerpostun lib -- db4.5 < %{reqdb_ver}
-echo >&2 "db4.5 upgrade 1[$1] 2[$2]"
 echo >&2 "Removing /var/lib/rpm/__db* from older rpmdb version"
 rm -f /var/lib/rpm/__db*
 p=$(/sbin/pidof poldek)
@@ -1089,8 +1088,8 @@ if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
 	mkdir %{_sysconfdir}/rpm/sysinfo
 fi
 
-%triggerpostun -- %{name} < 4.4.9-43.10
-%(cat %{SOURCE5})
+%triggerpostun -- %{name} < 4.4.9-44
+%{_rpmlibdir}/hrmib-cache
 
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
@@ -1141,6 +1140,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/macros
+
+%attr(755,root,root) %{_rpmlibdir}/hrmib-cache
 
 %files base
 %defattr(644,root,root,755)
