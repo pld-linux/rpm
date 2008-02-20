@@ -1,9 +1,10 @@
 #!/bin/sh
+export LC_ALL=C
+umask 002
+
 mydir=/var/cache/hrmib
 mkdir -p $mydir || exit 1
 rm -f $mydir/*
-
-export LC_ALL=C
 
 buf=$(rpm --nodigest --nosignature  -qa --qf '%{name}-%{version}-%{release}.%{arch} %{installtime:date}\n')
 echo "$buf" | while read nvra idate; do
