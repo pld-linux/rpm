@@ -413,7 +413,7 @@ Summary(pl.UTF-8):	Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
-Conflicts:	filesystem-debuginfo < 2.0-7
+Conflicts:	filesystem-debuginfo < 3.0-16
 
 %description utils
 Additional utilities for managing RPM packages and database.
