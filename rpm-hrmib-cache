@@ -1,24 +1,26 @@
 #!/bin/sh
-# skip if no rpm(1) or touch(1)
-[ -x /bin/rpm -a -x /bin/touch ] || exit 0
+build_hrmib_cache() {
+	# skip if no rpm(1) or touch(1)
+	[ -x /bin/rpm -a -x /bin/touch ] || return
 
-export LC_ALL=C
-umask 002
+	export LC_ALL=C
+	umask 002
 
-mydir=/var/cache/hrmib
-mkdir -p $mydir || exit 0
-rm -f $mydir/*
+	mydir=/var/cache/hrmib
+	mkdir -p $mydir || return
+	rm -f $mydir/*
 
-buf=$(rpm --nodigest --nosignature  -qa --qf '%{name}-%{version}-%{release}.%{arch} %{installtime:date}\n')
-echo "$buf" | while read nvra idate; do
-   case $nvra in
-   gpg-pubkey-*)
-        ;;
-   *)
-        touch -d "$idate" "$mydir/$nvra"
-        ;;
-   esac
-done
-touch $mydir
+	buf=$(rpm --nodigest --nosignature  -qa --qf '%{name}-%{version}-%{release}.%{arch} %{installtime:date}\n')
+	echo "$buf" | while read nvra idate; do
+	   case $nvra in
+	   gpg-pubkey-*)
+			;;
+	   *)
+			touch -d "$idate" "$mydir/$nvra"
+			;;
+	   esac
+	done
+	touch $mydir
+}
 
-exit 0
+build_hrmib_cache
