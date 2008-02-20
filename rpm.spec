@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	43
+Release:	43.10
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -44,6 +44,7 @@ Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
 Source4:	%{name}-find-spec-bcond
+Source5:	%{name}-hrmib-cache
 Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
 Source8:	RPM-GPG-KEY
@@ -784,7 +785,7 @@ sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner}
+install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -1051,6 +1052,7 @@ rm -f manual/Makefile*
 rm -rf $RPM_BUILD_ROOT
 
 %triggerpostun lib -- %{name}-lib < %{version}
+echo >&2 "rpmlib upgrade 1[$1] 2[$2]"
 echo >&2 "Removing /var/lib/rpm/__db* from older rpmdb version"
 rm -f /var/lib/rpm/__db*
 # TODO: poldek should abort if it can't reopen rpmdb after rpm exec:
@@ -1069,17 +1071,8 @@ if [ "$p" ]; then
 fi
 echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
 
-%triggerpostun lib -- db < %{reqdb_ver}
-echo >&2 "Removing /var/lib/rpm/__db* from older rpmdb version"
-rm -f /var/lib/rpm/__db*
-p=$(/sbin/pidof poldek)
-if [ "$p" ]; then
-	echo >&2 "Killing poldek ($p), don't panic :)"
-	kill $p
-fi
-echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
-
 %triggerpostun lib -- db4.5 < %{reqdb_ver}
+echo >&2 "db4.5 upgrade 1[$1] 2[$2]"
 echo >&2 "Removing /var/lib/rpm/__db* from older rpmdb version"
 rm -f /var/lib/rpm/__db*
 p=$(/sbin/pidof poldek)
@@ -1095,6 +1088,9 @@ if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
 	mv -f %{_sysconfdir}/rpm/sysinfo{,.rpmsave}
 	mkdir %{_sysconfdir}/rpm/sysinfo
 fi
+
+%triggerpostun -- %{name} < 4.4.9-43.10
+%(cat %{SOURCE5})
 
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
@@ -1133,6 +1129,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %dir %attr(700,root,root) /var/spool/repackage
 %dir /var/lock/rpm
 /var/lock/rpm/transaction
+
+# exported package NVRA (stamped with install tid)
+# net-snmp hrSWInstalledName queries, bash-completions
+%dir /var/cache/hrmib
 
 #%attr(755,root,root) %{_rpmlibdir}/rpmd
 #%{!?with_static:%attr(755,root,root) %{_rpmlibdir}/rpm[eiu]}
