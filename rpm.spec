@@ -63,7 +63,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.0.2
-Release:	0.5
+Release:	0.6
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.0/%{name}-%{version}.tar.gz
@@ -72,6 +72,7 @@ Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
 Source4:	%{name}-find-spec-bcond
+Source5:	%{name}-hrmib-cache
 Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
 Source8:	%{name}-check-files
@@ -741,7 +742,7 @@ awk -f %{SOURCE6} %{SOURCE1}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner}
+install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib}
 
 %{__make} install \
 	pkgconfigdir=%{_pkgconfigdir} \
@@ -883,6 +884,7 @@ install %{SOURCE13} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
 install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
 install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
+install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
 install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
 install %{SOURCE17} $RPM_BUILD_ROOT%{_bindir}/banner.sh
@@ -1040,6 +1042,9 @@ if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
 	mkdir %{_sysconfdir}/rpm/sysinfo
 fi
 
+%triggerpostun -- %{name} < 4.4.9-44
+%{_rpmlibdir}/hrmib-cache
+
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
 
@@ -1077,6 +1082,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %dir /var/lock/rpm
 /var/lock/rpm/transaction
 
+# exported package NVRA (stamped with install tid)
+# net-snmp hrSWInstalledName queries, bash-completions
+%dir /var/cache/hrmib
+
 #%attr(755,root,root) %{_rpmlibdir}/rpmd
 #%{!?with_static:%attr(755,root,root) %{_rpmlibdir}/rpm[eiu]}
 #%attr(755,root,root) %{_rpmlibdir}/rpmk
@@ -1085,6 +1094,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/macros
 %{_rpmlibdir}/macros.pld
+
+%attr(755,root,root) %{_rpmlibdir}/hrmib-cache
 
 %files base
 %defattr(644,root,root,755)
