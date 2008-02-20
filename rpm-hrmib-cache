@@ -7,6 +7,8 @@ build_hrmib_cache() {
 	umask 002
 
 	mydir=/var/cache/hrmib
+
+	echo >&2 "Populating $mydir with initial contents"
 	mkdir -p $mydir || return
 	rm -f $mydir/*
 
