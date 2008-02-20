@@ -1,5 +1,14 @@
---- rpm-4.4.9/macros.in~	2008-01-15 03:02:22.239766677 +0200
-+++ rpm-4.4.9/macros.in	2008-01-21 21:07:36.760528341 +0200
+--- rpm-4.4.9/macros.in	2008-01-21 21:07:36.760528341 +0200
++++ rpm-4.4.9/macros.in	2008-02-20 20:05:29.045275299 +0200
+@@ -192,7 +192,7 @@
+ Summary: Debug information for package %{name}\
+ Summary(pl.UTF-8): Informacje dla debuggera dla pakietu %{name}\
+ Group: Development/Debug\
+-Requires: filesystem-debuginfo >= 3.0-16\
++Requires: filesystem-debuginfo >= 2.0-7\
+ AutoReqProv: 0\
+ %description debuginfo\
+ This package provides debug information for package %{name}.\
 @@ -1156,6 +1156,7 @@
  %_infodir		%{_prefix}/share/info
  %_mandir		%{_prefix}/share/man
