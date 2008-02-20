@@ -12,15 +12,9 @@ build_hrmib_cache() {
 	mkdir -p $mydir || return
 	rm -f $mydir/*
 
-	buf=$(rpm --nodigest --nosignature -qa --qf '%{name}-%{version}-%{release}.%{arch} %{installtime:date}\n')
+	buf=$(rpm --nodigest --nosignature -qa 'gpg*' --qf '%{N}-%{V}-%{R}%|ARCH?{.%{ARCH}}| %{INSTALLTIME:date}\n')
 	echo "$buf" | while read nvra idate; do
-	case $nvra in
-		gpg-pubkey-*)
-		;;
-	*)
 		touch -d "$idate" "$mydir/$nvra"
-		;;
-	esac
 	done
 	touch $mydir
 }
