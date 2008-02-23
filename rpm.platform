@@ -1,13 +1,13 @@
 # PLD rpm macros
 
-%__id		@__ID@
+%__id		/bin/id
 %__id_u		%{__id} -u
-%__chown_Rhf           @__CHOWN_RHF@
-%__chgrp_Rhf           @__CHGRP_RHF@
+%__chown_Rhf           %{__chown} -Rhf
+%__chgrp_Rhf           %{__chgrp} -Rhf
 
-%_fixowner       [ `%{__id_u}` = '0' ] && %{__chown_Rhf} root:@ROOT_GROUP@
+%_fixowner       [ `%{__id_u}` = '0' ] && %{__chown_Rhf} root:root
 %_fixgroup       true
-%_fixperms       %{__chmod} -Rf @FIXPERMS@
+%_fixperms       %{__chmod} -Rf -Rf a+rX,u+w,g-w,o-w
 
 %_exec_prefix    %{_prefix}
 %_bindir         %{_exec_prefix}/bin

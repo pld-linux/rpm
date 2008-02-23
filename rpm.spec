@@ -1,6 +1,5 @@
 #
 # TODO:
-# - manuals are not compressed
 # - %{_arch} = i686 not as used to be i386:
 #   5.0.2: rpm -E '%_target_base_arch %_arch'
 #          i386 i686
@@ -63,7 +62,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.0.2
-Release:	0.6
+Release:	0.7
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.0/%{name}-%{version}.tar.gz
@@ -1001,12 +1000,16 @@ for a in librpm-%{sover}.so librpmdb-%{sover}.so librpmio-%{sover}.so librpmbuil
 	ln -s /%{_lib}/$a $RPM_BUILD_ROOT%{_libdir}/$a
 done
 
+# Append rpm.platform contents to /usr/lib/rpm/${arch}-linux/macros
+for m in $RPM_BUILD_ROOT%{_rpmlibdir}/*/macros ; do
+	cat %{SOURCE2} | %{__sed} 's#@LIB@#%{_lib}#' >> $m
+done
 # remove arch dependant macros which have no use on noarch
-#%{__sed} -i -e '
-#/{__spec_install_post_strip}/d
-#/{__spec_install_post_chrpath}/d
-#/{__spec_install_post_compress_modules}/d
-#' $RPM_BUILD_ROOT%{_rpmlibdir}/noarch-linux/macros
+%{__sed} -i -e '
+/{__spec_install_post_strip}/d
+/{__spec_install_post_chrpath}/d
+/{__spec_install_post_compress_modules}/d
+' $RPM_BUILD_ROOT%{_rpmlibdir}/noarch-linux/macros
 
 # Bourne shell script vs ELF executable linked with rpm,rpmdb,rpmio
 mv $RPM_BUILD_ROOT{%{_rpmlibdir},%{_bindir}}/rpm2cpio
