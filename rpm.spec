@@ -1,5 +1,6 @@
 #
 # TODO:
+# - check if we want shell autodeps: Requires: executable(ln) executable(mv)
 # - %{_arch} = i686 not as used to be i386:
 #   5.0.2: rpm -E '%_target_base_arch %_arch'
 #          i386 i686
