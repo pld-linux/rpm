@@ -494,52 +494,48 @@ fi; }; __spec_install_post_chrpath } } }
 #
 %gconf_schema_install() \
 	umask 022; \
-	GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" /usr/bin/gconftool-2 --makefile-install-rule /etc/gconf/schemas/%{?1}%{!?1:*.schemas} > /dev/null \
-	%{nil}
+	GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" /usr/bin/gconftool-2 --makefile-install-rule /etc/gconf/schemas/%{?1}%{!?1:*.schemas} > /dev/null; \
+%{nil}
 
 %gconf_schema_uninstall() \
 if [ $1 = 0 ]; then \
 	umask 022; \
 	GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" /usr/bin/gconftool-2 --makefile-uninstall-rule /etc/gconf/schemas/%{?1} > /dev/null \
-fi \
+fi; \
 %{nil}
 
 #-----------------------------------------------------------------
 # Update desktop MIME database
 # requires: desktop-file-utils
 #
-%update_desktop_database_post() {{ \
+%update_desktop_database_post() \
 	umask 022; \
 	/usr/bin/update-desktop-database -q; \
-}} \
 %{nil}
 
-%update_desktop_database_postun() {{ \
-if [ $1 = 0 ]; then \
+%update_desktop_database_postun() \
+if [ "$1" = "0" ]; then \
 	umask 022; \
 	/usr/bin/update-desktop-database -q; \
-fi \
-}} \
+fi; \
 %{nil}
 
 #-----------------------------------------------------------------
 # Update shared MIME info database
 # requires: shared-mime-info
 #
-%update_mime_database() {{ \
+%update_mime_database() \
 	umask 022; \
 	/usr/bin/update-mime-database %{_datadir}/mime; \
-}} \
 %{nil}
 
 #-----------------------------------------------------------------
 # Update icon cache
 # requires: gtk+
 #
-%update_icon_cache() {{ \
+%update_icon_cache() \
 	umask 022; \
 	/usr/bin/gtk-update-icon-cache -qf %{_datadir}/icons/%1; \
-}} \
 %{nil}
 
 #-----------------------------------------------------------------
@@ -548,12 +544,12 @@ fi \
 #
 %scrollkeeper_update_post() \
 	/usr/bin/scrollkeeper-update -q; \
-	%{nil}
+%{nil}
 
 %scrollkeeper_update_postun() \
-if [ $1 = 0 ]; then \
+if [ "$1" = "0" ]; then \
 	/usr/bin/scrollkeeper-update -q; \
-fi \
+fi; \
 %{nil}
 
 #-----------------------------------------------------------------
