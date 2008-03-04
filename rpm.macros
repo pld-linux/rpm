@@ -1262,7 +1262,9 @@ for cfg in ${cfgs:-dist}; do                                        \
 																	\
 	%{!?-c:%{__make} -C %{_kernelsrcdir} clean						\\\
 		RCS_FIND_IGNORE="-name '*.ko' -o"							\\\
+		${1+"$@"}													\\\
 		M=$PWD %{MakeOpts}}											\
+																	\
 	%{__make} -C %{_kernelsrcdir} modules							\\\
 		${1+"$@"}													\\\
 		M=$PWD %{MakeOpts}											\
