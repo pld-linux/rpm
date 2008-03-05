@@ -22,7 +22,7 @@
 #   /usr/lib/rpm/osgideps.pl
 #   /usr/lib/rpm/perldeps.pl
 #   /usr/lib/rpm/vcheck
-#   /usr/share/man/man8/rpmconstant.8.gz
+#   /usr/share/man/man8/rpmconstant.8
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
@@ -62,12 +62,12 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.0.2
-Release:	0.7
+Version:	5.0.3
+Release:	0.1
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.0/%{name}-%{version}.tar.gz
-# Source0-md5:	596aaf5cd9dea7195f625530bc89e684
+# Source0-md5:	b3df4e54e84cf3344ce6b76fa2a8d5bf
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -112,7 +112,6 @@ Patch8:		%{name}-php-macros.patch
 Patch9:		%{name}-gettext-in-header.patch
 Patch10:	%{name}-compress-doc.patch
 Patch11:	%{name}-lua.patch
-Patch12:	%{name}-scaremem.patch
 
 Patch14:	%{name}-etc_dir.patch
 Patch16:	%{name}-php-deps.patch
@@ -640,7 +639,6 @@ Python para manipular pacotes e bancos de dados RPM.
 %patch9 -p1
 %patch10 -p1
 %{?with_system_lua:%patch11 -p1}
-%patch12 -p1
 # CHECK ME - macrofiles: ~/etc could be used
 #%%patch14 -p1
 %patch16 -p1
