@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	48
+Release:	49
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -1069,7 +1069,8 @@ if [ "$p" ]; then
 	kill $p
 fi
 rm -f /var/lib/rpm/__db*
-echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
+echo >&2 "Rebuilding rpmdb"
+rpm --rebuilddb
 
 %triggerpostun lib -- db4.5 < %{reqdb_ver}
 echo >&2 "db4.5 upgrade: removing /var/lib/rpm/__db* from older rpmdb version"
@@ -1078,8 +1079,8 @@ if [ "$p" ]; then
 	echo >&2 "Killing poldek ($p), don't panic :)"
 	kill $p
 fi
-rm -f /var/lib/rpm/__db*
-echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
+echo >&2 "Rebuilding rpmdb"
+rpm --rebuilddb
 
 %pretrans
 # this needs to be a dir
