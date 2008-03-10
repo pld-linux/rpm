@@ -14,7 +14,7 @@
  
  #	Directory where temporary files can be created.
 -%_tmppath		%(echo "${TMPDIR:-/tmp}")
-+%_tmppath		%{expand:%%global _tmppath %{lua:print(os.getenv("TEMP") or os.getenv ("TMP") or "/tmp")}}%{_tmppath}
++%_tmppath		%{expand:%%global _tmppath %{lua:print(os.getenv("TMPDIR") or "/tmp")}}%{_tmppath}
  %tmpdir			%{_tmppath}
  
  #	Path to top of build area.
