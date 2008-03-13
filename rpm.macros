@@ -281,14 +281,14 @@ CXXFLAGS="%{rpmcxxflags}" \
 %requires_eq()		%(echo '%*' | LC_ALL="C" xargs -r rpm -q --qf 'Requires: %{N} = %|E?{%{E}:}|%{V}\\n' | sed -e 's/ 0:/ /' | grep -v 'is not')
 %requires_eq_to() %(LC_ALL="C" rpm -q --qf 'Requires: %1 = %|E?{%{E}:}|%{V}' %2 | grep -v "is not")
 
-%apache_modules_api %(awk '/#define MODULE_MAGIC_NUMBER_MAJOR/ {print $3}' /usr/include/apache/ap_mmn.h 2>/dev/null || echo ERROR)
+%apache_modules_api %{expand:%%global apache_modules_api %(awk '/#define MODULE_MAGIC_NUMBER_MAJOR/ {print $3}' /usr/include/apache/ap_mmn.h 2>/dev/null || echo ERROR)}%apache_modules_api
 
 # kernel version-release handling
-%__kernel_ver	 %{expand:%%global __kernel_ver %%(VER_H=%{_kernelsrcdir}/include/linux/utsrelease.h; [ -f $VER_H ] || VER_H=%{_kernelsrcdir}/include/linux/version.h; [ -f $VER_H ] && (grep UTS_RELEASE $VER_H 2>/dev/null | head -n 1 | cut -d'"' -f2) || (awk '/^VERSION/ { ver = $0; gsub(/VERSION.*=/, NIL, ver); } /^PATCHLEVEL/ { plev = $0; gsub(/PATCHLEVEL.*=/, NIL, plev); } /^SUBLEVEL/ { slev = $0; gsub(/SUBLEVEL.*=/, NIL, slev); } /^EXTRAVERSION/ { ever = $0; gsub(/EXTRAVERSION.*=/, NIL, ever); gsub(/ /, NIL, ever); } END { printf("%d.%d.%d%s", ver, plev, slev, ever); }' %{_kernelsrcdir}/Makefile 2> /dev/null))}%__kernel_ver
-%__kernel_rel	%(LC_ALL=C rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{R}" | grep -v "is not")
-%__kernel_rpmvr	%(LC_ALL=C rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{V}-%{R}" | grep -v "is not")
-%_kernel_ver	%{__kernel_ver}%{?with_dist_kernel:%(echo %{__kernel_ver} | grep -q -e - || echo -%{__kernel_rel})}
-%_kernel_ver_str %(echo %{!?_without_dist_kernel:%{__kernel_rpmvr}}%{?_without_dist_kernel:%{__kernel_ver}} | sed -e 's/-/_/g')
+%__kernel_ver	 %{expand:%%global __kernel_ver %(VER_H=%{_kernelsrcdir}/include/linux/utsrelease.h; [ -f $VER_H ] || VER_H=%{_kernelsrcdir}/include/linux/version.h; [ -f $VER_H ] && (grep UTS_RELEASE $VER_H 2>/dev/null | head -n 1 | cut -d'"' -f2) || (awk '/^VERSION/ { ver = $0; gsub(/VERSION.*=/, NIL, ver); } /^PATCHLEVEL/ { plev = $0; gsub(/PATCHLEVEL.*=/, NIL, plev); } /^SUBLEVEL/ { slev = $0; gsub(/SUBLEVEL.*=/, NIL, slev); } /^EXTRAVERSION/ { ever = $0; gsub(/EXTRAVERSION.*=/, NIL, ever); gsub(/ /, NIL, ever); } END { printf("%d.%d.%d%s", ver, plev, slev, ever); }' %{_kernelsrcdir}/Makefile 2> /dev/null))}%__kernel_ver
+%__kernel_rel	%{expand:%%global __kernel_rel %(Z=$(LC_ALL=C rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{R}" | grep -v "is not"); echo ${Z:-ERROR})}%__kernel_rel
+%__kernel_rpmvr	%{expand:%%global __kernel_rpmvr %(Z=$(LC_ALL=C rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{V}-%{R}" | grep -v "is not"); echo ${Z:-ERROR})}%__kernel_rpmvr
+%_kernel_ver	%{expand:%%global _kernel_ver %{__kernel_ver}%{?with_dist_kernel:%(echo %{__kernel_ver} | grep -q -e - || echo -%{__kernel_rel})}}%_kernel_ver
+%_kernel_ver_str %{expand:%%global _kernel_ver_str %(echo %{!?_without_dist_kernel:%{__kernel_rpmvr}}%{?_without_dist_kernel:%{__kernel_ver}} | sed -e 's/-/_/g')}%_kernel_ver_str
 
 # sgml macros
 %xmlcat_add()		/usr/bin/xmlcatalog --noout --add nextCatalog \"\" %1 /etc/xml/catalog ;
@@ -568,14 +568,15 @@ fi; \
 %__noautoreq		%(sed -e s'/#.*//' /etc/rpm/noautoreq)%{?_noautoreq: %{_noautoreq}}
 %__noautoreqdep		%(sed -e s'/#.*//' /etc/rpm/noautoreqdep)%{?_noautoreqdep: %{_noautoreqdep}}
 %__noautoprov		%(sed -e s'/#.*//' /etc/rpm/noautoprov)%{?_noautoprov: %{_noautoprov}}
+
 #%_noautocompressdoc	%{nil}
 #
 %_missing_doc_files_terminate_build	1%{nil}
 %_unpackaged_files_terminate_build	%{nil}
 # (X)emacs support
 %___emacs_lispdir_helper  -batch -q -eval '(while load-path (princ (concat (car load-path) "\\n")) (setq load-path (cdr load-path)))' 2> /dev/null|sed -n '/\\(.*\\/x\\?emacs\\/site-lisp\\)\\/\\?$/{s,,\\1,p;q;}'
-%_emacs_lispdir %(emacs %___emacs_lispdir_helper)
-%_xemacs_lispdir %(xemacs %___emacs_lispdir_helper)
+%_emacs_lispdir %{expand:%%global _emacs_lispdir %(Z=$(emacs %___emacs_lispdir_helper); echo ${Z:-ERROR})}%_emacs_lispdir
+%_xemacs_lispdir %{expand:%%global _xemacs_lispdir %(Z=$(xemacs %___emacs_lispdir_helper); echo ${Z:-ERROR})}%_xemacs_lispdir
 
 %__php_provides	%{nil}
 %__php_requires %{nil}
@@ -585,38 +586,39 @@ fi; \
 %__mono_requires %{nil}
 
 # Perl specific macro definitions.
-%perl_privlib		%(eval "`%{__perl} -V:installprivlib`"; echo $installprivlib)
-%perl_archlib		%(eval "`%{__perl} -V:installarchlib`"; echo $installarchlib)
-%perl_vendorlib		%(eval "`%{__perl} -V:installvendorlib`"; echo $installvendorlib)
-%perl_vendorarch	%(eval "`%{__perl} -V:installvendorarch`"; echo $installvendorarch)
-%perl_sitelib		%(eval "`%{__perl} -V:installsitelib`"; echo $installsitelib)
-%perl_sitearch		%(eval "`%{__perl} -V:installsitearch`"; echo $installsitearch)
+%perl_privlib		%{expand:%%global perl_privlib %(eval $(%{__perl} -V:installprivlib 2>/dev/null); echo ${installprivlib:-ERROR})}%perl_privlib
+%perl_archlib		%{expand:%%global perl_archlib %(eval $(%{__perl} -V:installarchlib 2>/dev/null); echo ${installarchlib:-ERROR})}%perl_archlib
+%perl_vendorlib		%{expand:%%global perl_vendorlib %(eval $(%{__perl} -V:installvendorlib 2>/dev/null); echo ${installvendorlib:-ERROR})}%perl_vendorlib
+%perl_vendorarch	%{expand:%%global perl_vendorarch %(eval $(%{__perl} -V:installvendorarch 2>/dev/null); echo ${installvendorarch:-ERROR})}%perl_vendorarch
+%perl_sitelib		%{expand:%%global perl_sitelib %(eval $(%{__perl} -V:installsitelib 2>/dev/null); echo ${installsitelib:-ERROR})}%perl_sitelib
+%perl_sitearch		%{expand:%%global perl_sitearch %(eval $(%{__perl} -V:installsitearch 2>/dev/null); echo ${installsitearch:-ERROR})}%perl_sitearch
 
 # Ruby
-%ruby_archdir		%(ruby -r rbconfig -e 'print Config::CONFIG["archdir"]' 2>/dev/null || echo ERROR)
-%ruby_ridir			%(ruby -r rbconfig -e 'include Config; print File.join(CONFIG["datadir"], "ri", CONFIG["ruby_version"], "system")' 2>/dev/null || echo ERROR)
-%ruby_rubylibdir	%(ruby -r rbconfig -e 'print Config::CONFIG["rubylibdir"]' 2>/dev/null || echo ERROR)
-%ruby_vendorarchdir	%(ruby -r rbconfig -e 'print Config::CONFIG["vendorarchdir"]' 2>/dev/null || echo ERROR)
-%ruby_vendorlibdir	%(ruby -r rbconfig -e 'print Config::CONFIG["vendorlibdir"]' 2>/dev/null || echo ERROR)
-%ruby_sitearchdir	%(ruby -r rbconfig -e 'print Config::CONFIG["sitearchdir"]' 2>/dev/null || echo ERROR)
-%ruby_sitelibdir	%(ruby -r rbconfig -e 'print Config::CONFIG["sitelibdir"]' 2>/dev/null || echo ERROR)
-%ruby_version		%(ruby -r rbconfig -e 'print Config::CONFIG["ruby_version"]' 2>/dev/null || echo ERROR)
+%__ruby				/usr/bin/ruby
+%ruby_archdir		%{expand:%%global ruby_archdir %(%{__ruby} -r rbconfig -e 'print Config::CONFIG["archdir"]' 2>/dev/null || echo ERROR)}%ruby_archdir
+%ruby_ridir			%{expand:%%global ruby_ridir %(%{__ruby} -r rbconfig -e 'include Config; print File.join(CONFIG["datadir"], "ri", CONFIG["ruby_version"], "system")' 2>/dev/null || echo ERROR)}%ruby_ridir
+%ruby_rubylibdir	%{expand:%%global ruby_rubylibdir %(%{__ruby} -r rbconfig -e 'print Config::CONFIG["rubylibdir"]' 2>/dev/null || echo ERROR)}%ruby_rubylibdir
+%ruby_vendorarchdir	%{expand:%%global ruby_vendorarchdir %(%{__ruby} -r rbconfig -e 'print Config::CONFIG["vendorarchdir"]' 2>/dev/null || echo ERROR)}%ruby_vendorarchdir
+%ruby_vendorlibdir	%{expand:%%global ruby_vendorlibdir %(%{__ruby} -r rbconfig -e 'print Config::CONFIG["vendorlibdir"]' 2>/dev/null || echo ERROR)}%ruby_vendorlibdir
+%ruby_sitearchdir	%{expand:%%global ruby_sitearchdir %(%{__ruby} -r rbconfig -e 'print Config::CONFIG["sitearchdir"]' 2>/dev/null || echo ERROR)}%ruby_sitearchdir
+%ruby_sitelibdir	%{expand:%%global ruby_sitelibdir %(%{__ruby} -r rbconfig -e 'print Config::CONFIG["sitelibdir"]' 2>/dev/null || echo ERROR)}%ruby_sitelibdir
+%ruby_version		%{expand:%%global ruby_version %(%{__ruby} -r rbconfig -e 'print Config::CONFIG["ruby_version"]' 2>/dev/null || echo ERROR)}%ruby_version
 %ruby_ver_requires_eq	Requires:	ruby(ver) = %ruby_version
 %ruby_mod_ver_requires_eq	Requires:	ruby-modules(ver) = %ruby_version
 
 %php_pear_dir		/usr/share/pear
-%php_extensiondir	%(php-config --extension-dir 2>/dev/null || echo ERROR)
-%php_sysconfdir		%(php-config --sysconfdir 2>/dev/null || echo ERROR)
-%php_includedir		%(php-config --include-dir 2>/dev/null || echo ERROR)
+%php_extensiondir	%{expand:%%global php_extensiondir %(php-config --extension-dir 2>/dev/null || echo ERROR)}%php_extensiondir
+%php_sysconfdir		%{expand:%%global php_sysconfdir %(php-config --sysconfdir 2>/dev/null || echo ERROR)}%php_sysconfdir
+%php_includedir		%{expand:%%global php_includedir %(php-config --include-dir 2>/dev/null || echo ERROR)}%php_includedir
 
 # extract php/zend api versions
-%php_major_version		%(awk '/#define PHP_MAJOR_VERSION/{print $3}' %{php_includedir}/main/php_version.h 2>/dev/null || echo ERROR)
-%php_api_version		%(awk '/#define PHP_API_VERSION/{print $3}' %{php_includedir}/main/php.h 2>/dev/null || echo ERROR)
-%php_pdo_api_version	%(awk '/#define PDO_DRIVER_API/{print $3}' %{php_includedir}/ext/pdo/php_pdo_driver.h 2>/dev/null || echo ERROR)
-%php_debug				%(awk '/#define ZEND_DEBUG/{print $3}' %{php_includedir}/main/php_config.h 2>/dev/null || echo ERROR)
-%zend_module_api		%(awk '/#define ZEND_MODULE_API_NO/{print $3}' %{php_includedir}/Zend/zend_modules.h 2>/dev/null || echo ERROR)
-%zend_extension_api		%(awk '/#define ZEND_EXTENSION_API_NO/{print $3}' %{php_includedir}/Zend/zend_extensions.h 2>/dev/null || echo ERROR)
-%zend_zts				%(Z=$(grep -sc '^#define ZTS 1' %{php_includedir}/main/php_config.h); echo ${Z:-ERROR})
+%php_major_version		%{expand:%%global php_major_version %(awk '/#define PHP_MAJOR_VERSION/{print $3}' %{php_includedir}/main/php_version.h 2>/dev/null || echo ERROR)}%php_major_version
+%php_api_version		%{expand:%%global php_api_version %(awk '/#define PHP_API_VERSION/{print $3}' %{php_includedir}/main/php.h 2>/dev/null || echo ERROR)}%php_api_version
+%php_pdo_api_version	%{expand:%%global php_pdo_api_version %(awk '/#define PDO_DRIVER_API/{print $3}' %{php_includedir}/ext/pdo/php_pdo_driver.h 2>/dev/null || echo ERROR)}%php_pdo_api_version
+%php_debug				%{expand:%%global php_debug %(awk '/#define ZEND_DEBUG/{print $3}' %{php_includedir}/main/php_config.h 2>/dev/null || echo ERROR)}%php_debug
+%zend_module_api		%{expand:%%global zend_module_api %(awk '/#define ZEND_MODULE_API_NO/{print $3}' %{php_includedir}/Zend/zend_modules.h 2>/dev/null || echo ERROR)}%zend_module_api
+%zend_extension_api		%{expand:%%global zend_extension_api %(awk '/#define ZEND_EXTENSION_API_NO/{print $3}' %{php_includedir}/Zend/zend_extensions.h 2>/dev/null || echo ERROR)}%zend_extension_api
+%zend_zts				%{expand:%%global zend_zts %(Z=$(grep -sc '^#define ZTS 1' %{php_includedir}/main/php_config.h); echo ${Z:-ERROR})}%zend_zts
 
 # helper macro
 %__php_api_requires(v:) Requires: php%{-v*}(%{expand:%1}) = %{expand:%{%{!?2:%{1}}%{?2}}}
@@ -665,11 +667,11 @@ fi \
 # X.org helper macros
 %__xorg_abi_requires() Requires: xorg-xserver-server(%{expand:%1}-abi) = %{expand:%{%{!?2:%{1}}%{?2}}}
 #
-%xorg_xserver_ansic_abi		%(awk '/#define ABI_ANSIC_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h 2> /dev/null || echo ERROR)
-%xorg_xserver_extension_abi	%(awk '/#define ABI_EXTENSION_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h 2> /dev/null || echo ERROR)
-%xorg_xserver_font_abi		%(awk '/#define ABI_FONT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h 2> /dev/null | echo ERROR)
-%xorg_xserver_videodrv_abi	%(awk '/#define ABI_VIDEODRV_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h 2> /dev/null || echo ERROR)
-%xorg_xserver_xinput_abi	%(awk '/#define ABI_XINPUT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h 2> /dev/null || echo ERROR)
+%xorg_xserver_ansic_abi		%{expand:%%global xorg_xserver_ansic_abi %(awk '/#define ABI_ANSIC_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h 2> /dev/null || echo ERROR)}%xorg_xserver_ansic_abi
+%xorg_xserver_extension_abi	%{expand:%%global xorg_xserver_extension_abi %(awk '/#define ABI_EXTENSION_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h 2> /dev/null || echo ERROR)}%xorg_xserver_extension_abi
+%xorg_xserver_font_abi		%{expand:%%global xorg_xserver_font_abi %(awk '/#define ABI_FONT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h 2> /dev/null | echo ERROR)}%xorg_xserver_font_abi
+%xorg_xserver_videodrv_abi	%{expand:%%global xorg_xserver_videodrv_abi %(awk '/#define ABI_VIDEODRV_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h 2> /dev/null || echo ERROR)}%xorg_xserver_videodrv_abi
+%xorg_xserver_xinput_abi	%{expand:%%global xorg_xserver_xinput_abi %(awk '/#define ABI_XINPUT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h 2> /dev/null || echo ERROR)}%xorg_xserver_xinput_abi
 
 %requires_xorg_xserver_extension %{__xorg_abi_requires ansic xorg_xserver_ansic_abi} \
 %{__xorg_abi_requires extension xorg_xserver_extension_abi}
@@ -682,10 +684,10 @@ fi \
 
 # Python specific macro definitions.
 # python main version
-%py_ver			%(python -c "import sys; print sys.version[:3]")
+%py_ver			%{expand:%%global py_ver %(%{__python} -c "import sys; print sys.version[:3]" || echo ERROR)}%py_ver
 
 # directories
-%py_prefix		%(python -c "import sys; print sys.prefix")
+%py_prefix		%{expand:%%global py_prefix %(%{__python} -c "import sys; print sys.prefix" || echo ERROR)}%py_prefix
 %py_libdir		%{py_prefix}/%{_lib}/python%{py_ver}
 %py_scriptdir	%{py_prefix}/share/python%{py_ver}
 %py_incdir		/usr/include/python%{py_ver}
@@ -736,18 +738,18 @@ fi; \
 }
 
 # XMMS specific macros
-%xmms_prefix			%(xmms-config --prefix 2>/dev/null)
-%xmms_exec_prefix		%(xmms-config --exec-prefix 2>/dev/null)
-%xmms_version			%(xmms-config --version 2>/dev/null)
-%xmms_datadir			%(xmms-config --data-dir 2>/dev/null)
-%xmms_plugindir			%(xmms-config --plugin-dir 2>/dev/null)
-%xmms_visualization_plugindir	%(xmms-config --visualization-plugin-dir 2>/dev/null)
-%xmms_input_plugindir		%(xmms-config --input-plugin-dir 2>/dev/null)
-%xmms_output_plugindir		%(xmms-config --output-plugin-dir 2>/dev/null)
-%xmms_effect_plugindir		%(xmms-config --effect-plugin-dir 2>/dev/null)
-%xmms_general_plugindir		%(xmms-config --general-plugin-dir 2>/dev/null)
+%xmms_prefix			%{expand:%%global xmms_prefix %(xmms-config --prefix 2>/dev/null || echo ERROR)}%xmms_prefix
+%xmms_exec_prefix		%{expand:%%global xmms_exec_prefix %(xmms-config --exec-prefix 2>/dev/null || echo ERROR)}%xmms_exec_prefix
+%xmms_version			%{expand:%%global xmms_version %(xmms-config --version 2>/dev/null || echo ERROR)}%xmms_version
+%xmms_datadir			%{expand:%%global xmms_datadir %(xmms-config --data-dir 2>/dev/null || echo ERROR)}%xmms_datadir
+%xmms_plugindir			%{expand:%%global xmms_plugindir %(xmms-config --plugin-dir 2>/dev/null || echo ERROR)}%xmms_plugindir
+%xmms_visualization_plugindir	%{expand:%%global xmms_visualization_plugindir %(xmms-config --visualization-plugin-dir 2>/dev/null || echo ERROR)}%xmms_visualization_plugindir
+%xmms_input_plugindir		%{expand:%%global xmms_input_plugindir %(xmms-config --input-plugin-dir 2>/dev/null || echo ERROR)}%xmms_input_plugindir
+%xmms_output_plugindir		%{expand:%%global xmms_output_plugindir %(xmms-config --output-plugin-dir 2>/dev/null || echo ERROR)}%xmms_output_plugindir
+%xmms_effect_plugindir		%{expand:%%global xmms_effect_plugindir %(xmms-config --effect-plugin-dir 2>/dev/null || echo ERROR)}%xmms_effect_plugindir
+%xmms_general_plugindir		%{expand:%%global xmms_general_plugindir %(xmms-config --general-plugin-dir 2>/dev/null || echo ERROR)}%xmms_general_plugindir
 
-%_target_base_arch	%(echo %{_target_cpu} | sed 's/i.86/i386/;s/athlon/i386/;s/pentium./i386/;s/amd64/x86_64/;s/ia32e/x86_64/')
+%_target_base_arch	%{expand:%%global _target_base_arch %(echo %{_target_cpu} | sed 's/i.86/i386/;s/athlon/i386/;s/pentium./i386/;s/amd64/x86_64/;s/ia32e/x86_64/')}%_target_base_arch
 
 # user/group checking macros
 #
@@ -953,11 +955,11 @@ fi \
 # Directory where arch-specific (JNI) version-independent jars are installed.
 %_jnidir		%{_libdir}/java
 
-%java_home		%([ -f %{_javadir}-utils/java-functions ] || { echo ERROR; exit 0; }; unset JAVA_HOME; . %{_javadir}-utils/java-functions; set_jvm; echo ${JAVA_HOME:-ERROR})
+%java_home		%{expand:%%global java_home %([ -f %{_javadir}-utils/java-functions ] || { echo ERROR; exit 0; }; unset JAVA_HOME; . %{_javadir}-utils/java-functions; set_jvm; echo ${JAVA_HOME:-ERROR})}%java_home
 
 %ant			JAVA_HOME=%{java_home} ant
 %jar			%{java_home}/bin/jar
-%java			%([ -f %{_javadir}-utils/java-functions ] || { echo ERROR; exit 0; }; unset JAVACMD; . %{_javadir}-utils/java-functions; set_javacmd; echo $JAVACMD)
+%java			%{expand:%%global java %([ -f %{_javadir}-utils/java-functions ] || { echo ERROR; exit 0; }; unset JAVACMD; . %{_javadir}-utils/java-functions; set_javacmd; echo $JAVACMD)}%java
 %javac			%{java_home}/bin/javac
 %javadoc		%{java_home}/bin/javadoc
 
