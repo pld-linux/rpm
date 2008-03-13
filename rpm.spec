@@ -63,7 +63,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.0.3
-Release:	0.1
+Release:	0.2
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.0/%{name}-%{version}.tar.gz
@@ -103,6 +103,7 @@ Source111:	%{name}-macros-amd64
 
 #Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-man_pl.patch
+Patch2:		%{name}-popt-downgrade.patch
 Patch3:		%{name}-rpmpopt.patch
 Patch4:		%{name}-perl-macros.patch
 Patch5:		%{name}-perl-req-perlfile.patch
@@ -630,6 +631,7 @@ Python para manipular pacotes e bancos de dados RPM.
 # APPLIED ALREADY? translationproject.org is used now
 #%%patch0 -p1
 %patch1 -p1
+%patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
