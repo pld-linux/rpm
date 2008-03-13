@@ -1,5 +1,5 @@
---- rpm-4.4.9/macros.in	2008-02-20 20:05:29.045275299 +0200
-+++ rpm-4.4.9/macros.in	2008-03-04 21:34:41.519716362 +0200
+--- rpm-4.4.9/macros.in	2008-03-04 21:34:41.519716362 +0200
++++ /usr/lib/rpm/macros	2008-03-14 01:44:34.456504495 +0200
 @@ -192,7 +192,7 @@
  Summary: Debug information for package %{name}\
  Summary(pl.UTF-8): Informacje dla debuggera dla pakietu %{name}\
@@ -9,15 +9,17 @@
  AutoReqProv: 0\
  %description debuginfo\
  This package provides debug information for package %{name}.\
-@@ -237,7 +237,7 @@
+@@ -237,8 +237,8 @@
  %_srcrpmdir		%{_topdir}/SRPMS
  
  #	Directory where temporary files can be created.
 -%_tmppath		%(echo "${TMPDIR:-/tmp}")
-+%_tmppath		%{expand:%%global _tmppath %{lua:print(os.getenv("TMPDIR") or "/tmp")}}%{_tmppath}
- %tmpdir			%{_tmppath}
+-%tmpdir			%{_tmppath}
++%_tmppath		%tmpdir
++%tmpdir			%{expand:%%global tmpdir %{lua:print(os.getenv("TMPDIR") or "/tmp")}}%tmpdir
  
  #	Path to top of build area.
+ %_topdir		%(echo $HOME)/rpm
 @@ -1156,6 +1156,7 @@
  %_infodir		%{_prefix}/share/info
  %_mandir		%{_prefix}/share/man
