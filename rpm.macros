@@ -35,7 +35,7 @@
 %__libtoolize		libtoolize --copy --force
 
 #	Path to top of build area.
-%_topdir		%(test -d ../SPECS -a -d ../SOURCES && (cd ..; pwd) || echo $HOME/rpm)
+%_topdir		%{expand:%%global _topdir %(test -d ../SPECS -a -d ../SOURCES && (cd ..; pwd) || echo $HOME/rpm)}%_topdir
 
 #	The number of cvs changelog entries kept when building package.
 %_buildchangelogtruncate 20
@@ -219,10 +219,10 @@ CXXFLAGS="%{rpmcxxflags}" \
 %{nil}
 
 # Location of autoconf macros
-%_aclocaldir	%(aclocal --print-ac-dir)
+%_aclocaldir	%{expand:%%global _aclocaldir %(aclocal --print-ac-dir)}%_aclocaldir
 
 # Location of omf files
-%_omf_dest_dir	%(scrollkeeper-config --omfdir)
+%_omf_dest_dir	%{expand:%%global _omf_dest_dir %(scrollkeeper-config --omfdir)}%_omf_dest_dir
 
 # Location of pkgconfig files
 %_pkgconfigdir	/usr/%{_lib}/pkgconfig
@@ -253,7 +253,7 @@ CXXFLAGS="%{rpmcxxflags}" \
 %date 		%(LC_ALL="C" date +"%a %b %d %Y")
 
 # tmp directory
-%tmpdir		%(echo "${TMPDIR:-/tmp}")
+%tmpdir		%{expand:%%global _tmppath %{lua:print(os.getenv("TMPDIR") or "/tmp")}}%{_tmppath}
 
 # Example files, programs, scripts...
 %_examplesdir	/usr/src/examples
@@ -270,9 +270,9 @@ CXXFLAGS="%{rpmcxxflags}" \
 # Requires name = version-release
 %requires_releq()		%(echo '%*' | LC_ALL="C" xargs -r rpm -q --qf 'Requires: %{N} = %|E?{%{E}:}|%{V}-%{R}\\n' | grep -v 'is not')
 
-%releq_kernel()			%(R=$(LC_ALL=C rpm -q --qf '%{N} = %|E?{%{E}:}|%{V}-%{R}' -f %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | grep -v 'is not' | sed -e 's:-headers::;s:-config::'); echo ${R:-ERROR})
-%releq_kernel_up()		%(R=$(LC_ALL=C rpm -q --qf '%{N}-up = %|E?{%{E}:}|%{V}-%{R}' -f %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | grep -v 'is not' | sed -e 's:-headers::;s:-config::'); echo ${R:-ERROR})
-%releq_kernel_smp()		%(R=$(LC_ALL=C rpm -q --qf '%{N}-smp = %|E?{%{E}:}|%{V}-%{R}' -f %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | grep -v 'is not' | sed -e 's:-headers::;s:-config::'); echo ${R:-ERROR})
+%releq_kernel			%{expand:%%global releq_kernel %(R=$(LC_ALL=C rpm -q --qf '%{N} = %|E?{%{E}:}|%{V}-%{R}' -f %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | grep -v 'is not' | sed -e 's:-headers::;s:-config::'); echo ${R:-ERROR})}%releq_kernel
+%releq_kernel_up		%{expand:%%global releq_kernel_up %(R=$(LC_ALL=C rpm -q --qf '%{N}-up = %|E?{%{E}:}|%{V}-%{R}' -f %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | grep -v 'is not' | sed -e 's:-headers::;s:-config::'); echo ${R:-ERROR})}%releq_kernel_up
+%releq_kernel_smp()		%{expand:%%global releq_kernel_smp %(R=$(LC_ALL=C rpm -q --qf '%{N}-smp = %|E?{%{E}:}|%{V}-%{R}' -f %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | grep -v 'is not' | sed -e 's:-headers::;s:-config::'); echo ${R:-ERROR})}%releq_kernel_smp
 %requires_releq_kernel(s:)		Requires%{-s:(%{-s*})}: %releq_kernel
 %requires_releq_kernel_up(s:)	Requires%{-s:(%{-s*})}: %releq_kernel_up
 %requires_releq_kernel_smp(s:)	Requires%{-s:(%{-s*})}: %releq_kernel_smp
@@ -284,7 +284,7 @@ CXXFLAGS="%{rpmcxxflags}" \
 %apache_modules_api %(awk '/#define MODULE_MAGIC_NUMBER_MAJOR/ {print $3}' /usr/include/apache/ap_mmn.h 2>/dev/null || echo ERROR)
 
 # kernel version-release handling
-%__kernel_ver	%( VER_H=%{_kernelsrcdir}/include/linux/utsrelease.h; [ -f $VER_H ] || VER_H=%{_kernelsrcdir}/include/linux/version.h; [ -f $VER_H ] && (grep UTS_RELEASE $VER_H 2>/dev/null | head -n 1 | cut -d'"' -f2) || (awk '/^VERSION/ { ver = $0; gsub(/VERSION.*=/, NIL, ver); } /^PATCHLEVEL/ { plev = $0; gsub(/PATCHLEVEL.*=/, NIL, plev); } /^SUBLEVEL/ { slev = $0; gsub(/SUBLEVEL.*=/, NIL, slev); } /^EXTRAVERSION/ { ever = $0; gsub(/EXTRAVERSION.*=/, NIL, ever); gsub(/ /, NIL, ever); } END { printf("%d.%d.%d%s", ver, plev, slev, ever); }' %{_kernelsrcdir}/Makefile 2> /dev/null))
+%__kernel_ver	 %{expand:%%global __kernel_ver %%(VER_H=%{_kernelsrcdir}/include/linux/utsrelease.h; [ -f $VER_H ] || VER_H=%{_kernelsrcdir}/include/linux/version.h; [ -f $VER_H ] && (grep UTS_RELEASE $VER_H 2>/dev/null | head -n 1 | cut -d'"' -f2) || (awk '/^VERSION/ { ver = $0; gsub(/VERSION.*=/, NIL, ver); } /^PATCHLEVEL/ { plev = $0; gsub(/PATCHLEVEL.*=/, NIL, plev); } /^SUBLEVEL/ { slev = $0; gsub(/SUBLEVEL.*=/, NIL, slev); } /^EXTRAVERSION/ { ever = $0; gsub(/EXTRAVERSION.*=/, NIL, ever); gsub(/ /, NIL, ever); } END { printf("%d.%d.%d%s", ver, plev, slev, ever); }' %{_kernelsrcdir}/Makefile 2> /dev/null))}%__kernel_ver
 %__kernel_rel	%(LC_ALL=C rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{R}" | grep -v "is not")
 %__kernel_rpmvr	%(LC_ALL=C rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{V}-%{R}" | grep -v "is not")
 %_kernel_ver	%{__kernel_ver}%{?with_dist_kernel:%(echo %{__kernel_ver} | grep -q -e - || echo -%{__kernel_rel})}
