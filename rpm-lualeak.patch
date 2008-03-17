@@ -6,7 +6,7 @@
  	    lua_pushliteral(L, "LUA_PATH");
  	    lua_pushstring(L, _lua_path);
 -	    free(_lua_path);
-+	    free(_lua_path); _lua_path = NULL;
++	    if (_lua_path) free(_lua_path); _lua_path = NULL;
  	}
      }
      lua_rawset(L, LUA_GLOBALSINDEX);
@@ -15,7 +15,7 @@
  	    if (Stat(_lua_init, &st) != -1)
  		(void)rpmluaRunScriptFile(lua, _lua_init);
 -	    free(_lua_init);
-+	    free(_lua_init); _lua_init = NULL;
++	    if (_lua_init) free(_lua_init); _lua_init = NULL;
  	}
      }
  #undef	_LUADOTDIR
