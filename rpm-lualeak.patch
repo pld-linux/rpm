@@ -1,0 +1,21 @@
+--- rpm-4.4.9/rpmio/rpmlua.c	2007-02-03 21:23:54.000000000 +0200
++++ rpm-4_5/rpmio/rpmlua.c	2007-06-18 20:39:08.000000000 +0300
+@@ -80,8 +80,8 @@
+     {	const char * _lua_path = rpmGetPath(_LUADOTDIR, "/lua/?.lua", NULL);
+ 	if (_lua_path != NULL) {
+ 	    lua_pushliteral(L, "LUA_PATH");
+ 	    lua_pushstring(L, _lua_path);
+-	    free(_lua_path);
++	    free(_lua_path); _lua_path = NULL;
+ 	}
+     }
+     lua_rawset(L, LUA_GLOBALSINDEX);
+@@ -94,7 +94,7 @@
+ 	    struct stat st;
+ 	    if (Stat(_lua_init, &st) != -1)
+ 		(void)rpmluaRunScriptFile(lua, _lua_init);
+-	    free(_lua_init);
++	    free(_lua_init); _lua_init = NULL;
+ 	}
+     }
+ #undef	_LUADOTDIR
