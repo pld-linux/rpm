@@ -252,9 +252,6 @@ CXXFLAGS="%{rpmcxxflags}" \
 # Current date
 %date 		%(LC_ALL="C" date +"%a %b %d %Y")
 
-# tmp directory
-%tmpdir		%{expand:%%global tmpdir %{lua:print(os.getenv("TMPDIR") or "/tmp")}}%{tmpdir}
-
 # Example files, programs, scripts...
 %_examplesdir	/usr/src/examples
 
