@@ -84,7 +84,7 @@
 +optflags: alphaev6 -O2 -fno-strict-aliasing -fwrapv -mieee -mcpu=ev6%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_alpha: %{specflags_alpha}}%{?specflags_alphaev6: %{specflags_alphaev6}}}
 +optflags: alphaev67 -O2 -fno-strict-aliasing -fwrapv -mieee -mcpu=ev67%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_alpha: %{specflags_alpha}}%{?specflags_alphaev67: %{specflags_alphaev67}}}
 +
-+optflags: sparc -O2 -fno-strict-aliasing -fwrapv -m32 -mcpu=v7 -mtune=ultrasparc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}}
++optflags: sparc -O2 -fno-strict-aliasing -fwrapv -m32 -mcpu=ultrasparc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}}
 +optflags: sparcv8 -O2 -fno-strict-aliasing -fwrapv -m32 -mcpu=v8 -mtune=ultrasparc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparcv8: %{specflags_sparcv8}}}
 +optflags: sparcv9 -O2 -fno-strict-aliasing -fwrapv -m32 -mcpu=ultrasparc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparcv9: %{specflags_sparcv9}}}
 +optflags: sparc64 -O2 -fno-strict-aliasing -fwrapv -mcpu=ultrasparc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparc64: %{specflags_sparc64}}}
