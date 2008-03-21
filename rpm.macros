@@ -505,35 +505,35 @@ fi; \
 # Update desktop MIME database
 # requires: desktop-file-utils
 #
-%update_desktop_database_post() \
+%update_desktop_database_post() {{\
 	umask 022; \
 	/usr/bin/update-desktop-database -q; \
-%{nil}
+}}%{nil}
 
-%update_desktop_database_postun() \
+%update_desktop_database_postun() {{\
 if [ "$1" = "0" ]; then \
 	umask 022; \
 	/usr/bin/update-desktop-database -q; \
 fi; \
-%{nil}
+}}%{nil}
 
 #-----------------------------------------------------------------
 # Update shared MIME info database
 # requires: shared-mime-info
 #
-%update_mime_database() \
+%update_mime_database() {{\
 	umask 022; \
 	/usr/bin/update-mime-database %{_datadir}/mime; \
-%{nil}
+}}%{nil}
 
 #-----------------------------------------------------------------
 # Update icon cache
 # requires: gtk+
 #
-%update_icon_cache() \
+%update_icon_cache() {{\
 	umask 022; \
 	/usr/bin/gtk-update-icon-cache -qf %{_datadir}/icons/%1; \
-%{nil}
+}}%{nil}
 
 #-----------------------------------------------------------------
 # Update scrollkeeper database
