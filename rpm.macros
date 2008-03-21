@@ -504,16 +504,16 @@ fi; \
 #-----------------------------------------------------------------
 # Update desktop MIME database
 # requires: desktop-file-utils
-#
-%update_desktop_database_post() {{\
+%update_desktop_database() {{ \
 	umask 022; \
 	/usr/bin/update-desktop-database -q; \
 }}%{nil}
 
-%update_desktop_database_postun() {{\
+%update_desktop_database_post %update_desktop_database
+
+%update_desktop_database_postun() {{ \
 if [ "$1" = "0" ]; then \
-	umask 022; \
-	/usr/bin/update-desktop-database -q; \
+	%update_desktop_database; \
 fi; \
 }}%{nil}
 
@@ -521,7 +521,7 @@ fi; \
 # Update shared MIME info database
 # requires: shared-mime-info
 #
-%update_mime_database() {{\
+%update_mime_database() {{ \
 	umask 022; \
 	/usr/bin/update-mime-database %{_datadir}/mime; \
 }}%{nil}
@@ -530,7 +530,7 @@ fi; \
 # Update icon cache
 # requires: gtk+
 #
-%update_icon_cache() {{\
+%update_icon_cache() {{ \
 	umask 022; \
 	/usr/bin/gtk-update-icon-cache -qf %{_datadir}/icons/%1; \
 }}%{nil}
