@@ -226,6 +226,8 @@ CXXFLAGS="%{rpmcxxflags}" \
 
 # Location of pkgconfig files
 %_pkgconfigdir	/usr/%{_lib}/pkgconfig
+# noarch pkgconfig files
+%_npkgconfigdir	/usr/share/pkgconfig
 
 # Location of desktop files
 %_desktopdir	/usr/share/applications
