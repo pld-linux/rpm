@@ -117,8 +117,6 @@ Patch11:	%{name}-lua.patch
 Patch14:	%{name}-etc_dir.patch
 Patch16:	%{name}-php-deps.patch
 
-Patch18:	%{name}-perl_req.patch
-
 Patch23:	%{name}-pkgconfigdeps.patch
 
 Patch26:	%{name}-notsc.patch
@@ -644,7 +642,6 @@ Python para manipular pacotes e bancos de dados RPM.
 # CHECK ME - macrofiles: ~/etc could be used
 #%%patch14 -p1
 %patch16 -p1
-%patch18 -p1
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
 echo '%%define	__perl_requires	%%{__perl} /usr/lib/rpm/perl.req' >> macros.perl
 echo '# obsoleted file' > macros.python
