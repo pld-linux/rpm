@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	52
+Release:	53
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -81,7 +81,7 @@ Patch14:	%{name}-etc_dir.patch
 Patch15:	%{name}-system_libs-more.patch
 Patch16:	%{name}-php-deps.patch
 Patch17:	%{name}-ldconfig-always.patch
-Patch18:	%{name}-perl_req.patch
+
 Patch19:	%{name}-link.patch
 Patch20:	%{name}-magic-usesystem.patch
 Patch21:	%{name}-dontneedutils.patch
@@ -131,6 +131,7 @@ Patch66:	%{name}-v3-support.patch
 Patch67:	%{name}-cleanbody.patch
 Patch68:	%{name}-rpm5-patchset-9486.patch
 Patch69:	%{name}-popt-downgrade.patch
+Patch70:	%{name}-lualeak.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -650,7 +651,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
-%patch18 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 #cp -f platform.in macros.pld.in # what for?
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
@@ -712,6 +712,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch67 -p1
 %patch68 -p1
 %patch69 -p1
+%patch70 -p1
 
 mv -f scripts/{perl.req,perl.req.in}
 mv -f scripts/{perl.prov,perl.prov.in}
@@ -1086,6 +1087,7 @@ echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb e
 %pretrans
 # this needs to be a dir
 if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
+	umask 022
 	mv -f %{_sysconfdir}/rpm/sysinfo{,.rpmsave}
 	mkdir %{_sysconfdir}/rpm/sysinfo
 fi
@@ -1155,13 +1157,13 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files lib
 %defattr(644,root,root,755)
-%attr(755,root,root) /%{_lib}/librpm*-*.so
-%attr(755,root,root) %{_libdir}/librpm*-*.so
+%attr(755,root,root) /%{_lib}/librpm-%{sover}.so
+%attr(755,root,root) /%{_lib}/librpmdb-%{sover}.so
+%attr(755,root,root) /%{_lib}/librpmio-%{sover}.so
+%attr(755,root,root) %{_libdir}/librpmbuild-%{sover}.so
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/rpm
-%{_libdir}/librpm*.la
 %attr(755,root,root) %{_libdir}/librpm.so
 %attr(755,root,root) %{_libdir}/librpm-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmio.so
@@ -1169,10 +1171,18 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_libdir}/librpmdb.so
 %attr(755,root,root) %{_libdir}/librpmdb-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmbuild.so
+%{_libdir}/librpm.la
+%{_libdir}/librpmbuild.la
+%{_libdir}/librpmdb.la
+%{_libdir}/librpmio.la
+%{_includedir}/rpm
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/librpm*.a
+%{_libdir}/librpm.a
+%{_libdir}/librpmbuild.a
+%{_libdir}/librpmdb.a
+%{_libdir}/librpmio.a
 
 %files utils
 %defattr(644,root,root,755)
