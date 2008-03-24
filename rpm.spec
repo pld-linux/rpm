@@ -77,7 +77,7 @@ Patch14:	%{name}-etc_dir.patch
 Patch15:	%{name}-system_libs-more.patch
 Patch16:	%{name}-php-deps.patch
 Patch17:	%{name}-ldconfig-always.patch
-Patch18:	%{name}-perl_req.patch
+
 Patch19:	%{name}-link.patch
 Patch20:	%{name}-magic-usesystem.patch
 Patch21:	%{name}-dontneedutils.patch
@@ -644,7 +644,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
-%patch18 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 #cp -f platform.in macros.pld.in # what for?
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
@@ -1119,13 +1118,13 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files lib
 %defattr(644,root,root,755)
-%attr(755,root,root) /%{_lib}/librpm*-*.so
-%attr(755,root,root) %{_libdir}/librpm*-*.so
+%attr(755,root,root) /%{_lib}/librpm-%{sover}.so
+%attr(755,root,root) /%{_lib}/librpmdb-%{sover}.so
+%attr(755,root,root) /%{_lib}/librpmio-%{sover}.so
+%attr(755,root,root) %{_libdir}/librpmbuild-%{sover}.so
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/rpm
-%{_libdir}/librpm*.la
 %attr(755,root,root) %{_libdir}/librpm.so
 %attr(755,root,root) %{_libdir}/librpm-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmio.so
@@ -1133,10 +1132,18 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_libdir}/librpmdb.so
 %attr(755,root,root) %{_libdir}/librpmdb-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmbuild.so
+%{_libdir}/librpm.la
+%{_libdir}/librpmbuild.la
+%{_libdir}/librpmdb.la
+%{_libdir}/librpmio.la
+%{_includedir}/rpm
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/librpm*.a
+%{_libdir}/librpm.a
+%{_libdir}/librpmbuild.a
+%{_libdir}/librpmdb.a
+%{_libdir}/librpmio.a
 
 %files utils
 %defattr(644,root,root,755)
