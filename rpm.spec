@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	54
+Release:	55
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -1058,7 +1058,12 @@ rm -f manual/Makefile*
 rm -rf $RPM_BUILD_ROOT
 
 %triggerpostun lib -- %{name}-lib < %{version}
-echo >&2 "rpm-lib upgrade: removing /var/lib/rpm/__db* from older rpmdb version"
+echo >&2 "rpm-lib upgrade: Removing /var/lib/rpm/__db* from older rpmdb version"
+rm -f /var/lib/rpm/__db*
+if [ -d /vservers ]; then
+	echo >&2 "rpm-lib upgrade: Removing vservers apps/pkgmgmt/base/rpm/state/__* from older rpmdb version"
+	rm -f /etc/vservers/*/apps/pkgmgmt/base/rpm/state/__*
+fi
 # TODO: poldek should abort if it can't reopen rpmdb after rpm exec:
 #Installing set #3
 #rpmdb: Program version 4.2 doesn't match environment version
@@ -1073,17 +1078,19 @@ if [ "$p" ]; then
 	echo >&2 "Killing poldek ($p), don't panic :)"
 	kill $p
 fi
-rm -f /var/lib/rpm/__db*
 echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
 
 %triggerpostun lib -- db4.5 < %{reqdb_ver}
-echo >&2 "db4.5 upgrade: removing /var/lib/rpm/__db* from older rpmdb version"
-p=$(/sbin/pidof poldek)
+echo >&2 "db4.5 upgrade: Removing /var/lib/rpm/__db* from older rpmdb version"
+rm -f /var/lib/rpm/__db*
+if [ -d /vservers ]; then
+	echo >&2 "db4.5 upgrade: Removing vservers apps/pkgmgmt/base/rpm/state/__* from older rpmdb version"
+	rm -f /etc/vservers/*/apps/pkgmgmt/base/rpm/state/__*
+fi
 if [ "$p" ]; then
 	echo >&2 "Killing poldek ($p), don't panic :)"
 	kill $p
 fi
-rm -f /var/lib/rpm/__db*
 echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
 
 %pretrans
