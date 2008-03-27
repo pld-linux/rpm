@@ -116,6 +116,7 @@ Patch11:	%{name}-lua.patch
 
 Patch14:	%{name}-etc_dir.patch
 Patch16:	%{name}-php-deps.patch
+Patch18:	%{name}-macros-th.patch
 
 Patch23:	%{name}-pkgconfigdeps.patch
 
@@ -672,6 +673,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch55 -p1
 %patch58 -p1
 %patch59 -p1
+%patch18 -p1
 %ifarch sparc64
 %patch61 -p1
 %endif
