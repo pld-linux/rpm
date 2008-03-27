@@ -772,85 +772,87 @@ install -d $RPM_BUILD_ROOT%{_rpmlibdir}/ppc-linux
 install %{SOURCE108} $RPM_BUILD_ROOT%{_rpmlibdir}/ppc-linux/macros
 %endif
 
+cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 # first platform file entry can't contain regexps
-echo "%{_target_cpu}-%{_target_vendor}-linux" > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%{_target_cpu}-%{_target_vendor}-linux
 
 # x86_64 things
 %ifarch x86_64
-echo "amd64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-echo "x86_64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+amd64-[^-]*-linux(-gnu)?
+x86_64-[^-]*-linux(-gnu)?
 %endif
 %ifarch amd64
-echo "amd64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-echo "x86_64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+amd64-[^-]*-linux(-gnu)?
+x86_64-[^-]*-linux(-gnu)?
 %endif
 %ifarch ia32e
-echo "ia32e-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-echo "x86_64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+ia32e-[^-]*-linux(-gnu)?
+x86_64-[^-]*-linux(-gnu)?
 %endif
 
 # x86 things
 %ifarch athlon %{x8664}
-echo "athlon-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+athlon-[^-]*-linux(-gnu)?
 %endif
 %ifarch pentium4 athlon %{x8664}
-echo "pentium4-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+pentium4-[^-]*-linux(-gnu)?
 %endif
 %ifarch pentium3 pentium4 athlon %{x8664}
-echo "pentium3-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+pentium3-[^-]*-linux(-gnu)?
 %endif
 %ifarch i686 pentium3 pentium4 athlon %{x8664}
-echo "i686-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+i686-[^-]*-linux(-gnu)?
 %endif
 %ifarch i586 i686 pentium3 pentium4 athlon %{x8664}
-echo "i586-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+i586-[^-]*-linux(-gnu)?
 %endif
 %ifarch i486 i586 i686 pentium3 pentium4 athlon %{x8664}
-echo "i486-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+i486-[^-]*-linux(-gnu)?
 %endif
 %ifarch %{ix86} %{x8664}
-echo "i386-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+i386-[^-]*-linux(-gnu)?
 %endif
 
 %ifarch alpha
-echo "alpha-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+alpha-[^-]*-linux(-gnu)?
 %endif
 
 %ifarch ia64
-echo "ia64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+ia64-[^-]*-linux(-gnu)?
 %endif
 
 %ifarch ppc64
-echo "powerpc64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-echo "ppc64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+powerpc64-[^-]*-linux(-gnu)?
+ppc64-[^-]*-linux(-gnu)?
 %endif
 %ifarch %{ppc} ppc64
-echo "powerpc-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-echo "ppc-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+powerpc-[^-]*-linux(-gnu)?
+ppc-[^-]*-linux(-gnu)?
 %endif
 
 %ifarch s390x
-echo "s390x-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+s390x-[^-]*-linux(-gnu)?
 %endif
 %ifarch s390 s390x
-echo "s390-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+s390-[^-]*-linux(-gnu)?
 %endif
 
 %ifarch sparc64
-echo "sparc64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-echo "sparcv8-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-echo "sparcv9-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+sparc64-[^-]*-linux(-gnu)?
+sparcv8-[^-]*-linux(-gnu)?
+sparcv9-[^-]*-linux(-gnu)?
 %endif
 %ifarch sparcv9
-echo "sparcv8-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-echo "sparcv9-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+sparcv8-[^-]*-linux(-gnu)?
+sparcv9-[^-]*-linux(-gnu)?
 %endif
 %ifarch sparc sparcv9 sparc64
-echo "sparc-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+sparc-[^-]*-linux(-gnu)?
 %endif
 
 # noarch
-echo "noarch-[^-]*-.*" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+noarch-[^-]*-.*
+EOF
 
 %ifarch %{ppc}
 #sed -e '/_target_platform/s/[%]{_target_cpu}/ppc/' \
