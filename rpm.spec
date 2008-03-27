@@ -59,9 +59,8 @@ Source16:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source17:	banner.sh
 Patch1067:	%{name}-disable-features.patch
-Patch1068:	%{name}-rpmrc-ac.patch
 Patch1069:	%{name}-parentdirs.patch
-Patch1070:	%{name}-macros-ac.patch
+Patch1070:	%{name}-rpmrc-ac.patch
 
 Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-rpmrc.patch
@@ -81,7 +80,7 @@ Patch14:	%{name}-etc_dir.patch
 Patch15:	%{name}-system_libs-more.patch
 Patch16:	%{name}-php-deps.patch
 Patch17:	%{name}-ldconfig-always.patch
-
+Patch18:	%{name}-macros-ac.patch
 Patch19:	%{name}-link.patch
 Patch20:	%{name}-magic-usesystem.patch
 Patch21:	%{name}-dontneedutils.patch
@@ -703,6 +702,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch58 -p1
 %patch59 -p1
 %patch60 -p1
+%patch18 -p1
 %patch61 -p1
 %patch62 -p1
 %patch63 -p1
@@ -722,7 +722,6 @@ rm -rf sqlite zlib db db3 popt rpmdb/db.h
 cp %{SOURCE8} RPM-GPG-KEY
 
 %patch1067 -p1
-%patch1068 -p1
 %patch1069 -p1
 %patch1070 -p1
 
