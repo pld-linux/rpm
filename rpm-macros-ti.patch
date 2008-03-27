@@ -1,12 +1,12 @@
---- rpm-4.4.9/macros.in~	2008-03-27 19:40:02.000000000 +0200
-+++ rpm-4.4.9/macros.in	2008-03-27 19:40:27.464333590 +0200
-@@ -1457,6 +1457,9 @@
- # PLD rpm macros
- %_enable_debug_packages 1
+--- rpm-4.4.9/macros.in~	2008-03-27 19:41:29.000000000 +0200
++++ rpm-4.4.9/macros.in	2008-03-27 19:45:51.090959034 +0200
+@@ -271,6 +271,9 @@
+ #
+ #%distribution
  
 +# PLD Linux Release
 +%pld_release	ti
 +
- #-----------------------------------------------------------------
- # CFLAGS and LDFLAGS used to build
- 
+ #	Configurable distribution URL, same as DistURL: tag in a specfile.
+ #	The URL will be used to supply reliable information to tools like
+ #	rpmfind.
