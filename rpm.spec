@@ -790,7 +790,7 @@ cat <<'EOF'> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 # x86_64 things
 %ifarch x86_64
 amd64-[^-]*-linux(-gnu)?
-x86_64-[^-]*-linux(-gnu)? >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+x86_64-[^-]*-linux(-gnu)?
 %endif
 %ifarch amd64
 amd64-[^-]*-linux(-gnu)?
