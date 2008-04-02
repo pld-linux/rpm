@@ -110,7 +110,7 @@
 +# -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
 +
 +%debugcflags	-O0 -g -Wall
-+%optldflags	-Wl,--as-needed
++%optldflags	-Wl,--as-needed -Wl,-z,relro -Wl,-z,-combreloc
 +
 +# Warning: those macros are overwritten by macros.build,
 +#          left here for compatibility
