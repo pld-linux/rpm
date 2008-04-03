@@ -283,11 +283,12 @@ CXXFLAGS="%{rpmcxxflags}" \
 %apache_modules_api %{expand:%%global apache_modules_api %(awk '/#define MODULE_MAGIC_NUMBER_MAJOR/ {print $3}' /usr/include/apache/ap_mmn.h 2>/dev/null || echo ERROR)}%apache_modules_api
 
 # kernel version-release handling
-%__kernel_ver	 %{expand:%%global __kernel_ver %(
-	Z=$(awk -F'"' '/UTS_RELEASE/{print $2}' %{_kernelsrcdir}/include/linux/{version,utsrelease}.h 2>/dev/null); \
-	Z=${Z:-$(awk -F' = ' '/^VERSION/{v=$2} /^PATCHLEVEL/{p=$2} /^SUBLEVEL/{s=$2} /^EXTRAVERSION/{e=$2} END {printf("%d.%d.%d%s", v, p, s, e)}' %{_kernelsrcdir}/Makefile 2>/dev/null)}; \
-	echo ${Z:-ERROR}; \
+%__kernel_ver	 %{expand:%%global __kernel_ver %( \\
+	Z=$(awk -F'"' '/UTS_RELEASE/{print $2}' %{_kernelsrcdir}/include/linux/{version,utsrelease}.h 2>/dev/null); \\
+	Z=${Z:-$(awk -F' = ' '/^VERSION/{v=$2} /^PATCHLEVEL/{p=$2} /^SUBLEVEL/{s=$2} /^EXTRAVERSION/{e=$2} END {printf("%d.%d.%d%s", v, p, s, e)}' %{_kernelsrcdir}/Makefile 2>/dev/null)}; \\
+	echo ${Z:-ERROR}; \\
 )}%__kernel_ver
+
 %__kernel_rel	%{expand:%%global __kernel_rel %(Z=$(LC_ALL=C rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{R}" | grep -v "is not"); echo ${Z:-ERROR})}%__kernel_rel
 %__kernel_rpmvr	%{expand:%%global __kernel_rpmvr %(Z=$(LC_ALL=C rpm -qf %{_kernelsrcdir}/include/linux/fs.h 2>/dev/null --qf "%{V}-%{R}" | grep -v "is not"); echo ${Z:-ERROR})}%__kernel_rpmvr
 %_kernel_ver	%{expand:%%global _kernel_ver %{__kernel_ver}%{?with_dist_kernel:%(echo %{__kernel_ver} | grep -q -e - || echo -%{__kernel_rel})}}%_kernel_ver
