@@ -103,7 +103,7 @@ Source111:	%{name}-macros-amd64
 
 #Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-man_pl.patch
-Patch2:		%{name}-popt-downgrade.patch
+Patch2:		%{name}-popt-aliases.patch
 Patch3:		%{name}-rpmpopt.patch
 Patch4:		%{name}-perl-macros.patch
 Patch5:		%{name}-perl-req-perlfile.patch
