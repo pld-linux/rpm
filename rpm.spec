@@ -124,7 +124,7 @@ Patch65:	%{name}-lzma-tukaani.patch
 Patch66:	%{name}-v3-support.patch
 Patch67:	%{name}-cleanbody.patch
 Patch68:	%{name}-rpm5-patchset-9486.patch
-Patch69:	%{name}-popt-downgrade.patch
+Patch69:	%{name}-popt-aliases.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
