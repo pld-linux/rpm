@@ -94,7 +94,7 @@
  %_localedir		%{_datadir}/locale
  
  #==============================================================================
-@@ -1429,6 +1432,24 @@
+@@ -1429,6 +1432,23 @@
  #%__executable_provides	%{_usrlibrpm}/executabledeps.sh --provides
  #%__executable_requires	%{_usrlibrpm}/executabledeps.sh --requires
 -%__scriptlet_requires	/bin/bash --rpm-requires
@@ -110,7 +110,6 @@
 +# -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
 +
 +%debugcflags	-O0 -g -Wall
-+%optldflags	-Wl,--as-needed -Wl,-z,relro -Wl,-z,-combreloc
 +
 +# Warning: those macros are overwritten by macros.build,
 +#          left here for compatibility
