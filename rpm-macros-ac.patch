@@ -1,5 +1,5 @@
---- rpm-4.4.9/macros.in	2008-03-27 19:30:48.294997963 +0200
-+++ rpm-4.4.9/macros.in	2008-03-27 19:48:22.895695000 +0200
+--- rpm-4.4.9/macros.in	2008-03-27 19:48:22.895695000 +0200
++++ rpm-4.4.9/macros.in	2008-04-04 23:03:44.008771012 +0300
 @@ -192,7 +192,7 @@
  Summary: Debug information for package %{name}\
  Summary(pl.UTF-8): Informacje dla debuggera dla pakietu %{name}\
@@ -9,13 +9,11 @@
  AutoReqProv: 0\
  %description debuginfo\
  This package provides debug information for package %{name}.\
-@@ -237,8 +237,8 @@
- %_srcrpmdir		%{_topdir}/SRPMS
+@@ -238,7 +238,7 @@
  
  #	Directory where temporary files can be created.
--%_tmppath		%(echo "${TMPDIR:-/tmp}")
+ %_tmppath		%(echo "${TMPDIR:-/tmp}")
 -%tmpdir			%{_tmppath}
-+%_tmppath		%(echo "${TMPDIR:-/tmp}")
 +%tmpdir			%{expand:%%global tmpdir %{lua:print(os.getenv("TMPDIR") or "/tmp")}}%tmpdir
  
  #	Path to top of build area.
@@ -38,3 +36,11 @@
  
  #==============================================================================
  # ---- config.guess platform macros.
+@@ -1464,6 +1468,7 @@
+ # -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
+ 
+ %debugcflags	-O0 -g -Wall
++%optldflags	-Wl,--as-needed
+ 
+ # Warning: those macros are overwritten by macros.build,
+ #          left here for compatibility
