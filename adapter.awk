@@ -18,6 +18,7 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # TODO
+# - really long sourceX make preamble sorting totally fcked up (try snake.spec r1.1)
 # - parse ../PLD-doc/BuildRequires.txt and setup proper BR epoches?
 # - add "-nc" option to skip CVS interaction
 # - sort Summary(XX)
@@ -929,27 +930,7 @@ preamble == 1 {
 		# assigning to $2 kills preamble formatting
 		$2 = fixedsub(filename, url[n], $2)
 
-		# sourceforge urls
-		sub("[?&]big_mirror=.*$", "", $2);
-		sub("[?&]modtime=.*$", "", $2);
-
-		sub("[?]use_mirror=.*$", "", $2);
-		sub("[?]download$", "", $2);
-
-		sub("^http://prdownloads\.sourceforge\.net/", "http://dl.sourceforge.net/", $2)
-		sub("^http://download\.sf\.net/", "http://dl.sourceforge.net/", $2)
-		sub("^http://download\.sourceforge\.net/", "http://dl.sourceforge.net/", $2)
-		sub("^http://downloads\.sourceforge\.net/", "http://dl.sourceforge.net/", $2)
-
-		sub("^http://.*\.dl\.sourceforge\.net/", "http://dl.sourceforge.net/", $2)
-		sub("^http://dl\.sourceforge\.net/sourceforge/", "http://dl.sourceforge.net/", $2)
-		sub("^http://dl\.sf\.net/", "http://dl.sourceforge.net/", $2)
-
-		sub("^ftp://ftp\.gnome\.org/", "http://ftp.gnome.org/", $2)
-		sub("^http://ftp\.gnome\.org/pub/gnome/", "http://ftp.gnome.org/pub/GNOME/", $2)
-
-		# apache urls
-		sub("^http://apache.zone-h.org/", "http://www.apache.org/dist/", $2)
+		$2 = unify_url($2)
 	}
 
 
@@ -1595,6 +1576,37 @@ function cflags(var)
 	return 1
 }
 
+function unify_url(url)
+{
+
+	# sourceforge urls
+	sub("[?&]big_mirror=.*$", "", url);
+	sub("[?&]modtime=.*$", "", url);
+	sub("[?]use_mirror=.*$", "", url);
+	sub("[?]download$", "", url);
+
+	sub("^http://prdownloads\.sourceforge\.net/", "http://dl.sourceforge.net/", url)
+	sub("^http://download\.sf\.net/", "http://dl.sourceforge.net/", url)
+	sub("^http://download\.sourceforge\.net/", "http://dl.sourceforge.net/", url)
+	sub("^http://downloads\.sourceforge\.net/", "http://dl.sourceforge.net/", url)
+
+	sub("^http://.*\.dl\.sourceforge\.net/", "http://dl.sourceforge.net/", url)
+	sub("^http://dl\.sourceforge\.net/sourceforge/", "http://dl.sourceforge.net/", url)
+	sub("^http://dl\.sf\.net/", "http://dl.sourceforge.net/", url)
+
+	sub("^ftp://ftp\.gnome\.org/", "http://ftp.gnome.org/", url)
+	sub("^http://ftp\.gnome\.org/pub/gnome/", "http://ftp.gnome.org/pub/GNOME/", url)
+
+	# apache urls
+	sub("^http://apache.zone-h.org/", "http://www.apache.org/dist/", url)
+
+	# gnu.org
+	sub("^ftp://ftp.gnu.org/", "http://ftp.gnu.org/", url)
+	sub("^http://ftp.gnu.org/pub/gnu/", "http://ftp.gnu.org/gnu/", url)
+
+	return url
+}
+
 function demacroize(str)
 {
 	if (mod_name) {
@@ -1626,11 +1638,14 @@ function demacroize(str)
 
 function kill_preamble_macros()
 {
-	if ($1 ~ /^URL:/ || $1 ~ /^Obsoletes:/) {
+	if ($1 ~ /^Obsoletes:/) {
 		# NB! assigning $2 a value breaks tabbing
 		$2 = demacroize($2);
-		# unify sourceforge url
-		sub("\.sf\.net/$", ".sourceforge.net/", $2);
+	}
+	if ($1 ~ /^URL:/) {
+		# NB! assigning $2 a value breaks tabbing
+		$2 = demacroize($2);
+		$2 = unify_url($2)
 	}
 }
 
@@ -1705,6 +1720,7 @@ function replace_requires()
 	sub(/^tftp-server$/, "tftpdaemon", $2);
 
 	sub(/^gcc-c\+\+$/, "libstdc++-devel", $2);
+	sub(/^chkconfig$/, "/sbin/chkconfig", $2);
 
 	replace_php_virtual_deps()
 }

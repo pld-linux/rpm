@@ -192,6 +192,13 @@ else
 	RPMBUILD="rpmbuild"
 fi
 
+#
+# are we using cvs-nserver ?
+#
+CVS_NSERVER=0
+cvs --version 2>&1 | grep -q 'CVS-nserver'
+[ $? -eq 0 ] && CVS_NSERVER=1
+
 POLDEK_INDEX_DIR="`$RPM --eval %_rpmdir`/"
 POLDEK_CMD="$SU_SUDO /usr/bin/poldek --noask"
 
@@ -332,7 +339,7 @@ Usage: builder [-D|--debug] [-V|--version] [--short-version] [-a|--as_anon] [-b|
                     - as above, but allow float version
 --use-greed-sources
                     - try download source from tag head if don't find it in
-                      current tag	
+                      current tag
 -U, --update        - refetch sources, don't use distfiles, and update md5 comments
 -Upi, --update-poldek-indexes
                     - refresh or make poldek package index files.
@@ -1164,6 +1171,26 @@ make_tagver() {
 	echo -n "$TAGVER"
 }
 
+# bool is_tag_a_branch(tag)
+#
+# returns 1 if a tag is a branch set on SPECFILE
+is_tag_a_branch() {
+	if [ -n "$DEBUG" ]; then
+		set -x
+		set -v
+	fi
+
+	if [ $# -ne 1 ]; then
+		return 0;
+	fi
+
+	TAG=$1
+
+	cd "$SPEC_DIR"
+	cvs status -v $SPECFILE | grep -Eiq "${TAG}.+(branch: [0-9.]+)"
+	return $?
+}
+
 tag_files()
 {
 	TAG_FILES="$@"
@@ -1189,6 +1216,18 @@ tag_files()
 	if [ -n "$CVSROOT" ]; then
 		OPTIONS="-d $CVSROOT $OPTIONS"
 	fi
+
+	# if a tagname we are about to set already exists
+	# and happens to be a branch (common case with AC-branch)
+	# pass -B (allows -F to disturb branch tag)
+	local _tag=$TAG
+	if [ "$TAG_VERSION" = "yes" ]; then
+		_tag=$TAGVER
+	fi;
+	is_tag_a_branch $_tag
+	if [ $? -eq 0 -a $CVS_NSERVER -eq 0 ]; then
+		OPTIONS="$OPTIONS -B"
+	fi;
 
 	cd "$SOURCE_DIR"
 	local tag_files
@@ -1655,13 +1694,13 @@ display_branches()
 }
 
 # checks a given list of packages/files/provides agains current rpmdb.
-# outputs all dependencies whcih current rpmdb doesn't satisfy.
+# outputs all dependencies which current rpmdb doesn't satisfy.
 # input can be either STDIN or parameters
 _rpm_prov_check()
 {
 	local DEPS
 
-	if [ "$#" -gt 0 ]; then
+	if [ $# -gt 0 ]; then
 		DEPS="$@"
 	else
 		DEPS=$(cat)
@@ -1677,13 +1716,13 @@ _rpm_prov_check()
 }
 
 # checks if given package/files/provides exists in rpmdb.
-# inout can be either stdin or parameters
-# returns packages wchi hare present in the rpmdb
+# input can be either stdin or parameters
+# returns packages which are present in the rpmdb
 _rpm_cnfl_check()
 {
 	local DEPS
 
-	if [ "$#" -gt 0 ]; then
+	if [ $# -gt 0 ]; then
 		DEPS="$@"
 	else
 		DEPS=$(cat)
@@ -1708,7 +1747,7 @@ fetch_build_requires()
 			fi
 
 			if [ -n "$CNFL" ] || [ -n "$DEPS" ]; then
-				echo "fetch builderequires: install [$DEPS]; remove [$CNFL]"
+				echo "fetch BuildRequires: install [$DEPS]; remove [$CNFL]"
 				update_shell_title "poldek: install [$DEPS]; remove [$CNFL]"
 				$SU_SUDO /usr/bin/poldek -q --update || $SU_SUDO /usr/bin/poldek -q --upa
 			fi
@@ -1722,7 +1761,7 @@ fetch_build_requires()
 					update_shell_title "install deps: $DEPS"
 					echo "Trying to install dependencies ($DEPS):"
 					local log=.${SPECFILE}_poldek.log
-					$SU_SUDO /usr/bin/poldek --caplookup -uGq $DEPS | tee $log
+					$SU_SUDO /usr/bin/poldek --caplookup -uGqQ $DEPS | tee $log
 					failed=$(awk '/^error:/{a=$2; sub(/^error: /, "", a); sub(/:$/, "", a); print a}' $log)
 					rm -f $log
 					local ok
@@ -1888,7 +1927,7 @@ init_rpm_dir() {
 
 	mkdir -p $TOP_DIR/{RPMS,BUILD,SRPMS}
 	cd $TOP_DIR
-	cvs -d $CVSROOT co SOURCES/.cvsignore SPECS/{mirrors,md5,adapter{,.awk},fetchsrc_request,builder,{relup,compile,repackage}.sh}
+	cvs -d $CVSROOT co SOURCES/{.cvsignore,dropin} SPECS/{mirrors,md5,adapter{,.awk},fetchsrc_request,builder,{relup,compile,repackage}.sh}
 
 	init_builder
 
@@ -1911,7 +1950,7 @@ get_greed_sources() {
 	if [ $? != 0 ]; then
 		Exit_error err_no_source_in_repo $1
 	fi
-	
+
 }
 
 # remove entries from CVS/Entries
@@ -2195,10 +2234,10 @@ while [ $# -gt 0 ]; do
 		-debug)
 			RPMBUILDOPTS="${RPMBUILDOPTS} -debug"; shift
 			;;
-		-* )
+		-*)
 			Exit_error err_invalid_cmdline "$1"
 			;;
-		* )
+		*)
 			SPECFILE="${1}"
 			# check if specname was passed as specname:cvstag
 			if [ "${SPECFILE##*:}" != "${SPECFILE}" ]; then
@@ -2211,7 +2250,7 @@ while [ $# -gt 0 ]; do
 done
 
 if [ -f CVS/Entries ] && [ -z "$CVSTAG" ]; then
-	CVSTAG=$(awk -vSPECFILE="${SPECFILE%.spec}.spec" -F/ '$2 == SPECFILE && $6 ~ /^T/{print substr($6, 2)}' CVS/Entries)
+	CVSTAG=$(awk -vSPECFILE=$(basename ${SPECFILE%.spec}.spec) -F/ '$2 == SPECFILE && $6 ~ /^T/{print substr($6, 2)}' CVS/Entries)
 	if [ "$CVSTAG" ]; then
 		echo >&2 "builder: Stick tag $CVSTAG active. Use -r TAGNAME to override."
 	fi
