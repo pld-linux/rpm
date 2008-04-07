@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	62
+Release:	63
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -132,6 +132,7 @@ Patch68:	%{name}-rpm5-patchset-9486.patch
 Patch69:	%{name}-popt-aliases.patch
 Patch70:	%{name}-lualeak.patch
 Patch71:	%{name}-rpm5-patchset-10061.patch
+Patch72:	%{name}-rpm5-patchset-7657.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -715,6 +716,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch69 -p1
 %patch70 -p1
 %patch71 -p0
+%patch72 -p0
 
 mv -f scripts/{perl.req,perl.req.in}
 mv -f scripts/{perl.prov,perl.prov.in}
