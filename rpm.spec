@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	57
+Release:	61
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -127,6 +127,8 @@ Patch66:	%{name}-v3-support.patch
 Patch67:	%{name}-cleanbody.patch
 Patch68:	%{name}-rpm5-patchset-9486.patch
 Patch69:	%{name}-popt-aliases.patch
+Patch70:	%{name}-lualeak.patch
+Patch71:	%{name}-rpm5-patchset-10061.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -706,6 +708,8 @@ install %{SOURCE12} scripts/perl.prov
 %patch67 -p1
 %patch68 -p1
 %patch69 -p1
+%patch70 -p1
+%patch71 -p0
 
 mv -f scripts/{perl.req,perl.req.in}
 mv -f scripts/{perl.prov,perl.prov.in}
@@ -784,7 +788,7 @@ install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/b
 	pylibdir=%{py_libdir} \
 	pkgbindir="%{_bindir}"
 
-cat <<'EOF'> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 # first platform file entry can't contain regexps
 %{_target_cpu}-%{_target_vendor}-linux
 
