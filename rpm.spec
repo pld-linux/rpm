@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	61
+Release:	62
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -906,7 +906,6 @@ install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 install %{SOURCE17} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
-
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Conflictname
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Dirnames
 install %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
@@ -1095,14 +1094,6 @@ if [ "$p" ]; then
 	kill $p
 fi
 echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
-
-%pretrans
-# this needs to be a dir
-if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
-	umask 022
-	mv -f %{_sysconfdir}/rpm/sysinfo{,.rpmsave}
-	mkdir %{_sysconfdir}/rpm/sysinfo
-fi
 
 %triggerpostun -- %{name} < 4.4.9-44
 %{_rpmlibdir}/hrmib-cache
