@@ -1239,7 +1239,8 @@ done \
 																	\
 %{?-C:cd %{-C*}}													\
 compile() {															\
-	L="<"; [[ '%{*}' != *$L$L* ]] || PATCH_SH="set -x -e;$(cat)"	\
+	local L="<" PATCH_SH;											\
+	[[ '%{*}' != *$L$L* ]] || PATCH_SH="set -x -e;$(cat)"			\
 	set -e -x														\
 	local cfgs='%{?with_dist_kernel:%{?with_smp: smp}%{?with_up: up}}%{!?with_dist_kernel: nondist}' \
 																	\
