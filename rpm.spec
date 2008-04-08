@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	61
+Release:	64
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -128,7 +128,8 @@ Patch67:	%{name}-cleanbody.patch
 Patch68:	%{name}-rpm5-patchset-9486.patch
 Patch69:	%{name}-popt-aliases.patch
 Patch70:	%{name}-lualeak.patch
-Patch71:	%{name}-rpm5-patchset-10061.patch
+#Patch71:	%{name}-rpm5-patchset-10061.patch
+Patch72:	%{name}-rpm5-patchset-7657.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -709,7 +710,8 @@ install %{SOURCE12} scripts/perl.prov
 %patch68 -p1
 %patch69 -p1
 %patch70 -p1
-%patch71 -p0
+#%patch71 -p0
+%patch72 -p0
 
 mv -f scripts/{perl.req,perl.req.in}
 mv -f scripts/{perl.prov,perl.prov.in}
@@ -897,7 +899,6 @@ install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 install %{SOURCE17} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
-
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Conflictname
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Dirnames
 install %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
@@ -1053,14 +1054,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %triggerpostun lib -- %{name}-lib < %{version}
 rm -f /var/lib/rpm/__db*
-
-%pretrans
-# this needs to be a dir
-if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
-	umask 022
-	mv -f %{_sysconfdir}/rpm/sysinfo{,.rpmsave}
-	mkdir %{_sysconfdir}/rpm/sysinfo
-fi
 
 %triggerpostun -- %{name} < 4.4.9-44
 %{_rpmlibdir}/hrmib-cache
