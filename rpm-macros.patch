@@ -46,15 +46,6 @@ diff -urN rpm.org/macros.in rpm/macros.in
  
  #	Archive formats to use for source/binary package payloads.
  #		"cpio"		cpio archive (default)
-@@ -522,7 +522,7 @@
- 
- #
- # Path to magic file used for file classification.
--%_rpmfc_magic_path	%{_rpmhome}/magic
-+%_rpmfc_magic_path	/usr/share/file/magic
- 
- #==============================================================================
- # ---- Database configuration macros.
 @@ -1224,17 +1224,17 @@
  %_exec_prefix		%{_prefix}
  %_bindir		%{_exec_prefix}/bin

@@ -48,12 +48,14 @@
 ERROR
 %endif
 
-#
 # versions of required libraries
-%define	reqdb_ver	4.6.18
-%define	reqpopt_ver	1.10.8
-%define	beecrypt_ver	2:4.1.2-4
-%define	sover	5.0
+%define		reqdb_ver	4.6.18
+%define		reqpopt_ver	1.10.8
+%define		beecrypt_ver	2:4.1.2-4
+%define		sover	5.1
+
+%define		subver	b2
+%define		rel		0.1
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
 Summary(es.UTF-8):	Gestor de paquetes RPM
@@ -62,12 +64,12 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.0.3
-Release:	0.2
+Version:	5.1
+Release:	0.%{subver}.%{rel}
 License:	LGPL
 Group:		Base
-Source0:	http://rpm5.org/files/rpm/rpm-5.0/%{name}-%{version}.tar.gz
-# Source0-md5:	b3df4e54e84cf3344ce6b76fa2a8d5bf
+Source0:	http://rpm5.org/files/rpm/rpm-5.1/%{name}-%{version}b2.tar.gz
+# Source0-md5:	11950912cb8e5f3353fd6c95cfbc650f
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -116,6 +118,7 @@ Patch11:	%{name}-lua.patch
 
 Patch14:	%{name}-etc_dir.patch
 Patch16:	%{name}-php-deps.patch
+Patch17:	%{name}-macros.patch
 Patch18:	%{name}-macros-th.patch
 
 Patch23:	%{name}-pkgconfigdeps.patch
@@ -625,7 +628,7 @@ Esse pacote deve ser instalado se você quiser desenvolver programas em
 Python para manipular pacotes e bancos de dados RPM.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}%{?subver}
 
 # APPLIED ALREADY? translationproject.org is used now
 #%%patch0 -p1
@@ -673,6 +676,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch55 -p1
 %patch58 -p1
 %patch59 -p1
+%patch17 -p1
 %patch18 -p1
 %ifarch sparc64
 %patch61 -p1
