@@ -52,7 +52,7 @@ ERROR
 %define		reqdb_ver	4.6.18
 %define		reqpopt_ver	1.10.8
 %define		beecrypt_ver	2:4.1.2-4
-%define		sover	5.1
+%define		sover	5.0
 
 %define		subver	b2
 %define		rel		0.1
@@ -738,7 +738,7 @@ awk -f %{SOURCE6} %{SOURCE1}
 	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.pld:%{_rpmlibdir}/macros.build:%{_rpmlibdir}/%%{_target}/macros:%{_sysconfdir}/macros.*:%{_sysconfdir}/macros:%{_sysconfdir}/%%{_target}/macros:~/etc/rpmmacros:~/etc/.rpmmacros:~/.rpmmacros' \
 	--with-bugreport="http://bugs.pld-linux.org/"
 
-%{__make} \
+%{__make} -j1 \
 	CC="%{__cc}" \
 	CXX="%{__cxx}" \
 	CPP="%{__cpp}"
@@ -1148,16 +1148,18 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files utils
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/rpmconstant
 %attr(755,root,root) %{_bindir}/rpm2cpio
-%attr(755,root,root) %{_rpmlibdir}/rpmcache
-%attr(755,root,root) %{_rpmlibdir}/rpmcmp
-%attr(755,root,root) %{_rpmlibdir}/rpmdeps
+%attr(755,root,root) %{_bindir}/rpmcache
+%attr(755,root,root) %{_bindir}/rpmconstant
+%attr(755,root,root) %{_bindir}/rpmdigest
+%attr(755,root,root) %{_bindir}/rpmgrep
 %attr(755,root,root) %{_rpmlibdir}/debugedit
-%attr(755,root,root) %{_rpmlibdir}/rpmdigest
 %attr(755,root,root) %{_rpmlibdir}/find-debuginfo.sh
-%attr(755,root,root) %{_rpmlibdir}/tgpg
+%attr(755,root,root) %{_rpmlibdir}/rpmcmp
 %attr(755,root,root) %{_rpmlibdir}/rpmdb_loadcvt
+%attr(755,root,root) %{_rpmlibdir}/rpmdeps
+%attr(755,root,root) %{_rpmlibdir}/tgpg
+%{_mandir}/man1/rpmgrep.1*
 %{_mandir}/man8/rpm2cpio.8*
 %{_mandir}/man8/rpmcache.8*
 %{_mandir}/man8/rpmdeps.8*
