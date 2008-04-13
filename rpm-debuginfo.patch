@@ -1,7 +1,7 @@
 diff -ur rpm.org/macros.in rpm/macros.in
 --- rpm.org/macros.in	2007-10-02 20:31:56.905775000 +0200
 +++ rpm/macros.in	2007-10-02 20:35:30.122401828 +0200
-@@ -195,15 +195,20 @@
+@@ -195,15 +195,21 @@
  %debug_package \
  %ifnarch noarch\
  %global __debug_package 1\
@@ -26,7 +26,7 @@ diff -ur rpm.org/macros.in rpm/macros.in
  %defattr(-,root,root)\
  %endif\
  %{nil}
-@@ -1123,7 +1128,7 @@
+@@ -1123,7 +1129,7 @@
  %{?buildroot:%{__rm} -rf '%{buildroot}'}
  %__spec_install_body	%{___build_body}
  %__spec_install_post\
@@ -35,7 +35,6 @@ diff -ur rpm.org/macros.in rpm/macros.in
  %{__arch_install_post}\
  %{__os_install_post}\
  %{nil}
-diff -ur rpm.org/scripts/find-debuginfo.sh rpm/scripts/find-debuginfo.sh
 --- rpm.org/scripts/find-debuginfo.sh	2007-09-06 09:36:38.000000000 +0200
 +++ rpm/scripts/find-debuginfo.sh	2007-10-02 20:38:57.745519759 +0200
 @@ -92,7 +92,8 @@
