@@ -54,8 +54,6 @@ ERROR
 %define		beecrypt_ver	2:4.1.2-4
 %define		sover	5.0
 
-%define		subver	b2
-%define		rel		0.1
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
 Summary(es.UTF-8):	Gestor de paquetes RPM
@@ -64,12 +62,12 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.1
-Release:	0.%{subver}.%{rel}
+Version:	5.1.0
+Release:	0.1
 License:	LGPL
 Group:		Base
-Source0:	http://rpm5.org/files/rpm/rpm-5.1/%{name}-%{version}b2.tar.gz
-# Source0-md5:	11950912cb8e5f3353fd6c95cfbc650f
+Source0:	http://rpm5.org/files/rpm/rpm-5.1/%{name}-%{version}.tar.gz
+# Source0-md5:	652ba4c5e2fa981f641c727baf0d71bc
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
