@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	64
+Release:	65
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -281,6 +281,7 @@ Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	db >= %{reqdb_ver}
+Requires:	zlib >= 1.2.3
 %{?with_selinux:Requires:	libselinux >= 1.18}
 %{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
 Requires:	popt >= %{reqpopt_ver}
