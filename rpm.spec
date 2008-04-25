@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	64.1
+Release:	66.1
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -130,6 +130,7 @@ Patch69:	%{name}-popt-aliases.patch
 Patch70:	%{name}-lualeak.patch
 #Patch71:	%{name}-rpm5-patchset-10061.patch
 Patch72:	%{name}-rpm5-patchset-7657.patch
+Patch73:	%{name}-namespace-probe.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -279,6 +280,7 @@ Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	db >= %{reqdb_ver}
+Requires:	zlib >= 1.2.3
 %{?with_selinux:Requires:	libselinux >= 1.18}
 %{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
 Requires:	popt >= %{reqpopt_ver}
@@ -712,6 +714,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch70 -p1
 #%patch71 -p0
 %patch72 -p0
+%patch73 -p1
 
 mv -f scripts/{perl.req,perl.req.in}
 mv -f scripts/{perl.prov,perl.prov.in}
