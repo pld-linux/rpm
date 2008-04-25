@@ -1,0 +1,3 @@
+- disable user(foo), group(foo) namespace probes
+  fixes unwanted trigger fires (i.e mailman pkg uninstall); rel 66.1
+  pld bug #120
