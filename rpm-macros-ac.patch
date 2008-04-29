@@ -1,5 +1,5 @@
---- rpm-4.4.9/macros.in	2008-03-27 19:48:22.895695000 +0200
-+++ rpm-4.4.9/macros.in	2008-04-04 23:03:44.008771012 +0300
+--- rpm-4.4.9/macros.in	2008-04-04 23:03:44.008771012 +0300
++++ rpm-4.4.9/macros.in	2008-04-29 17:39:02.041156816 +0300
 @@ -192,7 +192,7 @@
  Summary: Debug information for package %{name}\
  Summary(pl.UTF-8): Informacje dla debuggera dla pakietu %{name}\
@@ -9,15 +9,15 @@
  AutoReqProv: 0\
  %description debuginfo\
  This package provides debug information for package %{name}.\
-@@ -238,7 +238,7 @@
+@@ -242,6 +242,6 @@
  
  #	Directory where temporary files can be created.
- %_tmppath		%(echo "${TMPDIR:-/tmp}")
+-%_tmppath		%(echo "${TMPDIR:-/tmp}")
 -%tmpdir			%{_tmppath}
++%_tmppath		%{expand:%%global _tmppath %(echo "${TMPDIR:-/tmp}")}%_tmppath
 +%tmpdir			%{expand:%%global tmpdir %{lua:print(os.getenv("TMPDIR") or "/tmp")}}%tmpdir
  
  #	Path to top of build area.
- %_topdir		%(echo $HOME)/rpm
 @@ -271,6 +271,9 @@
  #
  #%distribution
