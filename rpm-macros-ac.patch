@@ -15,7 +15,7 @@
 -%_tmppath		%(echo "${TMPDIR:-/tmp}")
 -%tmpdir			%{_tmppath}
 +%_tmppath		%{expand:%%global _tmppath %(echo "${TMPDIR:-/tmp}")}%_tmppath
-+%tmpdir			%{expand:%%global tmpdir %{lua:print(os.getenv("TMPDIR") or "/tmp")}}%tmpdir
++%tmpdir			%{expand:%%global tmpdir %(echo "${TMPDIR:-/tmp}")}%tmpdir
  
  #	Path to top of build area.
 @@ -271,6 +271,9 @@
