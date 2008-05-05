@@ -920,11 +920,17 @@ fi \
 # /etc/sysconfig/rpm or per service /etc/sysconfig/SERVICE file.
 #
 # Usage:
-#   %service [-q] SERVICE ACTION ["SERVICE NICE DESCRIPTION"]
+#   %service [-q] [-n] SERVICE ACTION ["SERVICE NICE DESCRIPTION"]
 #
 #  -q be silent when service isn't started (for scriplets restaring other package's services)
+#  -n NOOP mode, do not actually restart service
 #
-%service(q) {{%(export quiet=%{-q:1}; /usr/lib/rpm/service_generator.sh %{*}) };}
+# Requirements:
+# BuildRequires:	rpmbuild(macros) >= 1.268
+# Requires:	rc-scripts
+# -n option:
+# BuildRequires:	rpmbuild(macros) >= 1.450
+%service(qn) {{%(export noop=%{-n:1} quiet=%{-q:1}; /usr/lib/rpm/service_generator.sh %{*}) };}
 
 
 # Java macros. based on jpackage macros.java
@@ -1410,6 +1416,9 @@ done																\
 #   %preun	-p %remove_etc_shells -p /bin/sh /bin/pdksh
 #
 #  -p (optional) -- specifies that result is embeded %post script (prepends <lua> as first line)
+#
+# Requirements:
+# BuildRequires:	rpmbuild(macros) >= 1.429
 
 %add_etc_shells(p) %{-p:<lua>}\
 t = {}\
