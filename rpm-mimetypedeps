@@ -1,0 +1,20 @@
+#!/bin/sh
+
+case $1 in
+-P|--provides)
+    while read filename ; do
+	case "$filename" in
+	*.desktop)
+	    mime=`grep MimeType $filename | cut -d'=' -f2`
+	    IFS=';'
+	    for type in $mime ; do
+		if [ -n "$type" ]; then
+	    	    echo "mimetype($type)"
+	    	fi
+	    done
+	    ;;
+	esac
+    done
+    ;;
+esac
+exit 0
