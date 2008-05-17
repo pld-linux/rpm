@@ -1,0 +1,74 @@
+diff -urN rpm-4.4.9/lib/rpmfc.c rpm-4.4.9.new/lib/rpmfc.c
+--- rpm-4.4.9/lib/rpmfc.c	2008-05-06 16:27:09.000000000 +0200
++++ rpm-4.4.9.new/lib/rpmfc.c	2008-05-06 16:33:48.000000000 +0200
+@@ -531,6 +531,8 @@
+   { "troff or preprocessor input",	RPMFC_MANPAGE|RPMFC_INCLUDE },
+   { "GNU Info",			RPMFC_MANPAGE|RPMFC_INCLUDE },
+ 
++  { "Desktop E",		RPMFC_DESKTOP_FILE|RPMFC_INCLUDE },
++
+   { "perl script text",		RPMFC_PERL|RPMFC_INCLUDE },
+   { "Perl5 module source text", RPMFC_PERL|RPMFC_MODULE|RPMFC_INCLUDE },
+ 
+@@ -872,6 +874,10 @@
+ 	    xx = rpmfcHelper(fc, 'P', "java", fc->noautoprov, fc->noautoprov_c);
+ 	if (fc->findreq)
+ 	    xx = rpmfcHelper(fc, 'R', "java", fc->noautoreq, fc->noautoreq_c);
++    } else
++    if (fc->fcolor->vals[fc->ix] & RPMFC_DESKTOP_FILE) {
++	if (fc->findprov)
++	    xx = rpmfcHelper(fc, 'P', "mimetype", fc->noautoprov, fc->noautoprov_c);
+     }
+ 
+     return 0;
+@@ -984,7 +990,7 @@
+ /*@unchecked@*/
+ static struct rpmfcApplyTbl_s rpmfcApplyTable[] = {
+     { rpmfcELF,		RPMFC_ELF },
+-    { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL|RPMFC_PYTHON|RPMFC_LIBTOOL|RPMFC_PKGCONFIG|RPMFC_BOURNE|RPMFC_JAVA|RPMFC_PHP) },
++    { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL|RPMFC_PYTHON|RPMFC_LIBTOOL|RPMFC_PKGCONFIG|RPMFC_BOURNE|RPMFC_JAVA|RPMFC_PHP|RPMFC_DESKTOP_FILE) },
+     { rpmfcMONO,	RPMFC_MONO },
+     { NULL, 0 }
+ };
+@@ -1350,6 +1356,10 @@
+ 	    else if (_suffix(s, ".php"))
+ 		ftype = "PHP script text";
+ 
++	    /* XXX all files with extension ".desktop" are desktop files for now. */
++	    else if (_suffix(s, ".desktop"))
++		ftype = "Desktop Entry";
++
+ 	    /* XXX skip all files in /dev/ which are (or should be) %dev dummies. */
+ 	    else if (slen >= fc->brlen+sizeof("/dev/") && !strncmp(s+fc->brlen, "/dev/", sizeof("/dev/")-1))
+ 		ftype = "";
+diff -urN rpm-4.4.9/lib/rpmfc.h rpm-4.4.9.new/lib/rpmfc.h
+--- rpm-4.4.9/lib/rpmfc.h	2008-05-06 16:27:09.000000000 +0200
++++ rpm-4.4.9.new/lib/rpmfc.h	2008-05-06 16:28:44.000000000 +0200
+@@ -53,6 +53,7 @@
+     RPMFC_FONT			= (1 << 21),
+     RPMFC_IMAGE			= (1 << 22),
+     RPMFC_MANPAGE		= (1 << 23),
++    RPMFC_DESKTOP_FILE		= (1 << 11),
+ 
+     RPMFC_PERL			= (1 << 24),
+     RPMFC_JAVA			= (1 << 25),
+diff -urN rpm-4.4.9/macros.in rpm-4.4.9.new/macros.in
+--- rpm-4.4.9/macros.in	2008-05-06 16:27:09.000000000 +0200
++++ rpm-4.4.9.new/macros.in	2008-05-06 16:24:15.000000000 +0200
+@@ -1461,6 +1461,16 @@
+ #%__executable_requires	%{_usrlibrpm}/executabledeps.sh --requires
+ #%__scriptlet_requires	/bin/bash --rpm-requires
+ 
++#------------------------------------------------------------------------
++# mimetype(...) configuration.
++#
++# Path to script to autogenerate mimetype(foo) provides, based on MimeType
++# key from desktop files.
++#
++# Note: Used if _use_internal_dependency_generator is non-zero. The
++# helper is also used by %{_uselibrpm}/rpmdeps --provides
++%__mimetype_provides %{_usrlibrpm}/mimetypedeps.sh --provides
++
+ # PLD rpm macros
+ %_enable_debug_packages 1
+ 
