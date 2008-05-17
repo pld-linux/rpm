@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	67.1
+Release:	68.1
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -59,6 +59,7 @@ Source15:	%{name}-macros.java
 Source16:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source17:	banner.sh
+Source18:	%{name}-mimetypedeps
 Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
@@ -132,6 +133,7 @@ Patch70:	%{name}-lualeak.patch
 Patch72:	%{name}-rpm5-patchset-7657.patch
 Patch73:	%{name}-namespace-probe.patch
 Patch74:	%{name}-mktemperror.patch
+Patch75:	%{name}-mimetype.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -717,6 +719,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch72 -p0
 %patch73 -p1
 %patch74 -p1
+%patch75 -p1
 
 mv -f scripts/{perl.req,perl.req.in}
 mv -f scripts/{perl.prov,perl.prov.in}
@@ -899,6 +902,7 @@ install %{SOURCE13} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
 install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
+install %{SOURCE18} $RPM_BUILD_ROOT%{_rpmlibdir}/mimetypedeps.sh
 install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
 install %{SOURCE17} $RPM_BUILD_ROOT%{_bindir}/banner.sh
@@ -1202,6 +1206,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/u_pkg.sh
 %attr(755,root,root) %{_rpmlibdir}/executabledeps.sh
 %attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
+%attr(755,root,root) %{_rpmlibdir}/mimetypedeps.sh
 # needs hacked pkg-config to return anything
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
 %attr(755,root,root) %{_rpmlibdir}/rpmb
