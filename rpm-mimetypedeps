@@ -2,19 +2,20 @@
 
 case $1 in
 -P|--provides)
-    while read filename ; do
+	while read filename; do
 	case "$filename" in
 	*.desktop)
-	    mime=`grep MimeType $filename | cut -d'=' -f2`
-	    IFS=';'
-	    for type in $mime ; do
+		mime=$(awk -F= '/^MimeType=/{print $2}' "$filename")
+		IFS=';'
+		for type in $mime; do
 		if [ -n "$type" ]; then
-	    	    echo "mimetype($type)"
-	    	fi
-	    done
-	    ;;
+			echo "mimetype($type)"
+		fi
+		done
+		;;
 	esac
-    done
-    ;;
+	done
+	;;
 esac
+
 exit 0
