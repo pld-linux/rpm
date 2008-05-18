@@ -1,11 +1,10 @@
-diff -urN rpm-4.4.9/lib/rpmfc.c rpm-4.4.9.new/lib/rpmfc.c
 --- rpm-4.4.9/lib/rpmfc.c	2008-05-06 16:27:09.000000000 +0200
 +++ rpm-4.4.9.new/lib/rpmfc.c	2008-05-06 16:33:48.000000000 +0200
 @@ -531,6 +531,8 @@
    { "troff or preprocessor input",	RPMFC_MANPAGE|RPMFC_INCLUDE },
    { "GNU Info",			RPMFC_MANPAGE|RPMFC_INCLUDE },
  
-+  { "Desktop E",		RPMFC_DESKTOP_FILE|RPMFC_INCLUDE },
++  { "Desktop Entry",		RPMFC_DESKTOP_FILE|RPMFC_INCLUDE },
 +
    { "perl script text",		RPMFC_PERL|RPMFC_INCLUDE },
    { "Perl5 module source text", RPMFC_PERL|RPMFC_MODULE|RPMFC_INCLUDE },
@@ -41,7 +40,6 @@ diff -urN rpm-4.4.9/lib/rpmfc.c rpm-4.4.9.new/lib/rpmfc.c
  	    /* XXX skip all files in /dev/ which are (or should be) %dev dummies. */
  	    else if (slen >= fc->brlen+sizeof("/dev/") && !strncmp(s+fc->brlen, "/dev/", sizeof("/dev/")-1))
  		ftype = "";
-diff -urN rpm-4.4.9/lib/rpmfc.h rpm-4.4.9.new/lib/rpmfc.h
 --- rpm-4.4.9/lib/rpmfc.h	2008-05-06 16:27:09.000000000 +0200
 +++ rpm-4.4.9.new/lib/rpmfc.h	2008-05-06 16:28:44.000000000 +0200
 @@ -53,6 +53,7 @@
@@ -52,7 +50,6 @@ diff -urN rpm-4.4.9/lib/rpmfc.h rpm-4.4.9.new/lib/rpmfc.h
  
      RPMFC_PERL			= (1 << 24),
      RPMFC_JAVA			= (1 << 25),
-diff -urN rpm-4.4.9/macros.in rpm-4.4.9.new/macros.in
 --- rpm-4.4.9/macros.in	2008-05-06 16:27:09.000000000 +0200
 +++ rpm-4.4.9.new/macros.in	2008-05-06 16:24:15.000000000 +0200
 @@ -1461,6 +1461,16 @@
