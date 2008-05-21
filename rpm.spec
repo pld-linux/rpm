@@ -725,7 +725,6 @@ mv -f scripts/{perl.prov,perl.prov.in}
 mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib db db3 popt rpmdb/db.h
-cp %{SOURCE8} $RPM_BUILD_ROOT/etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
@@ -790,6 +789,8 @@ sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg}
+
+install %{SOURCE8} $RPM_BUILD_ROOT/etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
