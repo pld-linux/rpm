@@ -1,6 +1,6 @@
 --- rpm-4.4.8.org/scripts/libtooldeps.sh	2005-11-12 22:20:42.000000000 +0100
 +++ rpm-4.4.8/scripts/libtooldeps.sh	2006-11-26 20:06:49.254008750 +0100
-@@ -5,6 +5,8 @@
+@@ -5,15 +5,18 @@
      exit 0
  }
  
@@ -9,7 +9,9 @@
  case $1 in
  -P|--provides)
      shift
-@@ -13,7 +15,8 @@
+-    RPM_BUILD_ROOT="$1"
++    RPM_BUILD_ROOT="`readlink -f "$1"`"
+     while read possible
      do
  	case "$possible" in
  	*.la)
