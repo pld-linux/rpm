@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	68
+Release:	69
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -1073,6 +1073,7 @@ if [ -d /vservers ]; then
 	echo >&2 "rpm-lib upgrade: Removing vservers apps/pkgmgmt/base/rpm/state/__* from older rpmdb version"
 	rm -f /etc/vservers/*/apps/pkgmgmt/base/rpm/state/__*
 fi
+echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
 # TODO: poldek should abort if it can't reopen rpmdb after rpm exec:
 #Installing set #3
 #rpmdb: Program version 4.2 doesn't match environment version
@@ -1087,7 +1088,6 @@ if [ "$p" ]; then
 	echo >&2 "Killing poldek ($p), don't panic :)"
 	kill $p
 fi
-echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
 
 %triggerpostun lib -- db4.5 < %{reqdb_ver}
 echo >&2 "db4.5 upgrade: Removing /var/lib/rpm/__db* from older rpmdb version"
@@ -1096,11 +1096,11 @@ if [ -d /vservers ]; then
 	echo >&2 "db4.5 upgrade: Removing vservers apps/pkgmgmt/base/rpm/state/__* from older rpmdb version"
 	rm -f /etc/vservers/*/apps/pkgmgmt/base/rpm/state/__*
 fi
+echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
 if [ "$p" ]; then
 	echo >&2 "Killing poldek ($p), don't panic :)"
 	kill $p
 fi
-echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
 
 %triggerpostun -- %{name} < 4.4.9-44
 %{_rpmlibdir}/hrmib-cache
