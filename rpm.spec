@@ -22,7 +22,11 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
 # versions of required libraries
+%if "%{pld_release}" == "ti"
+%define	reqdb_ver	4.5.20
+%else
 %define	reqdb_ver	4.6.18
+%endif
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
 %define	sover	4.4
@@ -78,8 +82,8 @@ Patch14:	%{name}-etc_dir.patch
 Patch15:	%{name}-system_libs-more.patch
 Patch16:	%{name}-php-deps.patch
 Patch17:	%{name}-ldconfig-always.patch
-Patch18:	%{name}-macros-th.patch
-Patch19:	%{name}-link.patch
+Patch18:	%{name}-macros-ti.patch
+Patch19:	%{name}-macros-th.patch
 Patch20:	%{name}-magic-usesystem.patch
 Patch21:	%{name}-dontneedutils.patch
 Patch22:	%{name}-provides-dont-obsolete.patch
@@ -134,6 +138,7 @@ Patch72:	%{name}-rpm5-patchset-7657.patch
 Patch73:	%{name}-namespace-probe.patch
 Patch74:	%{name}-mktemperror.patch
 Patch75:	%{name}-mimetype.patch
+Patch76:	%{name}-link.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -663,7 +668,6 @@ echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
-%patch19 -p1
 %patch20 -p1
 %patch21 -p1
 %patch22 -p1
@@ -703,7 +707,11 @@ install %{SOURCE12} scripts/perl.prov
 %patch58 -p1
 %patch59 -p1
 %patch60 -p1
+%if "%{pld_release}" == "ti"
 %patch18 -p1
+%else
+%patch19 -p1
+%endif
 %patch61 -p1
 %patch62 -p1
 %patch63 -p1
@@ -719,6 +727,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch73 -p1
 %patch74 -p1
 %patch75 -p1
+%patch76 -p1
 
 mv -f scripts/{perl.req,perl.req.in}
 mv -f scripts/{perl.prov,perl.prov.in}
@@ -790,7 +799,9 @@ sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg}
 
+%if "%{pld_release}" != "ti"
 install %{SOURCE8} $RPM_BUILD_ROOT/etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
+%endif
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -918,6 +929,28 @@ touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
 # obsolete but still installed
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/rpmrc
 
+%if "%{pld_release}" == "ti"
+
+cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
+# customized rpm macros - global for host
+#
+#%%_install_langs pl_PL:en_US
+%%distribution PLD Titanium
+#
+# remove or replace with file_contexts path if you want to use custom
+# SELinux file contexts policy instead of one stored in packages payload
+%%_install_file_context_path	%%{nil}
+%%_verify_file_context_path	%%{nil}
+
+# If non-zero, all erasures will be automagically repackaged.
+%%_repackage_all_erasures	0
+
+# If non-zero, create debuginfo packages
+%%_enable_debug_packages		0
+EOF
+
+%else
+
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # customized rpm macros - global for host
 #
@@ -932,6 +965,8 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # If non-zero, all erasures will be automagically repackaged.
 #%%_repackage_all_erasures    1
 EOF
+
+%endif
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF
 # global list of files (regexps) which don't generate Provides
@@ -1077,8 +1112,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %defattr(644,root,root,755)
 %doc CHANGES CREDITS README wdj/JBJ-GPG-KEY manual/*
 
+%if "%{pld_release}" != "ti"
 %dir /etc/pki/rpm-gpg
 /etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
+%endif
 
 %attr(755,root,root) /bin/rpm
 #%attr(755,root,root) %{_bindir}/rpmdb
