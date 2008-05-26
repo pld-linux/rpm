@@ -25,7 +25,7 @@
 %if "%{pld_release}" == "ti"
 %define	reqdb_ver	4.5.20
 %else
-%define	reqdb_ver	4.6.18
+%define	reqdb_ver	4.7.25
 %endif
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
@@ -39,7 +39,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	68.2
+Release:	69
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
