@@ -10,7 +10,7 @@
 
 # compiler version
 %cc_version		%{expand:%%global cc_version %(%{__cc} -dumpversion || echo ERROR)}%cc_version
-%cxx_version	%{expand:%%global cxx_version %(%{__cc} -dumpversion || echo ERROR)}%cxx_version
+%cxx_version	%{expand:%%global cxx_version %(%{__cxx} -dumpversion || echo ERROR)}%cxx_version
 
 %__rm			/bin/rm --interactive=never
 
