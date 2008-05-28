@@ -808,8 +808,8 @@ cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 # first platform file entry can't contain regexps
 %{_target_cpu}-%{_target_vendor}-linux
 
-# x86_64 things
 %ifarch x86_64
+# x86_64 things
 amd64-[^-]*-linux(-gnu)?
 x86_64-[^-]*-linux(-gnu)?
 %endif
@@ -822,8 +822,8 @@ ia32e-[^-]*-linux(-gnu)?
 x86_64-[^-]*-linux(-gnu)?
 %endif
 
-# x86 things
 %ifarch athlon %{x8664}
+# x86 things
 athlon-[^-]*-linux(-gnu)?
 %endif
 %ifarch pentium4 athlon %{x8664}
