@@ -413,6 +413,11 @@ Summary(pl.UTF-8):	Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
+%if %{with suggest_tags}
+Suggests:	bzip2
+Suggests:	gzip
+Suggests:	lzma
+%endif
 Conflicts:	filesystem-debuginfo < 3.0-16
 
 %description utils
