@@ -578,7 +578,7 @@ fi; \
 
 ###################################################################
 # Requires/Provides automation
-# exceptions system by Jacek Konieczny <jajcus@pld.org.pl>
+# exceptions system by Jacek Konieczny <jajcus@pld-linux.org>
 #
 %__noautoreqfiles	%(sed -e s'/#.*//' /etc/rpm/noautoreqfiles)%{?_noautoreqfiles: %{_noautoreqfiles}}
 %__noautoprovfiles	%(sed -e s'/#.*//' /etc/rpm/noautoprovfiles)%{?_noautoprovfiles: %{_noautoprovfiles}}
