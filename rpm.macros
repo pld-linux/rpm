@@ -624,6 +624,7 @@ fi; \
 %ruby_mod_ver_requires_eq	Requires:	ruby-modules(ver) = %ruby_version
 
 %php_pear_dir		/usr/share/pear
+%php_data_dir		/usr/share/php
 %php_extensiondir	%{expand:%%global php_extensiondir %(php-config --extension-dir 2>/dev/null || echo ERROR)}%php_extensiondir
 %php_sysconfdir		%{expand:%%global php_sysconfdir %(php-config --sysconfdir 2>/dev/null || echo ERROR)}%php_sysconfdir
 %php_includedir		%{expand:%%global php_includedir %(php-config --include-dir 2>/dev/null || echo ERROR)}%php_includedir
