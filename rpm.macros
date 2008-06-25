@@ -1426,15 +1426,19 @@ done																\
 # Author: Elan Ruusamäe <glen@pld-linux.org>
 #
 # Usage:
-#   %post	-p %add_etc_shells -p /bin/sh /bin/pdksh
-#   %preun	-p %remove_etc_shells -p /bin/sh /bin/pdksh
+#   %post	-p <lua>
+#   %lua_add_etc_shells /bin/sh /bin/pdksh
 #
-#  -p (optional) -- specifies that result is embeded %post script (prepends <lua> as first line)
+#   %preun	-p <lua>
+#   if arg[2] == 0 then
+#       %lua_remove_etc_shells /bin/bash /bin/rbash
+#   end
 #
 # Requirements:
-# BuildRequires:	rpmbuild(macros) >= 1.429
+# BuildRequires:	rpmbuild(macros) >= 1.462
+#
 
-%add_etc_shells(p) %{-p:<lua>}\
+%lua_add_etc_shells() \
 t = {}\
 f = io.open("/etc/shells", "r")\
 if f then\
@@ -1449,23 +1453,44 @@ for _, s in ipairs({%{expand:%%__lua_split %*}}) do\
 end\
 %{nil}
 
+%lua_remove_etc_shells() \
+t = {}\
+f = io.open("/etc/shells", "r")\
+if f then\
+	for l in f:lines() do t[l]=l; end\
+	f:close()\
+end\
+for _, l in pairs({%{expand:%%__lua_split %*}}) do\
+	print("Removing "..l.." from /etc/shells")\
+	t[l] = nil\
+end\
+s=""\
+for _, l in pairs(t) do\
+	s=s..l.."\\n"\
+end\
+io.open("/etc/shells", "w"):write(s)\
+%{nil}
+
+# Backwards compat. Use of %lua_ prefixed macros is preferred as these are cleaner to read.
+#
+# Author: Elan Ruusamäe <glen@pld-linux.org>
+#
+# Usage:
+#   %post	-p %add_etc_shells -p /bin/sh /bin/pdksh
+#   %preun	-p %remove_etc_shells -p /bin/sh /bin/pdksh
+#
+#  -p (optional) -- specifies that result is embeded %post script (prepends <lua> as first line)
+#
+# Requirements:
+# BuildRequires:	rpmbuild(macros) >= 1.429
+#
+%add_etc_shells(p) %{-p:<lua>}\
+%{expand:%%lua_add_etc_shells %*}\
+%{nil}
+
 %remove_etc_shells(p) %{-p:<lua>}\
 %{-p:if arg[2] == 0 then}\
-	t = {}\
-	f = io.open("/etc/shells", "r")\
-	if f then\
-		for l in f:lines() do t[l]=l; end\
-		f:close()\
-	end\
-	for _, l in pairs({%{expand:%%__lua_split %*}}) do\
-		print("Removing "..l.." from /etc/shells")\
-		t[l] = nil\
-	end\
-	s=""\
-	for _, l in pairs(t) do\
-		s=s..l.."\\n"\
-	end\
-	io.open("/etc/shells", "w"):write(s)\
+%{expand:%%lua_remove_etc_shells %*}\
 %{-p:end} \
 %{nil}
 
