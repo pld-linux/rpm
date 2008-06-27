@@ -462,7 +462,8 @@ if [ -d "$RPM_BUILD_ROOT" ]; then \
 						continue ; \
 						;; \
 					esac ; \
-					dir=$(readlink -m "$dir"); \
+					newdir=$(readlink -m "$dir"); \
+					[ ${#newdir} -le ${#dir} ] && dir=$newdir; \
 					case $dir in \
 					/home/* | /tmp/* | /usr/lib | /usr/lib64 | /lib | /lib64 | /usr/local/lib | /usr/local/lib64 | /usr/X11R6/lib | /usr/X11R6/lib64 ) \
 						echo "remove-rpath: $dir in $file"; \
