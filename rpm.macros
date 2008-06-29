@@ -36,7 +36,7 @@
 %__gnome_doc_prepare	gnome-doc-prepare --copy --force
 %__gtkdocize		gtkdocize --copy
 %__intltoolize		intltoolize --copy --force
-%__libtoolize		libtoolize --copy --force
+%__libtoolize		libtoolize --copy --force --install
 
 #	Path to top of build area.
 %_topdir		%{expand:%%global _topdir %(test -d ../SPECS -a -d ../SOURCES && (cd ..; pwd) || echo $HOME/rpm)}%_topdir
