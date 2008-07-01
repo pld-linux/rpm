@@ -683,24 +683,43 @@ if [ -f /etc/rc.d/init.d/php-fcgi ]; then \
 fi \
 %{nil}
 
-
 # X.org helper macros
-%__xorg_abi_requires() Requires: xorg-xserver-server(%{expand:%1}-abi) = %{expand:%{%{!?2:%{1}}%{?2}}}
-#
+%__xorg_abi_requires_ge() Requires: xorg-xserver-server(%{expand:%1}-abi) >= %{expand:%{%2}}
+%__xorg_abi_requires_lt() Requires: xorg-xserver-server(%{expand:%1}-abi) < %(awk -vv=%{expand:%{%2}} 'BEGIN{split(v, a, "."); printf("%s.0", a[1] + 1); exit}')
+
 %xorg_xserver_ansic_abi		%{expand:%%global xorg_xserver_ansic_abi %(awk '/#define ABI_ANSIC_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h 2> /dev/null || echo ERROR)}%xorg_xserver_ansic_abi
 %xorg_xserver_extension_abi	%{expand:%%global xorg_xserver_extension_abi %(awk '/#define ABI_EXTENSION_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h 2> /dev/null || echo ERROR)}%xorg_xserver_extension_abi
 %xorg_xserver_font_abi		%{expand:%%global xorg_xserver_font_abi %(awk '/#define ABI_FONT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h 2> /dev/null | echo ERROR)}%xorg_xserver_font_abi
 %xorg_xserver_videodrv_abi	%{expand:%%global xorg_xserver_videodrv_abi %(awk '/#define ABI_VIDEODRV_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h 2> /dev/null || echo ERROR)}%xorg_xserver_videodrv_abi
 %xorg_xserver_xinput_abi	%{expand:%%global xorg_xserver_xinput_abi %(awk '/#define ABI_XINPUT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h 2> /dev/null || echo ERROR)}%xorg_xserver_xinput_abi
 
-%requires_xorg_xserver_extension %{__xorg_abi_requires ansic xorg_xserver_ansic_abi} \
-%{__xorg_abi_requires extension xorg_xserver_extension_abi}
-%requires_xorg_xserver_xinput %{__xorg_abi_requires ansic xorg_xserver_ansic_abi} \
-%{__xorg_abi_requires xinput xorg_xserver_xinput_abi}
-%requires_xorg_xserver_font %{__xorg_abi_requires ansic xorg_xserver_ansic_abi} \
-%{__xorg_abi_requires font xorg_xserver_font_abi}
-%requires_xorg_xserver_videodrv %{__xorg_abi_requires ansic xorg_xserver_ansic_abi} \
-%{__xorg_abi_requires videodrv xorg_xserver_videodrv_abi}
+%requires_xorg_xserver_extension \
+	%{__xorg_abi_requires_ge ansic xorg_xserver_ansic_abi} \
+	%{__xorg_abi_requires_lt ansic xorg_xserver_ansic_abi} \
+	%{__xorg_abi_requires_ge extension xorg_xserver_extension_abi} \
+	%{__xorg_abi_requires_lt extension xorg_xserver_extension_abi} \
+%{nil}
+
+%requires_xorg_xserver_xinput \
+	%{__xorg_abi_requires_ge ansic xorg_xserver_ansic_abi} \
+	%{__xorg_abi_requires_lt ansic xorg_xserver_ansic_abi} \
+	%{__xorg_abi_requires_ge xinput xorg_xserver_xinput_abi} \
+	%{__xorg_abi_requires_lt xinput xorg_xserver_xinput_abi} \
+%{nil}
+
+%requires_xorg_xserver_font \
+	%{__xorg_abi_requires_ge ansic xorg_xserver_ansic_abi} \
+	%{__xorg_abi_requires_lt ansic xorg_xserver_ansic_abi} \
+	%{__xorg_abi_requires_ge font xorg_xserver_font_abi} \
+	%{__xorg_abi_requires_lt font xorg_xserver_font_abi} \
+%{nil}
+
+%requires_xorg_xserver_videodrv \
+	%{__xorg_abi_requires_ge ansic xorg_xserver_ansic_abi} \
+	%{__xorg_abi_requires_lt ansic xorg_xserver_ansic_abi} \
+	%{__xorg_abi_requires_ge videodrv xorg_xserver_videodrv_abi} \
+	%{__xorg_abi_requires_lt videodrv xorg_xserver_videodrv_abi} \
+%{nil}
 
 # Python specific macro definitions.
 # python main version
