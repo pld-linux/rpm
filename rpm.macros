@@ -694,31 +694,31 @@ fi \
 %xorg_xserver_xinput_abi	%{expand:%%global xorg_xserver_xinput_abi %(awk '/#define ABI_XINPUT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' /usr/include/xorg/xf86Module.h 2> /dev/null || echo ERROR)}%xorg_xserver_xinput_abi
 
 %requires_xorg_xserver_extension \
-	%{__xorg_abi_requires_ge ansic xorg_xserver_ansic_abi} \
-	%{__xorg_abi_requires_lt ansic xorg_xserver_ansic_abi} \
-	%{__xorg_abi_requires_ge extension xorg_xserver_extension_abi} \
-	%{__xorg_abi_requires_lt extension xorg_xserver_extension_abi} \
+%{__xorg_abi_requires_ge ansic xorg_xserver_ansic_abi} \
+%{__xorg_abi_requires_lt ansic xorg_xserver_ansic_abi} \
+%{__xorg_abi_requires_ge extension xorg_xserver_extension_abi} \
+%{__xorg_abi_requires_lt extension xorg_xserver_extension_abi} \
 %{nil}
 
 %requires_xorg_xserver_xinput \
-	%{__xorg_abi_requires_ge ansic xorg_xserver_ansic_abi} \
-	%{__xorg_abi_requires_lt ansic xorg_xserver_ansic_abi} \
-	%{__xorg_abi_requires_ge xinput xorg_xserver_xinput_abi} \
-	%{__xorg_abi_requires_lt xinput xorg_xserver_xinput_abi} \
+%{__xorg_abi_requires_ge ansic xorg_xserver_ansic_abi} \
+%{__xorg_abi_requires_lt ansic xorg_xserver_ansic_abi} \
+%{__xorg_abi_requires_ge xinput xorg_xserver_xinput_abi} \
+%{__xorg_abi_requires_lt xinput xorg_xserver_xinput_abi} \
 %{nil}
 
 %requires_xorg_xserver_font \
-	%{__xorg_abi_requires_ge ansic xorg_xserver_ansic_abi} \
-	%{__xorg_abi_requires_lt ansic xorg_xserver_ansic_abi} \
-	%{__xorg_abi_requires_ge font xorg_xserver_font_abi} \
-	%{__xorg_abi_requires_lt font xorg_xserver_font_abi} \
+%{__xorg_abi_requires_ge ansic xorg_xserver_ansic_abi} \
+%{__xorg_abi_requires_lt ansic xorg_xserver_ansic_abi} \
+%{__xorg_abi_requires_ge font xorg_xserver_font_abi} \
+%{__xorg_abi_requires_lt font xorg_xserver_font_abi} \
 %{nil}
 
 %requires_xorg_xserver_videodrv \
-	%{__xorg_abi_requires_ge ansic xorg_xserver_ansic_abi} \
-	%{__xorg_abi_requires_lt ansic xorg_xserver_ansic_abi} \
-	%{__xorg_abi_requires_ge videodrv xorg_xserver_videodrv_abi} \
-	%{__xorg_abi_requires_lt videodrv xorg_xserver_videodrv_abi} \
+%{__xorg_abi_requires_ge ansic xorg_xserver_ansic_abi} \
+%{__xorg_abi_requires_lt ansic xorg_xserver_ansic_abi} \
+%{__xorg_abi_requires_ge videodrv xorg_xserver_videodrv_abi} \
+%{__xorg_abi_requires_lt videodrv xorg_xserver_videodrv_abi} \
 %{nil}
 
 # Python specific macro definitions.
