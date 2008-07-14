@@ -723,10 +723,10 @@ fi \
 
 # Python specific macro definitions.
 # python main version
-%py_ver			%{expand:%%global py_ver %(%{__python} -c "import sys; print sys.version[:3]" || echo ERROR)}%py_ver
+%py_ver			%{expand:%%global py_ver %(%{__python} -c "import sys; print sys.version[:3]" 2>/dev/null || echo ERROR)}%py_ver
 
 # directories
-%py_prefix		%{expand:%%global py_prefix %(%{__python} -c "import sys; print sys.prefix" || echo ERROR)}%py_prefix
+%py_prefix		%{expand:%%global py_prefix %(%{__python} -c "import sys; print sys.prefix" 2>/dev/null || echo ERROR)}%py_prefix
 %py_libdir		%{py_prefix}/%{_lib}/python%{py_ver}
 %py_scriptdir	%{py_prefix}/share/python%{py_ver}
 %py_incdir		/usr/include/python%{py_ver}
