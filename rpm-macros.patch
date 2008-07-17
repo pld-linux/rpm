@@ -1,6 +1,17 @@
---- rpm-4.4.8/macros.in.orig	2007-04-08 20:24:47.206783474 +0200
-+++ rpm-4.4.8/macros.in	2007-04-08 20:36:08.925632417 +0200
-@@ -206,7 +206,7 @@
+--- rpm-4.4.9/macros.in	2008-01-25 02:16:46.248708080 +0200
++++ rpm-4.4.9/macros.in	2008-04-04 23:15:28.121279270 +0300
+@@ -109,6 +109,10 @@
+ %__automake		automake
+ %__autoconf		autoconf
+ 
++# compiler used to build kernel and kernel modules
++%kgcc		%{__cc}
++%kgcc_package	gcc
++
+ #==============================================================================
+ # Conditional build stuff.
+ 
+@@ -206,7 +210,7 @@
  %endif\
  %{nil}
  
@@ -9,7 +20,7 @@
  
  #	The path to the pgp executable (legacy, use %{__pgp} instead).
  %_pgpbin		%{__pgp}
-@@ -233,12 +233,12 @@
+@@ -233,12 +237,12 @@
  #	The directory where newly built source packages will be written.
  %_srcrpmdir		%{_topdir}/SRPMS
  
@@ -25,7 +36,7 @@
  
  #==============================================================================
  # ---- Optional rpmrc macros.
-@@ -248,7 +248,7 @@
+@@ -248,7 +252,7 @@
  #	Configurable build root path, same as BuildRoot: in a specfile.
  #	(Note: the configured macro value will override the spec file value).
  #
@@ -34,7 +45,7 @@
  
  #	The sub-directory (relative to %{_builddir}) where sources are compiled.
  #	This macro is set after processing %setup, either explicitly from the
-@@ -347,8 +347,8 @@
+@@ -347,8 +351,8 @@
  #		"w9.bzdio"	bzip2 level 9.
  #		"w9.lzdio"	lzma level 9.
  #
@@ -45,7 +56,7 @@
  
  #	Archive formats to use for source/binary package payloads.
  #		"cpio"		cpio archive (default)
-@@ -498,7 +498,7 @@
+@@ -498,7 +502,7 @@
  
  #
  # Path to magic file used for file classification.
@@ -54,7 +65,23 @@
  
  #==============================================================================
  # ---- Database configuration macros.
-@@ -1127,17 +1127,17 @@
+@@ -991,9 +995,12 @@
+   %{?_javaclasspath:CLASSPATH=\"%{_javaclasspath}\"\
+   export CLASSPATH}\
+   unset PERL_MM_OPT || :\
+-  LANG=C\
+-  export LANG\
+-  unset DISPLAY || :\
++  export LC_ALL=C\
++  export LANG=C\
++  unset LINGUAS ||:\
++  unset LANGUAGE ||:\
++  unset LC_MESSAGES ||:\
++  unset DISPLAY ||:\
+   \
+   %{verbose:set -x}%{!verbose:exec > /dev/null}\
+   umask 022\
+@@ -1127,17 +1134,17 @@
  %_exec_prefix		%{_prefix}
  %_bindir		%{_exec_prefix}/bin
  %_sbindir		%{_exec_prefix}/sbin
@@ -78,13 +105,12 @@
  %_localedir		%{_datadir}/locale
  
  #==============================================================================
-@@ -1428,7 +1428,25 @@
- # helpers are also used by %{_usrlibrpm}/rpmdeps {--provides|--requires}.
+@@ -1429,6 +1436,23 @@
  #%__executable_provides	%{_usrlibrpm}/executabledeps.sh --provides
  #%__executable_requires	%{_usrlibrpm}/executabledeps.sh --requires
 -%__scriptlet_requires	/bin/bash --rpm-requires
 +#%__scriptlet_requires	/bin/bash --rpm-requires
- 
++
 +# PLD rpm macros
 +%_enable_debug_packages 1
 +
@@ -95,8 +121,7 @@
 +# -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
 +
 +%debugcflags	-O0 -g -Wall
-+%optldflags	-Wl,--as-needed
-+
+ 
 +# Warning: those macros are overwritten by macros.build,
 +#          left here for compatibility
 +%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}

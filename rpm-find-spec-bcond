@@ -10,14 +10,14 @@ fi
 SPEC=$1
 if [ $SPEC = "--" ]; then
     if [ "$#" -lt 2 ]; then
-	echo "Usage: rpm --bcond SPEC"
+	echo "Usage: rpmbuikd --bcond SPEC"
 	exit 1
     fi
     SPEC=$2
 fi
 
 if [ ! -f $SPEC ]; then
-    echo "rpm: $SPEC: no such file"
+    echo "rpmbuild: $SPEC: no such file"
     exit 1
 fi
 

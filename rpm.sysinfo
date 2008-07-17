@@ -1,5 +1,4 @@
-Filelinktos:
-	/proc/self/fd
-	/dev/fd/0
-	/dev/fd/1
-	/dev/fd/2
+/proc/self/fd
+/dev/fd/0
+/dev/fd/1
+/dev/fd/2

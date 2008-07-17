@@ -1,0 +1,11 @@
+--- rpm-4.4.9/rpmio/LzmaDecode.h.orig	2007-10-14 19:23:02.629594398 +0000
++++ rpm-4.4.9/rpmio/LzmaDecode.h	2007-10-14 19:23:16.628653630 +0000
+@@ -35,7 +35,7 @@
+ /* #define _LZMA_LOC_OPT */
+ /* Enable local speed optimizations inside code */
+ 
+-/* #define _LZMA_SYSTEM_SIZE_T */
++#define _LZMA_SYSTEM_SIZE_T
+ /* Use system's size_t. You can use it to enable 64-bit sizes supporting*/
+ 
+ #ifndef UInt32

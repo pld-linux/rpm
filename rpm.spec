@@ -11,7 +11,7 @@
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
 %bcond_without	apidocs		# don't generate documentation with doxygen
-%bcond_with	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
+%bcond_without	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
 %bcond_without	system_libmagic	# don't use system libmagic
@@ -22,7 +22,7 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
 # versions of required libraries
-%define	reqdb_ver	4.5.20
+%define	reqdb_ver	4.5.20-6
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
 %define	sover	4.4
@@ -35,19 +35,19 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	0.2
-License:	GPL
+Release:	70
+License:	LGPL
 Group:		Base
-Source0:	ftp://jbj.org/pub/rpm-4.4.x/%{name}-%{version}.tar.gz
+Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
 # Source0-md5:	210b768006e7d88dd8a3bcd498ea27f6
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
 Source4:	%{name}-find-spec-bcond
-Source5:	%{name}-find-lang
+Source5:	%{name}-hrmib-cache
 Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
-Source8:	%{name}-check-files
+Source8:	RPM-GPG-KEY
 Source9:	%{name}-php-provides
 Source10:	%{name}-php-requires
 Source11:	%{name}.sysinfo
@@ -56,11 +56,12 @@ Source13:	%{name}-user_group.sh
 Source14:	%{name}.sysconfig
 Source15:	%{name}-macros.java
 Source16:	%{name}-java-requires
-Source30:	builder
-Source31:	adapter.awk
-Source32:	pldnotify.awk
 # http://svn.pld-linux.org/banner.sh/
-Source33:	banner.sh
+Source17:	banner.sh
+Patch1067:	%{name}-disable-features.patch
+Patch1069:	%{name}-parentdirs.patch
+Patch1070:	%{name}-rpmrc-ac.patch
+
 Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
@@ -79,18 +80,19 @@ Patch14:	%{name}-etc_dir.patch
 Patch15:	%{name}-system_libs-more.patch
 Patch16:	%{name}-php-deps.patch
 Patch17:	%{name}-ldconfig-always.patch
-Patch18:	%{name}-perl_req.patch
+Patch18:	%{name}-macros-ac.patch
 Patch19:	%{name}-link.patch
 Patch20:	%{name}-magic-usesystem.patch
 Patch21:	%{name}-dontneedutils.patch
 Patch22:	%{name}-provides-dont-obsolete.patch
 Patch23:	%{name}-pkgconfigdeps.patch
 Patch24:	%{name}-po.patch
-
+Patch25:	%{name}-rpm2cpio-payload.patch
 Patch26:	%{name}-notsc.patch
 Patch27:	%{name}-hack-norpmlibdep.patch
 Patch28:	%{name}-makefile-no_myLDADD_deps.patch
-
+Patch29:	%{name}-macros-dbhash.patch
+Patch30:	%{name}-rpm5-patchset-8784.patch
 Patch31:	%{name}-missing-prototypes.patch
 Patch32:	%{name}-pld-autodep.patch
 Patch33:	%{name}-arch-x86_64.patch
@@ -98,27 +100,42 @@ Patch34:	%{name}-epoch0.patch
 Patch35:	%{name}-perl_req-INC_dirs.patch
 Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
-
+Patch38:	%{name}-rpm5-patchset-8021.patch
+Patch39:	%{name}-popt-coreutils.patch
 Patch41:	%{name}-reduce-stack-usage.patch
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
-
+Patch43:	%{name}-rpm5-patchset-8637.patch
 Patch44:	%{name}-no-neon.patch
 Patch45:	%{name}-no-sqlite.patch
 Patch46:	%{name}-mono.patch
 Patch47:	%{name}-javadeps.patch
-
+Patch48:	%{name}-nopie.patch
 Patch49:	%{name}-p4.patch
 Patch50:	%{name}-macros.patch
 Patch51:	%{name}-cleanlibdirs.patch
 Patch52:	%{name}-morearchs.patch
-
+Patch53:	%{name}-chroot-hack.patch
 Patch55:	%{name}-truncate-cvslog.patch
-
+Patch56:	%{name}-rpm5-patchset-8413.patch
 Patch57:	%{name}-as_needed-fix.patch
 Patch58:	%{name}-repackage-wo-lzma.patch
 Patch59:	%{name}-libtool-deps.patch
 Patch60:	%{name}-obsolete-rpmrc.patch
-URL:		http://wraptastic.org/
+Patch61:	%{name}-rpmdb.patch
+Patch62:	%{name}-lzma-size_t.patch
+Patch63:	%{name}-tar_as_secondary_source.patch
+Patch64:	%{name}-man_pl.patch
+Patch65:	%{name}-lzma-tukaani.patch
+Patch66:	%{name}-v3-support.patch
+Patch67:	%{name}-cleanbody.patch
+Patch68:	%{name}-rpm5-patchset-9486.patch
+Patch69:	%{name}-popt-aliases.patch
+Patch70:	%{name}-lualeak.patch
+#Patch71:	%{name}-rpm5-patchset-10061.patch
+Patch72:	%{name}-rpm5-patchset-7657.patch
+Patch73:	%{name}-namespace-probe.patch
+Patch74:	%{name}-mktemperror.patch
+URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
@@ -137,8 +154,8 @@ BuildRequires:	neon-devel >= 0.25.5
 %endif
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
-%{?with_python:BuildRequires:	python-devel >= 1:2.5}
-BuildRequires:	python-modules >= 1:2.5
+%{?with_python:BuildRequires:	python-devel >= 1:2.3}
+BuildRequires:	python-modules >= 1:2.3
 BuildRequires:	rpm-perlprov
 %{?with_python:BuildRequires:	rpm-pythonprov}
 BuildRequires:	zlib-devel
@@ -164,10 +181,10 @@ Requires:	%{name}-base = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	popt >= %{reqpopt_ver}
+Obsoletes:	rpm-getdeps
 %{!?with_static:Obsoletes:	rpm-utils-static}
 Conflicts:	glibc < 2.2.92
-# ABI changes in rpm, new poldek needed
-Conflicts:	poldek < 0.20.1-0.20070108.1.4
+Conflicts:	poldek < 0.21-0.20070703.00.11
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_binary_payload		w9.gzdio
@@ -175,6 +192,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # don't require very fresh rpm.macros to build
 %define		__gettextize gettextize --copy --force --intl ; cp -f po/Makevars{.template,}
+%define		find_lang sh ./scripts/find-lang.sh $RPM_BUILD_ROOT
 %define		ix86	i386 i486 i586 i686 athlon pentium3 pentium4
 %define		ppc	ppc ppc7400 ppc7450
 %define		x8664	amd64 ia32e x86_64
@@ -185,6 +203,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		__newcpp %{?force_cpp}%{!?force_cpp:%{_target_cpu}-pld-linux-gcc -E}
 
 %define		_rpmlibdir /usr/lib/rpm
+%define		_noautocompressdoc	RPM-GPG-KEY
 
 %define		specflags	-fno-strict-aliasing
 
@@ -242,6 +261,7 @@ Summary:	RPM base package - scripts used by rpm packages themselves
 Summary(pl.UTF-8):	Podstawowy pakiet RPM - skrypty używane przez same pakiety rpm
 Group:		Base
 Requires:	filesystem
+Obsoletes:	rpm-scripts
 Obsoletes:	vserver-rpm
 
 %description base
@@ -263,13 +283,16 @@ Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	db >= %{reqdb_ver}
+Requires:	zlib >= 1.2.3
 %{?with_selinux:Requires:	libselinux >= 1.18}
 %{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
 Requires:	popt >= %{reqpopt_ver}
+%{?with_suggest_tags:Suggests:	lzma >= 1:4.42.0}
 Obsoletes:	rpm-libs
+# avoid installing with incompatible (non-tukaani) lzma
+Conflicts:	lzma < 1:4.42.0
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
-%{?with_suggest_tags:Suggests:	lzma}
 
 %description lib
 RPMs library.
@@ -387,6 +410,7 @@ Summary(pl.UTF-8):	Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
+Conflicts:	filesystem-debuginfo < 2.0-7
 
 %description utils
 Additional utilities for managing RPM packages and database.
@@ -441,13 +465,11 @@ Summary(pt_BR.UTF-8):	Scripts e programas executáveis usados para construir pac
 Summary(ru.UTF-8):	Скрипты и утилиты, необходимые для сборки пакетов
 Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для побудови пакетів
 Group:		Applications/File
-Requires(pre):	findutils
-Requires:	%{name}-build-macros >= 1.314
+Requires(pretrans):	findutils
+Requires:	%{name}-build-macros >= 1.433-2
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
-# we need fixed binutils for -feliminate-dwarf2-dups
-Requires:	binutils >= 3:2.17.50.0.3-2
 Requires:	bzip2
 Requires:	chrpath >= 0.10-4
 Requires:	cpio
@@ -456,7 +478,11 @@ Requires:	elfutils
 Requires:	file >= 4.17
 Requires:	fileutils
 Requires:	findutils
-Requires:	gcc >= 5:3.4
+%ifarch athlon
+Requires:	gcc >= 3.0.3
+%else
+Requires:	gcc
+%endif
 Requires:	glibc-devel
 Requires:	grep
 Requires:	gzip
@@ -492,40 +518,6 @@ construir pacotes usando o RPM.
 используются для сборки RPM'ов.
 
 %description build -l uk.UTF-8
-Різноманітні допоміжні скрипти та утиліти, які використовуються для
-побудови RPM'ів.
-
-%package build-tools
-Summary:	Scripts for managing .spec files and building RPM packages
-Summary(de.UTF-8):	Scripts fürs Bauen binärer RPM-Pakete
-Summary(pl.UTF-8):	Skrypty pomocnicze do zarządznia plikami .spec i budowania RPM-ów
-Summary(pt_BR.UTF-8):	Scripts e programas executáveis usados para construir pacotes
-Summary(ru.UTF-8):	Скрипты и утилиты, необходимые для сборки пакетов
-Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для побудови пакетів
-Group:		Applications/File
-Requires:	%{name}-build = %{version}-%{release}
-# these are optional
-#Requires:	cvs
-Requires:	wget
-
-%description build-tools
-Scripts for managing .spec files and building RPM packages.
-
-%description build-tools -l de.UTF-8
-Scripts fürs Bauen RPM-Pakete.
-
-%description build-tools -l pl.UTF-8
-Skrypty pomocnicze do zarządzania plikami .spec i do budowania RPM-ów.
-
-%description build-tools -l pt_BR.UTF-8
-Este pacote contém scripts e programas executáveis que são usados para
-construir pacotes usando o RPM.
-
-%description build-tools -l ru.UTF-8
-Различные вспомогательные скрипты и исполняемые программы, которые
-используются для сборки RPM'ов.
-
-%description build-tools -l uk.UTF-8
 Різноманітні допоміжні скрипти та утиліти, які використовуються для
 побудови RPM'ів.
 
@@ -663,7 +655,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
-%patch18 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 #cp -f platform.in macros.pld.in # what for?
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
@@ -673,7 +664,6 @@ echo '%%define	__php_provides	/usr/lib/rpm/php.prov' > macros.php
 echo '%%define	__php_requires	/usr/lib/rpm/php.req' >> macros.php
 echo '%%define	__mono_provides	/usr/lib/rpm/mono-find-provides' > macros.mono
 echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
-install %{SOURCE5} scripts/find-lang.sh
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
@@ -683,9 +673,12 @@ install %{SOURCE12} scripts/perl.prov
 %patch22 -p1
 %patch23 -p1
 %patch24 -p1
+%patch25 -p1
 %patch26 -p1
 %patch27 -p1
 %patch28 -p1
+%patch29 -p1
+%patch30 -p1
 %patch31 -p1
 %patch32 -p1
 %patch33 -p1
@@ -693,31 +686,53 @@ install %{SOURCE12} scripts/perl.prov
 %patch35 -p0
 %patch36 -p1
 %patch37 -p1
+%patch38 -p1
+%patch39 -p1
 %patch41 -p1
 %patch42 -p1
+%patch43 -p1
 %{!?with_neon:%patch44 -p1}
 %patch45 -p1
 %patch46 -p1
 %patch47 -p1
+%patch48 -p1
 %patch49 -p1
 %patch50 -p1
 %patch51 -p1
 #%patch52 -p1
+%patch53 -p1
 %patch55 -p1
+%patch56 -p1
 %patch57 -p1
 %patch58 -p1
 %patch59 -p1
 %patch60 -p1
+%patch18 -p1
+%patch61 -p1
+%patch62 -p1
+%patch63 -p1
+%patch64 -p1
+%patch65 -p1
+%patch66 -p1
+%patch67 -p1
+%patch68 -p1
+%patch69 -p1
+%patch70 -p1
+#%patch71 -p0
+%patch72 -p0
+%patch73 -p1
+%patch74 -p1
 
-cd scripts
-mv -f perl.req perl.req.in
-mv -f perl.prov perl.prov.in
-cd ..
-
+mv -f scripts/{perl.req,perl.req.in}
+mv -f scripts/{perl.prov,perl.prov.in}
 mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
-
 rm -rf sqlite zlib db db3 popt rpmdb/db.h
+cp %{SOURCE8} RPM-GPG-KEY
+
+%patch1067 -p1
+%patch1069 -p1
+%patch1070 -p1
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
@@ -763,7 +778,7 @@ sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu
 	--enable-shared \
 	--enable-static \
 	%{!?with_apidocs:--without-apidocs} \
-	%{?with_python:--with-python=2.5} \
+	%{?with_python:--with-python=%{py_ver}} \
 	%{!?with_python:--without-python} \
 	%{!?with_selinux:--without-selinux} \
 	--without-db
@@ -781,7 +796,7 @@ sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner}
+install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -789,16 +804,92 @@ install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/b
 	pylibdir=%{py_libdir} \
 	pkgbindir="%{_bindir}"
 
-echo "%{_target_cpu}-%{_target_vendor}-linux-gnu" > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+# first platform file entry can't contain regexps
+%{_target_cpu}-%{_target_vendor}-linux
 
-%ifarch %{ppc}
-#sed -e '/_target_platform/s/[%]{_target_cpu}/ppc/' \
-#	-i $RPM_BUILD_ROOT%{_rpmlibdir}/ppc74[05]0-linux/macros
+%ifarch x86_64
+# x86_64 things
+amd64-[^-]*-linux(-gnu)?
+x86_64-[^-]*-linux(-gnu)?
 %endif
+%ifarch amd64
+amd64-[^-]*-linux(-gnu)?
+x86_64-[^-]*-linux(-gnu)?
+%endif
+%ifarch ia32e
+ia32e-[^-]*-linux(-gnu)?
+x86_64-[^-]*-linux(-gnu)?
+%endif
+
+%ifarch athlon %{x8664}
+# x86 things
+athlon-[^-]*-linux(-gnu)?
+%endif
+%ifarch pentium4 athlon %{x8664}
+pentium4-[^-]*-linux(-gnu)?
+%endif
+%ifarch pentium3 pentium4 athlon %{x8664}
+pentium3-[^-]*-linux(-gnu)?
+%endif
+%ifarch i686 pentium3 pentium4 athlon %{x8664}
+i686-[^-]*-linux(-gnu)?
+%endif
+%ifarch i586 i686 pentium3 pentium4 athlon %{x8664}
+i586-[^-]*-linux(-gnu)?
+%endif
+%ifarch i486 i586 i686 pentium3 pentium4 athlon %{x8664}
+i486-[^-]*-linux(-gnu)?
+%endif
+%ifarch %{ix86} %{x8664}
+i386-[^-]*-linux(-gnu)?
+%endif
+
+%ifarch alpha
+alpha-[^-]*-linux(-gnu)?
+%endif
+
+%ifarch ia64
+ia64-[^-]*-linux(-gnu)?
+%endif
+
+%ifarch ppc64
+powerpc64-[^-]*-linux(-gnu)?
+ppc64-[^-]*-linux(-gnu)?
+%endif
+%ifarch ppc ppc64
+powerpc-[^-]*-linux(-gnu)?
+ppc-[^-]*-linux(-gnu)?
+%endif
+
+%ifarch s390x
+s390x-[^-]*-linux(-gnu)?
+%endif
+%ifarch s390 s390x
+s390-[^-]*-linux(-gnu)?
+%endif
+
+%ifarch sparc64
+sparc64-[^-]*-linux(-gnu)?
+sparcv8-[^-]*-linux(-gnu)?
+sparcv9-[^-]*-linux(-gnu)?
+%endif
+%ifarch sparcv9
+sparcv8-[^-]*-linux(-gnu)?
+sparcv9-[^-]*-linux(-gnu)?
+%endif
+%ifarch sparc sparcv9 sparc64
+sparc-[^-]*-linux(-gnu)?
+%endif
+
+# noarch
+noarch-[^-]*-.*
+EOF
 
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/vpkg-provides*
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{prov,req}.pl
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{provides,requires}.perl
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
 
 # not installed since 4.4.8 (-tools-perl subpackage)
 install scripts/rpmdiff scripts/rpmdiff.cgi $RPM_BUILD_ROOT%{_rpmlibdir}
@@ -813,19 +904,21 @@ install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
 install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
 install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
-install %{SOURCE8} $RPM_BUILD_ROOT%{_rpmlibdir}/check-files
 install %{SOURCE13} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
 install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
-install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
+install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
 install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
-install %{SOURCE30} $RPM_BUILD_ROOT%{_bindir}/builder
-install %{SOURCE31} $RPM_BUILD_ROOT%{_bindir}/adapter.awk
-install %{SOURCE32} $RPM_BUILD_ROOT%{_bindir}/pldnotify.awk
-install %{SOURCE33} $RPM_BUILD_ROOT%{_bindir}/banner.sh
+install %{SOURCE17} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
-install %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Conflictname
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Dirnames
+install %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Obsoletename
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Providename
+touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
 
 # obsolete but still installed
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/rpmrc
@@ -843,6 +936,10 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 
 # If non-zero, all erasures will be automagically repackaged.
 #%%_repackage_all_erasures    1
+
+# Boolean (i.e. 1 == "yes", 0 == "no") that controls whether files
+# marked as %doc should be installed.
+#%%_excludedocs   1
 EOF
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF
@@ -916,6 +1013,8 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep <<EOF
 ^libxkbui.so
 # -- fam / gamin
 ^libfam.so.0
+# -- mdns-bonjour: mDNSResponder-libs / avahi-compat-libdns_sd
+^libdns_sd.so.1
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc <<EOF
 # global list of file masks not to be compressed in DOCDIR
@@ -950,6 +1049,18 @@ rm -f $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log,xinetd}
 # manuals for utils dropped in 4.4.8 (?)
 #rm -f $RPM_BUILD_ROOT%{_mandir}/{,*/}/man8/{rpmcache,rpmgraph}.8
 
+# unpackaged in 4.4.9, reasons unknown
+rm $RPM_BUILD_ROOT%{_bindir}/rpm{db,e,i,query,sign,u,verify}
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/rpm{d,e,i,k,q,u,v}
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/symclash.{sh,py}
+rm $RPM_BUILD_ROOT%{perl_archlib}/perllocal.pod
+rm $RPM_BUILD_ROOT%{perl_sitearch}/RPM.pm
+rm $RPM_BUILD_ROOT%{perl_sitearch}/auto/RPM/.packlist
+rm $RPM_BUILD_ROOT%{perl_sitearch}/auto/RPM/RPM.bs
+rm $RPM_BUILD_ROOT%{perl_sitearch}/auto/RPM/RPM.so
+rm $RPM_BUILD_ROOT%{_prefix}/local/man/man3/RPM.3pm
+rm $RPM_BUILD_ROOT%{_mandir}/{,ja,pl}/man8/rpm{cache,graph}.8
+
 %find_lang %{name}
 
 rm -rf manual
@@ -959,15 +1070,55 @@ rm -f manual/Makefile*
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%triggerpostun lib -- %{name}-lib < %{version}
+echo >&2 "rpm-lib upgrade: Removing /var/lib/rpm/__db* from older rpmdb version"
+rm -f /var/lib/rpm/__db*
+if [ -d /vservers ]; then
+	echo >&2 "rpm-lib upgrade: Removing vservers apps/pkgmgmt/base/rpm/state/__* from older rpmdb version"
+	rm -f /etc/vservers/*/apps/pkgmgmt/base/rpm/state/__*
+fi
+echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
+# TODO: poldek should abort if it can't reopen rpmdb after rpm exec:
+#Installing set #3
+#rpmdb: Program version 4.2 doesn't match environment version
+#error: db4 error(22) from dbenv->open: Invalid argument
+#error: cannot open Packages index using db3 - Invalid argument (22)
+#error: //var/lib/rpm: open rpm database failed
+#Processing dependencies...
+#There are more than one package which provide "/bin/sh":
+# if poldek is running, kill it so it will not attempt to fill whole rpmdb
+p=$(/sbin/pidof poldek)
+if [ "$p" ]; then
+	echo >&2 "Killing poldek ($p), don't panic :)"
+	kill $p
+fi
+
+%triggerpostun lib -- db4.5 < %{reqdb_ver}
+echo >&2 "db4.5 upgrade: Removing /var/lib/rpm/__db* from older rpmdb version"
+rm -f /var/lib/rpm/__db*
+if [ -d /vservers ]; then
+	echo >&2 "db4.5 upgrade: Removing vservers apps/pkgmgmt/base/rpm/state/__* from older rpmdb version"
+	rm -f /etc/vservers/*/apps/pkgmgmt/base/rpm/state/__*
+fi
+echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
+if [ "$p" ]; then
+	echo >&2 "Killing poldek ($p), don't panic :)"
+	kill $p
+fi
+
+%triggerpostun -- %{name} < 4.4.9-44
+%{_rpmlibdir}/hrmib-cache
+
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
 
-%pre build
+%pretrans build
 find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc CHANGES CREDITS README wdj/JBJ-GPG-KEY manual/*
+%doc RPM-GPG-KEY
 
 %attr(755,root,root) /bin/rpm
 #%attr(755,root,root) %{_bindir}/rpmdb
@@ -977,8 +1128,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
+%dir %{_sysconfdir}/rpm/sysinfo
 # these are ok to be replaced
-%config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo
+%config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo/*
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/platform
 
 
@@ -995,6 +1147,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %dir /var/lock/rpm
 /var/lock/rpm/transaction
 
+# exported package NVRA (stamped with install tid)
+# net-snmp hrSWInstalledName queries, bash-completions
+%dir /var/cache/hrmib
+
 #%attr(755,root,root) %{_rpmlibdir}/rpmd
 #%{!?with_static:%attr(755,root,root) %{_rpmlibdir}/rpm[eiu]}
 #%attr(755,root,root) %{_rpmlibdir}/rpmk
@@ -1002,6 +1158,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/macros
+
+%attr(755,root,root) %{_rpmlibdir}/hrmib-cache
 
 %files base
 %defattr(644,root,root,755)
@@ -1013,13 +1171,13 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files lib
 %defattr(644,root,root,755)
-%attr(755,root,root) /%{_lib}/librpm*-*.so
-%attr(755,root,root) %{_libdir}/librpm*-*.so
+%attr(755,root,root) /%{_lib}/librpm-%{sover}.so
+%attr(755,root,root) /%{_lib}/librpmdb-%{sover}.so
+%attr(755,root,root) /%{_lib}/librpmio-%{sover}.so
+%attr(755,root,root) %{_libdir}/librpmbuild-%{sover}.so
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/rpm
-%{_libdir}/librpm*.la
 %attr(755,root,root) %{_libdir}/librpm.so
 %attr(755,root,root) %{_libdir}/librpm-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmio.so
@@ -1027,10 +1185,18 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_libdir}/librpmdb.so
 %attr(755,root,root) %{_libdir}/librpmdb-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmbuild.so
+%{_libdir}/librpm.la
+%{_libdir}/librpmbuild.la
+%{_libdir}/librpmdb.la
+%{_libdir}/librpmio.la
+%{_includedir}/rpm
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/librpm*.a
+%{_libdir}/librpm.a
+%{_libdir}/librpmbuild.a
+%{_libdir}/librpmdb.a
+%{_libdir}/librpmio.a
 
 %files utils
 %defattr(644,root,root,755)
@@ -1076,7 +1242,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/config.*
 %attr(755,root,root) %{_rpmlibdir}/cross-build
 %attr(755,root,root) %{_rpmlibdir}/find-spec-bcond
-%attr(755,root,root) %{_rpmlibdir}/find-lang.sh
 %attr(755,root,root) %{_rpmlibdir}/getpo.sh
 %attr(755,root,root) %{_rpmlibdir}/install-build-tree
 %attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
@@ -1109,6 +1274,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/sparc*
 %endif
 %ifarch %{x8664}
+%{_rpmlibdir}/amd64*
+%{_rpmlibdir}/ia32e*
 %{_rpmlibdir}/x86_64*
 %endif
 # must be here for "Requires: rpm-*prov" to work
@@ -1132,12 +1299,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %lang(ja) %{_mandir}/ja/man8/rpmbuild.8*
 %lang(pl) %{_mandir}/pl/man1/gendiff.1*
 %lang(pl) %{_mandir}/pl/man8/rpmbuild.8*
-
-%files build-tools
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/builder
-%attr(755,root,root) %{_bindir}/adapter.awk
-%attr(755,root,root) %{_bindir}/pldnotify.awk
 
 %files javaprov
 %defattr(644,root,root,755)
@@ -1163,7 +1324,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files php-pearprov
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_rpmlibdir}/php*
-%attr(755,root,root) %{_rpmlibdir}/find-php*
 
 %if %{with python}
 %files -n python-rpm
