@@ -1515,4 +1515,42 @@ io.open("/etc/shells", "w"):write(s)\
 %{-p:end} \
 %{nil}
 
+# Check syntax for Python files
+#
+# Author: Elan Ruusamäe <glen@pld-linux.org>
+# Author: Arkadiusz Miśkiewicz <arekm@pld-linux.org>
+#
+# Usage:
+#   %py_lint src
+#
+# Requirements:
+# BuildRequires:	python
+# BuildRequires:	rpmbuild(macros) >= 1.469
+
+%py_lint() \
+__py_lint() { \
+find "$@" -type f -name '*.py' | python -c ' \
+import sys \
+import compiler \
+\
+err = 0\
+for f in sys.stdin: \
+	fd = open(f.strip()) \
+	c = fd.read() \
+	fd.close() \
+	try: \
+		compiler.parse(c) \
+	except SyntaxError, e: \
+		print "py_lint: %s: %s" % (f.strip(), e) \
+		err = err + 1\
+\
+if err: \
+	print >> sys.stderr, "\\npy_lint: ERROR: Syntax errors in %d files.\\n" % err \
+	sys.exit(1) \
+else: \
+	print >> sys.stderr,  "py_lint: Found no syntax errors." \
+' \
+}; __py_lint %* \
+%{nil}
+
 # vim:ts=4 sw=4 noet syn=spec
