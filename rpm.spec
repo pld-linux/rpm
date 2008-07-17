@@ -936,6 +936,10 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 
 # If non-zero, all erasures will be automagically repackaged.
 #%%_repackage_all_erasures    1
+
+# Boolean (i.e. 1 == "yes", 0 == "no") that controls whether files
+# marked as %doc should be installed.
+#%%_excludedocs   1
 EOF
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF
