@@ -69,6 +69,7 @@
 # Flags specified in %filterout_* are removed from %rpm*flags, exactly:
 # %rpmcflags    = %optflags - %filterout - %filterout_c   - %filterout_ld
 # %rpmcxxflags  = %optflags - %filterout - %filterout_cxx - %filterout_ld
+# %rpmcppflags  = %optcppflags - %filterout - %filterout_cpp - %filterout_ld
 # %rpmldflags   = %optldflags - %filterout_ld
 #
 # Regular expressions are supported, but to avoid some character be treated
@@ -91,6 +92,12 @@
 %rpmcxxflags %(awk 'BEGIN {
 	split("%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}",I);
 	split("%{?filterout} %{?filterout_cxx} %{?filterout_ld}",F);
+	%{filter_out}
+}')
+
+%rpmcppflags %(awk 'BEGIN {
+	split("%{?debug:%debugcppflags}%{!?debug:%optcppflags}%{?debuginfocppflags}",I);
+	split("%{?filterout} %{?filterout_cpp} %{?filterout_cpp}",F);
 	%{filter_out}
 }')
 
@@ -122,7 +129,7 @@
  CXXFLAGS="${CXXFLAGS:-%rpmcxxflags}" ; export CXXFLAGS ; \
  FFLAGS="${FFLAGS:-%rpmcflags}" ; export FFLAGS ; \
  FCFLAGS="${FCFLAGS:-%rpmcflags}" ; export FCFLAGS ; \
- CPPFLAGS="${CPPFLAGS:-}" ; export CPPFLAGS ; \
+ CPPFLAGS="${CPPFLAGS:-%rpmcppflags}" ; export CPPFLAGS ; \
  %{?__cc:CC="%{__cc}" ; export CC ; } \
  %{?__cxx:CXX="%{__cxx}" ; export CXX ; } \
  %{?configuredir:%{configuredir}}%{!?configuredir:.}/configure \
@@ -162,7 +169,7 @@ CXXFLAGS="%{rpmcxxflags}" \
 	CFLAGS="${CFLAGS:-%rpmcflags}" \
 	CXXFLAGS="${CXXFLAGS:-%rpmcxxflags}" \
 	FFLAGS="${FFLAGS:-%rpmcflags}" \
-	CPPFLAGS="${CPPFLAGS:-}" \
+	CPPFLAGS="${CPPFLAGS:-%rpmcppflags}" \
 	%{?__cc:CC="%{__cc}"} \
 	%{?__cxx:CXX="%{__cxx}"} \
 	libsuffix=%{_lib} \
@@ -191,7 +198,7 @@ CXXFLAGS="%{rpmcxxflags}" \
 	CXXFLAGS="${CXXFLAGS:-%rpmcxxflags}" \
 	FFLAGS="${FFLAGS:-%rpmcflags}" \
 	FCFLAGS="${FCFLAGS:-%rpmcflags}" \
-	CPPFLAGS="${CPPFLAGS:-}" \
+	CPPFLAGS="${CPPFLAGS:-%rpmcppflags}" \
 	%{?__cc:CC="%{__cc}"} \
 	%{?__cxx:CXX="%{__cxx}"} \
 	--host=%{_target_platform} \
