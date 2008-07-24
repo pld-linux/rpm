@@ -22,10 +22,10 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
 # versions of required libraries
-%define	reqdb_ver	4.6.18
+%define	reqdb_ver	4.5.20
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
-%define	find_lang_rev	1.26
+%define	find_lang_rev	1.27
 %define	sover	4.4
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
@@ -36,7 +36,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	26
+Release:	15
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -402,7 +402,6 @@ Summary(pl.UTF-8):	Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
-Requires:	filesystem-debuginfo >= 3.0-16
 
 %description utils
 Additional utilities for managing RPM packages and database.
@@ -887,7 +886,7 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # customized rpm macros - global for host
 #
 #%%_install_langs pl_PL:en_US
-%%distribution PLD
+%%distribution PLD Titanium
 #
 # remove or replace with file_contexts path if you want to use custom
 # SELinux file contexts policy instead of one stored in packages payload
@@ -895,7 +894,10 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 %%_verify_file_context_path	%%{nil}
 
 # If non-zero, all erasures will be automagically repackaged.
-#%%_repackage_all_erasures    1
+%%_repackage_all_erasures	0
+
+# If non-zero, create debuginfo packages
+%%_enable_debug_packages	0
 EOF
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF

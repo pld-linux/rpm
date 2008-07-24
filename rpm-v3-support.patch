@@ -1,0 +1,25 @@
+--- a/lib/rpmds.c	10 Jun 2007 17:12:25 -0000	2.55.2.4
++++ b/lib/rpmds.c	6 Oct 2007 01:09:19 -0000
+@@ -253,6 +255,7 @@
+     const char ** N;
+     rpmTagType Nt;
+     int_32 Count;
++int rpmv3 = headerIsEntry(h, RPMTAG_OLDFILENAMES);
+ 
+ assert(scareMem == 0);		/* XXX always allocate memory */
+     if (tagN == RPMTAG_PROVIDENAME) {
+@@ -280,12 +283,12 @@
+ 	tagEVR = RPMTAG_TRIGGERVERSION;
+ 	tagF = RPMTAG_TRIGGERFLAGS;
+     } else
+-    if (tagN == RPMTAG_DIRNAMES) {
++    if (!rpmv3 && tagN == RPMTAG_DIRNAMES) {
+ 	Type = "Dirnames";
+ 	tagEVR = 0;
+ 	tagF = 0;
+     } else
+-    if (tagN == RPMTAG_FILELINKTOS) {
++    if (!rpmv3 && tagN == RPMTAG_FILELINKTOS) {
+ 	Type = "Filelinktos";
+ 	tagEVR = RPMTAG_DIRNAMES;
+ 	tagF = RPMTAG_DIRINDEXES;
