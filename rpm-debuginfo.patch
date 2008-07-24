@@ -17,7 +17,7 @@
  Debug information is useful when developing applications that use this\
  package or when debugging this package.\
 -%files debug -f debugfiles.list\
-+%description debuginfo -l pl.UTF-8\
++%description debuginfo -l pl_PL.UTF-8\
 +Ten pakiet dostarcza informacje dla debuggera dla pakietu %{name}.\
 +Informacje te są przydatne przy rozwijaniu aplikacji używających tego\
 +pakietu oraz przy odpluskwianiu samego pakietu.\
