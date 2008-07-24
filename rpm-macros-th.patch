@@ -1,7 +1,6 @@
-diff -ur rpm-4.4.9.org/macros.in rpm-4.4.9/macros.in
---- rpm-4.4.9.org/macros.in	2008-07-24 08:52:35.205363000 +0200
-+++ rpm-4.4.9/macros.in	2008-07-24 09:01:00.351355186 +0200
-@@ -275,6 +275,9 @@
+--- rpm-5.0.3/macros.in	2008-03-27 19:38:53.797722786 +0200
++++ rpm-4.4.9/macros.in	2008-04-04 23:06:29.374285032 +0300
+@@ -282,6 +282,9 @@
  #
  #%distribution
  
@@ -11,147 +10,11 @@ diff -ur rpm-4.4.9.org/macros.in rpm-4.4.9/macros.in
  #	Configurable distribution URL, same as DistURL: tag in a specfile.
  #	The URL will be used to supply reliable information to tools like
  #	rpmfind.
-@@ -1468,6 +1471,8 @@
+@@ -1464,6 +1467,7 @@
  # -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
  
  %debugcflags	-O0 -g -Wall
 +%optldflags	-Wl,--as-needed -Wl,-z,relro -Wl,-z,-combreloc
-+%optcppflags	-D_FORTIFY_SOURCE=2
  
  # Warning: those macros are overwritten by macros.build,
  #          left here for compatibility
-Tylko w rpm-4.4.9: macros.in~
-diff -ur rpm-4.4.9.org/macros.in.orig rpm-4.4.9/macros.in.orig
---- rpm-4.4.9.org/macros.in.orig	2008-07-24 08:52:35.195363000 +0200
-+++ rpm-4.4.9/macros.in.orig	2008-07-24 08:52:35.205363788 +0200
-@@ -109,6 +109,10 @@
- %__automake		automake
- %__autoconf		autoconf
- 
-+# compiler used to build kernel and kernel modules
-+%kgcc		%{__cc}
-+%kgcc_package	gcc
-+
- #==============================================================================
- # Conditional build stuff.
- 
-@@ -207,7 +211,7 @@
- %endif\
- %{nil}
- 
--%_defaultdocdir		%{_usr}/doc
-+%_defaultdocdir		%{_usr}/share/doc
- 
- #	The path to the pgp executable (legacy, use %{__pgp} instead).
- %_pgpbin		%{__pgp}
-@@ -236,12 +240,12 @@
- #	The directory where newly built source packages will be written.
- %_srcrpmdir		%{_topdir}/SRPMS
- 
--#	Directory where temporaray files can be created.
--%_tmppath		%{_var}/tmp
-+#	Directory where temporary files can be created.
-+%_tmppath		%(echo "${TMPDIR:-/tmp}")
- %tmpdir			%{_tmppath}
- 
- #	Path to top of build area.
--%_topdir		%{_usrsrc}/rpm
-+%_topdir		%(echo $HOME)/rpm
- 
- #==============================================================================
- # ---- Optional rpmrc macros.
-@@ -251,7 +255,7 @@
- #	Configurable build root path, same as BuildRoot: in a specfile.
- #	(Note: the configured macro value will override the spec file value).
- #
--%buildroot		%{_tmppath}/%{name}-root
-+%buildroot		%{_tmppath}/%{name}-%{version}-root-%(id -u -n)
- 
- #	The sub-directory (relative to %{_builddir}) where sources are compiled.
- #	This macro is set after processing %setup, either explicitly from the
-@@ -350,8 +354,8 @@
- #		"w9.bzdio"	bzip2 level 9.
- #		"w9.lzdio"	lzma level 9.
- #
--#%_source_payload	w9.gzdio
--#%_binary_payload	w9.gzdio
-+%_source_payload	w9.gzdio
-+%_binary_payload	w9.lzdio
- 
- #	Archive formats to use for source/binary package payloads.
- #		"cpio"		cpio archive (default)
-@@ -498,7 +502,7 @@
- 
- #
- # Path to magic file used for file classification.
--%_rpmfc_magic_path	%{_usr}/lib/rpm/magic
-+%_rpmfc_magic_path	/usr/share/file/magic
- 
- #==============================================================================
- # ---- Database configuration macros.
-@@ -992,9 +996,12 @@
-   %{?_javaclasspath:CLASSPATH=\"%{_javaclasspath}\"\
-   export CLASSPATH}\
-   unset PERL_MM_OPT || :\
--  LANG=C\
--  export LANG\
--  unset DISPLAY || :\
-+  export LC_ALL=C\
-+  export LANG=C\
-+  unset LINGUAS ||:\
-+  unset LANGUAGE ||:\
-+  unset LC_MESSAGES ||:\
-+  unset DISPLAY ||:\
-   \
-   %{verbose:set -x}%{!verbose:exec > /dev/null}\
-   umask 022\
-@@ -1145,17 +1152,17 @@
- %_exec_prefix		%{_prefix}
- %_bindir		%{_exec_prefix}/bin
- %_sbindir		%{_exec_prefix}/sbin
--%_libexecdir		%{_exec_prefix}/libexec
-+%_libexecdir		%{_exec_prefix}/lib
- %_datadir		%{_prefix}/share
--%_sysconfdir		%{_prefix}/etc
--%_sharedstatedir	%{_prefix}/com
--%_localstatedir		%{_prefix}/var
-+%_sysconfdir		/etc
-+%_sharedstatedir	/var/lib
-+%_localstatedir		/var
- %_lib			lib
- %_libdir		%{_exec_prefix}/%{_lib}
- %_includedir		%{_prefix}/include
- %_oldincludedir		/usr/include
--%_infodir		%{_prefix}/info
--%_mandir		%{_prefix}/man
-+%_infodir		%{_prefix}/share/info
-+%_mandir		%{_prefix}/share/man
- %_localedir		%{_datadir}/locale
- 
- #==============================================================================
-@@ -1449,7 +1456,24 @@
- # helpers are also used by %{_usrlibrpm}/rpmdeps {--provides|--requires}.
- #%__executable_provides	%{_usrlibrpm}/executabledeps.sh --provides
- #%__executable_requires	%{_usrlibrpm}/executabledeps.sh --requires
--%__scriptlet_requires	/bin/bash --rpm-requires
-+#%__scriptlet_requires	/bin/bash --rpm-requires
-+
-+# PLD rpm macros
-+%_enable_debug_packages 1
-+
-+#-----------------------------------------------------------------
-+# CFLAGS and LDFLAGS used to build
-+
-+%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -gdwarf-2 -g2}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
-+# -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
-+
-+%debugcflags	-O0 -g -Wall
- 
-+# Warning: those macros are overwritten by macros.build,
-+#          left here for compatibility
-+%rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
-+%rpmcxxflags	%{rpmcflags}
-+%rpmldflags	%{!?no_build_with_as_needed:-Wl,--as-needed}
-+  
- # \endverbatim
- #*/
