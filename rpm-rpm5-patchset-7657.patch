@@ -1,0 +1,23 @@
+Index: rpm/CHANGES
+ 4.5 -> 5.0:
++    - jbj: perform fsync(2) before closing installed file.
+     - jbj: default RPMCANONCOLOR to 3 everywhere but ia64 and mips*.
+     - rse: remove now unused LIBDIR (--with-path-lib) from Autoconf and rename --with-path-usrlib to --with-path-lib
+     - jbj: hardwire _GetPass() to avoid --addsign (*Getpass) segfault for now.
+Index: rpm/lib/fsm.c
+RCS File: /v/rpm/cvs/rpm/lib/fsm.c,v
+rcsdiff -q -kk '-r2.115' '-r2.116' -u '/v/rpm/cvs/rpm/lib/fsm.c,v' 2>/dev/null
+--- lib/fsm.c	2007/06/21 12:13:29	2.115
++++ lib/fsm.c	2007/07/09 23:18:17	2.116
+@@ -1043,8 +1043,10 @@
+ 	    xx = munmap(mapped, nmapped);
+ /*@=noeffect@*/
+ 	    fsm->rdbuf = rdbuf;
+-	}
++	} else
+ /*@=branchstate@*/
++#else
++	    xx = fsync(Fileno(fsm->rfd));
+ #endif
+ 
+     }

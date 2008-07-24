@@ -22,7 +22,7 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
 # versions of required libraries
-%define	reqdb_ver	4.6.18
+%define	reqdb_ver	4.5.20
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
 %define	sover	4.4
@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	52
+Release:	64
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -47,8 +47,6 @@ Source4:	%{name}-find-spec-bcond
 Source5:	%{name}-hrmib-cache
 Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
-Source8:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
-# Source8-md5:	08b29584dd349aac9caa7610131a0a88
 Source9:	%{name}-php-provides
 Source10:	%{name}-php-requires
 Source11:	%{name}.sysinfo
@@ -77,7 +75,7 @@ Patch14:	%{name}-etc_dir.patch
 Patch15:	%{name}-system_libs-more.patch
 Patch16:	%{name}-php-deps.patch
 Patch17:	%{name}-ldconfig-always.patch
-Patch18:	%{name}-perl_req.patch
+Patch18:	%{name}-macros-ti.patch
 Patch19:	%{name}-link.patch
 Patch20:	%{name}-magic-usesystem.patch
 Patch21:	%{name}-dontneedutils.patch
@@ -126,7 +124,10 @@ Patch65:	%{name}-lzma-tukaani.patch
 Patch66:	%{name}-v3-support.patch
 Patch67:	%{name}-cleanbody.patch
 Patch68:	%{name}-rpm5-patchset-9486.patch
-Patch69:	%{name}-popt-downgrade.patch
+Patch69:	%{name}-popt-aliases.patch
+Patch70:	%{name}-lualeak.patch
+#Patch71:	%{name}-rpm5-patchset-10061.patch
+Patch72:	%{name}-rpm5-patchset-7657.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -196,7 +197,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		__newcpp %{?force_cpp}%{!?force_cpp:%{_target_cpu}-pld-linux-gcc -E}
 
 %define		_rpmlibdir /usr/lib/rpm
-%define		_noautocompressdoc	RPM-GPG-KEY
 
 %define		specflags	-fno-strict-aliasing
 
@@ -644,7 +644,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
-%patch18 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 #cp -f platform.in macros.pld.in # what for?
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
@@ -697,6 +696,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch58 -p1
 %patch59 -p1
 %patch60 -p1
+%patch18 -p1
 %patch61 -p1
 %patch62 -p1
 %patch63 -p1
@@ -706,13 +706,15 @@ install %{SOURCE12} scripts/perl.prov
 %patch67 -p1
 %patch68 -p1
 %patch69 -p1
+%patch70 -p1
+#%patch71 -p0
+%patch72 -p0
 
 mv -f scripts/{perl.req,perl.req.in}
 mv -f scripts/{perl.prov,perl.prov.in}
 mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib db db3 popt rpmdb/db.h
-cp %{SOURCE8} RPM-GPG-KEY
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
@@ -784,85 +786,87 @@ install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/b
 	pylibdir=%{py_libdir} \
 	pkgbindir="%{_bindir}"
 
+cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 # first platform file entry can't contain regexps
-echo "%{_target_cpu}-%{_target_vendor}-linux" > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%{_target_cpu}-%{_target_vendor}-linux
 
 # x86_64 things
 %ifarch x86_64
-echo "amd64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-echo "x86_64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+amd64-[^-]*-linux(-gnu)?
+x86_64-[^-]*-linux(-gnu)?
 %endif
 %ifarch amd64
-echo "amd64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-echo "x86_64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+amd64-[^-]*-linux(-gnu)?
+x86_64-[^-]*-linux(-gnu)?
 %endif
 %ifarch ia32e
-echo "ia32e-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-echo "x86_64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+ia32e-[^-]*-linux(-gnu)?
+x86_64-[^-]*-linux(-gnu)?
 %endif
 
 # x86 things
 %ifarch athlon %{x8664}
-echo "athlon-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+athlon-[^-]*-linux(-gnu)?
 %endif
 %ifarch pentium4 athlon %{x8664}
-echo "pentium4-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+pentium4-[^-]*-linux(-gnu)?
 %endif
 %ifarch pentium3 pentium4 athlon %{x8664}
-echo "pentium3-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+pentium3-[^-]*-linux(-gnu)?
 %endif
 %ifarch i686 pentium3 pentium4 athlon %{x8664}
-echo "i686-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+i686-[^-]*-linux(-gnu)?
 %endif
 %ifarch i586 i686 pentium3 pentium4 athlon %{x8664}
-echo "i586-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+i586-[^-]*-linux(-gnu)?
 %endif
 %ifarch i486 i586 i686 pentium3 pentium4 athlon %{x8664}
-echo "i486-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+i486-[^-]*-linux(-gnu)?
 %endif
 %ifarch %{ix86} %{x8664}
-echo "i386-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+i386-[^-]*-linux(-gnu)?
 %endif
 
 %ifarch alpha
-echo "alpha-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+alpha-[^-]*-linux(-gnu)?
 %endif
 
 %ifarch ia64
-echo "ia64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+ia64-[^-]*-linux(-gnu)?
 %endif
 
 %ifarch ppc64
-echo "powerpc64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-echo "ppc64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+powerpc64-[^-]*-linux(-gnu)?
+ppc64-[^-]*-linux(-gnu)?
 %endif
 %ifarch ppc ppc64
-echo "powerpc-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-echo "ppc-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+powerpc-[^-]*-linux(-gnu)?
+ppc-[^-]*-linux(-gnu)?
 %endif
 
 %ifarch s390x
-echo "s390x-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+s390x-[^-]*-linux(-gnu)?
 %endif
 %ifarch s390 s390x
-echo "s390-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+s390-[^-]*-linux(-gnu)?
 %endif
 
 %ifarch sparc64
-echo "sparc64-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-echo "sparcv8-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-echo "sparcv9-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+sparc64-[^-]*-linux(-gnu)?
+sparcv8-[^-]*-linux(-gnu)?
+sparcv9-[^-]*-linux(-gnu)?
 %endif
 %ifarch sparcv9
-echo "sparcv8-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-echo "sparcv9-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+sparcv8-[^-]*-linux(-gnu)?
+sparcv9-[^-]*-linux(-gnu)?
 %endif
 %ifarch sparc sparcv9 sparc64
-echo "sparc-[^-]*-linux(-gnu)?" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+sparc-[^-]*-linux(-gnu)?
 %endif
 
 # noarch
-echo "noarch-[^-]*-.*" >> $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+noarch-[^-]*-.*
+EOF
 
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/vpkg-provides*
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{prov,req}.pl
@@ -906,7 +910,7 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # customized rpm macros - global for host
 #
 #%%_install_langs pl_PL:en_US
-%%distribution PLD
+%%distribution PLD Titanium
 #
 # remove or replace with file_contexts path if you want to use custom
 # SELinux file contexts policy instead of one stored in packages payload
@@ -914,7 +918,10 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 %%_verify_file_context_path	%%{nil}
 
 # If non-zero, all erasures will be automagically repackaged.
-#%%_repackage_all_erasures    1
+%%_repackage_all_erasures	0
+
+# If non-zero, create debuginfo packages
+%%_enable_debug_packages	0
 EOF
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF
@@ -988,6 +995,8 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep <<EOF
 ^libxkbui.so
 # -- fam / gamin
 ^libfam.so.0
+# -- mdns-bonjour: mDNSResponder-libs / avahi-compat-libdns_sd
+^libdns_sd.so.1
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc <<EOF
 # global list of file masks not to be compressed in DOCDIR
@@ -1046,14 +1055,6 @@ rm -rf $RPM_BUILD_ROOT
 %triggerpostun lib -- %{name}-lib < %{version}
 rm -f /var/lib/rpm/__db*
 
-%pretrans
-# this needs to be a dir
-if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
-	umask 022
-	mv -f %{_sysconfdir}/rpm/sysinfo{,.rpmsave}
-	mkdir %{_sysconfdir}/rpm/sysinfo
-fi
-
 %triggerpostun -- %{name} < 4.4.9-44
 %{_rpmlibdir}/hrmib-cache
 
@@ -1066,7 +1067,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc CHANGES CREDITS README wdj/JBJ-GPG-KEY manual/*
-%doc RPM-GPG-KEY
 
 %attr(755,root,root) /bin/rpm
 #%attr(755,root,root) %{_bindir}/rpmdb
@@ -1119,13 +1119,13 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files lib
 %defattr(644,root,root,755)
-%attr(755,root,root) /%{_lib}/librpm*-*.so
-%attr(755,root,root) %{_libdir}/librpm*-*.so
+%attr(755,root,root) /%{_lib}/librpm-%{sover}.so
+%attr(755,root,root) /%{_lib}/librpmdb-%{sover}.so
+%attr(755,root,root) /%{_lib}/librpmio-%{sover}.so
+%attr(755,root,root) %{_libdir}/librpmbuild-%{sover}.so
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/rpm
-%{_libdir}/librpm*.la
 %attr(755,root,root) %{_libdir}/librpm.so
 %attr(755,root,root) %{_libdir}/librpm-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmio.so
@@ -1133,10 +1133,18 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_libdir}/librpmdb.so
 %attr(755,root,root) %{_libdir}/librpmdb-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmbuild.so
+%{_libdir}/librpm.la
+%{_libdir}/librpmbuild.la
+%{_libdir}/librpmdb.la
+%{_libdir}/librpmio.la
+%{_includedir}/rpm
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/librpm*.a
+%{_libdir}/librpm.a
+%{_libdir}/librpmbuild.a
+%{_libdir}/librpmdb.a
+%{_libdir}/librpmio.a
 
 %files utils
 %defattr(644,root,root,755)

@@ -1,0 +1,64 @@
+#!/bin/sh
+# Display bcond (_with_*, _without_*) macros from given spec 
+# $Id$
+
+if [ "$#" = 0 ]; then
+    echo "Usage: $0 SPEC"
+    exit 1
+fi
+
+SPEC=$1
+if [ $SPEC = "--" ]; then
+    if [ "$#" -lt 2 ]; then
+	echo "Usage: rpmbuild --bcond SPEC"
+	exit 1
+    fi
+    SPEC=$2
+fi
+
+if [ ! -f $SPEC ]; then
+    echo "rpmbuild: $SPEC: no such file"
+    exit 1
+fi
+
+bconds=`awk -F"\n" 'BEGIN { chlog=0 }
+		/^%changelog/ { chlog=1 }
+		/_with(out)?_[_a-zA-Z0-9]+/ && chlog == 0 {
+			match($0, /_with(out)?_[_a-zA-Z0-9]+/);
+	       		print substr($0, RSTART, RLENGTH)                       
+	    	}
+		/^%bcond_with/ && chlog == 0 {
+			match($0, /bcond_with(out)?[ \t]+[_a-zA-Z0-9]+/);
+				 bcond = substr($0, RSTART +5 , RLENGTH -5);
+				 gsub(/[ \t]+/,"_",bcond);
+				 print bcond
+			}' $SPEC | sort -u`
+
+for c in $bconds; do
+    echo -n "$c"
+
+    if ! echo `rpm --eval "%$c"` | grep $c >/dev/null; then
+	echo " (on)"
+    else 
+	echo ""
+    fi
+done
+
+
+for bcond in $bconds; do
+    isset=`awk -F"\n" "BEGIN { val=0 }
+                   /^%define[\t ]+$bcond/ {
+                     if (match(\\$0, /$bcond[\t ]+0[\t ]*$/)) {
+                        val = 0
+                     } else if (match(\\$0, /$bcond[\t ]+1[\t ]*$/)) {
+                        val = 1
+                     } else {
+                        print \"couldn't determine $bcond value from \", \\$0
+                     }
+                  } END { print val }" $SPEC`;
+
+    if [ x"$isset" = x"1" ]; then
+	echo "WARN: $bcond defined in spec";
+    fi
+done
+	 
