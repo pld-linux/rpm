@@ -22,7 +22,7 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
 # versions of required libraries
-%define	reqdb_ver	4.6.18
+%define	reqdb_ver	4.5.20
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
 %define	sover	4.4
@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	52
+Release:	54
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -47,8 +47,6 @@ Source4:	%{name}-find-spec-bcond
 Source5:	%{name}-hrmib-cache
 Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
-Source8:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
-# Source8-md5:	08b29584dd349aac9caa7610131a0a88
 Source9:	%{name}-php-provides
 Source10:	%{name}-php-requires
 Source11:	%{name}.sysinfo
@@ -77,7 +75,7 @@ Patch14:	%{name}-etc_dir.patch
 Patch15:	%{name}-system_libs-more.patch
 Patch16:	%{name}-php-deps.patch
 Patch17:	%{name}-ldconfig-always.patch
-Patch18:	%{name}-perl_req.patch
+
 Patch19:	%{name}-link.patch
 Patch20:	%{name}-magic-usesystem.patch
 Patch21:	%{name}-dontneedutils.patch
@@ -196,7 +194,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		__newcpp %{?force_cpp}%{!?force_cpp:%{_target_cpu}-pld-linux-gcc -E}
 
 %define		_rpmlibdir /usr/lib/rpm
-%define		_noautocompressdoc	RPM-GPG-KEY
 
 %define		specflags	-fno-strict-aliasing
 
@@ -644,7 +641,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
-%patch18 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 #cp -f platform.in macros.pld.in # what for?
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
@@ -712,7 +708,6 @@ mv -f scripts/{perl.prov,perl.prov.in}
 mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib db db3 popt rpmdb/db.h
-cp %{SOURCE8} RPM-GPG-KEY
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
@@ -906,7 +901,7 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # customized rpm macros - global for host
 #
 #%%_install_langs pl_PL:en_US
-%%distribution PLD
+%%distribution PLD Titanium
 #
 # remove or replace with file_contexts path if you want to use custom
 # SELinux file contexts policy instead of one stored in packages payload
@@ -914,7 +909,10 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 %%_verify_file_context_path	%%{nil}
 
 # If non-zero, all erasures will be automagically repackaged.
-#%%_repackage_all_erasures    1
+%%_repackage_all_erasures	0
+
+# If non-zero, create debuginfo packages
+%%_enable_debug_packages	0
 EOF
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF
@@ -988,6 +986,8 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep <<EOF
 ^libxkbui.so
 # -- fam / gamin
 ^libfam.so.0
+# -- mdns-bonjour: mDNSResponder-libs / avahi-compat-libdns_sd
+^libdns_sd.so.1
 EOF
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc <<EOF
 # global list of file masks not to be compressed in DOCDIR
@@ -1066,7 +1066,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc CHANGES CREDITS README wdj/JBJ-GPG-KEY manual/*
-%doc RPM-GPG-KEY
 
 %attr(755,root,root) /bin/rpm
 #%attr(755,root,root) %{_bindir}/rpmdb
@@ -1119,13 +1118,13 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files lib
 %defattr(644,root,root,755)
-%attr(755,root,root) /%{_lib}/librpm*-*.so
-%attr(755,root,root) %{_libdir}/librpm*-*.so
+%attr(755,root,root) /%{_lib}/librpm-%{sover}.so
+%attr(755,root,root) /%{_lib}/librpmdb-%{sover}.so
+%attr(755,root,root) /%{_lib}/librpmio-%{sover}.so
+%attr(755,root,root) %{_libdir}/librpmbuild-%{sover}.so
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/rpm
-%{_libdir}/librpm*.la
 %attr(755,root,root) %{_libdir}/librpm.so
 %attr(755,root,root) %{_libdir}/librpm-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmio.so
@@ -1133,10 +1132,18 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_libdir}/librpmdb.so
 %attr(755,root,root) %{_libdir}/librpmdb-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmbuild.so
+%{_libdir}/librpm.la
+%{_libdir}/librpmbuild.la
+%{_libdir}/librpmdb.la
+%{_libdir}/librpmio.la
+%{_includedir}/rpm
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/librpm*.a
+%{_libdir}/librpm.a
+%{_libdir}/librpmbuild.a
+%{_libdir}/librpmdb.a
+%{_libdir}/librpmio.a
 
 %files utils
 %defattr(644,root,root,755)
