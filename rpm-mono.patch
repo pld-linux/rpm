@@ -1,17 +1,19 @@
---- rpm-4.4.8/lib/rpmfc.c.orig	2005-11-19 01:11:00.884392480 +0100
-+++ rpm-4.4.8/lib/rpmfc.c	2005-11-19 01:13:08.489993480 +0100
-@@ -539,6 +539,10 @@
+diff -urN rpm-4.4.9/lib/rpmfc.c rpm-4.4.9.new/lib/rpmfc.c
+--- rpm-4.4.9/lib/rpmfc.c	2008-07-27 13:26:12.000000000 +0200
++++ rpm-4.4.9.new/lib/rpmfc.c	2008-07-27 13:31:18.000000000 +0200
+@@ -549,6 +549,11 @@
  
    { "Java ",			RPMFC_JAVA|RPMFC_INCLUDE },
  
 +  /* .NET executables and libraries. file(1) cannot differ it from native win32 executables unfortunatelly */
++  { "Mono/.Net assembly",	RPMFC_MONO|RPMFC_INCLUDE },
 +  { "PE executable",		RPMFC_MONO|RPMFC_INCLUDE },
 +  { "executable PE",		RPMFC_MONO|RPMFC_INCLUDE },
 +
    { "current ar archive",	RPMFC_STATIC|RPMFC_LIBRARY|RPMFC_ARCHIVE|RPMFC_INCLUDE },
  
    { "Zip archive data",		RPMFC_COMPRESSED|RPMFC_ARCHIVE|RPMFC_INCLUDE },
-@@ -900,6 +904,35 @@
+@@ -915,6 +920,35 @@
  }
  
  /**
@@ -47,7 +49,7 @@
   * Extract Elf dependencies.
   * @param fc		file classifier
   * @return		0 on success
-@@ -931,6 +963,7 @@
+@@ -946,6 +980,7 @@
  static struct rpmfcApplyTbl_s rpmfcApplyTable[] = {
      { rpmfcELF,		RPMFC_ELF },
      { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL|RPMFC_PYTHON|RPMFC_LIBTOOL|RPMFC_PKGCONFIG|RPMFC_BOURNE|RPMFC_JAVA|RPMFC_PHP) },
@@ -55,9 +57,10 @@
      { NULL, 0 }
  };
  
---- rpm-4.4.8./lib/rpmfc.h	2005-08-11 13:11:54.000000000 +0200
-+++ rpm-4.4.8/lib/rpmfc.h	2005-08-11 14:10:33.000000000 +0200
-@@ -78,6 +78,7 @@
+diff -urN rpm-4.4.9/lib/rpmfc.h rpm-4.4.9.new/lib/rpmfc.h
+--- rpm-4.4.9/lib/rpmfc.h	2008-07-27 13:26:12.000000000 +0200
++++ rpm-4.4.9.new/lib/rpmfc.h	2008-07-27 13:29:10.000000000 +0200
+@@ -59,6 +59,7 @@
      RPMFC_PYTHON		= (1 << 26),
      RPMFC_PHP			= (1 << 27),
      RPMFC_TCL			= (1 << 28),
@@ -65,9 +68,10 @@
  
      RPMFC_WHITE			= (1 << 29),
      RPMFC_INCLUDE		= (1 << 30),
---- rpm-4.4.9/macros.in.orig	2007-05-24 21:20:58.889811039 +0200
-+++ rpm-4.4.9/macros.in	2007-05-24 21:20:49.657284908 +0200
-@@ -1406,6 +1406,9 @@
+diff -urN rpm-4.4.9/macros.in rpm-4.4.9.new/macros.in
+--- rpm-4.4.9/macros.in	2008-07-27 13:26:12.000000000 +0200
++++ rpm-4.4.9.new/macros.in	2008-07-27 13:29:10.000000000 +0200
+@@ -1407,6 +1407,9 @@
  #%__php_provides		%{_usrlibrpm}/php.prov
  #%__php_requires		%{_usrlibrpm}/php.req
  
