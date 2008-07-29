@@ -1,0 +1,48 @@
+--- rpm-5.1.4/rpmio/rpmrpc.c.org	2008-07-29 21:27:42.203871384 +0200
++++ rpm-5.1.4/rpmio/rpmrpc.c	2008-07-29 21:27:58.080756454 +0200
+@@ -1757,14 +1757,14 @@
+ 	return -2;
+ 	/*@notreached@*/ break;
+     }
+-    return glob(pattern, flags, errfunc, pglob);
++    return rpm_glob(pattern, flags, errfunc, pglob);
+ }
+ 
+ void Globfree(glob_t *pglob)
+ {
+ if (_rpmio_debug)
+ fprintf(stderr, "*** Globfree(%p)\n", pglob);
+-    globfree(pglob);
++    rpm_globfree(pglob);
+ }
+ 
+ DIR * Opendir(const char * path)
+--- rpm-5.1.4/misc/librpmmisc.c.org	2008-07-29 21:26:19.710540550 +0200
++++ rpm-5.1.4/misc/librpmmisc.c	2008-07-29 21:27:25.357426308 +0200
+@@ -71,7 +71,11 @@
+ #include "fnmatch.h"
+ #include "fnmatch.c"
+ #ifndef __CYGWIN__
++#define	glob		rpm_glob
++#define	globfree	rpm_globfree
+ #include "glob.h"
+ #include "glob.c"
++#undef glob
++#undef globfree
+ #endif
+ 
+--- rpm/misc/librpmmisc.vers~	2007-11-13 03:16:23.000000000 +0100
++++ rpm/misc/librpmmisc.vers	2008-07-29 21:32:35.023645681 +0200
+@@ -7,8 +7,10 @@
+     db_strerror_rpmdb;
+     db_create_rpmdb;
+     fnmatch;
+-    glob;
+-    globfree;
++    rpm_glob;
++    rpm_glob64;
++    rpm_globfree;
++    rpm_globfree64;
+     lua*;
+     magic_*;
+     rpmz_*;
