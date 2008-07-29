@@ -1,17 +1,17 @@
---- rpm-4.3/lib/depends.c.orig	2003-05-15 18:16:51.000000000 +0200
-+++ rpm-4.3/lib/depends.c	2003-06-29 00:17:42.000000000 +0200
-@@ -343,8 +343,12 @@
+--- rpm-4.5/macros.in~	2008-04-13 02:54:35.000000000 +0300
++++ rpm-4.5/macros.in	2008-04-28 20:45:00.431568869 +0300
+@@ -337,6 +337,14 @@
+ #
+ %_query_selector_match	default
  
-     /* On upgrade, erase older packages of same color (if any). */
- 
-+    /* NOTE: in PLD we don't want to remove packages which only provided
-+     * %{name} (e.g. perl-modules in case of some newer perl modules),
-+     * so we use NAME instead of PROVIDENAME (as in vanilla rpm) here */
++#   On upgrade, erase older packages of same color (if any).
++#   "name" for RPMTAG_NAME, otherwise RPMTAG_PROVIDENAME
++#
++#   in PLD Linux we don't want to remove packages which only provided
++#   %{name} (e.g. perl-modules in case of some newer perl modules),
++#   so we use NAME instead of PROVIDENAME (as in vanilla rpm) here
++%_upgrade_tag name
 +
-   if (!(depFlags & RPMDEPS_FLAG_NOUPGRADE)) {
--    mi = rpmtsInitIterator(ts, RPMTAG_PROVIDENAME, rpmteN(p), 0);
-+    mi = rpmtsInitIterator(ts, RPMTAG_NAME, rpmteN(p), 0);
-     while((oh = rpmdbNextIterator(mi)) != NULL) {
- 	int lastx;
- 	rpmte q;
-
+ #	Configurable packager information, same as Packager: in a specfile.
+ #
+ #%packager

@@ -1,13 +1,13 @@
---- rpm-4.4.9/rpmio/macro.c.old	2007-11-10 10:29:08.000000000 +0100
-+++ rpm-4.4.9/rpmio/macro.c	2007-11-10 10:37:25.000000000 +0100
-@@ -21,6 +21,7 @@
+--- rpm-4.5/rpmio/macro.c~	2008-06-10 02:08:37.000000000 +0300
++++ rpm-4.5/rpmio/macro.c	2008-06-10 02:08:59.476044991 +0300
+@@ -22,6 +22,7 @@
  #include <stdio.h>
  #include <stdlib.h>
  #include <string.h>
 +#include <strings.h>
+ #include <ctype.h>
  #define rpmError fprintf
- #define RPMERR_BADSPEC stderr
- #undef	_
+ #define	rpmIsVerbose()	(0)
 @@ -2106,6 +2107,7 @@ int isCompressed(const char * file, rpmC
      ssize_t nb;
      int rc = -1;

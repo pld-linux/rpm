@@ -9,9 +9,9 @@
  WITH_INTERNAL_DB=1
  DBLIBSRCS="db3.c"
  
---- rpm-4.4.8/rpmdb/Makefile.am.orig	2007-02-03 19:58:47.000000000 +0100
-+++ rpm-4.4.8/rpmdb/Makefile.am	2007-04-08 16:41:48.380367607 +0200
-@@ -25,21 +25,17 @@
+--- rpm-4.5/rpmdb/Makefile.am~	2008-04-13 03:28:19.000000000 +0300
++++ rpm-4.5/rpmdb/Makefile.am	2008-04-13 13:49:10.122086563 +0300
+@@ -25,25 +25,18 @@
  tjfn_LDADD = librpmdb.la
  
  pkgincdir = $(pkgincludedir)
@@ -19,11 +19,15 @@
 +pkginc_HEADERS = header.h hdrinline.h rpmdb.h
  noinst_HEADERS = fprint.h header_internal.h legacy.h
  
- pkgbindir = @USRLIBRPM@
--pkgbin_PROGRAMS = \
--	rpmdb_archive rpmdb_checkpoint rpmdb_deadlock rpmdb_dump \
--	rpmdb_hotbackup rpmdb_load rpmdb_printlog rpmdb_recover \
--	rpmdb_svc rpmdb_stat rpmdb_upgrade rpmdb_verify 
+ pkglibdir =		@USRLIBRPM@
+ versionlibdir = 	$(pkglibdir)/@VERSION@
+-versionlib_PROGRAMS = \
+-	db_archive db_checkpoint db_deadlock db_dump \
+-	db_hotbackup db_load db_printlog db_recover \
+-	db_stat db_upgrade db_verify 
+-if WITH_DB_RPC
+-versionlib_PROGRAMS += db_svc
+-endif
  
  mylibs = librpmdb.la
  
@@ -31,25 +35,7 @@
  
  # XXX watchout, ../db3/libdb.la created by this Makefile may surprise
 -libdb_la = $(top_builddir)/$(WITH_DB_SUBDIR)/libdb.la
-+libdb_la =
++libdb_la = 
  
  # XXX grrr, RPM_BUILD_ROOT prevents build pollution if/when -lrpm different
  LDFLAGS = -L$(RPM_BUILD_ROOT)$(usrlibdir) -L$(DESTDIR)$(usrlibdir)
-@@ -56,16 +52,13 @@
- 	@WITH_POPT_LIB@ \
- 	@WITH_SQLITE3_LIB@ \
- 	@WITH_LIBELF_LIB@
--librpmdb_la_LIBADD = $(DBLIBOBJS) $(libdb_la)
-+librpmdb_la_LIBADD = $(DBLIBOBJS) -ldb
- librpmdb_la_DEPENDENCIES = $(DBLIBOBJS) $(libdb_la)
- 
- if HAVE_LD_VERSION_SCRIPT
- librpmdb_la_LDFLAGS += -Wl,--version-script=$(srcdir)/librpmdb.vers
- endif
- 
--# XXX make sure that db.h symlink is generated
--dbconfig.c $(DBLIBSRCS): db.h
--
- dbconfig.o: $(top_srcdir)/dbconfig.c
- 	$(COMPILE) -o $@ -c $<
- 

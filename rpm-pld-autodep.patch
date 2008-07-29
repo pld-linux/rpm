@@ -20,8 +20,8 @@
  };
  
  /**
---- rpm-4.4.9/lib/rpmfc.c.orig	2007-05-22 08:11:41.155736775 +0200
-+++ rpm-4.4.9/lib/rpmfc.c	2007-05-22 08:23:39.964699364 +0200
+--- rpm-4.5/lib/rpmfc.c~	2008-06-10 14:06:23.000000000 +0300
++++ rpm-4.5/lib/rpmfc.c	2008-06-10 14:21:53.097663262 +0300
 @@ -15,6 +15,8 @@
  #define	_RPMDS_INTERNAL
  #include <rpmds.h>
@@ -134,73 +134,6 @@
  	    /* Add to package requires. */
  	    ds = rpmdsSingle(RPMTAG_REQUIRENAME, s, "", RPMSENSE_FIND_REQUIRES);
  	    xx = rpmdsMerge(&fc->requires, ds);
-@@ -743,44 +816,52 @@
- 
-     if (fc->fcolor->vals[fc->ix] & RPMFC_PERL) {
- 	if (strncmp(fn, "/usr/share/doc/", sizeof("/usr/share/doc/")-1)) {
--	    if (fc->fcolor->vals[fc->ix] & RPMFC_MODULE)
--		xx = rpmfcHelper(fc, 'P', "perl");
--	    if (is_executable || (fc->fcolor->vals[fc->ix] & RPMFC_MODULE))
--		xx = rpmfcHelper(fc, 'R', "perl");
-+	    if (fc->findprov && (fc->fcolor->vals[fc->ix] & RPMFC_MODULE))
-+		xx = rpmfcHelper(fc, 'P', "perl", fc->noautoprov, fc->noautoprov_c);
-+	    if (fc->findreq && (is_executable || (fc->fcolor->vals[fc->ix] & RPMFC_MODULE)))
-+		xx = rpmfcHelper(fc, 'R', "perl", fc->noautoreq, fc->noautoreq_c);
- 	}
-     } else
-     if (fc->fcolor->vals[fc->ix] & RPMFC_PYTHON) {
--	xx = rpmfcHelper(fc, 'P', "python");
-+	if (fc->findprov)
-+	xx = rpmfcHelper(fc, 'P', "python", fc->noautoprov, fc->noautoprov_c);
- #ifdef	NOTYET
- 	if (is_executable)
- #endif
--	    xx = rpmfcHelper(fc, 'R', "python");
-+	if (fc->findreq)
-+	    xx = rpmfcHelper(fc, 'R', "python", fc->noautoreq, fc->noautoreq_c);
-     } else
-     if (fc->fcolor->vals[fc->ix] & RPMFC_LIBTOOL) {
--	xx = rpmfcHelper(fc, 'P', "libtool");
-+	if (fc->findprov)
-+	xx = rpmfcHelper(fc, 'P', "libtool", fc->noautoprov, fc->noautoprov_c);
- #ifdef	NOTYET
- 	if (is_executable)
- #endif
--	    xx = rpmfcHelper(fc, 'R', "libtool");
-+	if (fc->findreq)
-+	    xx = rpmfcHelper(fc, 'R', "libtool", fc->noautoreq, fc->noautoreq_c);
-     } else
-     if (fc->fcolor->vals[fc->ix] & RPMFC_PKGCONFIG) {
--	xx = rpmfcHelper(fc, 'P', "pkgconfig");
-+	if (fc->findprov)
-+	xx = rpmfcHelper(fc, 'P', "pkgconfig", fc->noautoprov, fc->noautoprov_c);
- #ifdef	NOTYET
- 	if (is_executable)
- #endif
--	    xx = rpmfcHelper(fc, 'R', "pkgconfig");
-+	if (fc->findreq)
-+	    xx = rpmfcHelper(fc, 'R', "pkgconfig", fc->noautoreq, fc->noautoreq_c);
-     } else
-     if (fc->fcolor->vals[fc->ix] & RPMFC_BOURNE) {
- #ifdef	NOTYET
- 	xx = rpmfcHelper(fc, 'P', "executable");
- #endif
--	if (is_executable)
--	    xx = rpmfcHelper(fc, 'R', "executable");
-+	if (fc->findreq && is_executable)
-+	    xx = rpmfcHelper(fc, 'R', "executable", fc->noautoreq, fc->noautoreq_c);
-     } else
-     if (fc->fcolor->vals[fc->ix] & RPMFC_PHP) {
--	xx = rpmfcHelper(fc, 'P', "php");
-+	if (fc->findprov)
-+	xx = rpmfcHelper(fc, 'P', "php", fc->noautoprov, fc->noautoprov_c);
- 	/* not only executable, files run by httpd usually are not */
--	    xx = rpmfcHelper(fc, 'R', "php");
-+	if (fc->findreq)
-+	    xx = rpmfcHelper(fc, 'R', "php", fc->noautoreq, fc->noautoreq_c);
-     }
- 
-     return 0;
 @@ -808,20 +889,26 @@
      default:
  	break;
@@ -409,95 +342,94 @@
  
  /*@-boundswrite@*/
      /* Generate per-file indices into package dependencies. */
---- rpm-4.4.9/po/pl.po.orig	2007-05-22 08:11:40.947724921 +0200
-+++ rpm-4.4.9/po/pl.po	2007-05-22 08:24:24.091213990 +0200
-@@ -2937,6 +2937,86 @@
- msgid "Failed to find %s:\n"
- msgstr "Nie uda³o siê odnale¼æ %s:\n"
- 
-+#: lib/rpmfc.c:334
-+#, c-format
-+msgid "Compilation of regular expresion '%s' (expanded from '%s') failed. Skipping it.\n"
-+msgstr "Kompilacja wyra¿enia regularnego '%s' (powsta³ego z '%s') nie powiod³a siê; pominiêto.\n"
-+
-+#: lib/rpmfc.c:395
-+#, c-format
-+msgid "%i _noautoprov patterns.\n"
-+msgstr "%i wzorców _noautoprov.\n"
-+
-+#: lib/rpmfc.c:405
-+#, c-format
-+msgid "%i _noautoreq patterns.\n"
-+msgstr "%i wzorców _noautoreq.\n"
-+
-+#: lib/rpmfc.c:459
-+#, c-format
-+msgid "Checking %c: '%s' against _noauto expr. #%i\n"
-+msgstr "Sprawdzanie %c: '%s' z wyra¿eniem _noauto #%i\n"
-+
-+#: lib/rpmfc.c:462
-+#, c-format
-+msgid "Skipping %c: '%s' as it matches _noauto expr. #%i\n"
-+msgstr "Pominiêto %c: '%s' pasuj±ce do wyra¿enia _noauto #%i\n"
-+
-+#. XXX ts created in main() should be used
-+#: lib/rpmfc.c:1173
-+msgid "Searching for required packages....\n"
-+msgstr "Poszukiwanie wymaganych pakietów...\n"
-+
-+#: lib/rpmfc.c:1197
-+#, c-format
-+msgid "#%i requires: %s,%s,%i\n"
-+msgstr "#%i wymaga: %s,%s,%i\n"
-+
-+#: lib/rpmfc.c:1199
-+#, c-format
-+msgid "skipping #%i require\n"
-+msgstr "pominiêto zale¿no¶æ #%i\n"
-+
-+#: lib/rpmfc.c:1205
-+#, c-format
-+msgid "skipping %s requirement processing (matches noautoreqdep pattern #%i)\n"
-+msgstr "pominiêto przetwarzanie zale¿no¶ci %s (pasuje do wzorca noautoreqdep #%i)\n"
-+
-+#: lib/rpmfc.c:1211
-+#, c-format
-+msgid "skipping #%i require (is file requirement)\n"
-+msgstr "pominiêto zale¿no¶æ #%i (zale¿no¶æ od pliku)\n"
-+
-+#: lib/rpmfc.c:1216
-+#, c-format
-+msgid "%s -> not found\n"
-+msgstr "%s -> nie znaleziono\n"
-+
-+#: lib/rpmfc.c:1219
-+#, c-format
-+msgid "Iterator: %p\n"
-+msgstr "Iterator: %p\n"
-+
-+#: lib/rpmfc.c:1221
-+#, c-format
-+msgid "%s -> multiple (skipping)\n"
-+msgstr "%s -> wiele (pominiêto)\n"
-+
-+#: lib/rpmfc.c:1230
-+#, c-format
-+msgid "%s -> %s (skipping)\n"
-+msgstr "%s -> %s (pominiêto)\n"
-+
-+#: lib/rpmfc.c:1295
-+#, c-format
-+msgid "skipping %s provides detection (matches noautoprovfiles pattern #%i)\n"
-+msgstr "pominiêto wykrywanie w³asno¶ci %s (pasuje do wzorca noautoprovfiles #%i)\n"
-+
-+#: lib/rpmfc.c:1306
-+#, c-format
-+msgid "skipping %s requires detection (matches noautoreqfiles pattern #%i)\n"
-+msgstr "pominiêto wykrywanie w³asno¶ci %s (pasuje do wzorca noautoreqfiles #%i)\n"
-+
- #: lib/rpmfi.c:622
- #, c-format
- msgid "%s skipped due to missingok flag\n"
+#--- rpm-4.4.9/po/pl.po.orig	2007-05-22 08:11:40.947724921 +0200
+#+++ rpm-4.4.9/po/pl.po	2007-05-22 08:24:24.091213990 +0200
+#@@ -2937,6 +2937,86 @@
+# msgid "Failed to find %s:\n"
+# msgstr "Nie uda³o siê odnale¼æ %s:\n"
+# 
+#+#: lib/rpmfc.c:334
+#+#, c-format
+#+msgid "Compilation of regular expresion '%s' (expanded from '%s') failed. Skipping it.\n"
+#+msgstr "Kompilacja wyra¿enia regularnego '%s' (powsta³ego z '%s') nie powiod³a siê; pominiêto.\n"
+#+
+#+#: lib/rpmfc.c:395
+#+#, c-format
+#+msgid "%i _noautoprov patterns.\n"
+#+msgstr "%i wzorców _noautoprov.\n"
+#+
+#+#: lib/rpmfc.c:405
+#+#, c-format
+#+msgid "%i _noautoreq patterns.\n"
+#+msgstr "%i wzorców _noautoreq.\n"
+#+
+#+#: lib/rpmfc.c:459
+#+#, c-format
+#+msgid "Checking %c: '%s' against _noauto expr. #%i\n"
+#+msgstr "Sprawdzanie %c: '%s' z wyra¿eniem _noauto #%i\n"
+#+
+#+#: lib/rpmfc.c:462
+#+#, c-format
+#+msgid "Skipping %c: '%s' as it matches _noauto expr. #%i\n"
+#+msgstr "Pominiêto %c: '%s' pasuj±ce do wyra¿enia _noauto #%i\n"
+#+
+#+#. XXX ts created in main() should be used
+#+#: lib/rpmfc.c:1173
+#+msgid "Searching for required packages....\n"
+#+msgstr "Poszukiwanie wymaganych pakietów...\n"
+#+
+#+#: lib/rpmfc.c:1197
+#+#, c-format
+#+msgid "#%i requires: %s,%s,%i\n"
+#+msgstr "#%i wymaga: %s,%s,%i\n"
+#+
+#+#: lib/rpmfc.c:1199
+#+#, c-format
+#+msgid "skipping #%i require\n"
+#+msgstr "pominiêto zale¿no¶æ #%i\n"
+#+
+#+#: lib/rpmfc.c:1205
+#+#, c-format
+#+msgid "skipping %s requirement processing (matches noautoreqdep pattern #%i)\n"
+#+msgstr "pominiêto przetwarzanie zale¿no¶ci %s (pasuje do wzorca noautoreqdep #%i)\n"
+#+
+#+#: lib/rpmfc.c:1211
+#+#, c-format
+#+msgid "skipping #%i require (is file requirement)\n"
+#+msgstr "pominiêto zale¿no¶æ #%i (zale¿no¶æ od pliku)\n"
+#+
+#+#: lib/rpmfc.c:1216
+#+#, c-format
+#+msgid "%s -> not found\n"
+#+msgstr "%s -> nie znaleziono\n"
+#+
+#+#: lib/rpmfc.c:1219
+#+#, c-format
+#+msgid "Iterator: %p\n"
+#+msgstr "Iterator: %p\n"
+#+
+#+#: lib/rpmfc.c:1221
+#+#, c-format
+#+msgid "%s -> multiple (skipping)\n"
+#+msgstr "%s -> wiele (pominiêto)\n"
+#+
+#+#: lib/rpmfc.c:1230
+#+#, c-format
+#+msgid "%s -> %s (skipping)\n"
+#+msgstr "%s -> %s (pominiêto)\n"
+#+
+#+#: lib/rpmfc.c:1295
+#+#, c-format
+#+msgid "skipping %s provides detection (matches noautoprovfiles pattern #%i)\n"
+#+msgstr "pominiêto wykrywanie w³asno¶ci %s (pasuje do wzorca noautoprovfiles #%i)\n"
+#+
+#+#: lib/rpmfc.c:1306
+#+#, c-format
+#+msgid "skipping %s requires detection (matches noautoreqfiles pattern #%i)\n"
+#+msgstr "pominiêto wykrywanie w³asno¶ci %s (pasuje do wzorca noautoreqfiles #%i)\n"
+#+
+# #: lib/rpmfi.c:622
+# #, c-format
 --- rpm/configure.ac.orig	2004-08-22 13:02:30.000000000 +0200
 +++ rpm/configure.ac	2004-08-22 13:25:37.000000000 +0200
 @@ -971,6 +971,18 @@
@@ -519,3 +451,113 @@
  dnl figure out what root's primary group is
  dnl
  AC_MSG_CHECKING(root's primary group)
+--- rpm-4.5/lib/rpmfc.c~	2008-06-11 01:02:40.000000000 +0300
++++ rpm-4.5/lib/rpmfc.c	2008-06-11 01:04:54.048916180 +0300
+@@ -382,12 +382,9 @@
+  * @param fc		file classifier
+  * @param deptype	'P' == Provides:, 'R' == Requires:, helper
+  * @param nsdep		class name for interpreter (e.g. "perl")
+- * @param noauto	_noauto* regexps
+- * @param noauto_c	# of _noauto* regexps
+  * @return		0 on success
+  */
+-static int rpmfcHelper(rpmfc fc, unsigned char deptype, const char * nsdep,
+-    regex_t * noauto, int noauto_c)
++static int rpmfcHelper(rpmfc fc, unsigned char deptype, const char * nsdep)
+ 	/*@globals rpmGlobalMacroContext, h_errno, fileSystem, internalState @*/
+ 	/*@modifies fc, rpmGlobalMacroContext, fileSystem, internalState @*/
+ {
+@@ -405,6 +402,8 @@
+     int pac;
+     int xx;
+     int i;
++    regex_t * noauto = fc->noauto;
++    int noauto_c = fc->noauto_c;
+ 
+     switch (deptype) {
+     default:
+--- rpm-4.5/lib/rpmfc.c~	2008-06-11 01:04:54.000000000 +0300
++++ rpm-4.5/lib/rpmfc.c	2008-06-11 01:10:06.222936657 +0300
+@@ -410,7 +410,7 @@
+ 	return -1;
+ 	/*@notreached@*/ break;
+     case 'P':
+-	if (fc->skipProv)
++	if (fc->skipProv || !fc->findprov)
+ 	    return 0;
+ 	xx = snprintf(buf, sizeof(buf), "%%{?__%s_provides}", nsdep);
+ 	depsp = &fc->provides;
+@@ -418,7 +418,7 @@
+ 	tagN = RPMTAG_PROVIDENAME;
+ 	break;
+     case 'R':
+-	if (fc->skipReq)
++	if (fc->skipReq || !fc->findreq)
+ 	    return 0;
+ 	xx = snprintf(buf, sizeof(buf), "%%{?__%s_requires}", nsdep);
+ 	depsp = &fc->requires;
+--- rpm-4.5/lib/rpmfc.c~	2008-06-11 01:11:33.000000000 +0300
++++ rpm-4.5/lib/rpmfc.c	2008-06-11 01:16:17.084344647 +0300
+@@ -402,8 +402,8 @@
+     int pac;
+     int xx;
+     int i;
+-    regex_t * noauto = fc->noauto;
+-    int noauto_c = fc->noauto_c;
++    regex_t * noauto = NULL;
++    int noauto_c = 0;
+ 
+     switch (deptype) {
+     default:
+@@ -412,6 +412,8 @@
+     case 'P':
+ 	if (fc->skipProv || !fc->findprov)
+ 	    return 0;
++	noauto = fc->noautoprov;
++	noauto_c = fc->noautoprov_c;
+ 	xx = snprintf(buf, sizeof(buf), "%%{?__%s_provides}", nsdep);
+ 	depsp = &fc->provides;
+ 	dsContext = RPMSENSE_FIND_PROVIDES;
+@@ -420,6 +422,8 @@
+     case 'R':
+ 	if (fc->skipReq || !fc->findreq)
+ 	    return 0;
++	noauto = fc->noautoreq;
++	noauto_c = fc->noautoreq_c;
+ 	xx = snprintf(buf, sizeof(buf), "%%{?__%s_requires}", nsdep);
+ 	depsp = &fc->requires;
+ 	dsContext = RPMSENSE_FIND_REQUIRES;
+#--- rpm-4.5/lib/rpmfc.c~	2008-06-11 00:28:21.000000000 +0300
+#+++ rpm-4.5/lib/rpmfc.c	2008-06-11 00:37:51.675282123 +0300
+#@@ -829,7 +829,6 @@
+# 	}
+#     } else
+#     if (fc->fcolor->vals[fc->ix] & RPMFC_PYTHON) {
+#-	xx = rpmfcHelper(fc, 'P', "python");
+# 	if (fc->findprov)
+# 	    xx = rpmfcHelper(fc, 'P', "python", fc->noautoprov, fc->noautoprov_c);
+# #ifdef	NOTYET
+#--- rpm-4.5/lib/rpmfc.c~	2008-06-11 00:37:51.000000000 +0300
+#+++ rpm-4.5/lib/rpmfc.c	2008-06-11 00:39:12.427942547 +0300
+#@@ -876,7 +876,8 @@
+# 	    xx = rpmfcHelper(fc, 'R', "java", fc->noautoreq, fc->noautoreq_c);
+#     } else
+#     if (fc->fcolor->vals[fc->ix] & RPMFC_DESKTOP_FILE) {
+#-	xx = rpmfcHelper(fc, 'P', "mimetype");
+#+	if (fc->findprov)
+#+	    xx = rpmfcHelper(fc, 'P', "mimetype", fc->noautoprov, fc->noautoprov_c);
+#     }
+# 
+#     return 0;
+--- rpm-4.4.8/lib/rpmfc.c.orig	2007-02-14 07:31:50.000000000 +0100
++++ rpm-4.4.8/lib/rpmfc.c	2007-04-08 16:48:00.273560592 +0200
+@@ -773,7 +773,7 @@
+     } else
+     if (fc->fcolor->vals[fc->ix] & RPMFC_PHP) {
+ 	xx = rpmfcHelper(fc, 'P', "php");
+-	if (is_executable)
++	/* not only executable, files run by httpd usually are not */
+ 	    xx = rpmfcHelper(fc, 'R', "php");
+     }
+ 
+

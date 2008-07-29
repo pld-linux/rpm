@@ -1,6 +1,5 @@
-diff -urN rpm.org/configure.ac rpm/configure.ac
---- rpm.org/configure.ac	2004-06-14 11:46:10.220092656 +0200
-+++ rpm/configure.ac	2004-06-14 11:47:13.499472728 +0200
+--- rpm-4.5/configure.ac~	2008-04-13 03:20:07.000000000 +0300
++++ rpm-4.5/configure.ac	2008-04-13 03:23:45.011443406 +0300
 @@ -1203,7 +1215,7 @@
  dnl # XXX Propagate -lucb to popt ...
  dnl export LIBS INCPATH CONFIG_SITE
@@ -10,24 +9,22 @@ diff -urN rpm.org/configure.ac rpm/configure.ac
  
  AC_CONFIG_FILES([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
  	scripts/perl.req scripts/perl.prov
-@@ -1227,7 +1239,7 @@
- 	python/rpmdb/test/Makefile
+@@ -1534,7 +1534,6 @@
   	lua/Makefile
    ])
--AC_CONFIG_COMMANDS([default],[[	echo timestamp > popt/stamp-h.in
-+AC_CONFIG_COMMANDS([default],[[	
+ AC_CONFIG_COMMANDS([default],[[
+-	[ -d popt ] && echo timestamp > popt/stamp-h.in
  	echo timestamp > stamp-h.in
+ 	[ -d perl ] && cd perl && perl Makefile.PL INSTALLDIRS=vendor
    
- ]],[[]])
-diff -urN rpm.org/Makefile.am rpm/Makefile.am
---- rpm.org/Makefile.am	2004-06-14 11:46:04.409975928 +0200
-+++ rpm/Makefile.am	2004-06-14 11:48:04.236759488 +0200
-@@ -107,7 +106,6 @@
+--- rpm-4.5/Makefile.am~	2008-04-13 03:20:07.000000000 +0300
++++ rpm-4.5/Makefile.am	2008-04-13 03:24:33.962259478 +0300
+@@ -72,7 +72,6 @@
  	    -load lib/rpmlib.lcd \
  	    -load rpmdb/rpmdb.lcd \
  	    -load rpmio/rpmio.lcd \
 -	    -load popt/popt.lcd \
- 		$(DEFS) $(INCLUDES) rpmqv.c $(rpmb_SOURCES)
+ 		$(DEFS) $(INCLUDES) rpmqv.c $(rpmbuild_SOURCES)
  
  .PHONY:	lint
 --- rpm.org/rpmio/Makefile.am.org	2004-11-18 17:42:53.756263795 +0100

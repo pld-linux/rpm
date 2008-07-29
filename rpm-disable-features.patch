@@ -1,5 +1,5 @@
---- rpm-4.4.9/macros.in	2008-01-13 19:07:45.023017755 +0200
-+++ rpm-4.4.9/macros.in	2008-01-10 13:18:10.454983604 +0200
+--- rpm-4.5/macros.in~	2008-06-10 02:17:16.000000000 +0300
++++ rpm-4.5/macros.in	2008-06-10 02:17:47.682505213 +0300
 @@ -350,7 +350,7 @@
  #		"w9.lzdio"	lzma level 9.
  #
@@ -9,25 +9,25 @@
  
  #	Archive formats to use for source/binary package payloads.
  #		"cpio"		cpio archive (default)
-@@ -1426,8 +1426,8 @@
+@@ -1448,8 +1448,8 @@
  #
  # Note: Used iff _use_internal_dependency_generator is non-zero. The
- # helpers are also used by %{_usrlibrpm}/rpmdeps {--provides|--requires}.
--%__libtool_provides	%{_usrlibrpm}/libtooldeps.sh --provides %{buildroot} %{name}
--%__libtool_requires	%{_usrlibrpm}/libtooldeps.sh --requires %{buildroot} %{name}
-+#%__libtool_provides	%{_usrlibrpm}/libtooldeps.sh --provides %{buildroot} %{name}
-+#%__libtool_requires	%{_usrlibrpm}/libtooldeps.sh --requires %{buildroot} %{name}
+ # helpers are also used by %{_rpmhome}/rpmdeps {--provides|--requires}.
+-%__libtool_provides	%{_rpmhome}/libtooldeps.sh --provides %{buildroot} %{name}
+-%__libtool_requires	%{_rpmhome}/libtooldeps.sh --requires %{buildroot} %{name}
++#%__libtool_provides	%{_rpmhome}/libtooldeps.sh --provides %{buildroot} %{name}
++#%__libtool_requires	%{_rpmhome}/libtooldeps.sh --requires %{buildroot} %{name}
  
  #------------------------------------------------------------------------
  # pkgconfig(...) configuration.
-@@ -1436,8 +1436,8 @@
+@@ -1458,8 +1458,8 @@
  #
  # Note: Used iff _use_internal_dependency_generator is non-zero. The
- # helpers are also used by %{_usrlibrpm}/rpmdeps {--provides|--requires}.
--%__pkgconfig_provides	%{_usrlibrpm}/pkgconfigdeps.sh --provides
--%__pkgconfig_requires	%{_usrlibrpm}/pkgconfigdeps.sh --requires
-+#%__pkgconfig_provides	%{_usrlibrpm}/pkgconfigdeps.sh --provides
-+#%__pkgconfig_requires	%{_usrlibrpm}/pkgconfigdeps.sh --requires
+ # helpers are also used by %{_rpmhome}/rpmdeps {--provides|--requires}.
+-%__pkgconfig_provides	%{_rpmhome}/pkgconfigdeps.sh --provides
+-%__pkgconfig_requires	%{_rpmhome}/pkgconfigdeps.sh --requires
++#%__pkgconfig_provides	%{_rpmhome}/pkgconfigdeps.sh --provides
++#%__pkgconfig_requires	%{_rpmhome}/pkgconfigdeps.sh --requires
  
  #------------------------------------------------------------------------
  # executable(...) configuration.
