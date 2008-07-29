@@ -63,7 +63,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.1.4
-Release:	0.2
+Release:	0.3
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.1/%{name}-%{version}.tar.gz
@@ -101,7 +101,7 @@ Source109:	%{name}-macros-x86_64
 Source110:	%{name}-macros-ia32e
 Source111:	%{name}-macros-amd64
 
-#Patch0:		%{name}-pl.po.patch
+Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
 Patch2:		%{name}-popt-aliases.patch
 Patch3:		%{name}-rpmpopt.patch
@@ -632,9 +632,7 @@ Python para manipular pacotes e bancos de dados RPM.
 
 %prep
 %setup -q -n %{name}-%{version}%{?subver}
-
-# APPLIED ALREADY? translationproject.org is used now
-#%%patch0 -p1
+%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
