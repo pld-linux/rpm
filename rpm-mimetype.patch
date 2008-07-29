@@ -1,6 +1,7 @@
---- rpm-4.4.9/lib/rpmfc.c	2008-05-06 16:27:09.000000000 +0200
-+++ rpm-4.4.9.new/lib/rpmfc.c	2008-05-06 16:33:48.000000000 +0200
-@@ -531,6 +531,8 @@
+diff -urN rpm-5.1.4/lib/rpmfc.c rpm-5.1.4.new/lib/rpmfc.c
+--- rpm-5.1.4/lib/rpmfc.c	2008-07-29 19:36:38.000000000 +0200
++++ rpm-5.1.4.new/lib/rpmfc.c	2008-07-29 19:43:42.000000000 +0200
+@@ -527,6 +527,8 @@
    { "troff or preprocessor input",	RPMFC_MANPAGE|RPMFC_INCLUDE },
    { "GNU Info",			RPMFC_MANPAGE|RPMFC_INCLUDE },
  
@@ -9,7 +10,7 @@
    { "perl script text",		RPMFC_PERL|RPMFC_INCLUDE },
    { "Perl5 module source text", RPMFC_PERL|RPMFC_MODULE|RPMFC_INCLUDE },
  
-@@ -872,6 +874,10 @@
+@@ -875,6 +877,10 @@
  	    xx = rpmfcHelper(fc, 'P', "java", fc->noautoprov, fc->noautoprov_c);
  	if (fc->findreq)
  	    xx = rpmfcHelper(fc, 'R', "java", fc->noautoreq, fc->noautoreq_c);
@@ -20,43 +21,45 @@
      }
  
      return 0;
-@@ -984,7 +990,7 @@
+@@ -957,7 +963,7 @@
  /*@unchecked@*/
  static struct rpmfcApplyTbl_s rpmfcApplyTable[] = {
      { rpmfcELF,		RPMFC_ELF },
--    { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL|RPMFC_PYTHON|RPMFC_LIBTOOL|RPMFC_PKGCONFIG|RPMFC_BOURNE|RPMFC_JAVA|RPMFC_PHP) },
-+    { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL|RPMFC_PYTHON|RPMFC_LIBTOOL|RPMFC_PKGCONFIG|RPMFC_BOURNE|RPMFC_JAVA|RPMFC_PHP|RPMFC_DESKTOP_FILE) },
-     { rpmfcMONO,	RPMFC_MONO },
+-    { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL|RPMFC_PYTHON|RPMFC_LIBTOOL|RPMFC_PKGCONFIG|RPMFC_BOURNE|RPMFC_JAVA|RPMFC_PHP|RPMFC_MONO) },
++    { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_PERL|RPMFC_PYTHON|RPMFC_LIBTOOL|RPMFC_PKGCONFIG|RPMFC_BOURNE|RPMFC_JAVA|RPMFC_PHP|RPMFC_MONO|RPMFC_DESKTOP_FILE) },
      { NULL, 0 }
  };
-@@ -1350,6 +1356,10 @@
+ 
+@@ -1311,6 +1317,9 @@
  	    else if (_suffix(s, ".php"))
  		ftype = "PHP script text";
  
-+	    /* XXX all files with extension ".desktop" are desktop files for now. */
 +	    else if (_suffix(s, ".desktop"))
 +		ftype = "Desktop Entry";
 +
  	    /* XXX skip all files in /dev/ which are (or should be) %dev dummies. */
  	    else if (slen >= fc->brlen+sizeof("/dev/") && !strncmp(s+fc->brlen, "/dev/", sizeof("/dev/")-1))
  		ftype = "";
---- rpm-4.4.9/lib/rpmfc.h	2008-05-06 16:27:09.000000000 +0200
-+++ rpm-4.4.9.new/lib/rpmfc.h	2008-05-06 16:28:44.000000000 +0200
-@@ -53,6 +53,7 @@
-     RPMFC_FONT			= (1 << 21),
-     RPMFC_IMAGE			= (1 << 22),
-     RPMFC_MANPAGE		= (1 << 23),
-+    RPMFC_DESKTOP_FILE		= (1 << 11),
+diff -urN rpm-5.1.4/lib/rpmfc.h rpm-5.1.4.new/lib/rpmfc.h
+--- rpm-5.1.4/lib/rpmfc.h	2008-07-29 19:36:38.000000000 +0200
++++ rpm-5.1.4.new/lib/rpmfc.h	2008-07-29 19:44:27.000000000 +0200
+@@ -28,7 +28,8 @@
+ #define	RPMFC_ELF	(RPMFC_ELF32|RPMFC_ELF64|RPMFC_ELFMIPSN32)
+ 	/* (1 << 3) leaks into package headers, reserved */
  
-     RPMFC_PERL			= (1 << 24),
-     RPMFC_JAVA			= (1 << 25),
---- rpm-4.4.9/macros.in	2008-05-06 16:27:09.000000000 +0200
-+++ rpm-4.4.9.new/macros.in	2008-05-06 16:24:15.000000000 +0200
-@@ -1461,6 +1461,16 @@
- #%__executable_requires	%{_usrlibrpm}/executabledeps.sh --requires
- #%__scriptlet_requires	/bin/bash --rpm-requires
+-	/* bits 4-7 unused */
++	/* bits 4-6 unused */
++    RPMFC_DESKTOP_FILE		= (1 <<  7),
+     RPMFC_PKGCONFIG		= (1 <<  8),
+     RPMFC_LIBTOOL		= (1 <<  9),
+     RPMFC_BOURNE		= (1 << 10),
+diff -urN rpm-5.1.4/macros.in rpm-5.1.4.new/macros.in
+--- rpm-5.1.4/macros.in	2008-07-29 19:36:38.000000000 +0200
++++ rpm-5.1.4.new/macros.in	2008-07-29 19:45:45.000000000 +0200
+@@ -1617,6 +1617,16 @@
+ %__mono_requires	%{nil}
  
-+#------------------------------------------------------------------------
+ #------------------------------------------------------------------------
 +# mimetype(...) configuration.
 +#
 +# Path to script to autogenerate mimetype(foo) provides, based on MimeType
@@ -66,6 +69,7 @@
 +# helper is also used by %{_uselibrpm}/rpmdeps --provides
 +%__mimetype_provides %{_usrlibrpm}/mimetypedeps.sh --provides
 +
- # PLD rpm macros
- %_enable_debug_packages 1
- 
++#------------------------------------------------------------------------
+ # executable(...) configuration.
+ #
+ # Path to scripts to autogenerate executable(foo) script dependencies,
