@@ -64,7 +64,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.1.4
-Release:	0.3
+Release:	0.4
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.1/%{name}-%{version}.tar.gz
@@ -155,6 +155,7 @@ BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gettext-autopoint >= 0.11.4-2
 BuildRequires:	gettext-devel >= 0.11.4-2
+BuildRequires:	lzma-devel >= 4.42.2
 BuildRequires:	libmagic-devel
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
@@ -302,7 +303,6 @@ Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	libmagic >= 1.15-2
 %{?with_selinux:Requires:	libselinux >= 1.18}
 Requires:	popt >= %{reqpopt_ver}
-%{?with_suggest_tags:Suggests:	lzma}
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
@@ -426,7 +426,6 @@ Requires:	popt >= %{reqpopt_ver}
 %if %{with suggest_tags}
 Suggests:	bzip2
 Suggests:	gzip
-Suggests:	lzma
 %endif
 Conflicts:	filesystem-debuginfo < 3.0-16
 
@@ -504,7 +503,6 @@ Requires:	gcc
 Requires:	glibc-devel
 Requires:	grep
 Requires:	gzip
-Requires:	lzma
 Requires:	make
 Requires:	patch
 Requires:	sed
@@ -751,6 +749,7 @@ awk -f %{SOURCE6} %{SOURCE1}
 	--with-zlib=external \
 	--with-bzip2=external \
 	--with-beecrypt=external \
+	--with-lzma=external \
 	--with-neon=%{?with_neon:external}%{!?with_neon:no} \
 	--with-file=external \
 	--with-popt=external \
