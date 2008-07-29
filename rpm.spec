@@ -59,7 +59,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.1.4
-Release:	0.5
+Release:	0.6
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.1/%{name}-%{version}.tar.gz
@@ -116,6 +116,7 @@ Patch14:	%{name}-etc_dir.patch
 Patch16:	%{name}-php-deps.patch
 Patch17:	%{name}-macros.patch
 Patch18:	%{name}-macros-th.patch
+Patch19:	%{name}-glob.patch
 
 Patch23:	%{name}-pkgconfigdeps.patch
 
@@ -695,6 +696,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch59 -p1
 %patch17 -p1
 %patch18 -p1
+%patch19 -p1
 %patch60 -p1
 %ifarch sparc64
 %patch61 -p1
