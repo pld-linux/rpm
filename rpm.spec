@@ -8,8 +8,7 @@
 #          i386 i386
 # - python(abi) cap is not provided automatically because /usr/lib*/libpython2*.so.*
 #   matches ELF first
-# - repackaging when lzma is not installed (todo: fix digest signature of header)
-#   rpmbuild computes digest when writing package to temporary file, then adds a few
+# - rpmbuild computes digest when writing package to temporary file, then adds a few
 #   tags (incl. digest) and writes whole package to destination file;
 #   repackaging uses unchanged "immutable header" image from original rpm, also
 #   preserving payload format and compressor from original rpm, _not_ current settings
@@ -154,7 +153,7 @@ BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gettext-autopoint >= 0.11.4-2
 BuildRequires:	gettext-devel >= 0.11.4-2
-BuildRequires:	lzma-devel >= 4.42.2
+BuildRequires:	lzma-devel >= 4.999.3
 BuildRequires:	libmagic-devel
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
@@ -201,6 +200,8 @@ Obsoletes:	rpm-getdeps
 Conflicts:	glibc < 2.2.92
 # db4.6 poldek needed
 Conflicts:	poldek < 0.21-0.20070703.00.3
+# segfaults with lzma 0.42.2
+Conflicts:	lzma-libs < 4.999.3
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_binary_payload		w9.gzdio
@@ -729,7 +730,7 @@ awk -f %{SOURCE6} %{SOURCE1}
 # rpm checks for CPU type at runtime, but it looks better
 #sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu@|%{_target_cpu}|' macros.in
 
-%{?with_system_lua:CPPFLAGS=-I/usr/include/lua51}
+%{?with_system_lua:CPPFLAGS="-I/usr/include/lua51 %{rpmcppflags}"}
 # pass CC and CXX too in case of building with some older configure macro
 %configure \
 	CC="%{__newcc}" \
