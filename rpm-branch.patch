@@ -1,0 +1,68 @@
+Index: rpm/configure.ac
+diff -u -u -r2.305 -r2.306
+--- rpm/configure.ac	28 Jul 2008 14:35:25 -0000	2.305
++++ rpm/configure.ac	29 Jul 2008 16:00:15 -0000	2.306
+@@ -107,6 +107,7 @@
+ 
+ AC_PROG_CC
+ AC_PROG_CPP
++AC_PROG_CXX
+ 
+ AC_USE_SYSTEM_EXTENSIONS
+ 
+Index: rpm/macros.in
+diff -u -u -r1.250 -r1.251
+--- rpm/macros.in	20 Jul 2008 00:04:51 -0000	1.250
++++ rpm/macros.in	29 Jul 2008 15:42:49 -0000	1.251
+@@ -1115,9 +1115,14 @@
+   %{?_javaclasspath:CLASSPATH=\"%{_javaclasspath}\"\
+   export CLASSPATH}\
+   unset PERL_MM_OPT || :\
++  LC_ALL=C\
++  export LC_ALL\
+   LANG=C\
+   export LANG\
+   unset DISPLAY || :\
++  unset LINGUAS || :\
++  unset LANGUAGE || :\
++  unset LC_MESSAGES || :\
+   \
+   %{verbose:set -x}%{!verbose:exec > /dev/null}\
+   umask 022\
+Index: rpm/lib/rpmlib.h
+diff -u -u -r2.462 -r2.463
+--- rpm/lib/rpmlib.h	26 Mar 2008 20:59:14 -0000	2.462
++++ rpm/lib/rpmlib.h	29 Jul 2008 14:51:36 -0000	2.463
+@@ -10,6 +10,7 @@
+ 
+ #include <rpmtag.h>
+ #include <rpmversion.h>
++#include <rpmio.h>
+ 
+ #define RPM_FORMAT_VERSION 5
+ #define RPM_MAJOR_VERSION 0
+Index: rpm/rpmio/argv.h
+diff -u -u -r1.9 -r1.10
+--- rpm/rpmio/argv.h	22 May 2008 14:44:09 -0000	1.9
++++ rpm/rpmio/argv.h	29 Jul 2008 15:00:20 -0000	1.10
+@@ -5,6 +5,8 @@
+  * \file rpmio/argv.h
+  */
+ 
++#include <stdint.h>
++
+ typedef	const char * ARGstr_t;
+ typedef ARGstr_t * ARGV_t;
+ 
+Index: rpm/rpmio/rpmurl.h
+diff -u -u -r1.32 -r1.33
+--- rpm/rpmio/rpmurl.h~	2008-07-29 18:13:16.865049453 +0200
++++ rpm/rpmio/rpmurl.h	2008-07-29 18:14:51.751915001 +0200
+@@ -6,6 +6,7 @@
+  */
+ 
+ #include <assert.h>
++#include <rpmio.h>
+ 
+ /**
+  * Supported URL types.
