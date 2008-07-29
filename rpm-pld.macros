@@ -38,6 +38,8 @@
 
 %debugcflags   -O0 -g -Wall
 %debugcppflags %{nil}
+%debugldflags  %{nil}
+
 %optldflags    -Wl,--as-needed -Wl,-z,relro -Wl,-z,-combreloc
 %optcppflags   -D_FORTIFY_SOURCE=2
 
