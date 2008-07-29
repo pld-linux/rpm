@@ -8,10 +8,6 @@
 #          i386 i386
 # - python(abi) cap is not provided automatically because /usr/lib*/libpython2*.so.*
 #   matches ELF first
-# - rpmbuild computes digest when writing package to temporary file, then adds a few
-#   tags (incl. digest) and writes whole package to destination file;
-#   repackaging uses unchanged "immutable header" image from original rpm, also
-#   preserving payload format and compressor from original rpm, _not_ current settings
 # - TODO: add macros for some ppc, mipsel, alpha and sparc
 # - uppackaged list:
 #   /usr/lib/rpm/http.req
