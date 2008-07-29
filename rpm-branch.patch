@@ -71,17 +71,16 @@ Index: rpm/rpmdb/rpmdb.h
 diff -u -u -r1.75 -r1.73.2.2
 --- rpm/rpmdb/rpmdb.h	29 Jul 2008 14:54:30 -0000	1.75
 +++ rpm/rpmdb/rpmdb.h	29 Jul 2008 16:08:18 -0000	1.73.2.2
-@@ -10,7 +10,13 @@
+@@ -10,11 +10,13 @@
  #include <assert.h>
  #include <rpmlib.h>
  #include <mire.h>
--#include <db.h>
 +#if defined(_RPMDB_INTERNAL)
-+#if defined(WITH_DB)
-+#include "db.h"
-+#else
-+#include "db_emu.h"
-+#endif
+ #if defined(WITH_DB)
+ #include "db.h"
+ #else
+ #include "db_emu.h"
+ #endif
 +#endif
  
  /*@-exportlocal@*/
