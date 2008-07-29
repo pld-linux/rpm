@@ -49,7 +49,7 @@ ERROR
 %endif
 
 # versions of required libraries
-%define		reqdb_ver	4.6.18
+%define		reqdb_ver	4.7.25
 %define		reqpopt_ver	1.10.8
 %define		beecrypt_ver	2:4.1.2-4
 %define		sover	5.0
@@ -187,6 +187,8 @@ Requires:	%{name}-base = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	popt >= %{reqpopt_ver}
+Provides:	rpm-db-ver = %{reqdb_ver}
+Obsoletes:	rpm-getdeps
 %{!?with_static:Obsoletes:	rpm-utils-static}
 Conflicts:	glibc < 2.2.92
 # db4.6 poldek needed
