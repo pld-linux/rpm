@@ -87,7 +87,8 @@ Source16:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source17:	banner.sh
 Source18:	%{name}-pld.macros
-
+Source19:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
+# Source19-md5:  08b29584dd349aac9caa7610131a0a88
 Source100:	%{name}-macros-athlon
 Source101:	%{name}-macros-i386
 Source102:	%{name}-macros-i486
@@ -746,7 +747,9 @@ awk -f %{SOURCE6} %{SOURCE1}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib}
+install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg}
+
+install %{SOURCE19} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
 %{__make} install \
 	pkgconfigdir=%{_pkgconfigdir} \
@@ -1067,6 +1070,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc CHANGES CREDITS README pubkeys/JBJ-GPG-KEY manual/*
+
+%dir %{_sysconfdir}/pki/rpm-gpg
+%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
 %attr(755,root,root) /bin/rpm
 #%attr(755,root,root) %{_bindir}/rpmdb
