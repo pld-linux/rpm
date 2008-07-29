@@ -90,6 +90,7 @@ Source17:	banner.sh
 Source18:	%{name}-pld.macros
 Source19:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source19-md5:  08b29584dd349aac9caa7610131a0a88
+Source20:	%{name}-mimetypedeps
 Source100:	%{name}-macros-athlon
 Source101:	%{name}-macros-i386
 Source102:	%{name}-macros-i486
@@ -143,7 +144,7 @@ Patch55:	%{name}-truncate-cvslog.patch
 
 Patch58:	%{name}-repackage-wo-lzma.patch
 Patch59:	%{name}-libtool-deps.patch
-
+Patch60:	%{name}-mimetype.patch
 Patch61:	%{name}-sparc64.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.60
@@ -701,6 +702,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch59 -p1
 %patch17 -p1
 %patch18 -p1
+%patch60 -p1
 %ifarch sparc64
 %patch61 -p1
 %endif
@@ -917,6 +919,7 @@ install %{SOURCE13} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
 install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
 install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
+install %{SOURCE20} $RPM_BUILD_ROOT%{_rpmlibdir}/mimetypedeps.sh
 install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
 install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
@@ -1232,6 +1235,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/u_pkg.sh
 %attr(755,root,root) %{_rpmlibdir}/executabledeps.sh
 %attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
+%attr(755,root,root) %{_rpmlibdir}/mimetypedeps.sh
 # needs hacked pkg-config to return anything
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
 #%attr(755,root,root) %{_rpmlibdir}/rpmb
