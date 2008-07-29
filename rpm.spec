@@ -63,7 +63,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.1.4
-Release:	0.1
+Release:	0.2
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.1/%{name}-%{version}.tar.gz
@@ -738,7 +738,7 @@ awk -f %{SOURCE6} %{SOURCE1}
 	--with-pcre=no \
 	--with-keyutils=none \
 	--without-path-versioned \
-	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.pld:%{_rpmlibdir}/macros.build:%{_rpmlibdir}/%%{_target}/macros:%{_sysconfdir}/macros.*:%{_sysconfdir}/macros:%{_sysconfdir}/%%{_target}/macros:~/etc/rpmmacros:~/etc/.rpmmacros:~/.rpmmacros' \
+	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.pld:%{_rpmlibdir}/macros.build:%{_rpmlibdir}/%%{_target}/macros:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%%{_target}/macros:~/etc/rpmmacros:~/etc/.rpmmacros:~/.rpmmacros' \
 	--with-bugreport="http://bugs.pld-linux.org/"
 
 %{__make} -j1 \
