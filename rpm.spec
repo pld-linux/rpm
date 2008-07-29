@@ -62,12 +62,12 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.1.0
+Version:	5.1.4
 Release:	0.1
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.1/%{name}-%{version}.tar.gz
-# Source0-md5:	652ba4c5e2fa981f641c727baf0d71bc
+# Source0-md5:	9a04c22ce1dffc81a7e43d39b002aaa1
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -701,7 +701,7 @@ awk -f %{SOURCE6} %{SOURCE1}
 
 %build
 %{__libtoolize}
-%{__autopoint}
+#%{__autopoint}
 %{__aclocal}
 %{__autoheader}
 %{__autoconf}
@@ -1156,6 +1156,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/rpmconstant
 %attr(755,root,root) %{_bindir}/rpmdigest
 %attr(755,root,root) %{_bindir}/rpmgrep
+%attr(755,root,root) %{_bindir}/rpmrepo
+%attr(755,root,root) %{_bindir}/rpmmtree
 %attr(755,root,root) %{_rpmlibdir}/debugedit
 %attr(755,root,root) %{_rpmlibdir}/find-debuginfo.sh
 %attr(755,root,root) %{_rpmlibdir}/rpmcmp
@@ -1166,6 +1168,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_mandir}/man8/rpm2cpio.8*
 %{_mandir}/man8/rpmcache.8*
 %{_mandir}/man8/rpmdeps.8*
+%{_mandir}/man8/rpmmtree.8*
 %lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
 %lang(ja) %{_mandir}/ja/man8/rpmcache.8*
 %lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
