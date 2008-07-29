@@ -37,13 +37,15 @@
 # -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
 
 %debugcflags   -O0 -g -Wall
-%optldflags    -Wl,--as-needed
+%optldflags    -Wl,--as-needed -Wl,-z,relro -Wl,-z,-combreloc
+%optcppflags   -D_FORTIFY_SOURCE=2
 
 # Warning: those macros are overwritten by macros.build,
 #          left here for compatibility
 %rpmcflags     %{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
 %rpmcxxflags   %{rpmcflags}
 %rpmldflags    %{!?no_build_with_as_needed:-Wl,--as-needed}
+%rpmcppflags	-D_FORTIFY_SOURCE=2
 
 # arch macros
 %ix86  i386 i486 i586 i686 pentium3 pentium4 athlon
