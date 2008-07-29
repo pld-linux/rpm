@@ -64,7 +64,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.1.4
-Release:	0.4
+Release:	0.5
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.1/%{name}-%{version}.tar.gz
@@ -142,7 +142,6 @@ Patch52:	%{name}-morearchs.patch
 
 Patch55:	%{name}-truncate-cvslog.patch
 
-Patch58:	%{name}-repackage-wo-lzma.patch
 Patch59:	%{name}-libtool-deps.patch
 Patch60:	%{name}-mimetype.patch
 Patch61:	%{name}-sparc64.patch
@@ -696,7 +695,6 @@ install %{SOURCE12} scripts/perl.prov
 # OLD COMMENTED OUT
 #%%patch52 -p1 -- morearchs (rpmrc patch) adds ppc7400, ppc7400
 %patch55 -p1
-%patch58 -p1
 %patch59 -p1
 %patch17 -p1
 %patch18 -p1
