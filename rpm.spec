@@ -1030,7 +1030,7 @@ touch $RPM_BUILD_ROOT/var/lock/rpm/transaction
 # move rpm to /bin
 mv $RPM_BUILD_ROOT%{_bindir}/rpm $RPM_BUILD_ROOT/bin
 # move essential libs to /lib (libs that /bin/rpm links to)
-for a in librpm-%{sover}.so librpmdb-%{sover}.so librpmio-%{sover}.so librpmbuild-%{sover}.so; do
+for a in librpm-%{sover}.so librpmdb-%{sover}.so librpmio-%{sover}.so librpmbuild-%{sover}.so librpmmisc-%{sover}.so; do
 	mv -f $RPM_BUILD_ROOT%{_libdir}/$a $RPM_BUILD_ROOT/%{_lib}
 	ln -s /%{_lib}/$a $RPM_BUILD_ROOT%{_libdir}/$a
 done
@@ -1153,6 +1153,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) /%{_lib}/librpmdb-%{sover}.so
 %attr(755,root,root) /%{_lib}/librpmio-%{sover}.so
 %attr(755,root,root) /%{_lib}/librpmbuild-%{sover}.so
+%attr(755,root,root) /%{_lib}/librpmmisc-%{sover}.so
 
 %files devel
 %defattr(644,root,root,755)
