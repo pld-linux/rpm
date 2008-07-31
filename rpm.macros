@@ -151,13 +151,13 @@
 	%{dependencytracking} \
 }
 
-# override __cmake to add -j4 in your ~/.rpmmacros for parallel make
 %__cmake	/usr/bin/cmake
 %cmake { \
 CC="%{__cc}" \
 CXX="%{__cxx}" \
 CFLAGS="%{rpmcflags}" \
 CXXFLAGS="%{rpmcxxflags}" \
+LDFLAGS="%{rpmldflags}" \
 %{__cmake} \
 }
 
