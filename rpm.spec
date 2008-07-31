@@ -19,6 +19,10 @@
 #   /usr/lib/rpm/vcheck
 #   /usr/share/man/man8/rpmconstant.8
 #
+# - headerGet() making poldek segfault http://rpm5.org/cvs/tktview?tn=38,1
+# - LUA segfault - http://rpm5.org/cvs/tktview?tn=39,1
+# - rpm doesn't exit when no sources/patches available http://rpm5.org/cvs/tktview?tn=40,1
+#
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
 %bcond_with	apidocs		# don't generate documentation with doxygen
