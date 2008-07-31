@@ -21,7 +21,7 @@
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
-%bcond_without	apidocs		# don't generate documentation with doxygen
+%bcond_with	apidocs		# don't generate documentation with doxygen
 %bcond_with	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
