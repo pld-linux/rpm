@@ -1105,11 +1105,13 @@ echo -e "</dependencies>\\n" >> %{_mavendepmapdir}/maven2-depmap.xml
 # Author: Elan Ruusamäe <glen@pld-linux.org>
 #
 # Usage:
-#	%%pear_package_setup [-a #] [-n FMT]
+#	%%pear_package_setup ...
 #
 # -a #   - also unpack SOURCE#. for PEAR bootstrapping
 # -n FMT - create builddir with FMT, instead of default %%{_pearname}-%%{version}
 # -z     - unpack pear package and let pear use package.xml (not tarball) for install. for PEAR bootstrapping
+# -D     - pass -D to %setup (so the build dir is not removed)
+# -c     - register channel from local channel.xml file
 #
 # unpack PEAR package to %%{_builddir}/FMT. package is extracted with already
 # destination hierarchy. you should copy the tree to buildroot after
@@ -1144,9 +1146,10 @@ fi \
 
 %pear_install(a:n:zD) \
 %__pear \\\
-	-c pearrc \\\
+	-c %{builddir}/pearrc \\\
 	-d doc_dir=/docs \\\
-	-d php_dir=%{php_pear_dir} \\\
+	-d temp_dir=/tmp \\\
+	-d php_dir=%{-c:%{builddir}/}%{php_pear_dir} \\\
 	-d bin_dir=%{_bindir} \\\
 	-d data_dir=%{php_pear_dir}/data \\\
 	-d test_dir=%{php_pear_dir}/tests \\\
@@ -1156,18 +1159,20 @@ fi \
 	--nodeps \\\
 	%{-f:--force} \\\
 	%{!-z:%{S:%{-a*}%{!-a:0}}}%{-z:$_P} > .install.log || { c=$?; cat .install.log; exit $c; }; \
+	%{-c:cp -a %{builddir}/%{builddir}/%{php_pear_dir} %{builddir}/%{dirname:%{php_pear_dir}}; rm -rf %{builddir}/%{builddir}; } \
 %{nil}
 
 # The main macro.
 # using this macro will append optional-packages.txt to the nocompressdoc list
 # as it's displayed to user after package install. and adding additional gzip
 # dep is just waste ;)
-%pear_package_setup(a:n:zD) \
+%pear_package_setup(a:n:zDc:) \
 %define srcdir %{-n*}%{!-n:%{_pearname}-%{version}} \
 %define builddir %{_builddir}/%{srcdir} \
 %setup -q -c -T %{-D:-D} -n %{srcdir} \
 %{-z:tar zxf %{S:0}; %{-a:tar zxf %{S:%{-a*}}}} \
 %{-z:_P=package2.xml; [ -f $_P ] || _P=package.xml; _N=%{srcdir}; mv $_P $_N; cd $_N} \
+%{-c:%{__pear} -c pearrc config-set php_dir %{builddir}/%{php_pear_dir}; %__pear -c %{builddir}/pearrc channel-add %{-c*}} \
 %pear_install \
 %{-z:cd ..} \
 cat %{-z:$_N/}.install.log | %__pear_install_log \
