@@ -1,6 +1,6 @@
---- ./rpmpopt.in	2008-03-13 16:18:11.169818380 +0200
-+++ rpm-4.4.9/rpmpopt.in	2008-03-24 22:09:33.709972364 +0200
-@@ -595,4 +595,13 @@
+--- rpm-4.4.9/rpmpopt.in	2008-03-24 22:09:33.709972364 +0200
++++ rpm-4.4.9/rpmpopt.in	2008-04-04 18:51:45.658923774 +0300
+@@ -595,4 +595,16 @@
  rpmv	alias --httpproxy	--define '_httpproxy !#:+'
  
 +rpm	alias --downgrade	--oldpackage \
@@ -11,6 +11,9 @@
 +
 +rpm alias --what-requires --whatrequires \
 +	--POPTdesc=$"find package name that contains a required capability"
++
++rpm alias --norepackage --define '_repackage_all_erasures 0' \
++	--POPTdesc=$"Disable re-package of the files before erasing"
 +
  # \endverbatim
  #*/
