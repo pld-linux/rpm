@@ -1107,7 +1107,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_bindir}/rpmsign
 #%attr(755,root,root) %{_bindir}/rpmverify
 
-%dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
 %dir %{_sysconfdir}/rpm/sysinfo
 # these are ok to be replaced
@@ -1145,6 +1144,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files base
 %defattr(644,root,root,755)
+%dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rpm
 %dir %{_rpmlibdir}
 %attr(755,root,root) %{_bindir}/banner.sh
