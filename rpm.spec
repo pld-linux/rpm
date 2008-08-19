@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	0.30
+Release:	0.34
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -64,6 +64,7 @@ Patch1070:	%{name}-rpmrc-ac.patch
 Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
 Patch3:		%{name}-rpmpopt.patch
+Patch4:		%{name}-perl-macros.patch
 Patch6:		%{name}-noexpand.patch
 Patch7:		%{name}-scripts-closefds.patch
 Patch9:		%{name}-gettext-in-header.patch
@@ -110,6 +111,8 @@ Patch69:	%{name}-popt-aliases.patch
 #Patch71:	%{name}-rpm5-patchset-10061.patch
 Patch73:	%{name}-namespace-probe.patch
 Patch74:	%{name}-noversiondir.patch
+#Patch75:	%{name}-rpmte-segv.patch
+Patch76:	%{name}-pydebuginfo.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -616,6 +619,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 %patch6 -p1
 %patch7 -p1
 %patch9 -p1
@@ -673,6 +677,8 @@ install %{SOURCE12} scripts/perl.prov
 #%patch71 -p0
 %patch73 -p1
 %patch74 -p1
+#%patch75 -p0
+%patch76 -p1
 
 #mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
