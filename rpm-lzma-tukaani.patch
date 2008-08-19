@@ -1,12 +1,10 @@
-diff -urN rpm-4.4.9.org/rpmio/rpmio.c rpm-4.4.9/rpmio/rpmio.c
---- rpm-4.4.9.org/rpmio/rpmio.c	2007-03-31 13:33:15.000000000 +0200
-+++ rpm-4.4.9/rpmio/rpmio.c	2007-12-10 12:50:56.678906501 +0100
-@@ -2879,7 +2879,7 @@
-         xx = dup2(fdno, 1);
-         for (i = 3; i < 1024; i++)
- 	    xx = close(i);
--        if (execl("/usr/bin/lzma", "lzma", "e", "-si", "-so", NULL))
-+        if (execl("/usr/bin/lzma", "lzma", "--format=alone", "-zc", "-", NULL))
-             _exit(1);
-     }
-     return NULL; /* warning */
+--- rpm-4.5/scripts/rpm2cpio~	2007-06-11 08:56:55.000000000 +0300
++++ rpm-4.5/scripts/rpm2cpio	2008-08-19 10:31:53.658158936 +0300
+@@ -31,6 +31,6 @@
+     BZh)      dd if="$pkg" ibs=$o skip=1 2>/dev/null | bunzip2 ;;
+     "$gz"*)   dd if="$pkg" ibs=$o skip=1 2>/dev/null | gunzip ;;
+     # no magic in old lzma format, if unknown we assume that's lzma for now
+-    *)        dd if="$pkg" ibs=$o skip=1 2>/dev/null | lzma d -si -so ;;
++    *)        dd if="$pkg" ibs=$o skip=1 2>/dev/null | lzma --format=alone -d ;;
+     #*)        echo "Unrecognized rpm file: $pkg"; return 1 ;;
+ esac
