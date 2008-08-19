@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	0.34
+Release:	0.36
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -1069,7 +1069,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %doc RPM-GPG-KEY
 %attr(755,root,root) /bin/rpm
 
-%dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
 %dir %{_sysconfdir}/rpm/sysinfo
 # these are ok to be replaced
@@ -1105,6 +1104,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files base
 %defattr(644,root,root,755)
+%dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rpm
 %dir %{_rpmlibdir}
 %attr(755,root,root) %{_bindir}/banner.sh
