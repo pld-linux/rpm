@@ -1,0 +1,53 @@
+--- rpm-4.5/scripts/find-debuginfo.sh~	2008-08-19 10:16:33.693025509 +0300
++++ rpm-4.5/scripts/find-debuginfo.sh	2008-08-18 22:54:31.109085807 +0300
+@@ -10,30 +10,37 @@
+ 
+ LISTFILE=$BUILDDIR/debugfiles.list
+ SOURCEFILE=$BUILDDIR/debugsources.list
++DEBUGFILES=$BUILDDIR/debugfiles-add.list
+ 
+ : > $SOURCEFILE
+-: > $LISTFILE
+ 
+-strip_to_debug()
+-{
++strip_to_debug() {
+   objcopy --only-keep-debug --remove-section .comment "$2" "$1"
+   objcopy --add-gnu-debuglink="$1" "$2"
+ }
+ 
++extract_debuginfo() {
++	:
++}
++
+ if [ ! -d $RPM_BUILD_ROOT ]; then
+ 	# no buildroot, exit
+ 	exit 0
+ fi
+ 
++if [ -f $DEBUGFILES ]; then
++	cat $DEBUGFILES > $LISTFILE
++fi
++
+ filelist=$(find $RPM_BUILD_ROOT ! -path "$RPM_BUILD_ROOT/usr/lib/debug/*.debug" -type f '(' -perm -0100 -or -perm -0010 -or -perm -0001 ')')
+-if [ -z "$filelist" ]; then
++if [ -z "$filelist" -a ! -f $DEBUGFILES ]; then
+ 	# no files, exit
+ 	exit 0
+ fi
+ 
+ filetypes=$(echo "$filelist" | xargs -r -d'\n' file)
+ elflist=$(echo "$filetypes" | awk -F: '/ELF.*, not stripped/ {print $1}')
+-if [ -z "$elflist" ]; then
++if [ -z "$elflist" -a ! -f $DEBUGFILES ]; then
+ 	# no elf objects, exit
+ 	exit 0
+ fi
+@@ -72,4 +79,7 @@
+ find ${RPM_BUILD_ROOT}/usr/src/debug -type d -print0 | xargs -0 chmod a+rx
+ 
+ find ${RPM_BUILD_ROOT}/usr/lib/debug -type f | sed -n -e "s#^$RPM_BUILD_ROOT##p" > $LISTFILE
++if [ -f $DEBUGFILES ]; then
++	sed -e "s#^$RPM_BUILD_ROOT##" $DEBUGFILES >> $LISTFILE
++fi
+ find ${RPM_BUILD_ROOT}/usr/src/debug -mindepth 1 -maxdepth 1 | sed -n -e "s#^$RPM_BUILD_ROOT##p" >> $LISTFILE
