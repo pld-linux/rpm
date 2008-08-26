@@ -1159,7 +1159,7 @@ fi \
 	--nodeps \\\
 	%{-f:--force} \\\
 	%{!-z:%{S:%{-a*}%{!-a:0}}}%{-z:$_P} > .install.log || { c=$?; cat .install.log; exit $c; }; \
-	%{-c:cp -a %{builddir}/%{builddir}/%{php_pear_dir} %{builddir}/%{dirname:%{php_pear_dir}}; rm -rf %{builddir}/%{builddir}; } \
+	%{-c:cp -a %{builddir}/%{builddir}/%{php_pear_dir} %{builddir}/%(dirname %{php_pear_dir}); rm -rf %{builddir}/%{builddir}; } \
 %{nil}
 
 # The main macro.
