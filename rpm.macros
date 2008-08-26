@@ -1133,7 +1133,7 @@ echo -e "</dependencies>\\n" >> %{_mavendepmapdir}/maven2-depmap.xml
 %__pear_install_log \
 tee install.log \
 # make post message of optional packages \
-grep 'can optionally use' install.log | sed -e 's,package "pear/,package "php-pear-,g;s,^pear/,php-pear-,' > optional-packages.txt \
+grep 'can optionally use' install.log | sed -e 's,package "pear/,package "php-pear-,g;s,^pear/,php-pear-,;s,^pear/,php-pear-,;s,^channel://.*/,,' > optional-packages.txt \
 if [ -s optional-packages.txt ]; then \
 	awk -F'"' '/use package/{print $2}' optional-packages.txt | sed -e "s,_,/,g;s,php-pear-, 'pear(,;s,$,.*)'," | tr -d '\\\n' > _noautoreq \
 else \
