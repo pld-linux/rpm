@@ -47,7 +47,10 @@ Source4:	%{name}-find-spec-bcond
 Source5:	%{name}-hrmib-cache
 Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
-Source8:	RPM-GPG-KEY
+Source8:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
+# Source8-md5:	08b29584dd349aac9caa7610131a0a88
+Source81:	ftp://ftp.pld-linux.org/dists/ac/PLD-2.0-Ac-GPG-key.asc
+# Source81-md5:	8e7574d1de2fa95c2c54cd2ee03364c1
 Source9:	%{name}-php-provides
 Source10:	%{name}-php-requires
 Source11:	%{name}.sysinfo
@@ -203,7 +206,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		__newcpp %{?force_cpp}%{!?force_cpp:%{_target_cpu}-pld-linux-gcc -E}
 
 %define		_rpmlibdir /usr/lib/rpm
-%define		_noautocompressdoc	RPM-GPG-KEY
 
 %define		specflags	-fno-strict-aliasing
 
@@ -728,7 +730,6 @@ mv -f scripts/{perl.prov,perl.prov.in}
 mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib db db3 popt rpmdb/db.h
-cp %{SOURCE8} RPM-GPG-KEY
 
 %patch1067 -p1
 %patch1069 -p1
@@ -796,7 +797,10 @@ sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib}
+install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg}
+
+install %{SOURCE8} $RPM_BUILD_ROOT/etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
+install %{SOURCE81} $RPM_BUILD_ROOT/etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -1118,7 +1122,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc CHANGES CREDITS README wdj/JBJ-GPG-KEY manual/*
-%doc RPM-GPG-KEY
+
+%dir /etc/pki/rpm-gpg
+/etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
+/etc/pki/rpm-gpg/PLD-2.0-Ac-GPG-key.asc
 
 %attr(755,root,root) /bin/rpm
 #%attr(755,root,root) %{_bindir}/rpmdb
