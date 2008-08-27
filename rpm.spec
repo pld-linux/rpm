@@ -53,19 +53,19 @@ Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
 Source8:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source8-md5:	08b29584dd349aac9caa7610131a0a88
-Source81:	ftp://ftp.pld-linux.org/dists/ac/PLD-2.0-Ac-GPG-key.asc
-# Source81-md5:	8e7574d1de2fa95c2c54cd2ee03364c1
-Source9:	%{name}-php-provides
-Source10:	%{name}-php-requires
-Source11:	%{name}.sysinfo
-Source12:	perl.prov
-Source13:	%{name}-user_group.sh
-Source14:	%{name}.sysconfig
-Source15:	%{name}-macros.java
-Source16:	%{name}-java-requires
+Source8:	ftp://ftp.pld-linux.org/dists/ac/PLD-2.0-Ac-GPG-key.asc
+# Source9-md5:	8e7574d1de2fa95c2c54cd2ee03364c1
+Source10:	%{name}-php-provides
+Source11:	%{name}-php-requires
+Source12:	%{name}.sysinfo
+Source13:	perl.prov
+Source14:	%{name}-user_group.sh
+Source15:	%{name}.sysconfig
+Source16:	%{name}-macros.java
+Source17:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
-Source17:	banner.sh
-Source18:	%{name}-mimetypedeps
+Source18:	banner.sh
+Source19:	%{name}-mimetypedeps
 Patch0:		%{name}-pl.po.patch
 Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
@@ -669,9 +669,9 @@ echo '%%define	__php_provides	/usr/lib/rpm/php.prov' > macros.php
 echo '%%define	__php_requires	/usr/lib/rpm/php.req' >> macros.php
 echo '%%define	__mono_provides	/usr/lib/rpm/mono-find-provides' > macros.mono
 echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
-install %{SOURCE9} scripts/php.prov.in
-install %{SOURCE10} scripts/php.req.in
-install %{SOURCE12} scripts/perl.prov
+install %{SOURCE10} scripts/php.prov.in
+install %{SOURCE11} scripts/php.req.in
+install %{SOURCE13} scripts/perl.prov
 %patch20 -p1
 %patch21 -p1
 %patch22 -p1
@@ -806,7 +806,7 @@ install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/b
 
 %if "%{pld_release}" != "ti"
 install %{SOURCE8} $RPM_BUILD_ROOT/etc/pki/rpm-gpg
-install %{SOURCE81} $RPM_BUILD_ROOT/etc/pki/rpm-gpg
+install %{SOURCE9} $RPM_BUILD_ROOT/etc/pki/rpm-gpg
 %endif
 
 %{__make} install \
@@ -909,25 +909,25 @@ install macros.perl	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.perl
 install macros.python	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.python
 install macros.php	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.php
 install macros.mono	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.mono
-install %{SOURCE15}	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.java
+install %{SOURCE16}	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.java
 
 install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
 install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
 install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
-install %{SOURCE13} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
-install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
+install %{SOURCE14} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
+install %{SOURCE17} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
-install %{SOURCE18} $RPM_BUILD_ROOT%{_rpmlibdir}/mimetypedeps.sh
-install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
+install %{SOURCE19} $RPM_BUILD_ROOT%{_rpmlibdir}/mimetypedeps.sh
+install %{SOURCE15} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
-install %{SOURCE17} $RPM_BUILD_ROOT%{_bindir}/banner.sh
+install %{SOURCE18} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Conflictname
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Dirnames
-install %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
+install %{SOURCE12} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Obsoletename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Providename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
