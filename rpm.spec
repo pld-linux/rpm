@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	0.41
+Release:	0.42
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -75,6 +75,7 @@ Patch15:	%{name}-system_libs-more.patch
 Patch17:	%{name}-ldconfig-always.patch
 Patch18:	%{name}-macros-ac.patch
 Patch19:	%{name}-link.patch
+Patch20:	%{name}-perl_req-use_base.patch
 Patch22:	%{name}-provides-dont-obsolete.patch
 Patch23:	%{name}-pkgconfigdeps.patch
 Patch24:	%{name}-po.patch
@@ -641,6 +642,7 @@ install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
 %patch19 -p1
+%patch20 -p1
 %patch22 -p1
 %patch23 -p1
 %patch24 -p1
