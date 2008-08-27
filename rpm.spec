@@ -53,6 +53,8 @@ Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
 Source8:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source8-md5:	08b29584dd349aac9caa7610131a0a88
+Source81:	ftp://ftp.pld-linux.org/dists/ac/PLD-2.0-Ac-GPG-key.asc
+# Source81-md5:	8e7574d1de2fa95c2c54cd2ee03364c1
 Source9:	%{name}-php-provides
 Source10:	%{name}-php-requires
 Source11:	%{name}.sysinfo
@@ -803,7 +805,8 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg}
 
 %if "%{pld_release}" != "ti"
-install %{SOURCE8} $RPM_BUILD_ROOT/etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
+install %{SOURCE8} $RPM_BUILD_ROOT/etc/pki/rpm-gpg
+install %{SOURCE81} $RPM_BUILD_ROOT/etc/pki/rpm-gpg
 %endif
 
 %{__make} install \
@@ -816,8 +819,8 @@ cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 # first platform file entry can't contain regexps
 %{_target_cpu}-%{_target_vendor}-linux
 
-# x86_64 things
 %ifarch x86_64
+# x86_64 things
 amd64-[^-]*-[Ll]inux(-gnu)?
 x86_64-[^-]*-[Ll]inux(-gnu)?
 %endif
@@ -830,8 +833,8 @@ ia32e-[^-]*-[Ll]inux(-gnu)?
 x86_64-[^-]*-[Ll]inux(-gnu)?
 %endif
 
-# x86 things
 %ifarch athlon %{x8664}
+# x86 things
 athlon-[^-]*-[Ll]inux(-gnu)?
 %endif
 %ifarch pentium4 athlon %{x8664}
@@ -967,8 +970,11 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 
 # If non-zero, all erasures will be automagically repackaged.
 #%%_repackage_all_erasures    1
-EOF
 
+# Boolean (i.e. 1 == "yes", 0 == "no") that controls whether files
+# marked as %doc should be installed.
+#%%_excludedocs   1
+EOF
 %endif
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF
@@ -1117,7 +1123,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %if "%{pld_release}" != "ti"
 %dir /etc/pki/rpm-gpg
-/etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
+/etc/pki/rpm-gpg/*.asc
 %endif
 
 %attr(755,root,root) /bin/rpm
@@ -1131,7 +1137,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 # these are ok to be replaced
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo/*
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/platform
-
 
 %{_mandir}/man8/rpm.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
