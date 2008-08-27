@@ -7,6 +7,8 @@
 #   tags (incl. digest) and writes whole package to destination file;
 #   repackaging uses unchanged "immutable header" image from original rpm, also
 #   preserving payload format and compressor from original rpm, _not_ current settings
+#   /usr/bin/install: cannot stat `./it.gmo': No such file or directory
+#   /usr/bin/install: cannot stat `./sr@Latn.gmo': No such file or directory
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
@@ -1074,7 +1076,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc CHANGES CREDITS README manual/*
-%doc RPM-GPG-KEY
 
 %dir /etc/pki/rpm-gpg
 /etc/pki/rpm-gpg/*.asc
@@ -1088,9 +1089,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/platform
 
 %{_mandir}/man8/rpm.8*
-
-%dir /etc/pki/rpm-gpg
-/etc/pki/rpm-gpg/*.asc
 
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
 %lang(ja) %{_mandir}/ja/man8/rpm.8*
