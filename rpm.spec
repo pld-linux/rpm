@@ -53,7 +53,7 @@ Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
 Source8:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source8-md5:	08b29584dd349aac9caa7610131a0a88
-Source8:	ftp://ftp.pld-linux.org/dists/ac/PLD-2.0-Ac-GPG-key.asc
+Source9:	ftp://ftp.pld-linux.org/dists/ac/PLD-2.0-Ac-GPG-key.asc
 # Source9-md5:	8e7574d1de2fa95c2c54cd2ee03364c1
 Source10:	%{name}-php-provides
 Source11:	%{name}-php-requires
