@@ -1,12 +1,12 @@
 Index: lib/depends.c
 ===================================================================
 RCS file: /v/rpm/cvs/rpm/lib/depends.c,v
-retrieving revision 1.403
-retrieving revision 1.402
-diff -w -u -r1.403 -r1.402
---- lib/depends.c	6 Jun 2008 09:14:55 -0000	1.403
-+++ lib/depends.c	30 May 2008 21:25:31 -0000	1.402
-@@ -1926,22 +1926,26 @@
+retrieving revision 1.327.2.9
+retrieving revision 1.327.2.8
+diff -w -u -r1.327.2.9 -r1.327.2.8
+--- lib/depends.c	6 Jun 2008 14:50:46 -0000	1.327.2.9
++++ lib/depends.c	5 Jun 2008 13:44:41 -0000	1.327.2.8
+@@ -1813,7 +1813,7 @@
  	    continue;
  	/*@=abstractcompare@*/
  
@@ -15,22 +15,3 @@ diff -w -u -r1.403 -r1.402
  	if (requires == NULL) continue;		/* XXX can't happen */
  
  	(void) rpmdsSetIx(requires, tsi->tsi_reqx);
- 
- 	Flags = rpmdsFlags(requires);
- 
-+#if 0
- 	dp = rpmdsNewDNEVR( identifyDepend(Flags), requires);
-+#endif
- 
- 	/*
- 	 * Attempt to unravel a dependency loop by eliminating Requires's.
- 	 */
- 	if (zap) {
-+#if 0
- 	    rpmlog(msglvl,
- 			_("removing %s \"%s\" from tsort relations.\n"),
- 			(rpmteNEVRA(p) ?  rpmteNEVRA(p) : "???"), dp);
-+#endif
- 	    rpmteTSI(p)->tsi_count--;
- 	    if (tsi_prev) tsi_prev->tsi_next = tsi->tsi_next;
- 	    tsi->tsi_next = NULL;
