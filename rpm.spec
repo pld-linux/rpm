@@ -47,17 +47,20 @@ Source4:	%{name}-find-spec-bcond
 Source5:	%{name}-hrmib-cache
 Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
-Source8:	RPM-GPG-KEY
-Source9:	%{name}-php-provides
-Source10:	%{name}-php-requires
-Source11:	%{name}.sysinfo
-Source12:	perl.prov
-Source13:	%{name}-user_group.sh
-Source14:	%{name}.sysconfig
-Source15:	%{name}-macros.java
-Source16:	%{name}-java-requires
+Source8:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
+# Source8-md5:	08b29584dd349aac9caa7610131a0a88
+Source9:	ftp://ftp.pld-linux.org/dists/ac/PLD-2.0-Ac-GPG-key.asc
+# Source9-md5:	8e7574d1de2fa95c2c54cd2ee03364c1
+Source10:	%{name}-php-provides
+Source11:	%{name}-php-requires
+Source12:	%{name}.sysinfo
+Source13:	perl.prov
+Source14:	%{name}-user_group.sh
+Source15:	%{name}.sysconfig
+Source16:	%{name}-macros.java
+Source17:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
-Source17:	banner.sh
+Source18:	banner.sh
 Patch1067:	%{name}-disable-features.patch
 Patch1070:	%{name}-rpmrc-ac.patch
 #Patch0:	%{name}-pl.po.patch
@@ -183,7 +186,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		__newcpp %{?force_cpp}%{!?force_cpp:%{_target_cpu}-pld-linux-gcc -E}
 
 %define		_rpmlibdir /usr/lib/rpm
-%define		_noautocompressdoc	RPM-GPG-KEY
 
 %define		specflags	-fno-strict-aliasing
 
@@ -638,9 +640,9 @@ echo '%%define	__php_provides	/usr/lib/rpm/php.prov' > macros.php
 echo '%%define	__php_requires	/usr/lib/rpm/php.req' >> macros.php
 echo '%%define	__mono_provides	/usr/lib/rpm/mono-find-provides' > macros.mono
 echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
-install %{SOURCE9} scripts/php.prov.in
-install %{SOURCE10} scripts/php.req.in
-install %{SOURCE12} scripts/perl.prov
+install %{SOURCE10} scripts/php.prov.in
+install %{SOURCE11} scripts/php.req.in
+install %{SOURCE13} scripts/perl.prov
 %patch19 -p1
 %patch20 -p1
 %patch22 -p1
@@ -687,7 +689,6 @@ install %{SOURCE12} scripts/perl.prov
 #mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib db db3 popt rpmdb/db.h
-cp %{SOURCE8} RPM-GPG-KEY
 
 %patch1067 -p1
 %patch1070 -p1
@@ -752,7 +753,10 @@ sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib}
+install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg}
+
+install %{SOURCE8} $RPM_BUILD_ROOT/etc/pki/rpm-gpg
+install %{SOURCE9} $RPM_BUILD_ROOT/etc/pki/rpm-gpg
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -854,24 +858,24 @@ install macros.perl	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.perl
 install macros.python	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.python
 install macros.php	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.php
 install macros.mono	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.mono
-install %{SOURCE15}	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.java
+install %{SOURCE16}	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.java
 
 install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
 install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
 install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
-install %{SOURCE13} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
-install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
+install %{SOURCE14} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
+install %{SOURCE17} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
-install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
+install %{SOURCE15} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
-install %{SOURCE17} $RPM_BUILD_ROOT%{_bindir}/banner.sh
+install %{SOURCE18} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Conflictname
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Dirnames
-install %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
+install %{SOURCE12} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Obsoletename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Providename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
@@ -1071,6 +1075,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %defattr(644,root,root,755)
 %doc CHANGES CREDITS README manual/*
 %doc RPM-GPG-KEY
+
+%dir /etc/pki/rpm-gpg
+/etc/pki/rpm-gpg/*.asc
+
 %attr(755,root,root) /bin/rpm
 
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
@@ -1080,6 +1088,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/platform
 
 %{_mandir}/man8/rpm.8*
+
+%dir /etc/pki/rpm-gpg
+/etc/pki/rpm-gpg/*.asc
+
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
 %lang(ja) %{_mandir}/ja/man8/rpm.8*
 %lang(ko) %{_mandir}/ko/man8/rpm.8*
