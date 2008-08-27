@@ -804,8 +804,8 @@ sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg}
 
-install %{SOURCE8} $RPM_BUILD_ROOT/etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
-install %{SOURCE81} $RPM_BUILD_ROOT/etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
+install %{SOURCE8} $RPM_BUILD_ROOT/etc/pki/rpm-gpg
+install %{SOURCE81} $RPM_BUILD_ROOT/etc/pki/rpm-gpg
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -1130,8 +1130,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %doc CHANGES CREDITS README wdj/JBJ-GPG-KEY manual/*
 
 %dir /etc/pki/rpm-gpg
-/etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
-/etc/pki/rpm-gpg/PLD-2.0-Ac-GPG-key.asc
+/etc/pki/rpm-gpg/*.asc
 
 %attr(755,root,root) /bin/rpm
 #%attr(755,root,root) %{_bindir}/rpmdb
