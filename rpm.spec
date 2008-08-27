@@ -810,76 +810,76 @@ cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 
 %ifarch x86_64
 # x86_64 things
-amd64-[^-]*-linux(-gnu)?
-x86_64-[^-]*-linux(-gnu)?
+amd64-[^-]*-[Ll]inux(-gnu)?
+x86_64-[^-]*-[Ll]inux(-gnu)?
 %endif
 %ifarch amd64
-amd64-[^-]*-linux(-gnu)?
-x86_64-[^-]*-linux(-gnu)?
+amd64-[^-]*-[Ll]inux(-gnu)?
+x86_64-[^-]*-[Ll]inux(-gnu)?
 %endif
 %ifarch ia32e
-ia32e-[^-]*-linux(-gnu)?
-x86_64-[^-]*-linux(-gnu)?
+ia32e-[^-]*-[Ll]inux(-gnu)?
+x86_64-[^-]*-[Ll]inux(-gnu)?
 %endif
 
 %ifarch athlon %{x8664}
 # x86 things
-athlon-[^-]*-linux(-gnu)?
+athlon-[^-]*-[Ll]inux(-gnu)?
 %endif
 %ifarch pentium4 athlon %{x8664}
-pentium4-[^-]*-linux(-gnu)?
+pentium4-[^-]*-[Ll]inux(-gnu)?
 %endif
 %ifarch pentium3 pentium4 athlon %{x8664}
-pentium3-[^-]*-linux(-gnu)?
+pentium3-[^-]*-[Ll]inux(-gnu)?
 %endif
 %ifarch i686 pentium3 pentium4 athlon %{x8664}
-i686-[^-]*-linux(-gnu)?
+i686-[^-]*-[Ll]inux(-gnu)?
 %endif
 %ifarch i586 i686 pentium3 pentium4 athlon %{x8664}
-i586-[^-]*-linux(-gnu)?
+i586-[^-]*-[Ll]inux(-gnu)?
 %endif
 %ifarch i486 i586 i686 pentium3 pentium4 athlon %{x8664}
-i486-[^-]*-linux(-gnu)?
+i486-[^-]*-[Ll]inux(-gnu)?
 %endif
 %ifarch %{ix86} %{x8664}
-i386-[^-]*-linux(-gnu)?
+i386-[^-]*-[Ll]inux(-gnu)?
 %endif
 
 %ifarch alpha
-alpha-[^-]*-linux(-gnu)?
+alpha-[^-]*-[Ll]inux(-gnu)?
 %endif
 
 %ifarch ia64
-ia64-[^-]*-linux(-gnu)?
+ia64-[^-]*-[Ll]inux(-gnu)?
 %endif
 
 %ifarch ppc64
-powerpc64-[^-]*-linux(-gnu)?
-ppc64-[^-]*-linux(-gnu)?
+powerpc64-[^-]*-[Ll]inux(-gnu)?
+ppc64-[^-]*-[Ll]inux(-gnu)?
 %endif
 %ifarch ppc ppc64
-powerpc-[^-]*-linux(-gnu)?
-ppc-[^-]*-linux(-gnu)?
+powerpc-[^-]*-[Ll]inux(-gnu)?
+ppc-[^-]*-[Ll]inux(-gnu)?
 %endif
 
 %ifarch s390x
-s390x-[^-]*-linux(-gnu)?
+s390x-[^-]*-[Ll]inux(-gnu)?
 %endif
 %ifarch s390 s390x
-s390-[^-]*-linux(-gnu)?
+s390-[^-]*-[Ll]inux(-gnu)?
 %endif
 
 %ifarch sparc64
-sparc64-[^-]*-linux(-gnu)?
-sparcv8-[^-]*-linux(-gnu)?
-sparcv9-[^-]*-linux(-gnu)?
+sparc64-[^-]*-[Ll]inux(-gnu)?
+sparcv8-[^-]*-[Ll]inux(-gnu)?
+sparcv9-[^-]*-[Ll]inux(-gnu)?
 %endif
 %ifarch sparcv9
-sparcv8-[^-]*-linux(-gnu)?
-sparcv9-[^-]*-linux(-gnu)?
+sparcv8-[^-]*-[Ll]inux(-gnu)?
+sparcv9-[^-]*-[Ll]inux(-gnu)?
 %endif
 %ifarch sparc sparcv9 sparc64
-sparc-[^-]*-linux(-gnu)?
+sparc-[^-]*-[Ll]inux(-gnu)?
 %endif
 
 # noarch
