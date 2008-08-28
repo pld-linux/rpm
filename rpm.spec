@@ -39,7 +39,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	78
+Release:	79
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -142,6 +142,7 @@ Patch74:	%{name}-mktemperror.patch
 Patch75:	%{name}-mimetype.patch
 Patch76:	%{name}-link.patch
 Patch77:	%{name}-perl_req-use_base.patch
+Patch78:	%{name}-perl_req-skip_multiline.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -733,6 +734,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch75 -p1
 %patch76 -p1
 %patch77 -p1
+%patch78 -p1
 
 mv -f scripts/{perl.req,perl.req.in}
 mv -f scripts/{perl.prov,perl.prov.in}
