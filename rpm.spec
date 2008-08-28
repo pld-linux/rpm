@@ -63,7 +63,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.1.4
-Release:	0.8
+Release:	0.9
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.1/%{name}-%{version}.tar.gz
@@ -133,6 +133,7 @@ Patch35:	%{name}-perl_req-INC_dirs.patch
 Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
 Patch38:	%{name}-perl_req-use_base.patch
+Patch39:	%{name}-perl_req-skip_multiline.patch
 
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
 
@@ -693,6 +694,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch36 -p1
 %patch37 -p1
 %patch38 -p1
+%patch39 -p1
 %patch42 -p1
 %patch46 -p1
 %patch47 -p1
