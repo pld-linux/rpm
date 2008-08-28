@@ -1,0 +1,48 @@
+--- rpm-4.4.9/macros.in	2008-04-29 17:39:02.041156816 +0300
++++ rpm-4.4.9/macros.in	2008-08-12 23:07:34.371259643 +0300
+@@ -192,7 +192,7 @@
+ Summary: Debug information for package %{name}\
+ Summary(pl.UTF-8): Informacje dla debuggera dla pakietu %{name}\
+ Group: Development/Debug\
+-Requires: filesystem-debuginfo >= 3.0-16\
++Requires: filesystem-debuginfo >= 2.0-7\
+ AutoReqProv: 0\
+ %description debuginfo\
+ This package provides debug information for package %{name}.\
+@@ -242,6 +242,6 @@
+ 
+ #	Directory where temporary files can be created.
+-%_tmppath		%(echo "${TMPDIR:-/tmp}")
+-%tmpdir			%{_tmppath}
++%_tmppath		%{expand:%%global _tmppath %(echo "${TMPDIR:-/tmp}")}%_tmppath
++%tmpdir			%{expand:%%global tmpdir %(echo "${TMPDIR:-/tmp}")}%tmpdir
+ 
+ #	Path to top of build area.
+@@ -271,6 +271,9 @@
+ #
+ #%distribution
+ 
++# PLD Linux Release
++%pld_release	ac
++
+ #	Configurable distribution URL, same as DistURL: tag in a specfile.
+ #	The URL will be used to supply reliable information to tools like
+ #	rpmfind.
+@@ -1156,6 +1159,7 @@
+ %_infodir		%{_prefix}/share/info
+ %_mandir		%{_prefix}/share/man
+ %_localedir		%{_datadir}/locale
++%_x_libraries	/usr/X11R6/%{_lib}
+ 
+ #==============================================================================
+ # ---- config.guess platform macros.
+@@ -1468,6 +1472,9 @@
+ # -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
+ 
+ %debugcflags	-O0 -g -Wall
++%debugcppflags	%{nil}
++%optldflags	-Wl,--as-needed
++%optcppflags	%{nil}
+ 
+ # Warning: those macros are overwritten by macros.build,
+ #          left here for compatibility
