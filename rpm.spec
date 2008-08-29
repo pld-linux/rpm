@@ -37,7 +37,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	0.44
+Release:	0.46
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -114,6 +114,7 @@ Patch63:	%{name}-tar_as_secondary_source.patch
 Patch64:	%{name}-man_pl.patch
 Patch65:	%{name}-lzma-tukaani.patch
 Patch66:	%{name}-v3-support.patch
+Patch67:	%{name}-cleanbody.patch
 Patch69:	%{name}-popt-aliases.patch
 #Patch71:	%{name}-rpm5-patchset-10061.patch
 Patch73:	%{name}-namespace-probe.patch
@@ -144,6 +145,7 @@ BuildRequires:	popt-devel >= %{reqpopt_ver}
 BuildRequires:	python-modules >= 1:2.3
 BuildRequires:	rpm-perlprov
 %{?with_python:BuildRequires:	rpm-pythonprov}
+BuildRequires:	uuid-devel
 BuildRequires:	zlib-devel
 %if %{with apidocs}
 BuildRequires:	doxygen
@@ -682,6 +684,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch64 -p1
 %patch65 -p1
 %patch66 -p1
+%patch67 -p1
 %patch69 -p1
 #%patch71 -p0
 %patch73 -p1
