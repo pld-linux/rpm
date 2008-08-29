@@ -519,14 +519,18 @@ fi; }; __spec_install_post_chrpath } } }
 # Requires: GConf2
 #
 %gconf_schema_install() \
-	umask 022; \
-	GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" /usr/bin/gconftool-2 --makefile-install-rule /etc/gconf/schemas/%{?1}%{!?1:*.schemas} > /dev/null; \
+	if [ -x /usr/bin/gconftool-2 ]; then \
+		umask 022; \
+		GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" \\\
+		/usr/bin/gconftool-2 --makefile-install-rule /etc/gconf/schemas/%{?1}%{!?1:*.schemas} > /dev/null; \
+	fi; \
 %{nil}
 
 %gconf_schema_uninstall() \
-if [ $1 = 0 ]; then \
+if [ $1 = 0 -a -x /usr/bin/gconftool-2 ]; then \
 	umask 022; \
-	GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" /usr/bin/gconftool-2 --makefile-uninstall-rule /etc/gconf/schemas/%{?1} > /dev/null \
+	GCONF_CONFIG_SOURCE="xml:readwrite:/etc/gconf/gconf.xml.defaults" \\\
+	/usr/bin/gconftool-2 --makefile-uninstall-rule /etc/gconf/schemas/%{?1} > /dev/null \
 fi; \
 %{nil}
 
