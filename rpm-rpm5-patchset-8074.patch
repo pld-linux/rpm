@@ -1,0 +1,45 @@
+Index: rpm/lib/rpmcli.h
+RCS File: /v/rpm/cvs/rpm/lib/rpmcli.h,v
+rcsdiff -q -kk '-r2.67' '-r2.67.2.1' -u '/v/rpm/cvs/rpm/lib/rpmcli.h,v' 2>/dev/null
+--- rpmcli.h	2007/05/25 17:36:02	2.67
++++ rpmcli.h	2007/07/30 03:07:58	2.67.2.1
+@@ -775,7 +775,6 @@
+     rpmRelocation relocations;
+ 
+     /* database mode arguments */
+-    int init;			/*!< from --initdb */
+     int rebuild;		/*!< from --rebuilddb */
+     int verify;			/*!< from --verifydb */
+ 
+Index: rpm/rpmdb/poptDB.c
+RCS File: /v/rpm/cvs/rpm/rpmdb/poptDB.c,v
+rcsdiff -q -kk '-r1.6' '-r1.6.2.1' -u '/v/rpm/cvs/rpm/rpmdb/poptDB.c,v' 2>/dev/null
+--- poptDB.c	2007/05/25 17:36:33	1.6
++++ poptDB.c	2007/07/30 03:07:58	1.6.2.1
+@@ -14,8 +14,6 @@
+ /**
+  */
+ struct poptOption rpmDatabasePoptTable[] = {
+- { "initdb", '\0', POPT_ARG_VAL, &rpmDBArgs.init, 1,
+-	N_("initialize database"), NULL},
+  { "rebuilddb", '\0', POPT_ARG_VAL, &rpmDBArgs.rebuild, 1,
+ 	N_("rebuild database inverted lists from installed package headers"),
+ 	NULL},
+Index: rpm/rpmqv.c
+RCS File: /v/rpm/cvs/rpm/rpmqv.c,v
+rcsdiff -q -kk '-r1.113.2.1' '-r1.113.2.2' -u '/v/rpm/cvs/rpm/rpmqv.c,v' 2>/dev/null
+--- rpmqv.c	2007/06/05 22:48:08	1.113.2.1
++++ rpmqv.c	2007/07/30 03:07:58	1.113.2.2
+@@ -290,12 +290,6 @@
+     
+ #ifdef	IAM_RPMDB
+   if (bigMode == MODE_UNKNOWN || (bigMode & MODES_DB)) {
+-    if (da->init) {
+-	if (bigMode != MODE_UNKNOWN) 
+-	    argerror(_("only one major mode may be specified"));
+-	else
+-	    bigMode = MODE_INITDB;
+-    } else
+     if (da->rebuild) {
+ 	if (bigMode != MODE_UNKNOWN) 
+ 	    argerror(_("only one major mode may be specified"));
