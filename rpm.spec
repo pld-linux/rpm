@@ -670,15 +670,6 @@ echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
 install %{SOURCE10} scripts/php.prov.in
 install %{SOURCE11} scripts/php.req.in
 install %{SOURCE13} scripts/perl.prov
-%if "%{pld_release}" == "ac"
-%patch18 -p1
-%endif
-%if "%{pld_release}" == "th"
-%patch19 -p1
-%endif
-%if "%{pld_release}" == "ti"
-%patch20 -p1
-%endif
 %patch21 -p1
 %patch22 -p1
 %patch23 -p1
@@ -701,6 +692,15 @@ install %{SOURCE13} scripts/perl.prov
 %patch45 -p1
 %patch48 -p1
 %patch50 -p1
+%if "%{pld_release}" == "ac"
+%patch18 -p1
+%endif
+%if "%{pld_release}" == "th"
+%patch19 -p1
+%endif
+%if "%{pld_release}" == "ti"
+%patch20 -p1
+%endif
 %patch51 -p1
 #%patch52 -p1
 %patch53 -p1
