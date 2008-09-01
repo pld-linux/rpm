@@ -13,7 +13,11 @@
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
 %bcond_without	apidocs		# don't generate documentation with doxygen
+%if "%{pld_release}" == "ac"
 %bcond_without	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
+%else
+%bcond_with	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
+%endif
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
 %bcond_without	system_libmagic	# don't use system libmagic
@@ -24,7 +28,11 @@
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
 # versions of required libraries
-%define	reqdb_ver	4.5.20-6
+%if "%{pld_release}" == "th"
+%define	reqdb_ver	4.7.25
+%else
+%define	reqdb_ver	4.5.20
+%endif
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
 %define	sover		4.5
@@ -37,7 +45,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	0.48
+Release:	0.50
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -80,15 +88,17 @@ Patch14:	%{name}-etc_dir.patch
 Patch15:	%{name}-system_libs-more.patch
 Patch17:	%{name}-ldconfig-always.patch
 Patch18:	%{name}-macros-ac.patch
-Patch19:	%{name}-link.patch
-Patch20:	%{name}-perl_req-use_base.patch
+Patch19:	%{name}-macros-th.patch
+Patch20:	%{name}-macros-ti.patch
 Patch21:	%{name}-perl_req-skip_multiline.patch
 Patch22:	%{name}-provides-dont-obsolete.patch
 Patch23:	%{name}-pkgconfigdeps.patch
 Patch24:	%{name}-po.patch
+Patch25:	%{name}-link.patch
 Patch26:	%{name}-notsc.patch
 Patch27:	%{name}-hack-norpmlibdep.patch
 Patch28:	%{name}-makefile-no_myLDADD_deps.patch
+Patch29:	%{name}-perl_req-use_base.patch
 Patch31:	%{name}-missing-prototypes.patch
 Patch32:	%{name}-pld-autodep.patch
 Patch33:	%{name}-arch-x86_64.patch
@@ -170,6 +180,7 @@ Requires:	%{name}-base = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	popt >= %{reqpopt_ver}
+Provides:	rpm-db-ver = %{reqdb_ver}
 Obsoletes:	rpm-getdeps
 %{!?with_static:Obsoletes:	rpm-utils-static}
 Conflicts:	glibc < 2.2.92
@@ -398,7 +409,11 @@ Summary(pl.UTF-8):	Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
+%if "%{pld_release}" == "ac"
 Conflicts:	filesystem-debuginfo < 2.0-7
+%else
+Conflicts:	filesystem-debuginfo < 3.0-16
+%endif
 
 %description utils
 Additional utilities for managing RPM packages and database.
@@ -466,10 +481,15 @@ Requires:	elfutils
 Requires:	file >= 4.17
 Requires:	fileutils
 Requires:	findutils
+%if "%{pld_release}" == "ac"
 %ifarch athlon
 Requires:	gcc >= 3.0.3
 %else
 Requires:	gcc
+%endif
+%else
+# rpmrc patch adds flags specific to gcc >= 3.4
+Requires:	gcc >= 5:3.4
 %endif
 Requires:	glibc-devel
 Requires:	grep
@@ -650,15 +670,24 @@ echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
 install %{SOURCE10} scripts/php.prov.in
 install %{SOURCE11} scripts/php.req.in
 install %{SOURCE13} scripts/perl.prov
+%if "%{pld_release}" == "ac"
+%patch18 -p1
+%endif
+%if "%{pld_release}" == "th"
 %patch19 -p1
+%endif
+%if "%{pld_release}" == "ti"
 %patch20 -p1
+%endif
 %patch21 -p1
 %patch22 -p1
 %patch23 -p1
 %patch24 -p1
+%patch25 -p1
 %patch26 -p1
 %patch27 -p1
 %patch28 -p1
+%patch29 -p1
 %patch31 -p1
 %patch32 -p1
 %patch33 -p1
@@ -680,7 +709,6 @@ install %{SOURCE13} scripts/perl.prov
 %patch57 -p1
 %patch58 -p1
 %patch59 -p1
-%patch18 -p1
 %patch62 -p1
 %patch63 -p1
 %patch64 -p1
@@ -699,8 +727,10 @@ install %{SOURCE13} scripts/perl.prov
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib db db3 popt rpmdb/db.h
 
+%if "%{pld_release}" == "ac"
 %patch1067 -p1
 %patch1070 -p1
+%endif
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
@@ -762,10 +792,13 @@ sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg}
+install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib}
 
+%if "%{pld_release}" != "ti"
+install -d $RPM_BUILD_ROOT/etc/pki/rpm-gpg
 install %{SOURCE8} $RPM_BUILD_ROOT/etc/pki/rpm-gpg
 install %{SOURCE9} $RPM_BUILD_ROOT/etc/pki/rpm-gpg
+%endif
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -889,6 +922,25 @@ touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Obsoletename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Providename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
 
+%if "%{pld_release}" == "ti"
+cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
+# customized rpm macros - global for host
+#
+#%%_install_langs pl_PL:en_US
+%%distribution PLD Titanium
+#
+# remove or replace with file_contexts path if you want to use custom
+# SELinux file contexts policy instead of one stored in packages payload
+%%_install_file_context_path	%%{nil}
+%%_verify_file_context_path	%%{nil}
+
+# If non-zero, all erasures will be automagically repackaged.
+%%_repackage_all_erasures	0
+
+# If non-zero, create debuginfo packages
+%%_enable_debug_packages		0
+EOF
+%else
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # customized rpm macros - global for host
 #
@@ -907,6 +959,7 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # marked as %doc should be installed.
 #%%_excludedocs   1
 EOF
+%endif
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF
 # global list of files (regexps) which don't generate Provides
@@ -1084,8 +1137,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %defattr(644,root,root,755)
 %doc CHANGES CREDITS README manual/*
 
+%if "%{pld_release}" != "ti"
 %dir /etc/pki/rpm-gpg
 /etc/pki/rpm-gpg/*.asc
+%endif
 
 %attr(755,root,root) /bin/rpm
 
