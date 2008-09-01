@@ -1,6 +1,6 @@
---- rpm-4.5/scripts/find-debuginfo.sh~	2008-08-19 10:16:33.693025509 +0300
-+++ rpm-4.5/scripts/find-debuginfo.sh	2008-08-18 22:54:31.109085807 +0300
-@@ -10,30 +10,37 @@
+--- rpm-4.5/scripts/find-debuginfo.sh	2008-08-18 22:54:31.109085807 +0300
++++ rpm-4.5/scripts/find-debuginfo.sh	2008-08-29 23:27:02.516217319 +0300
+@@ -10,30 +10,38 @@
  
  LISTFILE=$BUILDDIR/debugfiles.list
  SOURCEFILE=$BUILDDIR/debugsources.list
@@ -8,6 +8,7 @@
  
  : > $SOURCEFILE
 -: > $LISTFILE
++touch $LISTFILE
  
 -strip_to_debug()
 -{
@@ -43,9 +44,7 @@
  	# no elf objects, exit
  	exit 0
  fi
-@@ -72,4 +79,7 @@
- find ${RPM_BUILD_ROOT}/usr/src/debug -type d -print0 | xargs -0 chmod a+rx
- 
+@@ -74,2 +82,5 @@
  find ${RPM_BUILD_ROOT}/usr/lib/debug -type f | sed -n -e "s#^$RPM_BUILD_ROOT##p" > $LISTFILE
 +if [ -f $DEBUGFILES ]; then
 +	sed -e "s#^$RPM_BUILD_ROOT##" $DEBUGFILES >> $LISTFILE
