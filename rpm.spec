@@ -22,6 +22,10 @@
 # - headerGet() making poldek segfault http://rpm5.org/cvs/tktview?tn=38,1
 # - LUA segfault - http://rpm5.org/cvs/tktview?tn=39,1
 # - rpm doesn't exit when no sources/patches available http://rpm5.org/cvs/tktview?tn=40,1
+# - http://rpm5.org/cvs/tktview?tn=38&_submit=Show
+# - http://rpm5.org/cvs/tktview?tn=39&_submit=Show
+# - http://rpm5.org/cvs/tktview?tn=40&_submit=Show
+# - http://rpm5.org/cvs/tktview?tn=41&_submit=Show
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
