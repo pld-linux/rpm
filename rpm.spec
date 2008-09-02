@@ -45,7 +45,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	0.50
+Release:	0.52
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -156,7 +156,7 @@ BuildRequires:	popt-devel >= %{reqpopt_ver}
 BuildRequires:	python-modules >= 1:2.3
 BuildRequires:	rpm-perlprov
 %{?with_python:BuildRequires:	rpm-pythonprov}
-BuildRequires:	uuid-devel
+BuildRequires:	ossp-uuid-devel
 BuildRequires:	zlib-devel
 %if %{with apidocs}
 BuildRequires:	doxygen
