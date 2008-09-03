@@ -35,10 +35,8 @@
 # versions of required libraries
 %if "%{pld_release}" == "th"
 %define	reqdb_ver	4.7.25
-%define	reqdb_patch	1
 %else
 %define	reqdb_ver	4.5.20
-%define	reqdb_patch	2
 %endif
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
@@ -78,11 +76,6 @@ Source16:	%{name}-macros.java
 Source17:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source18:	banner.sh
-Source19:	http://download.oracle.com/berkeley-db/db-4.5.20.tar.gz
-# Source19-md5:	b0f1c777708cb8e9d37fb47e7ed3312d
-Source20:	http://download.oracle.com/berkeley-db/db-4.7.25.tar.gz
-# Source20-md5:	ec2b87e833779681a0c3a814aa71359e
-%patchset_source -f http://www.oracle.com/technology/products/berkeley-db/db/update/%{reqdb_ver}/patch.%{reqdb_ver}.%g 1 %{reqdb_patch}
 Patch1067:	%{name}-disable-features.patch
 Patch1070:	%{name}-rpmrc-ac.patch
 #Patch0:	%{name}-pl.po.patch
@@ -662,13 +655,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 
 %prep
 %setup -q
-%if %{with internal_db}
-%if "%{pld_release}" == "th"
-%{__tar} -zxf %{SOURCE20} -C db --strip-components=1
-%else
-%{__tar} -zxf %{SOURCE19} -C db --strip-components=1
-%endif
-%endif
 #%patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -750,11 +736,10 @@ install %{SOURCE13} scripts/perl.prov
 %patch79 -p1
 
 mv -f po/{sr,sr@Latn}.po
-rm -rf sqlite zlib popt rpmdb/db.h
+rm -rf sqlite zlib popt
 
 %if %{with internal_db}
 cd db
-%patchset_patch 1 %{reqdb_patch}
 %if %{without nptl}
 sed -i -e 's,AM_PTHREADS_SHARED("POSIX/.*,:,' dist/aclocal/mutex.ac
 %endif
@@ -769,7 +754,7 @@ cd -
 %patch78 -p1
 %else
 %patch15 -p1
-rm -rf db3 db
+rm -rf db3 db rpmdb/db.h
 %endif
 
 %if "%{pld_release}" == "ac"
@@ -807,7 +792,9 @@ cd ..
 %{__automake}
 %if %{with internal_db}
 cd db3
+echo -e 'AC_CONFIG_AUX_DIR(.)\nAC_PROG_LIBTOOL'> configure.ac
 %{__libtoolize}
+rm -f configure.ac
 cd ..
 %endif
 
