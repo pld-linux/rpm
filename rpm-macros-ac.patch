@@ -1,5 +1,5 @@
---- rpm-4.4.9/macros.in	2008-04-29 17:39:02.041156816 +0300
-+++ rpm-4.4.9/macros.in	2008-08-12 23:07:34.371259643 +0300
+--- rpm-4.4.9/macros.in	2008-08-12 23:07:34.371259643 +0300
++++ rpm-4.5/macros.in	2008-09-03 16:47:30.861766714 +0300
 @@ -192,7 +192,7 @@
  Summary: Debug information for package %{name}\
  Summary(pl.UTF-8): Informacje dla debuggera dla pakietu %{name}\
@@ -46,3 +46,12 @@
  
  # Warning: those macros are overwritten by macros.build,
  #          left here for compatibility
+@@ -1497,7 +1504,7 @@
+ #
+ # Note: Used if _use_internal_dependency_generator is non-zero. The
+ # helper is also used by %{_rpmhome}/rpmdeps --provides
+-%__mimetype_provides %{_rpmhome}/mimetypedeps.sh --provides
++#%__mimetype_provides %{_rpmhome}/mimetypedeps.sh --provides
+ 
+ # \endverbatim
+ #*/

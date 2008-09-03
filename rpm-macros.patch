@@ -1,5 +1,5 @@
---- rpm-4.4.9/macros.in	2008-01-25 02:16:46.248708080 +0200
-+++ rpm-4.4.9/macros.in	2008-04-04 23:15:28.121279270 +0300
+--- rpm-4.4.9/macros.in	2008-04-04 23:15:28.121279270 +0300
++++ rpm-4.5/macros.in	2008-09-03 16:47:30.861766714 +0300
 @@ -109,6 +109,10 @@
  %__automake		automake
  %__autoconf		autoconf
@@ -56,7 +56,7 @@
  
  #	Archive formats to use for source/binary package payloads.
  #		"cpio"		cpio archive (default)
-@@ -512,7 +512,7 @@
+@@ -508,7 +512,7 @@
  
  #
  # Path to magic file used for file classification.
@@ -128,6 +128,15 @@
 +%rpmcxxflags	%{rpmcflags}
 +%rpmldflags	%{!?no_build_with_as_needed:-Wl,--as-needed}
 +  
+ # \endverbatim
+ #*/
+@@ -1480,7 +1504,7 @@
+ #
+ # Note: Used if _use_internal_dependency_generator is non-zero. The
+ # helper is also used by %{_rpmhome}/rpmdeps --provides
+-#%__mimetype_provides %{_rpmhome}/mimetypedeps.sh --provides
++%__mimetype_provides %{_rpmhome}/mimetypedeps.sh --provides
+ 
  # \endverbatim
  #*/
 --- rpm-4.5/configure.ac~	2008-06-10 02:03:07.000000000 +0300
