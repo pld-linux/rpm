@@ -1,10 +1,10 @@
---- rpm-4.5/configure.ac~	2008-09-03 17:12:14.000000000 +0300
-+++ rpm-4.5/configure.ac	2008-09-03 17:36:17.708355723 +0300
-@@ -250,6 +250,7 @@
- AC_PATH_PROG(__GREP, grep, /bin/grep, $MYPATH)
- AC_PATH_PROG(__GZIP, gzip, /bin/gzip, $MYPATH)
- AC_PATH_PROG(__HG, hg, %{_bindir}/hg, $MYPATH)
-+AC_PATH_PROG(__CPP, cpp, %{_bindir}/cpp, $MYPATH)
- 
- AC_PATH_PROG(__ID, id, /usr/bin/id, $MYPATH)
- AC_MSG_CHECKING(checking whether id supports -u)
+--- rpm-4.5/configure.ac~	2008-09-03 18:51:51.000000000 +0300
++++ rpm-4.5/configure.ac	2008-09-03 19:09:02.754451743 +0300
+@@ -25,6 +25,7 @@
+ AC_PROG_AWK
+ AC_PROG_CC
+ AC_PROG_CPP
++AC_PROG_CXX
+ AC_PROG_INSTALL
+ AC_PROG_LN_S
+ AC_PROG_MAKE_SET
