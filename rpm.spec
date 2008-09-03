@@ -75,8 +75,10 @@ Source16:	%{name}-macros.java
 Source17:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source18:	banner.sh
-Source19:	http://download.oracle.com/berkeley-db/db-%{reqdb_ver}.tar.gz
+Source19:	http://download.oracle.com/berkeley-db/db-4.5.20.tar.gz
 # Source19-md5:	b0f1c777708cb8e9d37fb47e7ed3312d
+Source20:	http://download.oracle.com/berkeley-db/db-4.7.25.tar.gz
+# Source20-md5:	ec2b87e833779681a0c3a814aa71359e
 %patchset_source -f http://www.oracle.com/technology/products/berkeley-db/db/update/%{reqdb_ver}/patch.%{reqdb_ver}.%g 1 %{reqdb_patch}
 Patch1067:	%{name}-disable-features.patch
 Patch1070:	%{name}-rpmrc-ac.patch
@@ -655,7 +657,11 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %prep
 %setup -q
 %if %{with internal_db}
+%if "%{pld_release}" == "th"
+%{__tar} -zxf %{SOURCE20} -C db3 --strip-components=1
+%else
 %{__tar} -zxf %{SOURCE19} -C db3 --strip-components=1
+%endif
 %endif
 #%patch0 -p1
 %patch1 -p1
