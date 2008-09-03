@@ -17,7 +17,7 @@
 %bcond_without	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
 %bcond_without	internal_db		# internal db (db 4.5.20)
 %else
-%bcond_with	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
+%bcond_with		autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
 %bcond_with		internal_db		# internal db (db 4.5.20)
 %endif
 %bcond_without	python		# don't build python bindings
@@ -32,8 +32,10 @@
 # versions of required libraries
 %if "%{pld_release}" == "th"
 %define	reqdb_ver	4.7.25
+%define	reqdb_patch	1
 %else
 %define	reqdb_ver	4.5.20
+%define	reqdb_patch	2
 %endif
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
@@ -73,6 +75,9 @@ Source16:	%{name}-macros.java
 Source17:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source18:	banner.sh
+Source19:	http://download.oracle.com/berkeley-db/db-%{reqdb_ver}.tar.gz
+# Source19-md5:	b0f1c777708cb8e9d37fb47e7ed3312d
+%patchset_source -f http://www.oracle.com/technology/products/berkeley-db/db/update/%{reqdb_ver}/patch.%{reqdb_ver}.%g 1 %{reqdb_patch}
 Patch1067:	%{name}-disable-features.patch
 Patch1070:	%{name}-rpmrc-ac.patch
 #Patch0:	%{name}-pl.po.patch
@@ -135,6 +140,7 @@ Patch74:	%{name}-noversiondir.patch
 Patch75:	%{name}-rpmte-segv.patch
 Patch76:	%{name}-pydebuginfo.patch
 Patch77:	%{name}-dirdeps-macro.patch
+Patch78:	db-%{name}-robustness.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -152,13 +158,14 @@ BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libxml2-devel
 BuildRequires:	neon-devel >= 0.25.5
 %endif
+BuildRequires:	ossp-uuid-devel
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
 %{?with_python:BuildRequires:	python-devel >= 1:2.3}
 BuildRequires:	python-modules >= 1:2.3
 BuildRequires:	rpm-perlprov
 %{?with_python:BuildRequires:	rpm-pythonprov}
-BuildRequires:	ossp-uuid-devel
+BuildRequires:	tar >= 1:1.15.1
 BuildRequires:	zlib-devel
 %if %{with apidocs}
 BuildRequires:	doxygen
@@ -284,10 +291,10 @@ Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	db >= %{reqdb_ver}
-Requires:	zlib >= 1.2.3
 %{?with_selinux:Requires:	libselinux >= 1.18}
 %{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
 Requires:	popt >= %{reqpopt_ver}
+Requires:	zlib >= 1.2.3
 %{?with_suggest_tags:Suggests:	lzma >= 1:4.42.0}
 Obsoletes:	rpm-libs
 # avoid installing with incompatible (non-tukaani) lzma
@@ -313,7 +320,7 @@ Group:		Development/Libraries
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
-Requires:	db-devel >= %{reqdb_ver}
+%{!?with_internal_db:Requires:	db-devel >= %{reqdb_ver}}
 Requires:	elfutils-devel
 %{?with_system_libmagic:Requires:	libmagic-devel}
 %{?with_selinux:Requires:	libselinux-devel}
@@ -647,6 +654,9 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 
 %prep
 %setup -q
+%if %{with internal_db}
+%{__tar} -zxf %{SOURCE19} -C db3 --strip-components=1
+%endif
 #%patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -659,9 +669,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch11 -p1 -R
 %patch12 -p1
 %patch14 -p1
-%if %{without internal_db}
-%patch15 -p1
-%endif
 %patch17 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
@@ -728,9 +735,17 @@ install %{SOURCE13} scripts/perl.prov
 %patch77 -p0
 
 mv -f po/{sr,sr@Latn}.po
-rm -rf sqlite zlib db popt rpmdb/db.h
-%if %{without internal_db}
-rm -rf db3
+rm -rf sqlite zlib popt rpmdb/db.h
+%if %{with internal_db}
+cd db3
+%patchset_patch 1 %{reqdb_patch}
+%if "%{reqdb_ver}" == "4.5.20"
+%patch78 -p1
+cd -
+%endif
+%else
+%patch15 -p1
+rm -rf db3 db
 %endif
 
 %if "%{pld_release}" == "ac"
