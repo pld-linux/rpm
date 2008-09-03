@@ -146,6 +146,7 @@ Patch75:	%{name}-rpmte-segv.patch
 Patch76:	%{name}-pydebuginfo.patch
 Patch77:	%{name}-dirdeps-macro.patch
 Patch78:	%{name}-db3-configure.patch
+Patch79:	%{name}-macros-cpp.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -170,6 +171,7 @@ BuildRequires:	popt-devel >= %{reqpopt_ver}
 BuildRequires:	python-modules >= 1:2.3
 BuildRequires:	rpm-perlprov
 %{?with_python:BuildRequires:	rpm-pythonprov}
+BuildRequires:	rpmbuild(macros) >= 1.351
 BuildRequires:	tar >= 1:1.15.1
 BuildRequires:	zlib-devel
 %if %{with apidocs}
@@ -295,10 +297,11 @@ Summary:	RPMs library
 Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
-Requires:	db >= %{reqdb_ver}
-%{?with_selinux:Requires:	libselinux >= 1.18}
+%{!?with_internal_db:Requires:	db >= %{reqdb_ver}}
 %{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
+%{?with_selinux:Requires:	libselinux >= 1.18}
 Requires:	popt >= %{reqpopt_ver}
+%{?with_nptl:Requires:	uname(release) >= 2.6.0}
 Requires:	zlib >= 1.2.3
 %{?with_suggest_tags:Suggests:	lzma >= 1:4.42.0}
 Obsoletes:	rpm-libs
@@ -744,6 +747,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch76 -p1
 %endif
 %patch77 -p0
+%patch79 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt rpmdb/db.h
@@ -756,7 +760,11 @@ sed -i -e 's,AM_PTHREADS_SHARED("POSIX/.*,:,' dist/aclocal/mutex.ac
 %endif
 cp -f /usr/share/aclocal/libtool.m4 dist/aclocal/libtool.ac
 cp -f /usr/share/automake/config.sub dist
-cp -f /usr/share/libtool/ltmain.sh dist
+if [ -f /usr/share/libtool/config/ltmain.sh ]; then
+	cp -f /usr/share/libtool/config/ltmain.sh dist
+else
+	cp -f /usr/share/libtool/ltmain.sh dist
+fi
 cd -
 %patch78 -p1
 %else
@@ -797,6 +805,11 @@ cd ..
 %{__autoheader}
 %{__autoconf}
 %{__automake}
+%if %{with internal_db}
+cd db3
+%{__libtoolize}
+cd ..
+%endif
 
 # config.guess doesn't handle athlon, so we have to change it by hand.
 # rpm checks for CPU type at runtime, but it looks better
