@@ -9,6 +9,7 @@
 #   preserving payload format and compressor from original rpm, _not_ current settings
 #   /usr/bin/install: cannot stat `./it.gmo': No such file or directory
 #   /usr/bin/install: cannot stat `./sr@Latn.gmo': No such file or directory
+# - neon makes rpm link to libs in /usr
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
@@ -49,7 +50,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	0.53
+Release:	0.54
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -658,9 +659,9 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %setup -q
 %if %{with internal_db}
 %if "%{pld_release}" == "th"
-%{__tar} -zxf %{SOURCE20} -C db3 --strip-components=1
+%{__tar} -zxf %{SOURCE20} -C db --strip-components=1
 %else
-%{__tar} -zxf %{SOURCE19} -C db3 --strip-components=1
+%{__tar} -zxf %{SOURCE19} -C db --strip-components=1
 %endif
 %endif
 #%patch0 -p1
@@ -737,18 +738,21 @@ install %{SOURCE13} scripts/perl.prov
 %patch73 -p1
 %patch74 -p1
 %patch75 -p0
+%if "%{pld_release}" == "ac"
 %patch76 -p1
+%endif
 %patch77 -p0
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt rpmdb/db.h
+
 %if %{with internal_db}
-cd db3
+cd db
 %patchset_patch 1 %{reqdb_patch}
 %if "%{reqdb_ver}" == "4.5.20"
 %patch78 -p1
-cd -
 %endif
+cd -
 %else
 %patch15 -p1
 rm -rf db3 db
