@@ -1312,7 +1312,7 @@ for cfg in ${cfgs:-dist}; do                                        \
 	[ -z "$PATCH_SH" ] || echo "$PATCH_SH" | %__spec_build_shell	\
 	set -x															\
 																	\
-	%if %{with dist_kernel}											\
+	%if %{with dist_kernel}	|| %(test -f %{_kernelsrcdir}/scripts/bin2c ; echo $?)	\
 		%{__make} -j1 -C %{_kernelsrcdir} prepare scripts			\\\
 			%{-p*} %{-P*}											\\\
 			%{MakeOpts}												\
