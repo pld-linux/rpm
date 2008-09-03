@@ -1,0 +1,10 @@
+--- rpm-4.5/configure.ac~	2008-09-03 17:12:14.000000000 +0300
++++ rpm-4.5/configure.ac	2008-09-03 17:36:17.708355723 +0300
+@@ -250,6 +250,7 @@
+ AC_PATH_PROG(__GREP, grep, /bin/grep, $MYPATH)
+ AC_PATH_PROG(__GZIP, gzip, /bin/gzip, $MYPATH)
+ AC_PATH_PROG(__HG, hg, %{_bindir}/hg, $MYPATH)
++AC_PATH_PROG(__CPP, cpp, %{_bindir}/cpp, $MYPATH)
+ 
+ AC_PATH_PROG(__ID, id, /usr/bin/id, $MYPATH)
+ AC_MSG_CHECKING(checking whether id supports -u)
