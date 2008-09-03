@@ -5,7 +5,7 @@
  dnl export LIBS INCPATH CONFIG_SITE
  
 -AC_CONFIG_SUBDIRS(popt zlib file sqlite db3)
-+AC_CONFIG_SUBDIRS(file)
++AC_CONFIG_SUBDIRS(file db3)
  
  AC_CONFIG_FILES([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
  	scripts/perl.req scripts/perl.prov

@@ -9,6 +9,17 @@
  WITH_INTERNAL_DB=1
  DBLIBSRCS="db3.c"
  
+--- rpm-4.5/configure.ac~	2008-04-13 03:20:07.000000000 +0300
++++ rpm-4.5/configure.ac	2008-04-13 03:23:45.011443406 +0300
+@@ -1203,7 +1215,7 @@
+ dnl # XXX Propagate -lucb to popt ...
+ dnl export LIBS INCPATH CONFIG_SITE
+ 
+-AC_CONFIG_SUBDIRS(file db3)
++AC_CONFIG_SUBDIRS(file)
+ 
+ AC_CONFIG_FILES([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
+ 	scripts/perl.req scripts/perl.prov
 --- rpm-4.5/rpmdb/Makefile.am~	2008-04-13 03:28:19.000000000 +0300
 +++ rpm-4.5/rpmdb/Makefile.am	2008-04-13 13:49:10.122086563 +0300
 @@ -25,25 +25,18 @@
