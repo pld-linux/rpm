@@ -17,9 +17,11 @@
 %if "%{pld_release}" == "ac"
 %bcond_without	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
 %bcond_without	internal_db		# internal db (db 4.5.20)
+%bcond_with		nptl			# internal db: don't use process-shared POSIX mutexes (NPTL provides full interface)
 %else
 %bcond_with		autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
 %bcond_with		internal_db		# internal db (db 4.5.20)
+%bcond_without	nptl			# internal db: don't use process-shared POSIX mutexes (NPTL provides full interface)
 %endif
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
@@ -143,7 +145,7 @@ Patch74:	%{name}-noversiondir.patch
 Patch75:	%{name}-rpmte-segv.patch
 Patch76:	%{name}-pydebuginfo.patch
 Patch77:	%{name}-dirdeps-macro.patch
-Patch78:	db-%{name}-robustness.patch
+Patch78:	%{name}-db3-configure.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -749,10 +751,14 @@ rm -rf sqlite zlib popt rpmdb/db.h
 %if %{with internal_db}
 cd db
 %patchset_patch 1 %{reqdb_patch}
-%if "%{reqdb_ver}" == "4.5.20"
-%patch78 -p1
+%if %{without nptl}
+sed -i -e 's,AM_PTHREADS_SHARED("POSIX/.*,:,' dist/aclocal/mutex.ac
 %endif
+cp -f /usr/share/aclocal/libtool.m4 dist/aclocal/libtool.ac
+cp -f /usr/share/automake/config.sub dist
+cp -f /usr/share/libtool/ltmain.sh dist
 cd -
+%patch78 -p1
 %else
 %patch15 -p1
 rm -rf db3 db
@@ -810,6 +816,7 @@ sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu
 	%{?with_python:--with-python=%{py_ver}} \
 	%{!?with_python:--without-python} \
 	%{!?with_selinux:--without-selinux} \
+	--%{?with_nptl:en}%{!?with_nptl:dis}able-posixmutexes \
 	--without-db
 
 %{__make} \
