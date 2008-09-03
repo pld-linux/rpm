@@ -15,8 +15,10 @@
 %bcond_without	apidocs		# don't generate documentation with doxygen
 %if "%{pld_release}" == "ac"
 %bcond_without	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
+%bcond_without	internal_db		# internal db (db 4.5.20)
 %else
 %bcond_with	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
+%bcond_with		internal_db		# internal db (db 4.5.20)
 %endif
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
@@ -45,7 +47,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	0.52
+Release:	0.53
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -138,7 +140,7 @@ BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.2-17
-BuildRequires:	db-devel >= %{reqdb_ver}
+%{!?with_internal_db:BuildRequires:	db-devel >= %{reqdb_ver}}
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gettext-devel >= 0.11.4-2
 %{?with_system_libmagic:BuildRequires:	libmagic-devel}
@@ -168,7 +170,7 @@ BuildRequires:	tetex-pdftex
 # Require static library only for static build
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
 BuildRequires:	bzip2-static >= 1.0.2-17
-BuildRequires:	db-static >= %{reqdb_ver}
+%{!?with_internal_db:BuildRequires:	db-static >= %{reqdb_ver}}
 BuildRequires:	elfutils-static
 BuildRequires:	glibc-static >= 2.2.94
 %{?with_system_libmagic:BuildRequires:	libmagic-static}
@@ -374,7 +376,7 @@ Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
-Requires:	db-static >= %{reqdb_ver}
+%{!?with_internal_db:Requires:	db-static >= %{reqdb_ver}}
 Requires:	elfutils-static
 %{?with_system_libmagic:Requires:	libmagic-static}
 Requires:	popt-static >= %{reqpopt_ver}
@@ -657,7 +659,9 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch11 -p1 -R
 %patch12 -p1
 %patch14 -p1
+%if %{without internal_db}
 %patch15 -p1
+%endif
 %patch17 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
@@ -723,9 +727,11 @@ install %{SOURCE13} scripts/perl.prov
 %patch76 -p1
 %patch77 -p0
 
-#mv -f po/{no,nb}.po
 mv -f po/{sr,sr@Latn}.po
-rm -rf sqlite zlib db db3 popt rpmdb/db.h
+rm -rf sqlite zlib db popt rpmdb/db.h
+%if %{without internal_db}
+rm -rf db3
+%endif
 
 %if "%{pld_release}" == "ac"
 %patch1067 -p1
