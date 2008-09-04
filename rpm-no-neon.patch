@@ -2258,3 +2258,13 @@
  #ifdef  REFERENCE
  typedef enum {
      ne_conn_namelookup,	/* lookup up hostname (info = hostname) */
+--- rpm-4.5/rpmio/url.c~	2008-06-10 02:19:26.000000000 +0300
++++ rpm-4.5/rpmio/url.c	2008-09-04 20:05:19.011716915 +0300
+@@ -134,7 +134,6 @@
+ 			(u->scheme ? u->scheme : ""));
+ 	/*@=usereleased@*/
+     }
+-    xx = davFree(u);
+     u->buf = _free(u->buf);
+     u->url = _free(u->url);
+     u->scheme = _free((void *)u->scheme);
