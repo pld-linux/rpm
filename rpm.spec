@@ -156,7 +156,7 @@ BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libxml2-devel
 BuildRequires:	neon-devel >= 0.25.5
 %endif
-BuildRequires:	ossp-uuid-devel
+BuildRequires:	ossp-uuid-devel >= 1.6.2-4
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
 %{?with_python:BuildRequires:	python-devel >= 1:2.3}
@@ -292,6 +292,7 @@ Requires:	beecrypt >= %{beecrypt_ver}
 %{!?with_internal_db:Requires:	db >= %{reqdb_ver}}
 %{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
 %{?with_selinux:Requires:	libselinux >= 1.18}
+Requires:	ossp-uuid >= 1.6.2-4
 Requires:	popt >= %{reqpopt_ver}
 %{?with_nptl:Requires:	uname(release) >= 2.6.0}
 Requires:	zlib >= 1.2.3
