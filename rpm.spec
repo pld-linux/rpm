@@ -9,7 +9,6 @@
 #   preserving payload format and compressor from original rpm, _not_ current settings
 #   /usr/bin/install: cannot stat `./it.gmo': No such file or directory
 #   /usr/bin/install: cannot stat `./sr@Latn.gmo': No such file or directory
-# - neon makes rpm link to libs in /usr
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
@@ -27,7 +26,7 @@
 %bcond_without	selinux		# build without selinux support
 %bcond_without	system_libmagic	# don't use system libmagic
 %bcond_without	suggest_tags	# build without Suggest tag (bootstrapping)
-%bcond_without	neon		# build with HTTP/WebDAV support (neon library)
+%bcond_with	neon		# build with HTTP/WebDAV support (neon library). NOTE: neon libs are in /usr!
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
@@ -50,7 +49,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	0.54
+Release:	0.55
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -697,7 +696,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch39 -p1
 %patch42 -p1
 %patch43 -p1
-## TODO %{!?with_neon:%patch44 -p1}
+%{!?with_neon:%patch44 -p1}
 %patch45 -p1
 %patch48 -p1
 %patch50 -p1
