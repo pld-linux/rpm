@@ -1858,8 +1858,8 @@
  #ifdef __cplusplus
  }
  #endif
---- rpm-4.5/rpmio/rpmio.c~	2008-09-04 17:45:06.000000000 +0300
-+++ rpm-4.5/rpmio/rpmio.c	2008-09-04 17:47:14.122344271 +0300
+--- rpm-4.5/rpmio/rpmio.c	2008-09-04 18:04:37.362241187 +0300
++++ rpm-4.5/rpmio/rpmio.c	2008-09-04 18:05:08.695569896 +0300
 @@ -155,11 +155,6 @@
  /*@unchecked@*/
  int _ftp_debug = 0;
@@ -1872,6 +1872,173 @@
  /* =============================================================== */
  
  /*@-boundswrite@*/
+@@ -386,13 +381,6 @@
+ 
+     fdstat_enter(fd, FDSTAT_READ);
+ /*@-boundswrite@*/
+-    /* HACK: flimsy wiring for davRead */
+-    if (fd->req != NULL) {
+-	rc = davRead(fd, buf, (count > fd->bytesRemain ? fd->bytesRemain : count));
+-	/* XXX Chunked davRead EOF. */
+-	if (rc == 0)
+-	    fd->bytesRemain = 0;
+-    } else
+ 	rc = read(fdFileno(fd), buf, (count > fd->bytesRemain ? fd->bytesRemain : count));
+ /*@=boundswrite@*/
+     fdstat_exit(fd, FDSTAT_READ, rc);
+@@ -420,10 +408,6 @@
+ 
+     fdstat_enter(fd, FDSTAT_WRITE);
+ /*@-boundsread@*/
+-    /* HACK: flimsy wiring for davWrite */
+-    if (fd->req != NULL)
+-	rc = davWrite(fd, buf, (count > fd->bytesRemain ? fd->bytesRemain : count));
+-    else
+ 	rc = write(fdno, buf, (count > fd->bytesRemain ? fd->bytesRemain : count));
+ /*@=boundsread@*/
+     fdstat_exit(fd, FDSTAT_WRITE, rc);
+@@ -470,11 +454,6 @@
+     fdSetFdno(fd, -1);
+ 
+     fdstat_enter(fd, FDSTAT_CLOSE);
+-    /* HACK: flimsy wiring for davClose */
+-/*@-branchstate@*/
+-    if (fd->req != NULL)
+-	rc = davClose(fd);
+-    else
+ 	rc = ((fdno >= 0) ? close(fdno) : -2);
+ /*@=branchstate@*/
+     fdstat_exit(fd, FDSTAT_CLOSE, rc);
+@@ -544,10 +523,6 @@
+     FD_ZERO(&wrfds);
+ #endif
+ 	
+-    /* HACK: flimsy wiring for davWrite */
+-    if (fd->req != NULL)
+-	return 1;
+-
+     if ((fdno = fdFileno(fd)) < 0)
+ 	return -1;	/* XXX W2DO? */
+ 	
+@@ -599,10 +574,6 @@
+     FD_ZERO(&rdfds);
+ #endif
+ 
+-    /* HACK: flimsy wiring for davRead */
+-    if (fd->req != NULL)
+-	return 1;
+-
+     if ((fdno = fdFileno(fd)) < 0)
+ 	return -1;	/* XXX W2DO? */
+ 	
+@@ -2265,29 +2236,6 @@
+ 	    fd->wr_chunked = 0;
+ 	}
+ 	break;
+-    case URL_IS_HTTPS:
+-    case URL_IS_HTTP:
+-    case URL_IS_HKP:
+-	fd = davOpen(url, flags, mode, &u);
+-	if (fd == NULL || u == NULL)
+-	    break;
+-
+-	cmd = ((flags & O_WRONLY)
+-		?  ((flags & O_APPEND) ? "PUT" :
+-		   ((flags & O_CREAT) ? "PUT" : "PUT"))
+-		: "GET");
+-	u->openError = davReq(fd, cmd, path);
+-	if (u->openError < 0) {
+-	    /* XXX make sure that we can exit through ufdClose */
+-	    fd = fdLink(fd, "error ctrl (ufdOpen HTTP)");
+-	    fd = fdLink(fd, "error data (ufdOpen HTTP)");
+-	} else {
+-	    fd->bytesRemain = ((!strcmp(cmd, "GET"))
+-		?  fd->contentLength : -1);
+-	    fd->wr_chunked = ((!strcmp(cmd, "PUT"))
+-		?  fd->wr_chunked : 0);
+-	}
+-	break;
+     case URL_IS_DASH:
+ 	assert(!(flags & O_RDWR));
+ 	fd = fdDup( ((flags & O_WRONLY) ? STDOUT_FILENO : STDIN_FILENO) );
+@@ -2911,10 +2859,8 @@
+ 	    if (fd->nfps > 0 && fpno == -1 &&
+ 		fd->fps[fd->nfps-1].io == ufdio &&
+ 		fd->fps[fd->nfps-1].fp == fp &&
+-		(fd->fps[fd->nfps-1].fdno >= 0 || fd->req != NULL))
++		(fd->fps[fd->nfps-1].fdno >= 0))
+ 	    {
+-		int hadreqpersist = (fd->req != NULL);
+-
+ 		if (fp)
+ 		    rc = fflush(fp);
+ 		fd->nfps--;
+@@ -2924,26 +2870,9 @@
+ /*@-usereleased@*/
+ 		if (fdGetFdno(fd) >= 0)
+ 		    break;
+-		if (!fd->persist)
+-		    hadreqpersist = 0;
+ 		fdSetFp(fd, NULL);
+ 		fd->nfps++;
+ 		if (fp) {
+-		    /* HACK: flimsy Keepalive wiring. */
+-		    if (hadreqpersist) {
+-			fd->nfps--;
+-/*@-exposetrans@*/
+-			fdSetFp(fd, fp);
+-/*@=exposetrans@*/
+-/*@-refcounttrans@*/
+-			(void) fdClose(fd);
+-/*@=refcounttrans@*/
+-			fdSetFp(fd, NULL);
+-			fd->nfps++;
+-/*@-refcounttrans@*/
+-			(void) fdClose(fd);
+-/*@=refcounttrans@*/
+-		    } else
+ 			rc = fclose(fp);
+ 		}
+ 		fdPop(fd);
+@@ -3223,7 +3152,7 @@
+ if (_rpmio_debug)
+ fprintf(stderr, "*** Fopen ufdio path %s fmode %s\n", path, fmode);
+ 	    fd = ufdOpen(path, flags, perms);
+-	    if (fd == NULL || !(fdFileno(fd) >= 0 || fd->req != NULL))
++	    if (fd == NULL || !(fdFileno(fd) >= 0))
+ 		return fd;
+ 	    break;
+ 	default:
+@@ -3234,7 +3163,7 @@
+ 	}
+ 
+ 	/* XXX persistent HTTP/1.1 returns the previously opened fp */
+-	if (isHTTP && ((fp = fdGetFp(fd)) != NULL) && ((fdno = fdGetFdno(fd)) >= 0 || fd->req != NULL))
++	if (isHTTP && ((fp = fdGetFp(fd)) != NULL) && ((fdno = fdGetFdno(fd)) >= 0))
+ 	{
+ 	    /*@+voidabstract@*/
+ 	    fdPush(fd, fpio, fp, fileno(fp));	/* Push fpio onto stack */
+@@ -3276,10 +3205,6 @@
+     int i, rc = 0;
+ 
+     if (fd == NULL) return -1;
+-    if (fd->req != NULL) {
+-	/* HACK: flimsy wiring for neon errors. */
+-	rc = (fd->syserrno  || fd->errcookie != NULL) ? -1 : 0;
+-    } else
+     for (i = fd->nfps; rc == 0 && i >= 0; i--) {
+ /*@-boundsread@*/
+ 	FDSTACK_t * fps = &fd->fps[i];
+@@ -3317,9 +3242,6 @@
+ {
+     int i, rc = -1;
+ 
+-    if (fd->req != NULL)
+-	rc = 123456789;	/* HACK: https has no steenkin fileno. */
+-    else
+     for (i = fd->nfps ; rc == -1 && i >= 0; i--) {
+ /*@-boundsread@*/
+ 	rc = fd->fps[i].fdno;
 --- rpm-4.5/rpmio/librpmio.vers~	2008-07-09 12:38:31.000000000 +0300
 +++ rpm-4.5/rpmio/librpmio.vers	2008-09-04 17:52:56.158976430 +0300
 @@ -29,25 +29,6 @@
@@ -1920,3 +2087,174 @@
   { "hdrdebug", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_hdr_debug, -1,
  	NULL, NULL},
   { "miredebug", '\0', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_mire_debug, -1,
+--- rpm-4.5/rpmio/rpmrpc.c	2008-09-04 17:56:39.132287618 +0300
++++ rpm-4.5/rpmio/rpmrpc.c	2008-09-04 17:57:38.618948392 +0300
+@@ -78,10 +78,6 @@
+     case URL_IS_FTP:
+ 	return ftpMkdir(path, mode);
+ 	/*@notreached@*/ break;
+-    case URL_IS_HTTPS:
+-    case URL_IS_HTTP:
+-	return davMkdir(path, mode);
+-	/*@notreached@*/ break;
+     case URL_IS_PATH:
+ 	path = lpath;
+ 	/*@fallthrough@*/
+@@ -105,15 +101,6 @@
+     case URL_IS_FTP:
+ 	return ftpChdir(path);
+ 	/*@notreached@*/ break;
+-    case URL_IS_HTTPS:
+-    case URL_IS_HTTP:
+-#ifdef	NOTYET
+-	return davChdir(path);
+-#else
+-	errno = EINVAL;		/* XXX W2DO? */
+-	return -2;
+-#endif
+-	/*@notreached@*/ break;
+     case URL_IS_PATH:
+ 	path = lpath;
+ 	/*@fallthrough@*/
+@@ -138,10 +125,6 @@
+     case URL_IS_FTP:
+ 	return ftpRmdir(path);
+ 	/*@notreached@*/ break;
+-    case URL_IS_HTTPS:
+-    case URL_IS_HTTP:
+-	return davRmdir(path);
+-	/*@notreached@*/ break;
+     case URL_IS_PATH:
+ 	path = lpath;
+ 	/*@fallthrough@*/
+@@ -245,10 +228,6 @@
+ 
+     oldut = urlPath(oldpath, &oe);
+     switch (oldut) {
+-    case URL_IS_HTTPS:
+-    case URL_IS_HTTP:
+-	return davRename(oldpath, newpath);
+-	/*@notreached@*/ break;
+     case URL_IS_FTP:		/* XXX WRONG WRONG WRONG */
+     case URL_IS_PATH:
+     case URL_IS_UNKNOWN:
+@@ -343,10 +322,6 @@
+     case URL_IS_FTP:
+ 	return ftpUnlink(path);
+ 	/*@notreached@*/ break;
+-    case URL_IS_HTTPS:
+-    case URL_IS_HTTP:
+-	return davUnlink(path);
+-	/*@notreached@*/ break;
+     case URL_IS_PATH:
+ 	path = lpath;
+ 	/*@fallthrough@*/
+@@ -1354,10 +1329,6 @@
+     case URL_IS_FTP:
+ 	return ftpStat(path, st);
+ 	/*@notreached@*/ break;
+-    case URL_IS_HTTPS:
+-    case URL_IS_HTTP:
+-	return davStat(path, st);
+-	/*@notreached@*/ break;
+     case URL_IS_PATH:
+ 	path = lpath;
+ 	/*@fallthrough@*/
+@@ -1384,10 +1355,6 @@
+     case URL_IS_FTP:
+ 	return ftpLstat(path, st);
+ 	/*@notreached@*/ break;
+-    case URL_IS_HTTPS:
+-    case URL_IS_HTTP:
+-	return davLstat(path, st);
+-	/*@notreached@*/ break;
+     case URL_IS_PATH:
+ 	path = lpath;
+ 	/*@fallthrough@*/
+@@ -1630,14 +1597,6 @@
+     case URL_IS_FTP:
+ 	return ftpReadlink(path, buf, bufsiz);
+ 	/*@notreached@*/ break;
+-    case URL_IS_HTTPS:
+-    case URL_IS_HTTP:
+-#ifdef	NOTYET
+-	return davReadlink(path, buf, bufsiz);
+-#else
+-	return -2;
+-#endif
+-	/*@notreached@*/ break;
+     case URL_IS_PATH:
+ 	path = lpath;
+ 	/*@fallthrough@*/
+@@ -1787,10 +1746,6 @@
+     case URL_IS_FTP:
+ 	return ftpOpendir(path);
+ 	/*@notreached@*/ break;
+-    case URL_IS_HTTPS:	
+-    case URL_IS_HTTP:
+-	return davOpendir(path);
+-	/*@notreached@*/ break;
+     case URL_IS_PATH:
+ 	path = lpath;
+ 	/*@fallthrough@*/
+@@ -1815,8 +1770,6 @@
+ 	return NULL;
+     if (ISAVMAGIC(dir))
+ 	return avReaddir(dir);
+-    if (ISDAVMAGIC(dir))
+-	return davReaddir(dir);
+     return readdir(dir);
+ }
+ 
+@@ -1828,8 +1781,6 @@
+ 	return 0;
+     if (ISAVMAGIC(dir))
+ 	return avClosedir(dir);
+-    if (ISDAVMAGIC(dir))
+-	return davClosedir(dir);
+     return closedir(dir);
+ }
+ 
+@@ -1852,14 +1803,6 @@
+     case URL_IS_FTP:
+ 	return ftpRealpath(path, resolved_path);
+ 	/*@notreached@*/ break;
+-    case URL_IS_HTTPS:	
+-    case URL_IS_HTTP:
+-    case URL_IS_HKP:
+-#ifdef WITH_NEON
+-	return davRealpath(path, resolved_path);
+-	/*@notreached@*/ break;
+-#endif
+-	/*@fallthrough@*/
+     default:
+ 	return xstrdup(path);
+ 	/*@notreached@*/ break;
+--- rpm-4.5/./rpmio/rpmio_internal.h~	2008-06-10 02:19:26.000000000 +0300
++++ rpm-4.5/./rpmio/rpmio_internal.h	2008-09-04 18:00:31.015598325 +0300
+@@ -182,7 +182,6 @@
+ /*@dependent@*/
+     void *	url;		/* ufdio: URL info */
+ /*@relnull@*/
+-    void *	req;		/* ufdio: HTTP request */
+ 
+     int		rd_timeoutsecs;	/* ufdRead: per FD_t timer */
+     ssize_t	bytesRemain;	/* ufdio: */
+--- rpm-4.5/rpmio/rpmurl.h~	2008-06-10 02:19:26.000000000 +0300
++++ rpm-4.5/rpmio/rpmurl.h	2008-09-04 18:14:00.546141703 +0300
+@@ -54,15 +54,6 @@
+ /*@relnull@*/
+     FD_t data;			/*!< per-xfer data channel */
+ 
+-/*@relnull@*/
+-    void * capabilities;	/*!< neon: ne_server_capabilities ptr */
+-/*@relnull@*/
+-    void * lockstore;		/*!< neon: ne_lock_store ptr */
+-/*@relnull@*/
+-    void * sess;		/*!< neon: ne_session ptr */
+-    off_t current;		/*!< neon: current body offset. */
+-    off_t total;		/*!< neon: total body length. */
+-    int connstatus;		/*!< neon: connection status. */
+ #ifdef  REFERENCE
+ typedef enum {
+     ne_conn_namelookup,	/* lookup up hostname (info = hostname) */
