@@ -1,0 +1,13 @@
+diff -urN rpm-4.5/rpmdb/Makefile.am rpm-4.5.new/rpmdb/Makefile.am
+--- rpm-4.5/rpmdb/Makefile.am	2008-09-06 16:46:54.000000000 +0200
++++ rpm-4.5.new/rpmdb/Makefile.am	2008-09-06 19:35:40.000000000 +0200
+@@ -49,7 +49,8 @@
+ 	$(top_builddir)/rpmio/librpmio.la \
+ 	@WITH_POPT_LIB@ \
+ 	@WITH_SQLITE3_LIB@ \
+-	@WITH_LIBELF_LIB@
++	@WITH_LIBELF_LIB@ \
++	@WITH_SELINUX_LIB@
+ librpmdb_la_LIBADD = $(DBLIBOBJS) $(libdb_la)
+ librpmdb_la_DEPENDENCIES = $(DBLIBOBJS) $(libdb_la)
+ 
