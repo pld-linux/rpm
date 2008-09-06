@@ -49,7 +49,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	0.55
+Release:	0.56
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -139,6 +139,7 @@ Patch76:	%{name}-pydebuginfo.patch
 Patch77:	%{name}-dirdeps-macro.patch
 Patch78:	%{name}-db3-configure.patch
 Patch79:	%{name}-macros-cpp.patch
+Patch80:	%{name}-link-selinux.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -734,6 +735,7 @@ install %{SOURCE13} scripts/perl.prov
 %endif
 %patch77 -p0
 %patch79 -p1
+%patch80 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
