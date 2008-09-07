@@ -52,14 +52,14 @@ elif [ "$1" = del ]; then
 		echo "Removing $MODE $2" | `bannercmd "${MODE}del-$2"`
 		/usr/sbin/${MODE}del $2 || :
 		if [ -x /usr/sbin/nscd ]; then
-		case "${MODE}" in
-		user)
-			/usr/sbin/nscd -i passwd
-			;;
-		group)
-			/usr/sbin/nscd -i group
-			;;
-		esac
+			case "${MODE}" in
+			user)
+				/usr/sbin/nscd -i passwd
+				;;
+			group)
+				/usr/sbin/nscd -i group
+				;;
+			esac
 		fi
 	fi
 elif [ "$MODE" = "user" -a "$1" = "addtogroup" ]; then
