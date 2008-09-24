@@ -25,9 +25,6 @@
 # TODO:
 # - ability to do ./builder -bb foo.spec foo2.spec foo3.spec
 
-RCSID='$Id$'
-r=${RCSID#* * }
-rev=${r%% *}
 VERSION="v0.22-RELEASE"
 VERSIONSTRING="\
 Build package utility from PLD Linux CVS repository
