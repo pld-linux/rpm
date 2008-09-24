@@ -18,18 +18,20 @@
 #	 10 - Refused to build fractional release
 #	100 - Unknown error (should not happen)
 
-# Notes (todo):
-#	- builder -u fetches current version first (well that's okay, how you compare versions if you have no old spec?)
-#	- when Icon: field is present, -5 and -a5 doesn't work
-#	- builder -R skips installing BR if spec is not present before builder invocation (need to run builder twice)
+# Notes (todo/bugs):
+# - builder -u fetches current version first (well that's okay, how you compare versions if you have no old spec?)
+# - when Icon: field is present, -5 and -a5 doesn't work
+# - builder -R skips installing BR if spec is not present before builder invocation (need to run builder twice)
+# TODO:
+# - ability to do ./builder -bb foo.spec foo2.spec foo3.spec
 
 RCSID='$Id$'
 r=${RCSID#* * }
 rev=${r%% *}
-VERSION="v0.21/$rev"
+VERSION="v0.22-RELEASE"
 VERSIONSTRING="\
 Build package utility from PLD Linux CVS repository
-$VERSION (C) 1999-2007 Free Penguins".
+$VERSION (C) 1999-2008 Free Penguins".
 
 PATH="/bin:/usr/bin:/usr/sbin:/sbin:/usr/X11R6/bin"
 
@@ -75,7 +77,7 @@ LOGDIRFAIL=""
 LASTLOG_FILE=""
 
 CHMOD="no"
-CHMOD_MODE="0444"
+CHMOD_MODE="0644"
 RPMOPTS=""
 RPMBUILDOPTS=""
 BCOND=""
@@ -199,12 +201,12 @@ CVS_NSERVER=0
 cvs --version 2>&1 | grep -q 'CVS-nserver'
 [ $? -eq 0 ] && CVS_NSERVER=1
 
-POLDEK_INDEX_DIR="`$RPM --eval %_rpmdir`/"
+POLDEK_INDEX_DIR="$($RPM --eval %_rpmdir)/"
 POLDEK_CMD="$SU_SUDO /usr/bin/poldek --noask"
 
 run_poldek()
 {
-	RES_FILE=~/tmp/poldek-exit-status.$RANDOM
+	RES_FILE=$(mktemp -t builder.XXXXXX || ${TMPDIR:-/tmp}/builder.$RANDOM)
 	if [ -n "$LOGFILE" ]; then
 		LOG=`eval echo $LOGFILE`
 		if [ -n "$LASTLOG_FILE" ]; then
@@ -389,7 +391,7 @@ update_shell_title() {
 		fi
 
 		msg="$pkg: ${SHELL_TITLE_PREFIX:+$SHELL_TITLE_PREFIX }$msg"
-		msg="$(echo $msg | tr -d '\n\r')"
+		msg=$(echo $msg | tr -d '\n\r')
 		case "$TERM" in
 			cygwin|xterm*)
 			echo >&2 -ne "\033]1;$msg\007\033]2;$msg\007"
@@ -423,7 +425,7 @@ minirpm() {
 	# we reset macros not to contain macros.build as all the %() macros are
 	# executed here, while none of them are actually needed.
 	# at the time of this writing macros.build + macros contained 70 "%(...)" macros.
-	safe_macrofiles=$(rpm --showrc | awk -F: '/^macrofiles/ { gsub(/^macrofiles[ \t]+:/, "", $0); gsub(/:.*macros.build:/, ":", $0); print $0 } ')
+	safe_macrofiles=$(rpm $TARGET_SWITCH --showrc | awk -F: '/^macrofiles/ { gsub(/^macrofiles[ \t]+:/, "", $0); gsub(/:.*macros.build:/, ":", $0); print $0 } ')
 
 	# TODO: move these to /usr/lib/rpm/macros
 	cat > $BUILDER_MACROS <<'EOF'
@@ -468,6 +470,10 @@ minirpm() {
 	rm -f %{tmpdir}/__ps{1,2};
 ) \
 %{nil}
+%add_etc_shells(p) %{p:<lua>}
+%remove_etc_shells(p) %{p:<lua>}
+%lua_add_etc_shells()  %{nil}
+%lua_remove_etc_shells() %{nil}
 EOF
 	if [ "$NOINIT" = "yes" ] ; then
 		cat >> $BUILDER_MACROS <<'EOF'
@@ -475,7 +481,7 @@ EOF
 %_sourcedir ./
 EOF
 	fi
-	eval $RPMBUILD --macros "$safe_macrofiles:$BUILDER_MACROS" $QUIET $RPMOPTS $RPMBUILDOPTS $BCOND $TARGET_SWITCH $* 2>&1
+	eval $RPMBUILD $TARGET_SWITCH --macros "$safe_macrofiles:$BUILDER_MACROS" $QUIET $RPMOPTS $RPMBUILDOPTS $BCOND $* 2>&1
 }
 
 cache_rpm_dump() {
@@ -484,10 +490,11 @@ cache_rpm_dump() {
 		set -v
 	fi
 
-	update_shell_title "cache_rpm_dump"
 	if [ -x /usr/bin/rpm-specdump ]; then
-		rpm_dump_cache=`rpm-specdump $BCOND $TARGET_SWITCH $SPECFILE`
+		update_shell_title "cache_rpm_dump using rpm-specdump command"
+		rpm_dump_cache=$(rpm-specdump $TARGET_SWITCH $BCOND $SPECFILE)
 	else
+		update_shell_title "cache_rpm_dump using rpmbuild command"
 		local rpm_dump
 		rpm_dump=`
 			# what we need from dump is NAME, VERSION, RELEASE and PATCHES/SOURCES.
@@ -522,7 +529,7 @@ cache_rpm_dump() {
 
 rpm_dump() {
 	if [ -z "$rpm_dump_cache" ] ; then
-		echo "internal error: cache_rpm_dump not called! (missing %prep?)" 1>&2
+		echo >&2 "internal error: cache_rpm_dump not called! (missing %prep?)"
 	fi
 	echo "$rpm_dump_cache"
 }
@@ -530,7 +537,7 @@ rpm_dump() {
 get_icons()
 {
 	update_shell_title "get icons"
-	ICONS="`awk '/^Icon:/ {print $2}' ${SPECFILE}`"
+	ICONS=$(awk '/^Icon:/ {print $2}' ${SPECFILE})
 	if [ -z "$ICONS" ]; then
 		return
 	fi
@@ -553,15 +560,15 @@ parse_spec()
 	cache_rpm_dump
 
 	if [ "$NOSRCS" != "yes" ]; then
-		SOURCES="`rpm_dump | awk '/SOURCEURL[0-9]+/ {print $3}'`"
+		SOURCES=$(rpm_dump | awk '/SOURCEURL[0-9]+/ {print $3}')
 	fi
 
 	if (rpm_dump | grep -qEi ":.*nosource.*1"); then
 		FAIL_IF_NO_SOURCES="no"
 	fi
 
-	PATCHES="`rpm_dump | awk '/PATCHURL[0-9]+/ {print $3}'`"
-	ICONS="`awk '/^Icon:/ {print $2}' ${SPECFILE}`"
+	PATCHES=$(rpm_dump | awk '/PATCHURL[0-9]+/ {print $3}')
+	ICONS=$(awk '/^Icon:/ {print $2}' ${SPECFILE})
 	PACKAGE_NAME=$(rpm_dump | awk '$2 == "PACKAGE_NAME" { print $3; exit}')
 	PACKAGE_VERSION=$(rpm_dump | awk '$2 == "PACKAGE_VERSION" { print $3; exit}')
 	PACKAGE_RELEASE=$(rpm_dump | awk '$2 == "PACKAGE_RELEASE" { print $3; exit}')
@@ -602,45 +609,45 @@ Exit_error()
 	case "$1" in
 		"err_no_spec_in_cmdl" )
 			remove_build_requires
-			echo "ERROR: spec file name not specified."
+			echo >&2 "ERROR: spec file name not specified."
 			exit 2 ;;
 		"err_invalid_cmdline" )
-			echo "ERROR: invalid command line arg ($2)."
+			echo >&2 "ERROR: invalid command line arg ($2)."
 			exit 2 ;;
 		"err_no_spec_in_repo" )
 			remove_build_requires
-			echo "Error: spec file not stored in CVS repo."
+			echo >&2 "Error: spec file not stored in CVS repo."
 			exit 3 ;;
 		"err_no_source_in_repo" )
 			remove_build_requires
-			echo "Error: some source, patch or icon files not stored in CVS repo. ($2)"
+			echo >&2 "Error: some source, patch or icon files not stored in CVS repo. ($2)"
 			exit 4 ;;
 		"err_build_fail" )
 			remove_build_requires
-			echo "Error: package build failed. (${2:-no more info})"
+			echo >&2 "Error: package build failed. (${2:-no more info})"
 			exit 5 ;;
 		"err_no_package_data" )
 			remove_build_requires
-			echo "Error: couldn't get out package name/version/release from spec file."
+			echo >&2 "Error: couldn't get out package name/version/release from spec file."
 			exit 6 ;;
 		"err_tag_exists" )
 			remove_build_requires
-			echo "Tag ${2} already exists (spec release: ${3})."
+			echo >&2 "Tag ${2} already exists (spec release: ${3})."
 			exit 9 ;;
 		"err_fract_rel" )
 			remove_build_requires
-			echo "Release ${2} not integer and not a snapshot."
+			echo >&2 "Release ${2} not integer and not a snapshot."
 			exit 10 ;;
 		"err_branch_exists" )
 			remove_build_requires
-			echo "Tree branch already exists (${2})."
+			echo >&2 "Tree branch already exists (${2})."
 			exit 11 ;;
 		"err_acl_deny" )
 			remove_build_requires
-			echo "Error: conditions reject building this spec (${2})."
+			echo >&2 "Error: conditions reject building this spec (${2})."
 			exit 12 ;;
 	esac
-	echo "Unknown error."
+	echo >&2 "Unknown error."
 	exit 100
 }
 
@@ -656,14 +663,14 @@ init_builder()
 		if [ "$ASSUMED_NAME" ]; then
 			extra="--define 'name $ASSUMED_NAME'"
 		fi
-		SOURCE_DIR="`eval $RPM $RPMOPTS $extra --eval '%{_sourcedir}'`"
-		SPEC_DIR="`eval $RPM $RPMOPTS $extra --eval '%{_specdir}'`"
+		SOURCE_DIR=$(eval $RPM $RPMOPTS $extra --eval '%{_sourcedir}')
+		SPEC_DIR=$(eval $RPM $RPMOPTS $extra --eval '%{_specdir}')
 	else
 		SOURCE_DIR="."
 		SPEC_DIR="."
 	fi
 
-	__PWD="`pwd`"
+	__PWD=$(pwd)
 }
 
 get_spec()
@@ -678,7 +685,7 @@ get_spec()
 
 	cd "$SPEC_DIR"
 	if [ ! -f "$SPECFILE" ]; then
-		SPECFILE="`basename $SPECFILE .spec`.spec"
+		SPECFILE="$(basename $SPECFILE .spec).spec"
 	fi
 	if [ "$NOCVSSPEC" != "yes" ]; then
 
@@ -718,10 +725,10 @@ find_mirror()
 		if [ -z "$origin" ] || [[ $origin == \#* ]]; then
 			continue
 		fi
-		ol=`echo -n "$origin"|wc -c`
-		prefix="`echo -n "$url" | head -c $ol`"
+		ol=$(echo -n "$origin" | wc -c)
+		prefix=$(echo -n "$url" | head -c $ol)
 		if [ "$prefix" = "$origin" ] ; then
-			suffix="`echo "$url"|cut -b $((ol+1))-`"
+			suffix=$(echo "$url" | cut -b $((ol+1))-)
 			echo -n "$mirror$suffix"
 			return 0
 		fi
@@ -750,7 +757,7 @@ src_md5()
 	if [ -f additional-md5sums ]; then
 		local spec_rev=$(grep $SPECFILE CVS/Entries 2>/dev/null | sed -e s:/$SPECFILE/:: -e s:/.*::)
 		if [ -z "$spec_rev" ]; then
-			spec_rev="$(head -n 1 $SPECFILE | sed -e 's/.*\$Revision: \([0-9.]*\).*/\1/')"
+			spec_rev=$(head -n 1 $SPECFILE | sed -e 's/.*\$Revision: \([0-9.]*\).*/\1/')
 		fi
 		local spec="$SPECFILE[0-9.,]*,$(echo $spec_rev | sed 's/\./\\./g')"
 		md5=$(grep -s -v '^#' additional-md5sums | \
@@ -809,7 +816,7 @@ good_md5 ()
 
 good_size ()
 {
-	size="$(find $(nourl "$1") -printf "%s" 2>/dev/null)"
+	size=$(find $(nourl "$1") -printf "%s" 2>/dev/null)
 	[ -n "$size" -a "$size" -gt 0 ]
 }
 
@@ -944,6 +951,8 @@ update_md5()
 
 check_md5()
 {
+	[ "$NO5" = "yes" ] && return
+
 	update_shell_title "check md5"
 
 	for i in "$@"; do
@@ -1048,7 +1057,7 @@ get_files()
 							${GETLOCAL} $url_attic $target
 						else
 							if [ -z "$NOMIRRORS" ]; then
-								url_attic="`find_mirror "$url_attic"`"
+								url_attic=$(find_mirror "$url_attic")
 							fi
 							update_shell_title "${GETURI%% *}: $url_attic"
 							${GETURI} ${OUTFILEOPT} "$target" "$url_attic" || \
@@ -1077,7 +1086,7 @@ get_files()
 
 				if [ -z "$NOURLS" ] && [ ! -f "$fp" -o -n "$UPDATE" ] && [ "`echo $i | grep -E 'ftp://|http://|https://'`" ]; then
 					if [ -z "$NOMIRRORS" ]; then
-						im="`find_mirror "$i"`"
+						im=$(find_mirror "$i")
 					else
 						im="$i"
 					fi
@@ -1138,7 +1147,7 @@ get_files()
 		fi
 
 		if [ "$CHMOD" = "yes" ]; then
-			CHMOD_FILES="`nourl "$@"`"
+			CHMOD_FILES=$(nourl "$@")
 			if [ -n "$CHMOD_FILES" ]; then
 				chmod $CHMOD_MODE $CHMOD_FILES
 			fi
@@ -1287,6 +1296,13 @@ branch_files()
 	fi
 
 	local OPTIONS="tag $CVS_FORCE -b"
+
+	# branch exists?
+	is_tag_a_branch $TAG
+	if [ $? -eq 1 ]; then
+		OPTIONS="$OPTIONS -B"
+	fi
+
 	if [ -n "$CVSROOT" ]; then
 		OPTIONS="-d $CVSROOT $OPTIONS"
 	fi
@@ -1337,12 +1353,12 @@ build_package()
 	if [ -n "$TRY_UPGRADE" ]; then
 		update_shell_title "build_package: try_upgrade"
 		if [ -n "$FLOAT_VERSION" ]; then
-			TNOTIFY=`./pldnotify.awk $SPECFILE -n` || exit 1
+			TNOTIFY=$(./pldnotify.awk $SPECFILE -n) || exit 1
 		else
-			TNOTIFY=`./pldnotify.awk $SPECFILE` || exit 1
+			TNOTIFY=$(./pldnotify.awk $SPECFILE) || exit 1
 		fi
 
-		TNEWVER=`echo $TNOTIFY | awk '{ match($4,/\[NEW\]/); print $5 }'`
+		TNEWVER=$(echo $TNOTIFY | awk '{ match($4,/\[NEW\]/); print $5 }')
 
 		if [ -n "$TNEWVER" ]; then
 			TOLDVER=`echo $TNOTIFY | awk '{ print $3; }'`
@@ -1391,8 +1407,9 @@ build_package()
 		if [ -n "$LASTLOG_FILE" ]; then
 			echo "LASTLOG=$LOG" > $LASTLOG_FILE
 		fi
-		RES_FILE=~/tmp/$RPMBUILD-exit-status.$RANDOM
-		(time eval ${NICE_COMMAND} $RPMBUILD $BUILD_SWITCH -v $QUIET $CLEAN $RPMOPTS $RPMBUILDOPTS $BCOND $TARGET_SWITCH $SPECFILE; echo $? > $RES_FILE) 2>&1 |tee $LOG
+		RES_FILE=$(mktemp -t builder.XXXXXX || ${TMPDIR:-/tmp}/builder.$RANDOM)
+
+		(time eval ${NICE_COMMAND} $RPMBUILD $TARGET_SWITCH $BUILD_SWITCH -v $QUIET $CLEAN $RPMOPTS $RPMBUILDOPTS $BCOND $SPECFILE; echo $? > $RES_FILE) 2>&1 |tee $LOG
 		RETVAL=`cat $RES_FILE`
 		rm $RES_FILE
 		if [ -n "$LOGDIROK" ] && [ -n "$LOGDIRFAIL" ]; then
@@ -1403,7 +1420,7 @@ build_package()
 			fi
 		fi
 	else
-		eval ${NICE_COMMAND} $RPMBUILD $BUILD_SWITCH -v $QUIET $CLEAN $RPMOPTS $RPMBUILDOPTS $BCOND $TARGET_SWITCH $SPECFILE
+		eval ${NICE_COMMAND} $RPMBUILD $TARGET_SWITCH $BUILD_SWITCH -v $QUIET $CLEAN $RPMOPTS $RPMBUILDOPTS $BCOND $SPECFILE
 		RETVAL=$?
 	fi
 	if [ "$RETVAL" -ne "0" ]; then
@@ -1432,7 +1449,6 @@ install_required_packages()
 find_spec_bcond() {
 	# taken from find-spec-bcond, but with just getting the list
 	local SPEC="$1"
-	# quick revert hint: '$RPMBUILD --bcond $SPEC'
 	awk -F"\n" '
 	/^%changelog/ { exit }
 	/_with(out)?_[_a-zA-Z0-9]+/{
@@ -1609,17 +1625,17 @@ run_sub_builder()
 	#
 	#
 	# y0shi.
+	# kurwa. translate that ^^^^
 
 	parent_spec_name=''
 
 	# Istnieje taki spec? ${package}.spec
 	if [ -f "${SPEC_DIR}/${package}.spec" ]; then
 		parent_spec_name=${package}.spec
-	elif [ -f "${SPEC_DIR}/`echo ${package_name} | sed -e s,-devel.*,,g -e s,-static,,g`.spec" ]; then
-		parent_spec_name="`echo ${package_name} | sed -e s,-devel.*,,g -e s,-static,,g`.spec"
+	elif [ -f "${SPEC_DIR}/$(echo ${package_name} | sed -e s,-devel.*,,g -e s,-static,,g).spec" ]; then
+		parent_spec_name="$(echo ${package_name} | sed -e s,-devel.*,,g -e s,-static,,g).spec"
 	else
-		for provides_line in `grep ^Provides:.*$package  ${SPEC_DIR} -R`
-		do
+		for provides_line in $(grep -r ^Provides:.*$package ${SPEC_DIR}); do
 			echo $provides_line
 		done
 	fi
@@ -1706,7 +1722,7 @@ _rpm_prov_check()
 		DEPS=$(cat)
 	fi
 
-	DEPS=$(rpm -q --whatprovides $DEPS 2>&1 | awk '/^(error:|no package provides)/ { print }')
+	DEPS=$(LANG=C rpm -q --whatprovides $DEPS 2>&1 | awk '/^(error:|no package provides)/ { print }')
 
 	# packages
 	echo "$DEPS" | awk '/^no package provides/ { print $NF }'
@@ -1728,67 +1744,76 @@ _rpm_cnfl_check()
 		DEPS=$(cat)
 	fi
 
-	rpm -q --whatprovides $DEPS 2>/dev/null | awk '!/no package provides/ { print }'
+	LANG=C rpm -q --whatprovides $DEPS 2>/dev/null | awk '!/no package provides/ { print }'
+}
+
+# install deps via information from 'rpm-getdeps' or 'rpm --specsrpm'
+install_build_requires_rpmdeps() {
+	if [ "$FETCH_BUILD_REQUIRES_RPMGETDEPS" = "yes" ]; then
+		# TODO: Conflicts list doesn't check versions
+		local CNFL=$(rpm-getdeps $BCOND $SPECFILE 2> /dev/null | awk '/^\-/ { print $3 } ' | _rpm_cnfl_check | xargs)
+		local DEPS=$(rpm-getdeps $BCOND $SPECFILE 2> /dev/null | awk '/^\+/ { print $3 } ' | _rpm_prov_check | xargs)
+	fi
+	if [ "$FETCH_BUILD_REQUIRES_RPMSPECSRPM" = "yes" ]; then
+		local CNFL=$(rpm -q --specsrpm --conflicts $BCOND $SPECFILE | awk '{print $1}' | _rpm_cnfl_check | xargs)
+		local DEPS=$(rpm -q --specsrpm --requires $BCOND $SPECFILE | awk '{print $1}' | _rpm_prov_check | xargs)
+	fi
+
+	if [ -n "$CNFL" ] || [ -n "$DEPS" ]; then
+		echo "fetch BuildRequires: install [$DEPS]; remove [$CNFL]"
+		update_shell_title "poldek: install [$DEPS]; remove [$CNFL]"
+		$SU_SUDO /usr/bin/poldek -q --update || $SU_SUDO /usr/bin/poldek -q --upa
+	fi
+	if [ -n "$CNFL" ]; then
+		update_shell_title "uninstall conflicting packages: $CNFL"
+		echo "Trying to uninstall conflicting packages ($CNFL):"
+		$SU_SUDO /usr/bin/poldek --noask --nofollow -ev $CNFL
+	fi
+
+	while [ "$DEPS" ]; do
+			update_shell_title "install deps: $DEPS"
+			echo "Trying to install dependencies ($DEPS):"
+			local log=.${SPECFILE}_poldek.log
+			LANG=C $SU_SUDO /usr/bin/poldek --caplookup -uGqQ $DEPS | tee $log
+			failed=$(awk '/^error:/{a=$2; sub(/^error: /, "", a); sub(/:$/, "", a); print a}' $log)
+			rm -f $log
+			local ok
+			if [ -n "$failed" ]; then
+				for package in $failed; do
+					spawn_sub_builder -bb $(depspecname $package) && ok="$ok $package"
+				done
+				DEPS="$ok"
+			else
+				DEPS=""
+			fi
+	done
 }
 
 fetch_build_requires()
 {
-	if [ "${FETCH_BUILD_REQUIRES}" = "yes" ]; then
-		update_shell_title "fetch build requires"
-		if [ "$FETCH_BUILD_REQUIRES_RPMGETDEPS" = "yes" ] || [ "$FETCH_BUILD_REQUIRES_RPMSPECSRPM" = "yes" ]; then
-			if [ "$FETCH_BUILD_REQUIRES_RPMGETDEPS" = "yes" ]; then
-				# TODO: Conflicts list doesn't check versions
-				local CNFL=$(rpm-getdeps $BCOND $SPECFILE 2> /dev/null | awk '/^\-/ { print $3 } ' | _rpm_cnfl_check | xargs)
-				local DEPS=$(rpm-getdeps $BCOND $SPECFILE 2> /dev/null | awk '/^\+/ { print $3 } ' | _rpm_prov_check | xargs)
-			fi
-			if [ "$FETCH_BUILD_REQUIRES_RPMSPECSRPM" = "yes" ]; then
-				local CNFL=$(rpm -q --specsrpm --conflicts $BCOND $SPECFILE | awk '{print $1}' | _rpm_cnfl_check | xargs)
-				local DEPS=$(rpm -q --specsrpm --requires $BCOND $SPECFILE | awk '{print $1}' | _rpm_prov_check | xargs)
-			fi
+	if [ "${FETCH_BUILD_REQUIRES}" != "yes" ]; then
+		return
+	fi
 
-			if [ -n "$CNFL" ] || [ -n "$DEPS" ]; then
-				echo "fetch BuildRequires: install [$DEPS]; remove [$CNFL]"
-				update_shell_title "poldek: install [$DEPS]; remove [$CNFL]"
-				$SU_SUDO /usr/bin/poldek -q --update || $SU_SUDO /usr/bin/poldek -q --upa
-			fi
-			if [ -n "$CNFL" ]; then
-				update_shell_title "uninstall conflicting packages: $CNFL"
-				echo "Trying to uninstall conflicting packages ($CNFL):"
-				$SU_SUDO /usr/bin/poldek --noask --nofollow -ev $CNFL
-			fi
+	update_shell_title "fetch build requires"
+	if [ "$FETCH_BUILD_REQUIRES_RPMGETDEPS" = "yes" ] || [ "$FETCH_BUILD_REQUIRES_RPMSPECSRPM" = "yes" ]; then
+		install_build_requires_rpmdeps
+		return
+	fi
 
-			while [ "$DEPS" ]; do
-					update_shell_title "install deps: $DEPS"
-					echo "Trying to install dependencies ($DEPS):"
-					local log=.${SPECFILE}_poldek.log
-					$SU_SUDO /usr/bin/poldek --caplookup -uGqQ $DEPS | tee $log
-					failed=$(awk '/^error:/{a=$2; sub(/^error: /, "", a); sub(/:$/, "", a); print a}' $log)
-					rm -f $log
-					local ok
-					if [ -n "$failed" ]; then
-						for package in $failed; do
-							spawn_sub_builder -bb $(depspecname $package) && ok="$ok $package"
-						done
-						DEPS="$ok"
-					else
-						DEPS=""
-					fi
-			done
-			return
-		fi
-
+		# XXX is this ugliest code written in human history still needed?
 		echo -ne "\nAll packages installed by fetch_build_requires() are written to:\n"
 		echo -ne "`pwd`/.${SPECFILE}_INSTALLED_PACKAGES\n"
 		echo -ne "\nIf anything fails, you may get rid of them by executing:\n"
 		echo "poldek -e \`cat `pwd`/.${SPECFILE}_INSTALLED_PACKAGES\`\n\n"
 		echo > `pwd`/.${SPECFILE}_INSTALLED_PACKAGES
-		for package_item in `cat $SPECFILE|grep -B100000 ^%changelog|grep -v ^#|grep BuildRequires|grep -v ^-|sed -e "s/^.*BuildRequires://g"|awk '{print $1}'|sed -e s,perl\(,perl-,g -e s,::,-,g -e s,\(.*\),,g -e s,%{,,g -e s,},,g|grep -v OpenGL-devel|sed -e s,sh-utils,coreutils,g -e s,fileutils,coreutils,g -e s,textutils,coreutils,g -e s,kgcc_package,gcc,g -e s,\),,g`
+		for package_item in $(cat $SPECFILE | grep -B100000 ^%changelog|grep -v ^#|grep BuildRequires|grep -v ^-|sed -e "s/^.*BuildRequires://g"|awk '{print $1}'|sed -e s,perl\(,perl-,g -e s,::,-,g -e s,\(.*\),,g -e s,%{,,g -e s,},,g|grep -v OpenGL-devel|sed -e s,sh-utils,coreutils,g -e s,fileutils,coreutils,g -e s,textutils,coreutils,g -e s,kgcc_package,gcc,g -e s,\),,g)
 		do
-			package_item="`echo $package_item|sed -e s,rpmbuild,rpm-build,g |sed -e s,__perl,perl,g |sed -e s,gasp,binutils-gasp,g -e s,binutils-binutils,binutils,g -e s,apxs,apache,g|sed -e s,apache\(EAPI\)-devel,apache-devel,g -e s,kernel-headers\(netfilter\),kernel-headers,g -e s,awk,mawk,g -e s,mmawk,mawk,g -e s,motif,openmotif,g -e s,openopenmotif,openmotif,g`"
+			package_item=$(echo $package_item|sed -e s,rpmbuild,rpm-build,g |sed -e s,__perl,perl,g |sed -e s,gasp,binutils-gasp,g -e s,binutils-binutils,binutils,g -e s,apxs,apache,g|sed -e s,apache\(EAPI\)-devel,apache-devel,g -e s,kernel-headers\(netfilter\),kernel-headers,g -e s,awk,mawk,g -e s,mmawk,mawk,g -e s,motif,openmotif,g -e s,openopenmotif,openmotif,g)
 			GO="yes"
-			package=`basename "$package_item"|sed -e "s/}$//g"`
-			COND_ARCH_TST="`cat $SPECFILE|grep -B1 BuildRequires|grep -B1 $package|grep ifarch|sed -e "s/^.*ifarch//g"`"
-			mach=`uname -m`
+			package=$(basename "$package_item"|sed -e "s/}$//g")
+			COND_ARCH_TST=$(cat $SPECFILE|grep -B1 BuildRequires|grep -B1 $package|grep ifarch|sed -e "s/^.*ifarch//g")
+			mach=$(uname -m)
 
 			COND_TST=`cat $SPECFILE|grep BuildRequires|grep "$package"`
 			if `echo $COND_TST|grep -q '^BuildRequires:'`; then
@@ -1909,7 +1934,7 @@ fetch_build_requires()
 			fi
 		done
 		if [ "$NOT_INSTALLED_PACKAGES" != "" ]; then
-			echo "Unable to install following packages and their dependencies:"
+			echo >&2 "Unable to install following packages and their dependencies:"
 			for pkg in "$NOT_INSTALLED_PACKAGES"
 			do
 				echo $pkg
@@ -1917,14 +1942,13 @@ fetch_build_requires()
 			remove_build_requires
 			exit 8
 		fi
-	fi
 }
 
 init_rpm_dir() {
-
-	TOP_DIR="`eval $RPM $RPMOPTS --eval '%{_topdir}'`"
+	TOP_DIR=$(eval $RPM $RPMOPTS --eval '%{_topdir}')
 	CVSROOT=":pserver:cvs@$CVS_SERVER:/cvsroot"
 
+	echo "Initialising rpm directories to $TOP_DIR from $CVSROOT"
 	mkdir -p $TOP_DIR/{RPMS,BUILD,SRPMS}
 	cd $TOP_DIR
 	cvs -d $CVSROOT co SOURCES/{.cvsignore,dropin} SPECS/{mirrors,md5,adapter{,.awk},fetchsrc_request,builder,{relup,compile,repackage}.sh}
@@ -2086,11 +2110,16 @@ while [ $# -gt 0 ]; do
 			shift; RPMOPTS="${RPMOPTS} ${1}"; shift ;;
 		--nopatch | -np )
 			shift; RPMOPTS="${RPMOPTS} --define \"patch${1} : ignoring patch${1}; exit 1; \""; shift ;;
+		--topdir)
+			RPMOPTS="${RPMOPTS} --define \"_topdir $2\""
+			shift 2
+			;;
 		--with | --without )
 			case $GROUP_BCONDS in
 				"yes")
 					COND=${1}
 					shift
+					# XXX: broken: ./builder -bb ucspi-tcp.spec --without mysql
 					while ! `echo ${1}|grep -qE '(^-|spec)'`
 					do
 						BCOND="$BCOND $COND $1"
@@ -2116,9 +2145,13 @@ while [ $# -gt 0 ]; do
 		--date )
 			CVSDATE="${2}"; shift 2 ;;
 		-r | --cvstag )
-			shift; CVSTAG="${1}"; shift ;;
+			CVSTAG="$2"
+		   	shift 2
+		   	;;
 		-A)
-			shift; CVSTAG="HEAD"; ;;
+			shift
+			CVSTAG="HEAD"
+		   	;;
 		-R | --fetch-build-requires)
 			FETCH_BUILD_REQUIRES="yes"
 			NOT_INSTALLED_PACKAGES=
@@ -2244,7 +2277,7 @@ while [ $# -gt 0 ]; do
 				CVSTAG="${SPECFILE##*:}"
 				SPECFILE="${SPECFILE%%:*}"
 			fi
-			ASSUMED_NAME="$(basename ${SPECFILE%%.spec})"
+			ASSUMED_NAME=$(basename ${SPECFILE%%.spec})
 			shift
 	esac
 done
@@ -2257,6 +2290,11 @@ if [ -f CVS/Entries ] && [ -z "$CVSTAG" ]; then
 elif [ "$CVSTAG" = "HEAD" ]; then
 	# assume -r HEAD is same as -A
 	CVSTAG=""
+fi
+
+if [ "$CVSTAG" ]; then
+	# pass $CVSTAG used by builder to rpmbuild too, so specs could use it
+	RPMOPTS="$RPMOPTS --define \"_cvstag $CVSTAG\""
 fi
 
 if [ -n "$DEBUG" ]; then
