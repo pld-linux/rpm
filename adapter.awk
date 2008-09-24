@@ -1,9 +1,9 @@
 #!/usr/bin/gawk -f
 #
-# This is adapter v0.29. Adapter adapts .spec files for PLD Linux.
+# This is adapter v0.30-RELEASE. Adapter adapts .spec files for PLD Linux.
 # $Id$
 #
-# Copyright (C) 1999-2007 PLD-Team <feedback@pld-linux.org>
+# Copyright (C) 1999-2008 PLD-Team <feedback@pld-linux.org>
 # Authors:
 # 	Michał Kuratczyk <kura@pld.org.pl>
 # 	Sebastian Zagrodzki <s.zagrodzki@mimuw.edu.pl>
@@ -79,6 +79,7 @@ BEGIN {
 	"rpm --eval %_kdedocdir"	| getline kdedocdir
 	"rpm --eval %_desktopdir" | getline desktopdir
 	"rpm --eval %_pixmapsdir" | getline pixmapsdir
+	"rpm --eval %_javadir" | getline javadir
 
 	"rpm --eval %perl_sitearch" | getline perl_sitearch
 	"rpm --eval %perl_archlib" | getline perl_archlib
@@ -98,6 +99,7 @@ BEGIN {
 	"rpm --eval %ruby_sitelibdir" | getline ruby_sitelibdir
 
 	"rpm --eval %php_pear_dir" | getline php_pear_dir
+	"rpm --eval %php_data_dir" | getline php_data_dir
 	"rpm --eval %tmpdir" | getline tmpdir
 }
 
@@ -675,50 +677,7 @@ preamble == 1 {
 		format_preamble()
 		group = $0;
 		sub(/^[^ \t]*[ \t]*/, "", group);
-
-		sub(/^Amusements\/Games\/Strategy\/Real Time/, "X11/Applications/Games/Strategy", group)
-		sub(/^Application\/Multimedia$/, "Applications/Multimedia", group)
-		sub(/^Applications\/Compilers$/, "Development/Languages", group)
-		sub(/^Applications\/Daemons$/, "Daemons", group)
-		sub(/^Applications\/Internet$/, "Applications/Networking", group)
-		sub(/^Applications\/Internet\/Peer to Peer/, "Applications/Networking", group)
-		sub(/^Applications\/Productivity$/, "X11/Applications", group)
-		sub(/^Database$/, "Applications/Databases", group)
-		sub(/^Development\/Code Generators$/, "Development", group)
-		sub(/^Development\/Docs$/, "Documentation", group)
-		sub(/^Development\/Documentation$/, "Documentation", group)
-		sub(/^Development\/Java/, "Development/Languages/Java", group)
-		sub(/^Development\/Libraries\/C and C\+\+$/, "Development/Libraries", group)
-		sub(/^Development\/Libraries\/Java$/, "Development/Languages/Java", group)
-		sub(/^Development\/Other/,"Development", group)
-		sub(/^Development\/Testing$/, "Development", group)
-		sub(/^Emulators$/, "Applications/Emulators", group)
-		sub(/^Games/,"Applications/Games", group)
-		sub(/^Library\/Development$/, "Development/Libraries", group)
-		sub(/^Networking\/Deamons$/, "Networking/Daemons", group)
-		sub(/^Shells/,"Applications/Shells", group)
-		sub(/^System Environment\/Base$/, "Base", group)
-		sub(/^System Environment\/Daemons$/, "Daemons", group)
-		sub(/^System Environment\/Kernel$/, "Base/Kernel", group)
-		sub(/^System Environment\/Libraries$/, "Libraries", group)
-		sub(/^System$/, "Base", group)
-		sub(/^System\/Base$/, "Base", group)
-		sub(/^System\/Libraries$/, "Libraries", group)
-		sub(/^System\/Servers$/, "Daemons", group)
-		sub(/^Text Processing\/Markup\/HTML$/, "Applications/Text", group)
-		sub(/^Text Processing\/Markup\/XML$/, "Applications/Text", group)
-		sub(/^Utilities\//,"Applications/", group)
-		sub(/^Web\/Database$/, "Applications/WWW", group)
-		sub(/^X11\/GNOME/,"X11/Applications", group)
-		sub(/^X11\/GNOME\/Applications/,"X11/Applications", group)
-		sub(/^X11\/GNOME\/Development\/Libraries/,"X11/Development/Libraries", group)
-		sub(/^X11\/Games/,"X11/Applications/Games", group)
-		sub(/^X11\/Games\/Strategy/,"X11/Applications/Games/Strategy", group)
-		sub(/^X11\/Library/,"X11/Libraries", group)
-		sub(/^X11\/Utilities/,"X11/Applications", group)
-		sub(/^X11\/XFree86/, "X11", group)
-		sub(/^X11\/Xserver$/, "X11/Servers", group)
-
+		group = replace_groupnames(group);
 		$0 = "Group:\t\t" group
 
 		if (group ~ /^X11/ && x11 == 0)	# Is it X11 application?
@@ -815,6 +774,12 @@ preamble == 1 {
 		}
 		if (l == "Apache Software License 1.1" || l == "Apache 1.1") {
 			l = "Apache v1.1"
+		}
+		if (l == "GPLv2") {
+			l = "GPL v2"
+		}
+		if (l == "GPLv2+") {
+			l = "GPL v2+"
 		}
 		$0 = "License:\t" l;
 	}
@@ -1135,8 +1100,10 @@ function use_macros()
 
 	gsub("%{_datadir}/applications", "%{_desktopdir}")
 	gsub("%{_datadir}/pixmaps", "%{_pixmapsdir}")
+	gsub("%{_datadir}/java", "%{_javadir}")
 
 	gsub(libdir, "%{_libdir}")
+	gsub(javadir, "%{_javadir}")
 
 	gsub(bindir, "%{_bindir}")
 	gsub("%{prefix}/bin", "%{_bindir}")
@@ -1175,7 +1142,9 @@ function use_macros()
 			continue;
 		if ($c ~ sysconfdir "/{?modprobe.(d|conf)")
 			continue;
-		if ($c ~ sysconfdir "/{?udev/rules.d")
+		if ($c ~ sysconfdir "/{?udev")
+			continue;
+		if ($c ~ sysconfdir "/{?hotplug")
 			continue;
 		if ($c ~ sysconfdir "/{?logrotate.d")
 			continue;
@@ -1217,6 +1186,7 @@ function use_macros()
 	gsub(kdedocdir, "%{_kdedocdir}")
 	gsub(docdir, "%{_docdir}")
 	gsub(php_pear_dir, "%{php_pear_dir}")
+	gsub(php_data_dir, "%{php_data_dir}")
 
 	for (c = 1; c <= NF; c++) {
 		if ($c ~ datadir "/automake")
@@ -1349,12 +1319,15 @@ function use_macros()
 	gsub("/usr/src/linux", "%{_kernelsrcdir}")
 	gsub("%{_prefix}/src/linux", "%{_kernelsrcdir}")
 
-	if (/^ant /) {
+	if (/^ant / || /^%{ant}/) {
 		sub(/^ant/, "%ant")
+		sub(/^%{ant}/, "%ant")
 		add_br("BuildRequires:  jpackage-utils");
 		add_br("BuildRequires:  rpmbuild(macros) >= 1.300");
 	}
 
+	$0 = fixedsub("%(%{__cc} -dumpversion)", "%{cc_version}", $0);
+	$0 = fixedsub("%(%{__cxx} -dumpversion)", "%{cxx_version}", $0);
 }
 
 function format_configure(line,		n, a, s) {
@@ -1517,6 +1490,8 @@ function use_files_macros(	i, n, t, a)
 	gsub("%{_datadir}/applications", "%{_desktopdir}");
 	gsub("%{_datadir}/icons", "%{_iconsdir}");
 	gsub("%{_datadir}/pixmaps", "%{_pixmapsdir}");
+	gsub("%{_datadir}/pear", "%{php_pear_dir}");
+	gsub("%{_datadir}/php", "%{php_data_dir}");
 }
 
 function use_script_macros()
@@ -1722,6 +1697,9 @@ function replace_requires()
 	sub(/^gcc-c\+\+$/, "libstdc++-devel", $2);
 	sub(/^chkconfig$/, "/sbin/chkconfig", $2);
 
+	# fedora
+	sub(/^iscsi-initiator-utils$/, "open-iscsi", $2);
+
 	replace_php_virtual_deps()
 }
 
@@ -1753,6 +1731,58 @@ function replace_php_virtual_deps()
 			$4 = substr($4, 3);
 		}
 	}
+}
+
+function replace_groupnames(group)
+{
+	sub(/^Amusements\/Games\/Strategy\/Real Time/, "X11/Applications/Games/Strategy", group)
+	sub(/^Application\/Multimedia$/, "Applications/Multimedia", group)
+	sub(/^Applications\/Compilers$/, "Development/Languages", group)
+	sub(/^Applications\/Daemons$/, "Daemons", group)
+	sub(/^Applications\/Internet$/, "Applications/Networking", group)
+	sub(/^Applications\/Internet\/Peer to Peer/, "Applications/Networking", group)
+	sub(/^Applications\/Productivity$/, "X11/Applications", group)
+	sub(/^Database$/, "Applications/Databases", group)
+	sub(/^Development\/Code Generators$/, "Development", group)
+	sub(/^Development\/Docs$/, "Documentation", group)
+	sub(/^Development\/Documentation$/, "Documentation", group)
+	sub(/^Development\/Java/, "Development/Languages/Java", group)
+	sub(/^Development\/Libraries\/C and C\+\+$/, "Development/Libraries", group)
+	sub(/^Development\/Libraries\/Java$/, "Development/Languages/Java", group)
+	sub(/^Development\/Other/,"Development", group)
+	sub(/^Development\/Testing$/, "Development", group)
+	sub(/^Emulators$/, "Applications/Emulators", group)
+	sub(/^Games/,"Applications/Games", group)
+	sub(/^Library\/Development$/, "Development/Libraries", group)
+	sub(/^Networking\/Deamons$/, "Networking/Daemons", group)
+	sub(/^Shells/,"Applications/Shells", group)
+	sub(/^System Environment\/Base$/, "Base", group)
+	sub(/^System Environment\/Daemons$/, "Daemons", group)
+	sub(/^System Environment\/Kernel$/, "Base/Kernel", group)
+	sub(/^System Environment\/Libraries$/, "Libraries", group)
+	sub(/^System$/, "Base", group)
+	sub(/^System\/Base$/, "Base", group)
+	sub(/^System\/Libraries$/, "Libraries", group)
+	sub(/^System\/Servers$/, "Daemons", group)
+	sub(/^Text Processing\/Markup\/HTML$/, "Applications/Text", group)
+	sub(/^Text Processing\/Markup\/XML$/, "Applications/Text", group)
+	sub(/^Utilities\//,"Applications/", group)
+	sub(/^Web\/Database$/, "Applications/WWW", group)
+	sub(/^X11\/GNOME/,"X11/Applications", group)
+	sub(/^X11\/GNOME\/Applications/,"X11/Applications", group)
+	sub(/^X11\/GNOME\/Development\/Libraries/,"X11/Development/Libraries", group)
+	sub(/^X11\/Games/,"X11/Applications/Games", group)
+	sub(/^X11\/Games\/Strategy/,"X11/Applications/Games/Strategy", group)
+	sub(/^X11\/Library/,"X11/Libraries", group)
+	sub(/^X11\/Utilities/,"X11/Applications", group)
+	sub(/^X11\/XFree86/, "X11", group)
+	sub(/^X11\/Xserver$/, "X11/Servers", group)
+	sub(/^Development\/C$/, "Development/Libraries", group)
+	sub(/^Development\/Python$/, "Development/Languages/Python", group)
+	sub(/^System\/Kernel and hardware$/, "Base/Kernel", group)
+	sub(/^Application\/System$/, "Applications/System", group)
+
+	return group;
 }
 
 # vim:ts=4:sw=4
