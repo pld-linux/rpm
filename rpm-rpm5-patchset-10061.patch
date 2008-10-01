@@ -9,6 +9,15 @@ RCS File: /v/rpm/cvs/rpm/lib/depends.c,v
 rcsdiff -q -kk '-r1.392' '-r1.393' -u '/v/rpm/cvs/rpm/lib/depends.c,v' 2>/dev/null
 --- lib/depends.c	2008/03/17 09:50:01	1.392
 +++ lib/depends.c	2008/03/31 23:00:56	1.393
+@@ -1592,7 +1592,7 @@
+ 	    continue;
+ 	/*@=abstractcompare@*/
+ 
+-	requires = rpmteDS(p, tsi->tsi_tagn);
++	requires = rpmteDS((rpmteType(p) == TR_REMOVED ? q : p), tsi->tsi_tagn);
+ 	if (requires == NULL) continue;		/* XXX can't happen */
+ 
+ 	(void) rpmdsSetIx(requires, tsi->tsi_reqx);
 @@ -1882,6 +1882,13 @@
  	return 0;
      selected[i] = 1;
