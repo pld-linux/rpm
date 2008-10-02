@@ -135,7 +135,7 @@ Patch67:	%{name}-cleanbody.patch
 Patch68:	%{name}-rpm5-patchset-9486.patch
 Patch69:	%{name}-popt-aliases.patch
 Patch70:	%{name}-lualeak.patch
-Patch71:	%{name}-rpm5-patchset-10061.patch
+#Patch71:	%{name}-rpm5-patchset-10061.patch
 Patch72:	%{name}-rpm5-patchset-7657.patch
 Patch73:	%{name}-namespace-probe.patch
 Patch74:	%{name}-mktemperror.patch
@@ -727,7 +727,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch68 -p1
 %patch69 -p1
 %patch70 -p1
-%patch71 -p0
+#%patch71 -p0
 %patch72 -p0
 %patch73 -p1
 %patch74 -p1
