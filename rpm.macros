@@ -1015,7 +1015,7 @@ fi \
 
 %java_home		%{expand:%%global java_home %([ -f %{_javadir}-utils/java-functions ] || { echo ERROR; exit 0; }; unset JAVA_HOME; . %{_javadir}-utils/java-functions; set_jvm; echo ${JAVA_HOME:-ERROR})}%java_home
 
-%ant			JAVA_HOME=%{java_home} ant
+%ant			JAVA_HOME=%{java_home} CLASSPATH=$CLASSPATH ant
 %jar			%{java_home}/bin/jar
 %java			%{expand:%%global java %([ -f %{_javadir}-utils/java-functions ] || { echo ERROR; exit 0; }; unset JAVACMD; . %{_javadir}-utils/java-functions; set_javacmd; echo $JAVACMD)}%java
 %javac			%{java_home}/bin/javac
