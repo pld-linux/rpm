@@ -9,6 +9,13 @@
 #   preserving payload format and compressor from original rpm, _not_ current settings
 #   /usr/bin/install: cannot stat `./it.gmo': No such file or directory
 #   /usr/bin/install: cannot stat `./sr@Latn.gmo': No such file or directory
+# - rpm2cpio borken:
+#glen@builder-ac pld/BUILD $ unpack dnews-5.5d1-1.src.rpm
+#* dnews-5.5d1-1.src.rpm... lzma: (stdin): Compressed data is corrupt
+#cpio: premature end of archive
+#DONE
+#glen@builder-ac pld/BUILD $ file dnews-5.5d1-1.src.rpm
+#dnews-5.5d1-1.src.rpm: RPM v3 src i386 dnews-5.5d1-1
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
@@ -49,7 +56,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	0.56
+Release:	0.57
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -140,6 +147,7 @@ Patch77:	%{name}-dirdeps-macro.patch
 Patch78:	%{name}-db3-configure.patch
 Patch79:	%{name}-macros-cpp.patch
 Patch80:	%{name}-link-selinux.patch
+Patch81:	%{name}-db-configure.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -741,19 +749,11 @@ mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
 
 %if %{with internal_db}
-cd db
 %if %{without nptl}
-sed -i -e 's,AM_PTHREADS_SHARED("POSIX/.*,:,' dist/aclocal/mutex.ac
+sed -i -e 's,AM_PTHREADS_SHARED("POSIX/.*,:,' db/dist/aclocal/mutex.ac
 %endif
-cp -f /usr/share/aclocal/libtool.m4 dist/aclocal/libtool.ac
-cp -f /usr/share/automake/config.sub dist
-if [ -f /usr/share/libtool/config/ltmain.sh ]; then
-	cp -f /usr/share/libtool/config/ltmain.sh dist
-else
-	cp -f /usr/share/libtool/ltmain.sh dist
-fi
-cd -
 %patch78 -p1
+%patch81 -p1
 %else
 %patch15 -p1
 rm -rf db3 db rpmdb/db.h
@@ -797,6 +797,14 @@ cd db3
 echo -e 'AC_CONFIG_AUX_DIR(.)\nAC_PROG_LIBTOOL'> configure.ac
 %{__libtoolize}
 rm -f configure.ac
+cd ../db
+cp -f /usr/share/aclocal/libtool.m4 dist/aclocal/libtool.ac
+cp -f /usr/share/automake/config.sub dist
+if [ -f /usr/share/libtool/config/ltmain.sh ]; then
+	cp -f /usr/share/libtool/config/ltmain.sh dist
+else
+	cp -f /usr/share/libtool/ltmain.sh dist
+fi
 cd ..
 %endif
 
