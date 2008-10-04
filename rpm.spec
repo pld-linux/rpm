@@ -148,6 +148,7 @@ Patch78:	%{name}-db3-configure.patch
 Patch79:	%{name}-macros-cpp.patch
 Patch80:	%{name}-link-selinux.patch
 Patch81:	%{name}-db-configure.patch
+Patch82:	%{name}-perl-makefile.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -706,6 +707,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch39 -p1
 %patch42 -p1
 %patch43 -p1
+%patch82 -p1
 %{!?with_neon:%patch44 -p1}
 %patch45 -p1
 %patch48 -p1
