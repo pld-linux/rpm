@@ -2268,3 +2268,14 @@
      u->buf = _free(u->buf);
      u->url = _free(u->url);
      u->scheme = _free((void *)u->scheme);
+--- rpm-4.5/perl/Makefile.PL.in~	2008-10-05 01:31:09.000000000 +0300
++++ rpm-4.5/perl/Makefile.PL.in	2008-10-05 01:32:12.688278120 +0300
+@@ -12,7 +12,7 @@
+     'NAME'		=> 'RPM',
+     'VERSION_FROM'	=> 'RPM.pm', # finds $VERSION
+     'PREREQ_PM'		=> {}, # e.g., Module::Name => 1.1
+-    'LIBS'		=> [join(' ', @ldaddp) . ' ' . join(' ', @ldadd) . ' @LIBS@ @WITH_POPT_LIB@ @WITH_BEECRYPT_LIB@ -lneon'],
++    'LIBS'		=> [join(' ', @ldaddp) . ' ' . join(' ', @ldadd) . ' @LIBS@ @WITH_POPT_LIB@ @WITH_BEECRYPT_LIB@'],
+     'DEFINE'		=> join(" ", @defines), # e.g., '-DHAVE_SOMETHING'
+     'INC' => join(' ', map { '-I@top_srcdir@/'. $_ } @libdir) . ' @CPPFLAGS@',
+     'TYPEMAPS'          => [ 'typemap' ],
