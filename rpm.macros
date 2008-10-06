@@ -911,7 +911,7 @@ fi;
 %groupadd(g:P:rfo)	\
 %{!-g:%{error:groupadd: Required argument -g missing}} \
 %{!?1:%{error:groupadd: Required parameter group missing}} \
-if ! /usr/bin/getgid %{1} > /dev/null 2>&1; then \
+if /usr/bin/getgid %{1} > /dev/null 2>&1; then \
 	if [ "`/usr/bin/getgid %{1}`" != "%{-g*}" ]; then \
 		echo "Error: group %{1} doesn't have gid=%{-g*}. Correct this before installing %{-P*}%{!?-P:%{name}}." 1>&2 \
 		exit 1 \
