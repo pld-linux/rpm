@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	84
+Release:	85
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -939,7 +939,6 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/rpmrc
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # customized rpm macros - global for host
 #
-#%%_install_langs pl_PL:en_US
 %%distribution PLD
 #
 # remove or replace with file_contexts path if you want to use custom
@@ -953,6 +952,14 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # Boolean (i.e. 1 == "yes", 0 == "no") that controls whether files
 # marked as %doc should be installed.
 #%%_excludedocs   1
+EOF
+
+cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.lang <<EOF
+# Customized rpm macros - global for host
+#	A colon separated list of desired locales to be installed;
+#	"all" means install all locale specific files.
+#
+#%%_install_langs pl_PL:en_US
 EOF
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF
@@ -1142,6 +1149,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_bindir}/rpmverify
 
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros.lang
 %dir %{_sysconfdir}/rpm/sysinfo
 # these are ok to be replaced
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo/*
