@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	85
+Release:	86
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -143,6 +143,7 @@ Patch75:	%{name}-mimetype.patch
 Patch76:	%{name}-link.patch
 Patch77:	%{name}-perl_req-use_base.patch
 Patch78:	%{name}-perl_req-skip_multiline.patch
+Patch79:	%{name}-nosmpflags.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -290,10 +291,10 @@ Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	db >= %{reqdb_ver}
-Requires:	zlib >= 1.2.3
-%{?with_selinux:Requires:	libselinux >= 1.18}
 %{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
+%{?with_selinux:Requires:	libselinux >= 1.18}
 Requires:	popt >= %{reqpopt_ver}
+Requires:	zlib >= 1.2.3
 %{?with_suggest_tags:Suggests:	lzma >= 1:4.42.0}
 Obsoletes:	rpm-libs
 # avoid installing with incompatible (non-tukaani) lzma
@@ -732,6 +733,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch76 -p1
 %patch77 -p1
 %patch78 -p1
+%patch79 -p1
 
 mv -f scripts/{perl.req,perl.req.in}
 mv -f scripts/{perl.prov,perl.prov.in}
