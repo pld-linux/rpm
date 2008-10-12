@@ -634,6 +634,7 @@ fi; \
 %ruby_vendorlibdir	%{expand:%%global ruby_vendorlibdir %(%{__ruby} -r rbconfig -e 'print Config::CONFIG["vendorlibdir"]' 2>/dev/null || echo ERROR)}%ruby_vendorlibdir
 %ruby_sitearchdir	%{expand:%%global ruby_sitearchdir %(%{__ruby} -r rbconfig -e 'print Config::CONFIG["sitearchdir"]' 2>/dev/null || echo ERROR)}%ruby_sitearchdir
 %ruby_sitelibdir	%{expand:%%global ruby_sitelibdir %(%{__ruby} -r rbconfig -e 'print Config::CONFIG["sitelibdir"]' 2>/dev/null || echo ERROR)}%ruby_sitelibdir
+%ruby_rdocdir		/usr/share/rdoc
 %ruby_version		%{expand:%%global ruby_version %(%{__ruby} -r rbconfig -e 'print Config::CONFIG["ruby_version"]' 2>/dev/null || echo ERROR)}%ruby_version
 %ruby_ver_requires_eq	Requires:	ruby(ver) = %ruby_version
 %ruby_mod_ver_requires_eq	Requires:	ruby-modules(ver) = %ruby_version
