@@ -1,6 +1,6 @@
---- rpm-4.4.9/macros.in	2008-01-13 19:07:45.023017755 +0200
-+++ rpm-4.4.9/macros.in	2008-01-10 13:18:10.454983604 +0200
-@@ -350,7 +350,7 @@
+--- rpm-4.4.9/macros.in.~1~	2008-10-20 22:23:45.720379526 +0300
++++ rpm-4.4.9/macros.in	2008-10-20 22:24:22.614492828 +0300
+@@ -358,7 +358,7 @@
  #		"w9.lzdio"	lzma level 9.
  #
  %_source_payload	w9.gzdio
@@ -9,7 +9,7 @@
  
  #	Archive formats to use for source/binary package payloads.
  #		"cpio"		cpio archive (default)
-@@ -1426,8 +1426,8 @@
+@@ -1438,8 +1438,8 @@
  #
  # Note: Used iff _use_internal_dependency_generator is non-zero. The
  # helpers are also used by %{_usrlibrpm}/rpmdeps {--provides|--requires}.
@@ -20,7 +20,7 @@
  
  #------------------------------------------------------------------------
  # pkgconfig(...) configuration.
-@@ -1436,8 +1436,8 @@
+@@ -1448,8 +1448,8 @@
  #
  # Note: Used iff _use_internal_dependency_generator is non-zero. The
  # helpers are also used by %{_usrlibrpm}/rpmdeps {--provides|--requires}.
@@ -31,8 +31,12 @@
  
  #------------------------------------------------------------------------
  # executable(...) configuration.
-@@ -1451,7 +1451,7 @@
- #%__scriptlet_requires	/bin/bash --rpm-requires
+@@ -1470,10 +1470,10 @@
+ #
+ # Note: Used if _use_internal_dependency_generator is non-zero. The
+ # helper is also used by %{_uselibrpm}/rpmdeps --provides
+-%__mimetype_provides %{_usrlibrpm}/mimetypedeps.sh --provides
++#%__mimetype_provides %{_usrlibrpm}/mimetypedeps.sh --provides
  
  # PLD rpm macros
 -%_enable_debug_packages 1
