@@ -1,13 +1,14 @@
 #!/usr/bin/php
 <?php
-#####################################################################
-#                                                                   #
-# Check system dependences between php-pear modules                 #
-#                                                                   #
-# Paweł Gołaszewski <blues@pld-linux.org>                           #
-# Michał Moskal <malekith@pld-linux.org>                            #
-# Elan Ruusamäe <glen@pld-linux.org>                                #
-#####################################################################
+/**
+ *
+ * Check system dependences between php-pear modules.
+ * Based on Perl version rpm-php-provides.
+ *
+ * Paweł Gołaszewski <blues@pld-linux.org>
+ * Michał Moskal <malekith@pld-linux.org>
+ * Elan Ruusamäe <glen@pld-linux.org>
+ */
 
 /**
  * Produce old style pear(Path/To/File.php) deps
