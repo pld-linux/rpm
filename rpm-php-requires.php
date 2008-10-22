@@ -3,7 +3,7 @@
 /**
  *
  * Check system dependences between php-pear modules.
- * Based on Perl version rpm-php-provides.
+ * Based on Perl version rpm-php-requires.
  *
  * Paweł Gołaszewski <blues@pld-linux.org>
  * Michał Moskal <malekith@pld-linux.org>
@@ -37,16 +37,12 @@ function extdeps($files) {
 
 	if (version_compare($res['version'], '5.0.0', 'ge')) {
 		$epoch = 4;
-		// produce dependencies only for php5
-		$compat = false;
 		// session, pcre are statically compiled in
 		// date, SPL, SimpleXML are internal for php
 		// sapi_apache?
 		$staticmods = array('standard', 'ereg', 'session', 'pcre', 'date', 'spl', 'simplexml');
 	} else {
 		$epoch = 3;
-		// produce dependencies where php4/php5 both are ok
-		$compat = true;
 		// session has always been compiled in
 		$staticmods = array('standard', 'ereg', 'session');
 	}
@@ -58,11 +54,7 @@ function extdeps($files) {
 			continue;
 		}
 
-		if ($compat) {
-			echo "php(", $ext, ")\n";
-		} else {
-			echo "php-", $ext, "\n";
-		}
+		echo "php(", $ext, ")\n";
 	}
 }
 
