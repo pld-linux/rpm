@@ -39,15 +39,16 @@ function extdeps($files) {
 		$epoch = 4;
 		// produce dependencies only for php5
 		$compat = false;
-		// session has always been compiled in
-		// date, spl are internal for php
-		$staticmods = array('session', 'date', 'spl');
+		// session, pcre are statically compiled in
+		// date, SPL, SimpleXML are internal for php
+		// sapi_apache?
+		$staticmods = array('standard', 'ereg', 'session', 'pcre', 'date', 'spl', 'simplexml');
 	} else {
 		$epoch = 3;
 		// produce dependencies where php4/php5 both are ok
 		$compat = true;
 		// session has always been compiled in
-		$staticmods = array('session');
+		$staticmods = array('standard', 'ereg', 'session');
 	}
 	echo "php-common >= ", $epoch, ":", $res['version'], "\n";
 
