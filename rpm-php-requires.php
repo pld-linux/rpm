@@ -16,7 +16,7 @@
  * @TODO: use tokenizer to parse php files.
  */
 function peardeps($files) {
-	// all files must begin with $RPM_BUILD_ROOT%{php_pear_dir}
+	// files inside php_pear_dir have this prefix
 	$prefix = RPM_BUILD_ROOT. PHP_PEAR_DIR . DIRECTORY_SEPARATOR;
 	$length = strlen($prefix);
 
