@@ -3,26 +3,104 @@
 /**
  *
  * Check system dependences between php-pear modules.
- * Based on Perl version rpm-php-requires.
  *
- * Paweł Gołaszewski <blues@pld-linux.org>
- * Michał Moskal <malekith@pld-linux.org>
+ * Paweł Gołaszewski <blues@pld-linux.org> (Perl version)
+ * Michał Moskal <malekith@pld-linux.org> (Perl version)
  * Elan Ruusamäe <glen@pld-linux.org>
  */
 
 /**
- * Produce old style pear(Path/To/File.php) deps
+ * Produce pear(Path/To/File.php) deps
+ * Ported to PHP from Perl version of rpm-php-requires.
+ *
+ * @TODO: use tokenizer to parse php files.
  */
 function peardeps($files) {
 	// all files must begin with $RPM_BUILD_ROOT%{php_pear_dir}
 	$prefix = RPM_BUILD_ROOT. PHP_PEAR_DIR . DIRECTORY_SEPARATOR;
 	$length = strlen($prefix);
+
+	$req = array();
 	foreach ($files as $f) {
-		if (substr($f, 0, $length) != $prefix) {
+		// skip non-php files
+		if (substr($f, -4) != '.php') {
 			continue;
 		}
-		$f = substr($f, $length);
-		echo "pear($f)\n";
+
+		// subdir inside php_pear_dir
+		if (substr($f, 0, $length) == $prefix) {
+			$file_dir = dirname(substr($f, $length));
+		} else {
+			$file_dir = null;
+		}
+
+		foreach (explode(PHP_EOL, file_get_contents($f)) as $line) {
+			// skip comments
+			if (preg_match('/^\s*(#|\/\/|\*|\/\*)/', $line)) {
+				continue;
+			}
+
+			while (preg_match("/(\W|^)(require|include)(_once)?
+					\s* \(? \s*
+					(\"([^\"]*)\"|'([^']*)')
+					\s* \)? \s* ;/x", $line, $m)) {
+
+				if ($m[5] != "") {
+					$x = $m[5];
+				} else if ($m[6] != "") {
+					$x = $m[6];
+				} else {
+					continue 2;
+				}
+
+				if (substr($x, 0, 2) == './' || substr($x, -1) == '$') {
+					continue 2;
+				}
+
+				if (substr($x, -4) != '.php') {
+					continue 2;
+				}
+				$req[$x] = 1;
+				continue 2;
+			}
+
+			if (is_null($file_dir)) {
+				continue;
+			}
+
+			while (preg_match("/(\W|^)(require|include)(_once)?
+					\s* \(? \s* dirname \s* \( \s* __FILE__ \s* \) \s* \. \s*
+					(\"([^\"]*)\"|'([^']*)')
+					\s* \)? \s* ;/x", $line, $m)) {
+
+				if ($m[5] != "") {
+					$x = $m[5];
+				} else if ($m[6] != "") {
+					$x = $m[6];
+				} else {
+					continue 2;
+				}
+
+				if (substr($x, -1) == '$') {
+					continue 2;
+				}
+				if (substr($x, -4) != '.php') {
+					continue 2;
+				}
+
+				$x = "$file_dir/$x";
+				$req[$x] = 1;
+				continue;
+			}
+		}
+	}
+
+	foreach (array_keys($req) as $f) {
+		// skip self deps
+		if (array_key_exists($f, $files)) {
+			continue;
+		}
+		print "pear($f)\n";
 	}
 }
 
@@ -64,7 +142,7 @@ define('PHP_PEAR_DIR', '/usr/share/pear');
 if ($argc > 1) {
 	$files = array_splice($argv, 1);
 } else {
-	$files = split(PHP_EOL, trim(file_get_contents('php://stdin')));
+	$files = explode(PHP_EOL, trim(file_get_contents('php://stdin')));
 }
 
 peardeps($files);
