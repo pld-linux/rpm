@@ -14,7 +14,7 @@
  */
 function peardeps($files) {
 	// all files must begin with $RPM_BUILD_ROOT%{php_pear_dir}
-	$prefix = RPM_BUILD_ROOT. PATH_SEPARATOR . PHP_PEAR_DIR;
+	$prefix = RPM_BUILD_ROOT. PHP_PEAR_DIR . DIRECTORY_SEPARATOR;
 	$length = strlen($prefix);
 	foreach ($files as $f) {
 		if (substr($f, 0, $length) != $prefix) {
