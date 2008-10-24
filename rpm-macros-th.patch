@@ -18,7 +18,7 @@ diff -ur rpm-4.4.9.org/macros.in rpm-4.4.9/macros.in
  
  %debugcflags	-O0 -g -Wall
 -%optldflags	-Wl,--as-needed
-+%optldflags	-Wl,--as-needed -Wl,-z,relro -Wl,-z,-combreloc
++%optldflags	-Wl,--as-needed -Wl,-z,relro -Wl,-z,combreloc
 +%optcppflags	-D_FORTIFY_SOURCE=2
  
  # Warning: those macros are overwritten by macros.build,
