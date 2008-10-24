@@ -1113,7 +1113,20 @@ Networking/Daemons/Java/Servlets
 	[pl]:		Sieciowe/Serwery/Java/Servlety
 
 Networking/Daemons/Radius
+	[cs]:		Sí»ové/Démoni/Radius
+	[da]:		Netværks/Dæmoner/Radius
+	[de]:		Netzwerkwesen/Server/Radius
+	[es]:		Red/Servidores/Radius
+	[fr]:		RÃ©seau/Serveurs/Radius
+	[is]:		Net/Púkar/Radius
+	[it]:		Rete/Demoni/Radius
+	[nb]:		Nettverks/Daemoner/Radius
 	[pl]:		Sieciowe/Serwery/Radius
+	[pt]:		Rede/Servidores/Radius
+	[ru]:		óÅÔØ/äÅÍÏÎÙ/Radius
+	[sl]:		Omre¾ni/Stre¾niki/Radius
+	[sv]:		Nätverk/Demoner/Radius
+	[uk]:		ĞœĞµÑ€ĞµĞ¶Ğ°/Ğ”ĞµĞ¼Ğ¾Ğ½Ğ¸/Radius
 
 Networking/News
 	[cs]:		Sí»ové/News
