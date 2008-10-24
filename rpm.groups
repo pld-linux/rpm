@@ -1112,6 +1112,9 @@ Networking/Daemons/Java/Extensions
 Networking/Daemons/Java/Servlets
 	[pl]:		Sieciowe/Serwery/Java/Servlety
 
+Networking/Daemons/Radius
+	[pl]:		Sieciowe/Serwery/Radius
+
 Networking/News
 	[cs]:		Sí»ové/News
 	[da]:		Netværks/Nyheder
