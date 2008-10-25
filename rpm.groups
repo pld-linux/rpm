@@ -1079,6 +1079,38 @@ Networking/Daemons
 	[sv]:		N‰tverk/Demoner
 	[uk]:		–ú–µ—Ä–µ–∂–∞/–î–µ–º–æ–Ω–∏
 
+Networking/Daemons/FTP
+	[cs]:		SÌªovÈ/DÈmoni/FTP
+	[da]:		NetvÊrks/DÊmoner/FTP
+	[de]:		Netzwerkwesen/Server/FTP
+	[es]:		Red/Servidores/FTP
+	[fr]:		R√©seau/Serveurs/FTP
+	[is]:		Net/P˙kar/FTP
+	[it]:		Rete/Demoni/FTP
+	[nb]:		Nettverks/Daemoner/FTP
+	[pl]:		Sieciowe/Serwery/FTP
+	[pt]:		Rede/Servidores/FTP
+	[ru]:		Û≈‘ÿ/‰≈ÕœŒŸ/FTP
+	[sl]:		Omreæni/Streæniki/FTP
+	[sv]:		N‰tverk/Demoner/FTP
+	[uk]:		–ú–µ—Ä–µ–∂–∞/–î–µ–º–æ–Ω–∏/FTP
+
+Networking/Daemons/HTTP
+	[cs]:		SÌªovÈ/DÈmoni/HTTP
+	[da]:		NetvÊrks/DÊmoner/HTTP
+	[de]:		Netzwerkwesen/Server/HTTP
+	[es]:		Red/Servidores/HTTP
+	[fr]:		R√©seau/Serveurs/HTTP
+	[is]:		Net/P˙kar/HTTP
+	[it]:		Rete/Demoni/HTTP
+	[nb]:		Nettverks/Daemoner/HTTP
+	[pl]:		Sieciowe/Serwery/HTTP
+	[pt]:		Rede/Servidores/HTTP
+	[ru]:		Û≈‘ÿ/‰≈ÕœŒŸ/HTTP
+	[sl]:		Omreæni/Streæniki/HTTP
+	[sv]:		N‰tverk/Demoner/HTTP
+	[uk]:		–ú–µ—Ä–µ–∂–∞/–î–µ–º–æ–Ω–∏/HTTP
+
 Networking/Daemons/Java
 	[cs]:		SÌªovÈ/DÈmoni/Java
 	[da]:		NetvÊrks/DÊmoner/Java
@@ -1128,6 +1160,22 @@ Networking/Daemons/Radius
 	[sl]:		Omreæni/Streæniki/Radius
 	[sv]:		N‰tverk/Demoner/Radius
 	[uk]:		–ú–µ—Ä–µ–∂–∞/–î–µ–º–æ–Ω–∏/Radius
+
+Networking/Daemons/SMTP
+	[cs]:		SÌªovÈ/DÈmoni/SMTP
+	[da]:		NetvÊrks/DÊmoner/SMTP
+	[de]:		Netzwerkwesen/Server/SMTP
+	[es]:		Red/Servidores/SMTP
+	[fr]:		R√©seau/Serveurs/SMTP
+	[is]:		Net/P˙kar/SMTP
+	[it]:		Rete/Demoni/SMTP
+	[nb]:		Nettverks/Daemoner/SMTP
+	[pl]:		Sieciowe/Serwery/SMTP
+	[pt]:		Rede/Servidores/SMTP
+	[ru]:		Û≈‘ÿ/‰≈ÕœŒŸ/SMTP
+	[sl]:		Omreæni/Streæniki/SMTP
+	[sv]:		N‰tverk/Demoner/SMTP
+	[uk]:		–ú–µ—Ä–µ–∂–∞/–î–µ–º–æ–Ω–∏/SMTP
 
 Networking/News
 	[cs]:		SÌªovÈ/News
