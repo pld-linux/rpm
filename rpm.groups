@@ -272,23 +272,6 @@ Applications/Games
 Applications/Games/Boards
 	[pl]:		Aplikacje/Gry/Planszowe
 
-Applications/Networking
-	[cs]:		Aplikace/SÌªovÈ
-	[da]:		Programmer/NetvÊrks
-	[de]:		Applikationen/Netzwerkwesen
-	[es]:		Aplicaciones/Red
-	[fr]:		Applications/R√©seau
-	[is]:		Forrit/Net
-	[it]:		Applicazioni/Rete
-	[nb]:		Applikasjoner/Nettverk
-	[pl]:		Aplikacje/Sieciowe
-	[pt]:		AplicaÁıes/Rede
-	[pt_BR]:	AplicaÁıes/Rede
-	[ru]:		“…Ãœ÷≈Œ…—/Û≈‘ÿ
-	[sl]:		Programi/Omreæni
-	[sv]:		Till‰mpningar/N‰tverk
-	[uk]:		–ü—Ä–∏–∫–ª–∞–¥–Ω—ñ –ü—Ä–æ–≥—Ä–∞–º–∏/–ú–µ—Ä–µ–∂–∞
-
 Applications/Mail
 	[cs]:		Aplikace/Poπta
 	[da]:		Programmer/Post
@@ -336,6 +319,23 @@ Applications/Multimedia
 	[sl]:		Programi/VeËpredstavnost
 	[sv]:		Till‰mpningar/Multimedia
 	[uk]:		–ü—Ä–∏–∫–ª–∞–¥–Ω—ñ –ü—Ä–æ–≥—Ä–∞–º–∏/–ú—É–ª—å—Ç–∏–º–µ–¥—ñ–∞
+
+Applications/Networking
+	[cs]:		Aplikace/SÌªovÈ
+	[da]:		Programmer/NetvÊrks
+	[de]:		Applikationen/Netzwerkwesen
+	[es]:		Aplicaciones/Red
+	[fr]:		Applications/R√©seau
+	[is]:		Forrit/Net
+	[it]:		Applicazioni/Rete
+	[nb]:		Applikasjoner/Nettverk
+	[pl]:		Aplikacje/Sieciowe
+	[pt]:		AplicaÁıes/Rede
+	[pt_BR]:	AplicaÁıes/Rede
+	[ru]:		“…Ãœ÷≈Œ…—/Û≈‘ÿ
+	[sl]:		Programi/Omreæni
+	[sv]:		Till‰mpningar/N‰tverk
+	[uk]:		–ü—Ä–∏–∫–ª–∞–¥–Ω—ñ –ü—Ä–æ–≥—Ä–∞–º–∏/–ú–µ—Ä–µ–∂–∞
 
 Applications/News
 	[cs]:		Aplikace/News
