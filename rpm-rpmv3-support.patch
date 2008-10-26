@@ -1,6 +1,14 @@
---- ./lib/package.c.rpmv3-support	2006-04-03 01:09:07.000000000 +0200
-+++ ./lib/package.c	2006-07-26 14:45:41.000000000 +0200
-@@ -94,6 +94,148 @@
+--- ./lib/package.c	2006-07-26 14:45:41.000000000 +0200
++++ rpm-4.4.9/lib/package.c	2008-10-26 17:56:29.000000000 +0200
+@@ -10,6 +10,7 @@
+ #include <rpmlib.h>
+ 
+ #include "rpmts.h"
++#include "rpmevr.h"
+ 
+ #include "misc.h"	/* XXX stripTrailingChar() */
+ #include "rpmlead.h"
+@@ -94,6 +95,148 @@
   */
  #define hdrchkRange(_dl, _off)		((_off) < 0 || (_off) > (_dl))
  
@@ -115,7 +123,7 @@
 +/* rpm v3 compatibility */
 +static void rpm3to4(Header h) {
 +    char * rpmversion;
-+    rpmTagType rpmversion_type;
++    int_32 rpmversion_type;
 +
 +    (void) headerGetEntry(h, RPMTAG_RPMVERSION, NULL, (void **) &rpmversion, &rpmversion_type);
 +
@@ -149,7 +157,7 @@
  void headerMergeLegacySigs(Header h, const Header sigh)
  {
      HFD_t hfd = (HFD_t) headerFreeData;
-@@ -1062,6 +1204,8 @@
+@@ -1062,6 +1205,8 @@
  	/* Append (and remap) signature tags to the metadata. */
  	headerMergeLegacySigs(h, sigh);
  
