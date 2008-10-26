@@ -1,0 +1,56 @@
+--- rpm-5.1.4/scripts/perl.req.in.orig	2008-10-26 10:26:43.622757203 +0100
++++ rpm-5.1.4/scripts/perl.req	2008-10-26 10:26:48.452756609 +0100
+@@ -140,15 +140,22 @@
+   return if (!is_perlfile($file, \*FILE));
+ 
+   while (<FILE>) {
+-    
+-    # skip the "= <<" block
+ 
+-    if ( ( m/^\s*\$(.*)\s*=\s*<<\s*["'](.*)['"]/) ||
+-         ( m/^\s*\$(.*)\s*=\s*<<\s*(.*);/) ) {
+-      $tag = $2;
+-      while (<FILE>) {
+-        ( $_ =~ /^$tag/) && last;
+-      }
++    # skip the documentation
++    if ( /^ = (?: head\d | pod | item | over | back | (?: begin|end|for ) \s+\S+ ) \b/x ) {
++        $_ = <FILE> until /^=cut/ or eof;
++        next;
++    }
++
++    # naively strip some comments... will screw m/\#/, m##, q##, qw##, qr##, etc, but these don't really matter for us 
++    s/(?<! \\ ) # \b .+ //x;
++
++    # skip the "= <<label", "print <<", "warn <<", "foo(<<label) blocks
++    # note: watch out for the binary << operator and comments
++    if ( m/ (?: = | \b[a-z][a-z_]+\(? ) \s* << \s* (?: q{0,2}(["']) (.+) \1 | ([a-zA-Z][a-zA-Z\d_]*) ) [\s;\)]* $/x ) {
++        my $tag = defined $2 ? $2 : $3;
++        $_ = <FILE> until m/^\Q$tag\E\s*$/ or eof;
++        next;
+     }
+ 
+     # skip q{} quoted sections - just hope we don't have curly brackets
+@@ -157,21 +164,7 @@
+     if ( m/^.*\Wq[qxwr]?\s*([\{\(\[#|\/])[^})\]#|\/]*$/ && ! m/^\s*(require|use)\s/ ) {
+       $tag = $1;
+       $tag =~ tr/{([/})]/;
+-      $_ = <FILE> until m/\Q$tag\E/;
+-    }
+-
+-    # skip the documentation
+-
+-    # we should not need to have item in this if statement (it
+-    # properly belongs in the over/back section) but people do not
+-    # read the perldoc.
+-
+-    if ( (m/^=(head[1-4]|pod|item)/) .. (m/^=(cut)/) ) {
+-      next;
+-    }
+-
+-    if ( (m/^=(over)/) .. (m/^=(back)/) ) {
+-      next;
++      $_ = <FILE> until m/\Q$tag\E/ or eof;
+     }
+     
+     # skip the data section
