@@ -39,7 +39,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	83
+Release:	89
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -135,6 +135,7 @@ Patch67:	%{name}-cleanbody.patch
 Patch68:	%{name}-rpm5-patchset-9486.patch
 Patch69:	%{name}-popt-aliases.patch
 Patch70:	%{name}-lualeak.patch
+# q>p reverse patch
 #Patch71:	%{name}-rpm5-patchset-10061.patch
 Patch72:	%{name}-rpm5-patchset-7657.patch
 Patch73:	%{name}-namespace-probe.patch
@@ -143,7 +144,10 @@ Patch75:	%{name}-mimetype.patch
 Patch76:	%{name}-link.patch
 Patch77:	%{name}-perl_req-use_base.patch
 Patch78:	%{name}-perl_req-skip_multiline.patch
-Patch79:	%{name}-perl_req-heredocs_pod.patch
+Patch79:	%{name}-nosmpflags.patch
+Patch80:	%{name}-hirmib-ts.patch
+Patch81:	%{name}-perl_req-heredocs_pod.patch
+Patch82:	%{name}-rpmv3-support.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -737,6 +741,9 @@ install %{SOURCE13} scripts/perl.prov
 %patch77 -p1
 %patch78 -p1
 %patch79 -p1
+%patch80 -p1
+%patch81 -p1
+%patch82 -p1
 
 mv -f scripts/{perl.req,perl.req.in}
 mv -f scripts/{perl.prov,perl.prov.in}
@@ -944,7 +951,6 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/rpmrc
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # customized rpm macros - global for host
 #
-#%%_install_langs pl_PL:en_US
 %%distribution PLD Titanium
 #
 # remove or replace with file_contexts path if you want to use custom
@@ -959,12 +965,19 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 %%_enable_debug_packages		0
 EOF
 
+cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.lang <<EOF
+# Customized rpm macros - global for host
+#	A colon separated list of desired locales to be installed;
+#	"all" means install all locale specific files.
+#
+#%%_install_langs pl_PL:en_US
+EOF
+
 %else
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # customized rpm macros - global for host
 #
-#%%_install_langs pl_PL:en_US
 %%distribution PLD
 #
 # remove or replace with file_contexts path if you want to use custom
@@ -978,6 +991,14 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # Boolean (i.e. 1 == "yes", 0 == "no") that controls whether files
 # marked as %doc should be installed.
 #%%_excludedocs   1
+EOF
+
+cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.lang <<EOF
+# Customized rpm macros - global for host
+#	A colon separated list of desired locales to be installed;
+#	"all" means install all locale specific files.
+#
+#%%_install_langs pl_PL:en_US
 EOF
 %endif
 
@@ -1137,10 +1158,12 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_bindir}/rpmverify
 
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros.lang
 %dir %{_sysconfdir}/rpm/sysinfo
 # these are ok to be replaced
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo/*
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/platform
+
 
 %{_mandir}/man8/rpm.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
