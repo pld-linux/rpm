@@ -56,7 +56,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	0.57
+Release:	0.58
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -1197,13 +1197,14 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) /bin/rpm
 
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros.lang
 %dir %{_sysconfdir}/rpm/sysinfo
 # these are ok to be replaced
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo/*
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/platform
 
-%{_mandir}/man8/rpm.8*
 
+%{_mandir}/man8/rpm.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
 %lang(ja) %{_mandir}/ja/man8/rpm.8*
 %lang(ko) %{_mandir}/ko/man8/rpm.8*
