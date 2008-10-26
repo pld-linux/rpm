@@ -149,6 +149,10 @@ Patch79:	%{name}-macros-cpp.patch
 Patch80:	%{name}-link-selinux.patch
 Patch81:	%{name}-db-configure.patch
 Patch82:	%{name}-perl-makefile.patch
+Patch83:	%{name}-nosmpflags.patch
+Patch84:	%{name}-hirmib-ts.patch
+Patch85:	%{name}-perl_req-heredocs_pod.patch
+Patch86:	%{name}-rpmv3-support.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -746,6 +750,10 @@ install %{SOURCE13} scripts/perl.prov
 %patch77 -p0
 %patch79 -p1
 %patch80 -p1
+%patch83 -p1
+%patch84 -p1
+%patch85 -p1
+%patch86 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
@@ -972,12 +980,14 @@ touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Obsoletename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Providename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
 
-%if "%{pld_release}" == "ti"
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # customized rpm macros - global for host
 #
-#%%_install_langs pl_PL:en_US
+%if "%{pld_release}" == "ti"
 %%distribution PLD Titanium
+%else
+%%distribution PLD
+%endif
 #
 # remove or replace with file_contexts path if you want to use custom
 # SELinux file contexts policy instead of one stored in packages payload
@@ -985,31 +995,23 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 %%_verify_file_context_path	%%{nil}
 
 # If non-zero, all erasures will be automagically repackaged.
-%%_repackage_all_erasures	0
+#%%_repackage_all_erasures	1
 
 # If non-zero, create debuginfo packages
-%%_enable_debug_packages		0
-EOF
-%else
-cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
-# customized rpm macros - global for host
-#
-#%%_install_langs pl_PL:en_US
-%%distribution PLD
-#
-# remove or replace with file_contexts path if you want to use custom
-# SELinux file contexts policy instead of one stored in packages payload
-%%_install_file_context_path	%%{nil}
-%%_verify_file_context_path	%%{nil}
-
-# If non-zero, all erasures will be automagically repackaged.
-#%%_repackage_all_erasures    1
+#%%_enable_debug_packages	1
 
 # Boolean (i.e. 1 == "yes", 0 == "no") that controls whether files
 # marked as %doc should be installed.
 #%%_excludedocs   1
 EOF
-%endif
+
+cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.lang <<EOF
+# Customized rpm macros - global for host
+#	A colon separated list of desired locales to be installed;
+#	"all" means install all locale specific files.
+#
+#%%_install_langs pl_PL:en_US
+EOF
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF
 # global list of files (regexps) which don't generate Provides
