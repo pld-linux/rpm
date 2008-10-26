@@ -107,6 +107,7 @@ Patch31:	%{name}-missing-prototypes.patch
 Patch32:	%{name}-pld-autodep.patch
 Patch33:	%{name}-arch-x86_64.patch
 Patch34:	%{name}-epoch0.patch
+Patch35:	%{name}-disable-features-ti.patch
 Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
 Patch39:	%{name}-popt-coreutils.patch
@@ -717,6 +718,7 @@ install %{SOURCE13} scripts/perl.prov
 %endif
 %if "%{pld_release}" == "ti"
 %patch20 -p1
+%patch35 -p1
 %endif
 %patch51 -p1
 #%patch52 -p1
