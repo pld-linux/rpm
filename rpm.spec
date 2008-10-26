@@ -302,6 +302,7 @@ Requires:	zlib >= 1.2.3
 Obsoletes:	rpm-libs
 # avoid installing with incompatible (non-tukaani) lzma
 Conflicts:	lzma < 1:4.42.0
+Requires(triggerpostun):	/sbin/pidof
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
 
@@ -1065,8 +1066,10 @@ done
 /{__spec_install_post_compress_modules}/d
 ' $RPM_BUILD_ROOT%{_rpmlibdir}/noarch-linux/macros
 
+%if %{with python}
 %py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
 %py_comp $RPM_BUILD_ROOT%{py_sitedir}
+%endif
 
 rm -f $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,a,py}
 
@@ -1129,6 +1132,7 @@ if [ -d /vservers ]; then
 	rm -f /etc/vservers/*/apps/pkgmgmt/base/rpm/state/__*
 fi
 echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
+p=$(/sbin/pidof poldek)
 if [ "$p" ]; then
 	echo >&2 "Killing poldek ($p), don't panic :)"
 	kill $p
