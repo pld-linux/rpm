@@ -1,0 +1,20 @@
+--- rpm-4.5/macros.in~	2008-10-26 23:13:47.000000000 +0200
++++ rpm-4.5/macros.in	2008-10-26 23:14:17.862069247 +0200
+@@ -811,7 +811,7 @@
+ %_repackage_root	%{nil}
+ 
+ #	If non-zero, all erasures will be automagically repackaged.
+-%_repackage_all_erasures	1
++%_repackage_all_erasures	0
+ 
+ #	Prevent pure erasure transactions with --rollback. Pure
+ #	erasure rollback transactions will undo an anaconda install,
+@@ -1476,7 +1476,7 @@
+ #%__scriptlet_requires	/bin/bash --rpm-requires
+ 
+ # PLD rpm macros
+-%_enable_debug_packages 1
++%_enable_debug_packages 0
+ 
+ #-----------------------------------------------------------------
+ # CFLAGS and LDFLAGS used to build
