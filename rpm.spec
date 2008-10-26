@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	87
+Release:	88
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -145,6 +145,7 @@ Patch77:	%{name}-perl_req-use_base.patch
 Patch78:	%{name}-perl_req-skip_multiline.patch
 Patch79:	%{name}-nosmpflags.patch
 Patch80:	%{name}-hirmib-ts.patch
+Patch81:	%{name}-perl_req-podimprove.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -736,6 +737,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch78 -p1
 %patch79 -p1
 %patch80 -p1
+%patch81 -p1
 
 mv -f scripts/{perl.req,perl.req.in}
 mv -f scripts/{perl.prov,perl.prov.in}
