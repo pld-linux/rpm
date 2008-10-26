@@ -1145,6 +1145,22 @@ Networking/Daemons/Java/Extensions
 Networking/Daemons/Java/Servlets
 	[pl]:		Sieciowe/Serwery/Java/Servlety
 
+Networking/Daemons/POP3
+	[cs]:		Sí»ové/Démoni/POP3
+	[da]:		Netværks/Dæmoner/POP3
+	[de]:		Netzwerkwesen/Server/POP3
+	[es]:		Red/Servidores/POP3
+	[fr]:		RÃ©seau/Serveurs/POP3
+	[is]:		Net/Púkar/POP3
+	[it]:		Rete/Demoni/POP3
+	[nb]:		Nettverks/Daemoner/POP3
+	[pl]:		Sieciowe/Serwery/POP3
+	[pt]:		Rede/Servidores/POP3
+	[ru]:		óÅÔØ/äÅÍÏÎÙ/POP3
+	[sl]:		Omre¾ni/Stre¾niki/POP3
+	[sv]:		Nätverk/Demoner/POP3
+	[uk]:		ÐœÐµÑ€ÐµÐ¶Ð°/Ð”ÐµÐ¼Ð¾Ð½Ð¸/POP3
+
 Networking/Daemons/Radius
 	[cs]:		Sí»ové/Démoni/Radius
 	[da]:		Netværks/Dæmoner/Radius
