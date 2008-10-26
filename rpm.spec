@@ -9,13 +9,6 @@
 #   preserving payload format and compressor from original rpm, _not_ current settings
 #   /usr/bin/install: cannot stat `./it.gmo': No such file or directory
 #   /usr/bin/install: cannot stat `./sr@Latn.gmo': No such file or directory
-# - rpm2cpio borken:
-#glen@builder-ac pld/BUILD $ unpack dnews-5.5d1-1.src.rpm
-#* dnews-5.5d1-1.src.rpm... lzma: (stdin): Compressed data is corrupt
-#cpio: premature end of archive
-#DONE
-#glen@builder-ac pld/BUILD $ file dnews-5.5d1-1.src.rpm
-#dnews-5.5d1-1.src.rpm: RPM v3 src i386 dnews-5.5d1-1
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
@@ -56,7 +49,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	0.58
+Release:	0.59
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -690,8 +683,8 @@ echo '%%define	__php_provides	/usr/lib/rpm/php.prov' > macros.php
 echo '%%define	__php_requires	/usr/lib/rpm/php.req' >> macros.php
 echo '%%define	__mono_provides	/usr/lib/rpm/mono-find-provides' > macros.mono
 echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
-install %{SOURCE10} scripts/php.prov.in
-install %{SOURCE11} scripts/php.req.in
+install %{SOURCE10} scripts/php.prov
+install %{SOURCE11} scripts/php.req
 install %{SOURCE13} scripts/perl.prov
 %patch21 -p1
 %patch22 -p1
