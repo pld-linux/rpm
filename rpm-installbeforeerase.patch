@@ -1,0 +1,46 @@
+ 4.4.9 -> 4.5:
++	- jbj: add a relation to to force install-before-erase.
++	- jbj: display dependency loops as an error for now.
+ 	- glen: do not skip %clean from spec file
+ 	- robert: install rpmdeps and debugedit to pkglibdir as on HEAD
+ 	- jbj: fix: python ts.hdrFromFdno(fdno) segfault.
+Index: rpm/lib/depends.c
+RCS File: /v/rpm/cvs/rpm/lib/depends.c,v
+rcsdiff -q -kk '-r1.327.2.9' '-r1.327.2.10' -u '/v/rpm/cvs/rpm/lib/depends.c,v' 2>/dev/null
+--- ./lib/depends.c	2008/06/06 14:50:46	1.327.2.9
++++ ./lib/depends.c	2008/10/26 18:29:50	1.327.2.10
+@@ -2191,6 +2191,25 @@
+ 	}
+       }
+ 
++
++	/* Ensure that erasures follow installs during upgrades. */
++      if (rpmteType(p) == TR_REMOVED && p->flink.Pkgid && p->flink.Pkgid[0]) {
++
++	qi = rpmtsiInit(ts);
++	while ((q = rpmtsiNext(qi, TR_ADDED)) != NULL) {
++	    if (strcmp(q->pkgid, p->flink.Pkgid[0]))
++		continue;
++	    requires = rpmdsFromPRCO(q->PRCO, RPMTAG_NAME);
++	    if (requires != NULL) {
++		/* XXX disable erased arrow reversal. */
++		p->type = TR_ADDED;
++		(void) addRelation(ts, p, selected, requires);
++		p->type = TR_REMOVED;
++	    }
++	}
++	qi = rpmtsiFree(qi);
++      }
++
+       if (_autobits != 0xffffffff)
+       {
+ 
+@@ -2401,7 +2420,7 @@
+ 		const char * dp;
+ 		char buf[4096];
+ 		int msglvl = (anaconda || (rpmtsDFlags(ts) & RPMDEPS_FLAG_DEPLOOPS))
+-			? RPMMESS_WARNING : RPMMESS_DEBUG;
++			? RPMMESS_WARNING : RPMMESS_ERROR;
+ ;
+ 
+ 		/* Unchain predecessor loop. */
