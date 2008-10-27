@@ -13,13 +13,12 @@
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
 %bcond_without	apidocs		# don't generate documentation with doxygen
+%bcond_with		internal_db		# internal db (db 4.5.20)
 %if "%{pld_release}" == "ac"
 %bcond_without	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
-%bcond_without	internal_db		# internal db (db 4.5.20)
 %bcond_with		nptl			# internal db: don't use process-shared POSIX mutexes (NPTL provides full interface)
 %else
 %bcond_with		autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
-%bcond_with		internal_db		# internal db (db 4.5.20)
 %bcond_without	nptl			# internal db: don't use process-shared POSIX mutexes (NPTL provides full interface)
 %endif
 %bcond_without	python		# don't build python bindings
@@ -49,7 +48,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	0.59
+Release:	0.61
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -132,7 +131,8 @@ Patch65:	%{name}-lzma-tukaani.patch
 Patch66:	%{name}-v3-support.patch
 Patch67:	%{name}-cleanbody.patch
 Patch69:	%{name}-popt-aliases.patch
-#Patch71:	%{name}-rpm5-patchset-10061.patch
+# reverse arrows patch
+Patch71:	%{name}-installbeforeerase.patch
 Patch73:	%{name}-namespace-probe.patch
 Patch74:	%{name}-noversiondir.patch
 Patch75:	%{name}-rpmte-segv.patch
@@ -302,7 +302,7 @@ Requires:	beecrypt >= %{beecrypt_ver}
 %{?with_selinux:Requires:	libselinux >= 1.18}
 Requires:	ossp-uuid >= 1.6.2-4
 Requires:	popt >= %{reqpopt_ver}
-%{?with_nptl:Requires:	uname(release) >= 2.6.0}
+%{?with_internal_db:%{?with_nptl:Requires:	uname(release) >= 2.6.0}}
 Requires:	zlib >= 1.2.3
 %{?with_suggest_tags:Suggests:	lzma >= 1:4.42.0}
 Obsoletes:	rpm-libs
@@ -735,7 +735,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch66 -p1
 %patch67 -p1
 %patch69 -p1
-#%patch71 -p0
+%patch71 -p1
 %patch73 -p1
 %patch74 -p1
 %patch75 -p0
@@ -831,7 +831,7 @@ sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu
 	%{?with_python:--with-python=%{py_ver}} \
 	%{!?with_python:--without-python} \
 	%{!?with_selinux:--without-selinux} \
-	--%{?with_nptl:en}%{!?with_nptl:dis}able-posixmutexes \
+	%{?with_internal_db:--%{?with_nptl:en}%{!?with_nptl:dis}able-posixmutexes} \
 	--without-db
 
 %{__make} \
