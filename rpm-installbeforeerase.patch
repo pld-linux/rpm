@@ -4,11 +4,17 @@
  	- glen: do not skip %clean from spec file
  	- robert: install rpmdeps and debugedit to pkglibdir as on HEAD
  	- jbj: fix: python ts.hdrFromFdno(fdno) segfault.
-Index: rpm/lib/depends.c
-RCS File: /v/rpm/cvs/rpm/lib/depends.c,v
-rcsdiff -q -kk '-r1.327.2.9' '-r1.327.2.10' -u '/v/rpm/cvs/rpm/lib/depends.c,v' 2>/dev/null
---- ./lib/depends.c	2008/06/06 14:50:46	1.327.2.9
-+++ ./lib/depends.c	2008/10/26 18:29:50	1.327.2.10
+--- rpm-4.5/lib/depends.c~	2008/10/26 18:29:50	1.327.2.10
++++ rpm-4.5/lib/depends.c	2008-10-27 14:42:52.984295775 +0200
+@@ -1936,7 +1936,7 @@
+ 	return 0;
+ 
+     /* Avoid certain dependency relations. */
+-    if (teType == TR_ADDED && ignoreDep(ts, p, q))
++    if (ignoreDep(ts, p, q))
+ 	return 0;
+ 
+     /* Avoid redundant relations. */
 @@ -2191,6 +2191,25 @@
  	}
        }
