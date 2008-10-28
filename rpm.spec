@@ -1,5 +1,6 @@
 #
 # TODO:
+# - check if glob() patch needs resurrecting/rewriting
 # - check if we want shell autodeps: Requires: executable(ln) executable(mv)
 # - %{_arch} = i686 not as used to be i386:
 #   5.0.2: rpm -E '%_target_base_arch %_arch'
@@ -20,11 +21,7 @@
 #   /usr/share/man/man8/rpmconstant.8
 #
 # - headerGet() making poldek segfault http://rpm5.org/cvs/tktview?tn=38,1
-# - LUA segfault - http://rpm5.org/cvs/tktview?tn=39,1
 # - rpm doesn't exit when no sources/patches available http://rpm5.org/cvs/tktview?tn=40,1
-# - http://rpm5.org/cvs/tktview?tn=38&_submit=Show
-# - http://rpm5.org/cvs/tktview?tn=39&_submit=Show
-# - http://rpm5.org/cvs/tktview?tn=40&_submit=Show
 # - http://rpm5.org/cvs/tktview?tn=41&_submit=Show
 #
 # Conditional build:
@@ -66,12 +63,12 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.1.4
-Release:	0.10
+Version:	5.1.6
+Release:	0.1
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.1/%{name}-%{version}.tar.gz
-# Source0-md5:	9a04c22ce1dffc81a7e43d39b002aaa1
+# Source0-md5:	5eb40d7b756fcf04aad7d00a5b3d5b69
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -92,7 +89,7 @@ Source16:	%{name}-java-requires
 Source17:	banner.sh
 Source18:	%{name}-pld.macros
 Source19:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
-# Source19-md5:  08b29584dd349aac9caa7610131a0a88
+# Source19-md5:	08b29584dd349aac9caa7610131a0a88
 Source20:	%{name}-mimetypedeps
 Source100:	%{name}-macros-athlon
 Source101:	%{name}-macros-i386
@@ -661,7 +658,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 
 %prep
 %setup -q -n %{name}-%{version}%{?subver}
-%patch0 -p1
+#patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -710,7 +707,8 @@ install %{SOURCE12} scripts/perl.prov
 %patch59 -p1
 %patch17 -p1
 %patch18 -p1
-%patch19 -p1
+# Maybe, at last we can remove this?
+#patch19 -p1
 %patch60 -p1
 %ifarch sparc64
 %patch61 -p1
@@ -1072,8 +1070,6 @@ rm $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,a,py}
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log,xinetd}
 # utils dropped in 4.4.8 -- their manuals
 rm $RPM_BUILD_ROOT%{_mandir}/{,*/}/man8/rpmgraph.8
-# unpackaged in 4.4.9, reasons unknown
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/symclash.{sh,py}
 
 %find_lang %{name}
 
