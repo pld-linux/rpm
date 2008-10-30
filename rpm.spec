@@ -1,5 +1,8 @@
 #
 # TODO:
+# pluto_> btw. /usr/lib/rpm/find-debuginfo.sh needs fix. it extract debuginfo also from kernel modules.
+# pluto_> there's a filelist=$(find $RPM_BUILD_ROOT ! -path "$RPM_BUILD_ROOT/usr/lib/debug/*.debug" -type f
+# pluto_> and we need to add ! -path /lib/modules/...
 # - python(abi) cap is not provided automatically because /usr/lib*/libpython2*.so.*
 #   matches ELF first
 # - repackaging when lzma is not installed (todo: fix digest signature of header)
