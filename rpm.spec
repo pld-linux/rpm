@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	0.61
+Release:	0.62
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -490,7 +490,7 @@ Summary(ru.UTF-8):	Скрипты и утилиты, необходимые дл
 Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для побудови пакетів
 Group:		Applications/File
 Requires(pretrans):	findutils
-Requires:	%{name}-build-macros >= 1.486-1
+Requires:	%{name}-build-macros >= 1.486
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
