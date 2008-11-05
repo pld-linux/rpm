@@ -496,7 +496,7 @@ fi; }; __spec_install_post_chrpath } } }
     fail=0; \
     printf "Searching for shared objects with unresolved symbols..."; \
     for f in $(find $RPM_BUILD_ROOT -type f -name '*.so.*' -print); do \
-        LC_ALL=C objdump -T $f 2> /dev/null | LC_ALL=C awk -v "file=$f" 'BEGIN { found=0; symbols = "" } /^[0-9a-z]+ +D +\*UND\*/ { found = 1; symbols = symbols "\n\t" $NF } END { if (found) { print "\nUnresolved symbols found in: " file symbols; exit(1); } } ' || fail=1 ; \
+        LC_ALL=C objdump -T $f 2> /dev/null | LC_ALL=C awk -v "file=$f" 'BEGIN { found=0; skip["program_name"]=1; symbols = "" } /^[0-9a-z]+ +D +\*UND\*/ { if ($NF in skip) { next; }; found = 1; symbols = symbols "\n\t" $NF } END { if (found) { print "\nUnresolved symbols found in: " file symbols; exit(1); } } ' || fail=1 ; \
     done ; \
     echo " DONE"; \
     %{!?no_install_post_check_so:[ $fail -eq 1 ] && exit 1 || exit 0;} \
