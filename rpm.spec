@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	0.62
+Release:	0.63
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -127,6 +127,7 @@ Patch56:	%{name}-rpm5-patchset-8413.patch
 Patch57:	%{name}-as_needed-fix.patch
 Patch58:	%{name}-repackage-wo-lzma.patch
 Patch59:	%{name}-libtool-deps.patch
+Patch61:	%{name}-lzma-mem.patch
 Patch62:	%{name}-lzma-size_t.patch
 Patch63:	%{name}-tar_as_secondary_source.patch
 Patch64:	%{name}-man_pl.patch
@@ -307,10 +308,10 @@ Requires:	ossp-uuid >= 1.6.2-4
 Requires:	popt >= %{reqpopt_ver}
 %{?with_internal_db:%{?with_nptl:Requires:	uname(release) >= 2.6.0}}
 Requires:	zlib >= 1.2.3
-%{?with_suggest_tags:Suggests:	lzma >= 1:4.42.0}
+%{?with_suggest_tags:Suggests:	lzma >= 1:4.999.5-0.alpha.2}
 Obsoletes:	rpm-libs
 # avoid installing with incompatible (non-tukaani) lzma
-Conflicts:	lzma < 1:4.42.0
+Conflicts:	lzma < 1:4.999.5-0.alpha.2
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
 
@@ -731,6 +732,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch57 -p1
 %patch58 -p1
 %patch59 -p1
+%patch61 -p1
 %patch62 -p1
 %patch63 -p1
 %patch64 -p1
