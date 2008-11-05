@@ -772,19 +772,25 @@ fi \
 %pyrequires_eq() Requires:	%1
 
 # Hardlink binary identical .pyc and .pyo files
-# (idea by glen <at> pld-linux <dot> org)
 %__spec_install_post_py_hardlink {\
 %{!?no_install_post_py_hardlink: __spec_install_post_py_hardlink() { \
-[ ! -d "$RPM_BUILD_ROOT" ] || find "$RPM_BUILD_ROOT" -name '*.pyc' | while read a; do \
-	b="${a%.pyc}.pyo"; \
-	if cmp -s "$a" "$b"; then \
-		ln -f "$a" "$b"; \
-	fi; \
-done \
+local a b c=0 t=0; \
+if [ -d "$RPM_BUILD_ROOT" ]; then \
+	find "$RPM_BUILD_ROOT" -name '*.pyc' > __rpm_pyc; \
+	while read a; do \
+		b="${a%.pyc}.pyo"; \
+		if cmp -s "$a" "$b"; then \
+			ln -f "$a" "$b"; \
+			c=$((c + 1)); \
+		fi; \
+		t=$((t + 1)); \
+	done < __rpm_pyc; \
+	[ $t -gt 0 ] && printf "Hardlink Python files: %d/%d files hardlinked\n" $c $t; \
+	rm -f __rpm_pyc; \
+fi; \
 }; __spec_install_post_py_hardlink } }
 
 # remove python sources, so that check-files won't complain
-# (idea by glen <at> pld-linux <dot> org)
 %py_postclean() \
 for d in %{py_sitescriptdir} %{py_sitedir} %*; do \
  [ ! -d "$RPM_BUILD_ROOT$d" ] || find "$RPM_BUILD_ROOT$d" -name '*.py' -print0 | xargs -0r -l512 rm;\
