@@ -2,7 +2,7 @@
 # TODO:
 # - check if glob() patch needs resurrecting/rewriting
 # - check if we want shell autodeps: Requires: executable(ln) executable(mv)
-# - %{_arch} = i686 not as used to be i386:
+# - %{_arch} = i686 not as used to be i386 (platform file thing?):
 #   5.0.2: rpm -E '%_target_base_arch %_arch'
 #          i386 i686
 #   4.4.9: rpm -E '%_target_base_arch %_arch'
