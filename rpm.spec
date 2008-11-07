@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	91
+Release:	92
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -118,6 +118,7 @@ Patch50:	%{name}-macros.patch
 Patch51:	%{name}-cleanlibdirs.patch
 Patch52:	%{name}-morearchs.patch
 Patch53:	%{name}-chroot-hack.patch
+Patch54:	%{name}-lualeak.patch
 Patch55:	%{name}-truncate-cvslog.patch
 Patch56:	%{name}-rpm5-patchset-8413.patch
 Patch57:	%{name}-as_needed-fix.patch
@@ -133,8 +134,8 @@ Patch66:	%{name}-v3-support.patch
 Patch67:	%{name}-cleanbody.patch
 Patch68:	%{name}-rpm5-patchset-9486.patch
 Patch69:	%{name}-popt-aliases.patch
-Patch70:	%{name}-lualeak.patch
 # reverse arrows patch
+Patch70:	%{name}-rpm5-patchset-10061.patch
 Patch71:	%{name}-installbeforeerase.patch
 Patch72:	%{name}-rpm5-patchset-7657.patch
 Patch73:	%{name}-namespace-probe.patch
@@ -712,6 +713,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch51 -p1
 #%patch52 -p1
 %patch53 -p1
+%patch54 -p1
 %patch55 -p1
 %patch56 -p1
 %patch57 -p1
@@ -728,8 +730,8 @@ install %{SOURCE13} scripts/perl.prov
 %patch67 -p1
 %patch68 -p1
 %patch69 -p1
-%patch70 -p1
-#%patch71 -p0
+%patch70 -p0
+%patch71 -p1
 %patch72 -p0
 %patch73 -p1
 %patch74 -p1
