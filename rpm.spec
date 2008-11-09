@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	2
+Release:	3
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -152,6 +152,7 @@ Patch83:	%{name}-nosmpflags.patch
 Patch84:	%{name}-hirmib-ts.patch
 Patch85:	%{name}-perl_req-heredocs_pod.patch
 Patch86:	%{name}-rpmv3-support.patch
+Patch87:	%{name}-mono.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -756,6 +757,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch85 -p1
 %patch86 -p1
 %patch70 -p0
+%patch87 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
