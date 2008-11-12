@@ -1345,6 +1345,7 @@ for cfg in ${cfgs:-dist}; do                                        \
 	%else															\
 		install -d o/include/config									\
 		touch o/include/config/MARKER								\
+		ln -sf %{_kernelsrcdir}/include/config/auto-$cfg.conf o/include/config/auto.conf	\
 		ln -sf %{_kernelsrcdir}/scripts o/scripts					\
 	%endif															\
 																	\
