@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	4
+Release:	5
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -1154,20 +1154,6 @@ if [ -d /vservers ]; then
 	rm -f /etc/vservers/*/apps/pkgmgmt/base/rpm/state/__*
 fi
 echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
-# TODO: poldek should abort if it can't reopen rpmdb after rpm exec:
-#Installing set #3
-#rpmdb: Program version 4.2 doesn't match environment version
-#error: db4 error(22) from dbenv->open: Invalid argument
-#error: cannot open Packages index using db3 - Invalid argument (22)
-#error: //var/lib/rpm: open rpm database failed
-#Processing dependencies...
-#There are more than one package which provide "/bin/sh":
-# if poldek is running, kill it so it will not attempt to fill whole rpmdb
-p=$(/sbin/pidof poldek)
-if [ "$p" ]; then
-	echo >&2 "Killing poldek ($p), don't panic :)"
-	kill $p
-fi
 
 %triggerpostun lib -- db4.5 < %{reqdb_ver}
 echo >&2 "db4.5 upgrade: Removing /var/lib/rpm/__db* from older rpmdb version"
@@ -1177,10 +1163,6 @@ if [ -d /vservers ]; then
 	rm -f /etc/vservers/*/apps/pkgmgmt/base/rpm/state/__*
 fi
 echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
-if [ "$p" ]; then
-	echo >&2 "Killing poldek ($p), don't panic :)"
-	kill $p
-fi
 
 %triggerpostun -- %{name} < 4.4.9-44
 %{_rpmlibdir}/hrmib-cache
