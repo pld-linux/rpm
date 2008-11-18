@@ -8,43 +8,60 @@
 export PATH="/sbin:/usr/sbin:/bin:/usr/bin"
 
 javaclassversion() {
-	[ $# -gt 0 ] || return
+	[ $# -gt 0 ] || return 1
 
-	local ver
-	classver=$(echo "$@" | xargs -r file | grep -o 'compiled Java class data, version [0-9.]*' | awk '{print $NF}' | sort -u)
-	[ "$classver" ] || return
+	local classver=$(echo "$@" | xargs -r file | grep -o 'compiled Java class data, version [0-9.]*' | awk '{print $NF}' | sort -u)
+	if [ -z "$classver" ]; then
+		return 1
+	fi
+
+	local v
 	for v in $classver; do
 		echo "java(ClassDataVersion) >= $v"
 	done
+	return 0
 }
 
 javajarversion() {
 	local jar="$1"
+	local ret=0
 
 	# check only files, symlinks could point outside buildroot
-	[ -f "$jar" -a ! -L "$jar" ] || return
-
-#	echo >&2 "find java requires: ${jar#$RPM_BUILD_ROOT}"
+	[ -f "$jar" -a ! -L "$jar" ] || return $ret
 
 	tmp=$(mktemp -d)
 	unzip -q -d $tmp $jar >&2
-	javaclassversion $(find $tmp -type f -name '*.class')
+	javaclassversion $(find $tmp -type f -name '*.class') || {
+		echo >&2 "ERROR: Class version could not be extracted from $jar"
+		ret=1
+	}
 	rm -rf $tmp
+
+	return $ret
+}
+
+find_requires() {
+	local ret=0
+	for file in $FILES; do
+		case $file in
+		*.jar)
+			javajarversion "$file" || ret=1
+		;;
+		*.class)
+			javaclassversion "$file" || {
+				echo >&2 "ERROR: Class version could not be extracted from $file"
+				ret=1
+			}
+		;;
+		esac
+	done
+	return $ret
 }
 
 FILES=$(cat -)
 
-find_requires() {
-	for file in $FILES; do
-		case $file in
-		*.jar)
-			javajarversion "$file"
-		;;
-		*.class)
-			javaclassversion "$file"
-		;;
-		esac
-	done
-}
-
-find_requires | sort -u
+t=$(mktemp)
+ret=0
+find_requires > $t || ret=1
+rm -f $t
+exit $ret
