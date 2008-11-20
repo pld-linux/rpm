@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	5
+Release:	6
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -311,9 +311,10 @@ Requires:	ossp-uuid >= 1.6.2-4
 Requires:	popt >= %{reqpopt_ver}
 %{?with_internal_db:%{?with_nptl:Requires:	uname(release) >= 2.6.0}}
 Requires:	zlib >= 1.2.3
-%{?with_suggest_tags:Suggests:	lzma >= 1:4.999.5-0.alpha.2}
+%{?with_suggest_tags:Suggests:	lzma}
 Obsoletes:	rpm-libs
 # avoid installing with incompatible (non-tukaani) lzma
+# avoid incompatible (-M0 not supported) lzma
 Conflicts:	lzma < 1:4.999.5-0.alpha.2
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
