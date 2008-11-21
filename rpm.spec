@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	6
+Release:	7
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -138,6 +138,7 @@ Patch69:	%{name}-popt-aliases.patch
 # reverse arrows patch
 Patch70:	%{name}-rpm5-patchset-10061.patch
 Patch71:	%{name}-installbeforeerase.patch
+Patch72:	%{name}-postun-nofail.patch
 Patch73:	%{name}-namespace-probe.patch
 Patch74:	%{name}-noversiondir.patch
 Patch75:	%{name}-rpmte-segv.patch
@@ -745,6 +746,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch67 -p1
 %patch69 -p1
 %patch71 -p1
+%patch72 -p1
 %patch73 -p1
 %patch74 -p1
 %patch75 -p0
