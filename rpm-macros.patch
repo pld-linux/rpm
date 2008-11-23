@@ -65,6 +65,15 @@
  
  #==============================================================================
  # ---- Database configuration macros.
+@@ -954,7 +954,7 @@
+ 
+ %___build_shell		%{?_buildshell:%{_buildshell}}%{!?_buildshell:/bin/sh}
+ %___build_args		-e
+-%___build_cmd		%{?_sudo:%{_sudo} }%{?_remsh:%{_remsh} %{_remhost} }%{?_remsudo:%{_remsudo} }%{?_remchroot:%{_remchroot} %{_remroot} }%{___build_shell} %{___build_args}
++%___build_cmd		%{?_sudo:%{_sudo} }%{?_remsh:%{_remsh} %{_remhost} }%{?_remsudo:%{_remsudo} }%{?_remchroot:%{_remchroot} %{_remroot} }%{?_clean_env:%{_clean_env} }%{___build_shell} %{___build_args}
+ %___build_pre	\
+   RPM_SOURCE_DIR=\"%{u2p:%{_sourcedir}}\"\
+   RPM_BUILD_DIR=\"%{u2p:%{_builddir}}\"\
 @@ -991,9 +995,12 @@
    %{?_javaclasspath:CLASSPATH=\"%{_javaclasspath}\"\
    export CLASSPATH}\
