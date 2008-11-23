@@ -155,6 +155,7 @@ Patch85:	%{name}-perl_req-heredocs_pod.patch
 Patch86:	%{name}-rpmv3-support.patch
 Patch87:	%{name}-mono.patch
 Patch88:	%{name}-poptexecpath.patch
+Patch89:	%{name}-lzma_w7.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -763,6 +764,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch70 -p0
 %patch87 -p1
 %patch88 -p1
+%patch89 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
