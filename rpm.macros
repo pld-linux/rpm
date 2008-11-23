@@ -131,16 +131,16 @@
 #	# ADDITIONAL_VAR is required because [a good reason here]
 #	%{expand:%%define _preserve_env %_preserve_env ADDITIONAL_VAR}
 
-%_preserve_env	HOME TMP TMPDIR
+%_preserve_env	PATH HOME TMP TMPDIR
 
 %_clean_env		env -i %(awk 'BEGIN {
-	split("%{?_preserve_env:%_preserve_env}",P);
-	for ( i in P ) {
-		p = P[ i ];
-		if ( ENVIRON[ p ] ) {
-			val = ENVIRON[ p ];
-			gsub( /[\\\\"$`]/, "\\\\\\&", val );
-			printf( "\\"" p "=" val "\\" ");
+	split("%{?_preserve_env:%_preserve_env}", P);
+	for (i in P) {
+		p = P[i];
+		if (ENVIRON[p]) {
+			val = ENVIRON[p];
+			gsub(/[\\\\"$`]/, "\\\\\\&", val);
+			printf("\\"" p "=" val "\\" ");
 		}
 	}
 }')
