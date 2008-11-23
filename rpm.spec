@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	7
+Release:	8
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -155,7 +155,7 @@ Patch85:	%{name}-perl_req-heredocs_pod.patch
 Patch86:	%{name}-rpmv3-support.patch
 Patch87:	%{name}-mono.patch
 Patch88:	%{name}-poptexecpath.patch
-Patch89:	%{name}-lzma_w7.patch
+Patch89:	%{name}-lzma-compress-level.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
