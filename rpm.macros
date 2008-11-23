@@ -122,6 +122,30 @@
 }')
 
 #-----------------------------------------------------------------
+#
+#  Generate a command which cleans environment, leaving only the
+# most important variables.
+#  If any spec requires any additional environment it should
+# redefine %_preserve_env in following manner:
+#
+#	# ADDITIONAL_VAR is required because [a good reason here]
+#	%{expand:%%define _preserve_env %_preserve_env ADDITIONAL_VAR}
+
+%_preserve_env	HOME TMP TMPDIR
+
+%_clean_env		env -i %(awk 'BEGIN {
+	split("%{?_preserve_env:%_preserve_env}",P);
+	for ( i in P ) {
+		p = P[ i ];
+		if ( ENVIRON[ p ] ) {
+			val = ENVIRON[ p ];
+			gsub( /[\\\\"$`]/, "\\\\\\&", val );
+			printf( "\\"" p "=" val "\\" ");
+		}
+	}
+}')
+
+#-----------------------------------------------------------------
 %configure2_13 { \
  if [ -n "$LINGUAS" ]; then unset LINGUAS; fi; \
  LDFLAGS="${LDFLAGS:-%rpmldflags}" ; export LDFLAGS ; \
