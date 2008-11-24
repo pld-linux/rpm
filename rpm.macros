@@ -133,14 +133,26 @@
 
 %_preserve_env	PATH HOME TMP TMPDIR
 
-%_clean_env		env -i %(awk 'BEGIN {
+%_clean_env		env -i %(awk -vq="'" -vqq="\\"'\\"" -vq2q="'\\"'" 'BEGIN {
 	split("%{?_preserve_env:%_preserve_env}", P);
 	for (i in P) {
 		p = P[i];
 		if (ENVIRON[p]) {
-			val = ENVIRON[p];
-			gsub(/[\\\\"$`]/, "\\\\\\&", val);
-			printf("\\"" p "=" val "\\" ");
+			split( ENVIRON[p], V, "" );
+			val = p "=";
+			for ( j = 1; j in V; j++ ) {
+				v = V[j];
+				if ( v == q )
+					v = qq;
+				else if ( v == "\\"" )
+					v = q2q;
+				else if ( v == "\\\\" )
+					v = "\\\\\\\\";
+				else
+					gsub( "[^a-zA-Z0-9/]", "\\"&\\"", v );
+				val = val "" v;
+			}
+			printf( val " " );
 		}
 	}
 }')
