@@ -149,7 +149,7 @@
 				else if ( v == "\\\\" )
 					v = "\\\\\\\\";
 				else
-					gsub( "[^a-zA-Z0-9/]", "\\"&\\"", v );
+					gsub( "[^a-zA-Z0-9/:._-]", "\\"&\\"", v );
 				val = val "" v;
 			}
 			printf( val " " );
