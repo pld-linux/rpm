@@ -11,15 +11,17 @@ diff -ur rpm-4.4.9.org/macros.in rpm-4.4.9/macros.in
  #	Configurable distribution URL, same as DistURL: tag in a specfile.
  #	The URL will be used to supply reliable information to tools like
  #	rpmfind.
---- rpm/macros.in~	2008-07-29 15:33:40.289757059 +0200
-+++ rpm/macros.in	2008-07-29 15:37:14.559735562 +0200
-@@ -1635,7 +1635,8 @@
- # -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
- 
- %debugcflags	-O0 -g -Wall
--%optldflags	-Wl,--as-needed
-+%optldflags	-Wl,--as-needed -Wl,-z,relro -Wl,-z,combreloc
-+%optcppflags	-D_FORTIFY_SOURCE=2
- 
- # Warning: those macros are overwritten by macros.build,
+--- rpm-4.5/macros.in.orig	2008-11-26 21:59:11.346746301 +0100
++++ rpm-4.5/macros.in	2008-11-26 22:01:02.728818761 +0100
+@@ -1490,8 +1490,9 @@
  #          left here for compatibility
+ %rpmcflags	%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
+ %rpmcxxflags	%{rpmcflags}
+-%rpmldflags	%{!?no_build_with_as_needed:-Wl,--as-needed}
+-  
++%rpmldflags	%{!?no_build_with_as_needed:-Wl,--as-needed} -Wl,-z,relro -Wl,-z,combreloc
++%optcppflags	-D_FORTIFY_SOURCE=2
++
+ #------------------------------------------------------------------------
+ # mimetype(...) configuration.
+ #
