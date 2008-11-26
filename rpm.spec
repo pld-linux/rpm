@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	8
+Release:	9
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -208,6 +208,7 @@ Requires:	popt >= %{reqpopt_ver}
 Provides:	rpm-db-ver = %{reqdb_ver}
 Obsoletes:	rpm-getdeps
 %{!?with_static:Obsoletes:	rpm-utils-static}
+Obsoletes:	tmpwatch-rpmrepackage
 Conflicts:	glibc < 2.2.92
 Conflicts:	poldek < 0.21-0.20070703.00.11
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -861,7 +862,7 @@ sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib}
+install -d $RPM_BUILD_ROOT{/%{_lib},/etc/{sysconfig,tmpwatch},%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib}
 
 %if "%{pld_release}" != "ti"
 install -d $RPM_BUILD_ROOT/etc/pki/rpm-gpg
@@ -874,6 +875,11 @@ install %{SOURCE9} $RPM_BUILD_ROOT/etc/pki/rpm-gpg
 	staticLDFLAGS=%{?with_static:-all-static} \
 	pylibdir=%{py_libdir} \
 	pkgbindir="%{_bindir}"
+
+cat <<'EOF' > $RPM_BUILD_ROOT/etc/tmpwatch/rpm.conf
+# Cleanup 90-days old repackage files.
+/var/spool/repackage 2160
+EOF
 
 cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 # first platform file entry can't contain regexps
@@ -1189,6 +1195,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %attr(755,root,root) /bin/rpm
 
+%config(noreplace) %verify(not md5 mtime size) /etc/tmpwatch/rpm.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros.lang
 %dir %{_sysconfdir}/rpm/sysinfo
