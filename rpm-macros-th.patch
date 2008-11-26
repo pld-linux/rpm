@@ -19,7 +19,7 @@ diff -ur rpm-4.4.9.org/macros.in rpm-4.4.9/macros.in
  %rpmcxxflags	%{rpmcflags}
 -%rpmldflags	%{!?no_build_with_as_needed:-Wl,--as-needed}
 -  
-+%rpmldflags	%{!?no_build_with_as_needed:-Wl,--as-needed} -Wl,-z,relro -Wl,-z,combreloc
++%optldflags	%{!?no_build_with_as_needed:-Wl,--as-needed} -Wl,-z,relro -Wl,-z,combreloc
 +%optcppflags	-D_FORTIFY_SOURCE=2
 +
  #------------------------------------------------------------------------
