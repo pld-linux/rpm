@@ -228,8 +228,7 @@ CXXFLAGS="%{rpmcxxflags}" \
 #%configure_cache 0
 %configure_cache_file	%{buildroot}.configure.cache
 
-%__configure_sh sh
-%configure {%__configure_sh ./configure \
+%configure {./configure \
  	LDFLAGS="${LDFLAGS:-%rpmldflags}" \
 	CFLAGS="${CFLAGS:-%rpmcflags}" \
 	CXXFLAGS="${CXXFLAGS:-%rpmcxxflags}" \
