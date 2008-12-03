@@ -1428,6 +1428,7 @@ compile %{*}\
 %define KernelD $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}			\
 %define ModprobeD $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{_kernel_ver} \
 																	\
+__install_kernel_modules() {										\
 local cfgs='%{?with_dist_kernel:%{?with_smp: smp}%{?with_up: up}}%{!?with_dist_kernel: nondist}' \
 																	\
 for MODULE in {%{-m*},}; do											\
@@ -1442,6 +1443,8 @@ for MODULE in {%{-m*},}; do											\
 			>> %{ModprobeD}$suf/%{-n*}.conf}						\
 	done															\
 done																\
+}																	\
+__install_kernel_modules											\
 %{nil}
 
 # patchset macros
