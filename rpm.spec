@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	9
+Release:	10
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -156,6 +156,7 @@ Patch86:	%{name}-rpmv3-support.patch
 Patch87:	%{name}-mono.patch
 Patch88:	%{name}-poptexecpath.patch
 Patch89:	%{name}-lzma-compress-level.patch
+Patch90:	%{name}-gstreamer.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -766,6 +767,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch87 -p1
 %patch88 -p1
 %patch89 -p1
+%patch90 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
