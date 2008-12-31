@@ -1,7 +1,7 @@
 diff -urN rpm/lib/rpmfc.c rpm.new/lib/rpmfc.c
 --- rpm/lib/rpmfc.c	2008-12-28 13:38:03.000000000 +0100
-+++ rpm.new/lib/rpmfc.c	2008-12-28 13:44:15.000000000 +0100
-@@ -960,13 +960,17 @@
++++ rpm.new/lib/rpmfc.c	2008-12-31 22:20:54.000000000 +0100
+@@ -960,13 +960,15 @@
  	/*@modifies rpmGlobalMacroContext, fileSystem, internalState @*/
  {
      const char * fn = fc->fn[fc->ix];
@@ -13,9 +13,7 @@ diff -urN rpm/lib/rpmfc.c rpm.new/lib/rpmfc.c
      if (fc->skipReq)
  	flags |= RPMELF_FLAG_SKIPREQUIRES;
  
-+    /* it may be gst plugin */
-+    if (strstr(fn, "/gstreamer-"))
-+	xx = rpmfcHelper(fc, 'P', "gstreamer");
++    xx = rpmfcHelper(fc, 'P', "gstreamer");
 +
      return rpmdsELF(fn, flags, rpmfcMergePR, fc);
  }
