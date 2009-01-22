@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	10
+Release:	11
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -77,6 +77,7 @@ Source16:	%{name}-macros.java
 Source17:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source18:	banner.sh
+Source19:	%{name}-macros.gstreamer
 Patch1067:	%{name}-disable-features.patch
 Patch1070:	%{name}-rpmrc-ac.patch
 #Patch0:	%{name}-pl.po.patch
@@ -978,6 +979,7 @@ install macros.python	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.python
 install macros.php	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.php
 install macros.mono	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.mono
 install %{SOURCE16}	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.java
+install %{SOURCE19}	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.gstreamer
 
 install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
@@ -1350,6 +1352,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/x86_64*
 %endif
 # must be here for "Requires: rpm-*prov" to work
+%{_rpmlibdir}/macros.gstreamer
 %{_rpmlibdir}/macros.java
 %{_rpmlibdir}/macros.mono
 %{_rpmlibdir}/macros.perl
