@@ -299,7 +299,7 @@ CXXFLAGS="%{rpmcxxflags}" \
 %__unsermake /usr/share/unsermake/unsermake
 
 # Current date
-%date 		%(LC_ALL="C" date +"%a %b %d %Y")
+%date 		%(LC_ALL=C date +"%a %b %d %Y")
 
 # Example files, programs, scripts...
 %_examplesdir	/usr/src/examples
@@ -314,7 +314,7 @@ CXXFLAGS="%{rpmcxxflags}" \
 %_rpmfilename		%%{NAME}-%%{VERSION}-%%{RELEASE}%{?debug:dbg}.%%{ARCH}.rpm
 
 # Requires name = version-release
-%requires_releq()		%(echo '%*' | LC_ALL="C" xargs -r rpm -q --qf 'Requires: %{N} = %|E?{%{E}:}|%{V}-%{R}\\n' | grep -v 'is not')
+%requires_releq()		%(Z=$(echo '%*' | LC_ALL=C xargs -r rpm -q --qf 'Requires: %{N} = %|E?{%{E}:}|%{V}-%{R}\\n'); if echo "$Z" | ! grep -v '^Requires:'; then echo "$Z"; fi)
 
 %releq_kernel			%{expand:%%global releq_kernel %(R=$(LC_ALL=C rpm -q --qf '%{N} = %|E?{%{E}:}|%{V}-%{R}' -f %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | grep -v 'is not' | sed -e 's:-headers::;s:-config::'); echo ${R:-ERROR})}%releq_kernel
 %releq_kernel_up		%{expand:%%global releq_kernel_up %(R=$(LC_ALL=C rpm -q --qf '%{N}-up = %|E?{%{E}:}|%{V}-%{R}' -f %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | grep -v 'is not' | sed -e 's:-headers::;s:-config::'); echo ${R:-ERROR})}%releq_kernel_up
@@ -323,9 +323,10 @@ CXXFLAGS="%{rpmcxxflags}" \
 %requires_releq_kernel_up(s:)	Requires%{-s:(%{-s*})}: %releq_kernel_up
 %requires_releq_kernel_smp(s:)	Requires%{-s:(%{-s*})}: %releq_kernel_smp
 
-# XXX: why epoch 0 is stripped?
-%requires_eq()		%(echo '%*' | LC_ALL="C" xargs -r rpm -q --qf 'Requires: %{N} = %|E?{%{E}:}|%{V}\\n' | sed -e 's/ 0:/ /' | grep -v 'is not')
-%requires_eq_to() %(LC_ALL="C" rpm -q --qf 'Requires: %1 = %|E?{%{E}:}|%{V}' %2 | grep -v "is not")
+# Requires: name = version
+%requires_eq()		%(Z=$(echo '%*' | LC_ALL=C xargs -r rpm -q --qf 'Requires: %{N} = %|E?{%{E}:}|%{V}\\n'); if echo "$Z" | ! grep -v '^Requires:'; then echo "$Z"; fi)
+# Requires: name = version (version based on querying package %2)
+%requires_eq_to() %(%{!?2:echo "ERROR: missing param 2 to %%requires_eq_to"}%{?2:Z=$(LC_ALL=C rpm -q --qf 'Requires: %1 = %|E?{%{E}:}|%{V}' %2 | grep -v "is not"); echo ${Z:-[%%requires_eq_to %1 %2] expanded to nothing}})
 
 %apache_modules_api %{expand:%%global apache_modules_api %(awk '/#define MODULE_MAGIC_NUMBER_MAJOR/ {print $3}' /usr/include/apache/ap_mmn.h 2>/dev/null || echo ERROR)}%apache_modules_api
 
