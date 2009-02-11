@@ -158,6 +158,7 @@ Patch87:	%{name}-mono.patch
 Patch88:	%{name}-poptexecpath.patch
 Patch89:	%{name}-lzma-compress-level.patch
 Patch90:	%{name}-gstreamer.patch
+Patch91:	%{name}-gendiff.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -769,6 +770,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch88 -p1
 %patch89 -p1
 %patch90 -p1
+%patch91 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
