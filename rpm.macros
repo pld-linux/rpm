@@ -129,9 +129,10 @@
 # redefine %_preserve_env in following manner:
 #
 #	# ADDITIONAL_VAR is required because [a good reason here]
-#	%{expand:%%define _preserve_env %_preserve_env ADDITIONAL_VAR}
+#	%define _preserve_env %_preserve_env_base ADDITIONAL_VAR
 
-%_preserve_env	PATH HOME TMP TMPDIR
+%_preserve_env_base	PATH HOME TMP TMPDIR
+%_preserve_env %_preserve_env_base
 
 %_clean_env		env -i %(awk -vq="'" -vqq="\\"'\\"" -vq2q="'\\"'" 'BEGIN {
 	split("%{?_preserve_env:%_preserve_env}", P);
