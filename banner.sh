@@ -60,28 +60,20 @@ Help()
 {
 	Usage
 	cat << EOF
--a
---all       - all banners
+-a, --all       - all banners
 -d, --delete    - delete specified banners
--e
---exclude   - exclude following banners (useful with -a)
--h
---help      - show this help
--i
---include   - cancel effect of -e (EXCLUDED banners will remain excluded)
--m
---make      - make a brand-new banner named as following parameter [1] (from stdin)
--M          - same as above, but append if file exists
--n
---names     - show names of the banners
---newer     - all choosen banners should be newer than following parameter in seconds
---older     - all choosen banners should be older than following parameter in seconds
--s
---show      - show specified banners
---stderr    - send banner to stderr instead of stdout (or other)
---stdout    - send banner to stdout instead of stderr (or other)
--u
---usage     - show short help
+-e, --exclude   - exclude following banners (useful with -a)
+-h, --help      - show this help
+-i, --include   - cancel effect of -e (EXCLUDED banners will remain excluded)
+-m, --make      - make a brand-new banner named as following parameter [1] (from stdin)
+-M              - same as above, but append if file exists
+-n, --names     - show names of the banners
+--newer         - all choosen banners should be newer than following parameter in seconds
+--older         - all choosen banners should be older than following parameter in seconds
+-s, --show      - show specified banners
+--stderr        - send banner to stderr instead of stdout (or other)
+--stdout        - send banner to stdout instead of stderr (or other)
+-u, --usage     - show short help
 
 [1] if there is no slash ('/') in the given name default dir ($BANNERDIR) is used,
     otherwise the one that's specified
