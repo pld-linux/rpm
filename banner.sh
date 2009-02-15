@@ -118,7 +118,7 @@ get_banner_list()
 	BANNERS="$1"
 	NOBANNERS="$2"
 	for BANNER in $BANNERS; do
-		if [ -r "$BANNERDIR/$BANNER" ];then
+		if [ -r "$BANNERDIR/$BANNER" ]; then
 			echo $NOBANNERS | grep -q $BANNER || echo $BANNER
 		fi
 	done
@@ -143,7 +143,7 @@ make_banner()
 	else
 		echo "$data" >> $BANNER
 	fi
-	if [ $SHOW -eq 1 ];then
+	if [ $SHOW -eq 1 ]; then
 		echo "$data"
 	fi
 }
@@ -157,7 +157,8 @@ show_banners()
 		show_banner $BANNER
 	done
 }
-######################################################## MAIN ########
+
+######################################################### MAIN ########
 while [ -n "$1" ]; do
 	case "$1" in
 		-a|--all)
@@ -185,12 +186,12 @@ while [ -n "$1" ]; do
 				NEW_BANNER="$2"
 			fi
 			ACTION="make"
-			if [ "$1" = "-M" ];then
+			if [ "$1" = "-M" ]; then
 				NEW_APPEND=1
 			else
 				NEW_APPEND=0
 			fi
-			if [ -z "$NEW_BANNER" ];then
+			if [ -z "$NEW_BANNER" ]; then
 				Help
 				exit 2
 			fi
@@ -203,7 +204,7 @@ while [ -n "$1" ]; do
 		--newer)
 			NEED_MTIME_CHECK=1
 			CHOOSE_NEWER="$2"
-			if [ -z "$CHOOSE_NEWER" ];then
+			if [ -z "$CHOOSE_NEWER" ]; then
 				Help
 				exit 2
 			fi
@@ -212,7 +213,7 @@ while [ -n "$1" ]; do
 		--older)
 			NEED_MTIME_CHECK=1
 			CHOOSE_OLDER="$2"
-			if [ -z "$CHOOSE_OLDER" ];then
+			if [ -z "$CHOOSE_OLDER" ]; then
 				Help
 				exit 2
 			fi
@@ -238,7 +239,7 @@ while [ -n "$1" ]; do
 			exit 1
 			;;
 		*)
-			if [ $EXCLUDE_FLAG -eq 0 ];then
+			if [ $EXCLUDE_FLAG -eq 0 ]; then
 				BANNERS="$BANNERS ${1##*/}"
 			else
 				NOBANNERS="$NOBANNERS ${1##*/}"
@@ -251,30 +252,27 @@ done
 if [ $ALL_BANNERS -ne 0 ]; then
 	BANNERS=`get_all_banner_list`
 fi
-if [ $NEED_BANNER_LIST -ne 0 ];then
+if [ $NEED_BANNER_LIST -ne 0 ]; then
 	BANNER_LIST=`get_banner_list "$BANNERS" "$NOBANNERS"`
 fi
-if [ $NEED_MTIME_CHECK -ne 0 ];then
+if [ $NEED_MTIME_CHECK -ne 0 ]; then
 	BANNER_LIST=`check_banners_mtime "$BANNER_LIST" "$CHOOSE_OLDER" "$CHOOSE_NEWER"`
 fi
 
 case $ACTION in
 	"delete")
-		delete_banners $BANNER_LIST;
+		delete_banners $BANNER_LIST
 		;;
 	"make")
-		make_banner $NEW_BANNER $NEW_SHOW;
+		make_banner $NEW_BANNER $NEW_SHOW
 		;;
 	"names")
-		echo $BANNER_LIST;
+		echo $BANNER_LIST
 		;;
 	"show")
-		show_banners $BANNER_LIST;
+		show_banners $BANNER_LIST
 		;;
 	"")
 		Help
 		;;
 esac
-
-
-
