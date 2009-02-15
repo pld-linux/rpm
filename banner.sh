@@ -50,14 +50,13 @@ esac
 
 #################################################### FUNCTIONS ########
 
-Usage()
-{
+Usage() {
 	cat << EOF
 Usage:	$(basename $0) [options] [banners]
 EOF
 }
-Help()
-{
+
+Help() {
 	Usage
 	cat << EOF
 -a, --all       - all banners
@@ -79,16 +78,15 @@ Help()
     otherwise the one that's specified
 EOF
 }
-Unknown_para()
-{
+
+Unknown_para() {
 	cat << EOF
 Unknown parameter $1
 EOF
 	Help
 }
 
-check_banners_mtime()
-{
+check_banners_mtime() {
 	BANNERS="$1"
 	OLDER="$2"
 	NEWER="$3"
@@ -104,17 +102,17 @@ check_banners_mtime()
 		echo $BANNER
 	done
 }
-delete_banners()
-{
+
+delete_banners() {
 	BANNERS="$1"
 	rm -rf $(get_banner_location_list "$BANNER")
 }
-get_all_banner_list()
-{
+
+get_all_banner_list() {
 	ls "$BANNERDIR" | grep -E -v "$EXCLUDEFILES"
 }
-get_banner_list()
-{
+
+get_banner_list() {
 	BANNERS="$1"
 	NOBANNERS="$2"
 	for BANNER in $BANNERS; do
@@ -123,15 +121,15 @@ get_banner_list()
 		fi
 	done
 }
-get_banner_location_list()
-{
+
+get_banner_location_list() {
 	BANNERS="$1"
 	for BANNER in $BANNERS; do
 		echo "$BANNERDIR/$BANNER"
 	done
 }
-make_banner()
-{
+
+make_banner() {
 	BANNER="$1"
 	SHOW="$2"
 	if [ ! -d "${BANNER%/*}" ]; then
@@ -147,12 +145,12 @@ make_banner()
 		echo "$data"
 	fi
 }
-show_banner()
-{
+
+show_banner() {
 	cat "$BANNERDIR/$1" >&$STDOUT
 }
-show_banners()
-{
+
+show_banners() {
 	for BANNER in $*; do
 		show_banner $BANNER
 	done
