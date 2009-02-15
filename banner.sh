@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# bug reports send to pzurowski@pld-linux.org or pld-devel-* lists
+# Please send bug reports to pzurowski@pld-linux.org or pld-devel-* lists
 #
 # 2004, GPL 2+
 #
@@ -10,7 +10,7 @@ CONFIG=/etc/sysconfig/banner
 
 ####################################################### CONFIG ########
 
-# default paramaters
+# default parameters
 ##########################
 
 BANNERDIR="/var/lib/banner/"
@@ -19,7 +19,7 @@ EXCLUDEFILES="(rpmnew$|rpmsave$|~$)"
 STDOUT="1"  # stdout by default
 #STDOUT="2" # stderr by default
 
-# config paramaeters
+# config parameters
 ##########################
 
 if [ -r $CONFIG ]; then
@@ -53,7 +53,7 @@ esac
 Usage()
 {
 	cat << EOF
-Usage:	$(basename $0) [opitions] [banners]
+Usage:	$(basename $0) [options] [banners]
 EOF
 }
 Help()
@@ -62,7 +62,7 @@ Help()
 	cat << EOF
 -a
 --all       - all banners
---delete    - delete wanted banners
+-d, --delete    - delete specified banners
 -e
 --exclude   - exclude following banners (useful with -a)
 -h
@@ -77,14 +77,14 @@ Help()
 --newer     - all choosen banners should be newer than following parameter in seconds
 --older     - all choosen banners should be older than following parameter in seconds
 -s
---show      - show wanted banners
+--show      - show specified banners
 --stderr    - send banner to stderr instead of stdout (or other)
 --stdout    - send banner to stdout instead of stderr (or other)
 -u
 --usage     - show short help
 
-[1] - if there will be no slash ('/') in name then config dir will be used,
-      else -- specified.
+[1] if there is no slash ('/') in the given name default dir ($BANNERDIR) is used,
+    otherwise the one that's specified
 EOF
 }
 Unknown_para()
@@ -171,7 +171,7 @@ while [ -n "$1" ]; do
 		-a|--all)
 			ALL_BANNERS=1
 			;;
-		--delete)
+		-d|--delete)
 			NEED_BANNER_LIST=1
 			ACTION="delete"
 			;;
@@ -278,6 +278,9 @@ case $ACTION in
 		;;
 	"show")
 		show_banners $BANNER_LIST;
+		;;
+	"")
+		Help
 		;;
 esac
 
