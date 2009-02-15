@@ -157,7 +157,7 @@ make_banner()
 }
 show_banner()
 {
-	cat $BANNERDIR/$1 >&$STDOUT
+	cat "$BANNERDIR/$1" >&$STDOUT
 }
 show_banners()
 {
@@ -166,8 +166,8 @@ show_banners()
 	done
 }
 ######################################################## MAIN ########
-while [ ! -z $1 ]; do
-	case $1 in
+while [ -n "$1" ]; do
+	case "$1" in
 		-a|--all)
 			ALL_BANNERS=1
 			;;
@@ -187,13 +187,13 @@ while [ ! -z $1 ]; do
 			;;
 		-m|--make|-M)
 			NEED_BANNER_LIST=0
-			if [[ $2 != */* ]]; then
+			if [[ "$2" != */* ]]; then
 				NEW_BANNER="$BANNERDIR/${2##*/}"
 			else
 				NEW_BANNER="$2"
 			fi
 			ACTION="make"
-			if [ "$1" == "-M" ];then
+			if [ "$1" = "-M" ];then
 				NEW_APPEND=1
 			else
 				NEW_APPEND=0
