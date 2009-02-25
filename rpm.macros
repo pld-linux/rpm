@@ -809,6 +809,25 @@ fi \
 # Software written in Python language require Python with main version
 %pyrequires_eq() Requires:	%1
 
+# Python 3.x
+# python main version
+%__python3			python3.0
+%py3_ver			%{expand:%%global py3_ver %(%{__python3} -c "import sys; print(sys.version[:3])" 2>/dev/null || echo ERROR)}%py3_ver
+
+# directories
+%py3_prefix		%{expand:%%global py3_prefix %(%{__python3} -c "import sys; print(sys.prefix)" 2>/dev/null || echo ERROR)}%py3_prefix
+%py3_libdir		%{py3_prefix}/%{_lib}/python%{py3_ver}
+%py3_scriptdir	%{py3_prefix}/share/python%{py3_ver}
+%py3_incdir		/usr/include/python%{py3_ver}
+%py3_sitedir		%{py3_libdir}/site-packages
+%py3_sitescriptdir %{py3_scriptdir}/site-packages
+%py3_dyndir		%{py3_libdir}/lib-dynload
+
+# pure python modules compilation
+%py3_comp		%{__python3} -c "import compileall; import sys; compileall.compile_dir(sys.argv[1], ddir=sys.argv[1][len('$RPM_BUILD_ROOT'):])"
+
+%py3_ocomp		%{__python3} -O -c "import compileall; import sys; compileall.compile_dir(sys.argv[1], ddir=sys.argv[1][len('$RPM_BUILD_ROOT'):])"
+
 # Hardlink binary identical .pyc and .pyo files
 %__spec_install_post_py_hardlink {\
 %{!?no_install_post_py_hardlink: __spec_install_post_py_hardlink() { \
@@ -831,6 +850,12 @@ fi; \
 # remove python sources, so that check-files won't complain
 %py_postclean() \
 for d in %{py_sitescriptdir} %{py_sitedir} %*; do \
+ [ ! -d "$RPM_BUILD_ROOT$d" ] || find "$RPM_BUILD_ROOT$d" -name '*.py' -print0 | xargs -0r -l512 rm;\
+done \
+%{nil}
+
+%py3_postclean() \
+for d in %{py3_sitescriptdir} %{py3_sitedir} %*; do \
  [ ! -d "$RPM_BUILD_ROOT$d" ] || find "$RPM_BUILD_ROOT$d" -name '*.py' -print0 | xargs -0r -l512 rm;\
 done \
 %{nil}
