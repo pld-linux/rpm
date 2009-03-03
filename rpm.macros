@@ -9,16 +9,25 @@
 %kgcc_package	gcc
 
 # compiler version
-%cc_version		%{expand:%%global cc_version %(%{__cc} -dumpversion || echo ERROR)}%cc_version
+%cc_version	%{expand:%%global cc_version %(%{__cc} -dumpversion || echo ERROR)}%cc_version
 %cxx_version	%{expand:%%global cxx_version %(%{__cxx} -dumpversion || echo ERROR)}%cxx_version
 
-%__rm			/bin/rm --interactive=never
+%__rm		/bin/rm --interactive=never
 
 # Build system path macros.
-#
-%__autoconf		autoconf %{?debug:-Wall}
-%__automake		automake -a -c -f --foreign
-%__autopoint		autopoint --force
+%__autoconf	autoconf %{?debug:-Wall}
+%__automake	automake -a -c -f --foreign
+%__autopoint	autopoint --force
+
+# add parallel build flags: -jN
+%__make		make %{?_smp_mflags}
+%__scons	scons %{?_smp_mflags}
+%__waf		waf %{?_smp_mflags}
+%__cmake	cmake %{?_smp_mflags}
+
+%_smp_mflags %([ -z "$RPM_BUILD_NCPUS" ] \\\
+	&& RPM_BUILD_NCPUS=$(/usr/bin/getconf _NPROCESSORS_ONLN); \\\
+	[ "$RPM_BUILD_NCPUS" -gt 1 ] && echo "-j$(($RPM_BUILD_NCPUS * 2))")
 
 %__gettextize { \
 	if grep -qs 'AM_GNU_GETTEXT.*external' configure.{ac,in} ; then \
@@ -55,10 +64,6 @@
 # XXX	Note: that there cannot be any whitespace within the string "p>q",
 #	and that both p and q are package names (i.e. no version/release).
 %_dependency_whiteout	%{nil}
-
-%_smp_mflags %([ -z "$RPM_BUILD_NCPUS" ] \\\
-	&& RPM_BUILD_NCPUS=$(/usr/bin/getconf _NPROCESSORS_ONLN); \\\
-	[ "$RPM_BUILD_NCPUS" -gt 1 ] && echo "-j$(($RPM_BUILD_NCPUS * 2))")
 
 #-----------------------------------------------------------------
 #
