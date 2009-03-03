@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	11
+Release:	12
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -159,6 +159,7 @@ Patch88:	%{name}-poptexecpath.patch
 Patch89:	%{name}-lzma-compress-level.patch
 Patch90:	%{name}-gstreamer.patch
 Patch91:	%{name}-gendiff.patch
+Patch92:	%{name}-set-failed-on-reopen.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -176,7 +177,7 @@ BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libxml2-devel
 BuildRequires:	neon-devel >= 0.25.5
 %endif
-BuildRequires:	ossp-uuid-devel >= 1.6.2-4
+BuildRequires:	ossp-uuid-devel >= 1.6.2-6
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
 %{?with_python:BuildRequires:	python-devel >= 1:2.3}
@@ -771,6 +772,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch89 -p1
 %patch90 -p1
 %patch91 -p1
+%patch92 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
@@ -841,6 +843,7 @@ sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu
 
 # pass CC and CXX too in case of building with some older configure macro
 # disable perl-RPM2 build, we have it in separate spec
+CPPFLAGS=-I/usr/include/oosp-uuid
 %configure \
 	CC="%{__newcc}" \
 	CXX="%{__newcxx}" \
