@@ -63,5 +63,6 @@ FILES=$(cat -)
 t=$(mktemp)
 ret=0
 find_requires > $t || ret=1
+cat $t
 rm -f $t
 exit $ret
