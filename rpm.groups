@@ -1332,6 +1332,8 @@ X11/Applications
 	[sv]:		X11/Till�mpningar
 	[uk]:		X11/Прикладні Програми
 
+X11/Applications/Accessibility
+
 X11/Applications/Editors
 	[cs]:		X11/Aplikace/Editory
 	[da]:		X11/Programmer/Tekstbehandlere
