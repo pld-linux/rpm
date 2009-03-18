@@ -20,14 +20,17 @@
 %__autopoint	autopoint --force
 
 # add parallel build flags: -jN
-#__make		make %{?_smp_mflags}
-#__scons	scons %{?_smp_mflags}
-#__waf		waf %{?_smp_mflags}
-#__cmake	cmake %{?_smp_mflags}
+#
+# if you want to disable parallel build do 
+# echo '%_smp_mflags %{nil}' >> ~/.rpmmacros
+#
+%__make		make %{?_smp_mflags}
+%__scons	scons %{?_smp_mflags}
+%__waf		waf %{?_smp_mflags}
+%__cmake	cmake %{?_smp_mflags}
 
-%_smp_mflags %([ -z "$RPM_BUILD_NCPUS" ] \\\
-	&& RPM_BUILD_NCPUS=$(/usr/bin/getconf _NPROCESSORS_ONLN); \\\
-	[ "$RPM_BUILD_NCPUS" -gt 1 ] && echo "-j$(($RPM_BUILD_NCPUS * 2))")
+%_smp_mflags %(_NCPUS=$(/usr/bin/getconf _NPROCESSORS_ONLN); \\\
+				[ "$_NCPUS" -gt 1 ] && echo "-j$(($_NCPUS * 2))")
 
 %__gettextize { \
 	if grep -qs 'AM_GNU_GETTEXT.*external' configure.{ac,in} ; then \
