@@ -21,8 +21,8 @@
 
 # add parallel build flags: -jN
 #
-# if you want to disable parallel build do 
-# echo '%_smp_mflags %{nil}' >> ~/.rpmmacros
+# if you want to disable parallel build do (replace %% with %)
+# echo '%%_smp_mflags %%{nil}' >> ~/.rpmmacros
 #
 %__make		make %{?_smp_mflags}
 %__scons	scons %{?_smp_mflags}
