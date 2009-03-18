@@ -20,10 +20,10 @@
 %__autopoint	autopoint --force
 
 # add parallel build flags: -jN
-%__make		make %{?_smp_mflags}
-%__scons	scons %{?_smp_mflags}
-%__waf		waf %{?_smp_mflags}
-%__cmake	cmake %{?_smp_mflags}
+#__make		make %{?_smp_mflags}
+#__scons	scons %{?_smp_mflags}
+#__waf		waf %{?_smp_mflags}
+#__cmake	cmake %{?_smp_mflags}
 
 %_smp_mflags %([ -z "$RPM_BUILD_NCPUS" ] \\\
 	&& RPM_BUILD_NCPUS=$(/usr/bin/getconf _NPROCESSORS_ONLN); \\\
