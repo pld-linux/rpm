@@ -139,7 +139,7 @@
 #	# ADDITIONAL_VAR is required because [a good reason here]
 #	%define _preserve_env %_preserve_env_base ADDITIONAL_VAR
 
-%_preserve_env_base	PATH HOME TMP TMPDIR
+%_preserve_env_base	PATH HOME TMP TMPDIR SSH_AUTH_SOCK
 %_preserve_env %_preserve_env_base
 
 %_clean_env		env -i %(awk -vq="'" -vqq="\\"'\\"" -vq2q="'\\"'" 'BEGIN {
