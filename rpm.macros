@@ -137,32 +137,35 @@
 # redefine %_preserve_env in following manner:
 #
 #	# ADDITIONAL_VAR is required because [a good reason here]
-#	%define _preserve_env %_preserve_env_base ADDITIONAL_VAR
+#	%define _preserve_env ADDITIONAL_VAR
 
 %_preserve_env_base	PATH HOME TMP TMPDIR SSH_AUTH_SOCK
-%_preserve_env %_preserve_env_base
 
-%_clean_env		env -i %(awk -vq="'" -vqq="\\"'\\"" -vq2q="'\\"'" 'BEGIN {
+%_clean_env		\
+	%{!?_preserve_env:%global _preserve_env %{nil}}%{expand:%%global _preserve_env %{_preserve_env} %_preserve_env_base} \
+	env -i %(awk -vq="'" -vqq="\\"'\\"" -vq2q="'\\"'" 'BEGIN {
 	split("%{?_preserve_env:%_preserve_env}", P);
 	for (i in P) {
 		p = P[i];
-		if (ENVIRON[p]) {
-			split( ENVIRON[p], V, "" );
-			val = p "=";
-			for ( j = 1; j in V; j++ ) {
-				v = V[j];
-				if ( v == q )
-					v = qq;
-				else if ( v == "\\"" )
-					v = q2q;
-				else if ( v == "\\\\" )
-					v = "\\\\\\\\";
-				else
-					gsub( "[^a-zA-Z0-9/:._-]", "\\"&\\"", v );
-				val = val "" v;
-			}
-			printf( val " " );
+		if (!ENVIRON[p] || d[p]) {
+			continue;
 		}
+		d[p] = 1;
+		split(ENVIRON[p], V, "");
+		val = p "=";
+		for (j = 1; j in V; j++) {
+			v = V[j];
+			if (v == q)
+				v = qq;
+			else if (v == "\\"")
+				v = q2q;
+			else if (v == "\\\\")
+				v = "\\\\\\\\";
+			else
+				gsub("[^a-zA-Z0-9/:._-]", "\\"&\\"", v);
+			val = val "" v;
+		}
+		printf(val " ");
 	}
 }')
 
