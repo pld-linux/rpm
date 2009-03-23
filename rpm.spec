@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	13
+Release:	14
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -78,6 +78,7 @@ Source17:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source18:	banner.sh
 Source19:	%{name}-macros.gstreamer
+Patch1000:	%{name}-new-debuginfo.patch
 Patch1067:	%{name}-disable-features.patch
 Patch1070:	%{name}-rpmrc-ac.patch
 #Patch0:	%{name}-pl.po.patch
@@ -678,6 +679,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 
 %prep
 %setup -q
+%patch1000 -p1
 #%patch0 -p1
 %patch1 -p1
 %patch2 -p1
