@@ -920,9 +920,13 @@ fi; \
 # user group membership management macros
 #
 # Usage:
-#	%addusertogroup myuser agroup
+#	%addusertogroup [-q] myuser agroup
 #
-%addusertogroup	/usr/lib/rpm/user_group.sh user addtogroup
+#  -q if user or group don't exist, don't make big noise of it (MISSINGOK behaviour)
+#
+# Requirements:
+# BuildRequires:	rpmbuild(macros) >= 1.515
+%addusertogroup(q)	quiet=%{-q:1} /usr/lib/rpm/user_group.sh user addtogroup %*
 
 # banner support (useful in {pre,post}{,un} and triggers)
 #
