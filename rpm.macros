@@ -141,9 +141,8 @@
 
 %_preserve_env_base	PATH HOME TMP TMPDIR SSH_AUTH_SOCK
 
-%_clean_env		\
-	%{!?_preserve_env:%global _preserve_env %{nil}}%{expand:%%global _preserve_env %{_preserve_env} %_preserve_env_base} \
-	env -i %(awk -vq="'" -vqq="\\"'\\"" -vq2q="'\\"'" 'BEGIN {
+# "env -i" must end in first line of expaned macros because it's used as first line of shell script (#! env...)
+%_clean_env		%{!?_preserve_env:%global _preserve_env %{nil}}%{expand:%%global _preserve_env %{_preserve_env} %_preserve_env_base} env -i %(awk -vq="'" -vqq="\\"'\\"" -vq2q="'\\"'" 'BEGIN {
 	split("%{?_preserve_env}", P);
 	for (i in P) {
 		p = P[i];
