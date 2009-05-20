@@ -31,6 +31,8 @@ javajarversion() {
 
 	tmp=$(mktemp -d)
 	unzip -q -d $tmp $jar >&2
+	# workaround for .jar files with stupid permissions
+	chmod -R u+rwX $tmp
 	javaclassversion $(find $tmp -type f -name '*.class') || {
 		echo >&2 "ERROR: Class version could not be extracted from $jar"
 		ret=1
