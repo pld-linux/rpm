@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	18
+Release:	19
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -163,6 +163,7 @@ Patch91:	%{name}-gendiff.patch
 Patch92:	%{name}-set-failed-on-reopen.patch
 Patch93:	%{name}-debugedit-workaround.patch
 Patch94:	%{name}-shescape-memfault.patch
+Patch95:	%{name}-gid-uucp.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -760,9 +761,8 @@ install %{SOURCE13} scripts/perl.prov
 %patch73 -p1
 %patch74 -p1
 %patch75 -p0
-%if "%{pld_release}" == "ac"
-%patch76 -p1
-%endif
+# having .py sources in -debuginfo needs more testing
+#%patch76 -p1
 %patch77 -p0
 %patch79 -p1
 %patch80 -p1
@@ -779,6 +779,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch92 -p1
 %patch93 -p1
 %patch94 -p1
+%patch95 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
