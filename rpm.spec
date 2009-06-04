@@ -164,6 +164,7 @@ Patch92:	%{name}-set-failed-on-reopen.patch
 Patch93:	%{name}-debugedit-workaround.patch
 Patch94:	%{name}-shescape-memfault.patch
 Patch95:	%{name}-gid-uucp.patch
+Patch96:	%{name}-disable-hkp.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -780,6 +781,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch93 -p1
 %patch94 -p1
 %patch95 -p1
+%patch96 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
