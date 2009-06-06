@@ -1,6 +1,5 @@
-diff -urN rpm-4.4.9.org/rpmdb/db3.c rpm-4.4.9/rpmdb/db3.c
---- rpm-4.4.9.org/rpmdb/db3.c	2007-04-25 03:48:42.000000000 +0200
-+++ rpm-4.4.9/rpmdb/db3.c	2007-11-12 20:01:29.761434045 +0100
+--- rpm-4.5/rpmdb/db3.c~	2009-06-06 17:54:26.000000000 +0300
++++ rpm-4.5/rpmdb/db3.c	2009-06-06 17:55:36.050580710 +0300
 @@ -1329,6 +1329,8 @@
  	} else {
  assert(rpmdb && rpmdb->db_dbenv);
@@ -10,12 +9,18 @@ diff -urN rpm-4.4.9.org/rpmdb/db3.c rpm-4.4.9/rpmdb/db3.c
  	    rpmdb->db_opens++;
  	}
  	/*@=mods@*/
-@@ -1496,7 +1498,7 @@
+@@ -1511,13 +1511,7 @@
  		if (dbfile)
  		    t = stpcpy( stpcpy( t, "/"), dbfile);
  /*@=boundswrite@*/
 -#ifdef	HACK	/* XXX necessary to support dbsubfile */
-+#if 1
- 		dbpath = (!dbi->dbi_use_dbenv && !dbi->dbi_temporary)
- 			? dbfullpath : dbfile;
- #else
+-		dbpath = (!dbi->dbi_use_dbenv && !dbi->dbi_temporary)
+-			? dbfullpath : dbfile;
+-#else
+-		dbpath = (!dbi->dbi_temporary)
+-			? dbfullpath : dbfile;
+-#endif
++		dbpath = (!dbi->dbi_temporary) ? dbfullpath : dbfile;
+ 
+ #if (DB_VERSION_MAJOR == 4 && DB_VERSION_MINOR >= 1)
+ 		rc = (db->open)(db, txnid, dbpath, dbsubfile,
