@@ -1,0 +1,39 @@
+	- jbj: reserve ~1K in  RPMSIGTAG_PADDING for now.
+	- jbj: add RPMSIGTAG_PADDING to force metadata header alignment in file.
+--- rpm-4.5/build/pack.c	2007-12-17 00:28:09.000000000 +0200
++++ rpm-4.5-sigpad/build/pack.c	2009-06-08 12:29:50.225343621 +0300
+@@ -702,6 +702,22 @@
+ 	goto exit;
+     }
+ 
++    /* Pad the signature header to put the metadata header at known offset. */
++    {	size_t slen = headerSizeof(sig, HEADER_MAGIC_YES);
++	void * uh = headerUnload(sig);
++	static const size_t align = 1024;
++	size_t nb = align - 96 - 16 - 8;
++	unsigned char * b;
++
++	uh = _free(uh);
++assert(slen < nb);
++	nb -= slen;
++	b = memset(alloca(nb), 0, nb);
++	(void) headerAddEntry(sig, RPMSIGTAG_PADDING, RPM_BIN_TYPE, b, nb);
++	sig = headerReload(sig, RPMTAG_HEADERSIGNATURES);
++assert(sig != NULL);
++    }
++
+     /* Open the output file */
+     fd = Fopen(fileName, "w");
+     if (fd == NULL || Ferror(fd)) {
+--- rpm-4.5/lib/rpmlib.h	2008-06-10 02:19:16.000000000 +0300
++++ rpm-4.5-sigpad/lib/rpmlib.h	2009-06-08 12:29:50.225343621 +0300
+@@ -1058,7 +1058,8 @@
+     RPMSIGTAG_BADSHA1_2	= RPMTAG_BADSHA1_2,	/*!< internal Broken SHA1, take 2. */
+     RPMSIGTAG_SHA1	= RPMTAG_SHA1HEADER,	/*!< internal sha1 header digest. */
+     RPMSIGTAG_DSA	= RPMTAG_DSAHEADER,	/*!< internal DSA header signature. */
+-    RPMSIGTAG_RSA	= RPMTAG_RSAHEADER	/*!< internal RSA header signature. */
++    RPMSIGTAG_RSA	= RPMTAG_RSAHEADER,	/*!< internal RSA header signature. */
++    RPMSIGTAG_PADDING	= 0x3fffffff		/*!< signature header padding */
+ };
+ 
+ /** \ingroup signature
