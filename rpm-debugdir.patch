@@ -1,0 +1,10 @@
+--- rpm-4.5/scripts/find-debuginfo.sh~	2009-06-08 23:57:15.000000000 +0300
++++ rpm-4.5/scripts/find-debuginfo.sh	2009-06-09 00:10:21.603343056 +0300
+@@ -333,4 +333,7 @@
+   sed -n -f "${LISTFILE}.dirs.sed" "${LISTFILE}" | sort -u > "${LISTFILE}.new"
+   cat "$LISTFILE" >> "${LISTFILE}.new"
+   mv "${LISTFILE}.new" "$LISTFILE"
++
++  # get rid of top level dir, we want it be only in filesystem-debuginfo package
++  sed -i -e '/^%dir \/usr\/lib\/debug$/d' "$LISTFILE"
+ fi
