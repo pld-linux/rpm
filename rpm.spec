@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	20
+Release:	21
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -166,6 +166,7 @@ Patch94:	%{name}-shescape-memfault.patch
 Patch95:	%{name}-gid-uucp.patch
 Patch96:	%{name}-disable-hkp.patch
 Patch97:	%{name}-sigpad.patch
+Patch98:	%{name}-debugdir.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -783,6 +784,8 @@ install %{SOURCE13} scripts/perl.prov
 %patch94 -p1
 %patch95 -p1
 %patch96 -p1
+%patch97 -p1
+%patch98 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
