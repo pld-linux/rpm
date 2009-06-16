@@ -33,6 +33,10 @@
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
+%ifarch sparc sparcv9 sparc64
+%undefine with_apidocs
+%endif
+
 # versions of required libraries
 %if "%{pld_release}" == "th"
 %define	reqdb_ver	4.7.25
