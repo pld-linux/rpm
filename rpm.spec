@@ -1365,7 +1365,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %ifarch %{ppc}
 %{_rpmlibdir}/ppc*
 %endif
-%ifarch sparc sparc64
+%ifarch sparc sparcv9 sparc64
 %{_rpmlibdir}/sparc*
 %endif
 %ifarch %{x8664}
