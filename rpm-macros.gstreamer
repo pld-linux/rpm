@@ -1,1 +1,0 @@
-%define __gstreamer_provides /usr/lib/rpm/gstreamerdeps.sh --provides
