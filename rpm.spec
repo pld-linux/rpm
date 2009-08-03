@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	95
+Release:	96
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -84,7 +84,7 @@ Patch15:	%{name}-system_libs-more.patch
 Patch16:	%{name}-php-deps.patch
 Patch17:	%{name}-ldconfig-always.patch
 Patch18:	%{name}-macros-ac.patch
-
+Patch19:	debuginfo-quote.patch
 Patch20:	%{name}-magic-usesystem.patch
 Patch21:	%{name}-dontneedutils.patch
 Patch22:	%{name}-provides-dont-obsolete.patch
@@ -721,6 +721,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch59 -p1
 %patch60 -p1
 %patch18 -p1
+%patch19 -p1
 %patch61 -p1
 %patch62 -p1
 %patch63 -p1
