@@ -9,20 +9,19 @@
  %{nil}
  
  #	Template for debug information sub-package.
---- rpm-4.5/scripts/find-debuginfo.sh.org	2009-03-23 09:17:40.543353186 +0100
-+++ rpm-4.5/scripts/find-debuginfo.sh	2007-09-06 09:36:38.000000000 +0200
-@@ -1,57 +1,336 @@
+--- rpm-4.5/scripts/find-debuginfo.sh.orig	2007-08-31 03:07:02.000000000 +0200
++++ rpm-4.5/scripts/find-debuginfo.sh	2009-09-17 15:22:30.299290490 +0200
+@@ -1,57 +1,327 @@
 -#!/bin/sh
 +#!/bin/bash
  #find-debuginfo.sh - automagically generate debug info and file list
  #for inclusion in an rpm spec file.
 +#
-+# Usage: find-debuginfo.sh [--strict-build-id] [-g]
++# Usage: find-debuginfo.sh [--strict-build-id]
 +#	 		   [-o debugfiles.list]
 +#			   [[-l filelist]... [-p 'pattern'] -o debuginfo.list]
 +#			   [builddir]
 +#
-+# The -g flag says to use strip -g instead of full strip on DSOs.
 +# The --strict-build-id flag says to exit with failure status if
 +# any ELF binary processed fails to contain a build-id note.
 +#
@@ -37,9 +36,6 @@
 +# All file names in switches are relative to builddir (. if not given).
 +#
 +
-+# With -g arg, pass it to strip on libraries.
-+strip_g=false
-+
 +# Barf on missing build IDs.
 +strict=false
 +
@@ -50,9 +46,6 @@
 +  case "$1" in
 +  --strict-build-id)
 +    strict=true
-+    ;;
-+  -g)
-+    strip_g=true
 +    ;;
 +  -o)
 +    if [ -z "${lists[$nout]}" -a -z "${ptns[$nout]}" ]; then
@@ -111,11 +104,9 @@
  strip_to_debug()
  {
 -  eu-strip --remove-comment -f "$1" "$2" || :
-+  local g=
-+  return; $strip_g && case "$(file -bi "$2")" in
-+  application/x-sharedlib,*) g=-g ;;
-+  esac
-+  eu-strip --remove-comment $g -f "$1" "$2" || exit
++  local t=$(mktemp "/tmp/rpm.stripped.XXXXXX")
++  eu-strip --strip-debug -f "$1" "$2" -o "$t" || exit
++  rm -f "$t"
 +}
 +
 +# Make a relative symlink to $1 called $3$2
