@@ -55,7 +55,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	26
+Release:	26.1
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -92,6 +92,7 @@ Patch3:		%{name}-rpmpopt.patch
 Patch4:		%{name}-perl-macros.patch
 Patch6:		%{name}-noexpand.patch
 Patch7:		%{name}-scripts-closefds.patch
+Patch8:		%{name}-db.patch
 Patch9:		%{name}-gettext-in-header.patch
 Patch10:	%{name}-compress-doc.patch
 Patch11:	%{name}-rpm5-patchset-8074.patch
@@ -698,6 +699,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch4 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1 -R
