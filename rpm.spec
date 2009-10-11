@@ -858,9 +858,12 @@ fi
 cd ..
 %endif
 
-# config.guess doesn't handle athlon, so we have to change it by hand.
 # rpm checks for CPU type at runtime, but it looks better
-sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu@|%{_target_cpu}|' macros.in
+sed -i \
+	-e 's|@host@|%{_target_cpu}-%{_target_vendor}-%{_target_os}|' \
+	-e 's|@host_cpu@|%{_target_cpu}|' \
+	-e 's|@host_os@|%{_target_os}|' \
+	macros.in
 
 # pass CC and CXX too in case of building with some older configure macro
 # disable perl-RPM2 build, we have it in separate spec
