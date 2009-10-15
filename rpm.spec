@@ -55,7 +55,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	28
+Release:	29
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -754,7 +754,6 @@ install %{SOURCE13} scripts/perl.prov
 %endif
 %patch51 -p1
 #%patch52 -p1
-%patch53 -p1
 %patch55 -p1
 %patch56 -p1
 %patch57 -p1
@@ -796,6 +795,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch97 -p1
 %patch98 -p1
 %patch99 -p1
+%patch53 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
