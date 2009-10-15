@@ -55,7 +55,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	27
+Release:	28
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -173,6 +173,7 @@ Patch95:	%{name}-gid-uucp.patch
 Patch96:	%{name}-disable-hkp.patch
 Patch97:	%{name}-sigpad.patch
 Patch98:	%{name}-debugdir.patch
+Patch99:	%{name}-pkgconfig.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -794,6 +795,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch96 -p1
 %patch97 -p1
 %patch98 -p1
+%patch99 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
@@ -1294,6 +1296,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_libdir}/librpmdb.la
 %{_libdir}/librpmio.la
 %{_includedir}/rpm
+%{_pkgconfigdir}/rpm.pc
 
 %files static
 %defattr(644,root,root,755)
