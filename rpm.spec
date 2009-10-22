@@ -55,7 +55,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	29
+Release:	30
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
