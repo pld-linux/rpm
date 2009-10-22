@@ -200,7 +200,7 @@ BuildRequires:	rpm-perlprov
 %{?with_python:BuildRequires:	rpm-pythonprov}
 BuildRequires:	rpmbuild(macros) >= 1.351
 BuildRequires:	tar >= 1:1.15.1
-BuildRequires:	zlib-devel
+BuildRequires:	zlib-devel >= 1.2.3.3
 %if %{with apidocs}
 BuildRequires:	doxygen
 BuildRequires:	ghostscript
@@ -217,7 +217,7 @@ BuildRequires:	glibc-static >= 2.2.94
 %{?with_system_libmagic:BuildRequires:	libmagic-static}
 %{?with_selinux:BuildRequires:	libselinux-static >= 1.18}
 BuildRequires:	popt-static >= %{reqpopt_ver}
-BuildRequires:	zlib-static
+BuildRequires:	zlib-static >= 1.2.3.3
 %endif
 Requires:	%{name}-base = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
@@ -363,7 +363,7 @@ Requires:	elfutils-devel
 %{?with_system_libmagic:Requires:	libmagic-devel}
 %{?with_selinux:Requires:	libselinux-devel}
 Requires:	popt-devel >= %{reqpopt_ver}
-Requires:	zlib-devel
+Requires:	zlib-devel >= 1.2.3.3
 
 %description devel
 The RPM packaging system includes C libraries that make it easy to
@@ -425,7 +425,7 @@ Requires:	bzip2-static
 Requires:	elfutils-static
 %{?with_system_libmagic:Requires:	libmagic-static}
 Requires:	popt-static >= %{reqpopt_ver}
-Requires:	zlib-static
+Requires:	zlib-static >= 1.2.3.3
 
 %description static
 RPM static libraries.
