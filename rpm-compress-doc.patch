@@ -1,22 +1,3 @@
---- rpm-4.4.8/build/files.c.orig	2007-02-01 23:21:51.000000000 +0100
-+++ rpm-4.4.8/build/files.c	2007-04-08 16:10:27.849202243 +0200
-@@ -1044,6 +1044,16 @@
- 	    appendStringBuf(pkg->specialDoc, "cp -pr ");
- 	    appendStringBuf(pkg->specialDoc, specialDocBuf);
- 	    appendLineStringBuf(pkg->specialDoc, " \"$DOCDIR\"");
-+
-+	    {
-+	        char *compress_doc;
-+
-+		compress_doc = rpmExpand("%{__compress_doc}", NULL);
-+		if (compress_doc && *compress_doc != '%')
-+	    	    appendLineStringBuf(pkg->specialDoc, compress_doc);
-+		if (compress_doc)
-+		  free(compress_doc);
-+	    }
- 	}
-     }
- 
 diff -ur rpm-4.0.4/macros.in rpm-4.0.4-/macros.in
 --- rpm-4.0.4/macros.in	Fri May 17 11:18:12 2002
 +++ rpm-4.0.4-/macros.in	Fri May 17 11:17:44 2002

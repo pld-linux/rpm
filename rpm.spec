@@ -51,7 +51,7 @@ ERROR
 
 # versions of required libraries
 %define		reqdb_ver	4.7.25
-%define		reqpopt_ver	1.10.8
+%define		reqpopt_ver	1.15
 %define		beecrypt_ver	2:4.1.2-4
 %define		sover	5.0
 
@@ -63,12 +63,12 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.1.6
+Version:	5.1.9
 Release:	0.1
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.1/%{name}-%{version}.tar.gz
-# Source0-md5:	5eb40d7b756fcf04aad7d00a5b3d5b69
+# Source0-md5:	2b6ff8f7abb1fe919402f00cc0ca56f7
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -116,6 +116,7 @@ Patch8:		%{name}-php-macros.patch
 Patch9:		%{name}-gettext-in-header.patch
 Patch10:	%{name}-compress-doc.patch
 Patch11:	%{name}-lua.patch
+Patch12:	%{name}-am.patch
 
 Patch14:	%{name}-etc_dir.patch
 Patch16:	%{name}-php-deps.patch
@@ -665,12 +666,14 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
+#%patch6 -p1 // in upstream
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+# compress doc in upstream
 %patch10 -p1
 %{?with_system_lua:%patch11 -p1}
+%patch12 -p1
 # CHECK ME - macrofiles: ~/etc could be used
 #%%patch14 -p1
 %patch16 -p1
@@ -684,14 +687,16 @@ echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
-%patch23 -p1
+# looks like upstream??
+#%patch23 -p1
 
 %ifarch i386 i486
 # disable TSC
 %patch26 -p1
 %endif
 %patch27 -p1
-%patch32 -p1
+# to port 
+#%patch32 -p1
 %patch34 -p1
 %patch35 -p0
 %patch36 -p1
@@ -701,7 +706,8 @@ install %{SOURCE12} scripts/perl.prov
 %patch40 -p1
 %patch42 -p1
 %patch46 -p1
-%patch47 -p1
+# port to new implementation
+#%patch47 -p1
 # OLD COMMENTED OUT
 #%%patch52 -p1 -- morearchs (rpmrc patch) adds ppc7400, ppc7400
 %patch55 -p1
@@ -710,7 +716,8 @@ install %{SOURCE12} scripts/perl.prov
 %patch18 -p1
 # Maybe, at last we can remove this?
 #patch19 -p1
-%patch60 -p1
+# port to new implementation
+#%patch60 -p1
 %ifarch sparc64
 %patch61 -p1
 %endif
@@ -1144,6 +1151,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_rpmlibdir}/rpmk
 #%attr(755,root,root) %{_rpmlibdir}/rpm[qv]
 
+%{_rpmlibdir}/qf
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/macros
 %{_rpmlibdir}/macros.pld
@@ -1207,6 +1215,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_mandir}/man1/rpmgrep.1*
 %{_mandir}/man8/rpm2cpio.8*
 %{_mandir}/man8/rpmcache.8*
+%{_mandir}/man8/rpmconstant.8*
 %{_mandir}/man8/rpmdeps.8*
 %{_mandir}/man8/rpmmtree.8*
 %lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
@@ -1239,6 +1248,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/cross-build
 %attr(755,root,root) %{_rpmlibdir}/find-spec-bcond
 %attr(755,root,root) %{_rpmlibdir}/getpo.sh
+%attr(755,root,root) %{_rpmlibdir}/install-sh
 %attr(755,root,root) %{_rpmlibdir}/install-build-tree
 %attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
 %attr(755,root,root) %{_rpmlibdir}/u_pkg.sh
@@ -1249,6 +1259,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
 #%attr(755,root,root) %{_rpmlibdir}/rpmb
 #%attr(755,root,root) %{_rpmlibdir}/rpmt
+%attr(755,root,root) %{_rpmlibdir}/vcheck
 %{_rpmlibdir}/noarch-*
 %ifarch %{ix86}
 %{_rpmlibdir}/i?86*
@@ -1281,15 +1292,21 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros.perl
 %{_rpmlibdir}/macros.php
 # not used yet ... these six depend on perl
-#%attr(755,root,root) %{_rpmlibdir}/http.req
+%attr(755,root,root) %{_rpmlibdir}/http.req
 #%attr(755,root,root) %{_rpmlibdir}/magic.prov
 #%attr(755,root,root) %{_rpmlibdir}/magic.req
 #%{_rpmlibdir}/sql.prov
 #%{_rpmlibdir}/sql.req
 #%{_rpmlibdir}/tcl.req
+%attr(755,root,root) %{_rpmlibdir}/mono*
 
 %attr(755,root,root) %{_bindir}/gendiff
 %attr(755,root,root) %{_bindir}/rpmbuild
+%attr(755,root,root) %{_bindir}/rpmspecdump
+%attr(755,root,root) %{_bindir}/rpmwget
+
+%dir %{_rpmlibdir}/helpers
+%attr(755,root,root) %{_rpmlibdir}/helpers/makeshlibs
 
 %{_mandir}/man1/gendiff.1*
 %{_mandir}/man8/rpmbuild.8*
@@ -1306,7 +1323,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files perlprov
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_rpmlibdir}/perl.*
-#%attr(755,root,root) %{_rpmlibdir}/perldeps.pl
+%attr(755,root,root) %{_rpmlibdir}/osgideps.pl
+%attr(755,root,root) %{_rpmlibdir}/perldeps.pl
 #%attr(755,root,root) %{_rpmlibdir}/find-perl-*
 #%attr(755,root,root) %{_rpmlibdir}/find-*.perl
 #%attr(755,root,root) %{_rpmlibdir}/find-prov.pl
