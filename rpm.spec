@@ -160,6 +160,7 @@ BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gettext-autopoint >= 0.11.4-2
 BuildRequires:	gettext-devel >= 0.11.4-2
+BuildRequires:	keyutils-devel
 BuildRequires:	lzma-devel >= 4.999.3
 BuildRequires:	libmagic-devel
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
@@ -334,6 +335,7 @@ Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
 %{?with_db:Requires:	db-devel >= %{reqdb_ver}}
 Requires:	elfutils-devel
+Requires:	keyutils-devel
 Requires:	libmagic-devel
 %{?with_selinux:Requires:	libselinux-devel}
 Requires:	popt-devel >= %{reqpopt_ver}
@@ -397,6 +399,7 @@ Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
 %{?with_db:Requires:	db-static >= %{reqdb_ver}}
 Requires:	elfutils-static
+Requires:	keyutils-static
 Requires:	libmagic-static
 Requires:	popt-static >= %{reqpopt_ver}
 Requires:	zlib-static
