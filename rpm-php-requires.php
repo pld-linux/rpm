@@ -7,6 +7,9 @@
  * Paweł Gołaszewski <blues@pld-linux.org> (Perl version)
  * Michał Moskal <malekith@pld-linux.org> (Perl version)
  * Elan Ruusamäe <glen@pld-linux.org>
+ *
+ * Requires: php-pear-PHP_CompatInfo
+ * Requires: php-pcre
  */
 
 /**
@@ -34,7 +37,7 @@ function peardeps($files) {
 			$file_dir = null;
 		}
 
-		foreach (explode(PHP_EOL, file_get_contents($f)) as $line) {
+		foreach (file($f) as $line) {
 			// skip comments
 			if (preg_match('/^\s*(#|\/\/|\*|\/\*)/', $line)) {
 				continue;
@@ -100,7 +103,7 @@ function peardeps($files) {
 		if (array_key_exists($f, $files)) {
 			continue;
 		}
-		print "pear($f)\n";
+		echo "pear($f)\n";
 	}
 }
 
