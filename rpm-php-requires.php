@@ -121,11 +121,11 @@ function extdeps($files) {
 		// session, pcre are statically compiled in
 		// date, SPL, SimpleXML are internal for php
 		// sapi_apache?
-		$staticmods = array('standard', 'ereg', 'session', 'pcre', 'date', 'spl', 'simplexml');
+		$staticmods = array('standard', 'ereg', 'date');
 	} else {
 		$epoch = 3;
 		// session has always been compiled in
-		$staticmods = array('standard', 'ereg', 'session');
+		$staticmods = array('standard', 'ereg');
 	}
 	echo "php-common >= ", $epoch, ":", $res['version'], "\n";
 
