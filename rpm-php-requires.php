@@ -118,23 +118,13 @@ function extdeps($files) {
 
 	if (version_compare($res['version'], '5.0.0', 'ge')) {
 		$epoch = 4;
-		// session, pcre are statically compiled in
-		// date, SPL, SimpleXML are internal for php
-		// sapi_apache?
-		$staticmods = array('standard', 'ereg', 'date');
 	} else {
 		$epoch = 3;
-		// session has always been compiled in
-		$staticmods = array('standard', 'ereg');
 	}
 	echo "php-common >= ", $epoch, ":", $res['version'], "\n";
 
 	// process extensions
 	foreach ($res['extensions'] as $ext) {
-		if (in_array($ext, $staticmods)) {
-			continue;
-		}
-
 		echo "php(", $ext, ")\n";
 	}
 }
