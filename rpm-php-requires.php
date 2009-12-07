@@ -125,6 +125,10 @@ function extdeps($files) {
 
 	// process extensions
 	foreach ($res['extensions'] as $ext) {
+		// bz2 ext is in php-bzip2 package
+		if ($ext == 'bz2') {
+			$ext = 'bzip2';
+		}
 		echo "php(", $ext, ")\n";
 	}
 }
