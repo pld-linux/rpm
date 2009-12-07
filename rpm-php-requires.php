@@ -116,12 +116,16 @@ function extdeps($files) {
 	$info = new PHP_CompatInfo('null');
 	$res = $info->parseData($files);
 
-	if (version_compare($res['version'], '5.0.0', 'ge')) {
+	// minimum php version we accept
+	// "%define php_min_version 5.1.2" in spec to minimum version to be 5.1.2
+	$version = max(PHP_MIN_VERSION, $res['version']);
+
+	if (version_compare($version, '5.0.0', 'ge')) {
 		$epoch = 4;
 	} else {
 		$epoch = 3;
 	}
-	echo "php-common >= ", $epoch, ":", $res['version'], "\n";
+	echo "php-common >= ", $epoch, ":", $version, "\n";
 
 	// process extensions
 	foreach ($res['extensions'] as $ext) {
@@ -129,12 +133,14 @@ function extdeps($files) {
 		if ($ext == 'bz2') {
 			$ext = 'bzip2';
 		}
+
 		echo "php(", $ext, ")\n";
 	}
 }
 
 define('RPM_BUILD_ROOT', getenv('RPM_BUILD_ROOT'));
 define('PHP_PEAR_DIR', '/usr/share/pear');
+define('PHP_MIN_VERSION', getenv('PHP_MIN_VERSION'));
 
 if ($argc > 1) {
 	$files = array_splice($argv, 1);
