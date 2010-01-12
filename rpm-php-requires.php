@@ -121,8 +121,12 @@ function extdeps($files) {
 	$version = max(PHP_MIN_VERSION, $res['version']);
 
 	if (version_compare($version, '5.0.0', 'ge')) {
+		# force php-<name> only deps when php5
+		# XXX what about php-pecl-<name> virtual provides?
+		$fmt = 'php-%s';
 		$epoch = 4;
 	} else {
+		$fmt = 'php(%s)';
 		$epoch = 3;
 	}
 	echo "php-common >= ", $epoch, ":", $version, "\n";
@@ -133,8 +137,12 @@ function extdeps($files) {
 		if ($ext == 'bz2') {
 			$ext = 'bzip2';
 		}
-
-		echo "php(", $ext, ")\n";
+		// ereg
+		if ($ext == 'ereg') {
+			// not yet
+			continue;
+		}
+		printf("$fmt\n", $ext);
 	}
 }
 
