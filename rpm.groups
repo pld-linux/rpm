@@ -1014,23 +1014,7 @@ Libraries/Python
 	[uk]:		Бібліотеки/Python
 
 Libraries/Java
-	[cs]:		Knihovny/Java
-	[da]:		Biblioteker/Java
-	[de]:		Bibliotheken/Java
-	[es]:		Bibliotecas/Java
 	[et]:		Teegid/Java
-	[fr]:		Librairies/Java
-	[is]:		A�ger�as�fn/Java
-	[it]:		Librerie/Java
-	[ja]:		�饤�֥��/Java
-	[nb]:		Biblioteker/Java
-	[pl]:		Biblioteki/Java
-	[pt]:		Bibliotecas/Java
-	[pt_BR]:	Bibliotecas/Java
-	[ru]:		����������/Java
-	[sv]:		Bibliotek/Java
-	[sl]:		Knji�nice/Java
-	[uk]:		Бібліотеки/Java
 
 Libraries/XML
 	[cs]:		Knihovny/XML
@@ -1331,8 +1315,6 @@ X11/Applications
 	[sl]:		X11/Programi
 	[sv]:		X11/Till�mpningar
 	[uk]:		X11/Прикладні Програми
-
-X11/Applications/Accessibility
 
 X11/Applications/Editors
 	[cs]:		X11/Aplikace/Editory
