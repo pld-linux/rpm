@@ -1,0 +1,22 @@
+--- rpm-4.4.9.org/macros.in	2008-07-24 08:52:35.205363000 +0200
++++ rpm-4.4.9/macros.in	2008-07-24 09:01:00.351355186 +0200
+@@ -275,6 +275,9 @@
+ #
+ #%distribution
+ 
++# PLD Linux Release
++%pld_release    th
++
+ #	Configurable distribution URL, same as DistURL: tag in a specfile.
+ #	The URL will be used to supply reliable information to tools like
+ #	rpmfind.
+@@ -1468,6 +1471,9 @@
+ # -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
+ 
+ %debugcflags	-O0 -g -Wall
++%debugcppflags	%{nil}
++%optldflags	-Wl,--as-needed -Wl,-z,relro -Wl,-z,-combreloc
++%optcppflags	-D_FORTIFY_SOURCE=2
+ 
+ # Warning: those macros are overwritten by macros.build,
+ #          left here for compatibility
