@@ -1,0 +1,11 @@
+--- rpm-4.5/rpmio/lzdio.c.org	2008-11-05 18:13:43.655364585 +0100
++++ rpm-4.5/rpmio/lzdio.c	2008-11-05 18:13:51.136793343 +0100
+@@ -132,7 +132,7 @@
+ 	for (i = 3; i < 1024; i++)
+ 	    xx = close(i);
+ 	lzma = rpmGetPath("%{?__lzma}%{!?__lzma:/usr/bin/lzma}", NULL);
+-	if (execle(lzma, "lzma", level, NULL, env))
++	if (execle(lzma, "lzma", level, "-M0", NULL, env))
+ 	    _exit(1);
+ 	lzma = _free(lzma);
+     }
