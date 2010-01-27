@@ -55,7 +55,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	33
+Release:	29
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -182,7 +182,6 @@ BuildRequires:	bzip2-devel >= 1.0.2-17
 %{!?with_internal_db:BuildRequires:	db-devel >= %{reqdb_ver}}
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gettext-devel >= 0.11.4-2
-BuildRequires:	keyutils-devel
 %{?with_system_libmagic:BuildRequires:	libmagic-devel}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
@@ -201,7 +200,7 @@ BuildRequires:	rpm-perlprov
 %{?with_python:BuildRequires:	rpm-pythonprov}
 BuildRequires:	rpmbuild(macros) >= 1.351
 BuildRequires:	tar >= 1:1.15.1
-BuildRequires:	zlib-devel >= 1.2.3.3
+BuildRequires:	zlib-devel
 %if %{with apidocs}
 BuildRequires:	doxygen
 BuildRequires:	ghostscript
@@ -218,7 +217,7 @@ BuildRequires:	glibc-static >= 2.2.94
 %{?with_system_libmagic:BuildRequires:	libmagic-static}
 %{?with_selinux:BuildRequires:	libselinux-static >= 1.18}
 BuildRequires:	popt-static >= %{reqpopt_ver}
-BuildRequires:	zlib-static >= 1.2.3.3
+BuildRequires:	zlib-static
 %endif
 Requires:	%{name}-base = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
@@ -361,11 +360,10 @@ Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
 %{!?with_internal_db:Requires:	db-devel >= %{reqdb_ver}}
 Requires:	elfutils-devel
-Requires:	keyutils-devel
 %{?with_system_libmagic:Requires:	libmagic-devel}
 %{?with_selinux:Requires:	libselinux-devel}
 Requires:	popt-devel >= %{reqpopt_ver}
-Requires:	zlib-devel >= 1.2.3.3
+Requires:	zlib-devel
 
 %description devel
 The RPM packaging system includes C libraries that make it easy to
@@ -425,10 +423,9 @@ Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
 %{!?with_internal_db:Requires:	db-static >= %{reqdb_ver}}
 Requires:	elfutils-static
-Requires:	keyutils-static
 %{?with_system_libmagic:Requires:	libmagic-static}
 Requires:	popt-static >= %{reqpopt_ver}
-Requires:	zlib-static >= 1.2.3.3
+Requires:	zlib-static
 
 %description static
 RPM static libraries.
