@@ -1,0 +1,12 @@
+--- rpm-4.5/scripts/find-debuginfo.sh~	2009-06-08 23:57:15.000000000 +0300
++++ rpm-4.5/scripts/find-debuginfo.sh	2009-06-09 00:10:21.603343056 +0300
+@@ -306,6 +306,9 @@
+   sed -n -r "\#^$ptn #s/ .*\$//p" "$LINKSFILE" | append_uniq "$out"
+ }
+ 
++# get rid of top level dir, we want it be only in filesystem-debuginfo package
++sed -i -e '/^%dir \/usr\/lib\/debug$/d' "$LISTFILE"
++
+ #
+ # When given multiple -o switches, split up the output as directed.
+ #
