@@ -1,0 +1,26 @@
+--- rpm-4.5/lib/psm.c~	2008-11-22 17:18:39.325237949 +0100
++++ rpm-4.5/lib/psm.c	2008-11-22 17:30:16.807430141 +0100
+@@ -2308,13 +2308,16 @@
+ 	    replace_lzma_with_gzip(psm->oh);
+ 	}
+ 	*t = '\0';
+-	t = stpcpy(t, ((psm->goal == PSM_PKGSAVE) ? "w9" : "r"));
+-	if (!strcmp(payload_compressor, "gzip"))
+-	    t = stpcpy(t, ".gzdio");
+-	if (!strcmp(payload_compressor, "bzip2"))
+-	    t = stpcpy(t, ".bzdio");
+-	if (!strcmp(payload_compressor, "lzma"))
+-	    t = stpcpy(t, ".lzdio");
++	if (!strcmp(payload_compressor, "lzma")) {
++		t = stpcpy(t, ((psm->goal == PSM_PKGSAVE) ? "w7" : "r"));
++		t = stpcpy(t, ".lzdio");
++	} else {
++		t = stpcpy(t, ((psm->goal == PSM_PKGSAVE) ? "w9" : "r"));
++		if (!strcmp(payload_compressor, "gzip"))
++			t = stpcpy(t, ".gzdio");
++		if (!strcmp(payload_compressor, "bzip2"))
++			t = stpcpy(t, ".bzdio");
++	}
+ 
+ 	/*@-branchstate@*/
+ 	if (!hge(fi->h, RPMTAG_PAYLOADFORMAT, NULL,
