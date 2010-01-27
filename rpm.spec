@@ -12,6 +12,7 @@
 #   preserving payload format and compressor from original rpm, _not_ current settings
 #   /usr/bin/install: cannot stat `./it.gmo': No such file or directory
 #   /usr/bin/install: cannot stat `./sr@Latn.gmo': No such file or directory
+# - maybe? http://rpm.org/gitweb?p=rpm.git;a=commitdiff;h=cfcd1f9bd98d5d0fc46a84931984efec3b9d47e2
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
@@ -55,7 +56,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	33
+Release:	34
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -174,6 +175,8 @@ Patch96:	%{name}-disable-hkp.patch
 Patch97:	%{name}-sigpad.patch
 Patch98:	%{name}-debugdir.patch
 Patch99:	%{name}-pkgconfig.patch
+Patch100:	%{name}-rpm5-debugedit.patch
+Patch101:	%{name}-builddir-readlink.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -799,6 +802,8 @@ install %{SOURCE13} scripts/perl.prov
 %patch98 -p1
 %patch99 -p1
 %patch53 -p1
+%patch100 -p1
+%patch101 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
