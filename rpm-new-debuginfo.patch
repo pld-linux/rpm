@@ -105,7 +105,7 @@
  {
 -  eu-strip --remove-comment -f "$1" "$2" || :
 +  local t=$(mktemp "/tmp/rpm.stripped.XXXXXX")
-+  eu-strip --remove-comment -f "$1" "$2" -o "$t" || exit
++  eu-strip --strip-debug -f "$1" "$2" -o "$t" || exit
 +  rm -f "$t"
 +}
 +
