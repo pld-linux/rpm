@@ -6,26 +6,18 @@
     Written by Alexander Larsson <alexl@redhat.com>, 2002
     Based on code by Jakub Jelinek <jakub@redhat.com>, 2001.
  
-@@ -66,8 +66,8 @@
- #define DW_FORM_indirect	0x16
- 
- #include <beecrypt/beecrypt.h>
--
- #include "hashtab.h"
-+#include <rpmtag.h>
- 
- #define DW_TAG_partial_unit 0x3c
- 
-@@ -77,9 +77,6 @@
+@@ -77,8 +77,9 @@
  int list_file_fd = -1;
  int do_build_id = 0;
  
 -typedef unsigned int uint_32;
 -typedef unsigned short uint_16;
--
++typedef unsigned char rpmuint8_t;
++typedef unsigned int rpmuint32_t;
++typedef unsigned short rpmuint16_t;
+ 
  typedef struct
  {
-   Elf *elf;
 @@ -93,7 +90,7 @@
  typedef struct
  {
