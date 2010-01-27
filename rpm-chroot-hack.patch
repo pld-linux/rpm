@@ -1,28 +1,21 @@
---- rpm-4.5/rpmio/rpmrpc.c~	2009-10-16 01:18:18.566743349 +0300
-+++ rpm-4.5/rpmio/rpmrpc.c	2009-10-16 01:18:21.863999841 +0300
-@@ -179,5 +179,6 @@
- {
-     const char * lpath;
-     int ut = urlPath(path, &lpath);
-+    int fdno;
- 
- if (_rpmio_debug)
-@@ -212,7 +213,17 @@
-     if (mode == 0)
- 	mode = 0644;
- #endif
--    return open(path, flags, mode);
-+    fdno = open(path, flags, mode);
-+    /* XXX if the open(2) fails, try to strip a possible chroot(2) prefix. */
-+    if (fdno < 0 && errno == ENOENT) {
-+        const char *dbpath = rpmExpand("%{_dbpath}", "/", NULL);
-+        const char *fn = strstr(path + 1, dbpath);
-+        if (fn)
-+            fdno = open(fn, flags, mode);
-+        if (dbpath)
-+        	 dbpath = _free(dbpath);
-+    }
-+    return fdno;
- }
- 
- /* XXX rpmdb.c: analogue to rename(2). */
+diff -urN rpm-4.4.9.org/rpmdb/db3.c rpm-4.4.9/rpmdb/db3.c
+--- rpm-4.4.9.org/rpmdb/db3.c	2007-04-25 03:48:42.000000000 +0200
++++ rpm-4.4.9/rpmdb/db3.c	2007-11-12 20:01:29.761434045 +0100
+@@ -1329,6 +1329,8 @@
+ 	} else {
+ assert(rpmdb && rpmdb->db_dbenv);
+ 	    dbenv = rpmdb->db_dbenv;
++	    if (rpmdb->db_chrootDone)
++		    dbenv->set_data_dir(dbenv, dbhome);
+ 	    rpmdb->db_opens++;
+ 	}
+ 	/*@=mods@*/
+@@ -1496,7 +1498,7 @@
+ 		if (dbfile)
+ 		    t = stpcpy( stpcpy( t, "/"), dbfile);
+ /*@=boundswrite@*/
+-#ifdef	HACK	/* XXX necessary to support dbsubfile */
++#if 1
+ 		dbpath = (!dbi->dbi_use_dbenv && !dbi->dbi_temporary)
+ 			? dbfullpath : dbfile;
+ #else
