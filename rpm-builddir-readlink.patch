@@ -1,13 +1,26 @@
 --- rpm-4.5/scripts/find-debuginfo.sh~	2010-01-27 19:25:48.000000000 +0200
 +++ rpm-4.5/scripts/find-debuginfo.sh	2010-01-27 20:23:37.279516094 +0200
-@@ -24,6 +24,10 @@
+@@ -24,6 +24,11 @@
  # Barf on missing build IDs.
  strict=false
  
 +# canon RPM_BUILD_DIR, the DW_AT_comp_dir in ELF objects is real a real path
 +# and debugedit will ignore them as they are out of build dir.
 +RPM_BUILD_DIR=$(readlink -f "$RPM_BUILD_DIR")
++echo "RPM_BUILD_DIR=$RPM_BUILD_DIR"
 +
  BUILDDIR=.
  out=debugfiles.list
  nout=0
+@@ -201,6 +203,11 @@
+     $strict && exit 2
+   fi
+ 
++  if [ ! -s "$SOURCEFILE" ]; then
++    echo >&2 "*** ERROR: no sources found for $f (stripped without sourcefile information?)"
++    exit 2
++  fi
++
+   # A binary already copied into /usr/lib/debug doesn't get stripped,
+   # just has its file names collected and adjusted.
+   case "$dn" in
