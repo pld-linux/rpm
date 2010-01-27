@@ -1,8 +1,8 @@
---- trunk/tools/debugedit.c	2010-01-27 18:57:49.758813670 +0200
-+++ rpm-4.5/tools/debugedit.c	2008-04-06 23:32:15.000000000 +0300
+--- rpm-4.5/tools/debugedit.c	2008-04-06 23:32:15.000000000 +0300
++++ trunk/tools/debugedit.c	2010-01-27 18:57:49.758813670 +0200
 @@ -1,4 +1,4 @@
--/* Copyright (C) 2001, 2002, 2003, 2005, 2007, 2009 Red Hat, Inc.
-+/* Copyright (C) 2001, 2002, 2003, 2005, 2007 Red Hat, Inc.
+-/* Copyright (C) 2001, 2002, 2003, 2005, 2007 Red Hat, Inc.
++/* Copyright (C) 2001, 2002, 2003, 2005, 2007, 2009 Red Hat, Inc.
     Written by Alexander Larsson <alexl@redhat.com>, 2002
     Based on code by Jakub Jelinek <jakub@redhat.com>, 2001.
  
@@ -10,152 +10,152 @@
  #define DW_FORM_indirect	0x16
  
  #include <beecrypt/beecrypt.h>
-+
+-
  #include "hashtab.h"
--#include <rpmtag.h>
++#include <rpmtag.h>
  
  #define DW_TAG_partial_unit 0x3c
  
-@@ -77,6 +77,9 @@
+@@ -77,9 +77,6 @@
  int list_file_fd = -1;
  int do_build_id = 0;
  
-+typedef unsigned int uint_32;
-+typedef unsigned short uint_16;
-+
+-typedef unsigned int uint_32;
+-typedef unsigned short uint_16;
+-
  typedef struct
  {
    Elf *elf;
-@@ -90,7 +93,7 @@
+@@ -93,7 +90,7 @@
  typedef struct
  {
    unsigned char *ptr;
--  rpmuint32_t addend;
-+  uint_32 addend;
+-  uint_32 addend;
++  rpmuint32_t addend;
  } REL;
  
  #define read_uleb128(ptr) ({		\
-@@ -109,32 +112,31 @@
+@@ -112,31 +109,32 @@
    ret;					\
  })
  
--static rpmuint16_t (*do_read_16) (unsigned char *ptr);
--static rpmuint32_t (*do_read_32) (unsigned char *ptr);
-+static uint_16 (*do_read_16) (unsigned char *ptr);
-+static uint_32 (*do_read_32) (unsigned char *ptr);
+-static uint_16 (*do_read_16) (unsigned char *ptr);
+-static uint_32 (*do_read_32) (unsigned char *ptr);
++static rpmuint16_t (*do_read_16) (unsigned char *ptr);
++static rpmuint32_t (*do_read_32) (unsigned char *ptr);
  static void (*write_32) (unsigned char *ptr, GElf_Addr val);
  
  static int ptr_size;
--static int cu_version;
++static int cu_version;
  
--static inline rpmuint16_t
-+static inline uint_16
+-static inline uint_16
++static inline rpmuint16_t
  buf_read_ule16 (unsigned char *data)
  {
    return data[0] | (data[1] << 8);
  }
  
--static inline rpmuint16_t
-+static inline uint_16
+-static inline uint_16
++static inline rpmuint16_t
  buf_read_ube16 (unsigned char *data)
  {
    return data[1] | (data[0] << 8);
  }
  
--static inline rpmuint32_t
-+static inline uint_32
+-static inline uint_32
++static inline rpmuint32_t
  buf_read_ule32 (unsigned char *data)
  {
    return data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24);
  }
  
--static inline rpmuint32_t
-+static inline uint_32
+-static inline uint_32
++static inline rpmuint32_t
  buf_read_ube32 (unsigned char *data)
  {
    return data[3] | (data[2] << 8) | (data[1] << 16) | (data[0] << 24);
-@@ -154,7 +156,7 @@
+@@ -156,7 +154,7 @@
  	{
  	  if (data->d_buf
  	      && offset >= data->d_off
--	      && offset < data->d_off + (off_t)data->d_size)
-+	      && offset < data->d_off + data->d_size)
+-	      && offset < data->d_off + data->d_size)
++	      && offset < data->d_off + (off_t)data->d_size)
  	    return (const char *) data->d_buf + (offset - data->d_off);
  	}
      }
-@@ -166,13 +168,13 @@
+@@ -168,13 +166,13 @@
  #define read_1(ptr) *ptr++
  
  #define read_16(ptr) ({					\
--  rpmuint16_t ret = do_read_16 (ptr);			\
-+  uint_16 ret = do_read_16 (ptr);			\
+-  uint_16 ret = do_read_16 (ptr);			\
++  rpmuint16_t ret = do_read_16 (ptr);			\
    ptr += 2;						\
    ret;							\
  })
  
  #define read_32(ptr) ({					\
--  rpmuint32_t ret = do_read_32 (ptr);			\
-+  uint_32 ret = do_read_32 (ptr);			\
+-  uint_32 ret = do_read_32 (ptr);			\
++  rpmuint32_t ret = do_read_32 (ptr);			\
    ptr += 4;						\
    ret;							\
  })
-@@ -181,7 +183,7 @@
+@@ -183,7 +181,7 @@
  int reltype;
  
  #define do_read_32_relocated(ptr) ({			\
--  rpmuint32_t dret = do_read_32 (ptr);			\
-+  uint_32 dret = do_read_32 (ptr);			\
+-  uint_32 dret = do_read_32 (ptr);			\
++  rpmuint32_t dret = do_read_32 (ptr);			\
    if (relptr)						\
      {							\
        while (relptr < relend && relptr->ptr < ptr)	\
-@@ -198,7 +200,7 @@
+@@ -200,7 +198,7 @@
  })
  
  #define read_32_relocated(ptr) ({			\
--  rpmuint32_t ret = do_read_32_relocated (ptr);		\
-+  uint_32 ret = do_read_32_relocated (ptr);		\
+-  uint_32 ret = do_read_32_relocated (ptr);		\
++  rpmuint32_t ret = do_read_32_relocated (ptr);		\
    ptr += 4;						\
    ret;							\
  })
-@@ -206,7 +208,7 @@
+@@ -208,7 +206,7 @@
  static void
  dwarf2_write_le32 (unsigned char *p, GElf_Addr val)
  {
--  rpmuint32_t v = (rpmuint32_t) val;
-+  uint_32 v = (uint_32) val;
+-  uint_32 v = (uint_32) val;
++  rpmuint32_t v = (rpmuint32_t) val;
  
    p[0] = v;
    p[1] = v >> 8;
-@@ -218,7 +220,7 @@
+@@ -220,7 +218,7 @@
  static void
  dwarf2_write_be32 (unsigned char *p, GElf_Addr val)
  {
--  rpmuint32_t v = (rpmuint32_t) val;
-+  uint_32 v = (uint_32) val;
+-  uint_32 v = (uint_32) val;
++  rpmuint32_t v = (rpmuint32_t) val;
  
    p[3] = v;
    p[2] = v >> 8;
-@@ -240,18 +242,16 @@
+@@ -242,16 +240,18 @@
  #define DEBUG_LINE	2
  #define DEBUG_ARANGES	3
  #define DEBUG_PUBNAMES	4
--#define DEBUG_PUBTYPES	5
--#define DEBUG_MACINFO	6
--#define DEBUG_LOC	7
--#define DEBUG_STR	8
--#define DEBUG_FRAME	9
--#define DEBUG_RANGES	10
-+#define DEBUG_MACINFO	5
-+#define DEBUG_LOC	6
-+#define DEBUG_STR	7
-+#define DEBUG_FRAME	8
-+#define DEBUG_RANGES	9
+-#define DEBUG_MACINFO	5
+-#define DEBUG_LOC	6
+-#define DEBUG_STR	7
+-#define DEBUG_FRAME	8
+-#define DEBUG_RANGES	9
++#define DEBUG_PUBTYPES	5
++#define DEBUG_MACINFO	6
++#define DEBUG_LOC	7
++#define DEBUG_STR	8
++#define DEBUG_FRAME	9
++#define DEBUG_RANGES	10
      { ".debug_info", NULL, NULL, 0, 0, 0 },
      { ".debug_abbrev", NULL, NULL, 0, 0, 0 },
      { ".debug_line", NULL, NULL, 0, 0, 0 },
      { ".debug_aranges", NULL, NULL, 0, 0, 0 },
      { ".debug_pubnames", NULL, NULL, 0, 0, 0 },
--    { ".debug_pubtypes", NULL, NULL, 0, 0, 0 },
++    { ".debug_pubtypes", NULL, NULL, 0, 0, 0 },
      { ".debug_macinfo", NULL, NULL, 0, 0, 0 },
      { ".debug_loc", NULL, NULL, 0, 0, 0 },
      { ".debug_str", NULL, NULL, 0, 0, 0 },
@@ -163,8 +163,8 @@
          }
        if (*slot != NULL)
  	{
--	  error (0, 0, "%s: Duplicate DWARF abbreviation %d", dso->filename,
-+	  error (0, 0, "%s: Duplicate DWARF-2 abbreviation %d", dso->filename,
+-	  error (0, 0, "%s: Duplicate DWARF-2 abbreviation %d", dso->filename,
++	  error (0, 0, "%s: Duplicate DWARF abbreviation %d", dso->filename,
  		 t->entry);
  	  free (t);
  	  htab_delete (h);
@@ -172,8 +172,8 @@
  	  form = read_uleb128 (ptr);
  	  if (form == 2 || form > DW_FORM_indirect)
  	    {
--	      error (0, 0, "%s: Unknown DWARF DW_FORM_%d", dso->filename, form);
-+	      error (0, 0, "%s: Unknown DWARF-2 DW_FORM_%d", dso->filename, form);
+-	      error (0, 0, "%s: Unknown DWARF-2 DW_FORM_%d", dso->filename, form);
++	      error (0, 0, "%s: Unknown DWARF DW_FORM_%d", dso->filename, form);
  	      htab_delete (h);
  	      return NULL;
  	    }
@@ -181,8 +181,8 @@
          }
        if (read_uleb128 (ptr) != 0)
          {
--	  error (0, 0, "%s: DWARF abbreviation does not end with 2 zeros",
-+	  error (0, 0, "%s: DWARF-2 abbreviation does not end with 2 zeros",
+-	  error (0, 0, "%s: DWARF-2 abbreviation does not end with 2 zeros",
++	  error (0, 0, "%s: DWARF abbreviation does not end with 2 zeros",
  		 dso->filename);
  	  htab_delete (h);
  	  return NULL;
@@ -190,10 +190,10 @@
  has_prefix (const char  *str,
  	    const char  *prefix)
  {
--  size_t str_len;
--  size_t prefix_len;
-+  int str_len;
-+  int prefix_len;
+-  int str_len;
+-  int prefix_len;
++  size_t str_len;
++  size_t prefix_len;
    
    str_len = strlen (str);
    prefix_len = strlen (prefix);
@@ -201,16 +201,16 @@
  }
  
  static int
--edit_dwarf2_line (DSO *dso, rpmuint32_t off, char *comp_dir, int phase)
-+edit_dwarf2_line (DSO *dso, uint_32 off, char *comp_dir, int phase)
+-edit_dwarf2_line (DSO *dso, uint_32 off, char *comp_dir, int phase)
++edit_dwarf2_line (DSO *dso, rpmuint32_t off, char *comp_dir, int phase)
  {
    unsigned char *ptr = debug_sections[DEBUG_LINE].data, *dir;
    unsigned char **dirt;
    unsigned char *endsec = ptr + debug_sections[DEBUG_LINE].size;
    unsigned char *endcu, *endprol;
    unsigned char opcode_base;
--  rpmuint32_t value, dirt_cnt;
-+  uint_32 value, dirt_cnt;
+-  uint_32 value, dirt_cnt;
++  rpmuint32_t value, dirt_cnt;
    size_t comp_dir_len = strlen (comp_dir);
    size_t abs_file_cnt = 0, abs_dir_cnt = 0;
  
@@ -218,240 +218,240 @@
      }
  
    value = read_16 (ptr);
--  if (value != 2 && value != 3)
-+  if (value != 2)
+-  if (value != 2)
++  if (value != 2 && value != 3)
      {
        error (0, 0, "%s: DWARF version %d unhandled", dso->filename,
  	     value);
-@@ -679,12 +679,9 @@
+@@ -679,9 +679,12 @@
  	  if (--shrank == 0)
  	    error (EXIT_FAILURE, 0,
  		   "canonicalization unexpectedly shrank by one character");
--	  else
--	    {	    
--	      memset (ptr, 'X', shrank);
--	      ptr += shrank;
--	      *ptr++ = '\0';
--	    }
-+	  memset (ptr, 'X', shrank);
-+	  ptr += shrank;
-+	  *ptr++ = '\0';
+-	  memset (ptr, 'X', shrank);
+-	  ptr += shrank;
+-	  *ptr++ = '\0';
++	  else
++	    {	    
++	      memset (ptr, 'X', shrank);
++	      ptr += shrank;
++	      *ptr++ = '\0';
++	    }
  	}
  
        if (abs_dir_cnt + abs_file_cnt != 0)
-@@ -740,7 +737,7 @@
+@@ -737,7 +740,7 @@
  edit_attributes (DSO *dso, unsigned char *ptr, struct abbrev_tag *t, int phase)
  {
    int i;
--  rpmuint32_t list_offs;
-+  uint_32 list_offs;
+-  uint_32 list_offs;
++  rpmuint32_t list_offs;
    int found_list_offs;
    char *comp_dir;
    
-@@ -749,9 +746,9 @@
+@@ -746,9 +749,9 @@
    found_list_offs = 0;
    for (i = 0; i < t->nattr; ++i)
      {
--      rpmuint32_t form = t->attr[i].form;
--      size_t len = 0;
--      size_t base_len, dest_len;
-+      uint_32 form = t->attr[i].form;
-+      uint_32 len = 0;
-+      int base_len, dest_len;
+-      uint_32 form = t->attr[i].form;
+-      uint_32 len = 0;
+-      int base_len, dest_len;
++      rpmuint32_t form = t->attr[i].form;
++      size_t len = 0;
++      size_t base_len, dest_len;
        
  
        while (1)
-@@ -794,7 +791,7 @@
+@@ -791,7 +794,7 @@
  	      {
  		  char *dir;
  
--		  dir = (char *) debug_sections[DEBUG_STR].data
-+		  dir = (char *)debug_sections[DEBUG_STR].data
+-		  dir = (char *)debug_sections[DEBUG_STR].data
++		  dir = (char *) debug_sections[DEBUG_STR].data
  		      + do_read_32_relocated (ptr);
  
  		  free (comp_dir);
-@@ -824,7 +821,7 @@
+@@ -821,7 +824,7 @@
  	    {
  	      char *name;
  	      
--	      name = (char *) debug_sections[DEBUG_STR].data
-+	      name = (char *)debug_sections[DEBUG_STR].data
+-	      name = (char *)debug_sections[DEBUG_STR].data
++	      name = (char *) debug_sections[DEBUG_STR].data
  		     + do_read_32_relocated (ptr);
  	      if (*name == '/' && comp_dir == NULL)
  		{
-@@ -858,12 +855,7 @@
+@@ -855,7 +858,12 @@
  
  	  switch (form)
  	    {
--	    case DW_FORM_ref_addr:
--	      if (cu_version == 2)
--		ptr += ptr_size;
--	      else
--		ptr += 4;
--	      break;
-+	    case DW_FORM_ref_addr: /* ptr_size in DWARF 2, offset in DWARF 3 */
+-	    case DW_FORM_ref_addr: /* ptr_size in DWARF 2, offset in DWARF 3 */
++	    case DW_FORM_ref_addr:
++	      if (cu_version == 2)
++		ptr += ptr_size;
++	      else
++		ptr += 4;
++	      break;
  	    case DW_FORM_addr:
  	      ptr += ptr_size;
  	      break;
-@@ -915,7 +907,7 @@
+@@ -907,7 +915,7 @@
  	      assert (len < UINT_MAX);
  	      break;
  	    default:
--	      error (0, 0, "%s: Unknown DWARF DW_FORM_%d", dso->filename,
-+	      error (0, 0, "%s: Unknown DWARF-2 DW_FORM_%d", dso->filename,
+-	      error (0, 0, "%s: Unknown DWARF-2 DW_FORM_%d", dso->filename,
++	      error (0, 0, "%s: Unknown DWARF DW_FORM_%d", dso->filename,
  		     form);
  	      return NULL;
  	    }
-@@ -926,34 +918,6 @@
+@@ -918,6 +926,34 @@
  	  break;
  	}
      }
--
--  /* Ensure the CU current directory will exist even if only empty.  Source
--     filenames possibly located in its parent directories refer relatively to
--     it and the debugger (GDB) cannot safely optimize out the missing
--     CU current dir subdirectories.  */
--  if (comp_dir && list_file_fd != -1)
--    {
--      char *p;
--      size_t size;
--
--      if (base_dir && has_prefix (comp_dir, base_dir))
--	p = comp_dir + strlen (base_dir);
--      else if (dest_dir && has_prefix (comp_dir, dest_dir))
--	p = comp_dir + strlen (dest_dir);
--      else
--	p = comp_dir;
--
--      size = strlen (p) + 1;
--      while (size > 0)
--	{
--	  ssize_t ret = write (list_file_fd, p, size);
--	  if (ret == -1)
--	    break;
--	  size -= ret;
--	  p += ret;
--	}
--    }
--
++
++  /* Ensure the CU current directory will exist even if only empty.  Source
++     filenames possibly located in its parent directories refer relatively to
++     it and the debugger (GDB) cannot safely optimize out the missing
++     CU current dir subdirectories.  */
++  if (comp_dir && list_file_fd != -1)
++    {
++      char *p;
++      size_t size;
++
++      if (base_dir && has_prefix (comp_dir, base_dir))
++	p = comp_dir + strlen (base_dir);
++      else if (dest_dir && has_prefix (comp_dir, dest_dir))
++	p = comp_dir + strlen (dest_dir);
++      else
++	p = comp_dir;
++
++      size = strlen (p) + 1;
++      while (size > 0)
++	{
++	  ssize_t ret = write (list_file_fd, p, size);
++	  if (ret == -1)
++	    break;
++	  size -= ret;
++	  p += ret;
++	}
++    }
++
    if (found_list_offs && comp_dir)
      edit_dwarf2_line (dso, list_offs, comp_dir, phase);
  
-@@ -1070,7 +1034,7 @@
+@@ -1034,7 +1070,7 @@
    if (debug_sections[DEBUG_INFO].data != NULL)
      {
        unsigned char *ptr, *endcu, *endsec;
--      rpmuint32_t value;
-+      uint_32 value;
+-      uint_32 value;
++      rpmuint32_t value;
        htab_t abbrev;
        struct abbrev_tag tag, *t;
        int phase;
-@@ -1212,11 +1176,11 @@
+@@ -1176,11 +1212,11 @@
  		  return 1;
  		}
  	      
--	      cu_version = read_16 (ptr);
--	      if (cu_version != 2 && cu_version != 3)
-+	      value = read_16 (ptr);
-+	      if (value != 2)
+-	      value = read_16 (ptr);
+-	      if (value != 2)
++	      cu_version = read_16 (ptr);
++	      if (cu_version != 2 && cu_version != 3)
  		{
  		  error (0, 0, "%s: DWARF version %d unhandled", dso->filename,
--			 cu_version);
-+			 value);
+-			 value);
++			 cu_version);
  		  return 1;
  		}
  	      
-@@ -1226,7 +1190,7 @@
+@@ -1190,7 +1226,7 @@
  		  if (debug_sections[DEBUG_ABBREV].data == NULL)
  		    error (0, 0, "%s: .debug_abbrev not present", dso->filename);
  		  else
--		    error (0, 0, "%s: DWARF CU abbrev offset too large",
-+		    error (0, 0, "%s: DWARF-2 CU abbrev offset too large",
+-		    error (0, 0, "%s: DWARF-2 CU abbrev offset too large",
++		    error (0, 0, "%s: DWARF CU abbrev offset too large",
  			   dso->filename);
  		  return 1;
  		}
-@@ -1236,14 +1200,14 @@
+@@ -1200,14 +1236,14 @@
  		  ptr_size = read_1 (ptr);
  		  if (ptr_size != 4 && ptr_size != 8)
  		    {
--		      error (0, 0, "%s: Invalid DWARF pointer size %d",
-+		      error (0, 0, "%s: Invalid DWARF-2 pointer size %d",
+-		      error (0, 0, "%s: Invalid DWARF-2 pointer size %d",
++		      error (0, 0, "%s: Invalid DWARF pointer size %d",
  			     dso->filename, ptr_size);
  		      return 1;
  		    }
  		}
  	      else if (read_1 (ptr) != ptr_size)
  		{
--		  error (0, 0, "%s: DWARF pointer size differs between CUs",
-+		  error (0, 0, "%s: DWARF-2 pointer size differs between CUs",
+-		  error (0, 0, "%s: DWARF-2 pointer size differs between CUs",
++		  error (0, 0, "%s: DWARF pointer size differs between CUs",
  			 dso->filename);
  		  return 1;
  		}
-@@ -1261,7 +1225,7 @@
+@@ -1225,7 +1261,7 @@
  		  t = htab_find_with_hash (abbrev, &tag, tag.entry);
  		  if (t == NULL)
  		    {
--		      error (0, 0, "%s: Could not find DWARF abbreviation %d",
-+		      error (0, 0, "%s: Could not find DWARF-2 abbreviation %d",
+-		      error (0, 0, "%s: Could not find DWARF-2 abbreviation %d",
++		      error (0, 0, "%s: Could not find DWARF abbreviation %d",
  			     dso->filename, tag.entry);
  		      htab_delete (abbrev);
  		      return 1;
-@@ -1410,12 +1374,12 @@
+@@ -1374,12 +1410,12 @@
       or Elf64 object, only that we are consistent in what bits feed the
       hash so it comes out the same for the same file contents.  */
    {
--    auto inline void process (const void *data, size_t size);
--    auto inline void process (const void *data, size_t size)
-+    inline void process (const void *data, size_t size)
+-    inline void process (const void *data, size_t size)
++    auto inline void process (const void *data, size_t size);
++    auto inline void process (const void *data, size_t size)
      {
        memchunk chunk = { .data = (void *) data, .size = size };
        hashFunctionContextUpdateMC (&ctx, &chunk);
      }
-+
+-
      union
      {
        GElf_Ehdr ehdr;
-@@ -1475,11 +1439,11 @@
+@@ -1439,11 +1475,11 @@
  
    /* Now format the build ID bits in hex to print out.  */
    {
--    const rpmuint8_t * id = (rpmuint8_t *)build_id->d_buf + build_id_offset;
-+    const unsigned char * id = (unsigned char *) build_id->d_buf + build_id_offset;
+-    const unsigned char * id = (unsigned char *) build_id->d_buf + build_id_offset;
++    const rpmuint8_t * id = (rpmuint8_t *)build_id->d_buf + build_id_offset;
      char hex[build_id_size * 2 + 1];
      int n = snprintf (hex, 3, "%02" PRIx8, id[0]);
      assert (n == 2);
--    for (i = 1; i < (int)build_id_size; ++i)
-+    for (i = 1; i < build_id_size; ++i)
+-    for (i = 1; i < build_id_size; ++i)
++    for (i = 1; i < (int)build_id_size; ++i)
        {
  	n = snprintf (&hex[i * 2], 3, "%02" PRIx8, id[i]);
  	assert (n == 2);
-@@ -1502,7 +1466,8 @@
+@@ -1466,8 +1502,7 @@
    Elf_Data *build_id = NULL;
    size_t build_id_offset = 0, build_id_size = 0;
  
--  optCon = poptGetContext("debugedit", argc, (const char **)argv, optionsTable, 0);
-+  optCon = poptGetContext("debugedit", argc, (const char **)argv,
-+			  optionsTable, 0);
+-  optCon = poptGetContext("debugedit", argc, (const char **)argv,
+-			  optionsTable, 0);
++  optCon = poptGetContext("debugedit", argc, (const char **)argv, optionsTable, 0);
    
    while ((nextopt = poptGetNextOpt (optCon)) > 0 || nextopt == POPT_ERROR_BADOPT)
      /* do nothing */ ;
-@@ -1620,8 +1585,7 @@
+@@ -1585,7 +1620,8 @@
  	      Elf_Data src = dst;
  	      src.d_buf = data->d_buf;
  	      assert (sizeof (Elf32_Nhdr) == sizeof (Elf64_Nhdr));
--	      while ((char *) data->d_buf + data->d_size - 
--		     (char *) src.d_buf > (int) sizeof nh
-+	      while ((char *) data->d_buf + data->d_size - (char *) src.d_buf > (int) sizeof nh
+-	      while ((char *) data->d_buf + data->d_size - (char *) src.d_buf > (int) sizeof nh
++	      while ((char *) data->d_buf + data->d_size - 
++		     (char *) src.d_buf > (int) sizeof nh
  		     && elf32_xlatetom (&dst, &src, dso->ehdr.e_ident[EI_DATA]))
  		{
  		  Elf32_Word len = sizeof nh + nh.n_namesz;
-@@ -1631,8 +1595,7 @@
+@@ -1595,7 +1631,8 @@
  		      && !memcmp ((char *) src.d_buf + sizeof nh, "GNU", sizeof "GNU"))
  		    {
  		      build_id = data;
--		      build_id_offset = (char *) src.d_buf + len - 
--					(char *) data->d_buf;
-+		      build_id_offset = (char *) src.d_buf + len - (char *) data->d_buf;
+-		      build_id_offset = (char *) src.d_buf + len - (char *) data->d_buf;
++		      build_id_offset = (char *) src.d_buf + len - 
++					(char *) data->d_buf;
  		      build_id_size = nh.n_descsz;
  		      break;
  		    }
