@@ -55,7 +55,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	33
+Release:	30
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -182,7 +182,6 @@ BuildRequires:	bzip2-devel >= 1.0.2-17
 %{!?with_internal_db:BuildRequires:	db-devel >= %{reqdb_ver}}
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gettext-devel >= 0.11.4-2
-BuildRequires:	keyutils-devel
 %{?with_system_libmagic:BuildRequires:	libmagic-devel}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
@@ -361,7 +360,6 @@ Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
 %{!?with_internal_db:Requires:	db-devel >= %{reqdb_ver}}
 Requires:	elfutils-devel
-Requires:	keyutils-devel
 %{?with_system_libmagic:Requires:	libmagic-devel}
 %{?with_selinux:Requires:	libselinux-devel}
 Requires:	popt-devel >= %{reqpopt_ver}
@@ -425,7 +423,6 @@ Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
 %{!?with_internal_db:Requires:	db-static >= %{reqdb_ver}}
 Requires:	elfutils-static
-Requires:	keyutils-static
 %{?with_system_libmagic:Requires:	libmagic-static}
 Requires:	popt-static >= %{reqpopt_ver}
 Requires:	zlib-static >= 1.2.3.3
