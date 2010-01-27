@@ -1,12 +1,12 @@
---- rpm-4.5/rpmio/ugid.c	2009-06-05 00:46:30.450894061 +0300
-+++ rpm-4.5/rpmio/ugid.c	2009-06-19 19:35:42.374530092 +0300
+--- rpm-4.5/rpmio/ugid.c~	2004-10-09 20:29:23.000000000 +0300
++++ rpm-4.5/rpmio/ugid.c	2009-06-05 00:46:30.450894061 +0300
 @@ -101,10 +101,10 @@
  	    /*@=internalglobs@*/
  	    grent = getgrnam(thisGname);
  	    if (grent == NULL) {
 -		/* XXX The filesystem package needs group/lock w/o getgrnam. */
 -		if (strcmp(thisGname, "lock") == 0) {
-+		/* XXX The FHS package needs group/uucp w/o getgrnam, filesystem needs adm */
++		/* XXX The FHS package needs group/uucp w/o getgrnam. */
 +		if (strcmp(thisGname, "uucp") == 0) {
  /*@-boundswrite@*/
 -		    *gid = lastGid = 54;
@@ -14,16 +14,3 @@
  /*@=boundswrite@*/
  		    return 0;
  		} else
-@@ -114,6 +114,12 @@
- /*@=boundswrite@*/
- 		    return 0;
- 		} else
-+		if (strcmp(thisGname, "adm") == 0) {
-+/*@-boundswrite@*/
-+		    *gid = lastGid = 4;
-+/*@=boundswrite@*/
-+		    return 0;
-+		} else
- 		return -1;
- 	    }
- 	}

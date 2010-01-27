@@ -20,12 +20,9 @@ diff -urN rpm.org/rpmrc.in rpm/rpmrc.in
  buildarchtranslate: i386: i386
  
  buildarchtranslate: alphaev5: alpha
-@@ -206,8 +206,9 @@
- buildarchtranslate: sun4d: sparc
- buildarchtranslate: sun4m: sparc
+@@ -206,6 +206,7 @@
  buildarchtranslate: sparcv8: sparc
--buildarchtranslate: sparcv9: sparc
-+buildarchtranslate: sparcv9: sparcv9
+ buildarchtranslate: sparcv9: sparc
  buildarchtranslate: sun4u: sparc64
 +buildarchtranslate: sparc64: sparc64
  
