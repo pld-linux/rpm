@@ -33,10 +33,6 @@
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 
-%ifarch sparc sparcv9 sparc64
-%undefine with_apidocs
-%endif
-
 # versions of required libraries
 %if "%{pld_release}" == "th"
 %define	reqdb_ver	4.7.25
@@ -55,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	33
+Release:	20
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -92,12 +88,10 @@ Patch3:		%{name}-rpmpopt.patch
 Patch4:		%{name}-perl-macros.patch
 Patch6:		%{name}-noexpand.patch
 Patch7:		%{name}-scripts-closefds.patch
-Patch8:		%{name}-db.patch
 Patch9:		%{name}-gettext-in-header.patch
 Patch10:	%{name}-compress-doc.patch
 Patch11:	%{name}-rpm5-patchset-8074.patch
 Patch12:	%{name}-system_libs.patch
-Patch13:	%{name}-unglobal.patch
 Patch14:	%{name}-etc_dir.patch
 Patch15:	%{name}-system_libs-more.patch
 Patch17:	%{name}-ldconfig-always.patch
@@ -172,8 +166,6 @@ Patch94:	%{name}-shescape-memfault.patch
 Patch95:	%{name}-gid-uucp.patch
 Patch96:	%{name}-disable-hkp.patch
 Patch97:	%{name}-sigpad.patch
-Patch98:	%{name}-debugdir.patch
-Patch99:	%{name}-pkgconfig.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -182,7 +174,6 @@ BuildRequires:	bzip2-devel >= 1.0.2-17
 %{!?with_internal_db:BuildRequires:	db-devel >= %{reqdb_ver}}
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gettext-devel >= 0.11.4-2
-BuildRequires:	keyutils-devel
 %{?with_system_libmagic:BuildRequires:	libmagic-devel}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
@@ -201,7 +192,7 @@ BuildRequires:	rpm-perlprov
 %{?with_python:BuildRequires:	rpm-pythonprov}
 BuildRequires:	rpmbuild(macros) >= 1.351
 BuildRequires:	tar >= 1:1.15.1
-BuildRequires:	zlib-devel >= 1.2.3.3
+BuildRequires:	zlib-devel
 %if %{with apidocs}
 BuildRequires:	doxygen
 BuildRequires:	ghostscript
@@ -218,7 +209,7 @@ BuildRequires:	glibc-static >= 2.2.94
 %{?with_system_libmagic:BuildRequires:	libmagic-static}
 %{?with_selinux:BuildRequires:	libselinux-static >= 1.18}
 BuildRequires:	popt-static >= %{reqpopt_ver}
-BuildRequires:	zlib-static >= 1.2.3.3
+BuildRequires:	zlib-static
 %endif
 Requires:	%{name}-base = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
@@ -332,7 +323,7 @@ Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	ossp-uuid >= 1.6.2-4
 Requires:	popt >= %{reqpopt_ver}
 %{?with_internal_db:%{?with_nptl:Requires:	uname(release) >= 2.6.0}}
-Requires:	zlib >= 1.2.3.3
+Requires:	zlib >= 1.2.3
 %{?with_suggest_tags:Suggests:	lzma}
 Obsoletes:	rpm-libs
 # avoid installing with incompatible (non-tukaani) lzma
@@ -361,11 +352,10 @@ Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
 %{!?with_internal_db:Requires:	db-devel >= %{reqdb_ver}}
 Requires:	elfutils-devel
-Requires:	keyutils-devel
 %{?with_system_libmagic:Requires:	libmagic-devel}
 %{?with_selinux:Requires:	libselinux-devel}
 Requires:	popt-devel >= %{reqpopt_ver}
-Requires:	zlib-devel >= 1.2.3.3
+Requires:	zlib-devel
 
 %description devel
 The RPM packaging system includes C libraries that make it easy to
@@ -425,10 +415,9 @@ Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
 %{!?with_internal_db:Requires:	db-static >= %{reqdb_ver}}
 Requires:	elfutils-static
-Requires:	keyutils-static
 %{?with_system_libmagic:Requires:	libmagic-static}
 Requires:	popt-static >= %{reqpopt_ver}
-Requires:	zlib-static >= 1.2.3.3
+Requires:	zlib-static
 
 %description static
 RPM static libraries.
@@ -703,12 +692,10 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch4 -p1
 %patch6 -p1
 %patch7 -p1
-%patch8 -p1
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1 -R
 %patch12 -p1
-%patch13 -p1
 %patch14 -p1
 %patch17 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
@@ -757,6 +744,7 @@ install %{SOURCE13} scripts/perl.prov
 %endif
 %patch51 -p1
 #%patch52 -p1
+%patch53 -p1
 %patch55 -p1
 %patch56 -p1
 %patch57 -p1
@@ -795,10 +783,6 @@ install %{SOURCE13} scripts/perl.prov
 %patch94 -p1
 %patch95 -p1
 %patch96 -p1
-%patch97 -p1
-%patch98 -p1
-%patch99 -p1
-%patch53 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
@@ -863,12 +847,9 @@ fi
 cd ..
 %endif
 
+# config.guess doesn't handle athlon, so we have to change it by hand.
 # rpm checks for CPU type at runtime, but it looks better
-sed -i \
-	-e 's|@host@|%{_target_cpu}-%{_target_vendor}-%{_target_os}|' \
-	-e 's|@host_cpu@|%{_target_cpu}|' \
-	-e 's|@host_os@|%{_target_os}|' \
-	macros.in
+sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu@|%{_target_cpu}|' macros.in
 
 # pass CC and CXX too in case of building with some older configure macro
 # disable perl-RPM2 build, we have it in separate spec
@@ -1299,7 +1280,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_libdir}/librpmdb.la
 %{_libdir}/librpmio.la
 %{_includedir}/rpm
-%{_pkgconfigdir}/rpm.pc
 
 %files static
 %defattr(644,root,root,755)
@@ -1378,7 +1358,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %ifarch %{ppc}
 %{_rpmlibdir}/ppc*
 %endif
-%ifarch sparc sparcv9 sparc64
+%ifarch sparc sparc64
 %{_rpmlibdir}/sparc*
 %endif
 %ifarch %{x8664}
