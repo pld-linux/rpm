@@ -17,8 +17,8 @@
    fi
  
 +  if [ ! -s "$SOURCEFILE" ]; then
-+    echo >&2 "*** ERROR: no sources found for $f (stripped without sourcefile information?)"
-+    exit 2
++    echo >&2 "*** ${strict_error}: no sources found for $f (stripped without sourcefile information?)"
++    $strict && exit 2
 +  fi
 +
    # A binary already copied into /usr/lib/debug doesn't get stripped,
