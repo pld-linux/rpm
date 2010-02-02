@@ -22,7 +22,7 @@
 +prefix=@prefix@
 +exec_prefix=@exec_prefix@
 +libdir=@libdir@
-+includedir=@includedir@
++includedir=@includedir@/rpm
 +rpmhome=@RPMCONFIGDIR@
 +
 +Name: RPM
