@@ -336,7 +336,7 @@ Requires:	ossp-uuid >= 1.6.2-4
 Requires:	popt >= %{reqpopt_ver}
 %{?with_internal_db:%{?with_nptl:Requires:	uname(release) >= 2.6.0}}
 Requires:	zlib >= 1.2.3.3
-%{?with_suggest_tags:Suggests:	lzma}
+%{?with_suggest_tags:Suggests:	xz}
 Obsoletes:	rpm-libs
 # avoid installing with incompatible (non-tukaani) lzma
 # avoid incompatible (-M0 not supported) lzma
@@ -547,7 +547,7 @@ Requires:	gcc >= 5:3.4
 Requires:	glibc-devel
 Requires:	grep
 Requires:	gzip
-Requires:	lzma
+Requires:	xz
 Requires:	make
 Requires:	patch
 Requires:	sed
