@@ -137,6 +137,10 @@ function extdeps($files) {
 		if ($ext == 'bz2') {
 			$ext = 'bzip2';
 		}
+		// SPL ext is in php-spl package
+		if ($ext == 'SPL') {
+			$ext = 'spl';
+		}
 		// ereg
 		if ($ext == 'ereg') {
 			// not yet
