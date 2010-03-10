@@ -38,7 +38,7 @@ function peardeps($files) {
 		}
 
 		foreach (file($f) as $line) {
-			// skip comments
+			// skip comments -- not perfect, matches "*" at start of line (very rare altho)
 			if (preg_match('/^\s*(#|\/\/|\*|\/\*)/', $line)) {
 				continue;
 			}
@@ -48,15 +48,15 @@ function peardeps($files) {
 					(\"([^\"]*)\"|'([^']*)')
 					\s* \)? \s* ;/x", $line, $m)) {
 
-				if ($m[5] != "") {
+				if ($m[5]) {
 					$x = $m[5];
-				} else if ($m[6] != "") {
+				} else if ($m[6]) {
 					$x = $m[6];
 				} else {
 					continue 2;
 				}
 
-				if (substr($x, 0, 2) == './' || substr($x, -1) == '$') {
+				if (substr($x, 0, 2) == './' || substr($x, -1) == '$') {  # XXX must be: CONTAINS DOLLAR
 					continue 2;
 				}
 
@@ -76,15 +76,15 @@ function peardeps($files) {
 					(\"([^\"]*)\"|'([^']*)')
 					\s* \)? \s* ;/x", $line, $m)) {
 
-				if ($m[5] != "") {
+				if ($m[5]) {
 					$x = $m[5];
-				} else if ($m[6] != "") {
+				} else if ($m[6]) {
 					$x = $m[6];
 				} else {
 					continue 2;
 				}
 
-				if (substr($x, -1) == '$') {
+				if (substr($x, -1) == '$') { # XXX must be: CONTAINS DOLLAR
 					continue 2;
 				}
 				if (substr($x, -4) != '.php') {
@@ -92,6 +92,9 @@ function peardeps($files) {
 				}
 
 				$x = "$file_dir/$x";
+				// remove double slashes
+				// TODO: resolve simpletest/test/../socket.php -> simpletest/socket.php
+				$x = str_replace("//", "/", $x);
 				$req[$x] = 1;
 				continue;
 			}
