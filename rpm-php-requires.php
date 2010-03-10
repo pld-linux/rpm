@@ -43,7 +43,7 @@ function peardeps($files) {
 				continue;
 			}
 
-			while (preg_match("/(\W|^)(require|include)(_once)?
+			if (preg_match("/(\W|^)(require|include)(_once)?
 					\s* \(? \s*
 					(\"([^\"]*)\"|'([^']*)')
 					\s* \)? \s* ;/x", $line, $m)) {
@@ -71,7 +71,7 @@ function peardeps($files) {
 				continue;
 			}
 
-			while (preg_match("/(\W|^)(require|include)(_once)?
+			if (preg_match("/(\W|^)(require|include)(_once)?
 					\s* \(? \s* dirname \s* \( \s* __FILE__ \s* \) \s* \. \s*
 					(\"([^\"]*)\"|'([^']*)')
 					\s* \)? \s* ;/x", $line, $m)) {
