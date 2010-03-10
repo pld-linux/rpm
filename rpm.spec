@@ -1055,10 +1055,10 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 %%_verify_file_context_path	%%{nil}
 
 # If non-zero, all erasures will be automagically repackaged.
-#%%_repackage_all_erasures	1
+#%%_repackage_all_erasures	0
 
 # If non-zero, create debuginfo packages
-#%%_enable_debug_packages	1
+#%%_enable_debug_packages	0
 
 # Boolean (i.e. 1 == "yes", 0 == "no") that controls whether files
 # marked as %doc should be installed.
