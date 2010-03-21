@@ -56,7 +56,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	36
+Release:	37
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -177,6 +177,7 @@ Patch98:	%{name}-debugdir.patch
 Patch99:	%{name}-pkgconfig.patch
 Patch100:	%{name}-rpm5-debugedit.patch
 Patch101:	%{name}-builddir-readlink.patch
+Patch102:	pythondeps-speedup.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -804,6 +805,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch53 -p1
 %patch100 -p1
 %patch101 -p1
+%patch102 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
@@ -1011,31 +1013,29 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{provides,requires}.perl
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
 
 # not installed since 4.4.8 (-tools-perl subpackage)
-install scripts/rpmdiff scripts/rpmdiff.cgi $RPM_BUILD_ROOT%{_rpmlibdir}
+install -p scripts/rpmdiff scripts/rpmdiff.cgi $RPM_BUILD_ROOT%{_rpmlibdir}
 
-install macros.perl	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.perl
-install macros.python	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.python
-install macros.php	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.php
-install macros.mono	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.mono
-install %{SOURCE16}	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.java
-install %{SOURCE19}	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.gstreamer
+cp -a macros.perl	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.perl
+cp -a macros.python	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.python
+cp -a macros.php	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.php
+cp -a macros.mono	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.mono
+cp -a %{SOURCE16}	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.java
+cp -a %{SOURCE19}	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.gstreamer
 
-install %{SOURCE1} doc/manual/groups
-install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
-install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
-install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
-install %{SOURCE14} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
-install %{SOURCE17} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
-install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
-install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
-install %{SOURCE15} $RPM_BUILD_ROOT/etc/sysconfig/rpm
-
-install %{SOURCE18} $RPM_BUILD_ROOT%{_bindir}/banner.sh
+install -p %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
+install -p %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
+install -p %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
+install -p %{SOURCE14} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
+install -p %{SOURCE17} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
+install -p scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
+install -p %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
+install -p %{SOURCE18} $RPM_BUILD_ROOT%{_bindir}/banner.sh
+cp -a %{SOURCE15} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Conflictname
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Dirnames
-install %{SOURCE12} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
+cp -a %{SOURCE12} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Obsoletename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Providename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
@@ -1195,6 +1195,7 @@ rm -f $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,a,py}
 
 rm -rf manual
 cp -a doc/manual manual
+cp -a %{SOURCE1} manual/groups
 rm -f manual/Makefile*
 
 %clean
