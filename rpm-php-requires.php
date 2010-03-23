@@ -140,15 +140,12 @@ function extdeps($files) {
 		if ($ext == 'bz2') {
 			$ext = 'bzip2';
 		}
-		// SPL ext is in php-spl package
-		if ($ext == 'SPL') {
-			$ext = 'spl';
+
+		// these need to be lowercased
+		if (in_array($ext, array('SPL', 'PDO', 'SQLite', 'Reflection', 'SimpleXML'))) {
+			$ext = strtolower($ext);
 		}
-		// ereg
-		if ($ext == 'ereg') {
-			// not yet
-			continue;
-		}
+
 		printf("$fmt\n", $ext);
 	}
 }
