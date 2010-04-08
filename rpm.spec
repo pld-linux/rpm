@@ -151,6 +151,7 @@ Patch59:	%{name}-libtool-deps.patch
 Patch60:	%{name}-mimetype.patch
 Patch61:	%{name}-sparc64.patch
 Patch62:	%{name}-gendiff.patch
+Patch70:	%{name}-configure-autoconf.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1.4
@@ -723,6 +724,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch61 -p1
 %endif
 %patch62 -p1
+%patch70 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
