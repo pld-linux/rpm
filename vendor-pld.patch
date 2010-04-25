@@ -1,0 +1,12 @@
+--- rpm-5.2.0/configure.ac.wig	2010-04-25 22:53:46.360198235 +0200
++++ rpm-5.2.0/configure.ac	2010-04-25 22:54:14.100214966 +0200
+@@ -1872,6 +1872,9 @@ AC_ARG_WITH(
+ 	    "fedora")
+ 		    AC_DEFINE([RPM_VENDOR_FEDORA], 1, Vendor is Fedora)
+ 		    ;;
++	    "pld")
++		    AC_DEFINE([RPM_VENDOR_PLD], 1, Vendor is PLD)
++		    ;;
+ 	    esac
+ 	    AC_MSG_RESULT([$withval])
+     else
