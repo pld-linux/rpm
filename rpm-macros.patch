@@ -1,7 +1,6 @@
-diff -urN rpm.org/macros.in rpm/macros.in
---- rpm.org/macros.in	2007-10-02 20:46:56.430390000 +0200
-+++ rpm/macros.in	2007-10-02 20:49:01.480941544 +0200
-@@ -213,7 +213,7 @@
+--- rpm-5.2.0/macros.in.wiget	2010-04-24 18:05:03.413900239 +0200
++++ rpm-5.2.0/macros.in	2010-04-24 18:06:23.963891557 +0200
+@@ -220,7 +220,7 @@ pakietu oraz przy odpluskwianiu samego p
  %endif\
  %{nil}
  
@@ -10,9 +9,12 @@ diff -urN rpm.org/macros.in rpm/macros.in
  
  #	The path to the pgp executable (legacy, use %{__pgp} instead).
  %_pgpbin		%{__pgp}
-@@ -242,12 +242,12 @@
- #	The directory where newly built source packages will be written.
- %_srcrpmdir		%{_topdir}/SRPMS
+@@ -253,14 +253,14 @@ pakietu oraz przy odpluskwianiu samego p
+ %_buildrootdir		@BUILDROOTDIR_MACRO@
+ 
+ #       Build root path, where %install installs the package during build.
+-%buildroot              %{_buildrootdir}/%{name}-root
++%buildroot		%{_tmppath}/%{name}-%{version}-root-%(id -u -n)
  
 -#	Directory where temporaray files can be created.
 -%_tmppath		%{_var}/tmp
@@ -25,19 +27,10 @@ diff -urN rpm.org/macros.in rpm/macros.in
 +%_topdir		%(echo $HOME)/rpm
  
  #==============================================================================
- # ---- Optional rpmrc macros.
-@@ -257,7 +257,7 @@
- #	Configurable build root path, same as BuildRoot: in a specfile.
- #	(Note: the configured macro value will override the spec file value).
- #
--%buildroot		%{_tmppath}/%{name}-root
-+%buildroot		%{_tmppath}/%{name}-%{version}-root-%(id -u -n)
- 
- #	The sub-directory (relative to %{_builddir}) where sources are compiled.
- #	This macro is set after processing %setup, either explicitly from the
-@@ -356,8 +356,8 @@
- #		"w9.bzdio"	bzip2 level 9.
- #		"w9.lzdio"	lzma level 9.
+ # ---- Optional macros.
+@@ -367,8 +367,8 @@ pakietu oraz przy odpluskwianiu samego p
+ #		"w6.lzdio"	lzma level 6 (legacy, stable).
+ #		"w6.xzdio"	xz level 6 (obsoletes lzma, unstable).
  #
 -#%_source_payload	w9.gzdio
 -#%_binary_payload	w9.gzdio
@@ -46,7 +39,7 @@ diff -urN rpm.org/macros.in rpm/macros.in
  
  #	Archive formats to use for source/binary package payloads.
  #		"cpio"		cpio archive (default)
-@@ -1224,17 +1224,17 @@
+@@ -1411,17 +1411,17 @@ print (t)\
  %_exec_prefix		%{_prefix}
  %_bindir		%{_exec_prefix}/bin
  %_sbindir		%{_exec_prefix}/sbin
@@ -69,8 +62,8 @@ diff -urN rpm.org/macros.in rpm/macros.in
 +%_mandir		%{_prefix}/share/man
  %_localedir		%{_datadir}/locale
  
- #==============================================================================
-@@ -1535,7 +1535,33 @@
+ %_initrddir		%{_sysconfdir}/rc.d/init.d
+@@ -1755,7 +1755,33 @@ PreReq: python >= %{python_version}, pyt
  # helpers are also used by %{_rpmhome}/rpmdeps {--provides|--requires}.
  #%__executable_provides	%{_rpmhome}/executabledeps.sh --provides
  #%__executable_requires	%{_rpmhome}/executabledeps.sh --requires

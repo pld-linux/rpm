@@ -1,23 +1,11 @@
---- rpm/lib/poptI.c.orig	2007-07-24 16:36:47.000000000 +0200
-+++ rpm/lib/poptI.c	2007-10-02 15:11:29.213848100 +0200
-@@ -17,7 +17,7 @@
+--- rpm-5.2.0/lib/poptI.c.wiget	2009-04-12 03:25:45.000000000 +0200
++++ rpm-5.2.0/lib/poptI.c	2010-04-25 22:59:14.467664549 +0200
+@@ -21,7 +21,7 @@ extern time_t get_date(const char * p, v
  /*@-fullinitblock@*/
  /*@unchecked@*/
  struct rpmQVKArguments_s rpmIArgs = {
--    .probFilter = (RPMPROB_FILTER_REPLACEOLDFILES | RPMPROB_FILTER_REPLACENEWFILES),
-+    .probFilter = 0,
- };
- /*@=fullinitblock@*/
- 
-@@ -275,10 +275,6 @@
- 	N_("skip files with leading component <path> "),
- 	N_("<path>") },
- 
-- { "fileconflicts", '\0', POPT_BIT_CLR, &rpmIArgs.probFilter,
--	(RPMPROB_FILTER_REPLACEOLDFILES | RPMPROB_FILTER_REPLACENEWFILES),
--	N_("detect file conflicts between packages"), NULL},
--
-  { "freshen", 'F', POPT_BIT_SET, &rpmIArgs.installInterfaceFlags,
- 	(INSTALL_UPGRADE|INSTALL_FRESHEN|INSTALL_INSTALL),
- 	N_("upgrade package(s) if already installed"),
-
+-#if defined(RPM_VENDOR_MANDRIVA) /* dont-filter-install-file-conflicts */
++#if defined(RPM_VENDOR_MANDRIVA) || defined(RPM_VENDOR_PLD) /* dont-filter-install-file-conflicts */
+     .probFilter = RPMPROB_FILTER_NONE,
+ #else
+     .probFilter = (RPMPROB_FILTER_REPLACEOLDFILES | RPMPROB_FILTER_REPLACENEWFILES),

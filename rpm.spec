@@ -53,7 +53,7 @@ ERROR
 %define		reqdb_ver	4.7.25
 %define		reqpopt_ver	1.15
 %define		beecrypt_ver	2:4.1.2-4
-%define		sover	5.0
+%define		sover	5.2
 
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
@@ -63,12 +63,12 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.1.9
-Release:	0.2
+Version:	5.2.0
+Release:	0.1
 License:	LGPL
 Group:		Base
-Source0:	http://rpm5.org/files/rpm/rpm-5.1/%{name}-%{version}.tar.gz
-# Source0-md5:	2b6ff8f7abb1fe919402f00cc0ca56f7
+Source0:	http://rpm5.org/files/rpm/rpm-5.2/%{name}-%{version}.tar.gz
+# Source0-md5:	9126c960be02f2b0d6068801aa27fde7
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -137,6 +137,8 @@ Patch37:	%{name}-doxygen_hack.patch
 Patch38:	%{name}-perl_req-use_base.patch
 Patch39:	%{name}-perl_req-skip_multiline.patch
 Patch40:	%{name}-perl_req-heredocs_pod.patch
+
+Patch41:	vendor-pld.patch
 
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
 
@@ -675,7 +677,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 # compress doc in upstream
 %patch10 -p1
 %{?with_system_lua:%patch11 -p1}
-%patch12 -p1
+#patch12 -p1
 # CHECK ME - macrofiles: ~/etc could be used
 #%%patch14 -p1
 %patch16 -p1
@@ -703,9 +705,10 @@ install %{SOURCE12} scripts/perl.prov
 %patch35 -p0
 %patch36 -p1
 %patch37 -p1
-%patch38 -p1
-%patch39 -p1
-%patch40 -p1
+#patch38 -p1 applied
+#patch39 -p1 applied
+#patch40 -p1 applied
+%patch41 -p1
 %patch42 -p1
 %patch46 -p1
 # port to new implementation
@@ -724,7 +727,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch61 -p1
 %endif
 %patch62 -p1
-%patch70 -p1
+%patch70 -p1 -b .wiget
 
 cd scripts
 mv -f perl.req perl.req.in
@@ -1081,7 +1084,7 @@ rm $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,a,py}
 # wrong location, not used anyway
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log,xinetd}
 # utils dropped in 4.4.8 -- their manuals
-rm $RPM_BUILD_ROOT%{_mandir}/{,*/}/man8/rpmgraph.8
+#rm $RPM_BUILD_ROOT%{_mandir}/{,*/}/man8/rpmgraph.8
 
 %find_lang %{name}
 
@@ -1158,6 +1161,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/macros
 %{_rpmlibdir}/macros.pld
+%{_rpmlibdir}/cpuinfo.yaml
 
 %attr(755,root,root) %{_rpmlibdir}/hrmib-cache
 
@@ -1203,18 +1207,20 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files utils
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rpm2cpio
-%attr(755,root,root) %{_bindir}/rpmcache
 %attr(755,root,root) %{_bindir}/rpmconstant
-%attr(755,root,root) %{_bindir}/rpmdigest
-%attr(755,root,root) %{_bindir}/rpmgrep
-%attr(755,root,root) %{_bindir}/rpmrepo
-%attr(755,root,root) %{_bindir}/rpmmtree
-%attr(755,root,root) %{_rpmlibdir}/debugedit
 %attr(755,root,root) %{_rpmlibdir}/find-debuginfo.sh
-%attr(755,root,root) %{_rpmlibdir}/rpmcmp
 %attr(755,root,root) %{_rpmlibdir}/rpmdb_loadcvt
-%attr(755,root,root) %{_rpmlibdir}/rpmdeps
 %attr(755,root,root) %{_rpmlibdir}/tgpg
+%dir %{_rpmlibdir}/bin
+%attr(755,root,root) %{_rpmlibdir}/bin/debugedit
+%attr(755,root,root) %{_rpmlibdir}/bin/grep
+%attr(755,root,root) %{_rpmlibdir}/bin/mtree
+%attr(755,root,root) %{_rpmlibdir}/bin/rpmcache
+%attr(755,root,root) %{_rpmlibdir}/bin/rpmcmp
+%attr(755,root,root) %{_rpmlibdir}/bin/rpmdeps
+%attr(755,root,root) %{_rpmlibdir}/bin/rpmdigest
+%attr(755,root,root) %{_rpmlibdir}/bin/rpmkey
+%attr(755,root,root) %{_rpmlibdir}/bin/rpmrepo
 %{_mandir}/man1/rpmgrep.1*
 %{_mandir}/man8/rpm2cpio.8*
 %{_mandir}/man8/rpmcache.8*
@@ -1305,8 +1311,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %attr(755,root,root) %{_bindir}/gendiff
 %attr(755,root,root) %{_bindir}/rpmbuild
-%attr(755,root,root) %{_bindir}/rpmspecdump
-%attr(755,root,root) %{_bindir}/rpmwget
+%attr(755,root,root) %{_rpmlibdir}/bin/rpmspecdump
+%attr(755,root,root) %{_rpmlibdir}/bin/wget
 
 %dir %{_rpmlibdir}/helpers
 %attr(755,root,root) %{_rpmlibdir}/helpers/makeshlibs
