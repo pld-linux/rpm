@@ -1,29 +1,42 @@
---- rpm-4.5/lib/psm.c	2010-05-08 14:14:22.817080224 +0200
-+++ rpm-4.5/lib/psm.c	2010-05-08 14:14:03.063343062 +0200
-@@ -469,6 +469,7 @@
- 	/*@modifies psm, fileSystem, internalState @*/
+--- rpm-5.2.0/lib/psm.c	2009-07-07 23:12:33.000000000 +0200
++++ rpm-5.2.0/lib/psm.c	2010-05-08 15:17:24.063904813 +0200
+@@ -576,17 +576,21 @@
+ #endif	/* WITH_LUA */
+ 
+ #if defined(WITH_LUA) || defined(WITH_FICL) || defined(WITH_JS) || defined(WITH_PERLEMBED) || defined(WITH_PYTHONEMBED) || defined(WITH_RUBYEMBED) || defined(WITH_TCL)
+-static int enterChroot(rpmpsm psm, int * fdnop)
++static int enterChroot(rpmpsm psm, int * pwdFdnop, int * rootFdnop)
+ 	/*@globals fileSystem, internalState @*/
+-	/*@modifies *fdnop, fileSystem, internalState @*/
++	/*@modifies *pwdFdnop, *rootFdnop, fileSystem, internalState @*/
  {
      const rpmts ts = psm->ts;
-+    int pwdFdno = -1;
-     int rootFdno = -1;
-     const char *n, *v, *r;
-     rpmRC rc = RPMRC_OK;
-@@ -487,9 +488,12 @@
+     int inChroot;
+     int xx;
  
      /* Save the current working directory. */
- /*@-nullpass@*/
--    rootFdno = open(".", O_RDONLY, 0);
-+    pwdFdno = open(".", O_RDONLY, 0);
- /*@=nullpass@*/
- 
-+    /* Save the current root directory. */
-+    rootFdno = open("/", O_RDONLY, 0);
+-    if (fdnop)
+-	(*fdnop) = open(".", O_RDONLY, 0);
++    if (pwdFdnop)
++	(*pwdFdnop) = open(".", O_RDONLY, 0);
 +
++    /* Save the current root directory. */
++    if (rootFdnop)
++	(*rootFdnop) = open("/", O_RDONLY, 0);
+ 
      /* Get into the chroot. */
      if (!rpmtsChrootDone(ts)) {
- 	const char *rootDir = rpmtsRootDir(ts);
-@@ -554,10 +558,12 @@
- 	/*@=superuser =noeffect @*/
+@@ -607,7 +611,7 @@
+     return inChroot;
+ }
+ 
+-static int exitChroot(rpmpsm psm, int inChroot, int rootFdno)
++static int exitChroot(rpmpsm psm, int inChroot, int pwdFdno, int rootFdno)
+ 	/*@globals fileSystem, internalState @*/
+ 	/*@modifies fileSystem, internalState @*/
+ {
+@@ -623,10 +627,12 @@
+ /*@=modobserver@*/
  	    xx = rpmtsSetChrootDone(ts, 0);
  	}
 +	xx = fchdir(pwdFdno);
@@ -33,6 +46,29 @@
  
      xx = close(rootFdno);
 +    xx = close(pwdFdno);
+ 
+     return 0;
+ }
+@@ -648,11 +654,12 @@
+ 	/*@modifies psm, fileSystem, internalState @*/
+ {
+     char * av[] = { NULL, NULL, NULL, NULL };
++    int pwdFdno = -1;
+     int rootFdno = -1;
+     rpmRC rc = RPMRC_OK;
+     int xx = 0;
+     int * ssp = NULL;
+-    int inChroot = enterChroot(psm, &rootFdno);
++    int inChroot = enterChroot(psm, &pwdFdno, &rootFdno);
+ 
+     if (psm->sstates != NULL)
+ 	ssp = psm->sstates + tag2slx(psm->scriptTag);
+@@ -726,7 +733,7 @@
+ 	*ssp |= RPMSCRIPT_STATE_REAPED;
+     }
+ 
+-    xx = exitChroot(psm, inChroot, rootFdno);
++    xx = exitChroot(psm, inChroot, pwdFdno, rootFdno);
  
      return rc;
  }
