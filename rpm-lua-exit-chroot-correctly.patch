@@ -1,0 +1,38 @@
+--- rpm-4.5/lib/psm.c	2010-05-08 14:14:22.817080224 +0200
++++ rpm-4.5/lib/psm.c	2010-05-08 14:14:03.063343062 +0200
+@@ -469,6 +469,7 @@
+ 	/*@modifies psm, fileSystem, internalState @*/
+ {
+     const rpmts ts = psm->ts;
++    int pwdFdno = -1;
+     int rootFdno = -1;
+     const char *n, *v, *r;
+     rpmRC rc = RPMRC_OK;
+@@ -487,9 +488,12 @@
+ 
+     /* Save the current working directory. */
+ /*@-nullpass@*/
+-    rootFdno = open(".", O_RDONLY, 0);
++    pwdFdno = open(".", O_RDONLY, 0);
+ /*@=nullpass@*/
+ 
++    /* Save the current root directory. */
++    rootFdno = open("/", O_RDONLY, 0);
++
+     /* Get into the chroot. */
+     if (!rpmtsChrootDone(ts)) {
+ 	const char *rootDir = rpmtsRootDir(ts);
+@@ -554,10 +558,12 @@
+ 	/*@=superuser =noeffect @*/
+ 	    xx = rpmtsSetChrootDone(ts, 0);
+ 	}
++	xx = fchdir(pwdFdno);
+     } else
+-	xx = fchdir(rootFdno);
++	xx = fchdir(pwdFdno);
+ 
+     xx = close(rootFdno);
++    xx = close(pwdFdno);
+ 
+     return rc;
+ }
