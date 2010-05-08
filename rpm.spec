@@ -56,7 +56,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	38
+Release:	39
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -178,6 +178,7 @@ Patch99:	%{name}-pkgconfig.patch
 Patch100:	%{name}-rpm5-debugedit.patch
 Patch101:	%{name}-builddir-readlink.patch
 Patch102:	pythondeps-speedup.patch
+Patch103:	%{name}-lua-exit-chroot-correctly.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -806,6 +807,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch100 -p1
 %patch101 -p1
 %patch102 -p1
+%patch103 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
