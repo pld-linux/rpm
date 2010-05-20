@@ -140,6 +140,10 @@ function extdeps($files) {
 		if ($ext == 'bz2') {
 			$ext = 'bzip2';
 		}
+		// libxml ext is in php-xml package
+		if ($ext == 'libxml') {
+			$ext = 'xml';
+		}
 
 		// these need to be lowercased
 		if (in_array($ext, array('SPL', 'PDO', 'SQLite', 'Reflection', 'SimpleXML'))) {
