@@ -126,7 +126,7 @@
 +#-----------------------------------------------------------------
 +# CFLAGS and LDFLAGS used to build
 +
-+%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -gdwarf-2 -g2}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
++%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -gdwarf-3 -g2}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
 +# -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
 +
 +%debugcflags	-O0 -g -Wall
