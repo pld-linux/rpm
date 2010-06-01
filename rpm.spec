@@ -31,9 +31,9 @@
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
 %bcond_without	suggest_tags	# build without Suggest tag (bootstrapping)
-%bcond_with	neon		# build with HTTP/WebDAV support (neon library)
+%bcond_without	neon		# build with HTTP/WebDAV support (neon library)
 %bcond_without	db		# BerkeleyDB
-%bcond_with	sqlite		# build with SQLite support
+%bcond_without	sqlite		# build with SQLite support
 %bcond_with	sqlite_dbapi	# default database backend is sqlite
 %bcond_without	system_lua		# use system lua
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
@@ -53,7 +53,7 @@ ERROR
 %define		reqdb_ver	4.7.25
 %define		reqpopt_ver	1.15
 %define		beecrypt_ver	2:4.1.2-4
-%define		sover	5.2
+%define		sover	5.3
 
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
@@ -63,12 +63,12 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.2.0
+Version:	5.3.1
 Release:	0.1
 License:	LGPL
 Group:		Base
-Source0:	http://rpm5.org/files/rpm/rpm-5.2/%{name}-%{version}.tar.gz
-# Source0-md5:	9126c960be02f2b0d6068801aa27fde7
+Source0:	http://rpm5.org/files/rpm/rpm-5.3/%{name}-%{version}.tar.gz
+# Source0-md5:	ee172f54e9b596056f8ecf13ae6afa9e
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -155,6 +155,8 @@ Patch61:	%{name}-sparc64.patch
 Patch62:	%{name}-gendiff.patch
 Patch63:	%{name}-lua-exit-chroot-correctly.patch
 Patch70:	%{name}-configure-autoconf.patch
+Patch71:	db.patch
+Patch72:	openmp.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1.4
@@ -182,6 +184,7 @@ BuildRequires:	python-modules >= 1:2.3
 %{?with_python:BuildRequires:	rpm-pythonprov}
 %{?with_sqlite:BuildRequires:	sqlite3-devel}
 BuildRequires:	zlib-devel
+BuildRequires:	xz-devel
 %if %{with apidocs}
 BuildRequires:	doxygen
 BuildRequires:	ghostscript
@@ -697,7 +700,7 @@ install %{SOURCE12} scripts/perl.prov
 
 %ifarch i386 i486
 # disable TSC
-%patch26 -p1
+patch26 -p1
 %endif
 %patch27 -p1
 # to port 
@@ -728,8 +731,10 @@ install %{SOURCE12} scripts/perl.prov
 %patch61 -p1
 %endif
 %patch62 -p1
-%patch63 -p1
-%patch70 -p1 -b .wiget
+#patch63 -p1 applied upstream
+%patch70 -p1
+%patch71 -p1
+%patch72 -p1 -b .wiget
 
 cd scripts
 mv -f perl.req perl.req.in
@@ -776,14 +781,15 @@ awk -f %{SOURCE6} %{SOURCE1}
 	--with-bzip2=external \
 	--with-beecrypt=external \
 	--with-lzma=external \
+	--with-xz=external \
 	--with-neon=%{?with_neon:external}%{!?with_neon:no} \
 	--with-file=external \
 	--with-popt=external \
-	--with-db=%{?with_db:external}%{!?with_db:no} \
-	--with-sqlite=%{?with_sqlite:external}%{!?with_sqlite:no} \
+	--with-db=%{?with_db:internal}%{!?with_db:no} \
+	--with-sqlite=%{?with_sqlite:yes}%{!?with_sqlite:no} \
 	--with-dbapi=%{!?with_sqlite_dbapi:db}%{?with_sqlite_dbapi:sqlite} \
 	--with-lua=%{!?with_system_lua:internal}%{?with_system_lua:external} \
-	--with-pcre=no \
+	--with-pcre=external \
 	--with-keyutils=none \
 	--without-path-versioned \
 	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.pld:%{_rpmlibdir}/macros.build:%{_rpmlibdir}/%%{_target}/macros:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%%{_target}/macros:~/etc/rpmmacros:~/etc/.rpmmacros:~/.rpmmacros' \
@@ -1260,15 +1266,16 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/cross-build
 %attr(755,root,root) %{_rpmlibdir}/find-spec-bcond
 %attr(755,root,root) %{_rpmlibdir}/getpo.sh
-%attr(755,root,root) %{_rpmlibdir}/install-sh
 %attr(755,root,root) %{_rpmlibdir}/install-build-tree
-%attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
 %attr(755,root,root) %{_rpmlibdir}/u_pkg.sh
 %attr(755,root,root) %{_rpmlibdir}/executabledeps.sh
 %attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
 %attr(755,root,root) %{_rpmlibdir}/mimetypedeps.sh
 # needs hacked pkg-config to return anything
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
+%dir %{_rpmlibdir}/bin
+%attr(755,root,root) %{_rpmlibdir}/bin/install-sh
+%attr(755,root,root) %{_rpmlibdir}/bin/mkinstalldirs
 #%attr(755,root,root) %{_rpmlibdir}/rpmb
 #%attr(755,root,root) %{_rpmlibdir}/rpmt
 %attr(755,root,root) %{_rpmlibdir}/vcheck
@@ -1311,6 +1318,18 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%{_rpmlibdir}/sql.req
 #%{_rpmlibdir}/tcl.req
 %attr(755,root,root) %{_rpmlibdir}/mono*
+%dir %{_rpmlibdir}/macros.d
+%{_rpmlibdir}/macros.d/perl
+%{_rpmlibdir}/macros.d/java
+%{_rpmlibdir}/macros.d/libtool
+%{_rpmlibdir}/macros.d/mono
+%{_rpmlibdir}/macros.d/perl
+%{_rpmlibdir}/macros.d/php
+%{_rpmlibdir}/macros.d/pkgconfig
+%{_rpmlibdir}/macros.d/python
+%{_rpmlibdir}/macros.d/selinux
+%{_rpmlibdir}/macros.rpmbuild
+
 
 %attr(755,root,root) %{_bindir}/gendiff
 %attr(755,root,root) %{_bindir}/rpmbuild
