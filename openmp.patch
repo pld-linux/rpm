@@ -1,0 +1,22 @@
+--- rpm-5.3.1/rpmio/Makefile.am.wiget	2010-05-24 17:23:09.000000000 +0200
++++ rpm-5.3.1/rpmio/Makefile.am	2010-06-01 21:29:20.521227268 +0200
+@@ -102,7 +102,7 @@ librpmio_la_SOURCES = \
+ 	rpmsq.c rpmsql.c rpmsquirrel.c rpmssl.c rpmsyck.c rpmsw.c rpmsx.c \
+ 	rpmtcl.c rpmuuid.c rpmxar.c rpmzlog.c rpmzq.c \
+ 	strcasecmp.c strtolocale.c tar.c url.c ugid.c xzdio.c yarn.c
+-librpmio_la_LDFLAGS = -release $(LT_CURRENT).$(LT_REVISION)
++librpmio_la_LDFLAGS = -release $(LT_CURRENT).$(LT_REVISION) $(OPENMP_CFLAGS)
+ if HAVE_LD_VERSION_SCRIPT
+ librpmio_la_LDFLAGS += -Wl,--version-script=$(srcdir)/librpmio.vers
+ endif
+--- rpm-5.3.1/tools/Makefile.am.wiget	2010-06-01 21:49:05.274449585 +0200
++++ rpm-5.3.1/tools/Makefile.am	2010-06-01 21:49:56.576943304 +0200
+@@ -281,7 +281,7 @@ if WITH_DBSQL
+ pkgbin_PROGRAMS +=	dbsql
+ dbsql_SOURCES	= dbsql.c
+ dbsql_CFLAGS	= $(CFLAGS) -I../db3/sql -I../db/sql/generated
+-dbsql_LDFLAGS	= @LDFLAGS_STATIC@ $(LDFLAGS)
++dbsql_LDFLAGS	= @LDFLAGS_STATIC@ $(LDFLAGS) $(OPENMP_CFLAGS)
+ dbsql_LDADD = \
+ 	$(top_builddir)/db3/libdb_sql-5.0.la \
+ 	$(RPMIO_LDADD_COMMON)
