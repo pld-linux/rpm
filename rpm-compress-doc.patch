@@ -1,6 +1,6 @@
-diff -ur rpm-4.0.4/macros.in rpm-4.0.4-/macros.in
---- rpm-4.0.4/macros.in	Fri May 17 11:18:12 2002
-+++ rpm-4.0.4-/macros.in	Fri May 17 11:17:44 2002
+diff -ur rpm-4.0.4/macros/macros.in rpm-4.0.4-/macros/macros.in
+--- rpm-4.0.4/macros/macros.in	Fri May 17 11:18:12 2002
++++ rpm-4.0.4-/macros/macros.in	Fri May 17 11:17:44 2002
 @@ -1208,6 +1208,9 @@
  #%__spec_triggerin_pre		%{nil}
  #%__spec_triggerin_post		%{nil}

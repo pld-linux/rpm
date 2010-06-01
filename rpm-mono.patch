@@ -1,6 +1,6 @@
---- rpm-5.0.1/macros.in~	2008-01-31 00:06:10.000000000 +0200
-+++ rpm-5.0.1/macros.in	2008-01-31 00:07:31.097681189 +0200
-@@ -1578,8 +1578,8 @@
+--- rpm-5.3.1/macros/mono.in.wiget	2010-05-30 16:58:43.653464509 +0200
++++ rpm-5.3.1/macros/mono.in	2010-05-30 16:59:15.576066903 +0200
+@@ -6,5 +6,5 @@
  #
  # Note: Used iff _use_internal_dependency_generator is non-zero. The
  # helpers are also used by %{_rpmhome}/rpmdeps {--provides|--requires}.
@@ -8,6 +8,3 @@
 -%__mono_requires	%{_rpmhome}/mono-find-requires
 +%__mono_provides	%{nil}
 +%__mono_requires	%{nil}
- 
- #------------------------------------------------------------------------
- # executable(...) configuration.

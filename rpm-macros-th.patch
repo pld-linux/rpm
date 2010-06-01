@@ -1,19 +1,18 @@
-diff -ur rpm-4.4.9.org/macros.in rpm-4.4.9/macros.in
---- rpm-4.4.9.org/macros.in	2008-07-24 08:52:35.205363000 +0200
-+++ rpm-4.4.9/macros.in	2008-07-24 09:01:00.351355186 +0200
-@@ -275,6 +275,9 @@
+--- rpm-5.3.1/macros/macros.rpmbuild.in.wiget	2010-05-30 17:11:07.699227892 +0200
++++ rpm-5.3.1/macros/macros.rpmbuild.in	2010-05-30 17:12:37.700048249 +0200
+@@ -102,6 +102,9 @@
  #
  #%distribution
  
 +# PLD Linux Release
 +%pld_release    th
 +
- #	Configurable distribution URL, same as DistURL: tag in a specfile.
- #	The URL will be used to supply reliable information to tools like
- #	rpmfind.
---- rpm/macros.in~	2008-07-29 15:33:40.289757059 +0200
-+++ rpm/macros.in	2008-07-29 15:37:14.559735562 +0200
-@@ -1635,7 +1635,8 @@
+ #	Configurable bug URL, same as BugURL: tag in a specfile.
+ #	The URL will be used to supply reliable information to where
+ #	to file bugs.
+--- rpm-5.3.1/macros/macros.in.wiget	2010-05-30 17:10:50.702560935 +0200
++++ rpm-5.3.1/macros/macros.in	2010-05-30 17:10:50.705892723 +0200
+@@ -956,7 +956,8 @@ pakietu oraz przy odpluskwianiu samego p
  # -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
  
  %debugcflags	-O0 -g -Wall

@@ -1,6 +1,19 @@
---- rpm-5.2.0/macros.in.wiget	2010-04-24 18:05:03.413900239 +0200
-+++ rpm-5.2.0/macros.in	2010-04-24 18:06:23.963891557 +0200
-@@ -220,7 +220,7 @@ pakietu oraz przy odpluskwianiu samego p
+--- rpm-5.3.1/macros/macros.rpmbuild.in.wiget	2010-05-30 17:03:38.009271449 +0200
++++ rpm-5.3.1/macros/macros.rpmbuild.in	2010-05-30 17:08:25.676741951 +0200
+@@ -123,8 +123,8 @@
+ #		"w6.lzdio"	lzma level 6 (legacy, stable).
+ #		"w6.xzdio"	xz level 6 (obsoletes lzma, unstable).
+ #
+-#%_source_payload	w9.gzdio
+-#%_binary_payload	w9.gzdio
++%_source_payload	w9.gzdio
++%_binary_payload	w9.lzdio
+ 
+ #	Archive formats to use for source/binary package payloads.
+ #		"cpio"		cpio archive (default)
+--- rpm-5.3.1/macros/macros.in.wiget	2010-05-30 17:03:38.009271449 +0200
++++ rpm-5.3.1/macros/macros.in	2010-05-30 17:06:26.886075137 +0200
+@@ -150,7 +150,7 @@ pakietu oraz przy odpluskwianiu samego p
  %endif\
  %{nil}
  
@@ -9,7 +22,7 @@
  
  #	The path to the pgp executable (legacy, use %{__pgp} instead).
  %_pgpbin		%{__pgp}
-@@ -253,14 +253,14 @@ pakietu oraz przy odpluskwianiu samego p
+@@ -183,14 +183,14 @@ pakietu oraz przy odpluskwianiu samego p
  %_buildrootdir		@BUILDROOTDIR_MACRO@
  
  #       Build root path, where %install installs the package during build.
@@ -28,24 +41,13 @@
  
  #==============================================================================
  # ---- Optional macros.
-@@ -367,8 +367,8 @@ pakietu oraz przy odpluskwianiu samego p
- #		"w6.lzdio"	lzma level 6 (legacy, stable).
- #		"w6.xzdio"	xz level 6 (obsoletes lzma, unstable).
- #
--#%_source_payload	w9.gzdio
--#%_binary_payload	w9.gzdio
-+%_source_payload	w9.gzdio
-+%_binary_payload	w9.lzdio
- 
- #	Archive formats to use for source/binary package payloads.
- #		"cpio"		cpio archive (default)
-@@ -1411,17 +1411,17 @@ print (t)\
- %_exec_prefix		%{_prefix}
+@@ -846,11 +846,11 @@ pakietu oraz przy odpluskwianiu samego p
+ %_datarootdir		%{_prefix}/share
  %_bindir		%{_exec_prefix}/bin
  %_sbindir		%{_exec_prefix}/sbin
 -%_libexecdir		%{_exec_prefix}/libexec
 +%_libexecdir		%{_exec_prefix}/lib
- %_datadir		%{_prefix}/share
+ %_datadir		%{_datarootdir}
 -%_sysconfdir		%{_prefix}/etc
 -%_sharedstatedir	%{_prefix}/com
 -%_localstatedir		%{_prefix}/var
@@ -55,15 +57,7 @@
  %_lib			lib
  %_libdir		%{_exec_prefix}/%{_lib}
  %_includedir		%{_prefix}/include
- %_oldincludedir		/usr/include
--%_infodir		%{_prefix}/info
--%_mandir		%{_prefix}/man
-+%_infodir		%{_prefix}/share/info
-+%_mandir		%{_prefix}/share/man
- %_localedir		%{_datadir}/locale
- 
- %_initrddir		%{_sysconfdir}/rc.d/init.d
-@@ -1755,7 +1755,33 @@ PreReq: python >= %{python_version}, pyt
+@@ -941,7 +941,33 @@ pakietu oraz przy odpluskwianiu samego p
  # helpers are also used by %{_rpmhome}/rpmdeps {--provides|--requires}.
  #%__executable_provides	%{_rpmhome}/executabledeps.sh --provides
  #%__executable_requires	%{_rpmhome}/executabledeps.sh --requires

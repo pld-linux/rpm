@@ -1,11 +1,10 @@
---- rpm-4.0.4/configure.ac.wiget	Tue Feb 12 23:26:36 2002
-+++ rpm-4.0.4/configure.ac	Tue Feb 12 23:27:46 2002
-@@ -1314,6 +1314,7 @@
-     rpmio/Makefile rpmdb/Makefile lib/Makefile build/Makefile
-     scripts/Makefile scripts/macros.perl scripts/macros.php
+--- rpm-5.3.1/configure.ac.wiget	2010-05-30 16:43:06.000000000 +0200
++++ rpm-5.3.1/configure.ac	2010-05-30 16:43:38.482725491 +0200
+@@ -2199,6 +2199,7 @@ AC_CONFIG_FILES([ po/Makefile.in
+     tools/Makefile
+     scripts/Makefile
      scripts/perl.req scripts/perl.prov
 +    scripts/php.req scripts/php.prov
-     scripts/macros.python tools/Makefile misc/Makefile doc/Makefile
-     doc/manual/Makefile doc/fr/Makefile doc/ja/Makefile doc/ko/Makefile
-     doc/pl/Makefile doc/ru/Makefile doc/sk/Makefile python/Makefile
-
+     rpmdb/DB_CONFIG
+     macros/macros macros/macros.rpmbuild
+     macros/java macros/libtool macros/mono macros/perl 

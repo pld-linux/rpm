@@ -1,16 +1,15 @@
-diff -urN rpm-4.3.org/configure.ac rpm-4.3/configure.ac
---- rpm-4.3.org/configure.ac	2004-01-07 01:51:35.251160244 +0100
-+++ rpm-4.3/configure.ac	2004-01-07 01:55:53.198560246 +0100
-@@ -1313,6 +1313,7 @@
-     Doxyfile Makefile macros rpmpopt rpm.spec
-     rpmio/Makefile rpmdb/Makefile lib/Makefile build/Makefile
-     scripts/Makefile scripts/macros.perl scripts/macros.php
+--- rpm-5.3.1/configure.ac.wiget	2010-05-22 17:15:11.000000000 +0200
++++ rpm-5.3.1/configure.ac	2010-05-30 16:37:59.526924459 +0200
+@@ -2198,6 +2198,7 @@ AC_CONFIG_FILES([ po/Makefile.in
+     build/Makefile build/auto/Makefile build/auto/desc build/auto/types
+     tools/Makefile
+     scripts/Makefile
 +    scripts/perl.req scripts/perl.prov
-     scripts/macros.python tools/Makefile misc/Makefile doc/Makefile
-     doc/manual/Makefile doc/fr/Makefile doc/ja/Makefile doc/ko/Makefile
-     doc/pl/Makefile doc/ru/Makefile doc/sk/Makefile python/Makefile
---- rpm-4.4.9/scripts/perl.req.orig	2006-07-08 16:13:50.000000000 +0200
-+++ rpm-4.4.9/scripts/perl.req	2008-03-24 01:13:31.985544655 +0100
+     rpmdb/DB_CONFIG
+     macros/macros macros/macros.rpmbuild
+     macros/java macros/libtool macros/mono macros/perl 
+--- rpm-5.3.1/scripts/perl.req.wiget	2008-10-26 10:50:53.000000000 +0100
++++ rpm-5.3.1/scripts/perl.req	2010-05-30 16:35:36.999438206 +0200
 @@ -1,4 +1,4 @@
 -#!/usr/bin/perl
 +#!@__PERL@
@@ -30,7 +29,7 @@ diff -urN rpm-4.3.org/configure.ac rpm-4.3/configure.ac
    }
  } else {
    
-@@ -49,7 +53,11 @@
+@@ -49,7 +53,11 @@ if ("@ARGV") {
    # contents of the file.
    
    foreach (<>) {
@@ -43,7 +42,7 @@ diff -urN rpm-4.3.org/configure.ac rpm-4.3/configure.ac
    }
  }
  
-@@ -203,19 +211,41 @@
+@@ -215,19 +223,41 @@ sub process_file {
  
        $module =~ s/\(\s*\)$//;
  
@@ -95,7 +94,7 @@ diff -urN rpm-4.3.org/configure.ac rpm-4.3/configure.ac
  
        };
  
-@@ -232,7 +262,31 @@
+@@ -244,7 +274,31 @@ sub process_file {
        # will be included with the name sys/systeminfo.ph so only use the
        # basename of *.ph files
  
