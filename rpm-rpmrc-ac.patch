@@ -134,10 +134,10 @@
  
  arch_canon:	m68kmint: m68kmint	13
  arch_canon:	atarist: m68kmint	13
-@@ -209,8 +205,8 @@
+@@ -205,8 +205,8 @@
  buildarchtranslate: sun4m: sparc
  buildarchtranslate: sparcv8: sparc
- buildarchtranslate: sparcv9: sparc
+ buildarchtranslate: sparcv9: sparcv9
 -buildarchtranslate: sun4u: sparc64
 -buildarchtranslate: sparc64: sparc64
 +buildarchtranslate: sun4u: sparc
