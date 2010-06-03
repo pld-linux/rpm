@@ -183,6 +183,7 @@ BuildRequires:	popt-devel >= %{reqpopt_ver}
 BuildRequires:	python-modules >= 1:2.3
 %{?with_python:BuildRequires:	rpm-pythonprov}
 %{?with_sqlite:BuildRequires:	sqlite3-devel}
+BuildRequires:	tcl
 BuildRequires:	zlib-devel
 BuildRequires:	xz-devel
 %if %{with apidocs}
