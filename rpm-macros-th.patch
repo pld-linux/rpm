@@ -34,7 +34,7 @@ diff -urN rpm-4.5/macros.in rpm-4.5.new//macros.in
  
  %debugcflags	-O0 -g -Wall
 +%debugcppflags	%{nil}
-+%optldflags	-Wl,--as-needed -Wl,--no-add-needed -Wl,-z,relro -Wl,-z,combreloc
++%optldflags	-Wl,--as-needed -Wl,--no-copy-dt-needed-entries -Wl,-z,relro -Wl,-z,combreloc
 +%optcppflags	-D_FORTIFY_SOURCE=2
  
  # Warning: those macros are overwritten by macros.build,
