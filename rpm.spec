@@ -13,6 +13,7 @@
 #   /usr/bin/install: cannot stat `./it.gmo': No such file or directory
 #   /usr/bin/install: cannot stat `./sr@Latn.gmo': No such file or directory
 # - maybe? http://rpm.org/gitweb?p=rpm.git;a=commitdiff;h=cfcd1f9bd98d5d0fc46a84931984efec3b9d47e2
+# - fix linking, rpm is beeing linked against installed rpmio
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
@@ -994,15 +995,27 @@ s390-[^-]*-[Ll]inux(-gnu)?
 
 %ifarch sparc64
 sparc64-[^-]*-[Ll]inux(-gnu)?
-sparcv8-[^-]*-[Ll]inux(-gnu)?
-sparcv9-[^-]*-[Ll]inux(-gnu)?
 %endif
-%ifarch sparcv9
-sparcv8-[^-]*-[Ll]inux(-gnu)?
+%ifarch sparcv9 sparc64
 sparcv9-[^-]*-[Ll]inux(-gnu)?
 %endif
 %ifarch sparc sparcv9 sparc64
 sparc-[^-]*-[Ll]inux(-gnu)?
+%endif
+%ifarch armv5tel
+armv5tel-[^-]*-[Ll]inux(-gnu)?
+%endif
+%ifarch armv4t armv5tel
+armv4t-[^-]*-[Ll]inux(-gnu)?
+%endif
+%ifarch armv3t armv4t armv5tel
+armv3t-[^-]*-[Ll]inux(-gnu)?
+%endif
+%ifarch armv5teb
+armv5teb-[^-]*-[Ll]inux(-gnu)?
+%endif
+%ifarch armv4b armv5teb
+armv4b-[^-]*-[Ll]inux(-gnu)?
 %endif
 
 # noarch
@@ -1393,6 +1406,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/amd64*
 %{_rpmlibdir}/ia32e*
 %{_rpmlibdir}/x86_64*
+%endif
+%ifarch armv5tel armv4t armv3t armv5teb armv4b
+%{_rpmlibdir}/arm*
 %endif
 # must be here for "Requires: rpm-*prov" to work
 %{_rpmlibdir}/macros.gstreamer
