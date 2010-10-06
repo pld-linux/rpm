@@ -1,0 +1,22 @@
+--- rpm-4.5/lib/rpmfc.c.org	2010-10-06 20:47:04.748417761 +0200
++++ rpm-4.5/lib/rpmfc.c	2010-10-06 20:48:13.364041124 +0200
+@@ -1356,8 +1356,18 @@
+ 	    /* XXX skip all files in /dev/ which are (or should be) %dev dummies. */
+ 	    else if (slen >= fc->brlen+sizeof("/dev/") && !strncmp(s+fc->brlen, "/dev/", sizeof("/dev/")-1))
+ 		ftype = "";
+-	    else
++	    else {
++		char *old_loc = setlocale(LC_CTYPE, NULL);
++		if (old_loc) {
++			old_loc = xstrdup(old_loc);
++			setlocale(LC_CTYPE, "C");
++		}
+ 		ftype = magic_file(ms, s);
++		if (old_loc) {
++			setlocale(LC_CTYPE, old_loc);
++			_free(old_loc);
++		}
++	    }
+ 
+ 	    if (ftype == NULL) {
+ 		xx = RPMERR_EXEC;

@@ -57,7 +57,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	43
+Release:	44
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -102,6 +102,7 @@ Patch12:	%{name}-system_libs.patch
 Patch13:	%{name}-unglobal.patch
 Patch14:	%{name}-etc_dir.patch
 Patch15:	%{name}-system_libs-more.patch
+Patch16:	%{name}-libmagic-locale.patch
 Patch17:	%{name}-ldconfig-always.patch
 Patch18:	%{name}-macros-ac.patch
 Patch19:	%{name}-macros-th.patch
@@ -716,6 +717,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch12 -p1
 %patch13 -p1
 %patch14 -p1
+%patch16 -p1
 %patch17 -p1
 sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
