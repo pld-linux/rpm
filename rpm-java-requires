@@ -7,8 +7,16 @@
 
 export PATH="/sbin:/usr/sbin:/bin:/usr/bin"
 
+# save $- state, to enable in functions
+debug=$-
+
+# enable debug: FIND_JAVAREQ_DEBUG=true
+FIND_JAVAREQ_DEBUG=${FIND_JAVAREQ_DEBUG:-false}
+
 javaclassversion() {
+	set -$debug
 	[ $# -gt 0 ] || return 1
+	$FIND_JAVAREQ_DEBUG && echo >&2 ">> class: $*"
 
 	local classver=$(echo "$@" | xargs -r file | grep -o 'compiled Java class data, version [0-9.]*' | awk '{print $NF}' | sort -u)
 	if [ -z "$classver" ]; then
@@ -23,8 +31,10 @@ javaclassversion() {
 }
 
 javajarversion() {
+	set -$debug
 	local jar="$1"
-	local ret=0
+	local tmp ret=0
+	$FIND_JAVAREQ_DEBUG && echo >&2 ">> jar: $jar"
 
 	# check only files, symlinks could point outside buildroot
 	[ -f "$jar" -a ! -L "$jar" ] || return $ret
@@ -33,16 +43,29 @@ javajarversion() {
 	unzip -q -d $tmp $jar >&2
 	# workaround for .jar files with stupid permissions
 	chmod -R u+rwX $tmp
-	javaclassversion $(find $tmp -type f -name '*.class') || {
-		echo >&2 "ERROR: Class version could not be extracted from $jar"
-		ret=1
-	}
+
+	# find .jar and .class files
+	for file in $(find $tmp -type f '(' -name '*.class' -o -name '*.jar' ')'); do
+		case "$file" in
+		*.jar)
+			# recursion!
+			javajarversion "$file" || ret=1
+		;;
+		*.class)
+			javaclassversion "$file" || {
+				echo >&2 "ERROR: Class version could not be extracted from $file"
+				ret=1
+			}
+		;;
+		esac
+	done
 	rm -rf $tmp
 
 	return $ret
 }
 
 find_requires() {
+	set -$debug
 	local ret=0
 	for file in $FILES; do
 		case $file in
@@ -65,6 +88,6 @@ FILES=$(cat -)
 t=$(mktemp)
 ret=0
 find_requires > $t || ret=1
-cat $t
+sort -u $t
 rm -f $t
 exit $ret
