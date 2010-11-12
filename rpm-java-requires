@@ -45,8 +45,7 @@ javajarversion() {
 	chmod -R u+rwX $tmp
 
 	# find .jar and .class files
-	find_requires $(find $tmp -type f '(' -name '*.class' -o -name '*.jar' ')') || ret=1
-
+	find_requires $(find $tmp -type f -regex '^.+\.(class|jar)$') || ret=1
 	rm -rf $tmp
 	return $ret
 }
