@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	96
+Release:	82
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -84,7 +84,7 @@ Patch15:	%{name}-system_libs-more.patch
 Patch16:	%{name}-php-deps.patch
 Patch17:	%{name}-ldconfig-always.patch
 Patch18:	%{name}-macros-ac.patch
-Patch19:	debuginfo-quote.patch
+
 Patch20:	%{name}-magic-usesystem.patch
 Patch21:	%{name}-dontneedutils.patch
 Patch22:	%{name}-provides-dont-obsolete.patch
@@ -118,7 +118,6 @@ Patch50:	%{name}-macros.patch
 Patch51:	%{name}-cleanlibdirs.patch
 Patch52:	%{name}-morearchs.patch
 Patch53:	%{name}-chroot-hack.patch
-Patch54:	%{name}-lualeak.patch
 Patch55:	%{name}-truncate-cvslog.patch
 Patch56:	%{name}-rpm5-patchset-8413.patch
 Patch57:	%{name}-as_needed-fix.patch
@@ -134,9 +133,8 @@ Patch66:	%{name}-v3-support.patch
 Patch67:	%{name}-cleanbody.patch
 Patch68:	%{name}-rpm5-patchset-9486.patch
 Patch69:	%{name}-popt-aliases.patch
-# reverse arrows patch
-Patch70:	%{name}-rpm5-patchset-10061.patch
-Patch71:	%{name}-installbeforeerase.patch
+Patch70:	%{name}-lualeak.patch
+Patch71:	%{name}-rpm5-patchset-10061.patch
 Patch72:	%{name}-rpm5-patchset-7657.patch
 Patch73:	%{name}-namespace-probe.patch
 Patch74:	%{name}-mktemperror.patch
@@ -144,11 +142,6 @@ Patch75:	%{name}-mimetype.patch
 Patch76:	%{name}-link.patch
 Patch77:	%{name}-perl_req-use_base.patch
 Patch78:	%{name}-perl_req-skip_multiline.patch
-Patch79:	%{name}-nosmpflags.patch
-Patch80:	%{name}-hirmib-ts.patch
-Patch81:	%{name}-perl_req-podimprove.patch
-Patch82:	%{name}-rpmv3-support.patch
-Patch83:	%{name}-set-failed-on-reopen.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -296,10 +289,10 @@ Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	db >= %{reqdb_ver}
-%{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
-%{?with_selinux:Requires:	libselinux >= 1.18}
-Requires:	popt >= %{reqpopt_ver}
 Requires:	zlib >= 1.2.3
+%{?with_selinux:Requires:	libselinux >= 1.18}
+%{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
+Requires:	popt >= %{reqpopt_ver}
 %{?with_suggest_tags:Suggests:	lzma >= 1:4.42.0}
 Obsoletes:	rpm-libs
 # avoid installing with incompatible (non-tukaani) lzma
@@ -713,7 +706,6 @@ install %{SOURCE13} scripts/perl.prov
 %patch51 -p1
 #%patch52 -p1
 %patch53 -p1
-%patch54 -p1
 %patch55 -p1
 %patch56 -p1
 %patch57 -p1
@@ -721,7 +713,6 @@ install %{SOURCE13} scripts/perl.prov
 %patch59 -p1
 %patch60 -p1
 %patch18 -p1
-%patch19 -p1
 %patch61 -p1
 %patch62 -p1
 %patch63 -p1
@@ -731,8 +722,8 @@ install %{SOURCE13} scripts/perl.prov
 %patch67 -p1
 %patch68 -p1
 %patch69 -p1
-%patch70 -p0
-%patch71 -p1
+%patch70 -p1
+%patch71 -p0
 %patch72 -p0
 %patch73 -p1
 %patch74 -p1
@@ -740,11 +731,6 @@ install %{SOURCE13} scripts/perl.prov
 %patch76 -p1
 %patch77 -p1
 %patch78 -p1
-%patch79 -p1
-%patch80 -p1
-%patch81 -p1
-%patch82 -p1
-%patch83 -p1
 
 mv -f scripts/{perl.req,perl.req.in}
 mv -f scripts/{perl.prov,perl.prov.in}
@@ -952,6 +938,7 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/rpmrc
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # customized rpm macros - global for host
 #
+#%%_install_langs pl_PL:en_US
 %%distribution PLD
 #
 # remove or replace with file_contexts path if you want to use custom
@@ -965,14 +952,6 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # Boolean (i.e. 1 == "yes", 0 == "no") that controls whether files
 # marked as %doc should be installed.
 #%%_excludedocs   1
-EOF
-
-cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.lang <<EOF
-# Customized rpm macros - global for host
-#	A colon separated list of desired locales to be installed;
-#	"all" means install all locale specific files.
-#
-#%%_install_langs pl_PL:en_US
 EOF
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF
@@ -1070,10 +1049,8 @@ done
 /{__spec_install_post_compress_modules}/d
 ' $RPM_BUILD_ROOT%{_rpmlibdir}/noarch-linux/macros
 
-%if %{with python}
 %py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
 %py_comp $RPM_BUILD_ROOT%{py_sitedir}
-%endif
 
 rm -f $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,a,py}
 
@@ -1113,6 +1090,20 @@ if [ -d /vservers ]; then
 	rm -f /etc/vservers/*/apps/pkgmgmt/base/rpm/state/__*
 fi
 echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
+# TODO: poldek should abort if it can't reopen rpmdb after rpm exec:
+#Installing set #3
+#rpmdb: Program version 4.2 doesn't match environment version
+#error: db4 error(22) from dbenv->open: Invalid argument
+#error: cannot open Packages index using db3 - Invalid argument (22)
+#error: //var/lib/rpm: open rpm database failed
+#Processing dependencies...
+#There are more than one package which provide "/bin/sh":
+# if poldek is running, kill it so it will not attempt to fill whole rpmdb
+p=$(/sbin/pidof poldek)
+if [ "$p" ]; then
+	echo >&2 "Killing poldek ($p), don't panic :)"
+	kill $p
+fi
 
 %triggerpostun lib -- db4.5 < %{reqdb_ver}
 echo >&2 "db4.5 upgrade: Removing /var/lib/rpm/__db* from older rpmdb version"
@@ -1122,7 +1113,10 @@ if [ -d /vservers ]; then
 	rm -f /etc/vservers/*/apps/pkgmgmt/base/rpm/state/__*
 fi
 echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
-echo >&2 "Remove db4.5 package to avoid future triggers doing it again"
+if [ "$p" ]; then
+	echo >&2 "Killing poldek ($p), don't panic :)"
+	kill $p
+fi
 
 %triggerpostun -- %{name} < 4.4.9-44
 %{_rpmlibdir}/hrmib-cache
@@ -1147,7 +1141,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_bindir}/rpmverify
 
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros.lang
 %dir %{_sysconfdir}/rpm/sysinfo
 # these are ok to be replaced
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo/*
