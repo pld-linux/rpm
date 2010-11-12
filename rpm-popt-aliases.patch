@@ -1,0 +1,11 @@
+--- ./rpmpopt.in~	2008-03-13 16:15:55.302001813 +0200
++++ ./rpmpopt.in	2008-03-13 16:18:11.169818380 +0200
+@@ -594,5 +594,8 @@
+ rpmv	alias --httpport	--define '_httpport !#:+'
+ rpmv	alias --httpproxy	--define '_httpproxy !#:+'
+ 
++rpm	alias --downgrade	--oldpackage \
++	--POPTdesc=$"Allow an upgrade to replace a newer package with an older one."
++
+ # \endverbatim
+ #*/
