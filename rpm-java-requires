@@ -29,7 +29,7 @@ javaclassversion() {
 
 	local v
 	for v in $classver; do
-		echo "$mode: java(ClassDataVersion) >= $v"
+		echo "java(ClassDataVersion) >= $v"
 	done
 	return 0
 }
