@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.4.9
-Release:	96
+Release:	92
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-4.4/%{name}-%{version}.tar.gz
@@ -84,7 +84,7 @@ Patch15:	%{name}-system_libs-more.patch
 Patch16:	%{name}-php-deps.patch
 Patch17:	%{name}-ldconfig-always.patch
 Patch18:	%{name}-macros-ac.patch
-Patch19:	debuginfo-quote.patch
+
 Patch20:	%{name}-magic-usesystem.patch
 Patch21:	%{name}-dontneedutils.patch
 Patch22:	%{name}-provides-dont-obsolete.patch
@@ -148,7 +148,6 @@ Patch79:	%{name}-nosmpflags.patch
 Patch80:	%{name}-hirmib-ts.patch
 Patch81:	%{name}-perl_req-podimprove.patch
 Patch82:	%{name}-rpmv3-support.patch
-Patch83:	%{name}-set-failed-on-reopen.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -304,6 +303,7 @@ Requires:	zlib >= 1.2.3
 Obsoletes:	rpm-libs
 # avoid installing with incompatible (non-tukaani) lzma
 Conflicts:	lzma < 1:4.42.0
+Requires(triggerpostun):	/sbin/pidof
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
 
@@ -721,7 +721,6 @@ install %{SOURCE13} scripts/perl.prov
 %patch59 -p1
 %patch60 -p1
 %patch18 -p1
-%patch19 -p1
 %patch61 -p1
 %patch62 -p1
 %patch63 -p1
@@ -744,7 +743,6 @@ install %{SOURCE13} scripts/perl.prov
 %patch80 -p1
 %patch81 -p1
 %patch82 -p1
-%patch83 -p1
 
 mv -f scripts/{perl.req,perl.req.in}
 mv -f scripts/{perl.prov,perl.prov.in}
@@ -1113,6 +1111,20 @@ if [ -d /vservers ]; then
 	rm -f /etc/vservers/*/apps/pkgmgmt/base/rpm/state/__*
 fi
 echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
+# TODO: poldek should abort if it can't reopen rpmdb after rpm exec:
+#Installing set #3
+#rpmdb: Program version 4.2 doesn't match environment version
+#error: db4 error(22) from dbenv->open: Invalid argument
+#error: cannot open Packages index using db3 - Invalid argument (22)
+#error: //var/lib/rpm: open rpm database failed
+#Processing dependencies...
+#There are more than one package which provide "/bin/sh":
+# if poldek is running, kill it so it will not attempt to fill whole rpmdb
+p=$(/sbin/pidof poldek)
+if [ "$p" ]; then
+	echo >&2 "Killing poldek ($p), don't panic :)"
+	kill $p
+fi
 
 %triggerpostun lib -- db4.5 < %{reqdb_ver}
 echo >&2 "db4.5 upgrade: Removing /var/lib/rpm/__db* from older rpmdb version"
@@ -1122,7 +1134,11 @@ if [ -d /vservers ]; then
 	rm -f /etc/vservers/*/apps/pkgmgmt/base/rpm/state/__*
 fi
 echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
-echo >&2 "Remove db4.5 package to avoid future triggers doing it again"
+p=$(/sbin/pidof poldek)
+if [ "$p" ]; then
+	echo >&2 "Killing poldek ($p), don't panic :)"
+	kill $p
+fi
 
 %triggerpostun -- %{name} < 4.4.9-44
 %{_rpmlibdir}/hrmib-cache
