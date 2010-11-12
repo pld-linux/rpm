@@ -1,5 +1,5 @@
---- rpm-4.4.9/macros.in	2008-04-29 17:39:02.041156816 +0300
-+++ rpm-4.4.9/macros.in	2008-08-12 23:07:34.371259643 +0300
+--- rpm-4.4.9/macros.in	2008-03-04 21:34:41.519716362 +0200
++++ /usr/lib/rpm/macros	2008-03-14 01:44:34.456504495 +0200
 @@ -192,7 +192,7 @@
  Summary: Debug information for package %{name}\
  Summary(pl.UTF-8): Informacje dla debuggera dla pakietu %{name}\
@@ -9,26 +9,18 @@
  AutoReqProv: 0\
  %description debuginfo\
  This package provides debug information for package %{name}.\
-@@ -242,6 +242,6 @@
+@@ -237,8 +237,8 @@
+ %_srcrpmdir		%{_topdir}/SRPMS
  
  #	Directory where temporary files can be created.
 -%_tmppath		%(echo "${TMPDIR:-/tmp}")
 -%tmpdir			%{_tmppath}
-+%_tmppath		%{expand:%%global _tmppath %(echo "${TMPDIR:-/tmp}")}%_tmppath
-+%tmpdir			%{expand:%%global tmpdir %(echo "${TMPDIR:-/tmp}")}%tmpdir
++%_tmppath		%tmpdir
++%tmpdir			%{expand:%%global tmpdir %{lua:print(os.getenv("TMPDIR") or "/tmp")}}%tmpdir
  
  #	Path to top of build area.
-@@ -271,6 +271,9 @@
- #
- #%distribution
- 
-+# PLD Linux Release
-+%pld_release	ac
-+
- #	Configurable distribution URL, same as DistURL: tag in a specfile.
- #	The URL will be used to supply reliable information to tools like
- #	rpmfind.
-@@ -1156,6 +1159,7 @@
+ %_topdir		%(echo $HOME)/rpm
+@@ -1156,6 +1156,7 @@
  %_infodir		%{_prefix}/share/info
  %_mandir		%{_prefix}/share/man
  %_localedir		%{_datadir}/locale
@@ -36,13 +28,3 @@
  
  #==============================================================================
  # ---- config.guess platform macros.
-@@ -1468,6 +1472,9 @@
- # -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
- 
- %debugcflags	-O0 -g -Wall
-+%debugcppflags	%{nil}
-+%optldflags	-Wl,--as-needed
-+%optcppflags	%{nil}
- 
- # Warning: those macros are overwritten by macros.build,
- #          left here for compatibility
