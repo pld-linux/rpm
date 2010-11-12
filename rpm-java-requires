@@ -7,20 +7,8 @@
 
 export PATH="/sbin:/usr/sbin:/bin:/usr/bin"
 
-# Enable debug: JAVADEPS_DEBUG=true
-: ${JAVADEPS_DEBUG=false}
-
-# save $- state, to enable in functions
-debug=$-
-
 javaclassversion() {
-	set -$debug
-	local mode=$1; shift
 	[ $# -gt 0 ] || return 1
-	$JAVADEPS_DEBUG && echo >&2 ">> javaclassversion($mode): $*"
-
-	# process only requires
-	[ "$mode" = requires ] || return $ret
 
 	local classver=$(echo "$@" | xargs -r file | grep -o 'compiled Java class data, version [0-9.]*' | awk '{print $NF}' | sort -u)
 	if [ -z "$classver" ]; then
@@ -35,11 +23,8 @@ javaclassversion() {
 }
 
 javajarversion() {
-	set -$debug
-	local mode=$1; shift
-	local jar=$1
-	local tmp ret=0
-	$JAVADEPS_DEBUG && echo >&2 ">> javajarversion($mode): $jar"
+	local jar="$1"
+	local ret=0
 
 	# check only files, symlinks could point outside buildroot
 	[ -f "$jar" -a ! -L "$jar" ] || return $ret
@@ -48,55 +33,38 @@ javajarversion() {
 	unzip -q -d $tmp $jar >&2
 	# workaround for .jar files with stupid permissions
 	chmod -R u+rwX $tmp
-
-	# find .jar and .class files
-	find_javadeps $mode $(find $tmp -type f -regextype posix-extended  -regex '^.+\.(class|jar)$') || ret=1
+	javaclassversion $(find $tmp -type f -name '*.class') || {
+		echo >&2 "ERROR: Class version could not be extracted from $jar"
+		ret=1
+	}
 	rm -rf $tmp
+
 	return $ret
 }
 
-find_javadeps() {
-	set -$debug
-	local mode=$1; shift
+find_requires() {
 	local ret=0
-
-	$JAVADEPS_DEBUG && echo >&2 ">> find_javadeps($mode): $*"
-	for file in $@; do
+	for file in $FILES; do
 		case $file in
 		*.jar)
-			javajarversion $mode "$file" || ret=1
+			javajarversion "$file" || ret=1
 		;;
 		*.class)
-			javaclassversion $mode "$file" || {
+			javaclassversion "$file" || {
 				echo >&2 "ERROR: Class version could not be extracted from $file"
 				ret=1
 			}
-		;;
-		*)
-			$JAVADEPS_DEBUG && echo >&2 ">> find_javadeps($mode): no handle: $file"
 		;;
 		esac
 	done
 	return $ret
 }
 
-ret=0
-# default mode to requires for backward compat
-mode=requires
-case $1 in
--P|--provides)
-	mode=provides
-	shift
-	;;
--R|--requires)
-	mode=requires
-	shift
-	;;
-esac
+FILES=$(cat -)
 
 t=$(mktemp)
-find_javadeps $mode $(cat -) > $t || ret=1
-sort -u $t
+ret=0
+find_requires > $t || ret=1
+cat $t
 rm -f $t
-
 exit $ret

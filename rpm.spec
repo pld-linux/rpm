@@ -1122,7 +1122,6 @@ if [ -d /vservers ]; then
 	rm -f /etc/vservers/*/apps/pkgmgmt/base/rpm/state/__*
 fi
 echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
-echo >&2 "Remove db4.5 package to avoid future triggers doing it again"
 
 %triggerpostun -- %{name} < 4.4.9-44
 %{_rpmlibdir}/hrmib-cache
