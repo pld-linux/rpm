@@ -272,6 +272,23 @@ Applications/Games
 Applications/Games/Boards
 	[pl]:		Aplikacje/Gry/Planszowe
 
+Applications/Networking
+	[cs]:		Aplikace/SÌªovÈ
+	[da]:		Programmer/NetvÊrks
+	[de]:		Applikationen/Netzwerkwesen
+	[es]:		Aplicaciones/Red
+	[fr]:		Applications/R√©seau
+	[is]:		Forrit/Net
+	[it]:		Applicazioni/Rete
+	[nb]:		Applikasjoner/Nettverk
+	[pl]:		Aplikacje/Sieciowe
+	[pt]:		AplicaÁıes/Rede
+	[pt_BR]:	AplicaÁıes/Rede
+	[ru]:		“…Ãœ÷≈Œ…—/Û≈‘ÿ
+	[sl]:		Programi/Omreæni
+	[sv]:		Till‰mpningar/N‰tverk
+	[uk]:		–ü—Ä–∏–∫–ª–∞–¥–Ω—ñ –ü—Ä–æ–≥—Ä–∞–º–∏/–ú–µ—Ä–µ–∂–∞
+
 Applications/Mail
 	[cs]:		Aplikace/Poπta
 	[da]:		Programmer/Post
@@ -319,23 +336,6 @@ Applications/Multimedia
 	[sl]:		Programi/VeËpredstavnost
 	[sv]:		Till‰mpningar/Multimedia
 	[uk]:		–ü—Ä–∏–∫–ª–∞–¥–Ω—ñ –ü—Ä–æ–≥—Ä–∞–º–∏/–ú—É–ª—å—Ç–∏–º–µ–¥—ñ–∞
-
-Applications/Networking
-	[cs]:		Aplikace/SÌªovÈ
-	[da]:		Programmer/NetvÊrks
-	[de]:		Applikationen/Netzwerkwesen
-	[es]:		Aplicaciones/Red
-	[fr]:		Applications/R√©seau
-	[is]:		Forrit/Net
-	[it]:		Applicazioni/Rete
-	[nb]:		Applikasjoner/Nettverk
-	[pl]:		Aplikacje/Sieciowe
-	[pt]:		AplicaÁıes/Rede
-	[pt_BR]:	AplicaÁıes/Rede
-	[ru]:		“…Ãœ÷≈Œ…—/Û≈‘ÿ
-	[sl]:		Programi/Omreæni
-	[sv]:		Till‰mpningar/N‰tverk
-	[uk]:		–ü—Ä–∏–∫–ª–∞–¥–Ω—ñ –ü—Ä–æ–≥—Ä–∞–º–∏/–ú–µ—Ä–µ–∂–∞
 
 Applications/News
 	[cs]:		Aplikace/News
@@ -701,9 +701,6 @@ Development/Building
 	[sv]:		Utveckling/Bygga
 	[uk]:		–†–æ–∑—Ä–æ–±–∫–∞/–ë—É–¥–æ–≤–∞
 
-Development/Debug
-	[pl]:		Programowanie/Odpluskwianie
-
 Development/Debuggers
 	[cs]:		V˝vojovÈ prost¯edky/Debuggery
 	[da]:		Udvikling/Fejlfinding
@@ -1013,9 +1010,6 @@ Libraries/Python
 	[sl]:		Knjiænice/Python
 	[uk]:		–ë—ñ–±–ª—ñ–æ—Ç–µ–∫–∏/Python
 
-Libraries/Java
-	[et]:		Teegid/Java
-
 Libraries/XML
 	[cs]:		Knihovny/XML
 	[da]:		Biblioteker/XML
@@ -1082,38 +1076,6 @@ Networking/Daemons
 	[sv]:		N‰tverk/Demoner
 	[uk]:		–ú–µ—Ä–µ–∂–∞/–î–µ–º–æ–Ω–∏
 
-Networking/Daemons/FTP
-	[cs]:		SÌªovÈ/DÈmoni/FTP
-	[da]:		NetvÊrks/DÊmoner/FTP
-	[de]:		Netzwerkwesen/Server/FTP
-	[es]:		Red/Servidores/FTP
-	[fr]:		R√©seau/Serveurs/FTP
-	[is]:		Net/P˙kar/FTP
-	[it]:		Rete/Demoni/FTP
-	[nb]:		Nettverks/Daemoner/FTP
-	[pl]:		Sieciowe/Serwery/FTP
-	[pt]:		Rede/Servidores/FTP
-	[ru]:		Û≈‘ÿ/‰≈ÕœŒŸ/FTP
-	[sl]:		Omreæni/Streæniki/FTP
-	[sv]:		N‰tverk/Demoner/FTP
-	[uk]:		–ú–µ—Ä–µ–∂–∞/–î–µ–º–æ–Ω–∏/FTP
-
-Networking/Daemons/HTTP
-	[cs]:		SÌªovÈ/DÈmoni/HTTP
-	[da]:		NetvÊrks/DÊmoner/HTTP
-	[de]:		Netzwerkwesen/Server/HTTP
-	[es]:		Red/Servidores/HTTP
-	[fr]:		R√©seau/Serveurs/HTTP
-	[is]:		Net/P˙kar/HTTP
-	[it]:		Rete/Demoni/HTTP
-	[nb]:		Nettverks/Daemoner/HTTP
-	[pl]:		Sieciowe/Serwery/HTTP
-	[pt]:		Rede/Servidores/HTTP
-	[ru]:		Û≈‘ÿ/‰≈ÕœŒŸ/HTTP
-	[sl]:		Omreæni/Streæniki/HTTP
-	[sv]:		N‰tverk/Demoner/HTTP
-	[uk]:		–ú–µ—Ä–µ–∂–∞/–î–µ–º–æ–Ω–∏/HTTP
-
 Networking/Daemons/Java
 	[cs]:		SÌªovÈ/DÈmoni/Java
 	[da]:		NetvÊrks/DÊmoner/Java
@@ -1147,54 +1109,6 @@ Networking/Daemons/Java/Extensions
 
 Networking/Daemons/Java/Servlets
 	[pl]:		Sieciowe/Serwery/Java/Servlety
-
-Networking/Daemons/POP3
-	[cs]:		SÌªovÈ/DÈmoni/POP3
-	[da]:		NetvÊrks/DÊmoner/POP3
-	[de]:		Netzwerkwesen/Server/POP3
-	[es]:		Red/Servidores/POP3
-	[fr]:		R√©seau/Serveurs/POP3
-	[is]:		Net/P˙kar/POP3
-	[it]:		Rete/Demoni/POP3
-	[nb]:		Nettverks/Daemoner/POP3
-	[pl]:		Sieciowe/Serwery/POP3
-	[pt]:		Rede/Servidores/POP3
-	[ru]:		Û≈‘ÿ/‰≈ÕœŒŸ/POP3
-	[sl]:		Omreæni/Streæniki/POP3
-	[sv]:		N‰tverk/Demoner/POP3
-	[uk]:		–ú–µ—Ä–µ–∂–∞/–î–µ–º–æ–Ω–∏/POP3
-
-Networking/Daemons/Radius
-	[cs]:		SÌªovÈ/DÈmoni/Radius
-	[da]:		NetvÊrks/DÊmoner/Radius
-	[de]:		Netzwerkwesen/Server/Radius
-	[es]:		Red/Servidores/Radius
-	[fr]:		R√©seau/Serveurs/Radius
-	[is]:		Net/P˙kar/Radius
-	[it]:		Rete/Demoni/Radius
-	[nb]:		Nettverks/Daemoner/Radius
-	[pl]:		Sieciowe/Serwery/Radius
-	[pt]:		Rede/Servidores/Radius
-	[ru]:		Û≈‘ÿ/‰≈ÕœŒŸ/Radius
-	[sl]:		Omreæni/Streæniki/Radius
-	[sv]:		N‰tverk/Demoner/Radius
-	[uk]:		–ú–µ—Ä–µ–∂–∞/–î–µ–º–æ–Ω–∏/Radius
-
-Networking/Daemons/SMTP
-	[cs]:		SÌªovÈ/DÈmoni/SMTP
-	[da]:		NetvÊrks/DÊmoner/SMTP
-	[de]:		Netzwerkwesen/Server/SMTP
-	[es]:		Red/Servidores/SMTP
-	[fr]:		R√©seau/Serveurs/SMTP
-	[is]:		Net/P˙kar/SMTP
-	[it]:		Rete/Demoni/SMTP
-	[nb]:		Nettverks/Daemoner/SMTP
-	[pl]:		Sieciowe/Serwery/SMTP
-	[pt]:		Rede/Servidores/SMTP
-	[ru]:		Û≈‘ÿ/‰≈ÕœŒŸ/SMTP
-	[sl]:		Omreæni/Streæniki/SMTP
-	[sv]:		N‰tverk/Demoner/SMTP
-	[uk]:		–ú–µ—Ä–µ–∂–∞/–î–µ–º–æ–Ω–∏/SMTP
 
 Networking/News
 	[cs]:		SÌªovÈ/News
