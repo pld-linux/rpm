@@ -7,16 +7,20 @@
 
 export PATH="/sbin:/usr/sbin:/bin:/usr/bin"
 
+# Enable debug: JAVADEPS_DEBUG=true
+: ${JAVADEPS_DEBUG=false}
+
 # save $- state, to enable in functions
 debug=$-
 
-# enable debug: FIND_JAVAREQ_DEBUG=true
-FIND_JAVAREQ_DEBUG=${FIND_JAVAREQ_DEBUG:-false}
-
 javaclassversion() {
 	set -$debug
+	local mode=$1; shift
 	[ $# -gt 0 ] || return 1
-	$FIND_JAVAREQ_DEBUG && echo >&2 ">> class: $*"
+	$JAVADEPS_DEBUG && echo >&2 ">> javaclassversion($mode): $*"
+
+	# process only requires
+	[ "$mode" = requires ] || return $ret
 
 	local classver=$(echo "$@" | xargs -r file | grep -o 'compiled Java class data, version [0-9.]*' | awk '{print $NF}' | sort -u)
 	if [ -z "$classver" ]; then
@@ -25,16 +29,17 @@ javaclassversion() {
 
 	local v
 	for v in $classver; do
-		echo "java(ClassDataVersion) >= $v"
+		echo "$mode: java(ClassDataVersion) >= $v"
 	done
 	return 0
 }
 
 javajarversion() {
 	set -$debug
-	local jar="$1"
+	local mode=$1; shift
+	local jar=$1
 	local tmp ret=0
-	$FIND_JAVAREQ_DEBUG && echo >&2 ">> jar: $jar"
+	$JAVADEPS_DEBUG && echo >&2 ">> javajarversion($mode): $jar"
 
 	# check only files, symlinks could point outside buildroot
 	[ -f "$jar" -a ! -L "$jar" ] || return $ret
@@ -45,38 +50,53 @@ javajarversion() {
 	chmod -R u+rwX $tmp
 
 	# find .jar and .class files
-	find_requires $(find $tmp -type f -regextype posix-extended -regex '^.+\.(class|jar)$') || ret=1
+	find_javadeps $mode $(find $tmp -type f -regextype posix-extended  -regex '^.+\.(class|jar)$') || ret=1
 	rm -rf $tmp
 	return $ret
 }
 
-find_requires() {
+find_javadeps() {
 	set -$debug
+	local mode=$1; shift
 	local ret=0
 
-	$FIND_JAVAREQ_DEBUG && echo >&2 ">> find_requires: $*"
+	$JAVADEPS_DEBUG && echo >&2 ">> find_javadeps($mode): $*"
 	for file in $@; do
 		case $file in
 		*.jar)
-			javajarversion "$file" || ret=1
+			javajarversion $mode "$file" || ret=1
 		;;
 		*.class)
-			javaclassversion "$file" || {
+			javaclassversion $mode "$file" || {
 				echo >&2 "ERROR: Class version could not be extracted from $file"
 				ret=1
 			}
 		;;
 		*)
-			$FIND_JAVAREQ_DEBUG && echo >&2 ">> find_requires: no handle: $file"
+			$JAVADEPS_DEBUG && echo >&2 ">> find_javadeps($mode): no handle: $file"
 		;;
 		esac
 	done
 	return $ret
 }
 
-t=$(mktemp)
 ret=0
-find_requires $(cat -) > $t || ret=1
+# default mode to requires for backward compat
+mode=requires
+case $1 in
+-P|--provides)
+	mode=provides
+	shift
+	;;
+-R|--requires)
+	mode=requires
+	shift
+	;;
+esac
+
+t=$(mktemp)
+find_javadeps $mode $(cat -) > $t || ret=1
 sort -u $t
 rm -f $t
+
 exit $ret
