@@ -45,29 +45,18 @@ javajarversion() {
 	chmod -R u+rwX $tmp
 
 	# find .jar and .class files
-	for file in $(find $tmp -type f '(' -name '*.class' -o -name '*.jar' ')'); do
-		case "$file" in
-		*.jar)
-			# recursion!
-			javajarversion "$file" || ret=1
-		;;
-		*.class)
-			javaclassversion "$file" || {
-				echo >&2 "ERROR: Class version could not be extracted from $file"
-				ret=1
-			}
-		;;
-		esac
-	done
-	rm -rf $tmp
+	find_requires $(find $tmp -type f '(' -name '*.class' -o -name '*.jar' ')') || ret=1
 
+	rm -rf $tmp
 	return $ret
 }
 
 find_requires() {
 	set -$debug
 	local ret=0
-	for file in $FILES; do
+
+	$FIND_JAVAREQ_DEBUG && echo >&2 ">> find_requires: $*"
+	for file in $@; do
 		case $file in
 		*.jar)
 			javajarversion "$file" || ret=1
@@ -78,16 +67,17 @@ find_requires() {
 				ret=1
 			}
 		;;
+		*)
+			$FIND_JAVAREQ_DEBUG && echo >&2 ">> find_requires: no handle: $file"
+		;;
 		esac
 	done
 	return $ret
 }
 
-FILES=$(cat -)
-
 t=$(mktemp)
 ret=0
-find_requires > $t || ret=1
+find_requires $(cat -) > $t || ret=1
 sort -u $t
 rm -f $t
 exit $ret
