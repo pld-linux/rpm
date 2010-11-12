@@ -115,7 +115,7 @@
  
  	# A binary already copied into /usr/lib/debug doesn't get stripped,
  	# just has its file names collected and adjusted.
-@@ -38,20 +51,21 @@
+@@ -38,20 +51,27 @@
  	/usr/lib/debug/*) continue ;;
  	esac
  
@@ -145,6 +145,12 @@
 +find $RPM_BUILD_ROOT/usr/lib/debug -type f | sed -n -e "s#^$RPM_BUILD_ROOT##p" > $LISTFILE
 +find $RPM_BUILD_ROOT/usr/lib/debug -mindepth 1 -type d | sed -n -e "s#^$RPM_BUILD_ROOT#%dir #p" >> $LISTFILE
 +find $RPM_BUILD_ROOT/usr/src/debug -mindepth 1 -maxdepth 1 | sed -n -e "s#^$RPM_BUILD_ROOT##p" >> $LISTFILE
++
++# add dirs already in filesystem-debuginfo package to exclude
++cat /usr/src/debug/filesystem-debuginfo.files | while read dir; do
++	[ -d $RPM_BUILD_ROOT$dir ] || continue
++	echo "%exclude %dir $dir"
++done >> $LISTFILE
 --- rpm-4.4.9.orig/scripts/find-debuginfo.sh	2008-02-11 18:51:12.304461614 +0200
 +++ rpm-4.4.9/scripts/find-debuginfo.sh	2008-02-11 18:50:17.000000000 +0200
 @@ -20,6 +20,11 @@
