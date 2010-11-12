@@ -5,15 +5,18 @@
 <!-- we match from root, not to left anything to default template -->
 <xsl:template match="/">
 	<!-- process provides -->
-	<xsl:text>Provides:&#09;eclipse(</xsl:text>
+	<xsl:if test="$mode = 'provides'">
+	<xsl:text>eclipse(</xsl:text>
 		<xsl:value-of select="//feature/@id"/>
 		<xsl:text>) = </xsl:text>
 		<xsl:value-of select="//feature/@version"/>
 	<xsl:text>&#10;</xsl:text>
+	</xsl:if>
 
 	<!-- process requires -->
+	<xsl:if test="$mode = 'requires'">
 	<xsl:for-each select="feature/requires/import">
-		<xsl:text>Requires:&#09;eclipse(</xsl:text>
+		<xsl:text>eclipse(</xsl:text>
 			<xsl:value-of select="@plugin"/>
 		<xsl:text>)</xsl:text>
 
@@ -25,6 +28,8 @@
 
 		<xsl:text>&#10;</xsl:text>
 	</xsl:for-each>
+	</xsl:if>
+
 </xsl:template>
 
 </xsl:stylesheet>
