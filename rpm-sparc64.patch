@@ -46,14 +46,3 @@
  
  $(PROGRAMS): 		@WITH_APIDOCS_TARGET@
  
---- rpm-4.4.9/configure.ac.orig	2007-06-18 17:11:08.000000000 +0200
-+++ rpm-4.4.9/configure.ac	2007-06-18 17:11:37.000000000 +0200
-@@ -35,7 +35,7 @@
- AC_SUBST(AS)
- if test "$ac_cv_c_compiler_gnu" = yes; then
-     CFLAGS="$CFLAGS -fPIC -DPIC -D_GNU_SOURCE -D_REENTRANT -Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes -Wno-char-subscripts"
--    LDFLAGS="-pie"
-+    LDFLAGS=""
- fi
- export CFLAGS LDFLAGS
- 
