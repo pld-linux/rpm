@@ -4,18 +4,22 @@
 
 <!-- we match from root, not to left anything to default template -->
 <xsl:template match="/">
+	<xsl:apply-templates select="feature"/>
+</xsl:template>
+
+<xsl:template match="feature">
 	<!-- process provides -->
 	<xsl:if test="$mode = 'provides'">
 		<xsl:text>eclipse(</xsl:text>
-			<xsl:value-of select="//feature/@id"/>
+			<xsl:value-of select="@id"/>
 			<xsl:text>) = </xsl:text>
-			<xsl:value-of select="//feature/@version"/>
+			<xsl:value-of select="@version"/>
 		<xsl:text>&#10;</xsl:text>
 	</xsl:if>
 
 	<!-- process requires -->
 	<xsl:if test="$mode = 'requires'">
-		<xsl:for-each select="feature/requires/import">
+		<xsl:for-each select="requires/import">
 			<xsl:text>eclipse(</xsl:text>
 				<xsl:value-of select="@plugin"/>
 			<xsl:text>)</xsl:text>
