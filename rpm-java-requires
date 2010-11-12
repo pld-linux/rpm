@@ -5,7 +5,7 @@
 # Based on rpm-4.4.2/scripts/find-req.pl
 # Authors: Elan Ruusamäe <glen@pld-linux.org>
 
-export PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
+export PATH="/sbin:/usr/sbin:/bin:/usr/bin"
 
 javaclassversion() {
 	[ $# -gt 0 ] || return
