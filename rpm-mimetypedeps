@@ -8,9 +8,9 @@ case $1 in
 		mime=$(awk -F= '/^MimeType=/{print $2}' "$filename")
 		IFS=';'
 		for type in $mime; do
-		if [ -n "$type" ]; then
-			echo "mimetype($type)"
-		fi
+			if [ -n "$type" ]; then
+				echo "mimetype($type)"
+			fi
 		done
 		;;
 	esac
