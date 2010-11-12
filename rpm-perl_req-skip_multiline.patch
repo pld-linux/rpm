@@ -1,0 +1,15 @@
+--- rpm-5.1.4/scripts/perl.req~	2008-08-20 21:34:42.000000000 +0200
++++ rpm-5.1.4/scripts/perl.req	2008-08-28 12:45:14.820174910 +0200
+@@ -156,10 +156,8 @@
+     # marker, such as occurs right here. Draw the line somewhere.
+     if ( m/^.*\Wq[qxwr]?\s*([\{\(\[#|\/])[^})\]#|\/]*$/ && ! m/^\s*(require|use)\s/ ) {
+       $tag = $1;
+-      $tag =~ tr/{\(\[\#|\//})]#|\//;
+-      while (<FILE>) {
+-        ( $_ =~ m/\}/ ) && last;
+-      }
++      $tag =~ tr/{([/})]/;
++      $_ = <FILE> until m/\Q$tag\E/;
+     }
+ 
+     # skip the documentation
