@@ -60,8 +60,9 @@
 					<xsl:value-of select="@version"/>
 				</xsl:if>
 
+				<!-- apparently: base ver or greater -->
 				<xsl:if test="@match = 'equivalent'">
-					<xsl:text> = </xsl:text>
+					<xsl:text> >= </xsl:text>
 					<xsl:value-of select="@version"/>
 				</xsl:if>
 
