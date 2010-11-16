@@ -40,7 +40,13 @@
 	<xsl:if test="$mode = 'requires'">
 		<xsl:for-each select="requires/import">
 			<xsl:text>eclipse(</xsl:text>
-				<xsl:value-of select="@plugin"/>
+				<!-- match plugin or feature -->
+				<xsl:if test="@plugin != ''">
+					<xsl:value-of select="@plugin"/>
+				</xsl:if>
+				<xsl:if test="@feature != ''">
+					<xsl:value-of select="@feature"/>
+				</xsl:if>
 			<xsl:text>)</xsl:text>
 
 			<!-- handle match="perfect" (probably means: same version as us) -->
