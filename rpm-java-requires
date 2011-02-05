@@ -7,8 +7,14 @@
 
 export PATH="/sbin:/usr/sbin:/bin:/usr/bin"
 
+# Set the prefix, unless it is overriden
+: ${RPM_LIBDIR=/usr/lib/rpm}
+
 # Enable debug: JAVADEPS_DEBUG=true
 : ${JAVADEPS_DEBUG=false}
+
+# xsltproc for eclipse feature.xml
+: ${xsltproc=/usr/bin/xsltproc}
 
 # save $- state, to enable in functions
 debug=$-
@@ -55,6 +61,21 @@ javajarversion() {
 	return $ret
 }
 
+eclipse_feature() {
+	set -$debug
+	local mode=$1; shift
+	local file=$1
+	local ret=0
+
+	$JAVADEPS_DEBUG && echo >&2 ">> eclipse_feature($mode): $file"
+
+	if [ ! -x $xsltproc ]; then
+		return 0
+	fi
+
+	$xsltproc --stringparam mode $mode ${RPM_LIBDIR}/eclipse-feature.xslt $file
+}
+
 find_javadeps() {
 	set -$debug
 	local mode=$1; shift
@@ -71,6 +92,9 @@ find_javadeps() {
 				echo >&2 "ERROR: Class version could not be extracted from $file"
 				ret=1
 			}
+		;;
+		*/feature.xml)
+			eclipse_feature $mode "$file" || ret=1
 		;;
 		*)
 			$JAVADEPS_DEBUG && echo >&2 ">> find_javadeps($mode): no handle: $file"
