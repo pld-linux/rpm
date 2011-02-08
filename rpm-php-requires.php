@@ -8,6 +8,8 @@
  * Michał Moskal <malekith@pld-linux.org> (Perl version)
  * Elan Ruusamäe <glen@pld-linux.org>
  *
+ * URL: <http://cvs.pld-linux.org/cgi-bin/cvsweb.cgi/packages/rpm/rpm-php-requires.php>
+ *
  * Requires: php-pear-PHP_CompatInfo
  * Requires: php-pcre
  */
