@@ -1,6 +1,6 @@
---- rpm/lib/poptI.c.orig	2007-07-24 16:36:47.000000000 +0200
-+++ rpm/lib/poptI.c	2007-10-02 15:11:29.213848100 +0200
-@@ -17,7 +17,7 @@
+--- rpm-4.4.4/lib/poptI.c.orig	2005-11-27 13:50:16.000000000 +0000
++++ rpm-4.4.4/lib/poptI.c	2005-12-28 02:43:01.029574304 +0000
+@@ -16,7 +16,7 @@
  /*@-fullinitblock@*/
  /*@unchecked@*/
  struct rpmQVKArguments_s rpmIArgs = {
@@ -9,15 +9,13 @@
  };
  /*@=fullinitblock@*/
  
-@@ -275,10 +275,6 @@
+@@ -274,9 +273,6 @@
  	N_("skip files with leading component <path> "),
  	N_("<path>") },
  
 - { "fileconflicts", '\0', POPT_BIT_CLR, &rpmIArgs.probFilter,
 -	(RPMPROB_FILTER_REPLACEOLDFILES | RPMPROB_FILTER_REPLACENEWFILES),
 -	N_("detect file conflicts between packages"), NULL},
--
-  { "freshen", 'F', POPT_BIT_SET, &rpmIArgs.installInterfaceFlags,
- 	(INSTALL_UPGRADE|INSTALL_FRESHEN|INSTALL_INSTALL),
- 	N_("upgrade package(s) if already installed"),
-
+  { "force", '\0', 0, NULL, RPMCLI_POPT_FORCE,
+ 	N_("short hand for --replacepkgs --replacefiles"), NULL},
+ 

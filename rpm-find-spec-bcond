@@ -10,7 +10,7 @@ fi
 SPEC=$1
 if [ $SPEC = "--" ]; then
     if [ "$#" -lt 2 ]; then
-	echo "Usage: rpmbuild --bcond SPEC"
+	echo "Usage: rpmbuikd --bcond SPEC"
 	exit 1
     fi
     SPEC=$2

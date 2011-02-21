@@ -1,11 +1,11 @@
---- rpm-4.4.3/configure.ac.orig	2005-11-18 23:04:14.916675328 +0100
-+++ rpm-4.4.3/configure.ac	2005-11-18 23:05:28.163540112 +0100
-@@ -42,7 +42,7 @@
+--- rpm-4.5/configure.ac~	2008-04-28 20:46:35.000000000 +0300
++++ rpm-4.5/configure.ac	2008-04-28 20:48:08.990410515 +0300
+@@ -16,7 +16,7 @@
  AC_SUBST(LT_AGE, 0)
  
  dnl Set of available languages.
--ALL_LINGUAS="cs da de fi fr gl is ja ko no pl pt pt_BR ro ru sk sl sr sv tr uk"
+-ALL_LINGUAS="cs da de fi fr gl id is ja ko nb pl pt pt_BR ro ru sk sl sr sv tr uk"
 +ALL_LINGUAS="cs da de fi fr gl id is it ja ko nb pl pt pt_BR ro ru sk sl sr@Latn sv tr uk"
  
- dnl Checks for programs.
- AC_PROG_CXX
+ AC_AIX
+ AC_MINIX

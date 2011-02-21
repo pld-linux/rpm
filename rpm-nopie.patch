@@ -1,0 +1,29 @@
+--- rpm-4.5/configure.ac~	2008-06-10 01:59:21.000000000 +0300
++++ rpm-4.5/configure.ac	2008-06-10 01:59:51.820465028 +0300
+@@ -36,7 +36,7 @@
+ if test "$ac_cv_c_compiler_gnu" = yes; then
+     CFLAGS="$CFLAGS -fPIC -DPIC -D_GNU_SOURCE -D_REENTRANT -Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes -Wno-char-subscripts"
+     case "$target" in
+-	*-*-linux* ) LDFLAGS="$LDFLAGS -pie" ;;
++	*-*-linux* ) LDFLAGS="$LDFLAGS" ;;
+     esac
+ fi
+ export CFLAGS LDFLAGS
+--- rpm-4.5/Makefile.am~	2008-06-11 01:11:33.000000000 +0300
++++ rpm-4.5/Makefile.am	2008-06-11 01:33:49.737107691 +0300
+@@ -55,13 +55,13 @@
+ rpm_LDFLAGS =		$(myLDFLAGS) $(staticLDFLAGS)
+ rpm_LDADD =		rpm.o $(top_builddir)/build/.libs/librpmbuild.a $(myLDADD)
+ rpm.o:	$(top_srcdir)/rpmqv.c
+-	$(COMPILE) -fpie -DIAM_RPMBT -DIAM_RPMDB -DIAM_RPMEIU -DIAM_RPMK -DIAM_RPMQV -o $@ -c $<
++	$(COMPILE) -DIAM_RPMBT -DIAM_RPMDB -DIAM_RPMEIU -DIAM_RPMK -DIAM_RPMQV -o $@ -c $<
+ 
+ rpmbuild_SOURCES =	$(top_srcdir)/build.c
+ rpmbuild_LDFLAGS =	$(myLDFLAGS) $(staticLDFLAGS)
+ rpmbuild_LDADD =	rpmbuild.o $(top_builddir)/build/librpmbuild.la $(myLDADD)
+ rpmbuild.o: $(top_srcdir)/rpmqv.c
+-	$(COMPILE) -fpie -DIAM_RPMBT -o $@ -c $<
++	$(COMPILE) -DIAM_RPMBT -o $@ -c $<
+ 
+ $(PROGRAMS): 		@WITH_APIDOCS_TARGET@
+ 

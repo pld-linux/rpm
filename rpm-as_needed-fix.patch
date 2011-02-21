@@ -1,0 +1,22 @@
+diff -urN rpm-4.4.9.org/build/Makefile.am rpm-4.4.9/build/Makefile.am
+--- rpm-4.4.9.org/build/Makefile.am	2007-05-19 14:44:43.000000000 +0200
++++ rpm-4.4.9/build/Makefile.am	2007-11-15 01:51:35.501378544 +0100
+@@ -37,6 +37,7 @@
+ 	$(top_builddir)/lib/librpm.la \
+ 	$(top_builddir)/rpmdb/librpmdb.la \
+ 	$(top_builddir)/rpmio/librpmio.la \
++	@WITH_MAGIC_LIB@ \
+ 	@WITH_LIBELF_LIB@
+ 
+ if HAVE_LD_VERSION_SCRIPT
+diff -urN rpm-4.4.9.org/lib/Makefile.am rpm-4.4.9/lib/Makefile.am
+--- rpm-4.4.9.org/lib/Makefile.am	2007-05-19 13:54:06.000000000 +0200
++++ rpm-4.4.9/lib/Makefile.am	2007-11-15 01:52:19.806906700 +0100
+@@ -46,6 +46,7 @@
+ librpm_la_LDFLAGS = -no-undefined -release $(LT_CURRENT).$(LT_REVISION) $(LDFLAGS) \
+ 	$(top_builddir)/rpmdb/librpmdb.la \
+ 	$(top_builddir)/rpmio/librpmio.la \
++	@WITH_MAGIC_LIB@ \
+ 	@WITH_POPT_LIB@ \
+ 	@WITH_SELINUX_LIB@ \
+ 	@LTLIBINTL@

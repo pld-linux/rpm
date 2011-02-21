@@ -1,6 +1,7 @@
---- rpm-4.4.9/macros.in	2008-03-27 19:45:51.090959034 +0200
-+++ rpm-4.4.9/macros.in	2008-04-04 23:09:48.869762337 +0300
-@@ -271,6 +271,9 @@
+diff -urN rpm-4.5/macros.in rpm-4.5.new//macros.in
+--- rpm-4.5/macros.in	2010-05-28 20:56:02.854032755 +0200
++++ rpm-4.5.new//macros.in	2010-05-28 20:59:04.177348180 +0200
+@@ -277,6 +277,9 @@
  #
  #%distribution
  
@@ -10,11 +11,30 @@
  #	Configurable distribution URL, same as DistURL: tag in a specfile.
  #	The URL will be used to supply reliable information to tools like
  #	rpmfind.
-@@ -1464,6 +1467,7 @@
+@@ -1449,7 +1452,7 @@
+ # Note: Used iff _use_internal_dependency_generator is non-zero. The
+ # helpers are also used by %{_rpmhome}/rpmdeps {--provides|--requires}.
+ %__libtool_provides	%{_rpmhome}/libtooldeps.sh --provides %{buildroot} %{name}
+-%__libtool_requires	%{_rpmhome}/libtooldeps.sh --requires %{buildroot} %{name}
++%__libtool_requires	%{nil}
+ 
+ #------------------------------------------------------------------------
+ # pkgconfig(...) configuration.
+@@ -1459,7 +1462,7 @@
+ # Note: Used iff _use_internal_dependency_generator is non-zero. The
+ # helpers are also used by %{_rpmhome}/rpmdeps {--provides|--requires}.
+ %__pkgconfig_provides	%{_rpmhome}/pkgconfigdeps.sh --provides
+-%__pkgconfig_requires	%{_rpmhome}/pkgconfigdeps.sh --requires
++%__pkgconfig_requires	%{nil}
+ 
+ #------------------------------------------------------------------------
+ # executable(...) configuration.
+@@ -1482,6 +1485,8 @@
  # -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
  
  %debugcflags	-O0 -g -Wall
 +%optldflags	-Wl,--as-needed
++%optcppflags	%{nil}
  
  # Warning: those macros are overwritten by macros.build,
  #          left here for compatibility

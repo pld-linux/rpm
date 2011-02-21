@@ -1,0 +1,52 @@
+--- rpm-4.4.8/configure.ac.orig	2007-04-08 16:26:29.303992000 +0200
++++ rpm-4.4.8/configure.ac	2007-04-08 16:35:11.461748504 +0200
+@@ -662,7 +662,7 @@
+ 
+ dnl ------------------ with    internal db
+ AC_DEFINE(HAVE_DB3_DB_H, 1, [Define if you have the <db3/db.h> header file])
+-WITH_DB_SUBDIR=db3
++WITH_DB_SUBDIR=
+ WITH_INTERNAL_DB=1
+ DBLIBSRCS="db3.c"
+ 
+--- rpm-4.5/configure.ac~	2008-04-13 03:20:07.000000000 +0300
++++ rpm-4.5/configure.ac	2008-04-13 03:23:45.011443406 +0300
+@@ -1203,7 +1215,7 @@
+ dnl # XXX Propagate -lucb to popt ...
+ dnl export LIBS INCPATH CONFIG_SITE
+ 
+-AC_CONFIG_SUBDIRS(file db3)
++AC_CONFIG_SUBDIRS(file)
+ 
+ AC_CONFIG_FILES([ Doxyfile Makefile rpmrc macros platform rpmpopt rpm.spec
+ 	scripts/perl.req scripts/perl.prov
+--- rpm-4.5/rpmdb/Makefile.am~	2008-04-13 03:28:19.000000000 +0300
++++ rpm-4.5/rpmdb/Makefile.am	2008-04-13 13:49:10.122086563 +0300
+@@ -25,25 +25,18 @@
+ tjfn_LDADD = librpmdb.la
+ 
+ pkgincdir = $(pkgincludedir)
+-pkginc_HEADERS = db.h header.h hdrinline.h rpmdb.h
++pkginc_HEADERS = header.h hdrinline.h rpmdb.h
+ noinst_HEADERS = fprint.h header_internal.h legacy.h
+ 
+ pkglibdir =		@USRLIBRPM@
+ versionlibdir = 	$(pkglibdir)/@VERSION@
+-versionlib_PROGRAMS = \
+-	db_archive db_checkpoint db_deadlock db_dump \
+-	db_hotbackup db_load db_printlog db_recover \
+-	db_stat db_upgrade db_verify 
+-if WITH_DB_RPC
+-versionlib_PROGRAMS += db_svc
+-endif
+ 
+ mylibs = librpmdb.la
+ 
+ LIBS =
+ 
+ # XXX watchout, ../db3/libdb.la created by this Makefile may surprise
+-libdb_la = $(top_builddir)/$(WITH_DB_SUBDIR)/libdb.la
++libdb_la = 
+ 
+ # XXX grrr, RPM_BUILD_ROOT prevents build pollution if/when -lrpm different
+ LDFLAGS = -L$(RPM_BUILD_ROOT)$(usrlibdir) -L$(DESTDIR)$(usrlibdir)

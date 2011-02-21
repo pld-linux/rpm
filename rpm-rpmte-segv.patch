@@ -1,0 +1,17 @@
+Index: lib/depends.c
+===================================================================
+RCS file: /v/rpm/cvs/rpm/lib/depends.c,v
+retrieving revision 1.327.2.9
+retrieving revision 1.327.2.8
+diff -w -u -r1.327.2.9 -r1.327.2.8
+--- lib/depends.c	6 Jun 2008 14:50:46 -0000	1.327.2.9
++++ lib/depends.c	5 Jun 2008 13:44:41 -0000	1.327.2.8
+@@ -1813,7 +1813,7 @@
+ 	    continue;
+ 	/*@=abstractcompare@*/
+ 
+-	requires = rpmteDS((rpmteType(p) == TR_REMOVED ? q : p), tsi->tsi_tagn);
++	requires = rpmteDS(p, tsi->tsi_tagn);
+ 	if (requires == NULL) continue;		/* XXX can't happen */
+ 
+ 	(void) rpmdsSetIx(requires, tsi->tsi_reqx);

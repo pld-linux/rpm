@@ -1,0 +1,12 @@
+diff -x '*~' -durN rpm-4.3.orig/Makefile.am rpm-4.3/Makefile.am
+--- rpm-4.3.orig/Makefile.am	2004-12-19 08:39:09.000000000 +0100
++++ rpm-4.3/Makefile.am	2004-12-19 08:39:45.135670136 +0100
+@@ -96,7 +96,7 @@
+ rpm2cpio_LDFLAGS =	$(myLDFLAGS)
+ rpm2cpio_LDADD =	$(myLDADD) @LIBMISC@
+ 
+-$(PROGRAMS): 		$(myLDADD) @WITH_APIDOCS_TARGET@
++$(PROGRAMS): 		@WITH_APIDOCS_TARGET@
+ 
+ .PHONY:	splint
+ splint:

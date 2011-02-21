@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Please send bug reports to pzurowski@pld-linux.org or pld-devel-* lists
+# bug reports send to pzurowski@pld-linux.org or pld-devel-* lists
 #
 # 2004, GPL 2+
 #
@@ -10,7 +10,7 @@ CONFIG=/etc/sysconfig/banner
 
 ####################################################### CONFIG ########
 
-# default parameters
+# default paramaters
 ##########################
 
 BANNERDIR="/var/lib/banner/"
@@ -19,7 +19,7 @@ EXCLUDEFILES="(rpmnew$|rpmsave$|~$)"
 STDOUT="1"  # stdout by default
 #STDOUT="2" # stderr by default
 
-# config parameters
+# config paramaeters
 ##########################
 
 if [ -r $CONFIG ]; then
@@ -50,43 +50,53 @@ esac
 
 #################################################### FUNCTIONS ########
 
-Usage() {
+Usage()
+{
 	cat << EOF
-Usage:	$(basename $0) [options] [banners]
+Usage:	$(basename $0) [opitions] [banners]
 EOF
 }
-
-Help() {
+Help()
+{
 	Usage
 	cat << EOF
--a, --all       - all banners
--d, --delete    - delete specified banners
--e, --exclude   - exclude following banners (useful with -a)
--h, --help      - show this help
--i, --include   - cancel effect of -e (EXCLUDED banners will remain excluded)
--m, --make      - make a brand-new banner named as following parameter [1] (from stdin)
--M              - same as above, but append if file exists
--n, --names     - show names of the banners
---newer         - all choosen banners should be newer than following parameter in seconds
---older         - all choosen banners should be older than following parameter in seconds
--s, --show      - show specified banners
---stderr        - send banner to stderr instead of stdout (or other)
---stdout        - send banner to stdout instead of stderr (or other)
--u, --usage     - show short help
+-a
+--all       - all banners
+--delete    - delete wanted banners
+-e
+--exclude   - exclude following banners (useful with -a)
+-h
+--help      - show this help
+-i
+--include   - cancel effect of -e (EXCLUDED banners will remain excluded)
+-m
+--make      - make a brand-new banner named as following parameter [1] (from stdin)
+-M          - same as above, but append if file exists
+-n
+--names     - show names of the banners
+--newer     - all choosen banners should be newer than following parameter in seconds
+--older     - all choosen banners should be older than following parameter in seconds
+-s
+--show      - show wanted banners
+--stderr    - send banner to stderr instead of stdout (or other)
+--stdout    - send banner to stdout instead of stderr (or other)
+-u
+--usage     - show short help
 
-[1] if there is no slash ('/') in the given name default dir ($BANNERDIR) is used,
-    otherwise the one that's specified
+[1] - if there will be no slash ('/') in name then config dir will be used,
+      else -- specified.
 EOF
 }
-
-Unknown_para() {
+Unknown_para()
+{
 	cat << EOF
 Unknown parameter $1
 EOF
 	Help
 }
 
-check_banners_mtime() {
+check_banners_mtime()
+{
 	BANNERS="$1"
 	OLDER="$2"
 	NEWER="$3"
@@ -102,34 +112,34 @@ check_banners_mtime() {
 		echo $BANNER
 	done
 }
-
-delete_banners() {
+delete_banners()
+{
 	BANNERS="$1"
 	rm -rf $(get_banner_location_list "$BANNER")
 }
-
-get_all_banner_list() {
+get_all_banner_list()
+{
 	ls "$BANNERDIR" | grep -E -v "$EXCLUDEFILES"
 }
-
-get_banner_list() {
+get_banner_list()
+{
 	BANNERS="$1"
 	NOBANNERS="$2"
 	for BANNER in $BANNERS; do
-		if [ -r "$BANNERDIR/$BANNER" ]; then
+		if [ -r "$BANNERDIR/$BANNER" ];then
 			echo $NOBANNERS | grep -q $BANNER || echo $BANNER
 		fi
 	done
 }
-
-get_banner_location_list() {
+get_banner_location_list()
+{
 	BANNERS="$1"
 	for BANNER in $BANNERS; do
 		echo "$BANNERDIR/$BANNER"
 	done
 }
-
-make_banner() {
+make_banner()
+{
 	BANNER="$1"
 	SHOW="$2"
 	if [ ! -d "${BANNER%/*}" ]; then
@@ -141,28 +151,27 @@ make_banner() {
 	else
 		echo "$data" >> $BANNER
 	fi
-	if [ $SHOW -eq 1 ]; then
+	if [ $SHOW -eq 1 ];then
 		echo "$data"
 	fi
 }
-
-show_banner() {
-	cat "$BANNERDIR/$1" >&$STDOUT
+show_banner()
+{
+	cat $BANNERDIR/$1 >&$STDOUT
 }
-
-show_banners() {
+show_banners()
+{
 	for BANNER in $*; do
 		show_banner $BANNER
 	done
 }
-
-######################################################### MAIN ########
-while [ -n "$1" ]; do
-	case "$1" in
+######################################################## MAIN ########
+while [ ! -z $1 ]; do
+	case $1 in
 		-a|--all)
 			ALL_BANNERS=1
 			;;
-		-d|--delete)
+		--delete)
 			NEED_BANNER_LIST=1
 			ACTION="delete"
 			;;
@@ -178,18 +187,18 @@ while [ -n "$1" ]; do
 			;;
 		-m|--make|-M)
 			NEED_BANNER_LIST=0
-			if [[ "$2" != */* ]]; then
+			if [[ $2 != */* ]]; then
 				NEW_BANNER="$BANNERDIR/${2##*/}"
 			else
 				NEW_BANNER="$2"
 			fi
 			ACTION="make"
-			if [ "$1" = "-M" ]; then
+			if [ "$1" == "-M" ];then
 				NEW_APPEND=1
 			else
 				NEW_APPEND=0
 			fi
-			if [ -z "$NEW_BANNER" ]; then
+			if [ -z "$NEW_BANNER" ];then
 				Help
 				exit 2
 			fi
@@ -202,7 +211,7 @@ while [ -n "$1" ]; do
 		--newer)
 			NEED_MTIME_CHECK=1
 			CHOOSE_NEWER="$2"
-			if [ -z "$CHOOSE_NEWER" ]; then
+			if [ -z "$CHOOSE_NEWER" ];then
 				Help
 				exit 2
 			fi
@@ -211,7 +220,7 @@ while [ -n "$1" ]; do
 		--older)
 			NEED_MTIME_CHECK=1
 			CHOOSE_OLDER="$2"
-			if [ -z "$CHOOSE_OLDER" ]; then
+			if [ -z "$CHOOSE_OLDER" ];then
 				Help
 				exit 2
 			fi
@@ -237,7 +246,7 @@ while [ -n "$1" ]; do
 			exit 1
 			;;
 		*)
-			if [ $EXCLUDE_FLAG -eq 0 ]; then
+			if [ $EXCLUDE_FLAG -eq 0 ];then
 				BANNERS="$BANNERS ${1##*/}"
 			else
 				NOBANNERS="$NOBANNERS ${1##*/}"
@@ -250,27 +259,27 @@ done
 if [ $ALL_BANNERS -ne 0 ]; then
 	BANNERS=`get_all_banner_list`
 fi
-if [ $NEED_BANNER_LIST -ne 0 ]; then
+if [ $NEED_BANNER_LIST -ne 0 ];then
 	BANNER_LIST=`get_banner_list "$BANNERS" "$NOBANNERS"`
 fi
-if [ $NEED_MTIME_CHECK -ne 0 ]; then
+if [ $NEED_MTIME_CHECK -ne 0 ];then
 	BANNER_LIST=`check_banners_mtime "$BANNER_LIST" "$CHOOSE_OLDER" "$CHOOSE_NEWER"`
 fi
 
 case $ACTION in
 	"delete")
-		delete_banners $BANNER_LIST
+		delete_banners $BANNER_LIST;
 		;;
 	"make")
-		make_banner $NEW_BANNER $NEW_SHOW
+		make_banner $NEW_BANNER $NEW_SHOW;
 		;;
 	"names")
-		echo $BANNER_LIST
+		echo $BANNER_LIST;
 		;;
 	"show")
-		show_banners $BANNER_LIST
-		;;
-	"")
-		Help
+		show_banners $BANNER_LIST;
 		;;
 esac
+
+
+

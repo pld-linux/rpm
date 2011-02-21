@@ -1,11 +1,11 @@
---- rpm-4.4.9/rpmdb/rpmdb.c~	2008-10-20 22:25:17.000000000 +0300
-+++ rpm-4.4.9/rpmdb/rpmdb.c	2008-10-21 19:21:25.533647571 +0300
-@@ -844,7 +844,7 @@
+--- rpm-4.5/rpmdb/rpmdb.c~	2008-10-26 21:16:40.000000000 +0200
++++ rpm-4.5/rpmdb/rpmdb.c	2008-10-26 22:30:16.229630486 +0200
+@@ -846,7 +846,7 @@
  	if (fd != NULL) {
  	    xx = Fclose(fd);
  	    fd = NULL;
--	    if (headerGetEntry(h, RPMTAG_INSTALLTID, NULL, (void **)&iidp, NULL)) {
-+	    if (headerGetEntry(h, RPMTAG_INSTALLTIME, NULL, (void **)&iidp, NULL)) {
+-	    if (headerGetEntry(h, RPMTAG_INSTALLTID, NULL, &iidp, NULL)) {
++	    if (headerGetEntry(h, RPMTAG_INSTALLTIME, NULL, &iidp, NULL)) {
  		struct utimbuf stamp;
  		stamp.actime = *iidp;
  		stamp.modtime = *iidp;

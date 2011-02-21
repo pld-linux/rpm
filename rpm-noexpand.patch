@@ -1,6 +1,6 @@
---- rpm-5.0.1.noexpand/build/parseChangelog.c	2008-01-31 01:18:18.506330692 +0200
-+++ rpm-5.0.1/build/parseChangelog.c	2008-01-31 01:20:45.467027848 +0200
-@@ -318,7 +318,7 @@
+--- rpm-4.4.3/build/parseChangelog.c.orig	2005-11-12 01:20:12.000000000 +0100
++++ rpm-4.4.3/build/parseChangelog.c	2005-11-18 19:46:50.357322048 +0100
+@@ -255,7 +255,7 @@
  	line = xstrtolocale(line);
  	appendStringBuf(sb, spec->line);
  	line = _free(line);
@@ -9,44 +9,26 @@
  	    nextPart = PART_NONE;
  	    break;
  	}
---- rpm-5.0.1.noexpand/build/parseSpec.c	2008-01-31 01:18:18.509664191 +0200
-+++ rpm-5.0.1/build/parseSpec.c	2008-01-31 01:20:45.073674806 +0200
-@@ -168,7 +168,7 @@
- 
- /**
-  */
--static int copyNextLineFromOFI(Spec spec, OFI_t * ofi)
-+static int copyNextLineFromOFI(Spec spec, OFI_t * ofi, int strip)
- 	/*@globals rpmGlobalMacroContext, h_errno,
- 		fileSystem @*/
- 	/*@modifies spec->nextline, spec->nextpeekc, spec->lbuf, spec->line,
-@@ -230,12 +230,16 @@
- /*@=mods@*/
+--- rpm-4.3/build/parseSpec.c.wiget	Thu May 15 18:15:51 2003
++++ rpm-4.3/build/parseSpec.c	Fri May 16 00:08:57 2003
+@@ -156,12 +156,16 @@
+ 	ofi->readPtr = from;
  
  	/* Don't expand macros (eg. %define) in false branch of %if clause */
 +	/* Also don't expand macros in %changelog where we set STRIP_NOEXPAND flag */
 +	/* (first line is ommited, so if there is e.g. %date macro, it will be expanded */
 +	if (!(strip & STRIP_NOEXPAND)) {
  	if (spec->readStack->reading &&
- 	    expandMacros(spec, spec->macros, spec->lbuf, spec->lbuf_len)) {
- 		rpmlog(RPMLOG_ERR, _("line %d: %s\n"),
+ 	    expandMacros(spec, spec->macros, spec->lbuf, sizeof(spec->lbuf))) {
+ 		rpmError(RPMERR_BADSPEC, _("line %d: %s\n"),
  			spec->lineNum, spec->lbuf);
- 		return RPMRC_FAIL;
+ 		return RPMERR_BADSPEC;
  	}
-+	}
++	}	
  	spec->nextline = spec->lbuf;
      }
-     return 0;
-@@ -347,7 +351,7 @@
  
-       /* Copy next file line into the spec line buffer */
- 
--      if ((rc = copyNextLineFromOFI(spec, ofi)) != 0) {
-+      if ((rc = copyNextLineFromOFI(spec, ofi, strip)) != 0) {
- 	if (rc == RPMRC_FAIL)
- 	    goto retry;
- 	return rc;
-@@ -360,6 +364,7 @@
+@@ -273,6 +277,7 @@
      SKIPSPACE(s);
  
      match = -1;
@@ -54,7 +36,7 @@
      if (!spec->readStack->reading && !strncmp("%if", s, sizeof("%if")-1)) {
  	match = 0;
      } else if (! strncmp("%ifarch", s, sizeof("%ifarch")-1)) {
-@@ -441,6 +446,7 @@
+@@ -354,6 +359,7 @@
  	ofi = spec->fileStack;
  	goto retry;
      }
@@ -62,13 +44,13 @@
  
      if (match != -1) {
  	rl = xmalloc(sizeof(*rl));
---- rpm-5.0.1.noexpand/build/rpmbuild.h	2008-01-31 01:18:18.509664191 +0200
-+++ rpm-5.0.1/build/rpmbuild.h	2008-01-31 01:20:45.073674806 +0200
-@@ -83,6 +83,7 @@
+--- rpm-4.3/build/rpmbuild.h.wiget	Sat May 10 17:19:33 2003
++++ rpm-4.3/build/rpmbuild.h	Fri May 16 00:06:47 2003
+@@ -75,6 +75,7 @@
  #define STRIP_NOTHING             0
  #define STRIP_TRAILINGSPACE (1 << 0)
  #define STRIP_COMMENTS      (1 << 1)
 +#define STRIP_NOEXPAND      (1 << 2)
  
- /*@unchecked@*/
- extern int _rpmbuildFlags;
+ #ifdef __cplusplus
+ extern "C" {

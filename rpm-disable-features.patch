@@ -1,0 +1,42 @@
+--- rpm-4.5/macros.in~	2008-06-10 02:17:16.000000000 +0300
++++ rpm-4.5/macros.in	2008-06-10 02:17:47.682505213 +0300
+@@ -350,7 +350,7 @@
+ #		"w9.lzdio"	lzma level 9.
+ #
+ %_source_payload	w9.gzdio
+-%_binary_payload	w9.lzdio
++%_binary_payload	w9.bzdio
+ 
+ #	Archive formats to use for source/binary package payloads.
+ #		"cpio"		cpio archive (default)
+@@ -1448,8 +1448,8 @@
+ #
+ # Note: Used iff _use_internal_dependency_generator is non-zero. The
+ # helpers are also used by %{_rpmhome}/rpmdeps {--provides|--requires}.
+-%__libtool_provides	%{_rpmhome}/libtooldeps.sh --provides %{buildroot} %{name}
+-%__libtool_requires	%{_rpmhome}/libtooldeps.sh --requires %{buildroot} %{name}
++#%__libtool_provides	%{_rpmhome}/libtooldeps.sh --provides %{buildroot} %{name}
++#%__libtool_requires	%{_rpmhome}/libtooldeps.sh --requires %{buildroot} %{name}
+ 
+ #------------------------------------------------------------------------
+ # pkgconfig(...) configuration.
+@@ -1458,8 +1458,8 @@
+ #
+ # Note: Used iff _use_internal_dependency_generator is non-zero. The
+ # helpers are also used by %{_rpmhome}/rpmdeps {--provides|--requires}.
+-%__pkgconfig_provides	%{_rpmhome}/pkgconfigdeps.sh --provides
+-%__pkgconfig_requires	%{_rpmhome}/pkgconfigdeps.sh --requires
++#%__pkgconfig_provides	%{_rpmhome}/pkgconfigdeps.sh --provides
++#%__pkgconfig_requires	%{_rpmhome}/pkgconfigdeps.sh --requires
+ 
+ #------------------------------------------------------------------------
+ # executable(...) configuration.
+@@ -1451,7 +1451,7 @@
+ #%__scriptlet_requires	/bin/bash --rpm-requires
+ 
+ # PLD rpm macros
+-%_enable_debug_packages 1
++%_enable_debug_packages 0
+ 
+ #-----------------------------------------------------------------
+ # CFLAGS and LDFLAGS used to build

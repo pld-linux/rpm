@@ -12,7 +12,7 @@
 -	if (!strcmp(payload_compressor, "lzma"))
 -	    t = stpcpy(t, ".lzdio");
 +	if (!strcmp(payload_compressor, "lzma")) {
-+		t = stpcpy(t, ((psm->goal == PSM_PKGSAVE) ? "w5" : "r"));
++		t = stpcpy(t, ((psm->goal == PSM_PKGSAVE) ? "w7" : "r"));
 +		t = stpcpy(t, ".lzdio");
 +	} else {
 +		t = stpcpy(t, ((psm->goal == PSM_PKGSAVE) ? "w9" : "r"));

@@ -1,13 +1,11 @@
---- rpm-5.0.1/macros.in~	2008-01-31 00:06:10.000000000 +0200
-+++ rpm-5.0.1/macros.in	2008-01-31 00:07:31.097681189 +0200
-@@ -1578,8 +1578,8 @@
- #
- # Note: Used iff _use_internal_dependency_generator is non-zero. The
- # helpers are also used by %{_rpmhome}/rpmdeps {--provides|--requires}.
--%__mono_provides	%{_rpmhome}/mono-find-provides
--%__mono_requires	%{_rpmhome}/mono-find-requires
-+%__mono_provides	%{nil}
-+%__mono_requires	%{nil}
+diff -urN rpm-4.5/lib/rpmfc.c rpm-4.5.new/lib/rpmfc.c
+--- rpm-4.5/lib/rpmfc.c	2008-11-09 15:05:53.000000000 +0100
++++ rpm-4.5.new/lib/rpmfc.c	2008-11-09 15:07:53.000000000 +0100
+@@ -555,6 +555,7 @@
+   { "Java ",			RPMFC_JAVA|RPMFC_INCLUDE },
  
- #------------------------------------------------------------------------
- # executable(...) configuration.
+   /* .NET executables and libraries. file(1) cannot differ it from native win32 executables unfortunatelly */
++  { "Mono/.Net assembly",	RPMFC_MONO|RPMFC_INCLUDE },
+   { "PE executable",		RPMFC_MONO|RPMFC_INCLUDE },
+   { "executable PE",		RPMFC_MONO|RPMFC_INCLUDE },
+ 

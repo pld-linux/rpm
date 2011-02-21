@@ -1,0 +1,64 @@
+--- rpm-4.5/macros.in	2008-09-03 16:47:30.861766714 +0300
++++ rpm-4.5/macros.in	2010-08-23 13:22:02.633790949 +0300
+@@ -198,7 +198,7 @@
+ Summary: Debug information for package %{name}\
+ Summary(pl.UTF-8): Informacje dla debuggera dla pakietu %{name}\
+ Group: Development/Debug\
+-Requires: filesystem-debuginfo >= 3.0-16\
++Requires: filesystem-debuginfo >= 2.0-7\
+ AutoReqProv: 0\
+ %description debuginfo\
+ This package provides debug information for package %{name}.\
+@@ -243,8 +243,8 @@
+ %_srcrpmdir		%{_topdir}/SRPMS
+ 
+ #	Directory where temporary files can be created.
+-%_tmppath		%(echo "${TMPDIR:-/tmp}")
+-%tmpdir			%{_tmppath}
++%_tmppath		%{expand:%%global _tmppath %(echo "${TMPDIR:-/tmp}")}%_tmppath
++%tmpdir			%{expand:%%global tmpdir %(echo "${TMPDIR:-/tmp}")}%tmpdir
+ 
+ #	Path to top of build area.
+ %_topdir		%(echo $HOME)/rpm
+@@ -277,6 +277,9 @@
+ #
+ #%distribution
+ 
++# PLD Linux Release
++%pld_release	ac
++
+ #	Configurable distribution URL, same as DistURL: tag in a specfile.
+ #	The URL will be used to supply reliable information to tools like
+ #	rpmfind.
+@@ -1178,6 +1181,7 @@
+ %_infodir		%{_prefix}/share/info
+ %_mandir		%{_prefix}/share/man
+ %_localedir		%{_datadir}/locale
++%_x_libraries	/usr/X11R6/%{_lib}
+ 
+ #==============================================================================
+ # ---- config.guess platform macros.
+@@ -1478,10 +1482,13 @@
+ #-----------------------------------------------------------------
+ # CFLAGS and LDFLAGS used to build
+ 
+-%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -gdwarf-3 -g2}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
++%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -gdwarf-2 -g2}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
+ # -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
+ 
+ %debugcflags	-O0 -g -Wall
++%debugcppflags	%{nil}
++%optldflags	-Wl,--as-needed
++%optcppflags	%{nil}
+ 
+ # Warning: those macros are overwritten by macros.build,
+ #          left here for compatibility
+@@ -1497,7 +1504,7 @@
+ #
+ # Note: Used if _use_internal_dependency_generator is non-zero. The
+ # helper is also used by %{_rpmhome}/rpmdeps --provides
+-%__mimetype_provides %{_rpmhome}/mimetypedeps.sh --provides
++#%__mimetype_provides %{_rpmhome}/mimetypedeps.sh --provides
+ 
+ # \endverbatim
+ #*/

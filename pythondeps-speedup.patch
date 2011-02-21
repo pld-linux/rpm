@@ -1,0 +1,25 @@
+--- rpm-4.5/scripts/pythondeps.sh	2007-05-25 20:36:39.000000000 +0300
++++ rpm-4.5/scripts/pythondeps.sh	2010-03-21 14:07:18.049336515 +0200
+@@ -5,7 +5,8 @@
+     exit 0
+ }
+ 
+-PYVER=`python -c "import sys; v=sys.version_info[:2]; print '%d.%d'%v"`
++# $PYVER is exported by rpm macro
++PYVER=${PYVER:-$(python -c "import sys; print '%d.%d' % sys.version_info[:2]")}
+ case $1 in
+ -P|--provides)
+     shift
+--- rpm-4.5/macros.in~	2010-03-21 14:03:42.559283734 +0200
++++ rpm-4.5/macros.in	2010-03-21 14:05:18.419287370 +0200
+@@ -1401,8 +1401,8 @@
+ #
+ # Note: Used iff _use_internal_dependency_generator is non-zero. The
+ # helpers are also used by %{_rpmhome}/rpmdeps {--provides|--requires}.
+-%__python_provides	%{_rpmhome}/pythondeps.sh --provides
+-%__python_requires	%{_rpmhome}/pythondeps.sh --requires
++%__python_provides	/usr/bin/env PYVER=%py_ver %{_rpmhome}/pythondeps.sh --provides
++%__python_requires	/usr/bin/env PYVER=%py_ver %{_rpmhome}/pythondeps.sh --requires
+ 
+ # Useful macros for building *.rpm python packages (for python > 1.6).
+ #

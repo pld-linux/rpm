@@ -1,0 +1,11 @@
+--- rpm-4.4.3/configure.ac.orig	2005-11-19 11:30:59.197389000 +0100
++++ rpm-4.4.3/configure.ac	2005-11-19 16:17:10.397970072 +0100
+@@ -439,7 +439,7 @@
+ ])
+ 
+ AC_CHECK_HEADERS(aio.h)
+-AC_SEARCH_LIBS(aio_read, [c rt aio posix4])
++dnl not used? AC_SEARCH_LIBS(aio_read, [c rt aio posix4])
+ 
+ dnl Better not use fchmod at all.
+ AC_CHECK_FUNC(fchmod)

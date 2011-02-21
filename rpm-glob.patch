@@ -1,48 +1,34 @@
---- rpm-5.1.4/rpmio/rpmrpc.c.org	2008-07-29 21:27:42.203871384 +0200
-+++ rpm-5.1.4/rpmio/rpmrpc.c	2008-07-29 21:27:58.080756454 +0200
-@@ -1757,14 +1757,14 @@
- 	return -2;
- 	/*@notreached@*/ break;
-     }
--    return glob(pattern, flags, errfunc, pglob);
-+    return rpm_glob(pattern, flags, errfunc, pglob);
- }
- 
- void Globfree(glob_t *pglob)
- {
+--- rpm-4.5/rpmio/rpmrpc.c~	2010-12-19 14:19:57.678043380 +0100
++++ rpm-4.5/rpmio/rpmrpc.c	2010-12-19 14:20:39.353812967 +0100
+@@ -1711,6 +1711,17 @@
  if (_rpmio_debug)
- fprintf(stderr, "*** Globfree(%p)\n", pglob);
--    globfree(pglob);
-+    rpm_globfree(pglob);
- }
+ fprintf(stderr, "*** Glob(%s,0x%x,%p,%p)\n", pattern, (unsigned)flags, (void *)errfunc, pglob);
+ /*@=castfcnptr@*/
++
++    /* same as upstream glob with difference that gl_stat is Lstat now */
++    pglob->gl_closedir = closedir;
++    pglob->gl_readdir = readdir;
++    pglob->gl_opendir = opendir;
++    pglob->gl_lstat = Lstat;
++    pglob->gl_stat = Lstat;
++
++/*@=type@*/
++	flags |= GLOB_ALTDIRFUNC;
++
+     switch (ut) {
+     case URL_IS_HTTPS:
+     case URL_IS_HTTP:
+--- rpm-4.5/configure.ac~	2010-12-19 13:46:37.917863585 +0100
++++ rpm-4.5/configure.ac	2010-12-19 13:50:49.826071048 +0100
+@@ -1004,8 +1004,8 @@
+ #fi
+ #
+ #if test "$rpm_cv_glob" = yes; then
+-    AC_DEFINE(USE_GNU_GLOB, 1, [Use the included glob.c?])
+-    AC_LIBOBJ(glob)
++#    AC_DEFINE(USE_GNU_GLOB, 1, [Use the included glob.c?])
++#    AC_LIBOBJ(glob)
+     AC_LIBOBJ(fnmatch)
+ #fi
  
- DIR * Opendir(const char * path)
---- rpm-5.1.4/misc/librpmmisc.c.org	2008-07-29 21:26:19.710540550 +0200
-+++ rpm-5.1.4/misc/librpmmisc.c	2008-07-29 21:27:25.357426308 +0200
-@@ -71,7 +71,11 @@
- #include "fnmatch.h"
- #include "fnmatch.c"
- #ifndef __CYGWIN__
-+#define	glob		rpm_glob
-+#define	globfree	rpm_globfree
- #include "glob.h"
- #include "glob.c"
-+#undef glob
-+#undef globfree
- #endif
- 
---- rpm/misc/librpmmisc.vers~	2007-11-13 03:16:23.000000000 +0100
-+++ rpm/misc/librpmmisc.vers	2008-07-29 21:32:35.023645681 +0200
-@@ -7,8 +7,10 @@
-     db_strerror_rpmdb;
-     db_create_rpmdb;
-     fnmatch;
--    glob;
--    globfree;
-+    rpm_glob;
-+    rpm_glob64;
-+    rpm_globfree;
-+    rpm_globfree64;
-     lua*;
-     magic_*;
-     rpmz_*;
+
