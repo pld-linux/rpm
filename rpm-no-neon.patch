@@ -2279,35 +2279,3 @@
      'DEFINE'		=> join(" ", @defines), # e.g., '-DHAVE_SOMETHING'
      'INC' => join(' ', map { '-I@top_srcdir@/'. $_ } @libdir) . ' @CPPFLAGS@',
      'TYPEMAPS'          => [ 'typemap' ],
---- rpm-4.5/configure.ac.orig	2011-02-21 16:29:42.000000000 +0100
-+++ rpm-4.5/configure.ac	2011-02-21 16:31:00.574910173 +0100
-@@ -591,28 +591,7 @@
- WITH_NEON_SUBDIR=
- WITH_NEON_INCLUDE=
- WITH_NEON_LIB=
--AC_CHECK_HEADER([neon/ne_session.h], [
--  AC_CHECK_LIB(neon, ne_session_create, [
--    AC_DEFINE(HAVE_LIBNEON, 1, [Define to 1 if you have the 'neon' library (-lneon).])
--    AC_CHECK_LIB(neon, ne_get_response_header, [
--      AC_DEFINE(HAVE_NEON_NE_GET_RESPONSE_HEADER, 1, [Define to 1 if you have ne_get_response_header() in libneon.])
--    ])
--    AC_CHECK_LIB(neon, ne_send_request_chunk, [
--	AC_DEFINE(HAVE_NEON_NE_SEND_REQUEST_CHUNK, 1, [Define to 1 if you have ne_send_request_chunk() in libneon.])
--    ])
--    WITH_NEON_INCLUDE="-I${includedir}/neon"
--    WITH_NEON_LIB="-lneon"
--  ])
--],[
--  if test -d neon ; then
--    AC_DEFINE(HAVE_LIBNEON, 1, [Define to 1 if you have the 'neon' library (-lneon).])
--# XXX HAVE_NEON_NE_GET_RESPONSE_HEADER assumes libneon-0.25 devel internal
--    AC_DEFINE(HAVE_NEON_NE_GET_RESPONSE_HEADER, 1, [Define to 1 if you have ne_get_response_header() in libneon.])
--    WITH_NEON_SUBDIR=neon
--    WITH_NEON_INCLUDE="-I\${top_srcdir}/${WITH_NEON_SUBDIR}/src"
--    WITH_NEON_LIB="\${top_builddir}/${WITH_NEON_SUBDIR}/src/libneon.la"
--  fi
--])
-+
- AC_SUBST(WITH_NEON_SUBDIR)
- AC_SUBST(WITH_NEON_INCLUDE)
- AC_SUBST(WITH_NEON_LIB)
