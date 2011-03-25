@@ -1,0 +1,20 @@
+--- rpm-4.9.0/configure.ac.wiget	2011-03-24 17:35:47.685289156 +0100
++++ rpm-4.9.0/configure.ac	2011-03-24 17:37:34.510170665 +0100
+@@ -709,7 +709,7 @@ WITH_LUA_INCLUDE=
+ AC_ARG_WITH(lua, [AS_HELP_STRING([--with-lua],[build with lua support])],,[with_lua=yes])
+ AS_IF([test "$with_lua" = yes],[
+   AC_CHECK_HEADER([lua.h],[
+-    AC_CHECK_LIB(lua,[luaL_openlibs],[with_lua=yes],[
++    AC_CHECK_LIB(lua51,[luaL_openlibs],[with_lua=yes],[
+       AC_MSG_ERROR([--with-lua given, but liblua not found])
+     ], 
+     [-lm])
+@@ -721,7 +721,7 @@ AS_IF([test "$with_lua" = yes],[
+ AS_IF([test "$with_lua" = yes],[
+   AC_DEFINE(WITH_LUA, 1, [Build with lua support?])
+   WITH_LUA_INCLUDE=
+-  WITH_LUA_LIB="-llua -lm" 
++  WITH_LUA_LIB="-llua51 -lm" 
+ ])
+ AC_SUBST(WITH_LUA_LIB)
+ AC_SUBST(WITH_LUA_INCLUDE)
