@@ -84,7 +84,6 @@ Source17:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source18:	banner.sh
 Source19:	%{name}-macros.gstreamer
-Patch1000:	%{name}-new-debuginfo.patch
 Patch1067:	%{name}-disable-features.patch
 Patch1070:	%{name}-rpmrc-ac.patch
 #Patch0:	%{name}-pl.po.patch
@@ -175,14 +174,19 @@ Patch94:	%{name}-shescape-memfault.patch
 Patch95:	%{name}-gid-uucp.patch
 Patch96:	%{name}-disable-hkp.patch
 Patch97:	%{name}-sigpad.patch
-Patch98:	%{name}-debugdir.patch
 Patch99:	%{name}-pkgconfig.patch
 Patch100:	%{name}-rpm5-debugedit.patch
 Patch101:	%{name}-builddir-readlink.patch
 Patch102:	pythondeps-speedup.patch
 Patch103:	%{name}-lua-exit-chroot-correctly.patch
 Patch104:	%{name}-glob.patch
-Patch2000:	lua51.patch
+
+Patch2001:	lua51.patch
+Patch2002:	%{name}-debugdir.patch
+Patch2003:	debuginfo-strict.patch
+Patch2004:	debuginfo-nostrip.patch
+Patch2005:	debuginfo-builddir.patch
+
 URL:		http://www.rpm.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -704,7 +708,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 
 %prep
 %setup -q
-#patch1000 -p1
 #%patch0 -p1
 #patch1 -p1
 #patch2 -p1
@@ -806,7 +809,6 @@ install %{SOURCE13} scripts/perl.prov
 #patch95 -p1
 #patch96 -p1
 #patch97 -p1
-#patch98 -p1
 #patch99 -p1
 #patch53 -p1
 #patch100 -p1
@@ -834,7 +836,11 @@ sed -i -e 's,AM_PTHREADS_SHARED("POSIX/.*,:,' db/dist/aclocal/mutex.ac
 #patch1070 -p1
 %endif
 
-%patch2000 -p1
+%patch2001 -p1
+%patch2002 -p1
+%patch2003 -p1
+%patch2004 -p1
+%patch2005 -p1
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}

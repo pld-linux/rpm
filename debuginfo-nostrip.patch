@@ -1,0 +1,16 @@
+--- rpm-4.9.0/scripts/find-debuginfo.sh.wiget	2011-03-25 18:57:10.367956883 +0100
++++ rpm-4.9.0/scripts/find-debuginfo.sh	2011-03-25 19:05:58.372477326 +0100
+@@ -89,10 +94,13 @@ debugdir="${RPM_BUILD_ROOT}/usr/lib/debu
+ strip_to_debug()
+ {
+   local g=
++  local t=$(mktemp "/tmp/rpm.stripped.XXXXXX")
+   $strip_g && case "$(file -bi "$2")" in
+   application/x-sharedlib*) g=-g ;;
+   esac
+   eu-strip --remove-comment $g -f "$1" "$2" || exit
++  eu-strip --remove-comment $g -f "$1" "$2" -o "$t" || exit
++  rm -f "$t"
+   chmod 444 "$1" || exit
+ }
+ 

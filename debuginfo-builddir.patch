@@ -1,0 +1,14 @@
+--- rpm-4.9.0/scripts/find-debuginfo.sh.wiget	2011-03-25 18:57:10.367956883 +0100
++++ rpm-4.9.0/scripts/find-debuginfo.sh	2011-03-25 19:05:58.372477326 +0100
+@@ -28,6 +28,11 @@ strip_g=false
+ # Barf on missing build IDs.
+ strict=false
+ 
++# canon RPM_BUILD_DIR, the DW_AT_comp_dir in ELF objects is real a real path
++# and debugedit will ignore them as they are out of build dir.
++RPM_BUILD_DIR=$(readlink -f "$RPM_BUILD_DIR")
++echo "RPM_BUILD_DIR=$RPM_BUILD_DIR"
++
+ BUILDDIR=.
+ out=debugfiles.list
+ nout=0

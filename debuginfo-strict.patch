@@ -1,0 +1,14 @@
+--- rpm-4.9.0/scripts/find-debuginfo.sh.wiget	2011-03-25 18:57:10.367956883 +0100
++++ rpm-4.9.0/scripts/find-debuginfo.sh	2011-03-25 19:05:58.372477326 +0100
+@@ -207,6 +215,11 @@ while read nlinks inum f; do
+     $strict && exit 2
+   fi
+ 
++  if [ ! -s "$SOURCEFILE" ]; then
++    echo >&2 "*** ${strict_error}: no sources found for $f (stripped without sourcefile information?)"
++    $strict && exit 2
++  fi
++
+   [ -x /usr/bin/gdb-add-index ] && /usr/bin/gdb-add-index "$f" > /dev/null 2>&1
+ 
+   # A binary already copied into /usr/lib/debug doesn't get stripped,
