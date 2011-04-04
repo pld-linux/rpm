@@ -17,15 +17,10 @@
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
-%bcond_without	apidocs		# don't generate documentation with doxygen
+%bcond_with	apidocs		# don't generate documentation with doxygen
 %bcond_with		internal_db		# internal db (db 4.5.20)
-%if "%{pld_release}" == "ac"
-%bcond_without	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
-%bcond_with		nptl			# internal db: don't use process-shared POSIX mutexes (NPTL provides full interface)
-%else
 %bcond_with		autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
 %bcond_without	nptl			# internal db: don't use process-shared POSIX mutexes (NPTL provides full interface)
-%endif
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
 %bcond_without	system_libmagic	# don't use system libmagic
@@ -40,11 +35,7 @@
 %endif
 
 # versions of required libraries
-%if "%{pld_release}" == "th"
 %define	reqdb_ver	4.7.25
-%else
-%define	reqdb_ver	4.5.20
-%endif
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
 %define	sover		4.5
@@ -87,7 +78,6 @@ Source19:	%{name}-macros.gstreamer
 Patch1067:	%{name}-disable-features.patch
 Patch1070:	%{name}-rpmrc-ac.patch
 #Patch0:	%{name}-pl.po.patch
-Patch1:		%{name}-rpmrc.patch
 Patch2:		%{name}-arch.patch
 Patch3:		%{name}-rpmpopt.patch
 Patch4:		%{name}-perl-macros.patch
@@ -186,6 +176,7 @@ Patch2002:	%{name}-debugdir.patch
 Patch2003:	debuginfo-strict.patch
 Patch2004:	debuginfo-nostrip.patch
 Patch2005:	debuginfo-builddir.patch
+Patch2006:	%{name}-rpmrc.patch
 
 URL:		http://www.rpm.org/
 BuildRequires:	autoconf >= 2.57
@@ -472,11 +463,7 @@ Summary(pl.UTF-8):	Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
-%if "%{pld_release}" == "ac"
-Conflicts:	filesystem-debuginfo < 2.0-7
-%else
 Conflicts:	filesystem-debuginfo < 3.0-16
-%endif
 
 %description utils
 Additional utilities for managing RPM packages and database.
@@ -544,16 +531,8 @@ Requires:	elfutils
 Requires:	file >= 4.17
 Requires:	fileutils
 Requires:	findutils
-%if "%{pld_release}" == "ac"
-%ifarch athlon
-Requires:	gcc >= 3.0.3
-%else
-Requires:	gcc
-%endif
-%else
 # rpmrc patch adds flags specific to gcc >= 3.4
 Requires:	gcc >= 5:3.4
-%endif
 Requires:	glibc-devel
 Requires:	grep
 Requires:	gzip
@@ -841,6 +820,7 @@ sed -i -e 's,AM_PTHREADS_SHARED("POSIX/.*,:,' db/dist/aclocal/mutex.ac
 %patch2003 -p1
 %patch2004 -p1
 %patch2005 -p1
+%patch2006 -p1
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
@@ -925,11 +905,9 @@ CPPFLAGS="%{rpmcppflags} -std=gnu99 -I/usr/include/ossp-uuid -I/usr/include/nspr
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/%{_lib},/etc/{sysconfig,tmpwatch},%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib}
 
-%if "%{pld_release}" != "ti"
 install -d $RPM_BUILD_ROOT/etc/pki/rpm-gpg
 install %{SOURCE8} $RPM_BUILD_ROOT/etc/pki/rpm-gpg
 install %{SOURCE9} $RPM_BUILD_ROOT/etc/pki/rpm-gpg
-%endif
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -1072,11 +1050,7 @@ touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # customized rpm macros - global for host
 #
-%if "%{pld_release}" == "ti"
-%%distribution PLD Titanium
-%else
 %%distribution PLD
-%endif
 #
 # remove or replace with file_contexts path if you want to use custom
 # SELinux file contexts policy instead of one stored in packages payload
@@ -1247,9 +1221,7 @@ if [ -d /vservers ]; then
 	rm -f /etc/vservers/*/apps/pkgmgmt/base/rpm/state/__*
 fi
 echo >&2 "You should rebuild your rpmdb: rpm --rebuilddb to avoid random rpmdb errors"
-%if "%{pld_release}" == "th"
 echo >&2 "You probably want to remove db4.5 package now"
-%endif
 
 %triggerpostun -- %{name} < 4.4.9-44
 %{_rpmlibdir}/hrmib-cache
@@ -1264,10 +1236,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %defattr(644,root,root,755)
 %doc CHANGES CREDITS README manual/*
 
-%if "%{pld_release}" != "ti"
 %dir /etc/pki/rpm-gpg
 /etc/pki/rpm-gpg/*.asc
-%endif
 
 %attr(755,root,root) /bin/rpm
 %attr(755,root,root) %{_bindir}/rpmdb
@@ -1315,6 +1285,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/macros
+%{_rpmlibdir}/rpmrc
 
 %attr(755,root,root) %{_rpmlibdir}/hrmib-cache
 
