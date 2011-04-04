@@ -1,47 +1,48 @@
---- rpm-4.4.8/rpmrc.in.orig	2007-02-03 21:02:07.000000000 +0100
-+++ rpm-4.4.8/rpmrc.in	2007-04-08 10:43:32.083363453 +0200
-@@ -13,69 +13,67 @@
+--- rpm-4.9.0/rpmrc.in.wiget	2011-04-04 15:47:20.722863493 +0200
++++ rpm-4.9.0/rpmrc.in	2011-04-04 16:56:25.217911201 +0200
+@@ -10,77 +10,77 @@
  # Values for RPM_OPT_FLAGS for various platforms
  
  # "fat" binary with both archs, for Darwin
 -optflags: fat -O2 -g -arch i386 -arch ppc
 +optflags: fat -O2 -arch i386 -arch ppc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_fat: %{specflags_fat}}}
  
--optflags: i386 -O2 -g -m32 -march=i386 -mtune=generic -fasynchronous-unwind-tables
--optflags: i486 -O2 -g -m32 -march=i486 -fasynchronous-unwind-tables
--optflags: i586 -O2 -g -m32 -march=i586 -fasynchronous-unwind-tables
--optflags: i686 -O2 -g -m32 -march=i686 -mtune=generic -fasynchronous-unwind-tables
--optflags: pentium3 -O2 -g -m32 -march=pentium3 -fasynchronous-unwind-tables
--optflags: pentium4 -O2 -g -m32 -march=pentium4 -fasynchronous-unwind-tables
--optflags: athlon -O2 -g -m32 -march=athlon -fasynchronous-unwind-tables
+-optflags: i386 -O2 -g -march=i386 -mtune=i686
+-optflags: i486 -O2 -g -march=i486
+-optflags: i586 -O2 -g -march=i586
+-optflags: i686 -O2 -g -march=i686
+-optflags: pentium3 -O2 -g -march=pentium3
+-optflags: pentium4 -O2 -g -march=pentium4
+-optflags: athlon -O2 -g -march=athlon
+-optflags: geode -Os -g -m32 -march=geode
 -optflags: ia64 -O2 -g
--optflags: x86_64 -O2 -g -m64 -mtune=generic
--optflags: amd64 -O2 -g -m64 -mtune=generic
--optflags: ia32e -O2 -g -m64 -mtune=generic
+-optflags: x86_64 -O2 -g
+-optflags: amd64 -O2 -g
+-optflags: ia32e -O2 -g
 -
 -optflags: alpha -O2 -g -mieee
--optflags: alphaev5 -O2 -g -mieee -mcpu=ev5
--optflags: alphaev56 -O2 -g -mieee -mcpu=ev56
--optflags: alphapca56 -O2 -g -mieee -mcpu=pca56
--optflags: alphaev6 -O2 -g -mieee -mcpu=ev6
--optflags: alphaev67 -O2 -g -mieee -mcpu=ev67
+-optflags: alphaev5 -O2 -g -mieee -mtune=ev5
+-optflags: alphaev56 -O2 -g -mieee -mtune=ev56
+-optflags: alphapca56 -O2 -g -mieee -mtune=pca56
+-optflags: alphaev6 -O2 -g -mieee -mtune=ev6
+-optflags: alphaev67 -O2 -g -mieee -mtune=ev67
 -
--optflags: sparc -O2 -g -m32 -mcpu=v7 -mtune=ultrasparc
--optflags: sparcv8 -O2 -g -m32 -mcpu=v8 -mtune=ultrasparc
--optflags: sparcv9 -O2 -g -m32 -mcpu=ultrasparc
--optflags: sparc64 -O2 -g -m64 -mcpu=ultrasparc
+-optflags: sparc -O2 -g -m32 -mtune=ultrasparc
+-optflags: sparcv8 -O2 -g -m32 -mtune=ultrasparc -mv8
+-optflags: sparcv9 -O2 -g -m32 -mtune=ultrasparc
+-optflags: sparcv9v -O2 -g -m32 -mtune=niagara
+-optflags: sparc64 -O2 -g -m64 -mtune=ultrasparc
+-optflags: sparc64v -O2 -g -m64 -mtune=niagara
 -
 -optflags: m68k -O2 -g -fomit-frame-pointer
 -
--optflags: ppc -O2 -g -m32
--optflags: ppc8260 -O2 -g -m32
--optflags: ppc8560 -O2 -g -m32
--optflags: ppc32dy4 -O2 -g -m32
--optflags: ppciseries -O2 -g -m32
--optflags: ppcpseries -O2 -g -m32
--optflags: ppc64 -O2 -g -m64 -mminimal-toc
--optflags: ppciseries -O2 -g -m64 -mminimal-toc
--optflags: ppcpseries -O2 -g -m64 -mminimal-toc
+-optflags: ppc -O2 -g -fsigned-char
+-optflags: ppc8260 -O2 -g -fsigned-char
+-optflags: ppc8560 -O2 -g -fsigned-char
+-optflags: ppc32dy4 -O2 -g -fsigned-char
+-optflags: ppciseries -O2 -g -fsigned-char
+-optflags: ppcpseries -O2 -g -fsigned-char
+-optflags: ppc64 -O2 -g -fsigned-char
 -
 -optflags: parisc -O2 -g -mpa-risc-1-0
 -optflags: hppa1.0 -O2 -g -mpa-risc-1-0
@@ -52,11 +53,14 @@
 -optflags: mips -O2 -g
 -optflags: mipsel -O2 -g
 -
--optflags: armv3l -O2 -g -fsigned-char -fomit-frame-pointer -march=armv3
--optflags: armv4b -O2 -g -fsigned-char -fomit-frame-pointer -march=armv4
--optflags: armv4l -O2 -g -fsigned-char -fomit-frame-pointer -march=armv4
--optflags: armv5teb -O2 -g -fsigned-char -fomit-frame-pointer -march=armv5te
--optflags: armv5tel -O2 -g -fsigned-char -fomit-frame-pointer -march=armv5te
+-optflags: armv3l -O2 -g -march=armv3
+-optflags: armv4b -O2 -g -march=armv4
+-optflags: armv4l -O2 -g -march=armv4
+-optflags: armv4tl -O2 -g -march=armv4t
+-optflags: armv5tel -O2 -g -march=armv5te
+-optflags: armv5tejl -O2 -g -march=armv5te
+-optflags: armv6l -O2 -g -march=armv6
+-optflags: armv7l -O2 -g -march=armv7
 -
 -optflags: atarist -O2 -g -fomit-frame-pointer
 -optflags: atariste -O2 -g -fomit-frame-pointer
@@ -65,6 +69,13 @@
 -optflags: atariclone -O2 -g -fomit-frame-pointer
 -optflags: milan -O2 -g -fomit-frame-pointer
 -optflags: hades -O2 -g -fomit-frame-pointer
+-
+-optflags: s390 -O2 -g
+-optflags: s390x -O2 -g
+-
+-optflags: sh3 -O2 -g
+-optflags: sh4 -O2 -g -mieee
+-optflags: sh4a -O2 -g -mieee
 +optflags: i386 -O2 -fno-strict-aliasing -fwrapv -march=i386%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i386: %{specflags_i386}}}
 +optflags: i486 -O2 -fno-strict-aliasing -fwrapv -march=i486%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i486: %{specflags_i486}}}
 +optflags: i586 -O2 -fno-strict-aliasing -fwrapv -march=i586%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_i586: %{specflags_i586}}}
@@ -72,6 +83,7 @@
 +optflags: pentium3 -O2 -fno-strict-aliasing -fwrapv -march=pentium3%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_pentium3: %{specflags_pentium3}}}
 +optflags: pentium4 -O2 -fno-strict-aliasing -fwrapv -march=pentium4%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_pentium4: %{specflags_pentium4}}}
 +optflags: athlon -O2 -fno-strict-aliasing -fwrapv -march=athlon%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_athlon: %{specflags_athlon}}}
++optflags: geode -Os -fno-strict-aliasing -fwrapv -march=geode%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia32: %{specflags_ia32}}%{?specflags_geode: %{specflags_geode}}}
 +optflags: ia64 -O2 -fno-strict-aliasing -fwrapv%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_ia64: %{specflags_ia64}}}
 +optflags: x86_64 -O2 -fno-strict-aliasing -fwrapv -march=x86-64%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_x86_64: %{specflags_x86_64}}}
 +optflags: amd64 -O2 -fno-strict-aliasing -fwrapv -march=k8%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_amd64: %{specflags_amd64}}}
@@ -87,7 +99,9 @@
 +optflags: sparc -O2 -fno-strict-aliasing -fwrapv -m32 -mcpu=v7 -mtune=ultrasparc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}}
 +optflags: sparcv8 -O2 -fno-strict-aliasing -fwrapv -m32 -mcpu=v8 -mtune=ultrasparc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparcv8: %{specflags_sparcv8}}}
 +optflags: sparcv9 -O2 -fno-strict-aliasing -fwrapv -m32 -mcpu=ultrasparc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparcv9: %{specflags_sparcv9}}}
++optflags: sparcv9v -O2 -fno-strict-aliasing -fwrapv -m32 -mtune=niagara%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparc9v: %{specflags_sparc9v}}}
 +optflags: sparc64 -O2 -fno-strict-aliasing -fwrapv -mcpu=ultrasparc%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparc64: %{specflags_sparc64}}}
++optflags: sparc64v -O2 -fno-strict-aliasing -fwrapv -mtune=niagara%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sparc: %{specflags_sparc}}%{?specflags_sparc64v: %{specflags_sparc64v}}}
 +
 +optflags: m68k -O2 -fno-strict-aliasing -fwrapv -fomit-frame-pointer%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_m68k: %{specflags_m68k}}}
 +
@@ -111,8 +125,11 @@
 +optflags: armv3l -O2 -fno-strict-aliasing -fwrapv -fsigned-char -fomit-frame-pointer -march=armv3%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_armv3l: %{specflags_armv3l}}}
 +optflags: armv4b -O2 -fno-strict-aliasing -fwrapv -fsigned-char -fomit-frame-pointer -march=armv4%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_armv4b: %{specflags_armv4b}}}
 +optflags: armv4l -O2 -fno-strict-aliasing -fwrapv -fsigned-char -fomit-frame-pointer -march=armv4%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_armv4l: %{specflags_armv4l}}}
-+optflags: armv5teb -O2 -fno-strict-aliasing -fwrapv -fsigned-char -fomit-frame-pointer -march=armv5te%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_armv5teb: %{specflags_armv5teb}}}
++optflags: armv4tl -O2 -fno-strict-aliasing -fwrapv -fsigned-char -fomit-frame-pointer -march=armv4t%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_armv4tl: %{specflags_armv4tl}}}
 +optflags: armv5tel -O2 -fno-strict-aliasing -fwrapv -fsigned-char -fomit-frame-pointer -march=armv5te%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_armv5tel: %{specflags_armv5tel}}}
++optflags: armv5tejl -O2 -fno-strict-aliasing -fwrapv -fsigned-char -fomit-frame-pointer -march=armv5te%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_armv5tejl: %{specflags_armv5tejl}}}
++optflags: armv6l -O2 -fno-strict-aliasing -fwrapv -fsigned-char -fomit-frame-pointer -march=armv6%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_armv6: %{specflags_armv6}}}
++optflags: armv7l -O2 -fno-strict-aliasing -fwrapv -fsigned-char -fomit-frame-pointer -march=armv7%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_armv7: %{specflags_armv7}}}
 +
 +optflags: atarist -O2 -fno-strict-aliasing -fwrapv -fomit-frame-pointer%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_atarist: %{specflags_atarist}}}
 +optflags: atariste -O2 -fno-strict-aliasing -fwrapv -fomit-frame-pointer%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_atariste: %{specflags_atariste}}}
@@ -121,20 +138,13 @@
 +optflags: atariclone -O2 -fno-strict-aliasing -fwrapv -fomit-frame-pointer%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_atariclone: %{specflags_atariclone}}}
 +optflags: milan -O2 -fno-strict-aliasing -fwrapv -fomit-frame-pointer%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_milan: %{specflags_milan}}}
 +optflags: hades -O2 -fno-strict-aliasing -fwrapv -fomit-frame-pointer%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_hades: %{specflags_hades}}}
- 
--optflags: s390 -O2 -g -m31
--optflags: s390x -O2 -g -m64
++
 +optflags: s390 -O2 -fno-strict-aliasing -fwrapv%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_s390: %{specflags_s390}}}
 +optflags: s390x -O2 -fno-strict-aliasing -fwrapv%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_s390: %{specflags_s390}}%{?specflags_s390x: %{specflags_s390x}}}
++
++optflags: sh3 -O2 -fno-strict-aliasing -fwrapv%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sh: %{specflags_sh}}%{?specflags_sh3: %{specflags_sh3}}}
++optflags: sh4 -O2 -mieee -fno-strict-aliasing -fwrapv%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sh: %{specflags_sh}}%{?specflags_sh4: %{specflags_sh4}}}
++optflags: sh4a -O2 -mieee -fno-strict-aliasing -fwrapv%{!?nospecflags:%{?specflags: %{specflags}}%{?specflags_sh: %{specflags_sh}}%{?specflags_sh4a: %{specflags_sh4a}}}
  
  #############################################################
  # Canonical arch names and numbers
-@@ -418,7 +416,7 @@
- buildarch_compat: amd64: x86_64
- buildarch_compat: ia32e: x86_64
- 
--macrofiles:	@USRLIBRPM@/macros:@USRLIBRPM@/%{_target}/macros:@SYSCONFIGDIR@/macros.*:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/etc/.rpmmacros:~/.rpmmacros
-+macrofiles:	@USRLIBRPM@/macros:@USRLIBRPM@/macros.build:@USRLIBRPM@/%{_target}/macros:@SYSCONFIGDIR@/macros.*:@SYSCONFIGDIR@/macros:@SYSCONFIGDIR@/%{_target}/macros:~/etc/.rpmmacros:~/.rpmmacros
- 
- # \endverbatim
- #*/
