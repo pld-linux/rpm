@@ -16,10 +16,10 @@
  #==============================================================================
  rpmbuild	alias --dbpath		--define '_dbpath !#:+' \
  	--POPTdesc=$"use database in DIRECTORY" \
-@@ -247,6 +247,15 @@
- 	--POPTargs=$"<option>"
+@@ -248,5 +248,14 @@
  rpmbuild alias --buildroot	--define '.buildroot !#:+' \
  	--POPTdesc=$"override build root" \
+ 	--POPTargs=$"DIRECTORY"
 +# (PLD-specific) Make RPM build tree
 +rpmbuild exec --install-build-tree install-build-tree \
 +	--POPTdesc=$"make all needed dirs for building binary rpms"
@@ -29,7 +29,6 @@
 +# (PLD-specific) Conditional building
 +rpmbuild exec  --bcond find-spec-bcond \
 +	--POPTdesc=$"find all --with/--without values"
- 	--POPTargs=$"DIRECTORY"
  
  # \endverbatim
 --- rpm-4.5/po/pl.po~	2008-04-13 03:15:20.000000000 +0300
