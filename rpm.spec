@@ -57,7 +57,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	51
+Release:	52
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -372,6 +372,7 @@ Requires:	elfutils-devel
 Requires:	keyutils-devel
 %{?with_system_libmagic:Requires:	libmagic-devel}
 %{?with_selinux:Requires:	libselinux-devel}
+Requires:	ossp-uuid-devel >= 1.6.2-6
 Requires:	popt-devel >= %{reqpopt_ver}
 Requires:	zlib-devel >= 1.2.3.3
 
@@ -552,13 +553,13 @@ Requires:	gcc >= 5:3.4
 Requires:	glibc-devel
 Requires:	grep
 Requires:	gzip
-Requires:	xz
 Requires:	make
 Requires:	patch
 Requires:	sed
 Requires:	sh-utils
 Requires:	tar
 Requires:	textutils
+Requires:	xz
 Provides:	rpmbuild(monoautodeps)
 Provides:	rpmbuild(noauto) = 3
 %ifarch %{x8664}
