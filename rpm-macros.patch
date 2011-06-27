@@ -114,7 +114,7 @@
  %_localedir		%{_datadir}/locale
  
  #==============================================================================
-@@ -1429,6 +1436,23 @@
+@@ -1429,6 +1436,22 @@
  #%__executable_provides	%{_usrlibrpm}/executabledeps.sh --provides
  #%__executable_requires	%{_usrlibrpm}/executabledeps.sh --requires
 -%__scriptlet_requires	/bin/bash --rpm-requires
@@ -126,8 +126,7 @@
 +#-----------------------------------------------------------------
 +# CFLAGS and LDFLAGS used to build
 +
-+%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -gdwarf-3 -g2}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
-+# -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
++%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -gdwarf-4 -g2}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
 +
 +%debugcflags	-O0 -g -Wall
  
