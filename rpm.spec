@@ -18,13 +18,13 @@
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
 %bcond_without	apidocs		# don't generate documentation with doxygen
-%bcond_with		internal_db		# internal db (db 4.5.20)
+%bcond_with	internal_db	# internal db (db 4.5.20)
 %if "%{pld_release}" == "ac"
 %bcond_without	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
-%bcond_with		nptl			# internal db: don't use process-shared POSIX mutexes (NPTL provides full interface)
+%bcond_with	nptl		# internal db: don't use process-shared POSIX mutexes (NPTL provides full interface)
 %else
-%bcond_with		autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
-%bcond_without	nptl			# internal db: don't use process-shared POSIX mutexes (NPTL provides full interface)
+%bcond_with	autoreqdep	# autogenerate package name deps in addition to sonames/perl(X)
+%bcond_without	nptl		# internal db: don't use process-shared POSIX mutexes (NPTL provides full interface)
 %endif
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
@@ -57,7 +57,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	54
+Release:	55
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
