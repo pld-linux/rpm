@@ -12,11 +12,11 @@
 --- rpm-5.3.1/tools/Makefile.am.wiget	2010-06-01 21:49:05.274449585 +0200
 +++ rpm-5.3.1/tools/Makefile.am	2010-06-01 21:49:56.576943304 +0200
 @@ -281,7 +281,7 @@ if WITH_DBSQL
+ if WITH_DBSQL
  pkgbin_PROGRAMS +=	dbsql
  dbsql_SOURCES	= dbsql.c
- dbsql_CFLAGS	= $(CFLAGS) -I../db3/sql -I../db/sql/generated
 -dbsql_LDFLAGS	= @LDFLAGS_STATIC@ $(LDFLAGS)
 +dbsql_LDFLAGS	= @LDFLAGS_STATIC@ $(LDFLAGS) $(OPENMP_CFLAGS)
  dbsql_LDADD = \
- 	$(top_builddir)/db3/libdb_sql-5.0.la \
  	$(RPMIO_LDADD_COMMON)
+ endif

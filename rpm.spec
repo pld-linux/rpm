@@ -63,12 +63,12 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.3.1
+Version:	5.3.5
 Release:	0.1
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.3/%{name}-%{version}.tar.gz
-# Source0-md5:	ee172f54e9b596056f8ecf13ae6afa9e
+# Source0-md5:	7a5112fd208bfda7a1cab20b9ce17a02
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -155,7 +155,6 @@ Patch61:	%{name}-sparc64.patch
 Patch62:	%{name}-gendiff.patch
 Patch63:	%{name}-lua-exit-chroot-correctly.patch
 Patch70:	%{name}-configure-autoconf.patch
-Patch71:	db.patch
 Patch72:	openmp.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.60
@@ -734,7 +733,6 @@ patch26 -p1
 %patch62 -p1
 #patch63 -p1 applied upstream
 %patch70 -p1
-%patch71 -p1
 %patch72 -p1 -b .wiget
 
 cd scripts

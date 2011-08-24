@@ -90,5 +90,6 @@
 +%x8664	x86_64 amd64 ia32e
 +%ppc	ppc ppc7400 ppc7450
 +  
- # \endverbatim
- #*/
+ #==============================================================================
+ # XXX Caveat:
+ # XXX With %{load:...} being interpreted immediately -- not lazily --

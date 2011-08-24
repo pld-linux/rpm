@@ -16,7 +16,7 @@
  #==============================================================================
  rpmbuild	alias --dbpath		--define '_dbpath !#:+' \
  	--POPTdesc=$"use database in DIRECTORY" \
-@@ -240,5 +249,15 @@
+@@ -240,6 +249,16 @@
  	--POPTdesc=$"override build root" \
  	--POPTargs=$"DIRECTORY"
  
@@ -30,8 +30,9 @@
 +rpmbuild exec  --bcond find-spec-bcond \
 +	--POPTdesc=$"find all --with/--without values"
 +
- # \endverbatim
- #*/
+ rpmbuild alias --lsb --noautoreq --noautoprov \
+ 	--define '_use_internal_dependency_generator 0' \
+ 	--notinlsb
 ;--- rpm-4.4.9/po/pl.po.orig	2007-05-22 01:10:34.875893544 +0200
 ;+++ rpm-4.4.9/po/pl.po	2007-05-22 08:08:41.253484731 +0200
 ;@@ -4509,6 +4509,18 @@

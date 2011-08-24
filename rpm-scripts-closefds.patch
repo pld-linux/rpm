@@ -14,6 +14,6 @@
 + 		Fcntl(fd, F_SETFD, (void*)oldfl);
 + 	    }
 + 	}
- 	/*@=type@*/
- 	return fd;
- 	/*@notreached@*/ break;
+ 
+ #if defined(POSIX_FADV_WILLNEED)
+ 	(void) Fadvise(fd, 0, 0, POSIX_FADV_WILLNEED);
