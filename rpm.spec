@@ -200,7 +200,7 @@ BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libxml2-devel
 BuildRequires:	neon-devel >= 0.25.5
 %endif
-BuildRequires:	ossp-uuid-devel >= 1.6.2-6
+BuildRequires:	ossp-uuid-devel >= 1.6.2-8
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
 %{?with_python:BuildRequires:	python-devel >= 1:2.3}
