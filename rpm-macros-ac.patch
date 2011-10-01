@@ -1,5 +1,5 @@
---- rpm-4.5/macros.in	2008-09-03 16:47:30.861766714 +0300
-+++ rpm-4.5/macros.in	2010-08-23 13:22:02.633790949 +0300
+--- rpm-4.5/macros.in~	2011-10-01 14:15:08.000000000 +0300
++++ rpm-4.5/macros.in	2011-10-01 14:55:12.132616372 +0300
 @@ -198,7 +198,7 @@
  Summary: Debug information for package %{name}\
  Summary(pl.UTF-8): Informacje dla debuggera dla pakietu %{name}\
@@ -38,17 +38,23 @@
  
  #==============================================================================
  # ---- config.guess platform macros.
-@@ -1478,10 +1482,13 @@
+@@ -1475,16 +1475,18 @@
+ #%__executable_provides	%{_rpmhome}/executabledeps.sh --provides
+ #%__executable_requires	%{_rpmhome}/executabledeps.sh --requires
+ #%__scriptlet_requires	/bin/bash --rpm-requires
+-
+ # PLD rpm macros
+ %_enable_debug_packages 1
+ 
  #-----------------------------------------------------------------
  # CFLAGS and LDFLAGS used to build
  
 -%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -gdwarf-3 -g2}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
 +%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -gdwarf-2 -g2}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
- # -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
  
  %debugcflags	-O0 -g -Wall
 +%debugcppflags	%{nil}
-+%optldflags	-Wl,--as-needed
++%optldflags		-Wl,--as-needed
 +%optcppflags	%{nil}
  
  # Warning: those macros are overwritten by macros.build,
