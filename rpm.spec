@@ -63,12 +63,12 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.3.5
+Version:	5.3.11
 Release:	0.1
 License:	LGPL
 Group:		Base
 Source0:	http://rpm5.org/files/rpm/rpm-5.3/%{name}-%{version}.tar.gz
-# Source0-md5:	7a5112fd208bfda7a1cab20b9ce17a02
+# Source0-md5:	7c1f624c22143324ee372dffd1a209c2
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree

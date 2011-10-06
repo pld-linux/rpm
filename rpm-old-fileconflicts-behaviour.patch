@@ -1,11 +1,11 @@
---- rpm-5.2.0/lib/poptI.c.wiget	2009-04-12 03:25:45.000000000 +0200
-+++ rpm-5.2.0/lib/poptI.c	2010-04-25 22:59:14.467664549 +0200
-@@ -21,7 +21,7 @@ extern time_t get_date(const char * p, v
+--- rpm-5.3.11/lib/poptI.c~	2011-05-08 01:58:28.000000000 +0300
++++ rpm-5.3.11/lib/poptI.c	2011-10-06 18:36:39.099587792 +0300
+@@ -21,7 +21,7 @@
  /*@-fullinitblock@*/
  /*@unchecked@*/
  struct rpmQVKArguments_s rpmIArgs = {
--#if defined(RPM_VENDOR_MANDRIVA) /* dont-filter-install-file-conflicts */
-+#if defined(RPM_VENDOR_MANDRIVA) || defined(RPM_VENDOR_PLD) /* dont-filter-install-file-conflicts */
+-#if defined(RPM_VENDOR_MANDRIVA) || defined(RPM_VENDOR_OPENMAMBA) /* dont-filter-install-file-conflicts */
++#if defined(RPM_VENDOR_MANDRIVA) || defined(RPM_VENDOR_OPENMAMBA) || defined(RPM_VENDOR_PLD) /* dont-filter-install-file-conflicts */
      .probFilter = RPMPROB_FILTER_NONE,
  #else
      .probFilter = (RPMPROB_FILTER_REPLACEOLDFILES | RPMPROB_FILTER_REPLACENEWFILES),
