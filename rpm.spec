@@ -84,6 +84,7 @@ Source17:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source18:	banner.sh
 Source19:	%{name}-macros.gstreamer
+Source20:	macros.php
 Patch1000:	%{name}-new-debuginfo.patch
 Patch1067:	%{name}-disable-features.patch
 Patch1070:	%{name}-rpmrc-ac.patch
@@ -725,8 +726,7 @@ sed -e 's/^/@pld@/' %{SOURCE2} >>platform.in
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
 echo '%%define	__perl_requires	%%{__perl} /usr/lib/rpm/perl.req' >> macros.perl
 echo '# obsoleted file' > macros.python
-echo '%%define	__php_provides	/usr/lib/rpm/php.prov' > macros.php
-echo '%%define	__php_requires	/usr/lib/rpm/php.req' >> macros.php
+cp -p %{SOURCE20} macros.php
 echo '%%define	__mono_provides	/usr/lib/rpm/mono-find-provides' > macros.mono
 echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
 install %{SOURCE10} scripts/php.prov
