@@ -1,5 +1,9 @@
 #!/usr/bin/php
 <?php
+/*
+ * minify.spec does not see these: pear(HTTP/ConditionalGet.php) pear(HTTP/Encoder.php)
+ * perl version does
+ */
 /**
  *
  * Check system dependences between php-pear modules.
