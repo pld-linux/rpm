@@ -57,7 +57,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	55
+Release:	56
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -85,6 +85,7 @@ Source17:	%{name}-java-requires
 Source18:	banner.sh
 Source19:	%{name}-macros.gstreamer
 Source20:	macros.php
+Source21:	%{name}-php-requires.php
 Patch1000:	%{name}-new-debuginfo.patch
 Patch1067:	%{name}-disable-features.patch
 Patch1070:	%{name}-rpmrc-ac.patch
@@ -1048,6 +1049,7 @@ install -p %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
 install -p %{SOURCE14} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
 install -p %{SOURCE17} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
 install -p scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
+cp -p %{SOURCE21} $RPM_BUILD_ROOT%{_rpmlibdir}/php.req.php
 install -p %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
 install -p %{SOURCE18} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 cp -a %{SOURCE15} $RPM_BUILD_ROOT/etc/sysconfig/rpm
