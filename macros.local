@@ -17,6 +17,6 @@
 #%_excludedocs			1
 #
 # A colon separated list of paths where files should *not* be installed.
-# Usually, these are network file system mount points.
-#
-#%_netsharedpath /proc:/dev
+# Usually, these are (network) file system mount points.
+# For static /dev not to update perms if upgraded and tmpfs mounted
+#%_netsharedpath /dev/shm:/proc:/dev
