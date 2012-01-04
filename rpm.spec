@@ -1085,6 +1085,9 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # Boolean (i.e. 1 == "yes", 0 == "no") that controls whether files
 # marked as %doc should be installed.
 #%%_excludedocs   1
+
+# For static /dev not to update perms if upgraded and tmpfs mounted
+#%%_netsharedpath /dev/shm
 EOF
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.lang <<EOF
