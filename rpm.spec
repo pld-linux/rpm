@@ -23,6 +23,7 @@
 # - headerGet() making poldek segfault http://rpm5.org/cvs/tktview?tn=38,1
 # - rpm doesn't exit when no sources/patches available http://rpm5.org/cvs/tktview?tn=40,1
 # - http://rpm5.org/cvs/tktview?tn=41&_submit=Show
+# - when adopting, use 4.5 ticket for checklist: https://bugs.launchpad.net/pld-linux/+bug/262985
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
