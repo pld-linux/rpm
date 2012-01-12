@@ -157,6 +157,7 @@ Patch62:	%{name}-gendiff.patch
 Patch63:	%{name}-lua-exit-chroot-correctly.patch
 Patch70:	%{name}-configure-autoconf.patch
 Patch72:	openmp.patch
+Patch100:	fix-automake-1.11.2.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1.4
@@ -735,6 +736,9 @@ patch26 -p1
 #patch63 -p1 applied upstream
 %patch70 -p1
 %patch72 -p1 -b .wiget
+
+%patch100 -p1
+
 
 cd scripts
 mv -f perl.req perl.req.in
