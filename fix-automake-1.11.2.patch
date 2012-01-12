@@ -1,0 +1,26 @@
+--- rpm-5.3.11/Makefile.am.org	2011-05-08 01:33:11.000000000 +0200
++++ rpm-5.3.11/Makefile.am	2012-01-12 10:05:51.000000000 +0100
+@@ -105,8 +105,8 @@
+ 	done
+ endif
+ 
+-pkglibdir =		@USRLIBRPM@
+-pkglib_DATA = rpmpopt macros/macros macros/macros.rpmbuild cpuinfo.yaml
++pkgbindir =		@USRLIBRPM@
++pkgbin_DATA = rpmpopt macros/macros macros/macros.rpmbuild cpuinfo.yaml
+ 
+ pkgbindir =	$(pkglibdir)/bin
+ pkgbin_SCRIPTS = install-sh mkinstalldirs
+--- rpm-5.3.11/scripts/Makefile.am.org	2011-04-28 17:51:48.000000000 +0200
++++ rpm-5.3.11/scripts/Makefile.am	2012-01-12 10:05:27.000000000 +0100
+@@ -46,8 +46,8 @@
+ 
+ bin_SCRIPTS = gendiff multiarch-dispatch multiarch-platform
+ 
+-pkglibdir =		@USRLIBRPM@
+-pkglib_SCRIPTS = \
++pkgbindir =		@USRLIBRPM@
++pkgbin_SCRIPTS = \
+ 	brp-compress brp-python-bytecompile brp-java-gcjcompile \
+ 	brp-strip brp-strip-comment-note brp-nobuildrootpath \
+ 	brp-strip-shared brp-strip-static-archive brp-sparc64-linux \
