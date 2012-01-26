@@ -184,6 +184,7 @@ Patch101:	%{name}-builddir-readlink.patch
 Patch102:	pythondeps-speedup.patch
 Patch103:	%{name}-lua-exit-chroot-correctly.patch
 Patch104:	%{name}-glob.patch
+Patch105:	%{name}-am.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -815,6 +816,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch102 -p1
 %patch103 -p1
 %patch104 -p1
+%patch105 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
