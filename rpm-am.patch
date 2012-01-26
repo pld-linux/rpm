@@ -1,11 +1,10 @@
 diff -ur rpm-4.5/Makefile.am rpm-4.5-ac/Makefile.am
 --- rpm-4.5/Makefile.am	2012-01-26 22:11:55.875577134 +0100
 +++ rpm-4.5-ac/Makefile.am	2012-01-26 22:10:47.855842412 +0100
-@@ -45,8 +45,8 @@
- 
+@@ -45,7 +45,8 @@
  bin_PROGRAMS = 		rpm rpmbuild
  
--pkglibdir =		@USRLIBRPM@
+ pkglibdir =		@USRLIBRPM@
 -pkglib_DATA =	rpmpopt macros
 +pkgdatadir =		@USRLIBRPM@
 +pkgdata_DATA =	rpmpopt macros
@@ -15,28 +14,26 @@ diff -ur rpm-4.5/Makefile.am rpm-4.5-ac/Makefile.am
 diff -ur rpm-4.5/scripts/Makefile.am rpm-4.5-ac/scripts/Makefile.am
 --- rpm-4.5/scripts/Makefile.am	2012-01-26 22:11:55.752244281 +0100
 +++ rpm-4.5-ac/scripts/Makefile.am	2012-01-26 22:07:08.238669872 +0100
-@@ -27,8 +27,8 @@
- 
+@@ -27,7 +27,8 @@
  bin_SCRIPTS = gendiff rpm2cpio
  
--pkglibdir =		@USRLIBRPM@
+ pkglibdir =		@USRLIBRPM@
 -pkglib_SCRIPTS = \
-+pkgdatadir =		@USRLIBRPM@
-+pkgdata_SCRIPTS = \
++pkgbindir =		@USRLIBRPM@
++pkgbin_SCRIPTS = \
  	brp-compress brp-python-bytecompile brp-java-gcjcompile \
  	brp-strip brp-strip-comment-note brp-nobuildrootpath \
  	brp-strip-shared brp-strip-static-archive brp-sparc64-linux \
 diff -ur rpm-4.5/tools/Makefile.am rpm-4.5-ac/tools/Makefile.am
 --- rpm-4.5/tools/Makefile.am	2012-01-26 22:11:55.748910960 +0100
 +++ rpm-4.5-ac/tools/Makefile.am	2012-01-26 22:11:02.329119298 +0100
-@@ -23,8 +23,8 @@
- 
+@@ -23,7 +23,8 @@
  bin_PROGRAMS =		rpmdigest rpmmtree rpmrepo
  
--pkglibdir =		@USRLIBRPM@
+ pkglibdir =		@USRLIBRPM@
 -pkglib_PROGRAMS =	rpmdeps @WITH_LIBDWARF_DEBUGEDIT@
-+pkgdir =		@USRLIBRPM@
-+pkg_PROGRAMS =	rpmdeps @WITH_LIBDWARF_DEBUGEDIT@
++pkgbindir =		@USRLIBRPM@
++pkgbin_PROGRAMS =	rpmdeps @WITH_LIBDWARF_DEBUGEDIT@
  
  convertdb1_SOURCES =	convertdb1.c
  

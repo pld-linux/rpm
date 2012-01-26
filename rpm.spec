@@ -928,8 +928,7 @@ install %{SOURCE9} $RPM_BUILD_ROOT/etc/pki/rpm-gpg
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	staticLDFLAGS=%{?with_static:-all-static} \
-	pylibdir=%{py_libdir} \
-	pkgbindir="%{_bindir}"
+	pylibdir=%{py_libdir}
 
 cat <<'EOF' > $RPM_BUILD_ROOT/etc/tmpwatch/rpm.conf
 # Cleanup 90-days old repackage files.
