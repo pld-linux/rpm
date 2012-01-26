@@ -13,3 +13,14 @@ RPM_USERDEL=yes
 # You can also disable this per service, if service supports it from
 # /etc/sysconfig/SERVICE
 #RPM_SKIP_AUTO_RESTART=yes
+
+# Should package upgrades activate SysV service?
+# You don't want to disable this unless you're planning to fully
+# migrate to systemd or want serviceles system.
+RPM_ACTIVATE_SYSV_SERVICE=yes
+
+# Should package upgrades activate systemd service?
+# This means migrating init scripts from SysV to systemd.
+# If you disable this, systemd units will not be enabled for newly
+# installed/upgraded services
+RPM_ACTIVATE_SYSTEMD_SERVICE=yes
