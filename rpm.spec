@@ -57,7 +57,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	61
+Release:	62
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -126,6 +126,7 @@ Patch35:	%{name}-disable-features-ti.patch
 Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
 Patch39:	%{name}-popt-coreutils.patch
+Patch40:	%{name}-helperEVR-noassert.patch
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
 Patch43:	%{name}-rpm5-patchset-8637.patch
 Patch44:	%{name}-no-neon.patch
@@ -750,6 +751,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch36 -p1
 %patch37 -p1
 %patch39 -p1
+%patch40 -p1
 %patch42 -p1
 %patch43 -p1
 %patch82 -p1
