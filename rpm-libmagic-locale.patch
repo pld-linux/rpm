@@ -14,7 +14,7 @@
 +			setlocale(LC_CTYPE, "C");
 +		}
 +		if (old_collate) {
-+			old_ctype = xstrdup(old_collate);
++			old_collate = xstrdup(old_collate);
 +			setlocale(LC_COLLATE, "C");
 +		}
 +
