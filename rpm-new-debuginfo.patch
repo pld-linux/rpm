@@ -11,7 +11,7 @@
  #	Template for debug information sub-package.
 --- rpm-4.5/scripts/find-debuginfo.sh.orig	2007-08-31 03:07:02.000000000 +0200
 +++ rpm-4.5/scripts/find-debuginfo.sh	2009-09-17 15:22:30.299290490 +0200
-@@ -1,57 +1,328 @@
+@@ -1,57 +1,327 @@
 -#!/bin/sh
 +#!/bin/bash
  #find-debuginfo.sh - automagically generate debug info and file list
@@ -105,7 +105,6 @@
  {
 -  eu-strip --remove-comment -f "$1" "$2" || :
 +  local t=$(mktemp "/tmp/rpm.stripped.XXXXXX")
-+  objcopy --compress-debug-sections "$2" || exit
 +  eu-strip --remove-comment -f "$1" "$2" -o "$t" || exit
 +  rm -f "$t"
 +}
