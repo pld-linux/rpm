@@ -1,0 +1,126 @@
+#!/bin/sh
+# This script reads filenames from STDIN and outputs any relevant requires
+# information that needs to be included in the package.
+#
+# Based on rpm-4.4.2/scripts/find-req.pl
+# Authors: Elan Ruusamäe <glen@pld-linux.org>
+
+export PATH="/sbin:/usr/sbin:/bin:/usr/bin"
+
+# Set the prefix, unless it is overriden
+: ${RPM_LIBDIR=/usr/lib/rpm}
+
+# Enable debug: JAVADEPS_DEBUG=true
+: ${JAVADEPS_DEBUG=false}
+
+# xsltproc for eclipse feature.xml
+: ${xsltproc=/usr/bin/xsltproc}
+
+# save $- state, to enable in functions
+debug=$-
+
+javaclassversion() {
+	set -$debug
+	local mode=$1; shift
+	[ $# -gt 0 ] || return 1
+	$JAVADEPS_DEBUG && echo >&2 ">> javaclassversion($mode): $*"
+
+	# process only requires
+	[ "$mode" = requires ] || return $ret
+
+	local classver=$(echo "$@" | xargs -r file | grep -o 'compiled Java class data, version [0-9.]*' | awk '{print $NF}' | sort -u)
+	if [ -z "$classver" ]; then
+		return 1
+	fi
+
+	local v
+	for v in $classver; do
+		echo "java(ClassDataVersion) >= $v"
+	done
+	return 0
+}
+
+javajarversion() {
+	set -$debug
+	local mode=$1; shift
+	local jar=$1
+	local tmp ret=0
+	$JAVADEPS_DEBUG && echo >&2 ">> javajarversion($mode): $jar"
+
+	# check only files, symlinks could point outside buildroot
+	[ -f "$jar" -a ! -L "$jar" ] || return $ret
+
+	tmp=$(mktemp -d)
+	unzip -q -d $tmp $jar >&2
+	# workaround for .jar files with stupid permissions
+	chmod -R u+rwX $tmp
+
+	# find .jar and .class files
+	find_javadeps $mode $(find $tmp -type f -regextype posix-extended  -regex '^.+\.(class|jar)$') || ret=1
+	rm -rf $tmp
+	return $ret
+}
+
+eclipse_feature() {
+	set -$debug
+	local mode=$1; shift
+	local file=$1
+	local ret=0
+
+	$JAVADEPS_DEBUG && echo >&2 ">> eclipse_feature($mode): $file"
+
+	if [ ! -x $xsltproc ]; then
+		return 0
+	fi
+
+	$xsltproc --stringparam mode $mode ${RPM_LIBDIR}/eclipse-feature.xslt $file
+}
+
+find_javadeps() {
+	set -$debug
+	local mode=$1; shift
+	local ret=0
+
+	$JAVADEPS_DEBUG && echo >&2 ">> find_javadeps($mode): $*"
+	for file in $@; do
+		case $file in
+		*.jar)
+			javajarversion $mode "$file" || ret=1
+		;;
+		*.class)
+			javaclassversion $mode "$file" || {
+				echo >&2 "ERROR: Class version could not be extracted from $file"
+				ret=1
+			}
+		;;
+		*/feature.xml)
+			eclipse_feature $mode "$file" || ret=1
+		;;
+		*)
+			$JAVADEPS_DEBUG && echo >&2 ">> find_javadeps($mode): no handle: $file"
+		;;
+		esac
+	done
+	return $ret
+}
+
+ret=0
+# default mode to requires for backward compat
+mode=requires
+case $1 in
+-P|--provides)
+	mode=provides
+	shift
+	;;
+-R|--requires)
+	mode=requires
+	shift
+	;;
+esac
+
+t=$(mktemp)
+find_javadeps $mode $(cat -) > $t || ret=1
+sort -u $t
+rm -f $t
+
+exit $ret

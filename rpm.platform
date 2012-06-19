@@ -1,0 +1,39 @@
+# PLD rpm macros
+
+%__id		/bin/id
+%__id_u		%{__id} -u
+%__chown_Rhf           %{__chown} -Rhf
+%__chgrp_Rhf           %{__chgrp} -Rhf
+
+%_fixowner       [ `%{__id_u}` = '0' ] && %{__chown_Rhf} root:root
+%_fixgroup       true
+%_fixperms       %{__chmod} -Rf -Rf a+rX,u+w,g-w,o-w
+
+%_exec_prefix    %{_prefix}
+%_bindir         %{_exec_prefix}/bin
+%_sbindir        %{_exec_prefix}/sbin
+%_datadir        %{_prefix}/share
+%_sharedstatedir /var/lib
+%_lib            @LIB@
+%_libdir         %{_exec_prefix}/%{_lib}
+%_libexecdir     %{_exec_prefix}/%{_lib}
+%_includedir     %{_prefix}/include
+%_oldincludedir  /usr/include
+%_sysconfdir     /etc
+%_localstatedir  /var
+%_infodir        /usr/share/info
+%_mandir         %{_prefix}/share/man
+%_defaultdocdir  /usr/share/doc
+
+%__os_install_post \
+%{__spec_install_post_strip}\
+%{__spec_install_post_chrpath}\
+%{__spec_install_post_check_so}\
+%{__spec_install_post_check_tmpfiles}\
+%{__spec_install_post_compress_docs}\
+%{__spec_install_post_compress_modules}\
+%{__spec_install_post_py_hardlink}\
+%{__spec_install_post_perl_clean}\
+%{__arch_install_post}\
+%{nil}
+
