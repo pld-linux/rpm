@@ -57,7 +57,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	66
+Release:	56
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -126,7 +126,6 @@ Patch35:	%{name}-disable-features-ti.patch
 Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
 Patch39:	%{name}-popt-coreutils.patch
-Patch40:	%{name}-helperEVR-noassert.patch
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
 Patch43:	%{name}-rpm5-patchset-8637.patch
 Patch44:	%{name}-no-neon.patch
@@ -185,8 +184,6 @@ Patch101:	%{name}-builddir-readlink.patch
 Patch102:	pythondeps-speedup.patch
 Patch103:	%{name}-lua-exit-chroot-correctly.patch
 Patch104:	%{name}-glob.patch
-Patch105:	%{name}-am.patch
-Patch106:	%{name}-automake_1.12.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -533,7 +530,7 @@ Summary(ru.UTF-8):	Скрипты и утилиты, необходимые дл
 Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для побудови пакетів
 Group:		Applications/File
 Requires(pretrans):	findutils
-Requires:	%{name}-build-macros >= 1.636
+Requires:	%{name}-build-macros >= 1.514
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
@@ -752,7 +749,6 @@ install %{SOURCE13} scripts/perl.prov
 %patch36 -p1
 %patch37 -p1
 %patch39 -p1
-%patch40 -p1
 %patch42 -p1
 %patch43 -p1
 %patch82 -p1
@@ -819,8 +815,6 @@ install %{SOURCE13} scripts/perl.prov
 %patch102 -p1
 %patch103 -p1
 %patch104 -p1
-%patch105 -p1
-%patch106 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
@@ -932,7 +926,8 @@ install %{SOURCE9} $RPM_BUILD_ROOT/etc/pki/rpm-gpg
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	staticLDFLAGS=%{?with_static:-all-static} \
-	pylibdir=%{py_libdir}
+	pylibdir=%{py_libdir} \
+	pkgbindir="%{_bindir}"
 
 cat <<'EOF' > $RPM_BUILD_ROOT/etc/tmpwatch/rpm.conf
 # Cleanup 90-days old repackage files.
@@ -1090,9 +1085,6 @@ cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
 # Boolean (i.e. 1 == "yes", 0 == "no") that controls whether files
 # marked as %doc should be installed.
 #%%_excludedocs   1
-
-# For static /dev not to update perms if upgraded and tmpfs mounted
-#%%_netsharedpath /dev/shm
 EOF
 
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.lang <<EOF
