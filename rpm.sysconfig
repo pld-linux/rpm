@@ -1,6 +1,7 @@
 # This file is intended for setting rpm options that cannot be set as macros
 #
-# NOTE: some packages might not use these features.
+# NOTE:
+#	At this moment only few packages use this features.
 
 # How verbose the .rpm scripts/triggers should be?
 RPM_SCRIPTVERBOSITY=5
@@ -15,12 +16,11 @@ RPM_USERDEL=yes
 
 # Should package upgrades enable SysV service?
 # You don't want to disable this unless you're planning to fully
-# migrate to systemd or want serviceless system.
+# migrate to systemd or want serviceles system.
 RPM_ENABLE_SYSV_SERVICE=yes
 
 # Should package upgrades enable systemd service?
 # This means migrating init scripts from SysV to systemd.
-# If you disable this, systemd units will not be enabled for
-# upgraded services. Newly installed packages will still have
-# systemd services enabled.
+# If you disable this, systemd units will not be enabled for newly
+# installed/upgraded services.
 RPM_ENABLE_SYSTEMD_SERVICE=yes
