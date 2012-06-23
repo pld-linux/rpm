@@ -57,7 +57,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	66
+Release:	67
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -553,7 +553,7 @@ Requires:	gcc
 %endif
 %else
 # rpmrc patch adds flags specific to gcc >= 3.4
-Requires:	gcc >= 5:3.4
+Requires:	gcc >= 6:4.7.0
 %endif
 Requires:	glibc-devel
 Requires:	grep
