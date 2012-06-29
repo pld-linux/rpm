@@ -1015,6 +1015,9 @@ sparcv9-[^-]*-[Ll]inux(-gnu)?
 %ifarch sparc sparcv9 sparc64
 sparc-[^-]*-[Ll]inux(-gnu)?
 %endif
+%ifarch armv6l
+armv6l-[^-]*-[Ll]inux(-gnu)?
+%endif
 %ifarch armv5tel
 armv5tel-[^-]*-[Ll]inux(-gnu)?
 %endif
@@ -1427,7 +1430,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/ia32e*
 %{_rpmlibdir}/x86_64*
 %endif
-%ifarch armv5tel armv4t armv3t armv5teb armv4b
+%ifarch armv6l armv5tel armv4t armv3t armv5teb armv4b
 %{_rpmlibdir}/arm*
 %endif
 # must be here for "Requires: rpm-*prov" to work
