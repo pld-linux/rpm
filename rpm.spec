@@ -107,7 +107,7 @@ Source110:	%{name}-macros-ia32e
 Source111:	%{name}-macros-amd64
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
 Source112:	cpu-os-macros.tar.gz
-# Source0-md5:	6fc7b779cd5476996fdc7872863e2106
+# Source112-md5:	6fc7b779cd5476996fdc7872863e2106
 
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
