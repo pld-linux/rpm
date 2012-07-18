@@ -1,13 +1,13 @@
 --- rpm-5.3.1/rpmio/Makefile.am.wiget	2010-05-24 17:23:09.000000000 +0200
 +++ rpm-5.3.1/rpmio/Makefile.am	2010-06-01 21:29:20.521227268 +0200
 @@ -102,7 +102,7 @@ librpmio_la_SOURCES = \
- 	rpmsq.c rpmsql.c rpmsquirrel.c rpmssl.c rpmsyck.c rpmsw.c rpmsx.c \
- 	rpmtcl.c rpmuuid.c rpmxar.c rpmzlog.c rpmzq.c \
- 	strcasecmp.c strtolocale.c tar.c url.c ugid.c xzdio.c yarn.c
+ 	xzdio.c \
+ 	yarn.c
+ 
 -librpmio_la_LDFLAGS = -release $(LT_CURRENT).$(LT_REVISION)
 +librpmio_la_LDFLAGS = -release $(LT_CURRENT).$(LT_REVISION) $(OPENMP_CFLAGS)
  if HAVE_LD_VERSION_SCRIPT
- librpmio_la_LDFLAGS += -Wl,--version-script=$(srcdir)/librpmio.vers
+ librpmio_la_LDFLAGS += -Wl,@LD_VERSION_SCRIPT_FLAG@,@top_srcdir@/rpmio/librpmio.vers
  endif
 --- rpm-5.3.1/tools/Makefile.am.wiget	2010-06-01 21:49:05.274449585 +0200
 +++ rpm-5.3.1/tools/Makefile.am	2010-06-01 21:49:56.576943304 +0200

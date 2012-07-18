@@ -1,12 +1,12 @@
 --- rpm-4.1/rpmdb/header.c.wiget2	Thu Sep 19 00:47:29 2002
 +++ rpm-4.1/rpmdb/header.c	Thu Sep 19 00:52:10 2002
 @@ -1645,7 +1645,8 @@
+ 	if (ed_weak) return (char *) ed_weak;
      }
- /*@=boundsread@*/
  
--    return entry->data;
+-    return (char *) entry->data;
 +/* when everything fail, try gettext */
-+    return ((entry->data != NULL) && *(char*)(entry->data)) ? _(entry->data) : entry->data;
++    return ((entry->data != NULL) && *(char*)(entry->data)) ? _(entry->data) : (char *) entry->data;
  }
  
  /**
