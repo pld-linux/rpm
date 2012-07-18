@@ -51,7 +51,7 @@ ERROR
 %endif
 
 # versions of required libraries
-%define		reqdb_ver	4.7.25
+%define		reqdb_ver	5.3
 %define		reqpopt_ver	1.15
 %define		beecrypt_ver	2:4.1.2-4
 %define		sover	5.3
@@ -64,12 +64,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.3.11
+Version:	5.4.10
 Release:	0.1
 License:	LGPL
 Group:		Base
-Source0:	http://rpm5.org/files/rpm/rpm-5.3/%{name}-%{version}.tar.gz
-# Source0-md5:	7c1f624c22143324ee372dffd1a209c2
+# http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
+Source0:	%{name}-%{version}.tar.gz
+# Source0-md5:	5d099161bdd3203265ab32ffad3360b5
 Source1:	%{name}.groups
 Source2:	%{name}.platform
 Source3:	%{name}-install-tree
@@ -104,6 +105,9 @@ Source108:	%{name}-macros-ppc
 Source109:	%{name}-macros-x86_64
 Source110:	%{name}-macros-ia32e
 Source111:	%{name}-macros-amd64
+# http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
+Source112:	cpu-os-macros.tar.gz
+# Source0-md5:	6fc7b779cd5476996fdc7872863e2106
 
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
@@ -157,7 +161,8 @@ Patch62:	%{name}-gendiff.patch
 Patch63:	%{name}-lua-exit-chroot-correctly.patch
 Patch70:	%{name}-configure-autoconf.patch
 Patch72:	openmp.patch
-Patch100:	fix-automake-1.11.2.patch
+Patch73:	rpm-URPM-build-fix.patch
+Patch74:	rpm-db5.3.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1.4
@@ -709,7 +714,8 @@ patch26 -p1
 #%patch32 -p1
 %patch34 -p1
 %patch35 -p0
-%patch36 -p1
+# needs update to 5.4
+#%patch36 -p1
 %patch37 -p1
 #patch38 -p1 applied
 #patch39 -p1 applied
@@ -736,9 +742,8 @@ patch26 -p1
 #patch63 -p1 applied upstream
 %patch70 -p1
 %patch72 -p1 -b .wiget
-
-%patch100 -p1
-
+%patch73 -p1
+%patch74 -p1
 
 cd scripts
 mv -f perl.req perl.req.in
@@ -789,7 +794,7 @@ awk -f %{SOURCE6} %{SOURCE1}
 	--with-neon=%{?with_neon:external}%{!?with_neon:no} \
 	--with-file=external \
 	--with-popt=external \
-	--with-db=%{?with_db:internal}%{!?with_db:no} \
+	--with-db=%{?with_db:external}%{!?with_db:no} \
 	--with-sqlite=%{?with_sqlite:yes}%{!?with_sqlite:no} \
 	--with-dbapi=%{!?with_sqlite_dbapi:db}%{?with_sqlite_dbapi:sqlite} \
 	--with-lua=%{!?with_system_lua:internal}%{?with_system_lua:external} \
