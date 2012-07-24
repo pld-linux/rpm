@@ -188,6 +188,7 @@ Patch104:	%{name}-glob.patch
 Patch105:	%{name}-am.patch
 Patch106:	%{name}-automake_1.12.patch
 Patch107:	%{name}-debugedit-dwarf4.patch
+Patch108:	%{name}-changelog_order_check_nonfatal.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4

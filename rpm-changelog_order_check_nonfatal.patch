@@ -1,0 +1,13 @@
+--- rpm-4.5/build/parseChangelog.c.orig	2012-07-24 14:46:12.856158625 +0200
++++ rpm-4.5/build/parseChangelog.c	2012-07-24 14:47:55.293158624 +0200
+@@ -181,9 +181,8 @@
+ 	    return RPMERR_BADSPEC;
+ 	}
+ 	if (lastTime && lastTime < time) {
+-	    rpmError(RPMERR_BADSPEC,
++	    rpmMessage(RPMMESS_WARNING,
+ 		     _("%%changelog not in descending chronological order\n"));
+-	    return RPMERR_BADSPEC;
+ 	}
+ 	lastTime = time;
+ 
