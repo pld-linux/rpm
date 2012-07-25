@@ -824,6 +824,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch105 -p1
 %patch106 -p1
 %patch107 -p1
+%patch108 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
