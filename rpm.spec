@@ -115,7 +115,6 @@ Patch2:		%{name}-popt-aliases.patch
 Patch3:		%{name}-rpmpopt.patch
 Patch4:		%{name}-perl-macros.patch
 Patch5:		%{name}-perl-req-perlfile.patch
-Patch6:		%{name}-noexpand.patch
 Patch7:		%{name}-scripts-closefds.patch
 Patch8:		%{name}-php-macros.patch
 Patch9:		%{name}-gettext-in-header.patch
@@ -681,7 +680,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-#%patch6 -p1 // in upstream
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
