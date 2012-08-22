@@ -54,7 +54,7 @@ ERROR
 %define		reqdb_ver	5.3
 %define		reqpopt_ver	1.15
 %define		beecrypt_ver	2:4.1.2-4
-%define		sover	5.3
+%define		sover	5.4
 
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
