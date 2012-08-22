@@ -120,7 +120,6 @@ Patch8:		%{name}-php-macros.patch
 Patch9:		%{name}-gettext-in-header.patch
 Patch10:	%{name}-compress-doc.patch
 Patch11:	%{name}-lua.patch
-Patch12:	%{name}-am.patch
 
 Patch14:	%{name}-etc_dir.patch
 Patch16:	%{name}-php-deps.patch
@@ -686,7 +685,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 # compress doc in upstream
 %patch10 -p1
 %{?with_system_lua:%patch11 -p1}
-#patch12 -p1
 # CHECK ME - macrofiles: ~/etc could be used
 #%%patch14 -p1
 %patch16 -p1
