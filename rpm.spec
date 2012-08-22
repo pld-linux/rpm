@@ -141,8 +141,6 @@ Patch42:	%{name}-old-fileconflicts-behaviour.patch
 Patch46:	%{name}-mono.patch
 Patch47:	%{name}-javadeps.patch
 
-Patch52:	%{name}-morearchs.patch
-
 Patch55:	%{name}-truncate-cvslog.patch
 
 Patch59:	%{name}-libtool-deps.patch
@@ -707,8 +705,6 @@ install %{SOURCE12} scripts/perl.prov
 %patch46 -p1
 # port to new implementation
 #%patch47 -p1
-# OLD COMMENTED OUT
-#%%patch52 -p1 -- morearchs (rpmrc patch) adds ppc7400, ppc7400
 %patch55 -p1
 %patch59 -p1
 %patch17 -p1
