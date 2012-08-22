@@ -127,8 +127,6 @@ Patch17:	%{name}-macros.patch
 Patch18:	%{name}-macros-th.patch
 Patch19:	%{name}-glob.patch
 
-Patch23:	%{name}-pkgconfigdeps.patch
-
 Patch26:	%{name}-notsc.patch
 Patch27:	%{name}-hack-norpmlibdep.patch
 
@@ -698,8 +696,6 @@ echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
-# looks like upstream??
-#%patch23 -p1
 
 %ifarch i386 i486
 # disable TSC
