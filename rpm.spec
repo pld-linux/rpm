@@ -133,9 +133,6 @@ Patch34:	%{name}-epoch0.patch
 Patch35:	%{name}-perl_req-INC_dirs.patch
 Patch36:	%{name}-debuginfo.patch
 Patch37:	%{name}-doxygen_hack.patch
-Patch38:	%{name}-perl_req-use_base.patch
-Patch39:	%{name}-perl_req-skip_multiline.patch
-Patch40:	%{name}-perl_req-heredocs_pod.patch
 
 Patch41:	vendor-pld.patch
 
@@ -705,9 +702,6 @@ install %{SOURCE12} scripts/perl.prov
 # needs update to 5.4
 #%patch36 -p1
 %patch37 -p1
-#patch38 -p1 applied
-#patch39 -p1 applied
-#patch40 -p1 applied
 %patch41 -p1
 %patch42 -p1
 %patch46 -p1
