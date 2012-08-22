@@ -1115,10 +1115,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
 %attr(755,root,root) /bin/rpm
-#%attr(755,root,root) %{_bindir}/rpmdb
-#%attr(755,root,root) %{_bindir}/rpmquery
-#%attr(755,root,root) %{_bindir}/rpmsign
-#%attr(755,root,root) %{_bindir}/rpmverify
 
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
 %dir %{_sysconfdir}/rpm/sysinfo
@@ -1136,6 +1132,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %lang(sk) %{_mandir}/sk/man8/rpm.8*
 
 %dir /var/lib/rpm
+%dir /var/lib/rpm/log
+%dir /var/lib/rpm/tmp
+%config(noreplace) %verify(not md5 mtime size) /var/lib/rpm/DB_CONFIG
 %dir %attr(700,root,root) /var/spool/repackage
 %dir /var/lock/rpm
 /var/lock/rpm/transaction
@@ -1143,11 +1142,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 # exported package NVRA (stamped with install tid)
 # net-snmp hrSWInstalledName queries, bash-completions
 %dir /var/cache/hrmib
-
-#%attr(755,root,root) %{_rpmlibdir}/rpmd
-#%{!?with_static:%attr(755,root,root) %{_rpmlibdir}/rpm[eiu]}
-#%attr(755,root,root) %{_rpmlibdir}/rpmk
-#%attr(755,root,root) %{_rpmlibdir}/rpm[qv]
 
 %{_rpmlibdir}/qf
 %{_rpmlibdir}/rpmpopt*
@@ -1206,7 +1200,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/tgpg
 %dir %{_rpmlibdir}/bin
 %attr(755,root,root) %{_rpmlibdir}/bin/debugedit
-%attr(755,root,root) %{_rpmlibdir}/bin/grep
 %attr(755,root,root) %{_rpmlibdir}/bin/mtree
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmcache
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmcmp
@@ -1214,7 +1207,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmdigest
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmkey
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmrepo
-%{_mandir}/man1/rpmgrep.1*
 %{_mandir}/man8/rpm2cpio.8*
 %{_mandir}/man8/rpmcache.8*
 %{_mandir}/man8/rpmconstant.8*
@@ -1244,9 +1236,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/noauto*
 %attr(755,root,root) %{_rpmlibdir}/brp-*
 %attr(755,root,root) %{_rpmlibdir}/check-files
-# %attr(755,root,root) %{_rpmlibdir}/check-prereqs
 %attr(755,root,root) %{_rpmlibdir}/compress-doc
-#%attr(755,root,root) %{_rpmlibdir}/config.*
 %attr(755,root,root) %{_rpmlibdir}/cross-build
 %attr(755,root,root) %{_rpmlibdir}/find-spec-bcond
 %attr(755,root,root) %{_rpmlibdir}/getpo.sh
@@ -1260,8 +1250,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %dir %{_rpmlibdir}/bin
 %attr(755,root,root) %{_rpmlibdir}/bin/install-sh
 %attr(755,root,root) %{_rpmlibdir}/bin/mkinstalldirs
-#%attr(755,root,root) %{_rpmlibdir}/rpmb
-#%attr(755,root,root) %{_rpmlibdir}/rpmt
 %attr(755,root,root) %{_rpmlibdir}/vcheck
 %{_rpmlibdir}/noarch-*
 %ifarch %{ix86}
@@ -1296,14 +1284,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros.php
 # not used yet ... these six depend on perl
 %attr(755,root,root) %{_rpmlibdir}/http.req
-#%attr(755,root,root) %{_rpmlibdir}/magic.prov
-#%attr(755,root,root) %{_rpmlibdir}/magic.req
-#%{_rpmlibdir}/sql.prov
-#%{_rpmlibdir}/sql.req
-#%{_rpmlibdir}/tcl.req
 %attr(755,root,root) %{_rpmlibdir}/mono*
 %dir %{_rpmlibdir}/macros.d
-%{_rpmlibdir}/macros.d/perl
 %{_rpmlibdir}/macros.d/java
 %{_rpmlibdir}/macros.d/libtool
 %{_rpmlibdir}/macros.d/mono
@@ -1340,11 +1322,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/perl.*
 %attr(755,root,root) %{_rpmlibdir}/osgideps.pl
 %attr(755,root,root) %{_rpmlibdir}/perldeps.pl
-#%attr(755,root,root) %{_rpmlibdir}/find-perl-*
-#%attr(755,root,root) %{_rpmlibdir}/find-*.perl
-#%attr(755,root,root) %{_rpmlibdir}/find-prov.pl
-#%attr(755,root,root) %{_rpmlibdir}/find-req.pl
-#%attr(755,root,root) %{_rpmlibdir}/get_magic.pl
 
 %files pythonprov
 %defattr(644,root,root,755)
