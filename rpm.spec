@@ -9,16 +9,34 @@
 #          i386 i386
 # - python(abi) cap is not provided automatically because /usr/lib*/libpython2*.so.*
 #   matches ELF first
-# - TODO: add macros for some ppc, mipsel, alpha and sparc
+# - add macros for some ppc, mipsel, alpha and sparc
 # - uppackaged list:
-#   /usr/lib/rpm/http.req
-#   /usr/lib/rpm/install-sh
-#   /usr/lib/rpm/mono-find-provides
-#   /usr/lib/rpm/mono-find-requires
-#   /usr/lib/rpm/osgideps.pl
-#   /usr/lib/rpm/perldeps.pl
-#   /usr/lib/rpm/vcheck
-#   /usr/share/man/man8/rpmconstant.8
+#   /usr/bin/multiarch-dispatch
+#   /usr/bin/multiarch-platform
+#   /usr/include/multiarch-dispatch.h
+#   /usr/lib/rpm/bin/api-sanity-autotest.pl
+#   /usr/lib/rpm/bin/api-sanity-checker.pl
+#   /usr/lib/rpm/bin/chroot
+#   /usr/lib/rpm/bin/cp
+#   /usr/lib/rpm/bin/dbconvert
+#   /usr/lib/rpm/bin/find
+#   /usr/lib/rpm/bin/mgo
+#   /usr/lib/rpm/bin/pom2spec
+#   /usr/lib/rpm/bin/sqlite3
+#   /usr/lib/rpm/check-multiarch-files
+#   /usr/lib/rpm/dbconvert.sh
+#   /usr/lib/rpm/gem_helper.rb
+#   /usr/lib/rpm/gstreamer.sh
+#   /usr/lib/rpm/kmod-deps.sh
+#   /usr/lib/rpm/macros.d/cmake
+#   /usr/lib/rpm/macros.d/gstreamer
+#   /usr/lib/rpm/macros.d/kernel
+#   /usr/lib/rpm/macros.d/mandriva
+#   /usr/lib/rpm/macros.d/ruby
+#   /usr/lib/rpm/macros.d/tcl
+#   /usr/lib/rpm/mkmultiarch
+#   /usr/lib/rpm/pythoneggs.py
+#   /usr/lib/rpm/rubygems.rb
 #
 # - headerGet() making poldek segfault http://rpm5.org/cvs/tktview?tn=38,1
 # - rpm doesn't exit when no sources/patches available http://rpm5.org/cvs/tktview?tn=40,1
