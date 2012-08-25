@@ -714,8 +714,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch27 -p1
 %patch34 -p1
 %patch35 -p0
-# needs update to 5.4
-#%patch36 -p1
+%patch36 -p1
 %patch37 -p1
 %patch41 -p1
 %patch42 -p1
