@@ -719,8 +719,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch41 -p1
 %patch42 -p1
 %patch46 -p1
-# port to new implementation
-#%patch47 -p1
+%patch47 -p1
 %patch55 -p1
 %patch59 -p1
 %patch17 -p1

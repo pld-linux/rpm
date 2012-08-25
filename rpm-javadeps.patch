@@ -1,22 +1,18 @@
 --- rpm-4.4.9/lib/rpmfc.c.orig	2007-05-22 20:19:05.990914000 +0200
 +++ rpm-4.4.9/lib/rpmfc.c	2007-05-22 22:12:38.775152636 +0200
-@@ -875,7 +875,14 @@
- 	if (is_executable)
- 	    if (fc->findreq)
- 	    xx = rpmfcHelper(fc, 'R', "mono", fc->noautoreq, fc->noautoreq_c);
+@@ -875,6 +875,10 @@
+ 	xx = rpmfcHelper(fc, 'P', "gstreamer");
+ 	/* XXX: currently of no use, but for the sake of consistency... */
+ 	xx = rpmfcHelper(fc, 'R', "gstreamer");
 +    } else
 +    if (fc->fcolor->vals[fc->ix] & RPMFC_JAVA) {
-+	if (fc->findprov)
-+	    xx = rpmfcHelper(fc, 'P', "java", fc->noautoprov, fc->noautoprov_c);
-+	if (fc->findreq)
-+	    xx = rpmfcHelper(fc, 'R', "java", fc->noautoreq, fc->noautoreq_c);
++	xx = rpmfcHelper(fc, 'P', "java");
++	xx = rpmfcHelper(fc, 'R', "java");
      }
-+
-     return 0;
- }
  
---- rpm-4.4.9/macros.in.orig	2007-05-24 21:20:49.657284000 +0200
-+++ rpm-4.4.9/macros.in	2007-05-24 21:22:32.823163996 +0200
+ /*@-observertrans@*/
+--- rpm-4.4.9/macros/java.in.orig	2007-05-24 21:20:49.657284000 +0200
++++ rpm-4.4.9/macros/java.in	2007-05-24 21:22:32.823163996 +0200
 @@ -1416,8 +1416,8 @@
  #
  # Note: Used iff _use_internal_dependency_generator is non-zero. The
@@ -26,5 +22,5 @@
 +%__java_provides	%{nil}
 +%__java_requires	%{nil}
  
- #------------------------------------------------------------------------
- # libtool(...) configuration.
+ #	The value of CLASSPATH in build scriptlets (iff configured).
+ #	
