@@ -726,8 +726,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch18 -p1
 # Maybe, at last we can remove this?
 #patch19 -p1
-# port to new implementation
-#%patch60 -p1
+%patch60 -p1
 %ifarch sparc64
 %patch61 -p1
 %endif
