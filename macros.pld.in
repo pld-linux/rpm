@@ -14,7 +14,7 @@
 #
 %_vendor		pld
 %_os			linux
-%_target_platform	%{_target_cpu}-%{_vendor}-%{_target_os}%{?_gnu}
+%_target_platform	%{_target_cpu}-%{_vendor}-%{_target_os}
 
 #==============================================================================
 # ---- configure macros.  note that most of these are inherited
@@ -103,28 +103,38 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 
 %undefine		__scriptlet_requires
 
-# provides don't obsolete
+# provides dont obsolete
 %_upgrade_tag		name
 
 #-----------------------------------------------------------------
 # CFLAGS and LDFLAGS used to build
 
-%debuginfocflags       %{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -gdwarf-2 -g2}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
+%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -gdwarf-4 -fno-debug-types-section -fvar-tracking-assignments -g2}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
 # -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
 
-%debugcflags   -O0 -g -Wall
-%debugcppflags %{nil}
-%debugldflags  %{nil}
+%debugcflags	-O0 -g -Wall
+%debugcppflags	%{nil}
+%debugldflags	%{nil}
 
-%optldflags    -Wl,--as-needed -Wl,-z,relro -Wl,-z,-combreloc
-%optcppflags   -D_FORTIFY_SOURCE=2
+%optldflags	-Wl,--as-needed -Wl,--no-copy-dt-needed-entries -Wl,-z,relro -Wl,-z,combreloc
+%optcppflags	%{nil}
 
 # Warning: those macros are overwritten by macros.build,
 #          left here for compatibility
-%rpmcflags     %{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
-%rpmcxxflags   %{rpmcflags}
-%rpmldflags    %{!?no_build_with_as_needed:-Wl,--as-needed}
-%rpmcppflags	-D_FORTIFY_SOURCE=2
+%rpmcflags	%{nil}
+%rpmcxxflags	%{nil}
+%rpmldflags	%{nil}
+%rpmcppflags	%{nil}
+
+# common compilation flags
+%_fortify_cflags	-Wp,-D_FORTIFY_SOURCE=2
+
+# cf http://wiki.mandriva.com/en/Development/Packaging/Problems#format_not_a_string_literal_and_no_format_arguments
+%Werror_cflags		-Wformat -Werror=format-security
+
+%_ssp_cflags		-fstack-protector --param=ssp-buffer-size=4
+%__common_cflags	-O2 -fwrapv %{debuginfocflags} -pipe %{Werror_cflags} %{?_fortify_cflags}
+%__common_cflags_with_ssp	%{__common_cflags} %{?_ssp_cflags} %{!?nospecflags:%{?specflags}}}
 
 # arch macros
 %ix86  i386 i486 i586 i686 pentium3 pentium4 athlon

@@ -88,6 +88,8 @@ Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
 Source0:	%{name}-%{version}.tar.gz
 # Source0-md5:	5d099161bdd3203265ab32ffad3360b5
+Source100:	cpu-os-macros.tar.gz
+# Source100-md5:	928034a5bdceb398881bc14b5f29973b
 Source1:	%{name}.groups
 Source2:	macros.pld.in
 Source3:	%{name}-install-tree
@@ -116,21 +118,6 @@ Source24:	rpm.noautoprovfiles
 Source25:	rpm.noautoreq
 Source26:	rpm.noautoreqdep
 Source27:	rpm.noautoreqfiles
-Source100:	%{name}-macros-athlon
-Source101:	%{name}-macros-i386
-Source102:	%{name}-macros-i486
-Source103:	%{name}-macros-i586
-Source104:	%{name}-macros-i686
-Source105:	%{name}-macros-noarch
-Source106:	%{name}-macros-pentium3
-Source107:	%{name}-macros-pentium4
-Source108:	%{name}-macros-ppc
-Source109:	%{name}-macros-x86_64
-Source110:	%{name}-macros-ia32e
-Source111:	%{name}-macros-amd64
-# http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
-Source112:	cpu-os-macros.tar.gz
-# Source112-md5:	6fc7b779cd5476996fdc7872863e2106
 
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
@@ -683,7 +670,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 źrodeł RPM-a przez doxygen.
 
 %prep
-%setup -q -n %{name}-%{version}%{?subver}
+%setup -q -n %{name}-%{version}%{?subver} -a100
 #patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -806,29 +793,29 @@ install %{SOURCE19} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key
 
 # install ARCH macros
 install -d $RPM_BUILD_ROOT%{_rpmlibdir}/noarch-linux
-install %{SOURCE105} $RPM_BUILD_ROOT%{_rpmlibdir}/noarch-linux/macros
+install cpu-os-macros/noarch-linux/macros $RPM_BUILD_ROOT%{_rpmlibdir}/noarch-linux/macros
 
 %ifarch %{ix86}
 install -d $RPM_BUILD_ROOT%{_rpmlibdir}/{i386,i486,i586,i686,athlon,pentium3,pentium4}-linux
-install %{SOURCE100} $RPM_BUILD_ROOT%{_rpmlibdir}/athlon-linux/macros
-install %{SOURCE101} $RPM_BUILD_ROOT%{_rpmlibdir}/i386-linux/macros
-install %{SOURCE102} $RPM_BUILD_ROOT%{_rpmlibdir}/i486-linux/macros
-install %{SOURCE103} $RPM_BUILD_ROOT%{_rpmlibdir}/i586-linux/macros
-install %{SOURCE104} $RPM_BUILD_ROOT%{_rpmlibdir}/i686-linux/macros
-install %{SOURCE106} $RPM_BUILD_ROOT%{_rpmlibdir}/pentium3-linux/macros
-install %{SOURCE107} $RPM_BUILD_ROOT%{_rpmlibdir}/pentium4-linux/macros
+install cpu-os-macros/athlon-linux/macros   $RPM_BUILD_ROOT%{_rpmlibdir}/athlon-linux/macros
+install cpu-os-macros/i386-linux/macros     $RPM_BUILD_ROOT%{_rpmlibdir}/i386-linux/macros
+install cpu-os-macros/i486-linux/macros     $RPM_BUILD_ROOT%{_rpmlibdir}/i486-linux/macros
+install cpu-os-macros/i586-linux/macros     $RPM_BUILD_ROOT%{_rpmlibdir}/i586-linux/macros
+install cpu-os-macros/i686-linux/macros     $RPM_BUILD_ROOT%{_rpmlibdir}/i686-linux/macros
+install cpu-os-macros/pentium3-linux/macros $RPM_BUILD_ROOT%{_rpmlibdir}/pentium3-linux/macros
+install cpu-os-macros/pentium4-linux/macros $RPM_BUILD_ROOT%{_rpmlibdir}/pentium4-linux/macros
 %endif
 
 %ifarch %{x8664}
 install -d $RPM_BUILD_ROOT%{_rpmlibdir}/{x86_64,ia32e,amd64}-linux
-install %{SOURCE109} $RPM_BUILD_ROOT%{_rpmlibdir}/x86_64-linux/macros
-install %{SOURCE110} $RPM_BUILD_ROOT%{_rpmlibdir}/ia32e-linux/macros
-install %{SOURCE111} $RPM_BUILD_ROOT%{_rpmlibdir}/amd64-linux/macros
+install cpu-os-macros/x86_64-linux/macros $RPM_BUILD_ROOT%{_rpmlibdir}/x86_64-linux/macros
+install cpu-os-macros/ia32e-linux/macros  $RPM_BUILD_ROOT%{_rpmlibdir}/ia32e-linux/macros
+install cpu-os-macros/amd64-linux/macros  $RPM_BUILD_ROOT%{_rpmlibdir}/amd64-linux/macros
 %endif
 
 %ifarch %{ppc}
 install -d $RPM_BUILD_ROOT%{_rpmlibdir}/ppc-linux
-install %{SOURCE108} $RPM_BUILD_ROOT%{_rpmlibdir}/ppc-linux/macros
+install cpu-os-macros/ppc-linux/macros $RPM_BUILD_ROOT%{_rpmlibdir}/ppc-linux/macros
 %endif
 
 cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
