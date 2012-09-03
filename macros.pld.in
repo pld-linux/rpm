@@ -1,12 +1,13 @@
-# PLD rpm macros
+# PLD Linux rpm macros
+# vim:ft=spec
 
 %distribution		PLD Linux
-%vendor		        pld 
+%vendor		        pld
 %bugurl			http://bugs.pld-linux.org/
 %disturl		http://www.pld-linux.org/
 %pld_release		th
 
-# 
+#
 # Per-platform rpm configuration file.
 
 #==============================================================================
@@ -103,7 +104,7 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 
 %undefine		__scriptlet_requires
 
-# provides dont obsolete
+# provides don't obsolete
 %_upgrade_tag		name
 
 #-----------------------------------------------------------------
