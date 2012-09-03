@@ -89,7 +89,7 @@ Group:		Base
 Source0:	%{name}-%{version}.tar.gz
 # Source0-md5:	5d099161bdd3203265ab32ffad3360b5
 Source1:	%{name}.groups
-Source2:	%{name}.platform
+Source2:	macros.pld.in
 Source3:	%{name}-install-tree
 Source4:	%{name}-find-spec-bcond
 Source5:	%{name}-hrmib-cache
@@ -106,10 +106,16 @@ Source15:	%{name}-macros.java
 Source16:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source17:	banner.sh
-Source18:	%{name}-pld.macros
 Source19:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source19-md5:	08b29584dd349aac9caa7610131a0a88
 Source20:	%{name}-mimetypedeps
+Source21:	macros.local
+Source22:	rpm.noautocompressdoc
+Source23:	rpm.noautoprov
+Source24:	rpm.noautoprovfiles
+Source25:	rpm.noautoreq
+Source26:	rpm.noautoreqdep
+Source27:	rpm.noautoreqfiles
 Source100:	%{name}-macros-athlon
 Source101:	%{name}-macros-i386
 Source102:	%{name}-macros-i486
@@ -135,13 +141,10 @@ Patch5:		%{name}-perl-req-perlfile.patch
 Patch7:		%{name}-scripts-closefds.patch
 Patch8:		%{name}-php-macros.patch
 Patch9:		%{name}-gettext-in-header.patch
-Patch10:	%{name}-compress-doc.patch
 Patch11:	%{name}-lua.patch
 
 Patch14:	%{name}-etc_dir.patch
 Patch16:	%{name}-php-deps.patch
-Patch17:	%{name}-macros.patch
-Patch18:	%{name}-macros-th.patch
 Patch19:	%{name}-glob.patch
 
 Patch26:	%{name}-notsc.patch
@@ -690,8 +693,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
-# compress doc in upstream
-%patch10 -p1
 %{?with_system_lua:%patch11 -p1}
 # CHECK ME - macrofiles: ~/etc could be used
 #%%patch14 -p1
@@ -722,8 +723,6 @@ install %{SOURCE12} scripts/perl.prov
 %patch47 -p1
 %patch55 -p1
 %patch59 -p1
-%patch17 -p1
-%patch18 -p1
 # Maybe, at last we can remove this?
 #patch19 -p1
 %patch60 -p1
@@ -736,6 +735,8 @@ install %{SOURCE12} scripts/perl.prov
 %patch73 -p1
 %patch74 -p1
 
+cp -p %{SOURCE2} macros/pld.in
+
 cd scripts
 mv -f perl.req perl.req.in
 mv -f perl.prov perl.prov.in
@@ -744,12 +745,6 @@ cd ..
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
 
-# update macros paths
-#for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
-#	sed -e 's@lib/rpm/redhat@lib/rpm/pld@g' $f > ${f}.tmp
-#	mv -f ${f}.tmp $f
-#done
-
 %build
 %{__libtoolize}
 #%{__autopoint}
@@ -757,10 +752,6 @@ awk -f %{SOURCE6} %{SOURCE1}
 %{__autoheader}
 %{__autoconf}
 %{__automake}
-
-# config.guess doesn't handle athlon, so we have to change it by hand.
-# rpm checks for CPU type at runtime, but it looks better
-#sed -i -e 's|@host@|%{_target_cpu}-%{_target_vendor}-linux-gnu|' -e 's|@host_cpu@|%{_target_cpu}|' macros.in
 
 %{?with_system_lua:CPPFLAGS="-I/usr/include/lua51 %{rpmcppflags}"}
 # pass CC and CXX too in case of building with some older configure macro
@@ -791,8 +782,10 @@ awk -f %{SOURCE6} %{SOURCE1}
 	--with-pcre=external \
 	--with-keyutils=none \
 	--without-path-versioned \
-	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.pld:%{_rpmlibdir}/macros.build:%{_rpmlibdir}/%%{_target}/macros:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%%{_target}/macros:~/etc/rpmmacros:~/etc/.rpmmacros:~/.rpmmacros' \
-	--with-bugreport="http://bugs.pld-linux.org/"
+	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/macros.build:%{_rpmlibdir}/%%{_target}/macros:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%%{_target}/macros:~/etc/rpmmacros:~/etc/.rpmmacros:~/.rpmmacros' \
+	--with-extra-path-macros=%{_rpmlibdir}/platform/%%{_target}/macros:%{_sysconfdir}/rpm/macros.d/*.macros:%{_rpmlibdir}/macros.d/pld \
+	--with-bugreport="http://bugs.pld-linux.org/" \
+	--with-vendor=pld
 
 %{__make} -j1 \
 	CC="%{__cc}" \
@@ -920,11 +913,6 @@ sparc-[^-]*-[Ll]inux(-gnu)?
 noarch-[^-]*-.*
 EOF
 
-%ifarch %{ppc}
-#sed -e '/_target_platform/s/[%]{_target_cpu}/ppc/' \
-#	-i $RPM_BUILD_ROOT%{_rpmlibdir}/ppc74[05]0-linux/macros
-%endif
-
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/vpkg-provides*
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{prov,req}.pl
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{provides,requires}.perl
@@ -938,7 +926,6 @@ install macros.python	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.python
 install macros.php	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.php
 install macros.mono	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.mono
 install %{SOURCE15}	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.java
-install %{SOURCE18}	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.pld
 
 install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
@@ -957,105 +944,20 @@ install %{SOURCE17} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
 
+install %{SOURCE21} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros
+install %{SOURCE22} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc
+install %{SOURCE23} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov
+install %{SOURCE24} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles
+install %{SOURCE25} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq
+install %{SOURCE26} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep
+install %{SOURCE27} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles
+
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Conflictname
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Dirnames
 install %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Obsoletename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Providename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
-
-cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros <<EOF
-# customized rpm macros - global for host
-#
-#%%_install_langs pl_PL:en_US
-%%distribution PLD
-#
-# remove or replace with file_contexts path if you want to use custom
-# SELinux file contexts policy instead of one stored in packages payload
-%%_install_file_context_path	%%{nil}
-%%_verify_file_context_path	%%{nil}
-
-# If non-zero, all erasures will be automagically repackaged.
-#%%_repackage_all_erasures    1
-EOF
-
-cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles <<EOF
-# global list of files (regexps) which don't generate Provides
-EOF
-cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov <<EOF
-# global list of script capabilities (regexps) not to be used in Provides
-EOF
-cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles <<EOF
-# global list of files (regexps) which don't generate Requires
-^%{_examplesdir}/
-^%{_docdir}/
-EOF
-cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq <<EOF
-# global list of script capabilities (regexps) not to be used in Requires
-EOF
-cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep <<EOF
-# global list of capabilities (SONAME, perl(module), php(module) regexps)
-# which don't generate dependencies on package NAMES
-# -- OpenGL implementation
-^libGL.so.1
-^libGLU.so.1
-^libOSMesa.so
-# -- Glide
-^libglide3.so.3
-# -- mozilla
-^libgtkmozembed.so
-^libgtksuperwin.so
-^libxpcom.so
-# -- X11 implementation
-^libFS.so
-^libI810XvMC.so
-^libICE.so
-^libSM.so
-^libX11.so
-^libXRes.so
-^libXTrap.so
-^libXaw.so
-^libXcomposite.so
-^libXcursor.so
-^libXdamage.so
-^libXdmcp.so
-^libXevie.so
-^libXext.so
-^libXfixes.so
-^libXfont.so
-^libXfontcache.so
-^libXft.so
-^libXi.so
-^libXinerama.so
-^libXmu.so
-^libXmuu.so
-^libXp.so
-^libXpm.so
-^libXrandr.so
-^libXrender.so
-^libXss.so
-^libXt.so
-^libXtst.so
-^libXv.so
-^libXvMC.so
-^libXxf86dga.so
-^libXxf86misc.so
-^libXxf86rush.so
-^libXxf86vm.so
-^libdps.so
-^libdpstk.so
-^libfontenc.so
-^libpsres.so
-^libxkbfile.so
-^libxkbui.so
-# -- fam / gamin
-^libfam.so.0
-# -- mdns-bonjour: mDNSResponder-libs / avahi-compat-libdns_sd
-^libdns_sd.so.1
-EOF
-cat > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc <<EOF
-# global list of file masks not to be compressed in DOCDIR
-EOF
 
 # for rpm -e|-U --repackage
 install -d $RPM_BUILD_ROOT/var/{spool/repackage,lock/rpm}
@@ -1069,10 +971,6 @@ for a in librpm-%{sover}.so librpmdb-%{sover}.so librpmio-%{sover}.so librpmbuil
 	ln -s /%{_lib}/$a $RPM_BUILD_ROOT%{_libdir}/$a
 done
 
-# Append rpm.platform contents to /usr/lib/rpm/${arch}-linux/macros
-for m in $RPM_BUILD_ROOT%{_rpmlibdir}/*/macros ; do
-	cat %{SOURCE2} | %{__sed} 's#@LIB@#%{_lib}#' >> $m
-done
 # remove arch dependant macros which have no use on noarch
 %{__sed} -i -e '
 /{__spec_install_post_strip}/d
@@ -1086,18 +984,18 @@ mv $RPM_BUILD_ROOT{%{_rpmlibdir},%{_bindir}}/rpm2cpio
 %py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
 %py_comp $RPM_BUILD_ROOT%{py_sitedir}
 
-rm $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,a,py}
+%{__rm} $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,a,py}
 
 # wrong location, not used anyway
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log,xinetd}
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log,xinetd}
 # utils dropped in 4.4.8 -- their manuals
-rm $RPM_BUILD_ROOT%{_mandir}/*/man8/rpmgraph.8
+%{__rm} $RPM_BUILD_ROOT%{_mandir}/*/man8/rpmgraph.8
 
 %find_lang %{name}
 
-rm -rf manual
+%{__rm} -rf manual
 cp -a doc/manual manual
-rm -f manual/Makefile*
+%{__rm} -f manual/Makefile*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -1137,7 +1035,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo/*
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/platform
 
-
 %{_mandir}/man8/rpm.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
 %lang(ja) %{_mandir}/ja/man8/rpm.8*
@@ -1161,7 +1058,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/qf
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/macros
-%{_rpmlibdir}/macros.pld
+%dir %{_rpmlibdir}/macros.d
+%{_rpmlibdir}/macros.d/pld
 %{_rpmlibdir}/cpuinfo.yaml
 
 %attr(755,root,root) %{_rpmlibdir}/hrmib-cache
@@ -1300,7 +1198,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 # not used yet ... these six depend on perl
 %attr(755,root,root) %{_rpmlibdir}/http.req
 %attr(755,root,root) %{_rpmlibdir}/mono*
-%dir %{_rpmlibdir}/macros.d
 %{_rpmlibdir}/macros.d/java
 %{_rpmlibdir}/macros.d/libtool
 %{_rpmlibdir}/macros.d/mono
@@ -1310,7 +1207,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros.d/python
 %{_rpmlibdir}/macros.d/selinux
 %{_rpmlibdir}/macros.rpmbuild
-
 
 %attr(755,root,root) %{_bindir}/gendiff
 %attr(755,root,root) %{_bindir}/rpmbuild

@@ -1,0 +1,58 @@
+# global list of capabilities (SONAME, perl(module), php(module) regexps)
+# which don't generate dependencies on package NAMES
+# -- OpenGL implementation
+^libGL.so.1
+^libGLU.so.1
+^libOSMesa.so
+# -- Glide
+^libglide3.so.3
+# -- mozilla
+^libgtkmozembed.so
+^libgtksuperwin.so
+^libxpcom.so
+# -- X11 implementation
+^libFS.so
+^libI810XvMC.so
+^libICE.so
+^libSM.so
+^libX11.so
+^libXRes.so
+^libXTrap.so
+^libXaw.so
+^libXcomposite.so
+^libXcursor.so
+^libXdamage.so
+^libXdmcp.so
+^libXevie.so
+^libXext.so
+^libXfixes.so
+^libXfont.so
+^libXfontcache.so
+^libXft.so
+^libXi.so
+^libXinerama.so
+^libXmu.so
+^libXmuu.so
+^libXp.so
+^libXpm.so
+^libXrandr.so
+^libXrender.so
+^libXss.so
+^libXt.so
+^libXtst.so
+^libXv.so
+^libXvMC.so
+^libXxf86dga.so
+^libXxf86misc.so
+^libXxf86rush.so
+^libXxf86vm.so
+^libdps.so
+^libdpstk.so
+^libfontenc.so
+^libpsres.so
+^libxkbfile.so
+^libxkbui.so
+# -- fam / gamin
+^libfam.so.0
+# -- mdns-bonjour: mDNSResponder-libs / avahi-compat-libdns_sd
+^libdns_sd.so.1

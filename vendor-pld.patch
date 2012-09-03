@@ -10,3 +10,23 @@
  	    esac
  	    AC_MSG_RESULT([$withval])
      else
+@@ -2485,7 +2485,7 @@
+     rpmdb/DB_CONFIG
+     macros/macros macros/macros.rpmbuild
+     macros/cmake macros/gstreamer macros/java macros/kernel macros/libtool
+-    macros/mandriva macros/suse macros/fedora macros/mono macros/perl macros/pkgconfig macros/php
++    macros/pld macros/mandriva macros/suse macros/fedora macros/mono macros/perl macros/pkgconfig macros/php
+     macros/python macros/ruby macros/selinux macros/tcl
+     doc/Makefile
+     doc/manual/Makefile doc/fr/Makefile doc/ja/Makefile doc/ko/Makefile
+--- rpm-5.4.10/Makefile.am~	2012-03-17 01:24:19.000000000 +0100
++++ rpm-5.4.10/Makefile.am	2012-09-03 00:08:35.599623394 +0200
+@@ -117,7 +117,7 @@
+ pkgcfgdir =	$(pkgdatadir)/macros.d
+ pkgcfg_DATA = \
+ 	macros/cmake macros/gstreamer macros/java macros/kernel macros/libtool \
+-	macros/mandriva macros/mono macros/perl macros/pkgconfig macros/php \
++	macros/pld macros/mono macros/perl macros/pkgconfig macros/php \
+ 	macros/python macros/ruby macros/selinux macros/tcl
+ 
+ noinst_HEADERS = build.h debug.h system.h

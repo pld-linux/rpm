@@ -1,0 +1,18 @@
+# customized rpm macros - global for host
+#
+#%_install_langs		pl_PL:en_US
+#
+# remove or replace with file_contexts path if you want to use custom
+# SELinux file contexts policy instead of one stored in packages payload
+%_install_file_context_path	%{nil}
+%_verify_file_context_path	%{nil}
+
+# If non-zero, all erasures will be automagically repackaged.
+#%_repackage_all_erasures	1
+
+# If non-zero, create debuginfo packages
+#%_enable_debug_packages	0
+
+# Boolean (i.e. 1 == "yes", 0 == "no") that controls whether files
+# marked as %doc should be installed.
+#%_excludedocs			1

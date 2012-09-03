@@ -1,0 +1,3 @@
+# global list of files (regexps) which don't generate Requires
+^%{_examplesdir}/
+^%{_docdir}/

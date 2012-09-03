@@ -1,0 +1,147 @@
+# PLD rpm macros
+
+%distribution		PLD Linux
+%vendor		        pld 
+%bugurl			http://bugs.pld-linux.org/
+%disturl		http://www.pld-linux.org/
+%pld_release		th
+
+# 
+# Per-platform rpm configuration file.
+
+#==============================================================================
+# ---- per-platform macros.
+#
+%_vendor		pld
+%_os			linux
+%_target_platform	%{_target_cpu}-%{_vendor}-%{_target_os}%{?_gnu}
+
+#==============================================================================
+# ---- configure macros.  note that most of these are inherited
+#      from the defaults.
+#
+%_prefix		/usr
+%_exec_prefix		%{_prefix}
+%_bindir		%{_exec_prefix}/bin
+%_sbindir		%{_exec_prefix}/sbin
+%_libexecdir		%{_exec_prefix}/%{_lib}
+%_datadir		%{_prefix}/share
+%_sysconfdir		%{_prefix}/etc
+%_sharedstatedir	/var/lib
+%_localstatedir		/var
+%_lib			lib
+%_libdir		%{_exec_prefix}/%{_lib}
+%_includedir		%{_prefix}/include
+%_oldincludedir		/usr/include
+%_infodir		%{_prefix}/share/info
+%_mandir		%{_prefix}/share/man
+%_initrddir		%{_sysconfdir}/rc.d/init.d
+%_sysconfdir		/etc
+
+%_defaultdocdir		%{_usr}/share/doc
+
+%_fmoddir		%{_libdir}/gfortran/modules
+
+# Executed at after copying %doc to DOCDIR, with $DOCDIR set
+%__compress_doc		@prefix@/lib/rpm/compress-doc%{?_noautocompressdoc: --noautocompressdoc='%{_noautocompressdoc}'}
+
+%__os_install_post \
+%{__spec_install_post_strip}\
+%{__spec_install_post_chrpath}\
+%{__spec_install_post_check_so}\
+%{__spec_install_post_check_tmpfiles}\
+%{__spec_install_post_compress_docs}\
+%{__spec_install_post_compress_modules}\
+%{__spec_install_post_py_hardlink}\
+%{__spec_install_post_perl_clean}\
+%{__arch_install_post}\
+%{nil}
+
+#---------------------------------------------------------------------
+#	Template for debug information sub-package.
+%_enable_debug_packages		1
+%{expand:%%define __sip_%{?_enable_debug_packages} 1}%{?__sip_1:%{?__debug_package:%{__debug_install_post}}}%{expand:%%undefine __sip_%{?_enable_debug_packages}}\
+
+%debug_package \
+%ifnarch noarch\
+%global __debug_package 1\
+%package debuginfo\
+Summary: Debug information for package %{name}\
+Summary(pl.UTF-8): Informacje dla debuggera dla pakietu %{name}\
+Group: Development/Debug\
+Requires: filesystem-debuginfo >= 3.0-16\
+AutoReqProv: 0\
+%description debuginfo\
+This package provides debug information for package %{name}.\
+Debug information is useful when developing applications that use this\
+package or when debugging this package.\
+%description debuginfo -l pl.UTF-8\
+Ten pakiet dostarcza informacje dla debuggera dla pakietu %{name}.\
+Informacje te są przydatne przy rozwijaniu aplikacji używających tego\
+pakietu oraz przy odpluskwianiu samego pakietu.\
+%files debuginfo -f debugfiles.list\
+%defattr(-,root,root)\
+%endif\
+%{nil}
+
+#---------------------------------------------------------------------
+# Overwrite RPM macros with PLD specific one here.
+
+%_tmppath		%(echo "${TMPDIR:-/var/tmp}")
+%tmpdir			%{_tmppath}
+
+%_topdir		%(echo $HOME)/rpm
+
+%buildroot		%{_tmppath}/%{name}-%{version}-root-%(id -u -n)
+
+%_source_payload	w9.gzdio
+%_binary_payload	w9.lzdio
+
+%_rpmfc_magic_path	/usr/share/file/magic
+
+%undefine		__scriptlet_requires
+
+# provides don't obsolete
+%_upgrade_tag		name
+
+#-----------------------------------------------------------------
+# CFLAGS and LDFLAGS used to build
+
+%debuginfocflags       %{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -gdwarf-2 -g2}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
+# -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
+
+%debugcflags   -O0 -g -Wall
+%debugcppflags %{nil}
+%debugldflags  %{nil}
+
+%optldflags    -Wl,--as-needed -Wl,-z,relro -Wl,-z,-combreloc
+%optcppflags   -D_FORTIFY_SOURCE=2
+
+# Warning: those macros are overwritten by macros.build,
+#          left here for compatibility
+%rpmcflags     %{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}
+%rpmcxxflags   %{rpmcflags}
+%rpmldflags    %{!?no_build_with_as_needed:-Wl,--as-needed}
+%rpmcppflags	-D_FORTIFY_SOURCE=2
+
+# arch macros
+%ix86  i386 i486 i586 i686 pentium3 pentium4 athlon
+%x8664 x86_64 amd64 ia32e
+%ppc   ppc ppc7400 ppc7450
+
+
+#---------------------------------------------------------------------
+#	Expanded at end of %prep
+#
+%__id_u		%{__id} -u
+%__chown_Rhf	%{__chown} -Rhf
+%__chgrp_Rhf	%{__chgrp} -Rhf
+%_fixowner	[ `%{__id_u}` = '0' ] && %{__chown_Rhf} root
+%_fixgroup	[ `%{__id_u}` = '0' ] && %{__chgrp_Rhf} root
+%_fixperms	%{__chmod} -Rf a+rX,u+w,g-w,o-w
+
+%__id		/bin/id
+
+#
+# rpm5 prolog for loading the standard macro
+%{load:/etc/rpm/macros.d/*.macros}
