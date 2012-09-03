@@ -971,13 +971,6 @@ for a in librpm-%{sover}.so librpmdb-%{sover}.so librpmio-%{sover}.so librpmbuil
 	ln -s /%{_lib}/$a $RPM_BUILD_ROOT%{_libdir}/$a
 done
 
-# remove arch dependant macros which have no use on noarch
-%{__sed} -i -e '
-/{__spec_install_post_strip}/d
-/{__spec_install_post_chrpath}/d
-/{__spec_install_post_compress_modules}/d
-' $RPM_BUILD_ROOT%{_rpmlibdir}/noarch-linux/macros
-
 # Bourne shell script vs ELF executable linked with rpm,rpmdb,rpmio
 mv $RPM_BUILD_ROOT{%{_rpmlibdir},%{_bindir}}/rpm2cpio
 

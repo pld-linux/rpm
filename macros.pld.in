@@ -46,12 +46,14 @@
 %__compress_doc		@prefix@/lib/rpm/compress-doc%{?_noautocompressdoc: --noautocompressdoc='%{_noautocompressdoc}'}
 
 %__os_install_post \
+%ifnarch noarch\
 %{__spec_install_post_strip}\
 %{__spec_install_post_chrpath}\
+%{__spec_install_post_compress_modules}\
+%endif\
 %{__spec_install_post_check_so}\
 %{__spec_install_post_check_tmpfiles}\
 %{__spec_install_post_compress_docs}\
-%{__spec_install_post_compress_modules}\
 %{__spec_install_post_py_hardlink}\
 %{__spec_install_post_perl_clean}\
 %{__arch_install_post}\
