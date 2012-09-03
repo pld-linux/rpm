@@ -10,33 +10,6 @@
 # - python(abi) cap is not provided automatically because /usr/lib*/libpython2*.so.*
 #   matches ELF first
 # - add macros for some ppc, mipsel, alpha and sparc
-# - uppackaged list:
-#   /usr/bin/multiarch-dispatch
-#   /usr/bin/multiarch-platform
-#   /usr/include/multiarch-dispatch.h
-#   /usr/lib/rpm/bin/api-sanity-autotest.pl
-#   /usr/lib/rpm/bin/api-sanity-checker.pl
-#   /usr/lib/rpm/bin/chroot
-#   /usr/lib/rpm/bin/cp
-#   /usr/lib/rpm/bin/dbconvert
-#   /usr/lib/rpm/bin/find
-#   /usr/lib/rpm/bin/mgo
-#   /usr/lib/rpm/bin/pom2spec
-#   /usr/lib/rpm/bin/sqlite3
-#   /usr/lib/rpm/check-multiarch-files
-#   /usr/lib/rpm/dbconvert.sh
-#   /usr/lib/rpm/gem_helper.rb
-#   /usr/lib/rpm/gstreamer.sh
-#   /usr/lib/rpm/kmod-deps.sh
-#   /usr/lib/rpm/macros.d/cmake
-#   /usr/lib/rpm/macros.d/gstreamer
-#   /usr/lib/rpm/macros.d/kernel
-#   /usr/lib/rpm/macros.d/mandriva
-#   /usr/lib/rpm/macros.d/ruby
-#   /usr/lib/rpm/macros.d/tcl
-#   /usr/lib/rpm/mkmultiarch
-#   /usr/lib/rpm/pythoneggs.py
-#   /usr/lib/rpm/rubygems.rb
 #
 # - headerGet() making poldek segfault http://rpm5.org/cvs/tktview?tn=38,1
 # - rpm doesn't exit when no sources/patches available http://rpm5.org/cvs/tktview?tn=40,1
@@ -1044,12 +1017,16 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %attr(755,root,root) %{_rpmlibdir}/hrmib-cache
 
+%dir %{_rpmlibdir}/bin
+%attr(755,root,root) %{_rpmlibdir}/bin/dbconvert
+
 %files base
 %defattr(644,root,root,755)
 %dir %{_sysconfdir}/rpm
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rpm
 %dir %{_rpmlibdir}
 %attr(755,root,root) %{_bindir}/banner.sh
+%attr(755,root,root) %{_bindir}/multiarch-dispatch
 %attr(755,root,root) %{_rpmlibdir}/user_group.sh
 %dir /var/lib/banner
 
@@ -1078,6 +1055,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_libdir}/librpmmisc-%{sover}.so
 %{_libdir}/librpm*.la
 %{_includedir}/rpm
+%{_includedir}/multiarch-dispatch.h
 %{_pkgconfigdir}/*.pc
 
 %files static
@@ -1091,8 +1069,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/find-debuginfo.sh
 %attr(755,root,root) %{_rpmlibdir}/rpmdb_loadcvt
 %attr(755,root,root) %{_rpmlibdir}/tgpg
-%dir %{_rpmlibdir}/bin
+%attr(755,root,root) %{_rpmlibdir}/bin/chroot
+%attr(755,root,root) %{_rpmlibdir}/bin/cp
 %attr(755,root,root) %{_rpmlibdir}/bin/debugedit
+%attr(755,root,root) %{_rpmlibdir}/bin/find
+%attr(755,root,root) %{_rpmlibdir}/bin/mgo
 %attr(755,root,root) %{_rpmlibdir}/bin/mtree
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmcache
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmcmp
@@ -1140,9 +1121,14 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/mimetypedeps.sh
 # needs hacked pkg-config to return anything
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
-%dir %{_rpmlibdir}/bin
+%attr(755,root,root) %{_rpmlibdir}/bin/api-sanity-autotest.pl
+%attr(755,root,root) %{_rpmlibdir}/bin/api-sanity-checker.pl
 %attr(755,root,root) %{_rpmlibdir}/bin/install-sh
 %attr(755,root,root) %{_rpmlibdir}/bin/mkinstalldirs
+%attr(755,root,root) %{_rpmlibdir}/bin/pom2spec
+%attr(755,root,root) %{_rpmlibdir}/bin/rpmspecdump
+%attr(755,root,root) %{_rpmlibdir}/bin/sqlite3
+%attr(755,root,root) %{_rpmlibdir}/bin/wget
 %attr(755,root,root) %{_rpmlibdir}/vcheck
 %{_rpmlibdir}/noarch-*
 %ifarch %{ix86}
@@ -1178,20 +1164,32 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 # not used yet ... these six depend on perl
 %attr(755,root,root) %{_rpmlibdir}/http.req
 %attr(755,root,root) %{_rpmlibdir}/mono*
+%{_rpmlibdir}/macros.d/cmake
+%{_rpmlibdir}/macros.d/gstreamer
 %{_rpmlibdir}/macros.d/java
+%{_rpmlibdir}/macros.d/kernel
 %{_rpmlibdir}/macros.d/libtool
 %{_rpmlibdir}/macros.d/mono
 %{_rpmlibdir}/macros.d/perl
 %{_rpmlibdir}/macros.d/php
 %{_rpmlibdir}/macros.d/pkgconfig
 %{_rpmlibdir}/macros.d/python
+%{_rpmlibdir}/macros.d/ruby
 %{_rpmlibdir}/macros.d/selinux
+%{_rpmlibdir}/macros.d/tcl
 %{_rpmlibdir}/macros.rpmbuild
 
+%attr(755,root,root) %{_rpmlibdir}/check-multiarch-files
+%attr(755,root,root) %{_rpmlibdir}/gem_helper.rb
+%attr(755,root,root) %{_rpmlibdir}/gstreamer.sh
+%attr(755,root,root) %{_rpmlibdir}/kmod-deps.sh
+%attr(755,root,root) %{_rpmlibdir}/mkmultiarch
+%attr(755,root,root) %{_rpmlibdir}/pythoneggs.py
+%attr(755,root,root) %{_rpmlibdir}/rubygems.rb
+
 %attr(755,root,root) %{_bindir}/gendiff
+%attr(755,root,root) %{_bindir}/multiarch-platform
 %attr(755,root,root) %{_bindir}/rpmbuild
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmspecdump
-%attr(755,root,root) %{_rpmlibdir}/bin/wget
 
 %dir %{_rpmlibdir}/helpers
 %attr(755,root,root) %{_rpmlibdir}/helpers/makeshlibs
