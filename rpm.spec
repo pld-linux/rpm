@@ -967,6 +967,10 @@ mv $RPM_BUILD_ROOT{%{_rpmlibdir},%{_bindir}}/rpm2cpio
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log,xinetd}
 # utils dropped in 4.4.8 -- their manuals
 %{__rm} $RPM_BUILD_ROOT%{_mandir}/*/man8/rpmgraph.8
+# utils dropped in 5.4 -- their manuals
+%{__rm} $RPM_BUILD_ROOT%{_mandir}/*/man8/rpmgrep.8
+# script obsoleted by /usr/lib/rpm/bin/dbconvert binary
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/dbconvert.sh
 
 %find_lang %{name}
 
