@@ -4,7 +4,7 @@
  	    psm->countCorrection = -1;
  
  	    if (!(rpmtsFlags(ts) & RPMTRANS_FLAG_NOPOSTUN)) {
--		rc = rpmpsmNext(psm, PSM_SCRIPT);
+-		rc = (rpmRC) rpmpsmNext(psm, PSM_SCRIPT);
 -		if (rc) break;
 +		if (rpmpsmNext(psm, PSM_SCRIPT))
 +		    rpmMessage(RPMMESS_VERBOSE, _("Ignoring failed %%postun scriptlet\n"));

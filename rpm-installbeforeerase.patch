@@ -4,49 +4,32 @@
  	- glen: do not skip %clean from spec file
  	- robert: install rpmdeps and debugedit to pkglibdir as on HEAD
  	- jbj: fix: python ts.hdrFromFdno(fdno) segfault.
---- rpm-4.5/lib/depends.c~	2008/10/26 18:29:50	1.327.2.10
-+++ rpm-4.5/lib/depends.c	2008-10-27 14:42:52.984295775 +0200
-@@ -1936,7 +1936,7 @@
- 	return 0;
- 
-     /* Avoid certain dependency relations. */
--    if (teType == TR_ADDED && ignoreDep(ts, p, q))
-+    if (ignoreDep(ts, p, q))
- 	return 0;
- 
-     /* Avoid redundant relations. */
-@@ -2191,6 +2191,25 @@
+--- rpm-5.4.10/lib/order.c~	2012-07-06 17:39:16.000000000 +0200
++++ rpm-5.4.10/lib/order.c	2012-09-03 23:09:03.706487979 +0200
+@@ -1631,7 +1631,7 @@
+ 	    (void) orgrpmAddRelation(ts, al, p, requires);
  	}
+ 
+-#ifdef	NOTYET
++#if defined(RPM_VENDOR_PLD)
+ 	/* Ensure that erasures follow installs during upgrades. */
+       if (rpmteType(p) == TR_REMOVED && p->flink.Pkgid && p->flink.Pkgid[0]) {
+ 	rpmtsi qi;
+@@ -1652,7 +1652,7 @@
+ 	}
+ 	qi = rpmtsiFree(qi);
        }
+-#endif	/* NOTYET */
++#endif
  
-+
-+	/* Ensure that erasures follow installs during upgrades. */
-+      if (rpmteType(p) == TR_REMOVED && p->flink.Pkgid && p->flink.Pkgid[0]) {
-+
-+	qi = rpmtsiInit(ts);
-+	while ((q = rpmtsiNext(qi, TR_ADDED)) != NULL) {
-+	    if (strcmp(q->pkgid, p->flink.Pkgid[0]))
-+		continue;
-+	    requires = rpmdsFromPRCO(q->PRCO, RPMTAG_NAME);
-+	    if (requires != NULL) {
-+		/* XXX disable erased arrow reversal. */
-+		p->type = TR_ADDED;
-+		(void) addRelation(ts, p, selected, requires);
-+		p->type = TR_REMOVED;
-+	    }
-+	}
-+	qi = rpmtsiFree(qi);
-+      }
-+
-       if (_autobits != 0xffffffff)
-       {
- 
-@@ -2401,7 +2420,7 @@
+ #ifdef	NOTYET
+ 	/* Order by requiring parent directories as prerequisites. */
+@@ -2175,7 +2175,7 @@
  		const char * dp;
- 		char buf[4096];
- 		int msglvl = (anaconda || (rpmtsDFlags(ts) & RPMDEPS_FLAG_DEPLOOPS))
--			? RPMMESS_WARNING : RPMMESS_DEBUG;
-+			? RPMMESS_WARNING : RPMMESS_ERROR;
- ;
- 
- 		/* Unchain predecessor loop. */
+ 		rpmlogLvl msglvl = (anaconda || (rpmtsDFlags(ts) & RPMDEPS_FLAG_DEPLOOPS))
+ 			? RPMLOG_WARNING : RPMLOG_ERR;
+-#if defined(RPM_VENDOR_MANDRIVA) /* loop-detection-optional-loglevel */
++#if defined(RPM_VENDOR_MANDRIVA) || defined(RPM_VENDOR_PLD) /* loop-detection-optional-loglevel */
+ 		// Report loops as debug-level message by default (7 = RPMLOG_DEBUG), overridable
+ 		msglvl = rpmExpandNumeric("%{?_loop_detection_loglevel}%{?!_loop_detection_loglevel:7}");
+ #endif

@@ -1,45 +1,38 @@
-Index: lib/depends.c
-===================================================================
-RCS file: /v/rpm/cvs/rpm/lib/depends.c,v
-retrieving revision 1.404
-retrieving revision 1.405
-diff -w -u -r1.404 -r1.405
---- lib/depends.c	3 Jul 2008 15:08:05 -0000	1.404
-+++ lib/depends.c	17 Jul 2008 13:57:42 -0000	1.405
-@@ -1462,6 +1462,8 @@
+--- rpm-5.4.10/lib/depends.c~	2012-04-15 23:20:56.000000000 +0200
++++ rpm-5.4.10/lib/depends.c	2012-09-03 23:00:59.363079731 +0200
+@@ -1569,7 +1569,7 @@
      int terminate = 2;		/* XXX terminate if rc >= terminate */
      int rc;
      int ourrc = 0;
-+    int dirname_deps;
-+    int symlink_deps;
- 
-     requires = rpmdsInit(requires);
-     if (requires != NULL)
-@@ -1537,6 +1539,8 @@
+-#if defined(RPM_VENDOR_MANDRIVA) || defined(RPM_VENDOR_ARK) || defined(RPM_OPTIONAL_DIRNAME_AND_SYMLINK_DEPS) /* optional-dirname-and-symlink-deps */
++#if defined(RPM_VENDOR_MANDRIVA) || defined(RPM_VENDOR_ARK) || defined(RPM_VENDOR_PLD) || defined(RPM_OPTIONAL_DIRNAME_AND_SYMLINK_DEPS) /* optional-dirname-and-symlink-deps */
+     int dirname_deps;
+     int symlink_deps;
+ #endif
+@@ -1648,7 +1648,7 @@
  	}
      }
  
-+    dirname_deps = rpmExpandNumeric("%{?_check_dirname_deps}%{?!_check_dirname_deps:1}");
-+    if (dirname_deps) {
-     dirnames = rpmdsInit(dirnames);
-     if (dirnames != NULL)
-     while (ourrc < terminate && rpmdsNext(dirnames) >= 0) {
-@@ -1577,7 +1581,10 @@
+-#if defined(RPM_VENDOR_MANDRIVA) || defined(RPM_VENDOR_ARK) || defined(RPM_OPTIONAL_DIRNAME_AND_SYMLINK_DEPS) /* optional-dirname-and-symlink-deps */
++#if defined(RPM_VENDOR_MANDRIVA) || defined(RPM_VENDOR_ARK) || defined(RPM_VENDOR_PLD) || defined(RPM_OPTIONAL_DIRNAME_AND_SYMLINK_DEPS) /* optional-dirname-and-symlink-deps */
+     dirname_deps = rpmExpandNumeric("%{?_check_dirname_deps}%{?!_check_dirname_deps:1}");
+     if (dirname_deps) {
+ #endif
+@@ -1692,7 +1692,7 @@
  	    /*@switchbreak@*/ break;
  	}
      }
-+    }
+-#if defined(RPM_VENDOR_MANDRIVA) || defined(RPM_VENDOR_ARK) || defined(RPM_OPTIONAL_DIRNAME_AND_SYMLINK_DEPS) /* optional-dirname-and-symlink-deps */
++#if defined(RPM_VENDOR_MANDRIVA) || defined(RPM_VENDOR_ARK) || defined(RPM_VENDOR_PLD) || defined(RPM_OPTIONAL_DIRNAME_AND_SYMLINK_DEPS) /* optional-dirname-and-symlink-deps */
+     }
  
-+    symlink_deps = rpmExpandNumeric("%{?_check_symlink_deps}%{?!_check_symlink_deps:1}");
-+    if (symlink_deps) {
-     linktos = rpmdsInit(linktos);
-     if (linktos != NULL)
-     while (ourrc < terminate && rpmdsNext(linktos) >= 0) {
-@@ -1595,6 +1602,7 @@
- 	dscolor = rpmdsColor(linktos);
- 	if (tscolor && dscolor && !(tscolor & dscolor))
- 	    continue;
-+    }
- 
- 	rc = unsatisfiedDepend(ts, linktos, adding);
+     symlink_deps = rpmExpandNumeric("%{?_check_symlink_deps}%{?!_check_symlink_deps:1}");
+@@ -1740,7 +1740,7 @@
+ 	    /*@switchbreak@*/ break;
+ 	}
+     }
+-#if defined(RPM_VENDOR_MANDRIVA) || defined(RPM_VENDOR_ARK) || defined(RPM_OPTIONAL_DIRNAME_AND_SYMLINK_DEPS) /* optional-dirname-and-symlink-deps */
++#if defined(RPM_VENDOR_MANDRIVA) || defined(RPM_VENDOR_ARK) || defined(RPM_VENDOR_PLD) || defined(RPM_OPTIONAL_DIRNAME_AND_SYMLINK_DEPS) /* optional-dirname-and-symlink-deps */
+     }
+ #endif    
  

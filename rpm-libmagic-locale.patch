@@ -1,11 +1,9 @@
---- rpm-4.5/lib/rpmfc.c.org	2012-02-29 16:32:05.655058968 +0100
-+++ rpm-4.5/lib/rpmfc.c	2012-02-29 16:36:22.430972834 +0100
-@@ -1114,9 +1114,31 @@
- 	    /* XXX skip all files in /dev/ which are (or should be) %dev dummies. */
- 	    else if (slen >= fc->brlen+sizeof("/dev/") && !strncmp(s+fc->brlen, "/dev/", sizeof("/dev/")-1))
- 		ftype = "";
--	    else
-+	    else {
+--- rpm-4.5/rpmio/rpmmg.c.org	2012-02-29 16:32:05.655058968 +0100
++++ rpm-4.5/rpmio/rpmmg.c	2012-02-29 16:36:22.430972834 +0100
+@@ -1114,7 +1114,28 @@
+ 	    /*@fallthrough@*/
+ 	case URL_IS_UNKNOWN:
+ 	default:
 +		char *old_ctype = setlocale(LC_CTYPE, NULL);
 +		char *old_collate = setlocale(LC_COLLATE, NULL);
 +
@@ -18,8 +16,8 @@
 +			setlocale(LC_COLLATE, "C");
 +		}
 +
- 		ftype = magic_file(ms, s);
- 
+ 	    t = magic_file(mg->ms, fn);
++
 +		if (old_ctype) {
 +			setlocale(LC_CTYPE, old_ctype);
 +			_free(old_ctype);
@@ -28,8 +26,6 @@
 +			setlocale(LC_COLLATE, old_collate);
 +			_free(old_collate);
 +		}
-+	    }
-+
- 	    if (ftype == NULL) {
- 		xx = RPMERR_EXEC;
- 		rpmError(xx, _("magic_file(ms, \"%s\") failed: mode %06o %s\n"),
+ 	    /* XXX HACK: libmagic compiled without <pcreposix.h> spews here. */
+ 	    if (t == NULL) {
+ 		const char * msg = magic_error(mg->ms);
