@@ -6,7 +6,7 @@
  		EVR = pav[i];
 -assert(EVR != NULL);
 +		if(EVR == NULL) {
-+			rpmMessage(RPMMESS_ERROR, _("%s helper returned empty version info for %s, omitting\n"), nsdep, N);
++			rpmlog(RPMLOG_ERR, _("%s helper returned empty version info for %s, omitting\n"), nsdep, N);
 +			continue;
 +		}
  	    }

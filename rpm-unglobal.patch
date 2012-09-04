@@ -29,7 +29,7 @@
 +
 +    /* Names must start with alphabetic or _ and be at least 3 chars */
 +    if (!((c = *n) && (xisalpha(c) || c == '_') && (ne - n) > 2)) {
-+	rpmError(RPMERR_BADSPEC,
++	rpmlog(RPMLOG_ERR,
 +		_("Macro %%%s has illegal name (%%unglobal)\n"), n);
 +	return se;
 +    }

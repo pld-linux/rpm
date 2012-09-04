@@ -7,7 +7,7 @@
 -		rc = (rpmRC) rpmpsmNext(psm, PSM_SCRIPT);
 -		if (rc) break;
 +		if (rpmpsmNext(psm, PSM_SCRIPT))
-+		    rpmMessage(RPMMESS_VERBOSE, _("Ignoring failed %%postun scriptlet\n"));
++		    rpmlog(RPMLOG_INFO, _("Ignoring failed %%postun scriptlet\n"));
  	    }
  
  	    if (!(rpmtsFlags(ts) & RPMTRANS_FLAG_NOTRIGGERPOSTUN)) {
