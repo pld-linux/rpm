@@ -765,8 +765,7 @@ awk -f %{SOURCE6} %{SOURCE1}
 	--with-pcre=external \
 	--with-keyutils=none \
 	--without-path-versioned \
-	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/macros.build:%{_rpmlibdir}/%%{_target}/macros:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%%{_target}/macros:~/etc/rpmmacros:~/etc/.rpmmacros:~/.rpmmacros' \
-	--with-extra-path-macros=%{_rpmlibdir}/platform/%%{_target}/macros:%{_sysconfdir}/rpm/macros.d/*.macros:%{_rpmlibdir}/macros.d/pld \
+	--with-extra-path-macros='%{_sysconfdir}/rpm/macros.d/*.macros:%{_rpmlibdir}/macros.build:%{_rpmlibdir}/macros.d/pld:~/etc/rpmmacros:~/etc/.rpmmacros:~/.rpmmacros' \
 	--with-bugreport="http://bugs.pld-linux.org/" \
 	--with-vendor=pld
 
