@@ -60,10 +60,15 @@
 %{__arch_install_post}\
 %{nil}
 
+%__spec_install_post\
+%{expand:%%define __sip_%{?_enable_debug_packages} 1}%{?__sip_1:%{?__debug_package:%{__debug_install_post}}}%{expand:%%undefine __sip_%{?_enable_debug_packages}}\
+%{__arch_install_post}\
+%{__os_install_post}\
+%{nil}
+
 #---------------------------------------------------------------------
 #	Template for debug information sub-package.
 %_enable_debug_packages		1
-%{expand:%%define __sip_%{?_enable_debug_packages} 1}%{?__sip_1:%{?__debug_package:%{__debug_install_post}}}%{expand:%%undefine __sip_%{?_enable_debug_packages}}\
 
 %debug_package \
 %ifnarch noarch\
