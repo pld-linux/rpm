@@ -968,7 +968,7 @@ mv $RPM_BUILD_ROOT{%{_rpmlibdir},%{_bindir}}/rpm2cpio
 # utils dropped in 4.4.8 -- their manuals
 %{__rm} $RPM_BUILD_ROOT%{_mandir}/*/man8/rpmgraph.8
 # utils dropped in 5.4 -- their manuals
-%{__rm} $RPM_BUILD_ROOT%{_mandir}/*/man8/rpmgrep.8
+%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/rpmgrep.1
 # script obsoleted by /usr/lib/rpm/bin/dbconvert binary
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/dbconvert.sh
 
