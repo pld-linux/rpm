@@ -91,6 +91,8 @@ Source24:	rpm.noautoprovfiles
 Source25:	rpm.noautoreq
 Source26:	rpm.noautoreqdep
 Source27:	rpm.noautoreqfiles
+Source28:	macros.php
+Source29:	%{name}-php-requires.php
 
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
@@ -671,8 +673,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
 echo '%%define	__perl_requires	%%{__perl} /usr/lib/rpm/perl.req' >> macros.perl
 echo '# obsoleted file' > macros.python
-echo '%%define	__php_provides	/usr/lib/rpm/php.prov' > macros.php
-echo '%%define	__php_requires	/usr/lib/rpm/php.req' >> macros.php
+cp -p %{SOURCE20} macros.php
 echo '%%define	__mono_provides	/usr/lib/rpm/mono-find-provides' > macros.mono
 echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
 install %{SOURCE9} scripts/php.prov.in
@@ -918,6 +919,7 @@ install %{SOURCE13} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
 install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
 install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
+cp -p %{SOURCE29} $RPM_BUILD_ROOT%{_rpmlibdir}/php.req.php
 install %{SOURCE20} $RPM_BUILD_ROOT%{_rpmlibdir}/mimetypedeps.sh
 install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
 install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
