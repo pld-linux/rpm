@@ -1,0 +1,35 @@
+--- rpm-4.5/lib/rpmfc.c.org	2012-02-29 16:32:05.655058968 +0100
++++ rpm-4.5/lib/rpmfc.c	2012-02-29 16:36:22.430972834 +0100
+@@ -1114,9 +1114,31 @@
+ 	    /* XXX skip all files in /dev/ which are (or should be) %dev dummies. */
+ 	    else if (slen >= fc->brlen+sizeof("/dev/") && !strncmp(s+fc->brlen, "/dev/", sizeof("/dev/")-1))
+ 		ftype = "";
+-	    else
++	    else {
++		char *old_ctype = setlocale(LC_CTYPE, NULL);
++		char *old_collate = setlocale(LC_COLLATE, NULL);
++
++		if (old_ctype) {
++			old_ctype = xstrdup(old_ctype);
++			setlocale(LC_CTYPE, "C");
++		}
++		if (old_collate) {
++			old_collate = xstrdup(old_collate);
++			setlocale(LC_COLLATE, "C");
++		}
++
+ 		ftype = magic_file(ms, s);
+ 
++		if (old_ctype) {
++			setlocale(LC_CTYPE, old_ctype);
++			_free(old_ctype);
++		}
++		if (old_collate) {
++			setlocale(LC_COLLATE, old_collate);
++			_free(old_collate);
++		}
++	    }
++
+ 	    if (ftype == NULL) {
+ 		xx = RPMERR_EXEC;
+ 		rpmError(xx, _("magic_file(ms, \"%s\") failed: mode %06o %s\n"),

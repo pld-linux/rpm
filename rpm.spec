@@ -130,8 +130,19 @@ Patch61:	%{name}-sparc64.patch
 Patch62:	%{name}-gendiff.patch
 Patch70:	%{name}-configure-autoconf.patch
 Patch72:	openmp.patch
-Patch73:	rpm-URPM-build-fix.patch
-Patch74:	rpm-db5.3.patch
+Patch73:	%{name}-URPM-build-fix.patch
+Patch74:	%{name}-db5.3.patch
+Patch75:	%{name}-helperEVR-noassert.patch
+Patch76:	%{name}-unglobal.patch
+Patch77:	%{name}-builddir-readlink.patch
+Patch78:	%{name}-changelog_order_check_nonfatal.patch
+Patch79:	%{name}-cleanbody.patch
+Patch80:	%{name}-dirdeps-macro.patch
+Patch81:	%{name}-installbeforeerase.patch
+Patch82:	%{name}-libmagic-locale.patch
+Patch83:	%{name}-namespace-probe.patch
+Patch84:	%{name}-popt-coreutils.patch
+Patch85:	%{name}-postun-nofail.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1.4
@@ -694,6 +705,17 @@ install %{SOURCE12} scripts/perl.prov
 %patch72 -p1 -b .wiget
 %patch73 -p1
 %patch74 -p1
+%patch75 -p1
+%patch76 -p1
+%patch77 -p1
+%patch78 -p1
+%patch79 -p1
+%patch80 -p1
+%patch81 -p1
+%patch82 -p1
+%patch83 -p1
+%patch84 -p1
+%patch85 -p1
 
 cp -p %{SOURCE2} macros/pld.in
 
