@@ -18,7 +18,7 @@
 #
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
-%bcond_with	apidocs		# don't generate documentation with doxygen
+%bcond_without	apidocs		# don't generate documentation with doxygen
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
 %bcond_without	suggest_tags	# build without Suggest tag (bootstrapping)
@@ -112,7 +112,6 @@ Patch27:	%{name}-hack-norpmlibdep.patch
 Patch34:	%{name}-epoch0.patch
 Patch35:	%{name}-perl_req-INC_dirs.patch
 Patch36:	%{name}-debuginfo.patch
-Patch37:	%{name}-doxygen_hack.patch
 
 Patch41:	vendor-pld.patch
 
@@ -126,7 +125,6 @@ Patch59:	%{name}-libtool-deps.patch
 Patch60:	%{name}-mimetype.patch
 Patch61:	%{name}-sparc64.patch
 Patch62:	%{name}-gendiff.patch
-Patch70:	%{name}-configure-autoconf.patch
 Patch72:	openmp.patch
 Patch73:	%{name}-URPM-build-fix.patch
 Patch74:	%{name}-db5.3.patch
@@ -777,7 +775,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch34 -p1
 %patch35 -p0
 %patch36 -p1
-####%patch37 -p1
 %patch41 -p1
 %patch42 -p1
 %patch47 -p1
@@ -790,7 +787,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch61 -p1
 %endif
 %patch62 -p1
-####%patch70 -p1
 %patch72 -p1 -b .wiget
 %patch73 -p1
 %patch74 -p1
