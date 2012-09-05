@@ -585,6 +585,7 @@ Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	python
 Requires:	python-modules
+Requires:	python-distribute
 
 %description pythonprov
 Python macros, which simplifies creation of RPM packages with Python
@@ -671,7 +672,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch16 -p1
 echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
 echo '%%define	__perl_requires	%%{__perl} /usr/lib/rpm/perl.req' >> macros.perl
-echo '# obsoleted file' > macros.python
 cp -p %{SOURCE20} macros.php
 echo '%%define	__mono_provides	/usr/lib/rpm/mono-find-provides' > macros.mono
 echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
@@ -903,7 +903,6 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
 install scripts/rpmdiff scripts/rpmdiff.cgi $RPM_BUILD_ROOT%{_rpmlibdir}
 
 install macros.perl	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.perl
-install macros.python	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.python
 install macros.php	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.php
 install macros.mono	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.mono
 install %{SOURCE15}	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.java
@@ -1209,7 +1208,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/gstreamer.sh
 %attr(755,root,root) %{_rpmlibdir}/kmod-deps.sh
 %attr(755,root,root) %{_rpmlibdir}/mkmultiarch
-%attr(755,root,root) %{_rpmlibdir}/pythoneggs.py
 %attr(755,root,root) %{_rpmlibdir}/rubygems.rb
 
 %attr(755,root,root) %{_bindir}/gendiff
@@ -1239,7 +1237,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files pythonprov
 %defattr(644,root,root,755)
-%{_rpmlibdir}/macros.python
+%attr(755,root,root) %{_rpmlibdir}/pythoneggs.py
 %attr(755,root,root) %{_rpmlibdir}/pythondeps.sh
 
 %files php-pearprov
