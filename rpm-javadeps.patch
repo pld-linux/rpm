@@ -20,7 +20,7 @@
 -%__java_provides	%{_rpmhome}/javadeps.sh --provides
 -%__java_requires	%{_rpmhome}/javadeps.sh --requires
 +%__java_provides	%{nil}
-+%__java_requires	%{nil}
++%__java_requires	env RPM_BUILD_ROOT=%{buildroot} %{_rpmhome}/java-find-requires
  
  #	The value of CLASSPATH in build scriptlets (iff configured).
  #	

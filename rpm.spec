@@ -76,7 +76,6 @@ Source11:	%{name}.sysinfo
 Source12:	perl.prov
 Source13:	%{name}-user_group.sh
 Source14:	%{name}.sysconfig
-Source15:	%{name}-macros.java
 Source16:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source17:	banner.sh
@@ -90,7 +89,6 @@ Source24:	rpm.noautoprovfiles
 Source25:	rpm.noautoreq
 Source26:	rpm.noautoreqdep
 Source27:	rpm.noautoreqfiles
-Source28:	macros.php
 Source29:	%{name}-php-requires.php
 
 Patch0:		%{name}-branch.patch
@@ -120,7 +118,6 @@ Patch41:	vendor-pld.patch
 
 Patch42:	%{name}-old-fileconflicts-behaviour.patch
 
-Patch46:	%{name}-mono.patch
 Patch47:	%{name}-javadeps.patch
 
 Patch55:	%{name}-truncate-cvslog.patch
@@ -670,11 +667,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 # CHECK ME - macrofiles: ~/etc could be used
 #%%patch14 -p1
 %patch16 -p1
-echo '%%define	__perl_provides	%%{__perl} /usr/lib/rpm/perl.prov' > macros.perl
-echo '%%define	__perl_requires	%%{__perl} /usr/lib/rpm/perl.req' >> macros.perl
-cp -p %{SOURCE20} macros.php
-echo '%%define	__mono_provides	/usr/lib/rpm/mono-find-provides' > macros.mono
-echo '%%define	__mono_requires	/usr/lib/rpm/mono-find-requires' >> macros.mono
 install %{SOURCE9} scripts/php.prov.in
 install %{SOURCE10} scripts/php.req.in
 install %{SOURCE12} scripts/perl.prov
@@ -690,7 +682,6 @@ install %{SOURCE12} scripts/perl.prov
 %patch37 -p1
 %patch41 -p1
 %patch42 -p1
-%patch46 -p1
 %patch47 -p1
 %patch55 -p1
 %patch59 -p1
@@ -901,11 +892,6 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
 
 # not installed since 4.4.8 (-tools-perl subpackage)
 install scripts/rpmdiff scripts/rpmdiff.cgi $RPM_BUILD_ROOT%{_rpmlibdir}
-
-install macros.perl	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.perl
-install macros.php	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.php
-install macros.mono	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.mono
-install %{SOURCE15}	$RPM_BUILD_ROOT%{_rpmlibdir}/macros.java
 
 install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
@@ -1180,14 +1166,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/ia32e*
 %{_rpmlibdir}/x86_64*
 %endif
-# must be here for "Requires: rpm-*prov" to work
-%{_rpmlibdir}/macros.java
-%{_rpmlibdir}/macros.mono
-%{_rpmlibdir}/macros.perl
-%{_rpmlibdir}/macros.php
 # not used yet ... these six depend on perl
 %attr(755,root,root) %{_rpmlibdir}/http.req
 %attr(755,root,root) %{_rpmlibdir}/mono*
+
+# must be here for "Requires: rpm-*prov" to work
 %{_rpmlibdir}/macros.d/cmake
 %{_rpmlibdir}/macros.d/gstreamer
 %{_rpmlibdir}/macros.d/java

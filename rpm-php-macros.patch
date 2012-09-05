@@ -8,3 +8,16 @@
      rpmdb/DB_CONFIG
      macros/macros macros/macros.rpmbuild
      macros/java macros/libtool macros/mono macros/perl 
+--- rpm-5.4.10/macros/php.in~	2010-10-16 05:38:31.000000000 +0200
++++ rpm-5.4.10/macros/php.in	2012-09-05 18:12:29.474278958 +0200
+@@ -10,7 +10,8 @@
+ # helpers are also used by %{_rpmhome}/rpmdeps {--provides|--requires}.
+ #%__php_provides	%{_rpmhome}/phpdeps.sh --provides
+ #%__php_requires	%{_rpmhome}/phpdeps.sh --requires
+-#%__php_provides		%{_rpmhome}/php.prov
+-#%__php_requires		%{_rpmhome}/php.req
++%__php_provides		%{_rpmhome}/php.prov
++# define 'php_req_new' in ~/.rpmmacros to use php version of req finder
++%__php_requires		env PHP_MIN_VERSION=%{?php_min_version} %{_rpmhome}/php.req%{?php_req_new:.php}
+ 
+ %php_pear_dir	%{_datadir}/pear
