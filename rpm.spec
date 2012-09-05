@@ -44,7 +44,7 @@ ERROR
 %define		reqdb_ver	5.3
 %define		reqpopt_ver	1.15
 %define		beecrypt_ver	2:4.1.2-4
-%define		sover	5.4
+%define		sover		5.4
 
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
@@ -141,6 +141,108 @@ Patch82:	%{name}-libmagic-locale.patch
 Patch83:	%{name}-namespace-probe.patch
 Patch84:	%{name}-popt-coreutils.patch
 Patch85:	%{name}-postun-nofail.patch
+
+# Patches imported from Mandriva
+
+# status: ready to merge, it's already been merged on HEAD, so commiting it to rpm-5_4
+# would basically just mean backporting it..
+Patch1000:	rpm-5.4.4-add-_specfile-macro.patch
+# status: needs to be cleaned up and properly reviewed together with rest
+# of the patches related to dependency generation
+Patch1001:	rpm-5.4.9-avoid-dependencies-on-self.patch
+# status: probably ready to merge
+Patch1002:	rpm-5.4.4-pkgconfigdeps-check-path.patch
+# status: probably okay to merge, but discuss on rpm-devel first
+Patch1003:	rpm-5.4.4-glob-wildcards-for-loading-macro-files.patch
+# status: needs to be discussed
+Patch1004:	rpm-5.4.4-allow-installation-of-repackaged-rpms.patch
+# status: ready to merge
+Patch1005:	rpm-5.4.8-dont-show-suggests-with-requires.patch
+# status: ready for merge
+Patch1006:	rpm-5.4.9-strip-buildroot-away-from-duplicate-files-list.patch
+# status: probably okay to merge, but discuss on rpm-devel first
+Patch1007:	rpm-5.4.10-duplicate_files_terminate_build.patch
+# status: same as above
+Patch1008:	rpm-5.4.10-unpackaged_subdirs_terminate_build.patch
+# mdvbz#64898
+# status: uncertain, might be okay to merge, discuss on rpm-devel first
+Patch1009:	rpm-5.4.4-rpmbuild-withoutclean.patch
+# no sense in having an additional dependency on 'pkgconfig' on all packages that
+# have a pkgconfig file, it's not needed for them to be made useful and anything
+# actuallly using pkgconfig for this purpose will pull it in as a dependency anyways...
+# status: might be okay to merge, but discuss on rpm-devel first
+Patch1010:	rpm-5.4.4-drop-useless-auto-generated-pkgconfig-dependency.patch
+# status: ready for merge
+Patch1011:	rpm-5.4.4-fix-rpmconstant-to-always-use-LC_CTYPE-C-for-case-conversion.patch
+# $RPM_BUILD_DIR isn't necessarily the same as $PWD, it's %%{_builddir}, not
+# %%{_builddir}/%%{?buildsubdir}, messing up paths in debug packages created..
+# status: needs to be discussed and investigated a bit better..
+Patch1012:	rpm-5.4.4-pass-_builddir-properly-to-find-debuginfo.patch
+# status: probably okay to merge, but discuss on rpm-devel first
+Patch1013:	rpm-5.4.10-files-listed-twice-terminates-build.patch
+# status: probably okay to merge
+Patch1014:	rpm-5.4.9-ruby1.9-fixes.patch
+# status: keep locally
+Patch1015:	rpm-5.4.9-keep-loading-script-macros.patch
+# status: same as for other dep gen patches
+Patch1016:	rpm-5.4.9-update-rpmfc-when-removing-dependencies-on-self.patch
+# status: idem
+Patch1017:	rpm-5.4.9-rpmfc-extract-dependencies-for-all-files.patch
+# status: ready for merge
+Patch1018:	rpm-5.4.5-rubygems-add-missing-newline.patch
+# status: probably okay to merge
+Patch1019:	rpm-5.4.5-python-export-spec-macros.patch
+# status: idem
+Patch1020:	rpm-5.4.9-font-provides.patch
+# stauus: idem
+Patch1021:	rpm-5.4.7-kmod-dependencies.patch
+# status: probably okay to merge, discuss on rpm-devel first
+Patch1022:	rpm-5.4.5-skip-dependencies-for-character-devices.patch
+# status: ready to merge
+Patch1023:	rpm-5.4.5-rpmfc-use-strlen-not-sizeof.patch
+# status: probably okay to merge
+Patch1024:	rpm-5.4.5-rpmfc-apply-python-coloring-from-magic.patch
+# status: ready to merge
+Patch1025:	rpm-5.4.7-rpmfc-fix-invalid-free-if-not-_defaultdocdir-set.patch
+# status: probably okay to merge
+Patch1026:	rpm-5.4.10-dont-try-generate-rpmfc-dependencies-from-doc-files.patch
+# status: ready
+Patch1027:	rpm-5.4.7-fix-generation-of-ruby-abi-provides.patch
+# crash reproducable with 'rpm -qa --triggers'
+# status: ready
+Patch1028:	rpm-5.4.7-hdrfmt-fix-unitialized-argv-element.patch
+# status: same as for other dep gen patches
+Patch1029:	rpm-5.4.7-dont-consider-trigger-dependencies-as-overlapping.patch
+# status: ready
+Patch1030:	rpm-5.4.7-fix-minor-memleaks.patch
+# status: ready
+Patch1031:	rpm-5.4.9-mire-fix-strings-lacking-null-terminator.patch
+# status: ready
+Patch1032:	rpm-5.4.9-rpmpython-fix-input.patch
+# status: ready
+Patch1033:	rpm-5.4.7-no-seqid_init-on-rdonly-database.patch
+# status: probably ready for merging
+Patch1034:	rpm-5.4.9-avoid-double-slash-in-path-for-dirname-filetrigger-matching.patch
+# status: probably ready to merge, discuss on rpm-devel first
+Patch1035:	rpm-5.4.9-fix-verify-segfault.patch
+# status: ready and should be merged
+Patch1036:	rpm-5.4.9-fix-typo-in-rpmtag-header.patch
+# Due to rpmdav/neon being written in a different fashion than other rpmio clients,
+# the inconsistent behaviour affects code elsewhere which expects consistent behaviour,
+# with the result being that when unable to download files, neon will save error
+# page as the target file.
+# status: should go upstream, but uncertain about "correct" fix, ie. this is
+# more of a workaround, while rewriting rpmdav code to behave consistently
+# would be "the right thing to do". Yet I'm not fully able to grasp all of the
+# code and don't want to spend more time just to get the API..
+Patch1037:	rpm-5.4.10-fix-neon-saving-error-pages-as-target-file.patch
+# As the transaction flags for ignoring arch & os are no longer used, there's
+# currently no way to ignore arch & os of packages anymore. This patch adds
+# support for doing this again by defining rpm variables and overriding
+# --ignorearch & --ignoreos to set these.
+# status: needs to be discussed upstream before thinking about merging
+Patch1038:	rpm-5.4.10-support-ignore-arch-and-os-again.patch
+
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1.4
@@ -667,10 +769,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 # CHECK ME - macrofiles: ~/etc could be used
 #%%patch14 -p1
 %patch16 -p1
-install %{SOURCE9} scripts/php.prov.in
-install %{SOURCE10} scripts/php.req.in
-install %{SOURCE12} scripts/perl.prov
-
 %ifarch i386 i486
 # disable TSC
 %patch26 -p1
@@ -679,7 +777,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch34 -p1
 %patch35 -p0
 %patch36 -p1
-%patch37 -p1
+####%patch37 -p1
 %patch41 -p1
 %patch42 -p1
 %patch47 -p1
@@ -692,7 +790,7 @@ install %{SOURCE12} scripts/perl.prov
 %patch61 -p1
 %endif
 %patch62 -p1
-%patch70 -p1
+####%patch70 -p1
 %patch72 -p1 -b .wiget
 %patch73 -p1
 %patch74 -p1
@@ -708,12 +806,52 @@ install %{SOURCE12} scripts/perl.prov
 %patch84 -p1
 %patch85 -p1
 
-cp -p %{SOURCE2} macros/pld.in
+%patch1000 -p1
+%patch1001 -p1
+%patch1002 -p1
+%patch1003 -p1
+%patch1004 -p1
+%patch1005 -p1
+%patch1006 -p1
+%patch1007 -p1
+%patch1008 -p1
+%patch1009 -p1
+%patch1010 -p1
+%patch1011 -p1
+%patch1012 -p1
+%patch1013 -p1
+%patch1014 -p1
+%patch1015 -p1
+%patch1016 -p1
+%patch1017 -p1
+%patch1018 -p1
+%patch1019 -p1
+%patch1020 -p1
+%patch1021 -p1
+%patch1022 -p1
+%patch1023 -p1
+%patch1024 -p1
+%patch1025 -p1
+%patch1026 -p1
+%patch1027 -p1
+%patch1028 -p1
+%patch1029 -p1
+%patch1030 -p1
+%patch1031 -p1
+%patch1032 -p1
+%patch1033 -p1
+%patch1034 -p1
+%patch1035 -p1
+%patch1036 -p1
+%patch1037 -p1
+%patch1038 -p1
 
-cd scripts
-mv -f perl.req perl.req.in
-mv -f perl.prov perl.prov.in
-cd ..
+install %{SOURCE2} macros/pld.in
+install %{SOURCE9} scripts/php.prov.in
+install %{SOURCE10} scripts/php.req.in
+install %{SOURCE12} scripts/perl.prov.in
+
+%{__mv} -f scripts/perl.req{,.in}
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
@@ -1170,6 +1308,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/http.req
 %attr(755,root,root) %{_rpmlibdir}/mono*
 
+%attr(755,root,root) %{_rpmlibdir}/fontconfig.prov
 # must be here for "Requires: rpm-*prov" to work
 %{_rpmlibdir}/macros.d/cmake
 %{_rpmlibdir}/macros.d/gstreamer
