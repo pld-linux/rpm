@@ -767,8 +767,8 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 # CHECK ME - macrofiles: ~/etc could be used
 #%%patch14 -p1
 %patch16 -p1
-%ifarch i386 i486
-# disable TSC
+%ifnarch i386 i486
+# enable TSC for capable archs
 %patch26 -p1
 %endif
 %patch27 -p1
