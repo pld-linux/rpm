@@ -55,7 +55,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	0.5
+Release:	0.6
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -260,6 +260,7 @@ BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libxml2-devel
 BuildRequires:	neon-devel >= 0.25.5
 %endif
+BuildRequires:	ossp-uuid-devel
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
 %{?with_system_lua:BuildRequires:	lua51-devel >= 5.1.2}
@@ -895,6 +896,7 @@ sed -i \
 	--with-lua=%{!?with_system_lua:internal}%{?with_system_lua:external} \
 	--with-pcre=external \
 	--with-keyutils=none \
+	--with-uuid=%{_libdir}:%{_includedir}/ossp-uuid \
 	--without-path-versioned \
 	--with-extra-path-macros='%{_sysconfdir}/rpm/macros.d/*.macros:%{_rpmlibdir}/macros.build:%{_rpmlibdir}/macros.d/pld:~/etc/rpmmacros:~/etc/.rpmmacros:~/.rpmmacros' \
 	--with-bugreport="http://bugs.pld-linux.org/" \
