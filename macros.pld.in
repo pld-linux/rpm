@@ -95,6 +95,11 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 #---------------------------------------------------------------------
 # Overwrite RPM macros with PLD specific one here.
 
+%__grep			/bin/grep
+%__lua			%{_bindir}/lua
+%__rc			%{_bindir}/rc
+%__xar			%{_bindir}/xar
+
 %_tmppath		%(echo "${TMPDIR:-/var/tmp}")
 %tmpdir			%{_tmppath}
 
@@ -127,10 +132,26 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 
 # Warning: those macros are overwritten by macros.build,
 #          left here for compatibility
-%rpmcflags	%{nil}
-%rpmcxxflags	%{nil}
-%rpmldflags	%{nil}
-%rpmcppflags	%{nil}
+%rpmcflags %(awk 'BEGIN {
+       split("%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}",I);
+       split("%{?filterout} %{?filterout_c} %{?filterout_ld}",F);
+       %{filter_out}
+}')
+%rpmcppflags       %(awk 'BEGIN {
+       split("%{?debug:%debugcppflags}%{!?debug:%optcppflags}%{?debuginfocppflags}",I);
+       split("%{?filterout} %{?filterout_cpp} %{?filterout_cpp}",F);
+       %{filter_out}
+}')
+%rpmcxxflags       %(awk 'BEGIN {
+       split("%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}",I);
+       split("%{?filterout} %{?filterout_cxx} %{?filterout_ld}",F);
+       %{filter_out}
+}')
+%rpmldflags        %(awk 'BEGIN {
+       split("%{?optldflags}",I);
+       split("%{?filterout_ld}",F)
+       %{filter_out}
+}')
 
 # common compilation flags
 %_fortify_cflags	-Wp,-D_FORTIFY_SOURCE=2

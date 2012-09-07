@@ -55,7 +55,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	0.1
+Release:	0.2
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -859,6 +859,13 @@ awk -f %{SOURCE6} %{SOURCE1}
 %{__autoheader}
 %{__autoconf}
 %{__automake}
+
+# rpm checks for CPU type at runtime, but it looks better
+sed -i \
+	-e 's|@host@|%{_target_cpu}-%{_target_vendor}-%{_target_os}|' \
+	-e 's|@host_cpu@|%{_target_cpu}|' \
+	-e 's|@host_os@|%{_target_os}|' \
+	macros.in
 
 %{?with_system_lua:CPPFLAGS="-I/usr/include/lua51 %{rpmcppflags}"}
 # pass CC and CXX too in case of building with some older configure macro
