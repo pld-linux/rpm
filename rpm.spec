@@ -55,7 +55,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	0.6
+Release:	0.7
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -1311,7 +1311,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %endif
 # not used yet ... these six depend on perl
 %attr(755,root,root) %{_rpmlibdir}/http.req
-%attr(755,root,root) %{_rpmlibdir}/mono*
+# we always used scripts provided by mono-devel, maybe move them here
+#%attr(755,root,root) %{_rpmlibdir}/mono-find-provides
+#%attr(755,root,root) %{_rpmlibdir}/mono-find-requires
 
 %attr(755,root,root) %{_rpmlibdir}/fontconfig.prov
 # must be here for "Requires: rpm-*prov" to work
