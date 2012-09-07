@@ -30,7 +30,6 @@
 %_sysconfdir		%{_prefix}/etc
 %_sharedstatedir	/var/lib
 %_localstatedir		/var
-%_lib			lib
 %_libdir		%{_exec_prefix}/%{_lib}
 %_includedir		%{_prefix}/include
 %_oldincludedir		/usr/include
