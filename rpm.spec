@@ -865,7 +865,7 @@ sed -i \
 	-e 's|@host@|%{_target_cpu}-%{_target_vendor}-%{_target_os}|' \
 	-e 's|@host_cpu@|%{_target_cpu}|' \
 	-e 's|@host_os@|%{_target_os}|' \
-	macros.in
+	macros/macros.in
 
 %{?with_system_lua:CPPFLAGS="-I/usr/include/lua51 %{rpmcppflags}"}
 # pass CC and CXX too in case of building with some older configure macro
