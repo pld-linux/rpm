@@ -55,7 +55,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	0.7
+Release:	0.8
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -139,6 +139,7 @@ Patch82:	%{name}-libmagic-locale.patch
 Patch83:	%{name}-namespace-probe.patch
 Patch84:	%{name}-popt-coreutils.patch
 Patch85:	%{name}-postun-nofail.patch
+Patch86:	%{name}-silence-RPM_CHAR_TYPE.patch
 
 # Patches imported from Mandriva
 
@@ -802,6 +803,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch83 -p1
 %patch84 -p1
 %patch85 -p1
+%patch86 -p1
 
 %patch1000 -p1
 %patch1001 -p1
@@ -898,7 +900,7 @@ sed -i \
 	--with-keyutils=none \
 	--with-uuid=%{_libdir}:%{_includedir}/ossp-uuid \
 	--without-path-versioned \
-	--with-extra-path-macros='%{_sysconfdir}/rpm/macros.d/*.macros:%{_rpmlibdir}/macros.build:%{_rpmlibdir}/macros.d/pld:~/etc/rpmmacros:~/etc/.rpmmacros:~/.rpmmacros' \
+	--with-extra-path-macros='%{_sysconfdir}/rpm/macros.d/*.macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/macros.build:~/etc/rpmmacros:~/etc/.rpmmacros:~/.rpmmacros' \
 	--with-bugreport="http://bugs.pld-linux.org/" \
 	--with-vendor=pld
 
