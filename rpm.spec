@@ -90,57 +90,48 @@ Source25:	rpm.noautoreq
 Source26:	rpm.noautoreqdep
 Source27:	rpm.noautoreqfiles
 Source29:	%{name}-php-requires.php
-
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
 Patch2:		%{name}-popt-aliases.patch
 Patch3:		%{name}-rpmpopt.patch
 Patch4:		%{name}-perl-macros.patch
 Patch5:		%{name}-perl-req-perlfile.patch
-Patch7:		%{name}-scripts-closefds.patch
-Patch8:		%{name}-php-macros.patch
-Patch9:		%{name}-gettext-in-header.patch
-Patch11:	%{name}-lua.patch
-
-Patch14:	%{name}-etc_dir.patch
-Patch16:	%{name}-php-deps.patch
-Patch19:	%{name}-glob.patch
-
-Patch26:	%{name}-notsc.patch
-Patch27:	%{name}-hack-norpmlibdep.patch
-
-Patch34:	%{name}-epoch0.patch
-Patch35:	%{name}-perl_req-INC_dirs.patch
-Patch36:	%{name}-debuginfo.patch
-
-Patch41:	vendor-pld.patch
-
-Patch42:	%{name}-old-fileconflicts-behaviour.patch
-
-Patch47:	%{name}-javadeps.patch
-
-Patch55:	%{name}-truncate-cvslog.patch
-
-Patch59:	%{name}-libtool-deps.patch
-Patch60:	%{name}-mimetype.patch
-Patch61:	%{name}-sparc64.patch
-Patch62:	%{name}-gendiff.patch
-Patch72:	openmp.patch
-Patch73:	%{name}-URPM-build-fix.patch
-Patch74:	%{name}-db5.3.patch
-Patch75:	%{name}-helperEVR-noassert.patch
-Patch76:	%{name}-unglobal.patch
-Patch77:	%{name}-builddir-readlink.patch
-Patch78:	%{name}-changelog_order_check_nonfatal.patch
-Patch79:	%{name}-cleanbody.patch
-Patch80:	%{name}-dirdeps-macro.patch
-Patch81:	%{name}-installbeforeerase.patch
-Patch82:	%{name}-libmagic-locale.patch
-Patch83:	%{name}-namespace-probe.patch
-Patch84:	%{name}-popt-coreutils.patch
-Patch85:	%{name}-postun-nofail.patch
-Patch86:	%{name}-silence-RPM_CHAR_TYPE.patch
-Patch87:	%{name}-fix-missing-types-in-headers.patch
+Patch6:		%{name}-scripts-closefds.patch
+Patch7:		%{name}-php-macros.patch
+Patch8:		%{name}-gettext-in-header.patch
+Patch9:	%{name}-lua.patch
+Patch10:	%{name}-etc_dir.patch
+Patch11:	%{name}-php-deps.patch
+Patch12:	%{name}-glob.patch
+Patch13:	%{name}-notsc.patch
+Patch14:	%{name}-hack-norpmlibdep.patch
+Patch15:	%{name}-epoch0.patch
+Patch16:	%{name}-perl_req-INC_dirs.patch
+Patch17:	%{name}-debuginfo.patch
+Patch18:	vendor-pld.patch
+Patch19:	%{name}-old-fileconflicts-behaviour.patch
+Patch20:	%{name}-javadeps.patch
+Patch21:	%{name}-truncate-cvslog.patch
+Patch22:	%{name}-libtool-deps.patch
+Patch23:	%{name}-mimetype.patch
+Patch24:	%{name}-sparc64.patch
+Patch25:	%{name}-gendiff.patch
+Patch26:	openmp.patch
+Patch27:	%{name}-URPM-build-fix.patch
+Patch28:	%{name}-db5.3.patch
+Patch29:	%{name}-helperEVR-noassert.patch
+Patch30:	%{name}-unglobal.patch
+Patch31:	%{name}-builddir-readlink.patch
+Patch32:	%{name}-changelog_order_check_nonfatal.patch
+Patch33:	%{name}-cleanbody.patch
+Patch34:	%{name}-dirdeps-macro.patch
+Patch35:	%{name}-installbeforeerase.patch
+Patch36:	%{name}-libmagic-locale.patch
+Patch37:	%{name}-namespace-probe.patch
+Patch38:	%{name}-popt-coreutils.patch
+Patch39:	%{name}-postun-nofail.patch
+Patch40:	%{name}-silence-RPM_CHAR_TYPE.patch
+Patch41:	%{name}-fix-missing-types-in-headers.patch
 
 # Patches imported from Mandriva
 
@@ -763,49 +754,49 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 %patch7 -p1
 %patch8 -p1
-%patch9 -p1
-%{?with_system_lua:%patch11 -p1}
+%{?with_system_lua:%patch9 -p1}
 # CHECK ME - macrofiles: ~/etc could be used
-#%%patch14 -p1
-%patch16 -p1
+#%%patch10 -p1
+%patch11 -p1
 %ifnarch i386 i486
 # enable TSC for capable archs
-%patch26 -p1
+%patch13 -p1
 %endif
-%patch27 -p1
-%patch34 -p1
-%patch35 -p0
-%patch36 -p1
-%patch41 -p1
-%patch42 -p1
-%patch47 -p1
-%patch55 -p1
-%patch59 -p1
+%patch14 -p1
+%patch15 -p1
+%patch16 -p0
+%patch17 -p1
+%patch18 -p1
+%patch19 -p1
+%patch20 -p1
+%patch21 -p1
+%patch22 -p1
 # Maybe, at last we can remove this?
-#patch19 -p1
-%patch60 -p1
+#patch12 -p1
+%patch23 -p1
 %ifarch sparc64
-%patch61 -p1
+%patch24 -p1
 %endif
-%patch62 -p1
-%patch72 -p1 -b .wiget
-%patch73 -p1
-%patch74 -p1
-%patch75 -p1
-%patch76 -p1
-%patch77 -p1
-%patch78 -p1
-%patch79 -p1
-%patch80 -p1
-%patch81 -p1
-%patch82 -p1
-%patch83 -p1
-%patch84 -p1
-%patch85 -p1
-%patch86 -p1
-%patch87 -p1
+%patch25 -p1
+%patch26 -p1 -b .wiget
+%patch27 -p1
+%patch28 -p1
+%patch29 -p1
+%patch30 -p1
+%patch31 -p1
+%patch32 -p1
+%patch33 -p1
+%patch34 -p1
+%patch35 -p1
+%patch36 -p1
+%patch37 -p1
+%patch38 -p1
+%patch39 -p1
+%patch40 -p1
+%patch41 -p1
 
 %patch1000 -p1
 %patch1001 -p1
