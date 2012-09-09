@@ -70,26 +70,26 @@ Source4:	%{name}-find-spec-bcond
 Source5:	%{name}-hrmib-cache
 Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
-Source9:	%{name}-php-provides
-Source10:	%{name}-php-requires
-Source11:	%{name}.sysinfo
-Source12:	perl.prov
-Source13:	%{name}-user_group.sh
-Source14:	%{name}.sysconfig
-Source16:	%{name}-java-requires
+Source8:	%{name}-php-provides
+Source9:	%{name}-php-requires
+Source10:	%{name}.sysinfo
+Source11:	perl.prov
+Source12:	%{name}-user_group.sh
+Source13:	%{name}.sysconfig
+Source14:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
-Source17:	banner.sh
-Source19:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
-# Source19-md5:	08b29584dd349aac9caa7610131a0a88
-Source20:	%{name}-mimetypedeps
-Source21:	macros.local
-Source22:	rpm.noautocompressdoc
-Source23:	rpm.noautoprov
-Source24:	rpm.noautoprovfiles
-Source25:	rpm.noautoreq
-Source26:	rpm.noautoreqdep
-Source27:	rpm.noautoreqfiles
-Source29:	%{name}-php-requires.php
+Source15:	banner.sh
+Source16:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
+# Source16-md5:	08b29584dd349aac9caa7610131a0a88
+Source17:	%{name}-mimetypedeps
+Source18:	macros.local
+Source19:	rpm.noautocompressdoc
+Source20:	rpm.noautoprov
+Source21:	rpm.noautoprovfiles
+Source22:	rpm.noautoreq
+Source23:	rpm.noautoreqdep
+Source24:	rpm.noautoreqfiles
+Source25:	%{name}-php-requires.php
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
 Patch2:		%{name}-popt-aliases.patch
@@ -839,9 +839,9 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1038 -p1
 
 install %{SOURCE2} macros/pld.in
-install %{SOURCE9} scripts/php.prov.in
-install %{SOURCE10} scripts/php.req.in
-install %{SOURCE12} scripts/perl.prov.in
+install %{SOURCE8} scripts/php.prov.in
+install %{SOURCE9} scripts/php.req.in
+install %{SOURCE11} scripts/perl.prov.in
 
 %{__mv} -f scripts/perl.req{,.in}
 
@@ -908,7 +908,7 @@ sed -i \
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg}
 
-install %{SOURCE19} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
+install %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
 %{__make} install \
 	pkgconfigdir=%{_pkgconfigdir} \
@@ -1035,30 +1035,30 @@ install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
 install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
 install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
-install %{SOURCE13} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
-install %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
+install %{SOURCE12} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
+install %{SOURCE14} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
 install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
-cp -p %{SOURCE29} $RPM_BUILD_ROOT%{_rpmlibdir}/php.req.php
-install %{SOURCE20} $RPM_BUILD_ROOT%{_rpmlibdir}/mimetypedeps.sh
+cp -p %{SOURCE25} $RPM_BUILD_ROOT%{_rpmlibdir}/php.req.php
+install %{SOURCE17} $RPM_BUILD_ROOT%{_rpmlibdir}/mimetypedeps.sh
 install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
-install %{SOURCE14} $RPM_BUILD_ROOT/etc/sysconfig/rpm
+install %{SOURCE13} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
-install %{SOURCE17} $RPM_BUILD_ROOT%{_bindir}/banner.sh
+install %{SOURCE15} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
 
-install %{SOURCE21} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros
-install %{SOURCE22} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc
-install %{SOURCE23} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov
-install %{SOURCE24} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles
-install %{SOURCE25} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq
-install %{SOURCE26} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep
-install %{SOURCE27} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles
+install %{SOURCE18} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros
+install %{SOURCE19} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc
+install %{SOURCE20} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov
+install %{SOURCE21} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles
+install %{SOURCE22} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq
+install %{SOURCE23} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep
+install %{SOURCE24} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles
 
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Conflictname
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Dirnames
-install %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
+install %{SOURCE10} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Obsoletename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Providename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
