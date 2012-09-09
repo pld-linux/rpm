@@ -140,6 +140,7 @@ Patch83:	%{name}-namespace-probe.patch
 Patch84:	%{name}-popt-coreutils.patch
 Patch85:	%{name}-postun-nofail.patch
 Patch86:	%{name}-silence-RPM_CHAR_TYPE.patch
+Patch87:	%{name}-fix-missing-types-in-headers.patch
 
 # Patches imported from Mandriva
 
@@ -804,6 +805,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch84 -p1
 %patch85 -p1
 %patch86 -p1
+%patch87 -p1
 
 %patch1000 -p1
 %patch1001 -p1
