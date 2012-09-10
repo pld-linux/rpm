@@ -133,6 +133,7 @@ Patch39:	%{name}-postun-nofail.patch
 Patch40:	%{name}-silence-RPM_CHAR_TYPE.patch
 Patch41:	%{name}-fix-missing-types-in-headers.patch
 Patch42:	%{name}-disable-ldconfig-optimization.patch
+Patch43:	%{name}-fix--p-interpreter-and-empty-script.patch
 
 # Patches imported from Mandriva
 
@@ -234,6 +235,8 @@ Patch1037:	rpm-5.4.10-fix-neon-saving-error-pages-as-target-file.patch
 # --ignorearch & --ignoreos to set these.
 # status: needs to be discussed upstream before thinking about merging
 Patch1038:	rpm-5.4.10-support-ignore-arch-and-os-again.patch
+# status: ready for merge
+Patch1039:	rpm-5.4.4-fix-same-package-with-epoch-possible-to-upgrade.patch
 
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.60
@@ -799,6 +802,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch40 -p1
 %patch41 -p1
 %patch42 -p1
+%patch43 -p1
 
 %patch1000 -p1
 %patch1001 -p1
@@ -839,6 +843,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1036 -p1
 %patch1037 -p1
 %patch1038 -p1
+%patch1039 -p1
 
 install %{SOURCE2} macros/pld.in
 install %{SOURCE8} scripts/php.prov.in
