@@ -55,7 +55,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	0.11
+Release:	0.12
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -134,6 +134,7 @@ Patch40:	%{name}-silence-RPM_CHAR_TYPE.patch
 Patch41:	%{name}-fix-missing-types-in-headers.patch
 Patch42:	%{name}-disable-ldconfig-optimization.patch
 Patch43:	%{name}-fix--p-interpreter-and-empty-script.patch
+Patch44:	%{name}-db_buffer_small.patch
 
 # Patches imported from Mandriva
 
@@ -803,6 +804,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch41 -p1
 %patch42 -p1
 %patch43 -p1
+%patch44 -p1
 
 %patch1000 -p1
 %patch1001 -p1
