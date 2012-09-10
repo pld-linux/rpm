@@ -801,7 +801,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch39 -p1
 %patch40 -p1
 %patch41 -p1
-%patch42 -p1
+#%patch42 -p1
 %patch43 -p1
 
 %patch1000 -p1
