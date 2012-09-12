@@ -915,7 +915,8 @@ sed -i \
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm,/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg}
+install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm} \
+	$RPM_BUILD_ROOT{/var/lib/rpm/filetriggers,/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg}
 
 install %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
@@ -1154,6 +1155,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %lang(sk) %{_mandir}/sk/man8/rpm.8*
 
 %dir /var/lib/rpm
+%dir /var/lib/rpm/filetriggers
 %dir /var/lib/rpm/log
 %dir /var/lib/rpm/tmp
 %config(noreplace) %verify(not md5 mtime size) /var/lib/rpm/DB_CONFIG
