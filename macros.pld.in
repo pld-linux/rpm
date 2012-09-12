@@ -116,6 +116,15 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 # provides don't obsolete
 %_upgrade_tag		name
 
+# Do not generate executable() dependencies for scriptlets,
+# as it may give false positives, for example:
+# [ ! -x /bin/prog ] || /bin/prog
+# will generate R:/bin/prog and we don't want that as /bin/prog is optional in this case
+# 0 - Use external generator
+# 1 - Use internal generator if available
+# 2 - Use __scriptlet_requires to process scriptlet dependencies
+%_use_internal_dependency_generator	1
+
 #-----------------------------------------------------------------
 # CFLAGS and LDFLAGS used to build
 
