@@ -107,7 +107,7 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 %buildroot		%{_tmppath}/%{name}-%{version}-root-%(id -u -n)
 
 %_source_payload	w9.gzdio
-%_binary_payload	w9.xzdio
+%_binary_payload	w9.lzdio
 
 %_rpmfc_magic_path	/usr/share/file/magic
 
