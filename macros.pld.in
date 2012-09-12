@@ -107,7 +107,7 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 %buildroot		%{_tmppath}/%{name}-%{version}-root-%(id -u -n)
 
 %_source_payload	w9.gzdio
-%_binary_payload	w9.lzdio
+%_binary_payload	w9.xzdio
 
 %_rpmfc_magic_path	/usr/share/file/magic
 
@@ -124,6 +124,13 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 # 1 - Use internal generator if available
 # 2 - Use __scriptlet_requires to process scriptlet dependencies
 %_use_internal_dependency_generator	1
+
+%_duplicate_files_terminate_build	1
+%_files_listed_twice_terminate_build	1
+%_unpackaged_subdirs_terminate_build	0
+
+# activate filetriggers (cf http://wiki.mandriva.com/en/Rpm_filetriggers)
+%_filetriggers_dir /var/lib/rpm/filetriggers
 
 #-----------------------------------------------------------------
 # CFLAGS and LDFLAGS used to build
@@ -175,7 +182,6 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 %ix86  i386 i486 i586 i686 pentium3 pentium4 athlon
 %x8664 x86_64 amd64 ia32e
 %ppc   ppc ppc7400 ppc7450
-
 
 #---------------------------------------------------------------------
 #	Expanded at end of %prep
