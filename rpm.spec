@@ -1111,9 +1111,6 @@ cp -a doc/manual manual
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%triggerpostun lib -- %{name}-lib < %{version}
-rm -f /var/lib/rpm/__db*
-
 %pretrans
 # this needs to be a dir
 if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
