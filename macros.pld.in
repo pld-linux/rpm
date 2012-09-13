@@ -111,8 +111,6 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 
 %_rpmfc_magic_path	/usr/share/file/magic
 
-%undefine		__scriptlet_requires
-
 # provides don't obsolete
 %_upgrade_tag		name
 
