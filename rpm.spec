@@ -1,6 +1,5 @@
 #
 # TODO:
-# - check if glob() patch needs resurrecting/rewriting
 # - check if we want shell autodeps: Requires: executable(ln) executable(mv)
 # - add macros for some ppc, mipsel, alpha and sparc
 #
@@ -95,7 +94,6 @@ Patch8:		%{name}-gettext-in-header.patch
 Patch9:	%{name}-lua.patch
 Patch10:	%{name}-etc_dir.patch
 Patch11:	%{name}-php-deps.patch
-Patch12:	%{name}-glob.patch
 Patch13:	%{name}-notsc.patch
 Patch14:	%{name}-hack-norpmlibdep.patch
 Patch15:	%{name}-epoch0.patch
@@ -771,8 +769,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch20 -p1
 %patch21 -p1
 %patch22 -p1
-# Maybe, at last we can remove this?
-#patch12 -p1
 %patch23 -p1
 %ifarch sparc64
 %patch24 -p1
