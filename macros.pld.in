@@ -129,9 +129,6 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 %_files_listed_twice_terminate_build	1
 %_unpackaged_subdirs_terminate_build	0
 
-# activate filetriggers (cf http://wiki.mandriva.com/en/Rpm_filetriggers)
-%_filetriggers_dir /var/lib/rpm/filetriggers
-
 #-----------------------------------------------------------------
 # CFLAGS and LDFLAGS used to build
 
