@@ -2,8 +2,6 @@
 # TODO:
 # - check if glob() patch needs resurrecting/rewriting
 # - check if we want shell autodeps: Requires: executable(ln) executable(mv)
-# - python(abi) cap is not provided automatically because /usr/lib*/libpython2*.so.*
-#   matches ELF first
 # - add macros for some ppc, mipsel, alpha and sparc
 #
 # - headerGet() making poldek segfault http://rpm5.org/cvs/tktview?tn=38,1
