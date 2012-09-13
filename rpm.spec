@@ -2,11 +2,6 @@
 # TODO:
 # - check if glob() patch needs resurrecting/rewriting
 # - check if we want shell autodeps: Requires: executable(ln) executable(mv)
-# - %{_arch} = i686 not as used to be i386 (platform file thing?):
-#   5.0.2: rpm -E '%_target_base_arch %_arch'
-#          i386 i686
-#   4.4.9: rpm -E '%_target_base_arch %_arch'
-#          i386 i386
 # - python(abi) cap is not provided automatically because /usr/lib*/libpython2*.so.*
 #   matches ELF first
 # - add macros for some ppc, mipsel, alpha and sparc
