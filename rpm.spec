@@ -91,8 +91,7 @@ Patch5:		%{name}-perl-req-perlfile.patch
 Patch6:		%{name}-scripts-closefds.patch
 Patch7:		%{name}-php-macros.patch
 Patch8:		%{name}-gettext-in-header.patch
-Patch9:	%{name}-lua.patch
-Patch10:	%{name}-etc_dir.patch
+Patch9:		%{name}-lua.patch
 Patch11:	%{name}-php-deps.patch
 Patch13:	%{name}-notsc.patch
 Patch14:	%{name}-hack-norpmlibdep.patch
@@ -753,8 +752,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch7 -p1
 %patch8 -p1
 %{?with_system_lua:%patch9 -p1}
-# CHECK ME - macrofiles: ~/etc could be used
-#%%patch10 -p1
 %patch11 -p1
 %ifnarch i386 i486
 # enable TSC for capable archs
@@ -890,7 +887,7 @@ sed -i \
 	--with-keyutils=none \
 	--with-uuid=%{_libdir}:%{_includedir}/ossp-uuid \
 	--without-path-versioned \
-	--with-extra-path-macros='%{_sysconfdir}/rpm/macros.d/*.macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/macros.build:~/etc/rpmmacros:~/etc/.rpmmacros:~/.rpmmacros' \
+	--with-extra-path-macros='%{_sysconfdir}/rpm/macros.d/*.macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/macros.build:~/etc/.rpmmacros:~/.rpmmacros' \
 	--with-bugreport="http://bugs.pld-linux.org/" \
 	--with-vendor=pld
 
