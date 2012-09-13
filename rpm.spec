@@ -47,7 +47,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	0.13
+Release:	0.14
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -117,7 +117,7 @@ Patch33:	%{name}-cleanbody.patch
 Patch34:	%{name}-dirdeps-macro.patch
 Patch35:	%{name}-installbeforeerase.patch
 Patch36:	%{name}-libmagic-locale.patch
-Patch37:	%{name}-namespace-probe.patch
+Patch37:	%{name}-namespace-compare.patch
 Patch38:	%{name}-popt-coreutils.patch
 Patch39:	%{name}-postun-nofail.patch
 Patch40:	%{name}-silence-RPM_CHAR_TYPE.patch

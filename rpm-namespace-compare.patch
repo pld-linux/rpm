@@ -1,0 +1,15 @@
+--- rpm-5.4.10/lib/rpmds.c~	2012-07-06 17:39:16.000000000 +0200
++++ rpm-5.4.10/lib/rpmds.c	2012-09-13 12:40:32.439076460 +0200
+@@ -4036,6 +4036,12 @@
+ 
+ assert((rpmdsFlags(A) & RPMSENSE_SENSEMASK) == A->ns.Flags);
+ assert((rpmdsFlags(B) & RPMSENSE_SENSEMASK) == B->ns.Flags);
++    /* Different namespaces don't overlap. */
++    if (A->ns.Type != B->ns.Type) {
++	result = 0;
++	goto exit;
++    }
++
+     /* Different names (and/or name.arch's) don't overlap. */
+     if (rpmdsNAcmp(A, B)) {
+ 	result = 0;
