@@ -125,6 +125,7 @@ Patch41:	%{name}-fix-missing-types-in-headers.patch
 Patch42:	%{name}-disable-ldconfig-optimization.patch
 Patch43:	%{name}-fix--p-interpreter-and-empty-script.patch
 Patch44:	%{name}-db_buffer_small.patch
+Patch45:	%{name}-pattern_Release.patch
 
 # Patches imported from Mandriva
 
@@ -790,6 +791,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 #patch42 -p1
 %patch43 -p1
 %patch44 -p1
+%patch45 -p1
 
 %patch1000 -p1
 %patch1001 -p1

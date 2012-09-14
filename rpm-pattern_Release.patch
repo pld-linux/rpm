@@ -1,0 +1,11 @@
+--- rpm-5.4.10/macros/macros.in~	2012-09-12 13:52:19.305575500 +0200
++++ rpm-5.4.10/macros/macros.in	2012-09-14 14:15:34.115044785 +0200
+@@ -778,7 +778,7 @@
+ %pattern_Name		^[A-Za-z0-9][A-Za-z0-9+._-]*$
+ %pattern_Epoch		^[0-9]+$
+ %pattern_Version	^[A-Za-z0-9+._~]+$
+-%pattern_Release	^[A-Za-z0-9+._]+$
++%pattern_Release	^[A-Za-z0-9+._@{}%]+$
+ %pattern_Disttag	^[A-Za-z0-9]+$
+ %pattern_Repotag	^[A-Za-z0-9]+$
+ %pattern_Distepoch	^[A-Za-z0-9.]+$
