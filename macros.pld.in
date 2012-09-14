@@ -114,6 +114,9 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 # provides don't obsolete
 %_upgrade_tag		name
 
+# we use '@' in release for kernel packages
+%pattern_Release	^[A-Za-z0-9+._@]+$
+
 # Do not generate executable() dependencies for scriptlets,
 # as it may give false positives, for example:
 # [ ! -x /bin/prog ] || /bin/prog
