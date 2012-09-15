@@ -4,7 +4,6 @@
 # - add macros for some ppc, mipsel, alpha and sparc
 # - make %%patch not multiline, so plain comment char could still work:
 #   http://git.pld-linux.org/gitweb.cgi/packages/kernel.git/commitdiff/5d3a3ea257d7f88e59d0ad93c20cc8448fb42f3d
-# - http://rpm5.org/cvs/tktview?tn=41&_submit=Show
 #
 # - when adopting, use 4.5 ticket for checklist: https://bugs.launchpad.net/pld-linux/+bug/262985
 #
@@ -127,6 +126,7 @@ Patch43:	%{name}-fix--p-interpreter-and-empty-script.patch
 Patch44:	%{name}-db_buffer_small.patch
 Patch45:	%{name}-pattern_Release.patch
 Patch46:	%{name}-fix-___build_pre-macro.patch
+Patch47:	%{name}-missing-patch-file-fails-build.patch
 
 # Patches imported from Mandriva
 
@@ -794,6 +794,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch44 -p1
 %patch45 -p1
 %patch46 -p1
+%patch47 -p1
 
 %patch1000 -p1
 %patch1001 -p1
