@@ -10,7 +10,6 @@
 #   http://git.pld-linux.org/gitweb.cgi/packages/kernel.git/commitdiff/5d3a3ea257d7f88e59d0ad93c20cc8448fb42f3d
 #
 # - headerGet() making poldek segfault http://rpm5.org/cvs/tktview?tn=38,1
-# - rpm doesn't exit when no sources/patches available http://rpm5.org/cvs/tktview?tn=40,1
 # - http://rpm5.org/cvs/tktview?tn=41&_submit=Show
 # - when adopting, use 4.5 ticket for checklist: https://bugs.launchpad.net/pld-linux/+bug/262985
 #
