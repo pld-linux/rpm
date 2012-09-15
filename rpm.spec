@@ -4,6 +4,10 @@
 # - add macros for some ppc, mipsel, alpha and sparc
 # - make %%patch not multiline, so plain comment char could still work:
 #   http://git.pld-linux.org/gitweb.cgi/packages/kernel.git/commitdiff/5d3a3ea257d7f88e59d0ad93c20cc8448fb42f3d
+# - why $RPM_SOURCE_DIR missing, needs macro?
+#	# for rpm 5.3
+#	[ -z "$RPM_SOURCE_DIR" ] && export RPM_SOURCE_DIR=$(dirname %{SOURCE6})
+#   http://git.pld-linux.org/gitweb.cgi/packages/kernel.git/commitdiff/5d3a3ea257d7f88e59d0ad93c20cc8448fb42f3d
 #
 # - headerGet() making poldek segfault http://rpm5.org/cvs/tktview?tn=38,1
 # - rpm doesn't exit when no sources/patches available http://rpm5.org/cvs/tktview?tn=40,1
