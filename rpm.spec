@@ -1106,6 +1106,15 @@ if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
 	mkdir %{_sysconfdir}/rpm/sysinfo
 fi
 
+%posttrans
+if [ -e /var/lib/rpm/__convert_needed ]; then
+	%{_rpmlibdir}/bin/dbconvert --rebuilddb
+	%{__rm} -f /var/lib/rpm/__convert_needed
+fi
+
+%triggerpostun -- %{name} < 5.4.0-1
+:>/var/lib/rpm/__convert_needed
+
 %triggerpostun -- %{name} < 4.4.9-44
 %{_rpmlibdir}/hrmib-cache
 
