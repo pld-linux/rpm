@@ -4,8 +4,8 @@
 # - add macros for some ppc, mipsel, alpha and sparc
 # - make %%patch not multiline, so plain comment char could still work:
 #   http://git.pld-linux.org/gitweb.cgi/packages/kernel.git/commitdiff/5d3a3ea257d7f88e59d0ad93c20cc8448fb42f3d
-#
 # - http://rpm5.org/cvs/tktview?tn=41&_submit=Show
+#
 # - when adopting, use 4.5 ticket for checklist: https://bugs.launchpad.net/pld-linux/+bug/262985
 #
 # Conditional build:
@@ -47,7 +47,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	0.16
+Release:	0.17
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
