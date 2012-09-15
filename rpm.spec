@@ -4,10 +4,6 @@
 # - add macros for some ppc, mipsel, alpha and sparc
 # - make %%patch not multiline, so plain comment char could still work:
 #   http://git.pld-linux.org/gitweb.cgi/packages/kernel.git/commitdiff/5d3a3ea257d7f88e59d0ad93c20cc8448fb42f3d
-# - why $RPM_SOURCE_DIR missing, needs macro?
-#	# for rpm 5.3
-#	[ -z "$RPM_SOURCE_DIR" ] && export RPM_SOURCE_DIR=$(dirname %{SOURCE6})
-#   http://git.pld-linux.org/gitweb.cgi/packages/kernel.git/commitdiff/5d3a3ea257d7f88e59d0ad93c20cc8448fb42f3d
 #
 # - http://rpm5.org/cvs/tktview?tn=41&_submit=Show
 # - when adopting, use 4.5 ticket for checklist: https://bugs.launchpad.net/pld-linux/+bug/262985
@@ -130,6 +126,7 @@ Patch42:	%{name}-disable-ldconfig-optimization.patch
 Patch43:	%{name}-fix--p-interpreter-and-empty-script.patch
 Patch44:	%{name}-db_buffer_small.patch
 Patch45:	%{name}-pattern_Release.patch
+Patch46:	%{name}-fix-___build_pre-macro.patch
 
 # Patches imported from Mandriva
 
@@ -796,6 +793,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch43 -p1
 %patch44 -p1
 %patch45 -p1
+%patch46 -p1
 
 %patch1000 -p1
 %patch1001 -p1
