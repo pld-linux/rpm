@@ -7,7 +7,7 @@ Fix for http://rpm5.org/cvs/tktview?tn=41
  %define __patch_fuzz    %{?_default_patch_fuzz:%(test %{_default_patch_fuzz} -ge 0 && echo "--fuzz=%{_default_patch_fuzz} ")} \
  %define __patch_options %{_default_patch_flags} %{-p:-p%{-p*}} %{-F:-F%{-F*}} %{-d:-d%{-d*}} %{-R} %{-E} %{__patch_suffix} \
 -echo "Patch #%{__patch_number} (%{basename:%{__patch_file}}):" && ( %{uncompress:%{__patch_file}} | %{__patch} %{__patch_fuzz}%{__patch_options} ) || exit 1\
-+echo "Patch #%{__patch_number} (%{basename:%{__patch_file}}):" && [ -f %{__patch_file} ] && ( %{uncompress:%{__patch_file}} | %{__patch} %{__patch_fuzz}%{__patch_options} ) || exit 1\
++echo "Patch #%{__patch_number} (%{basename:%{__patch_file}}):" && [ -f %{__patch_file} ] && %{uncompress:%{__patch_file}} | %{__patch} %{__patch_fuzz}%{__patch_options} || exit 1\
  }
  
  #
