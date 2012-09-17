@@ -170,8 +170,8 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 %Werror_cflags		-Wformat -Werror=format-security
 
 %_ssp_cflags		-fstack-protector --param=ssp-buffer-size=4
-%__common_cflags	-O2 -fwrapv %{debuginfocflags} -pipe %{Werror_cflags} %{?_fortify_cflags}
-%__common_cflags_with_ssp	%{__common_cflags} %{?_ssp_cflags} %{!?nospecflags:%{?specflags}}
+%__common_cflags	-O2 -fwrapv -pipe %{Werror_cflags} %{debuginfocflags} %{?_fortify_cflags} %{!?nospecflags:%{?specflags}}
+%__common_cflags_with_ssp	%{__common_cflags} %{?_ssp_cflags}
 
 # arch macros
 %ix86  i386 i486 i586 i686 pentium3 pentium4 athlon
