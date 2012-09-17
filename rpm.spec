@@ -1,6 +1,5 @@
 #
 # TODO:
-# - check if we want shell autodeps: Requires: executable(ln) executable(mv)
 # - add macros for some ppc, mipsel, alpha and sparc
 #
 # - when adopting, use 4.5 ticket for checklist: https://bugs.launchpad.net/pld-linux/+bug/262985
