@@ -127,6 +127,7 @@ Patch44:	%{name}-db_buffer_small.patch
 Patch45:	%{name}-pattern_Release.patch
 Patch46:	%{name}-fix-___build_pre-macro.patch
 Patch47:	%{name}-missing-patch-file-fails-build.patch
+Patch48:	%{name}-remove-misleading-missing-patch-message.patch
 
 # Patches imported from Mandriva
 
@@ -795,6 +796,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch45 -p1
 %patch46 -p1
 %patch47 -p1
+%patch48 -p1
 
 %patch1000 -p1
 %patch1001 -p1
