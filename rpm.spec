@@ -1065,7 +1065,7 @@ touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
 
 # create macro loading wrappers for backward compatibility
 for m in gstreamer java mono perl php python; do
-	echo "%{load:%{_rpmlibdir}/macros.d/$m}" >$RPM_BUILD_ROOT%{_rpmlibdir}/macros.$m
+	echo "%%{load:%{_rpmlibdir}/macros.d/$m}" >$RPM_BUILD_ROOT%{_rpmlibdir}/macros.$m
 done
 
 # for rpm -e|-U --repackage
