@@ -1063,6 +1063,11 @@ touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Obsoletename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Providename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
 
+# create macro loading wrappers for backward compatibility
+for m in gstreamer java mono perl php python; do
+	echo "%{load:%{_rpmlibdir}/macros.d/$m}" >$RPM_BUILD_ROOT%{_rpmlibdir}/macros.$m
+done
+
 # for rpm -e|-U --repackage
 install -d $RPM_BUILD_ROOT/var/{spool/repackage,lock/rpm}
 touch $RPM_BUILD_ROOT/var/lock/rpm/transaction
@@ -1332,6 +1337,13 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros.d/selinux
 %{_rpmlibdir}/macros.d/tcl
 %{_rpmlibdir}/macros.rpmbuild
+# compat wrappers
+%{_rpmlibdir}/macros.gstreamer
+%{_rpmlibdir}/macros.java
+%{_rpmlibdir}/macros.mono
+%{_rpmlibdir}/macros.perl
+%{_rpmlibdir}/macros.php
+%{_rpmlibdir}/macros.python
 
 %attr(755,root,root) %{_rpmlibdir}/check-multiarch-files
 %attr(755,root,root) %{_rpmlibdir}/gem_helper.rb
