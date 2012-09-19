@@ -1123,12 +1123,19 @@ fi
 %posttrans
 if [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] && \
 		! %{_rpmlibdir}/bin/rpmdb_checkversion -h /var/lib/rpm -d /var/lib/rpm ; then
-	if %{__cp} -a /var/lib/rpm /var/lib/rpm.rpmbackup ; then
+	if [ ! -e /var/lib/rpm.rpmbackup ] && %{__cp} -a /var/lib/rpm /var/lib/rpm.rpmbackup ; then
 		echo
 		echo "Backup of the rpm database has been created in /var/lib/rpm.rpmbackup"
 		echo
 	fi
-	[ -x %{_rpmlibdir}/bin/dbconvert ] && %{_rpmlibdir}/bin/dbconvert --rebuilddb
+	if [ -x %{_rpmlibdir}/bin/dbconvert ]; then
+		if ! %{_rpmlibdir}/bin/dbconvert --rebuilddb ; then
+			echo
+			echo "rpm database conversion failed!"
+			echo "You have to run  %{_rpmlibdir}/bin/dbconvert manually"
+			echo
+		fi
+	fi
 fi
 
 %triggerpostun -- %{name} < 4.4.9-44
