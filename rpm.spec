@@ -43,7 +43,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	0.19
+Release:	0.20
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -78,6 +78,7 @@ Source22:	rpm.noautoreq
 Source23:	rpm.noautoreqdep
 Source24:	rpm.noautoreqfiles
 Source25:	%{name}-php-requires.php
+Source26:	rpmdb_checkversion.c
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
 Patch2:		%{name}-popt-aliases.patch
@@ -846,6 +847,8 @@ install %{SOURCE11} scripts/perl.prov.in
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE1}
 
+install %{SOURCE26} tools/rpmdb_checkversion.c
+
 %build
 %{__libtoolize}
 #%{__autopoint}
@@ -901,6 +904,8 @@ sed -i \
 	CPP="%{__cpp}"
 
 %{?with_apidocs:%{__make} apidocs}
+
+%{__cc} %{rpmcflags} tools/rpmdb_checkversion.c -o tools/rpmdb_checkversion -ldb
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -1062,6 +1067,8 @@ touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Obsoletename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Providename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
 
+install tools/rpmdb_checkversion $RPM_BUILD_ROOT%{_rpmlibdir}/bin
+
 # create macro loading wrappers for backward compatibility
 for m in gstreamer java mono perl php python; do
 	echo "%%{load:%{_rpmlibdir}/macros.d/$m}" >$RPM_BUILD_ROOT%{_rpmlibdir}/macros.$m
@@ -1114,13 +1121,10 @@ if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
 fi
 
 %posttrans
-if [ -e /var/lib/rpm/__convert_needed ]; then
-	%{_rpmlibdir}/bin/dbconvert --rebuilddb
-	%{__rm} -f /var/lib/rpm/__convert_needed
+if [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] && \
+		! %{_rpmlibdir}/bin/rpmdb_checkversion -h /var/lib/rpm -d /var/lib/rpm ; then
+	[ -x %{_rpmlibdir}/bin/dbconvert ] && %{_rpmlibdir}/bin/dbconvert --rebuilddb
 fi
-
-%triggerpostun -- %{name} < 5.4.0-1
-:>/var/lib/rpm/__convert_needed
 
 %triggerpostun -- %{name} < 4.4.9-44
 %{_rpmlibdir}/hrmib-cache
@@ -1177,6 +1181,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %dir %{_rpmlibdir}/bin
 %attr(755,root,root) %{_rpmlibdir}/bin/dbconvert
+%attr(755,root,root) %{_rpmlibdir}/bin/rpmdb_checkversion
 
 %files base
 %defattr(644,root,root,755)
