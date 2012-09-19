@@ -1123,9 +1123,10 @@ fi
 %posttrans
 if [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] && \
 		! %{_rpmlibdir}/bin/rpmdb_checkversion -h /var/lib/rpm -d /var/lib/rpm ; then
-	if [ ! -e /var/lib/rpm.rpmbackup ] && %{__cp} -a /var/lib/rpm /var/lib/rpm.rpmbackup ; then
+	if [ ! -e /var/lib/rpm.rpmbackup-%{version}-%{release} ] && \
+			%{__cp} -a /var/lib/rpm /var/lib/rpm.rpmbackup-%{version}-%{release} ; then
 		echo
-		echo "Backup of the rpm database has been created in /var/lib/rpm.rpmbackup"
+		echo "Backup of the rpm database has been created in /var/lib/rpm.rpmbackup-%{version}-%{release}"
 		echo
 	fi
 	if [ -x %{_rpmlibdir}/bin/dbconvert ]; then
