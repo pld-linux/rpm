@@ -94,6 +94,8 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 #---------------------------------------------------------------------
 # Overwrite RPM macros with PLD specific one here.
 
+%__cp			/bin/cp
+%__find			/usr/bin/find
 %__grep			/bin/grep
 %__lua			%{_bindir}/lua
 %__rc			%{_bindir}/rc
