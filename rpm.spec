@@ -28,6 +28,11 @@
 ERROR
 %endif
 
+%if %{with sqlite}
+# Error: /lib64/librpmio-5.4.so: undefined symbol: sqlite3_enable_load_extension
+%define		sqlite_build_version %(pkg-config --silence-errors --modversion sqlite3 2>/dev/null || echo ERROR)
+%endif
+
 # versions of required libraries
 %define		reqdb_ver	5.3
 %define		reqpopt_ver	1.15
@@ -43,7 +48,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	1
+Release:	2
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -391,6 +396,7 @@ Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	libmagic >= 1.15-2
 %{?with_selinux:Requires:	libselinux >= 1.18}
 Requires:	popt >= %{reqpopt_ver}
+%{?with_sqlite:Requires:	sqlite3 >= %{sqlite_build_version}}
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
