@@ -114,6 +114,10 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 # provides don't obsolete
 %_upgrade_tag		name
 
+# Disable automatic dependencies on parent directory and symlinks for now 
+%_check_symlink_deps    0 
+%_check_dirname_deps    0 
+ 
 # Do not generate executable() dependencies for scriptlets,
 # as it may give false positives, for example:
 # [ ! -x /bin/prog ] || /bin/prog
