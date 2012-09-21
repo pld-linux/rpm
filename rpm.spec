@@ -43,7 +43,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	0.21
+Release:	0.23
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -1123,9 +1123,10 @@ fi
 %posttrans
 if [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] && \
 		! %{_rpmlibdir}/bin/rpmdb_checkversion -h /var/lib/rpm -d /var/lib/rpm ; then
-	if [ ! -e /var/lib/rpm.rpmbackup ] && %{__cp} -a /var/lib/rpm /var/lib/rpm.rpmbackup ; then
+	if [ ! -e /var/lib/rpm.rpmbackup-%{version}-%{release} ] && \
+			/bin/cp -a /var/lib/rpm /var/lib/rpm.rpmbackup-%{version}-%{release} ; then
 		echo
-		echo "Backup of the rpm database has been created in /var/lib/rpm.rpmbackup"
+		echo "Backup of the rpm database has been created in /var/lib/rpm.rpmbackup-%{version}-%{release}"
 		echo
 	fi
 	if [ -x %{_rpmlibdir}/bin/dbconvert ]; then
