@@ -48,7 +48,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	2
+Release:	3
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -235,6 +235,8 @@ Patch1037:	rpm-5.4.10-fix-neon-saving-error-pages-as-target-file.patch
 Patch1038:	rpm-5.4.10-support-ignore-arch-and-os-again.patch
 # status: ready for merge
 Patch1039:	rpm-5.4.4-fix-same-package-with-epoch-possible-to-upgrade.patch
+# we want that patch too, a bit of builder infrastructure relies on NOSIGNATURES
+Patch1040:	rpm-5.4.9-support-signatures-and-digest-disablers.patch
 
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.60
@@ -844,6 +846,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1037 -p1
 %patch1038 -p1
 %patch1039 -p1
+%patch1040 -p1
 
 install %{SOURCE2} macros/pld.in
 install %{SOURCE8} scripts/php.prov.in
