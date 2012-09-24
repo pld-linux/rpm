@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	9
+Release:	10
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -775,7 +775,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch12 -p1
 %patch13 -p1
 %patch14 -p0
-%patch15 -p1
+#patch15 -p1
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
