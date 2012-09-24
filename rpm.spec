@@ -1,5 +1,7 @@
 #
 # TODO:
+# - make key infrastructure code fallback from keyutils to plain mode in case keyctl
+#   returns -ENOSYS
 # - add macros for some ppc, mipsel, alpha and sparc
 #
 # - when adopting, use 4.5 ticket for checklist: https://bugs.launchpad.net/pld-linux/+bug/262985
@@ -14,7 +16,8 @@
 %bcond_without	db		# BerkeleyDB
 %bcond_without	sqlite		# build with SQLite support
 %bcond_with	sqlite_dbapi	# default database backend is sqlite
-%bcond_without	system_lua		# use system lua
+%bcond_without	system_lua	# use system lua
+%bcond_with	keyutils	# build with keyutils support
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
@@ -48,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	8
+Release:	9
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -249,7 +252,7 @@ BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	elfutils-devel >= 0.108
 #BuildRequires:	gettext-autopoint >= 0.11.4-2
 BuildRequires:	gettext-devel >= 0.11.4-2
-BuildRequires:	keyutils-devel
+%{?with_keyutils:BuildRequires:	keyutils-devel}
 BuildRequires:	libmagic-devel
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
@@ -425,7 +428,7 @@ Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
 %{?with_db:Requires:	db-devel >= %{reqdb_ver}}
 Requires:	elfutils-devel
-Requires:	keyutils-devel
+%{?with_keyutils:Requires:	keyutils-devel}
 Requires:	libmagic-devel
 %{?with_selinux:Requires:	libselinux-devel}
 Requires:	popt-devel >= %{reqpopt_ver}
@@ -489,7 +492,7 @@ Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
 %{?with_db:Requires:	db-static >= %{reqdb_ver}}
 Requires:	elfutils-static
-Requires:	keyutils-static
+%{?with_keyutils:Requires:	keyutils-static}
 Requires:	libmagic-static
 Requires:	popt-static >= %{reqpopt_ver}
 Requires:	zlib-static
@@ -906,7 +909,7 @@ sed -i \
 	--with-dbapi=%{!?with_sqlite_dbapi:db}%{?with_sqlite_dbapi:sqlite} \
 	--with-lua=%{!?with_system_lua:internal}%{?with_system_lua:external} \
 	--with-pcre=external \
-	--with-keyutils=none \
+	--with-keyutils=%{?with_keyutils:external}%{!?with_keyutils:no} \
 	--with-uuid=%{_libdir}:%{_includedir}/ossp-uuid \
 	--without-path-versioned \
 	--with-extra-path-macros='%{_sysconfdir}/rpm/macros.d/*.macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/macros.build:~/etc/.rpmmacros:~/.rpmmacros' \
@@ -1270,7 +1273,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmcmp
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmdeps
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmdigest
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmkey
+%{?with_keyutils:%attr(755,root,root) %{_rpmlibdir}/bin/rpmkey}
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmrepo
 %{_mandir}/man8/rpm2cpio.8*
 %{_mandir}/man8/rpmcache.8*
