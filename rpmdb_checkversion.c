@@ -41,14 +41,14 @@ main(int argc, char *argv[])
 		case '?':
 		default:
 			(void)fprintf(stderr, "usage: %s [-h home] [-d data_dir]\n", progname);
-			return (0);
+			return (1);
 		}
 	argc -= optind;
 	argv += optind;
 
 	if (argc != 0) {
 		(void)fprintf(stderr, "usage: %s [-h home] [-d data_dir]\n", progname);
-		return (0);
+		return (1);
 	}
 
 	/*
@@ -58,7 +58,7 @@ main(int argc, char *argv[])
 	if ((ret = db_env_create(&dbenv, 0)) != 0) {
 		if (!quiet)
 			fprintf(stderr, "%s: %s\n", progname, db_strerror(ret));
-		return (0);
+		return (1);
 	}
 	if (quiet) {
 		dbenv->set_errfile(dbenv, NULL);
@@ -74,7 +74,7 @@ main(int argc, char *argv[])
 	if ((ret = dbenv->set_cachesize(dbenv, 0, 64 * 1024, 0)) != 0) {
 		dbenv->err(dbenv, ret, "set_cachesize");
 		dbenv->close(dbenv, 0);
-		return (0);
+		return (1);
 	}
 
 	/* Databases are in a subdirectory. */
@@ -84,8 +84,11 @@ main(int argc, char *argv[])
 	ret = dbenv->open(dbenv, home, DB_INIT_MPOOL, 0644);
 	/* Close the environment handle. */
 	dbenv->close(dbenv, 0);
-
+#if 0
 	if (ret == DB_VERSION_MISMATCH) {
+#else
+	if (ret != 0) {
+#endif
 		return (1);
 	}
 
