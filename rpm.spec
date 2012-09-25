@@ -137,6 +137,7 @@ Patch46:	%{name}-file-magic-can-be-mixed-case.patch
 Patch47:	%{name}-query-file-always-noisy.patch
 Patch48:	%{name}-verify-ghosts-broken-logic.patch
 Patch49:	%{name}-python-enable-compat-RPMSENSE.patch
+Patch50:	%{name}-dont-treat-gstreamer-modules-as-font.patch
 
 # Patches imported from Mandriva
 
@@ -812,6 +813,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch47 -p1
 %patch48 -p1
 %patch49 -p1
+%patch50 -p1
 
 %patch1000 -p1
 %patch1001 -p1
