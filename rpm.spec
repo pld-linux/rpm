@@ -138,6 +138,7 @@ Patch47:	%{name}-query-file-always-noisy.patch
 Patch48:	%{name}-verify-ghosts-broken-logic.patch
 Patch49:	%{name}-python-enable-compat-RPMSENSE.patch
 Patch50:	%{name}-dont-treat-gstreamer-modules-as-font.patch
+Patch51:	%{name}-gst-inspect-typo.patch
 
 # Patches imported from Mandriva
 
@@ -814,6 +815,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch48 -p1
 %patch49 -p1
 %patch50 -p1
+%patch51 -p1
 
 %patch1000 -p1
 %patch1001 -p1
@@ -891,6 +893,7 @@ sed -i \
 	CXX="%{__newcxx}" \
 	CPP="%{__newcpp}" \
 	WITH_PERL_VERSION=no \
+	__GST_INSPECT=%{_bindir}/gst-inspect-1.0 \
 	--enable-shared \
 	--enable-static \
 	%{!?with_apidocs:--without-apidocs} \
