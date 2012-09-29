@@ -40,6 +40,7 @@
 %endif
 
 # versions of required libraries
+%define	reqdb_pkg	db4.7
 %if "%{pld_release}" == "th"
 %define	reqdb_ver	4.7.25
 %else
@@ -48,6 +49,7 @@
 %define	reqpopt_ver	1.10.8
 %define	beecrypt_ver	2:4.1.2-4
 %define	sover		4.5
+
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
 Summary(es.UTF-8):	Gestor de paquetes RPM
@@ -57,7 +59,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	69
+Release:	70
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -227,7 +229,7 @@ BuildRequires:	tetex-pdftex
 # Require static library only for static build
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
 BuildRequires:	bzip2-static >= 1.0.2-17
-%{!?with_internal_db:BuildRequires:	db-static >= %{reqdb_ver}}
+%{!?with_internal_db:BuildRequires:	%{reqdb_pkg}-static >= %{reqdb_ver}}
 BuildRequires:	elfutils-static
 BuildRequires:	glibc-static >= 2.2.94
 %{?with_system_libmagic:BuildRequires:	libmagic-static}
@@ -341,7 +343,7 @@ Summary:	RPMs library
 Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
-%{!?with_internal_db:Requires:	db >= %{reqdb_ver}}
+%{!?with_internal_db:Requires:	%{reqdb_pkg} >= %{reqdb_ver}}
 %{?with_system_libmagic:Requires:	libmagic >= 1.15-2}
 %{?with_selinux:Requires:	libselinux >= 1.18}
 Requires:	ossp-uuid >= 1.6.2-4
@@ -374,7 +376,7 @@ Group:		Development/Libraries
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
-%{!?with_internal_db:Requires:	db-devel >= %{reqdb_ver}}
+%{!?with_internal_db:Requires:	%{reqdb_pkg}-devel >= %{reqdb_ver}}
 Requires:	elfutils-devel
 Requires:	keyutils-devel
 %{?with_system_libmagic:Requires:	libmagic-devel}
@@ -439,7 +441,7 @@ Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
-%{!?with_internal_db:Requires:	db-static >= %{reqdb_ver}}
+%{!?with_internal_db:Requires:	%{reqdb_pkg}-static >= %{reqdb_ver}}
 Requires:	elfutils-static
 Requires:	keyutils-static
 %{?with_system_libmagic:Requires:	libmagic-static}
