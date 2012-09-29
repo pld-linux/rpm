@@ -37,6 +37,7 @@ ERROR
 %endif
 
 # versions of required libraries
+%define		reqdb_pkg	db5.3
 %define		reqdb_ver	5.3
 %define		reqpopt_ver	1.15
 %define		beecrypt_ver	2:4.1.2-4
@@ -51,7 +52,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	14
+Release:	15
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -285,7 +286,7 @@ BuildRequires:	tetex-pdftex
 # Require static library only for static build
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
 BuildRequires:	bzip2-static >= 1.0.2-17
-%{?with_db:BuildRequires:	db-static >= %{reqdb_ver}}
+%{?with_db:BuildRequires:	%{reqdb_pkg}-static >= %{reqdb_ver}}
 BuildRequires:	elfutils-static
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	libmagic-static
@@ -401,7 +402,7 @@ Summary:	RPMs library
 Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
-%{?with_db:Requires:	db >= %{reqdb_ver}}
+%{?with_db:Requires:	%{reqdb_pkg} >= %{reqdb_ver}}
 Requires:	libmagic >= 1.15-2
 %{?with_selinux:Requires:	libselinux >= 1.18}
 Requires:	popt >= %{reqpopt_ver}
@@ -428,7 +429,7 @@ Group:		Development/Libraries
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
-%{?with_db:Requires:	db-devel >= %{reqdb_ver}}
+%{?with_db:Requires:	%{reqdb_pkg}-devel >= %{reqdb_ver}}
 Requires:	elfutils-devel
 %{?with_keyutils:Requires:	keyutils-devel}
 Requires:	libmagic-devel
@@ -492,7 +493,7 @@ Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
-%{?with_db:Requires:	db-static >= %{reqdb_ver}}
+%{?with_db:Requires:	%{reqdb_pkg}-static >= %{reqdb_ver}}
 Requires:	elfutils-static
 %{?with_keyutils:Requires:	keyutils-static}
 Requires:	libmagic-static
