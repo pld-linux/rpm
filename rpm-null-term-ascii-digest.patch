@@ -1,0 +1,19 @@
+Index: rpmdb/legacy.c
+===================================================================
+RCS file: /v/rpm/cvs/rpm/rpmdb/legacy.c,v
+retrieving revision 1.44.4.3
+diff -p -u -w -r1.44.4.3 legacy.c
+--- rpmdb/legacy.c	16 Apr 2012 23:43:34 -0000	1.44.4.3
++++ rpmdb/legacy.c	2 Oct 2012 20:17:21 -0000
+@@ -282,8 +282,10 @@ int dodigest(int dalgo, const char * fn,
+ exit:
+     if (fsizep)
+ 	*fsizep = fsize;
+-    if (!rc)
++    if (!rc) {
+ 	memcpy(digest, dsum, dlen);
++	if (asAscii) digest[dlen] = '\0';
++    }
+     dsum = _free(dsum);
+ 
+     return rc;
