@@ -40,10 +40,11 @@
 %endif
 
 # versions of required libraries
-%define	reqdb_pkg	db4.7
 %if "%{pld_release}" == "th"
+%define	reqdb_pkg	db4.7
 %define	reqdb_ver	4.7.25
 %else
+%define	reqdb_pkg	db4.5
 %define	reqdb_ver	4.5.20
 %endif
 %define	reqpopt_ver	1.10.8
