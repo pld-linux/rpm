@@ -9,12 +9,13 @@
  
  static const luaL_Reg lualibs[] = {
    {"", luaopen_base},
-@@ -26,6 +26,8 @@
+@@ -26,6 +26,9 @@
    {LUA_STRLIBNAME, luaopen_string},
    {LUA_MATHLIBNAME, luaopen_math},
    {LUA_DBLIBNAME, luaopen_debug},
 +  {"rex_posix", luaopen_rex_posix},
 +  {"rex_pcre", luaopen_rex_pcre},
++  {"posix", luaopen_posix},
    {NULL, NULL}
  };
  
