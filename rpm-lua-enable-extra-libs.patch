@@ -1,0 +1,20 @@
+--- rpm-5.4.10/lua/linit.c~	2012-10-03 14:46:45.303935753 +0200
++++ rpm-5.4.10/lua/linit.c	2012-10-03 14:48:19.503932430 +0200
+@@ -13,6 +13,8 @@
+ #include "lualib.h"
+ #include "lauxlib.h"
+ 
++#include "lposix.h"
++#include "lrexlib.h"
+ 
+ static const luaL_Reg lualibs[] = {
+   {"", luaopen_base},
+@@ -26,6 +26,8 @@
+   {LUA_STRLIBNAME, luaopen_string},
+   {LUA_MATHLIBNAME, luaopen_math},
+   {LUA_DBLIBNAME, luaopen_debug},
++  {"rex_posix", luaopen_rex_posix},
++  {"rex_pcre", luaopen_rex_pcre},
+   {NULL, NULL}
+ };
+ 

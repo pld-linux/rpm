@@ -16,7 +16,7 @@
 %bcond_without	db		# BerkeleyDB
 %bcond_without	sqlite		# build with SQLite support
 %bcond_with	sqlite_dbapi	# default database backend is sqlite
-%bcond_without	system_lua	# use system lua
+%bcond_with	system_lua	# use system lua
 %bcond_with	keyutils	# build with keyutils support
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
@@ -52,7 +52,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	16
+Release:	17
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -141,6 +141,7 @@ Patch49:	%{name}-python-enable-compat-RPMSENSE.patch
 Patch50:	%{name}-dont-treat-gstreamer-modules-as-font.patch
 Patch51:	%{name}-gst-inspect-typo.patch
 Patch52:	%{name}-null-term-ascii-digest.patch
+Patch53:	%{name}-lua-enable-extra-libs.patch
 
 # Patches imported from Mandriva
 
@@ -819,6 +820,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch50 -p1
 %patch51 -p1
 %patch52 -p0
+%patch53 -p1
 
 %patch1000 -p1
 %patch1001 -p1
@@ -1281,6 +1283,12 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmcmp
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmdeps
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmdigest
+%if %{without system_lua}
+%attr(755,root,root) %{_rpmlibdir}/bin/lua
+%attr(755,root,root) %{_rpmlibdir}/bin/luac
+%attr(755,root,root) %{_rpmlibdir}/bin/rpmlua
+%attr(755,root,root) %{_rpmlibdir}/bin/rpmluac
+%endif
 %{?with_keyutils:%attr(755,root,root) %{_rpmlibdir}/bin/rpmkey}
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmrepo
 %{_mandir}/man8/rpm2cpio.8*
