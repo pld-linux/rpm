@@ -259,7 +259,11 @@ BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gettext-devel >= 0.11.4-2
 %{?with_keyutils:BuildRequires:	keyutils-devel}
 BuildRequires:	libmagic-devel
-%{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
+%if %{with selinux}
+BuildRequires:	libselinux-devel >= 2.1.0
+BuildRequires:	libsepol-devel >= 2.1.0
+BuildRequires:	libsemanage-devel >= 2.1.0
+%endif
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 1:1.4.2-9
@@ -292,7 +296,11 @@ BuildRequires:	bzip2-static >= 1.0.2-17
 BuildRequires:	elfutils-static
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	libmagic-static
-%{?with_selinux:BuildRequires:	libselinux-static >= 1.18}
+%if %{with selinux}
+BuildRequires:	libselinux-static >= 2.1.0
+BuildRequires:	libsepol-static >= 2.1.0
+BuildRequires:	libsemanage-static >= 2.1.0
+%endif
 BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
 %endif
@@ -406,7 +414,7 @@ Group:		Libraries
 Requires:	beecrypt >= %{beecrypt_ver}
 %{?with_db:Requires:	%{reqdb_pkg} >= %{reqdb_ver}}
 Requires:	libmagic >= 1.15-2
-%{?with_selinux:Requires:	libselinux >= 1.18}
+%{?with_selinux:Requires:	libselinux >= 2.1.0}
 Requires:	popt >= %{reqpopt_ver}
 %{?with_sqlite:Requires:	sqlite3 >= %{sqlite_build_version}}
 Obsoletes:	rpm-libs
@@ -904,7 +912,9 @@ sed -i \
 	%{!?with_apidocs:--without-apidocs} \
 	%{?with_python:--with-python=%{py_ver} --with-python-lib-dir=%{py_sitedir}} \
 	%{!?with_python:--without-python} \
-	--with%{!?with_selinux:out}-selinux \
+	--with-selinux=%{!?with_selinux:no}%{?with_selinux:external} \
+	--with-sepol=%{!?with_selinux:not}%{?with_selinux:external} \
+	--with-semanage=%{!?with_selinux:no}%{?with_selinux:external} \
 	--with-libelf \
 	--with-zlib=external \
 	--with-bzip2=external \
@@ -1283,6 +1293,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmcmp
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmdeps
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmdigest
+%if %{with selinux}
+%attr(755,root,root) %{_rpmlibdir}/bin/semodule
+%attr(755,root,root) %{_rpmlibdir}/bin/spooktool
+%endif
 %if %{without system_lua}
 %attr(755,root,root) %{_rpmlibdir}/bin/lua
 %attr(755,root,root) %{_rpmlibdir}/bin/luac
