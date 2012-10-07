@@ -12,7 +12,7 @@
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
 %bcond_without	suggest_tags	# build without Suggest tag (bootstrapping)
-%bcond_without	neon		# build with HTTP/WebDAV support (neon library)
+%bcond_with	neon		# build with HTTP/WebDAV support (neon library)
 %bcond_without	db		# BerkeleyDB
 %bcond_without	sqlite		# build with SQLite support
 %bcond_with	sqlite_dbapi	# default database backend is sqlite

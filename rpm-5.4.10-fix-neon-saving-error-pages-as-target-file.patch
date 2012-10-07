@@ -49,7 +49,7 @@
 -	    fd = fdLink(fd, "error ctrl (ufdOpen HTTP)");
 -	    fd = fdLink(fd, "error data (ufdOpen HTTP)");
 +	    fd = u->ctrl = fdLink(fd, "error ctrl (ufdOpen HTTP)");
-+	    fd = u->data fdLink(fd, "error data (ufdOpen HTTP)");
++	    fd = u->data = fdLink(fd, "error data (ufdOpen HTTP)");
 +#endif
  	} else {
  	    fd->bytesRemain = ((!strcmp(cmd, "GET"))
