@@ -1,0 +1,6 @@
+# Customized rpm macros - global for host
+#
+#	A colon separated list of desired locales to be installed;
+#	"all" means install all locale specific files.
+#
+#%%_install_langs pl_PL:en_US

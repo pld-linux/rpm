@@ -88,6 +88,7 @@ Source23:	rpm.noautoreqdep
 Source24:	rpm.noautoreqfiles
 Source25:	%{name}-php-requires.php
 Source26:	rpmdb_checkversion.c
+Source27:	macros.lang
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
 Patch2:		%{name}-popt-aliases.patch
@@ -1091,6 +1092,7 @@ install %{SOURCE15} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
 
 install %{SOURCE18} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros
+install %{SOURCE27} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.lang
 install %{SOURCE19} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc
 install %{SOURCE20} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov
 install %{SOURCE21} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles
@@ -1196,6 +1198,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) /bin/rpm
 
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros.lang
 %dir %{_sysconfdir}/rpm/sysinfo
 # these are ok to be replaced
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo/*
