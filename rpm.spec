@@ -937,7 +937,7 @@ sed -i \
 	--with-bugreport="http://bugs.pld-linux.org/" \
 	--with-vendor=pld
 
-%if %{with neon}
+%if %{without neon}
 %{__mv} tests/probes-test-1-0.src.rpm{,-no-neon}
 %endif
 
