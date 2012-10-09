@@ -939,6 +939,7 @@ sed -i \
 
 %if %{without neon}
 %{__mv} tests/probes-test-1-0.src.rpm{,-no-neon}
+%{__mv} tests/triggers-D-1.0-1.src.rpm{,-no-neon}
 %endif
 
 %{__make} -j1 \
