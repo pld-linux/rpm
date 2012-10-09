@@ -37,20 +37,3 @@
  
      if (rc)
  	goto errxit;
---- rpm-5.4.10/rpmio/rpmio.c.dl_error~	2012-07-06 17:39:19.000000000 +0200
-+++ rpm-5.4.10/rpmio/rpmio.c	2012-07-11 19:47:59.396732322 +0200
-@@ -2306,9 +2306,12 @@ fprintf(stderr, "*** ufdOpen(%s,0x%x,0%o
- 	u->openError = httpReq(fd, cmd, path);
- #endif
- 	if (u->openError < 0) {
-+	    /* XXX rpmdav doesn't behave consistently with the rest...*/
-+#ifndef WITH_NEON
- 	    /* XXX make sure that we can exit through ufdClose */
--	    fd = fdLink(fd, "error ctrl (ufdOpen HTTP)");
--	    fd = fdLink(fd, "error data (ufdOpen HTTP)");
-+	    fd = u->ctrl = fdLink(fd, "error ctrl (ufdOpen HTTP)");
-+	    fd = u->data = fdLink(fd, "error data (ufdOpen HTTP)");
-+#endif
- 	} else {
- 	    fd->bytesRemain = ((!strcmp(cmd, "GET"))
- 		?  fd->contentLength : -1);

@@ -868,7 +868,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1034 -p1
 %patch1035 -p1
 %patch1036 -p1
-#patch1037 -p1
+%patch1037 -p1
 %patch1038 -p1
 %patch1039 -p1
 %patch1040 -p1
@@ -936,11 +936,6 @@ sed -i \
 	--with-extra-path-macros='%{_sysconfdir}/rpm/macros.d/*.macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/macros.build:~/etc/.rpmmacros:~/.rpmmacros' \
 	--with-bugreport="http://bugs.pld-linux.org/" \
 	--with-vendor=pld
-
-#if %{without neon}
-#{__mv} tests/probes-test-1-0.src.rpm{,-no-neon}
-#{__mv} tests/triggers-D-1.0-1.src.rpm{,-no-neon}
-#endif
 
 %{__make} -j1 \
 	CC="%{__cc}" \
