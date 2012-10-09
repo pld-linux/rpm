@@ -901,7 +901,7 @@ sed -i \
 
 # pass CC and CXX too in case of building with some older configure macro
 # disable perl-RPM2 build, we have it in separate spec
-CPPFLAGS="%{rpmcppflags} -I/usr/include/ossp-uuid"
+CPPFLAGS="%{rpmcppflags} -I/usr/include/ossp-uuid -I/usr/include/%{reqdb_pkg}"
 %configure \
 	CC="%{__newcc}" \
 	CXX="%{__newcxx}" \
@@ -921,7 +921,7 @@ CPPFLAGS="%{rpmcppflags} -I/usr/include/ossp-uuid"
 	CC="%{__cc}" \
 	CXX="%{__cxx}" \
 	CPP="%{__cpp}" \
-	libdb_la=%{_libdir}/libdb.la \
+	libdb_la=%{_libdir}/libdb-%(echo %{reqdb_pkg} | sed -e 's/^db//').la \
 	pylibdir=%{py_libdir} \
 	myLDFLAGS="%{rpmldflags}" \
 	staticLDFLAGS=%{?with_static:-all-static}
