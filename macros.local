@@ -14,3 +14,8 @@
 # Boolean (i.e. 1 == "yes", 0 == "no") that controls whether files
 # marked as %doc should be installed.
 #%_excludedocs			1
+#
+# A colon separated list of paths where files should *not* be installed.
+# Usually, these are network file system mount points.
+#
+#%_netsharedpath /proc:/dev
