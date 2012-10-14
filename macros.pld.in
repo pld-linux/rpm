@@ -130,6 +130,12 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 %_files_listed_twice_terminate_build	1
 %_unpackaged_subdirs_terminate_build	0
 
+#
+# Export package NEVRA (stamped with install tid) info for HRMIB on this path.
+#
+# XXX	Note: escaped %% for use in headerSprintf()
+%_hrmib_path	/var/cache/hrmib/%{___NVRA}
+
 #-----------------------------------------------------------------
 # CFLAGS and LDFLAGS used to build
 
