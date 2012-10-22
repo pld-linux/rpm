@@ -1,0 +1,21 @@
+--- rpm-5.4.10.orig/lib/verify.c	2012-07-06 17:39:16.000000000 +0200
++++ rpm-5.4.10/lib/verify.c	2012-10-21 19:35:08.610708732 +0200
+@@ -261,11 +261,18 @@
+ 	    unsigned char * fdigest = (unsigned char *)
+ 			memset(alloca(vf->dlen), 0, vf->dlen);
+ 	    size_t fsize = 0;
++// Disable hmac during digest calculation, since rpm package files contain plain md5sums,
++// hmac support is useless, see:
++// http://lists.pld-linux.org/mailman/pipermail/pld-devel-en/2012-October/023193.html
++#if defined(RPM_VENDOR_PLD)
++	    int rc = dodigest(vf->dalgo, vf->fn, fdigest, 0, &fsize);
++#else
+ #define	_mask	(RPMVERIFY_FDIGEST|RPMVERIFY_HMAC)
+ 	    unsigned dflags = (vf->vflags & _mask) == RPMVERIFY_HMAC
+ 		? 0x2 : 0x0;
+ #undef	_mask
+ 	    int rc = dodigest(vf->dalgo, vf->fn, fdigest, dflags, &fsize);
++#endif
+ 	    sb.st_size = fsize;
+ 	    if (rc) {
+ 		VF_SET(res, READFAIL);
