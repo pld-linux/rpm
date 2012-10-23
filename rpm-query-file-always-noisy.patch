@@ -1,5 +1,82 @@
 --- rpm-5.4.10/lib/query.c~	2012-05-08 02:06:44.000000000 +0200
 +++ rpm-5.4.10/lib/query.c	2012-09-21 13:42:12.013607913 +0200
+@@ -522,6 +522,10 @@
+     case RPMQV_WHATCONFLICTS:
+     case RPMQV_WHATOBSOLETES:
+ 	qva->qva_mi = rpmtsInitIterator(ts, (rpmTag) qva->qva_source, arg, 0);
++#if defined(RPM_VENDOR_PLD)
++	if(rpmmiCount(qva->qva_mi) == 0)
++	    qva->qva_mi = rpmmiFree(qva->qva_mi);
++#endif
+ 	if (qva->qva_mi == NULL) {
+ 	    rpmlog(RPMLOG_NOTICE, _("key \"%s\" not found in %s table\n"),
+ 			arg, tagName((rpmTag)qva->qva_source));
+@@ -593,6 +597,10 @@
+ 	tag = (qva->qva_source == RPMQV_PKGID
+ 		? RPMTAG_SOURCEPKGID : RPMTAG_PKGID);
+ 	qva->qva_mi = rpmtsInitIterator(ts, (rpmTag) tag, MD5, sizeof(MD5));
++#if defined(RPM_VENDOR_PLD)
++	if(rpmmiCount(qva->qva_mi) == 0)
++	    qva->qva_mi = rpmmiFree(qva->qva_mi);
++#endif
+ 	if (qva->qva_mi == NULL) {
+ 	    rpmlog(RPMLOG_NOTICE, _("no package matches %s: %s\n"),
+ 			"pkgid", arg);
+@@ -610,6 +618,10 @@
+ 	}
+ 
+ 	qva->qva_mi = rpmtsInitIterator(ts, RPMTAG_SHA1HEADER, arg, 0);
++#if defined(RPM_VENDOR_PLD)
++	if(rpmmiCount(qva->qva_mi) == 0)
++	    qva->qva_mi = rpmmiFree(qva->qva_mi);
++#endif
+ 	if (qva->qva_mi == NULL) {
+ 	    rpmlog(RPMLOG_NOTICE, _("no package matches %s: %s\n"),
+ 			"hdrid", arg);
+@@ -637,6 +649,10 @@
+             *t = (nibble(s[0]) << 4) | nibble(s[1]);
+ 
+ 	qva->qva_mi = rpmtsInitIterator(ts, RPMTAG_FILEDIGESTS, digest, dlen);
++#if defined(RPM_VENDOR_PLD)
++	if(rpmmiCount(qva->qva_mi) == 0)
++	    qva->qva_mi = rpmmiFree(qva->qva_mi);
++#endif
+ 	if (qva->qva_mi == NULL) {
+ 	    rpmlog(RPMLOG_NOTICE, _("no package matches %s: %s\n"),
+ 			"fileid", arg);
+@@ -666,6 +682,10 @@
+ 	    return 1;
+ 	}
+ 	qva->qva_mi = rpmtsInitIterator(ts, RPMTAG_INSTALLTID, &iid, sizeof(iid));
++#if defined(RPM_VENDOR_PLD)
++	if(rpmmiCount(qva->qva_mi) == 0)
++	    qva->qva_mi = rpmmiFree(qva->qva_mi);
++#endif
+ 	if (qva->qva_mi == NULL) {
+ 	    rpmlog(RPMLOG_NOTICE, _("no package matches %s: %s\n"),
+ 			"tid", arg);
+@@ -677,6 +697,10 @@
+     case RPMQV_WHATNEEDS:
+     case RPMQV_WHATREQUIRES:
+ 	qva->qva_mi = rpmtsInitIterator(ts, RPMTAG_REQUIRENAME, arg, 0);
++#if defined(RPM_VENDOR_PLD)
++	if(rpmmiCount(qva->qva_mi) == 0)
++	    qva->qva_mi = rpmmiFree(qva->qva_mi);
++#endif
+ 	if (qva->qva_mi == NULL) {
+ 	    rpmlog(RPMLOG_NOTICE, _("no package requires %s\n"), arg);
+ 	    res = 1;
+@@ -688,6 +712,10 @@
+ 	if (arg[0] != '/') {
+ 	    provides_checked = 1;
+ 	    qva->qva_mi = rpmtsInitIterator(ts, RPMTAG_PROVIDENAME, arg, 0);
++#if defined(RPM_VENDOR_PLD)
++	    if(rpmmiCount(qva->qva_mi) == 0)
++		qva->qva_mi = rpmmiFree(qva->qva_mi);
++#endif
+ 	    if (qva->qva_mi == NULL) {
+ 		rpmlog(RPMLOG_NOTICE, _("no package provides %s\n"), arg);
+ 		res = 1;
 @@ -732,7 +732,7 @@
  	qva->qva_mi = rpmtsInitIterator(ts, RPMTAG_FILEPATHS, fn, 0);
  	if (qva->qva_mi == NULL && !provides_checked && !gotpattern) {
@@ -9,3 +86,14 @@
  	if(rpmmiCount(qva->qva_mi) == 0)
  	    qva->qva_mi = rpmmiFree(qva->qva_mi);
  #endif
+@@ -774,6 +802,10 @@
+ 	}
+ 	rpmlog(RPMLOG_DEBUG, D_("package record number: %u\n"), (unsigned)hdrNum);
+ 	qva->qva_mi = rpmtsInitIterator(ts, RPMDBI_PACKAGES, &hdrNum, sizeof(hdrNum));
++#if defined(RPM_VENDOR_PLD)
++	if(rpmmiCount(qva->qva_mi) == 0)
++	    qva->qva_mi = rpmmiFree(qva->qva_mi);
++#endif
+ 	if (qva->qva_mi == NULL) {
+ 	    rpmlog(RPMLOG_NOTICE,
+ 		_("record %u could not be read\n"), (unsigned)hdrNum);
