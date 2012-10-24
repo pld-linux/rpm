@@ -52,7 +52,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	22
+Release:	25
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -136,13 +136,15 @@ Patch43:	%{name}-fix-___build_pre-macro.patch
 Patch44:	%{name}-missing-patch-file-fails-build.patch
 Patch45:	%{name}-remove-misleading-missing-patch-message.patch
 Patch46:	%{name}-file-magic-can-be-mixed-case.patch
-Patch47:	%{name}-query-file-always-noisy.patch
+Patch47:	%{name}-query-always-noisy.patch
 Patch48:	%{name}-verify-ghosts-broken-logic.patch
 Patch49:	%{name}-python-enable-compat-RPMSENSE.patch
 Patch50:	%{name}-dont-treat-gstreamer-modules-as-font.patch
 Patch51:	%{name}-gst-inspect-typo.patch
 Patch52:	%{name}-null-term-ascii-digest.patch
 Patch53:	%{name}-lua-enable-extra-libs.patch
+Patch54:	%{name}-fix-filedigests-verify.patch
+Patch55:	%{name}-disable-hmac-verify.patch
 
 # Patches imported from Mandriva
 
@@ -834,6 +836,8 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch51 -p1
 %patch52 -p0
 %patch53 -p1
+%patch54 -p1
+%patch55 -p1
 
 %patch1000 -p1
 %patch1001 -p1
