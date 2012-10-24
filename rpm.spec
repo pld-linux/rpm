@@ -37,8 +37,8 @@ ERROR
 %endif
 
 # versions of required libraries
-%define		reqdb_pkg	db5.3
-%define		reqdb_ver	5.3
+%define		reqdb_pkg	db5.2
+%define		reqdb_ver	5.2
 %define		reqpopt_ver	1.15
 %define		beecrypt_ver	2:4.1.2-4
 %define		sover		5.4
@@ -52,7 +52,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	26
+Release:	26.1
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -115,7 +115,7 @@ Patch22:	%{name}-sparc64.patch
 Patch23:	%{name}-gendiff.patch
 Patch24:	openmp.patch
 Patch25:	%{name}-URPM-build-fix.patch
-Patch26:	%{name}-db5.3.patch
+Patch26:	%{name}-db5.2.patch
 Patch27:	%{name}-helperEVR-noassert.patch
 Patch28:	%{name}-unglobal.patch
 Patch29:	%{name}-builddir-readlink.patch
@@ -823,7 +823,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch38 -p1
 %patch39 -p1
 %patch40 -p1
-%patch41 -p1
+#patch41 -p1
 %patch42 -p1
 %patch43 -p1
 %patch44 -p1
