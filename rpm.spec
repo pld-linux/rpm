@@ -248,6 +248,10 @@ Patch1038:	rpm-5.4.10-support-ignore-arch-and-os-again.patch
 Patch1039:	rpm-5.4.4-fix-same-package-with-epoch-possible-to-upgrade.patch
 # we want that patch too, a bit of builder infrastructure relies on NOSIGNATURES
 Patch1040:	rpm-5.4.9-support-signatures-and-digest-disablers.patch
+# lack insight on actual functionality, which anyways seems broken, so let's
+# disable it to avoid errors from berkeley db..
+# status: keep locally
+Patch1041:	rpm-5.4.9-disable-l10ndir.patch
 
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.60
@@ -872,6 +876,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1038 -p1
 %patch1039 -p1
 %patch1040 -p1
+%patch1041 -p1
 
 install %{SOURCE2} macros/pld.in
 install %{SOURCE8} scripts/php.prov.in
