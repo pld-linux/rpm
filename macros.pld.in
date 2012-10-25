@@ -187,6 +187,9 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 %x8664 x86_64 amd64 ia32e
 %ppc   ppc ppc7400 ppc7450
 
+# avoid fdatasync syscall flood during database operations.
+%__nofsync	nofsync
+
 #---------------------------------------------------------------------
 #	Expanded at end of %prep
 #
@@ -200,8 +203,7 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 %__id		/bin/id
 
 #
+# DO NOT put anything after this %%{load:...} !
+#
 # rpm5 prolog for loading the standard macro
 %{load:/etc/rpm/macros.d/*.macros}
-
-# avoid fdatasync syscall flood during database operations.
-%__nofsync	nofsync
