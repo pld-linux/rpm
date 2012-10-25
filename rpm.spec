@@ -52,7 +52,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	29
+Release:	30
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -254,6 +254,11 @@ Patch1040:	rpm-5.4.9-support-signatures-and-digest-disablers.patch
 # disable it to avoid errors from berkeley db..
 # status: keep locally
 Patch1041:	rpm-5.4.9-disable-l10ndir.patch
+# status: ready for merge
+Patch1042:	rpm-5.4.9-fix-rpm_qa-pattern.patch
+# status: i18n strings is getting dropped, so this one might be of less relevance,
+# but feel free to discuss it on rpm-devel
+Patch1043:	rpm-5.4.9-fix-mdvbz62979.patch
 
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.60
@@ -881,6 +886,8 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1039 -p1
 %patch1040 -p1
 %patch1041 -p1
+%patch1042 -p1
+%patch1043 -p1
 
 install %{SOURCE2} macros/pld.in
 install %{SOURCE8} scripts/php.prov.in
