@@ -102,7 +102,6 @@ Patch9:		%{name}-lua.patch
 Patch10:	%{name}-php-deps.patch
 Patch11:	%{name}-notsc.patch
 Patch12:	%{name}-hack-norpmlibdep.patch
-Patch13:	%{name}-epoch0.patch
 Patch14:	%{name}-perl_req-INC_dirs.patch
 Patch15:	%{name}-debuginfo.patch
 Patch16:	vendor-pld.patch
@@ -798,7 +797,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch11 -p1
 %endif
 %patch12 -p1
-%patch13 -p1
 %patch14 -p0
 %patch15 -p1
 %patch16 -p1
