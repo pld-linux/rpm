@@ -1,0 +1,13 @@
+--- rpm-5.4.10/build/parsePreamble.c.orig	2012-05-03 20:39:51.000000000 +0200
++++ rpm-5.4.10/build/parsePreamble.c	2012-10-26 00:41:10.281500646 +0200
+@@ -30,8 +30,10 @@
+     RPMTAG_DISTEPOCH,
+     RPMTAG_LICENSE,
+     RPMTAG_GROUP,		/* XXX permissive. */
++#if !defined(RPM_VENDOR_PLD)
+     RPMTAG_SUMMARY,		/* XXX permissive. */
+     RPMTAG_DESCRIPTION,		/* XXX permissive. */
++#endif
+     RPMTAG_PACKAGER,
+     RPMTAG_DISTRIBUTION,
+     RPMTAG_DISTURL,

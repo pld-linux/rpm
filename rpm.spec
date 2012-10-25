@@ -52,7 +52,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	31
+Release:	32
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -102,6 +102,7 @@ Patch9:		%{name}-lua.patch
 Patch10:	%{name}-php-deps.patch
 Patch11:	%{name}-notsc.patch
 Patch12:	%{name}-hack-norpmlibdep.patch
+Patch13:	%{name}-dont-copy-descriptive-tags.patch
 Patch14:	%{name}-perl_req-INC_dirs.patch
 Patch15:	%{name}-debuginfo.patch
 Patch16:	vendor-pld.patch
@@ -255,9 +256,6 @@ Patch1040:	rpm-5.4.9-support-signatures-and-digest-disablers.patch
 Patch1041:	rpm-5.4.9-disable-l10ndir.patch
 # status: ready for merge
 Patch1042:	rpm-5.4.9-fix-rpm_qa-pattern.patch
-# status: i18n strings is getting dropped, so this one might be of less relevance,
-# but feel free to discuss it on rpm-devel
-Patch1043:	rpm-5.4.9-fix-mdvbz62979.patch
 
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.60
@@ -797,6 +795,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch11 -p1
 %endif
 %patch12 -p1
+%patch13 -p1
 %patch14 -p0
 %patch15 -p1
 %patch16 -p1
@@ -885,7 +884,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1040 -p1
 %patch1041 -p1
 %patch1042 -p1
-#patch1043 -p1
 
 install %{SOURCE2} macros/pld.in
 install %{SOURCE8} scripts/php.prov.in
