@@ -202,3 +202,6 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 #
 # rpm5 prolog for loading the standard macro
 %{load:/etc/rpm/macros.d/*.macros}
+
+# avoid fdatasync syscall flood during database operations.
+%__nofsync	nofsync
