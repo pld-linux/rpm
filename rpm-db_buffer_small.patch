@@ -47,7 +47,7 @@ Index: rpm-5.4.9/rpmdb/rpmdb.c
 +	               fprintf(stderr, "==> DB_BUFFER_SMALL orig requested (%d), configured (%d), forcing larger buffer (%d), new size (%d)\n",
 +	                    origlen, vp->ulen, uhlen, vp->size);
 +	           else
-+	               rpmlog(RPMLOG_DEBUG, D_("==> retry (%d) db3cpget (%d)"), retry, uhlen);
++	               fprintf(stderr, "==> retry (%d) db3cpget (%d)", retry, uhlen);
 +	           goto retry_get;
 +	        }
 +	    }
@@ -56,7 +56,7 @@ Index: rpm-5.4.9/rpmdb/rpmdb.c
 +	           fprintf(stderr, "==> success orig requested (%d), configured buffer (%d), buffer (%d), size after dbiGet (%d)\n",
 +			origlen, vp->ulen, uhlen, vp->size);
 +	        else
-+	           rpmlog(RPMLOG_DEBUG, D_("==> success"));
++	           fprintf(stderr, "==> success");
  	    }
  	}
      } else
@@ -68,8 +68,8 @@ Index: rpm-5.4.9/rpmdb/db3.c
  	rc = dbcursor->pget(dbcursor, key, pkey, data, flags);
  	/* XXX DB_NOTFOUND can be returned */
  	_printit = (rc == DB_NOTFOUND ? 0 : _debug);
-+	/* XXX Permit DB_BUFFER_SMALL to be returned (more restrictive?) */
-+	_printit = (rc == DB_BUFFER_SMALL ? 0 : _printit);
++//	/* XXX Permit DB_BUFFER_SMALL to be returned (more restrictive?) */
++//	_printit = (rc == DB_BUFFER_SMALL ? 0 : _printit);
  	rc = cvtdberr(dbi, "dbcursor->pget", rc, _printit);
  #else
  	/* XXX db3 does DB_FIRST on uninitialized cursor */
