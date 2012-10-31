@@ -1174,15 +1174,15 @@ fi
 
 %posttrans
 if [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] && \
-		! %{_rpmlibdir}/bin/rpmdb_checkversion -h /var/lib/rpm -d /var/lib/rpm ; then
-	if [ ! -e /var/lib/rpm.rpmbackup-%{version}-%{release} ] && \
-			/bin/cp -a /var/lib/rpm /var/lib/rpm.rpmbackup-%{version}-%{release} ; then
+		! %{_rpmlibdir}/bin/rpmdb_checkversion -h /var/lib/rpm -d /var/lib/rpm; then
+	if [ ! -e /var/lib/rpm.rpmbackup-%{version}-%{release} ] && [ -x /bin/cp ] && \
+			/bin/cp -a /var/lib/rpm /var/lib/rpm.rpmbackup-%{version}-%{release}; then
 		echo
 		echo "Backup of the rpm database has been created in /var/lib/rpm.rpmbackup-%{version}-%{release}"
 		echo
 	fi
 	if [ -x %{_rpmlibdir}/bin/dbconvert ]; then
-		if ! %{_rpmlibdir}/bin/dbconvert --rebuilddb ; then
+		if ! %{_rpmlibdir}/bin/dbconvert --rebuilddb; then
 			echo
 			echo "rpm database conversion failed!"
 			echo "You have to run  %{_rpmlibdir}/bin/dbconvert manually"
