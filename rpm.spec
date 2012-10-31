@@ -1173,7 +1173,7 @@ if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
 fi
 
 %posttrans
-if [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] && \
+if [ -e /var/lib/rpm/Packages ] && [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] && \
 		! %{_rpmlibdir}/bin/rpmdb_checkversion -h /var/lib/rpm -d /var/lib/rpm; then
 	if [ ! -e /var/lib/rpm.rpmbackup-%{version}-%{release} ] && [ -x /bin/cp ] && \
 			/bin/cp -a /var/lib/rpm /var/lib/rpm.rpmbackup-%{version}-%{release}; then
