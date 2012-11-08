@@ -714,6 +714,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 
 %prep
 %setup -q
+cp -p %{SOURCE15} .
 %patch1000 -p1
 #%patch0 -p1
 %patch2 -p1
@@ -1070,7 +1071,7 @@ install -p scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 cp -p %{SOURCE21} $RPM_BUILD_ROOT%{_rpmlibdir}/php.req.php
 install -p %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
 install -p %{SOURCE18} $RPM_BUILD_ROOT%{_bindir}/banner.sh
-cp -a %{SOURCE15} $RPM_BUILD_ROOT/etc/sysconfig/rpm
+cp -p %{name}.sysconfig $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Conflictname

@@ -40,3 +40,21 @@
  
  #-----------------------------------------------------------------
  # CFLAGS and LDFLAGS used to build
+--- rpm/rpm.sysconfig~	2012-11-08 05:23:51.082114980 +0200
++++ rpm/rpm.sysconfig	2012-11-08 06:49:38.238855609 +0200
+@@ -12,15 +12,3 @@
+ # You can also disable this per service, if service supports it from
+ # /etc/sysconfig/SERVICE
+ #RPM_SKIP_AUTO_RESTART=yes
+-
+-# Should package upgrades enable SysV service?
+-# You don't want to disable this unless you're planning to fully
+-# migrate to systemd or want serviceless system.
+-RPM_ENABLE_SYSV_SERVICE=yes
+-
+-# Should package upgrades enable systemd service?
+-# This means migrating init scripts from SysV to systemd.
+-# If you disable this, systemd units will not be enabled for
+-# upgraded services. Newly installed packages will still have
+-# systemd services enabled.
+-RPM_ENABLE_SYSTEMD_SERVICE=yes
