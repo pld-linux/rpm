@@ -716,8 +716,8 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %setup -q
 %patch1000 -p1
 #%patch0 -p1
-%patch1 -p1
 %patch2 -p1
+%patch1 -p1
 %patch3 -p1
 %patch4 -p1
 %patch6 -p1
