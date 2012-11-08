@@ -1,9 +1,10 @@
---- rpm-4.5/rpmio/macro.c.org	2009-08-08 15:42:25.574860247 +0200
-+++ rpm-4.5/rpmio/macro.c	2009-08-08 15:47:20.495455961 +0200
-@@ -807,6 +807,41 @@
+--- rpm-4.5/rpmio/macro.c	2009-08-08 15:47:20.495455961 +0200
++++ rpm-4.5/rpmio/macro.c	2012-11-08 06:37:45.082618600 +0200
+@@ -807,6 +807,42 @@
      return se;
  }
  
++void delMacroAll(MacroContext mc, const char * n);
 +/**
 + * Parse (and execute) macro undefinition.
 + * @param mc		macro context
@@ -42,7 +43,7 @@
  #ifdef	DYING
  static void
  dumpME(const char * msg, MacroEntry me)
-@@ -1430,6 +1465,10 @@
+@@ -1430,6 +1466,10 @@
  		s = doUndefine(mb->mc, se);
  		continue;
  	}
@@ -53,7 +54,7 @@
  
  	if (STREQ("echo", f, fn) ||
  	    STREQ("warn", f, fn) ||
-@@ -1984,6 +2023,18 @@
+@@ -1984,6 +2024,18 @@
      }
  }
  
