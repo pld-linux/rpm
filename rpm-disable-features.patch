@@ -58,3 +58,13 @@
 -# upgraded services. Newly installed packages will still have
 -# systemd services enabled.
 -RPM_ENABLE_SYSTEMD_SERVICE=yes
+--- rpm-4.5/scripts/find-debuginfo.sh~	2012-11-08 06:51:17.000000000 +0200
++++ rpm-4.5/scripts/find-debuginfo.sh	2012-11-08 06:57:02.627280611 +0200
+@@ -87,7 +87,6 @@
+ strip_to_debug()
+ {
+   local t=$(mktemp "/tmp/rpm.stripped.XXXXXX")
+-  objcopy --compress-debug-sections "$2" || exit
+   eu-strip --remove-comment -f "$1" "$2" -o "$t" || exit
+   rm -f "$t"
+ }
