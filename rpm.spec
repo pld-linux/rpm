@@ -557,7 +557,7 @@ Requires:	gcc >= 3.0.3
 Requires:	gcc
 %endif
 %else
-# rpmrc patch adds flags specific to gcc >= 3.4
+# rpmrc patch adds flags specific to gcc >= 4.7
 Requires:	gcc >= 6:4.7.0
 %endif
 Requires:	glibc-devel
@@ -717,7 +717,11 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1000 -p1
 #%patch0 -p1
 %patch2 -p1
+%if "%{pld_release}" == "ac"
+%patch1070 -p1
+%else
 %patch1 -p1
+%endif
 %patch3 -p1
 %patch4 -p1
 %patch6 -p1
@@ -845,7 +849,6 @@ rm -rf db3 db rpmdb/db.h
 
 %if "%{pld_release}" == "ac"
 %patch1067 -p1
-%patch1070 -p1
 %endif
 
 # generate Group translations to *.po
