@@ -47,7 +47,7 @@ Index: rpm-5.4.9/rpmdb/rpmdb.c
 +	               fprintf(stderr, "==> DB_BUFFER_SMALL orig requested (%d), configured (%d), forcing larger buffer (%d), new size (%d)\n",
 +	                    origlen, vp->ulen, uhlen, vp->size);
 +	           else
-+	               fprintf(stderr, "==> retry (%d) db3cpget (%d)", retry, uhlen);
++	               fprintf(stderr, "==> retry (%d) db3cpget (%d)\n", retry, uhlen);
 +	           goto retry_get;
 +	        }
 +	    }
@@ -56,7 +56,7 @@ Index: rpm-5.4.9/rpmdb/rpmdb.c
 +	           fprintf(stderr, "==> success orig requested (%d), configured buffer (%d), buffer (%d), size after dbiGet (%d)\n",
 +			origlen, vp->ulen, uhlen, vp->size);
 +	        else
-+	           fprintf(stderr, "==> success");
++	           fprintf(stderr, "==> success\n");
  	    }
  	}
      } else
