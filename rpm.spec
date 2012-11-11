@@ -52,7 +52,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	34
+Release:	35
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -630,10 +630,11 @@ Requires:	grep
 Requires:	gzip
 Requires:	make
 Requires:	patch
-Requires:	sed
+Requires:	sed >= 4.0
 Requires:	sh-utils
-Requires:	tar
+Requires:	tar >= 1:1.22
 Requires:	textutils
+Requires:	xz
 Provides:	rpmbuild(monoautodeps)
 Provides:	rpmbuild(noauto) = 3
 %ifarch %{x8664}
@@ -945,7 +946,7 @@ sed -i \
 	--with-keyutils=%{?with_keyutils:external}%{!?with_keyutils:no} \
 	--with-uuid=%{_libdir}:%{_includedir}/ossp-uuid \
 	--without-path-versioned \
-	--with-extra-path-macros='%{_sysconfdir}/rpm/macros.d/*.macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/macros.build:~/etc/.rpmmacros:~/.rpmmacros' \
+	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/%{_target}/macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/macros.build:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%{_target}/macros:%{_sysconfdir}/rpm/macros.d/*.macros:~/etc/.rpmmacros:~/.rpmmacros' \
 	--with-bugreport="http://bugs.pld-linux.org/" \
 	--with-vendor=pld
 
