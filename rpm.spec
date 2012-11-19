@@ -1184,6 +1184,9 @@ if [ -e /var/lib/rpm/Packages ] && [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] &
 		echo "Backup of the rpm database has been created in /var/lib/rpm.rpmbackup-%{version}-%{release}"
 		echo
 	fi
+
+	echo 'If poldek aborts after migration with rpmdb error, this is "normal", you should ignore it'
+
 	if [ -x %{_rpmlibdir}/bin/dbconvert ]; then
 		if ! %{_rpmlibdir}/bin/dbconvert --rebuilddb; then
 			echo
