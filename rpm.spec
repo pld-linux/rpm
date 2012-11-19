@@ -145,6 +145,7 @@ Patch52:	%{name}-null-term-ascii-digest.patch
 Patch53:	%{name}-lua-enable-extra-libs.patch
 Patch54:	%{name}-fix-filedigests-verify.patch
 Patch55:	%{name}-disable-hmac-verify.patch
+Patch56:	rpm-macros.patch
 
 # Patches imported from Mandriva
 
@@ -841,6 +842,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch53 -p1
 %patch54 -p1
 %patch55 -p1
+%patch56 -p1
 
 %patch1000 -p1
 %patch1001 -p1
