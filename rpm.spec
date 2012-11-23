@@ -52,7 +52,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	26.1
+Release:	35
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -102,7 +102,7 @@ Patch9:		%{name}-lua.patch
 Patch10:	%{name}-php-deps.patch
 Patch11:	%{name}-notsc.patch
 Patch12:	%{name}-hack-norpmlibdep.patch
-Patch13:	%{name}-epoch0.patch
+Patch13:	%{name}-dont-copy-descriptive-tags.patch
 Patch14:	%{name}-perl_req-INC_dirs.patch
 Patch15:	%{name}-debuginfo.patch
 Patch16:	vendor-pld.patch
@@ -145,6 +145,7 @@ Patch52:	%{name}-null-term-ascii-digest.patch
 Patch53:	%{name}-lua-enable-extra-libs.patch
 Patch54:	%{name}-fix-filedigests-verify.patch
 Patch55:	%{name}-disable-hmac-verify.patch
+Patch56:	rpm-macros.patch
 
 # Patches imported from Mandriva
 
@@ -254,6 +255,8 @@ Patch1040:	rpm-5.4.9-support-signatures-and-digest-disablers.patch
 # disable it to avoid errors from berkeley db..
 # status: keep locally
 Patch1041:	rpm-5.4.9-disable-l10ndir.patch
+# status: ready for merge
+Patch1042:	rpm-5.4.9-fix-rpm_qa-pattern.patch
 
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.60
@@ -628,10 +631,11 @@ Requires:	grep
 Requires:	gzip
 Requires:	make
 Requires:	patch
-Requires:	sed
+Requires:	sed >= 4.0
 Requires:	sh-utils
-Requires:	tar
+Requires:	tar >= 1:1.22
 Requires:	textutils
+Requires:	xz
 Provides:	rpmbuild(monoautodeps)
 Provides:	rpmbuild(noauto) = 3
 %ifarch %{x8664}
@@ -838,6 +842,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch53 -p1
 %patch54 -p1
 %patch55 -p1
+%patch56 -p1
 
 %patch1000 -p1
 %patch1001 -p1
@@ -881,6 +886,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1039 -p1
 %patch1040 -p1
 %patch1041 -p1
+%patch1042 -p1
 
 install %{SOURCE2} macros/pld.in
 install %{SOURCE8} scripts/php.prov.in
@@ -942,7 +948,7 @@ sed -i \
 	--with-keyutils=%{?with_keyutils:external}%{!?with_keyutils:no} \
 	--with-uuid=%{_libdir}:%{_includedir}/ossp-uuid \
 	--without-path-versioned \
-	--with-extra-path-macros='%{_sysconfdir}/rpm/macros.d/*.macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/macros.build:~/etc/.rpmmacros:~/.rpmmacros' \
+	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/%{_target}/macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/macros.build:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%{_target}/macros:%{_sysconfdir}/rpm/macros.d/*.macros:~/etc/.rpmmacros:~/.rpmmacros' \
 	--with-bugreport="http://bugs.pld-linux.org/" \
 	--with-vendor=pld
 
@@ -1170,16 +1176,19 @@ if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
 fi
 
 %posttrans
-if [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] && \
-		! %{_rpmlibdir}/bin/rpmdb_checkversion -h /var/lib/rpm -d /var/lib/rpm ; then
-	if [ ! -e /var/lib/rpm.rpmbackup-%{version}-%{release} ] && \
-			/bin/cp -a /var/lib/rpm /var/lib/rpm.rpmbackup-%{version}-%{release} ; then
+if [ -e /var/lib/rpm/Packages ] && [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] && \
+		! %{_rpmlibdir}/bin/rpmdb_checkversion -h /var/lib/rpm -d /var/lib/rpm; then
+	if [ ! -e /var/lib/rpm.rpmbackup-%{version}-%{release} ] && [ -x /bin/cp ] && \
+			/bin/cp -a /var/lib/rpm /var/lib/rpm.rpmbackup-%{version}-%{release}; then
 		echo
 		echo "Backup of the rpm database has been created in /var/lib/rpm.rpmbackup-%{version}-%{release}"
 		echo
 	fi
+
+	echo 'If poldek aborts after migration with rpmdb error, this is "normal", you should ignore it'
+
 	if [ -x %{_rpmlibdir}/bin/dbconvert ]; then
-		if ! %{_rpmlibdir}/bin/dbconvert --rebuilddb ; then
+		if ! %{_rpmlibdir}/bin/dbconvert --rebuilddb; then
 			echo
 			echo "rpm database conversion failed!"
 			echo "You have to run  %{_rpmlibdir}/bin/dbconvert manually"

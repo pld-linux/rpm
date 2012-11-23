@@ -1,0 +1,22 @@
+--- rpm-5.4.10/macros/macros.in~	2012-11-17 00:38:23.000000000 +0200
++++ rpm-5.4.10/macros/macros.in	2012-11-17 00:38:55.871401871 +0200
+@@ -670,18 +670,7 @@
+ # XXX	Note: that there cannot be any whitespace within the string "p>q",
+ #	and that both p and q are package names (i.e. no version/release).
+ #
+-%_dependency_whiteout_caos_core		\
+-	perl>perl-Filter		\
+-	pam>coreutils			\
+-	pam>initscripts			\
+-	glibc-common>glibc		\
+-	glibc>nscd			\
+-	filesystem>setup
+-
+-%_dependency_whiteout			\
+-	%{?_dependency_whiteout_caos_core} \
+-	%{?_dependency_whiteout_system} \
+-	%{nil}
++%_dependency_whiteout	%{nil}
+ 
+ #
+ # Default path used for serializing transactions with a  fcntl lock.
