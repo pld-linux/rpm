@@ -52,7 +52,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	35
+Release:	35.1
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -115,7 +115,7 @@ Patch22:	%{name}-sparc64.patch
 Patch23:	%{name}-gendiff.patch
 Patch24:	openmp.patch
 Patch25:	%{name}-URPM-build-fix.patch
-Patch26:	%{name}-db5.2.patch
+Patch26:	%{name}-db5.3.patch
 Patch27:	%{name}-helperEVR-noassert.patch
 Patch28:	%{name}-unglobal.patch
 Patch29:	%{name}-builddir-readlink.patch
@@ -146,6 +146,7 @@ Patch53:	%{name}-lua-enable-extra-libs.patch
 Patch54:	%{name}-fix-filedigests-verify.patch
 Patch55:	%{name}-disable-hmac-verify.patch
 Patch56:	rpm-macros.patch
+Patch57:	%{name}-db5.2.patch
 
 # Patches imported from Mandriva
 
@@ -812,7 +813,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch23 -p1
 %patch24 -p1
 %patch25 -p1
-%patch26 -p1
+####%patch26 -p1
 %patch27 -p1
 %patch28 -p1
 %patch29 -p1
@@ -827,7 +828,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch38 -p1
 %patch39 -p1
 %patch40 -p1
-#patch41 -p1
+####%patch41 -p1
 %patch42 -p1
 %patch43 -p1
 %patch44 -p1
@@ -843,6 +844,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch54 -p1
 %patch55 -p1
 %patch56 -p1
+%patch57 -p1
 
 %patch1000 -p1
 %patch1001 -p1
@@ -1175,8 +1177,27 @@ if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
 	mkdir %{_sysconfdir}/rpm/sysinfo
 fi
 
+%if 0
 %posttrans
-if [ -e /var/lib/rpm/Packages ] && [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] && \
+if [ ! -e /var/lib/rpm/Packages ]; then
+	%{__rm} -f /var/lib/rpm/need_rpmdb_downgrade 2>/dev/null >/dev/null
+	exit 0
+fi
+NEEDDBCONV=
+if [ -e /var/lib/rpm/need_rpmdb_downgrade ]; then
+	if [ ! -e /var/lib/rpm.rpmbackup-%{version}-%{release} ] && [ -x /bin/cp ] && \
+			/bin/cp -a /var/lib/rpm /var/lib/rpm.rpmbackup-%{version}-%{release}; then
+		echo
+		echo "Backup of the rpm database has been created in /var/lib/rpm.rpmbackup-%{version}-%{release}"
+		echo
+	fi
+	%{__rm} -f /var/lib/rpm/log/*
+	/usr/bin/db5.2_dump /var/lib/rpm/Packages | /usr/bin/db5.2_load /var/lib/rpm/Packages.downgraded
+	%{__mv} -f /var/lib/rpm/Packages /var/lib/rpm/Packages.rpmsave
+	%{__mv} -f /var/lib/rpm/Packages.downgraded /var/lib/rpm/Packages
+	NEEDDBCONV="YES"
+fi
+if [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] && \
 		! %{_rpmlibdir}/bin/rpmdb_checkversion -h /var/lib/rpm -d /var/lib/rpm; then
 	if [ ! -e /var/lib/rpm.rpmbackup-%{version}-%{release} ] && [ -x /bin/cp ] && \
 			/bin/cp -a /var/lib/rpm /var/lib/rpm.rpmbackup-%{version}-%{release}; then
@@ -1184,7 +1205,9 @@ if [ -e /var/lib/rpm/Packages ] && [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] &
 		echo "Backup of the rpm database has been created in /var/lib/rpm.rpmbackup-%{version}-%{release}"
 		echo
 	fi
-
+	NEEDDBCONV="YES"
+fi
+if [ "x$NEEDDBCONV" = "xYES" ]; then
 	echo 'If poldek aborts after migration with rpmdb error, this is "normal", you should ignore it'
 
 	if [ -x %{_rpmlibdir}/bin/dbconvert ]; then
@@ -1196,6 +1219,10 @@ if [ -e /var/lib/rpm/Packages ] && [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] &
 		fi
 	fi
 fi
+endif
+
+%triggerpostun -- %{name} > 5.0.0-1, %{name} < 5.4.10-36
+:>/var/lib/rpm/need_rpmdb_downgrade
 
 %triggerpostun -- %{name} < 4.4.9-44
 %{_rpmlibdir}/hrmib-cache
