@@ -19,7 +19,7 @@ else
 	echo "	/bin/rm -f /var/lib/rpm/log/*"
 	echo "	/usr/lib/rpm/bin/dbconvert --rebuilddb"
 	echo
-
+	exit
 fi
 
 if ! /usr/lib/rpm/bin/dbconvert --rebuilddb; then
