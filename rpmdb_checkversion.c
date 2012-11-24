@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <db.h>
 
+int	version_check __P((void));
+
 const char *progname = "rpmdb_checkversion";		/* Program name. */
 
 /*
@@ -20,6 +22,9 @@ main(int argc, char *argv[])
 	DB_ENV *dbenv;
 	int ret;
 
+	if ((ret = version_check()) != 0)
+		return (EXIT_FAILURE);
+
 	/*
 	 * All of the shared database files live in home, but
 	 * data files will live in data_dir.
@@ -27,7 +32,7 @@ main(int argc, char *argv[])
 	quiet = 0;
 	home = "/var/lib/rpm";
 	data_dir = "/var/lib/rpm";
-	while ((ch = getopt(argc, argv, "h:d:q")) != EOF)
+	while ((ch = getopt(argc, argv, "h:d:qV")) != EOF)
 		switch (ch) {
 		case 'h':
 			home = optarg;
@@ -38,6 +43,9 @@ main(int argc, char *argv[])
 		case 'q':
 			quiet = 1;
 			break;
+		case 'V':
+			printf("%s\n", db_version(NULL, NULL, NULL));
+			return (EXIT_SUCCESS);
 		case '?':
 		default:
 			(void)fprintf(stderr, "usage: %s [-h home] [-d data_dir]\n", progname);
@@ -92,5 +100,22 @@ main(int argc, char *argv[])
 		return (1);
 	}
 
+	return (0);
+}
+
+int
+version_check()
+{
+	int v_major, v_minor, v_patch;
+
+	/* Make sure we're loaded with the right version of the DB library. */
+	(void)db_version(&v_major, &v_minor, &v_patch);
+	if (v_major != DB_VERSION_MAJOR || v_minor != DB_VERSION_MINOR) {
+		fprintf(stderr,
+		    "%s: version %d.%d doesn't match library version %d.%d\n",
+		    progname, DB_VERSION_MAJOR,
+		    DB_VERSION_MINOR, v_major, v_minor);
+		return (EXIT_FAILURE);
+	}
 	return (0);
 }

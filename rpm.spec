@@ -961,7 +961,13 @@ sed -i \
 
 %{?with_apidocs:%{__make} apidocs}
 
-%{__cc} %{rpmcflags} tools/rpmdb_checkversion.c -o tools/rpmdb_checkversion -ldb-%{reqdb_ver}
+%{__cc} %{rpmcflags} -I/usr/include/db%{reqdb_ver} tools/rpmdb_checkversion.c \
+	-o tools/rpmdb_checkversion -ldb-%{reqdb_ver}
+
+if tools/rpmdb_checkversion -V 2>&1 | grep "t match library version"; then
+	echo "Error linking rpmdb tools!"
+	exit 1
+fi
 
 %install
 rm -rf $RPM_BUILD_ROOT
