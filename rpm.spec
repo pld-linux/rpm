@@ -1211,6 +1211,9 @@ if [ -e /var/lib/rpm/Packages ] && [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] &
 fi
 endif
 
+%triggerpostun -- %{name} < 4.4.9-44
+%{_rpmlibdir}/hrmib-cache
+
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
 
