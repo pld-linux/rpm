@@ -89,6 +89,7 @@ Source24:	rpm.noautoreqfiles
 Source25:	%{name}-php-requires.php
 Source26:	rpmdb_checkversion.c
 Source27:	macros.lang
+Source28:	rpmdb_reset.c
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
 Patch2:		%{name}-popt-aliases.patch
@@ -901,6 +902,7 @@ install %{SOURCE11} scripts/perl.prov.in
 awk -f %{SOURCE6} %{SOURCE1}
 
 install %{SOURCE26} tools/rpmdb_checkversion.c
+install %{SOURCE28} tools/rpmdb_reset.c
 
 %build
 %{__libtoolize}
@@ -963,8 +965,14 @@ sed -i \
 
 %{__cc} %{rpmcflags} -I/usr/include/db%{reqdb_ver} tools/rpmdb_checkversion.c \
 	-o tools/rpmdb_checkversion -ldb-%{reqdb_ver}
+%{__cc} %{rpmcflags} -I/usr/include/db%{reqdb_ver} tools/rpmdb_reset.c \
+	-o tools/rpmdb_reset -ldb-%{reqdb_ver}
 
 if tools/rpmdb_checkversion -V 2>&1 | grep "t match library version"; then
+	echo "Error linking rpmdb tools!"
+	exit 1
+fi
+if tools/rpmdb_reset -V 2>&1 | grep "t match library version"; then
 	echo "Error linking rpmdb tools!"
 	exit 1
 fi
