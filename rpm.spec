@@ -90,6 +90,7 @@ Source25:	%{name}-php-requires.php
 Source26:	rpmdb_checkversion.c
 Source27:	macros.lang
 Source28:	rpmdb_reset.c
+Source29:	dbupgrade.sh
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
 Patch2:		%{name}-popt-aliases.patch
@@ -1140,6 +1141,7 @@ touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
 
 install tools/rpmdb_checkversion $RPM_BUILD_ROOT%{_rpmlibdir}/bin
 install tools/rpmdb_reset $RPM_BUILD_ROOT%{_rpmlibdir}/bin
+install %{SOURCE29} $RPM_BUILD_ROOT%{_rpmlibdir}/bin/dbupgrade.sh
 
 # create macro loading wrappers for backward compatibility
 for m in gstreamer java mono perl php python; do
@@ -1295,6 +1297,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %dir %{_rpmlibdir}/bin
 %attr(755,root,root) %{_rpmlibdir}/bin/dbconvert
+%attr(755,root,root) %{_rpmlibdir}/bin/dbupgrade.sh
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmdb_checkversion
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmdb_reset
 
