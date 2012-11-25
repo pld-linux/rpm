@@ -1196,25 +1196,7 @@ fi
 
 %if 0
 %posttrans
-if [ ! -e /var/lib/rpm/Packages ]; then
-	%{__rm} -f /var/lib/rpm/need_rpmdb_downgrade 2>/dev/null >/dev/null
-	exit 0
-fi
-NEEDDBCONV=
-if [ -e /var/lib/rpm/need_rpmdb_downgrade ]; then
-	if [ ! -e /var/lib/rpm.rpmbackup-%{version}-%{release} ] && [ -x /bin/cp ] && \
-			/bin/cp -a /var/lib/rpm /var/lib/rpm.rpmbackup-%{version}-%{release}; then
-		echo
-		echo "Backup of the rpm database has been created in /var/lib/rpm.rpmbackup-%{version}-%{release}"
-		echo
-	fi
-	%{__rm} -f /var/lib/rpm/log/*
-	/usr/bin/db5.2_dump /var/lib/rpm/Packages | /usr/bin/db5.2_load /var/lib/rpm/Packages.downgraded
-	%{__mv} -f /var/lib/rpm/Packages /var/lib/rpm/Packages.rpmsave
-	%{__mv} -f /var/lib/rpm/Packages.downgraded /var/lib/rpm/Packages
-	NEEDDBCONV="YES"
-fi
-if [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] && \
+if [ -e /var/lib/rpm/Packages ] && [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] && \
 		! %{_rpmlibdir}/bin/rpmdb_checkversion -h /var/lib/rpm -d /var/lib/rpm; then
 	if [ ! -e /var/lib/rpm.rpmbackup-%{version}-%{release} ] && [ -x /bin/cp ] && \
 			/bin/cp -a /var/lib/rpm /var/lib/rpm.rpmbackup-%{version}-%{release}; then
@@ -1222,27 +1204,12 @@ if [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] && \
 		echo "Backup of the rpm database has been created in /var/lib/rpm.rpmbackup-%{version}-%{release}"
 		echo
 	fi
-	NEEDDBCONV="YES"
-fi
-if [ "x$NEEDDBCONV" = "xYES" ]; then
+
 	echo 'If poldek aborts after migration with rpmdb error, this is "normal", you should ignore it'
 
-	if [ -x %{_rpmlibdir}/bin/dbconvert ]; then
-		if ! %{_rpmlibdir}/bin/dbconvert --rebuilddb; then
-			echo
-			echo "rpm database conversion failed!"
-			echo "You have to run  %{_rpmlibdir}/bin/dbconvert manually"
-			echo
-		fi
-	fi
+	%{_rpmlibdir}/bin/dbupgrade.sh
 fi
 endif
-
-%triggerpostun -- %{name} > 5.0.0-1, %{name} < 5.4.10-36
-:>/var/lib/rpm/need_rpmdb_downgrade
-
-%triggerpostun -- %{name} < 4.4.9-44
-%{_rpmlibdir}/hrmib-cache
 
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
