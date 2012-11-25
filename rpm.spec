@@ -1139,6 +1139,7 @@ touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Providename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
 
 install tools/rpmdb_checkversion $RPM_BUILD_ROOT%{_rpmlibdir}/bin
+install tools/rpmdb_reset $RPM_BUILD_ROOT%{_rpmlibdir}/bin
 
 # create macro loading wrappers for backward compatibility
 for m in gstreamer java mono perl php python; do
@@ -1295,6 +1296,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %dir %{_rpmlibdir}/bin
 %attr(755,root,root) %{_rpmlibdir}/bin/dbconvert
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmdb_checkversion
+%attr(755,root,root) %{_rpmlibdir}/bin/rpmdb_reset
 
 %files base
 %defattr(644,root,root,755)
