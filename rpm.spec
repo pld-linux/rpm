@@ -317,6 +317,7 @@ BuildRequires:	libsemanage-static >= 2.1.0
 BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
 %endif
+Requires(posttrans):	coreutils
 Requires:	%{name}-base = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt >= %{beecrypt_ver}
@@ -1194,11 +1195,10 @@ if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
 	mkdir %{_sysconfdir}/rpm/sysinfo
 fi
 
-%if 0
 %posttrans
-if [ -e /var/lib/rpm/Packages ] && [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] && \
+if [ -e /var/lib/rpm/Packages ] && \
 		! %{_rpmlibdir}/bin/rpmdb_checkversion -h /var/lib/rpm -d /var/lib/rpm; then
-	if [ ! -e /var/lib/rpm.rpmbackup-%{version}-%{release} ] && [ -x /bin/cp ] && \
+	if [ ! -e /var/lib/rpm.rpmbackup-%{version}-%{release} ] && \
 			/bin/cp -a /var/lib/rpm /var/lib/rpm.rpmbackup-%{version}-%{release}; then
 		echo
 		echo "Backup of the rpm database has been created in /var/lib/rpm.rpmbackup-%{version}-%{release}"
@@ -1209,7 +1209,6 @@ if [ -e /var/lib/rpm/Packages ] && [ -x %{_rpmlibdir}/bin/rpmdb_checkversion ] &
 
 	%{_rpmlibdir}/bin/dbupgrade.sh
 fi
-endif
 
 %triggerpostun -- %{name} < 4.4.9-44
 %{_rpmlibdir}/hrmib-cache
