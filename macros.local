@@ -6,8 +6,7 @@
 %_verify_file_context_path	%{nil}
 
 # If non-zero, all erasures will be automagically repackaged.
-# You will need more than 256MiB RAM on i686 for repackage to succeed.
-#%_repackage_all_erasures	0
+#%_repackage_all_erasures	1
 
 # If non-zero, create debuginfo packages
 #%_enable_debug_packages	0
