@@ -1204,9 +1204,10 @@ if [ -e /var/lib/rpm/Packages ] && \
 		echo "Backup of the rpm database has been created in /var/lib/rpm.rpmbackup-%{version}-%{release}"
 		echo
 	fi
-
-	echo 'If poldek aborts after migration with rpmdb error, this is "normal", you should ignore it'
-
+	echo
+	echo 'If poldek aborts after migration with rpmdb error, this is expected behaviour,'
+	echo 'you should ignore it and restart poldek'
+	echo
 	%{_rpmlibdir}/bin/dbupgrade.sh
 fi
 
