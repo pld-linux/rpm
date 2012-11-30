@@ -349,8 +349,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_rpmlibdir /usr/lib/rpm
 %define		_noautocompressdoc	RPM-GPG-KEY
 
-%define		specflags	-fno-strict-aliasing
-
 %description
 RPM is a powerful package manager, which can be used to build,
 install, query, verify, update, and uninstall individual software
