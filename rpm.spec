@@ -150,6 +150,7 @@ Patch55:	%{name}-disable-hmac-verify.patch
 Patch56:	rpm-macros.patch
 Patch57:	%{name}-db5.2.patch
 Patch58:	%{name}-preserve-iterator.patch
+Patch59:	%{name}-triggerin-compat.patch
 
 # Patches imported from Mandriva
 
@@ -848,6 +849,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch56 -p1
 %patch57 -p1
 %patch58 -p1
+%patch59 -p1
 
 %patch1000 -p1
 %patch1001 -p1
