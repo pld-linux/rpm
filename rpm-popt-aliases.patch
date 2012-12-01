@@ -3,7 +3,7 @@
 @@ -595,4 +595,22 @@
  rpmv	alias --httpproxy	--define '_httpproxy !#:+'
  
-+rpm	alias --initdb	--qa \
++rpm	alias --initdb	-qa --quiet \
 +	--POPTdesc=$"Compatibility option with old rpm. Database is created lazily now."
 +
 +rpm	alias --downgrade	--oldpackage \
