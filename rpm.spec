@@ -94,7 +94,6 @@ Source29:	dbupgrade.sh
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
 Patch2:		%{name}-popt-aliases.patch
-Patch3:		%{name}-rpmpopt.patch
 Patch4:		%{name}-perl-macros.patch
 Patch5:		%{name}-perl-req-perlfile.patch
 Patch6:		%{name}-scripts-closefds.patch
@@ -788,7 +787,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 #patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
