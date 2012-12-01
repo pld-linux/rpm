@@ -4,7 +4,7 @@
  rpmv	alias --httpproxy	--define '_httpproxy !#:+'
  
 +rpm	alias --initdb	--qa \
-+	--POPTdesc=$"Compatibility option with old rpm. Database iscreated lazily now."
++	--POPTdesc=$"Compatibility option with old rpm. Database is created lazily now."
 +
 +rpm	alias --downgrade	--oldpackage \
 +	--POPTdesc=$"Allow an upgrade to replace a newer package with an older one."
