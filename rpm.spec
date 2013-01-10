@@ -52,7 +52,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	36
+Release:	37
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -331,6 +331,7 @@ Conflicts:	glibc < 2.2.92
 Conflicts:	poldek < 0.21-0.20070703.00.3
 # segfaults with lzma 0.42.2
 Conflicts:	lzma-libs < 4.999.3
+Conflicts:	util-vserver < 0.30.216-1.pre3034.7
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_binary_payload		w9.gzdio
