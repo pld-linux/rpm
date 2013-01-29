@@ -1,0 +1,46 @@
+--- rpm-5.4.10/scripts/pythoneggs.py.orig	2012-05-08 00:34:19.000000000 +0200
++++ rpm-5.4.10/scripts/pythoneggs.py	2013-01-29 12:59:00.000000000 +0100
+@@ -16,7 +16,7 @@
+ from distutils.sysconfig import get_python_lib
+ from subprocess import Popen, PIPE, STDOUT
+ import os
+-
++import re
+ 
+ opts, args = getopt(argv[1:], 'hPRSCOEb:',
+         ['help', 'provides', 'requires', 'suggests', 'conflicts', 'obsoletes', 'extras','buildroot='])
+@@ -29,6 +29,13 @@
+ Extras = False
+ buildroot = None
+ 
++def make_pldver(raw):
++    if re.match(r'^[0-9\.]+$', raw) == None:
++	pldver = re.sub(r'([\d\.]+)(.+)', r'\1-0.\2', raw)
++    else:
++	pldver = raw
++    return pldver
++
+ for o, a in opts:
+     if o in ('-h', '--help'):
+         print '-h, --help\tPrint help'
+@@ -129,7 +136,7 @@
+             if not name in py_deps:
+                 py_deps[name] = []
+             if dist.version:
+-                spec = ('==', dist.version)
++                spec = ('==', make_pldver(dist.version))
+                 if not spec in py_deps[name]:
+                     py_deps[name].append(spec)
+         if Requires or (Suggests and dist.extras):
+@@ -160,8 +167,9 @@
+                     if spec[0] != '!=':
+                         if not name in py_deps:
+                             py_deps[name] = []
+-                        if not spec in py_deps[name]:
+-                            py_deps[name].append(spec)
++                        plddep = (spec[0], make_pldver(spec[1]))
++                        if not plddep in py_deps[name]:
++                            py_deps[name].append(plddep)
+                 if not dep.specs:
+                     py_deps[name] = []
+         # Unused, for automatic sub-package generation based on 'extras' from egg metadata

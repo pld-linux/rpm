@@ -153,6 +153,7 @@ Patch59:	%{name}-triggerin-compat.patch
 Patch60:	%{name}-python-sitescriptdir.patch
 Patch61:	%{name}-clean-docdir.patch
 Patch62:	%{name}-DB_CONFIG.patch
+Patch63:	%{name}-pythoneggs.patch
 
 # Patches imported from Mandriva
 
@@ -855,6 +856,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch60 -p1
 %patch61 -p1
 %patch62 -p1
+%patch63 -p1
 
 %patch1000 -p1
 %patch1001 -p1
