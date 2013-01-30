@@ -1173,10 +1173,12 @@ done
 # Bourne shell script vs ELF executable linked with rpm,rpmdb,rpmio
 mv $RPM_BUILD_ROOT{%{_rpmlibdir},%{_bindir}}/rpm2cpio
 
+%if %{with python}
 %py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
 %py_comp $RPM_BUILD_ROOT%{py_sitedir}
 
 %{__rm} $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,a,py}
+%endif
 
 # wrong location, not used anyway
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log,xinetd}
