@@ -52,7 +52,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	40
+Release:	41
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -279,8 +279,8 @@ BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	libmagic-devel
 %if %{with selinux}
 BuildRequires:	libselinux-devel >= 2.1.0
-BuildRequires:	libsepol-devel >= 2.1.0
 BuildRequires:	libsemanage-devel >= 2.1.0
+BuildRequires:	libsepol-devel >= 2.1.0
 %endif
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
@@ -289,17 +289,17 @@ BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libxml2-devel
 BuildRequires:	neon-devel >= 0.25.5
 %endif
+%{?with_system_lua:BuildRequires:	lua51-devel >= 5.1.2}
 BuildRequires:	ossp-uuid-devel
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
-%{?with_system_lua:BuildRequires:	lua51-devel >= 5.1.2}
 %{?with_python:BuildRequires:	python-devel >= 1:2.3}
 BuildRequires:	python-modules >= 1:2.3
 %{?with_python:BuildRequires:	rpm-pythonprov}
 %{?with_sqlite:BuildRequires:	sqlite3-devel}
 BuildRequires:	tcl
-BuildRequires:	zlib-devel
 BuildRequires:	xz-devel
+BuildRequires:	zlib-devel
 %if %{with apidocs}
 BuildRequires:	doxygen
 BuildRequires:	ghostscript
@@ -308,16 +308,16 @@ BuildRequires:	tetex-pdftex
 %endif
 %if %{with static}
 # Require static library only for static build
+%{?with_db:BuildRequires:	%{reqdb_pkg}-static >= %{reqdb_ver}}
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
 BuildRequires:	bzip2-static >= 1.0.2-17
-%{?with_db:BuildRequires:	%{reqdb_pkg}-static >= %{reqdb_ver}}
 BuildRequires:	elfutils-static
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	libmagic-static
 %if %{with selinux}
 BuildRequires:	libselinux-static >= 2.1.0
-BuildRequires:	libsepol-static >= 2.1.0
 BuildRequires:	libsemanage-static >= 2.1.0
+BuildRequires:	libsepol-static >= 2.1.0
 %endif
 BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
@@ -429,8 +429,8 @@ Zawiera on:
 Summary:	RPMs library
 Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
-Requires:	beecrypt >= %{beecrypt_ver}
 %{?with_db:Requires:	%{reqdb_pkg} >= %{reqdb_ver}}
+Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	libmagic >= 1.15-2
 %{?with_selinux:Requires:	libselinux >= 2.1.0}
 Requires:	popt >= %{reqpopt_ver}
@@ -455,9 +455,9 @@ Summary(ru.UTF-8):	Хедеры и библиотеки для программ,
 Summary(uk.UTF-8):	Хедери та бібліотеки для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name}-lib = %{version}-%{release}
+%{?with_db:Requires:	%{reqdb_pkg}-devel >= %{reqdb_ver}}
 Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
-%{?with_db:Requires:	%{reqdb_pkg}-devel >= %{reqdb_ver}}
 Requires:	elfutils-devel
 %{?with_keyutils:Requires:	keyutils-devel}
 Requires:	libmagic-devel
@@ -519,9 +519,9 @@ Summary(ru.UTF-8):	Статическая библиотека для прогр
 Summary(uk.UTF-8):	Статична бібліотека для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
+%{?with_db:Requires:	%{reqdb_pkg}-static >= %{reqdb_ver}}
 Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
-%{?with_db:Requires:	%{reqdb_pkg}-static >= %{reqdb_ver}}
 Requires:	elfutils-static
 %{?with_keyutils:Requires:	keyutils-static}
 Requires:	libmagic-static
@@ -643,6 +643,7 @@ Requires:	sed >= 4.0
 Requires:	sh-utils
 Requires:	tar >= 1:1.22
 Requires:	textutils
+Requires:	which
 Requires:	xz
 Provides:	rpmbuild(monoautodeps)
 Provides:	rpmbuild(noauto) = 3
@@ -716,8 +717,8 @@ Summary(pl.UTF-8):	Makra ułatwiające tworzenie pakietów RPM z programami napi
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	python
-Requires:	python-modules
 Requires:	python-distribute
+Requires:	python-modules
 
 %description pythonprov
 Python macros, which simplifies creation of RPM packages with Python
@@ -748,7 +749,7 @@ Summary(pl.UTF-8):	Pythonowy interfejs do biblioteki RPM-a
 Summary(pt_BR.UTF-8):	Módulo Python para aplicativos que manipulam pacotes RPM
 Group:		Development/Languages/Python
 Requires:	%{name} = %{version}-%{release}
-%pyrequires_eq	python
+Requires:	python
 Obsoletes:	rpm-python
 
 %description -n python-rpm
@@ -1235,8 +1236,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %defattr(644,root,root,755)
 %doc CHANGES CREDITS README pubkeys/JBJ-GPG-KEY manual/*
 
-%dir %{_sysconfdir}/pki/rpm-gpg
-%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
+%dir /etc/pki/rpm-gpg
+/etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
 %attr(755,root,root) /bin/rpm
 
