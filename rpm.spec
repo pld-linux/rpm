@@ -52,7 +52,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	41
+Release:	42
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -154,6 +154,7 @@ Patch60:	%{name}-python-sitescriptdir.patch
 Patch61:	%{name}-clean-docdir.patch
 Patch62:	%{name}-DB_CONFIG.patch
 Patch63:	%{name}-pythoneggs.patch
+Patch64:	%{name}-fix-compress-doc.patch
 
 # Patches imported from Mandriva
 
@@ -858,6 +859,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch61 -p1
 %patch62 -p1
 %patch63 -p1
+%patch64 -p1
 
 %patch1000 -p1
 %patch1001 -p1
