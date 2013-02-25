@@ -155,6 +155,7 @@ Patch61:	%{name}-clean-docdir.patch
 Patch62:	%{name}-DB_CONFIG.patch
 Patch63:	%{name}-pythoneggs.patch
 Patch64:	%{name}-fix-compress-doc.patch
+Patch65:	%{name}-parseSpec-skip-empty-tags.patch
 
 # Patches imported from Mandriva
 
@@ -860,6 +861,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch62 -p1
 %patch63 -p1
 %patch64 -p1
+%patch65 -p1
 
 %patch1000 -p1
 %patch1001 -p1

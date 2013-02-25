@@ -1,0 +1,11 @@
+--- rpm-5.4.10/build/parseSpec.c.orig	2013-02-25 14:29:07.874848468 +0100
++++ rpm-5.4.10/build/parseSpec.c	2013-02-25 14:29:25.661698897 +0100
+@@ -92,6 +92,8 @@
+         if (aTags != NULL && aTags[0] != NULL) {
+             ARGV_t av;
+             s = tagCanonicalize(line+1);	/* XXX +1 to skip leading '%' */
++	    if (strlen(s) == 0)	/* not a tag, just unknown macro */
++		    goto exit;
+ #if defined(RPM_VENDOR_OPENPKG) /* wildcard-matching-arbitrary-tagnames */
+             av = argvSearchLinear(aTags, s, argvFnmatchCasefold);
+ #else
