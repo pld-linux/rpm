@@ -746,6 +746,22 @@ packages.
 Dodatkowe narzędzia do sprawdzenia zależności skryptów PHP PEAR w
 pakietach RPM.
 
+%package rubyprov
+Summary:	Ruby tools, which simplify creation of RPM packages with Ruby software
+Summary(pl.UTF-8):	Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w Ruby
+Group:		Applications/File
+Requires:	%{name} = %{version}-%{release}
+Requires:	ruby
+Requires:	ruby-modules
+
+%description rubyprov
+Ruby tools, which simplifies creation of RPM packages with Ruby
+software.
+
+%description rubyprov -l pl.UTF-8
+Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w
+Ruby.
+
 %package -n python-rpm
 Summary:	Python interface to RPM library
 Summary(pl.UTF-8):	Pythonowy interfejs do biblioteki RPM-a
@@ -1466,11 +1482,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros.python
 
 %attr(755,root,root) %{_rpmlibdir}/check-multiarch-files
-%attr(755,root,root) %{_rpmlibdir}/gem_helper.rb
 %attr(755,root,root) %{_rpmlibdir}/gstreamer.sh
 %attr(755,root,root) %{_rpmlibdir}/kmod-deps.sh
 %attr(755,root,root) %{_rpmlibdir}/mkmultiarch
-%attr(755,root,root) %{_rpmlibdir}/rubygems.rb
 
 %attr(755,root,root) %{_bindir}/gendiff
 %attr(755,root,root) %{_bindir}/multiarch-platform
@@ -1490,6 +1504,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/java-find-requires
 # needs jar (any jdk), jcf-dump (gcc-java) to work
 %attr(755,root,root) %{_rpmlibdir}/javadeps.sh
+
+%files rubyprov
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_rpmlibdir}/gem_helper.rb
+%attr(755,root,root) %{_rpmlibdir}/rubygems.rb
 
 %files perlprov
 %defattr(644,root,root,755)
