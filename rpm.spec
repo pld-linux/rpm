@@ -80,16 +80,16 @@ Source16:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source16-md5:	08b29584dd349aac9caa7610131a0a88
 Source17:	%{name}-mimetypedeps
 Source18:	macros.local
-Source19:	rpm.noautocompressdoc
-Source20:	rpm.noautoprov
-Source21:	rpm.noautoprovfiles
-Source22:	rpm.noautoreq
-Source23:	rpm.noautoreqdep
-Source24:	rpm.noautoreqfiles
+Source19:	%{name}.noautocompressdoc
+Source20:	%{name}.noautoprov
+Source21:	%{name}.noautoprovfiles
+Source22:	%{name}.noautoreq
+Source23:	%{name}.noautoreqdep
+Source24:	%{name}.noautoreqfiles
 Source25:	%{name}-php-requires.php
-Source26:	rpmdb_checkversion.c
+Source26:	%{name}db_checkversion.c
 Source27:	macros.lang
-Source28:	rpmdb_reset.c
+Source28:	%{name}db_reset.c
 Source29:	dbupgrade.sh
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
@@ -146,7 +146,7 @@ Patch52:	%{name}-null-term-ascii-digest.patch
 Patch53:	%{name}-lua-enable-extra-libs.patch
 Patch54:	%{name}-fix-filedigests-verify.patch
 Patch55:	%{name}-disable-hmac-verify.patch
-Patch56:	rpm-macros.patch
+Patch56:	%{name}-macros.patch
 Patch57:	%{name}-db5.2.patch
 Patch58:	%{name}-preserve-iterator.patch
 Patch59:	%{name}-triggerin-compat.patch
@@ -162,87 +162,87 @@ Patch66:	%{name}-payload-use-hashed-inode.patch
 
 # status: ready to merge, it's already been merged on HEAD, so commiting it to rpm-5_4
 # would basically just mean backporting it..
-Patch1000:	rpm-5.4.4-add-_specfile-macro.patch
+Patch1000:	%{name}-5.4.4-add-_specfile-macro.patch
 # status: needs to be cleaned up and properly reviewed together with rest
 # of the patches related to dependency generation
-Patch1001:	rpm-5.4.9-avoid-dependencies-on-self.patch
+Patch1001:	%{name}-5.4.9-avoid-dependencies-on-self.patch
 # status: probably ready to merge
-Patch1002:	rpm-5.4.4-pkgconfigdeps-check-path.patch
+Patch1002:	%{name}-5.4.4-pkgconfigdeps-check-path.patch
 # status: probably okay to merge, but discuss on rpm-devel first
-Patch1003:	rpm-5.4.4-glob-wildcards-for-loading-macro-files.patch
+Patch1003:	%{name}-5.4.4-glob-wildcards-for-loading-macro-files.patch
 # status: needs to be discussed
-Patch1004:	rpm-5.4.4-allow-installation-of-repackaged-rpms.patch
+Patch1004:	%{name}-5.4.4-allow-installation-of-repackaged-rpms.patch
 # status: ready to merge
-Patch1005:	rpm-5.4.8-dont-show-suggests-with-requires.patch
+Patch1005:	%{name}-5.4.8-dont-show-suggests-with-requires.patch
 # status: ready for merge
-Patch1006:	rpm-5.4.9-strip-buildroot-away-from-duplicate-files-list.patch
+Patch1006:	%{name}-5.4.9-strip-buildroot-away-from-duplicate-files-list.patch
 # status: probably okay to merge, but discuss on rpm-devel first
-Patch1007:	rpm-5.4.10-duplicate_files_terminate_build.patch
+Patch1007:	%{name}-5.4.10-duplicate_files_terminate_build.patch
 # status: same as above
-Patch1008:	rpm-5.4.10-unpackaged_subdirs_terminate_build.patch
+Patch1008:	%{name}-5.4.10-unpackaged_subdirs_terminate_build.patch
 # mdvbz#64898
 # status: uncertain, might be okay to merge, discuss on rpm-devel first
-Patch1009:	rpm-5.4.4-rpmbuild-withoutclean.patch
+Patch1009:	%{name}-5.4.4-rpmbuild-withoutclean.patch
 # no sense in having an additional dependency on 'pkgconfig' on all packages that
 # have a pkgconfig file, it's not needed for them to be made useful and anything
 # actuallly using pkgconfig for this purpose will pull it in as a dependency anyways...
 # status: might be okay to merge, but discuss on rpm-devel first
-Patch1010:	rpm-5.4.4-drop-useless-auto-generated-pkgconfig-dependency.patch
+Patch1010:	%{name}-5.4.4-drop-useless-auto-generated-pkgconfig-dependency.patch
 # status: ready for merge
-Patch1011:	rpm-5.4.4-fix-rpmconstant-to-always-use-LC_CTYPE-C-for-case-conversion.patch
+Patch1011:	%{name}-5.4.4-fix-rpmconstant-to-always-use-LC_CTYPE-C-for-case-conversion.patch
 # $RPM_BUILD_DIR isn't necessarily the same as $PWD, it's %%{_builddir}, not
 # %%{_builddir}/%%{?buildsubdir}, messing up paths in debug packages created..
 # status: needs to be discussed and investigated a bit better..
-Patch1012:	rpm-5.4.4-pass-_builddir-properly-to-find-debuginfo.patch
+Patch1012:	%{name}-5.4.4-pass-_builddir-properly-to-find-debuginfo.patch
 # status: probably okay to merge, but discuss on rpm-devel first
-Patch1013:	rpm-5.4.10-files-listed-twice-terminates-build.patch
+Patch1013:	%{name}-5.4.10-files-listed-twice-terminates-build.patch
 # status: probably okay to merge
-Patch1014:	rpm-5.4.9-ruby1.9-fixes.patch
+Patch1014:	%{name}-5.4.9-ruby1.9-fixes.patch
 # status: keep locally
-Patch1015:	rpm-5.4.9-keep-loading-script-macros.patch
+Patch1015:	%{name}-5.4.9-keep-loading-script-macros.patch
 # status: same as for other dep gen patches
-Patch1016:	rpm-5.4.9-update-rpmfc-when-removing-dependencies-on-self.patch
+Patch1016:	%{name}-5.4.9-update-rpmfc-when-removing-dependencies-on-self.patch
 # status: idem
-Patch1017:	rpm-5.4.9-rpmfc-extract-dependencies-for-all-files.patch
+Patch1017:	%{name}-5.4.9-rpmfc-extract-dependencies-for-all-files.patch
 # status: ready for merge
-Patch1018:	rpm-5.4.5-rubygems-add-missing-newline.patch
+Patch1018:	%{name}-5.4.5-rubygems-add-missing-newline.patch
 # status: probably okay to merge
-Patch1019:	rpm-5.4.5-python-export-spec-macros.patch
+Patch1019:	%{name}-5.4.5-python-export-spec-macros.patch
 # status: idem
-Patch1020:	rpm-5.4.9-font-provides.patch
+Patch1020:	%{name}-5.4.9-font-provides.patch
 # stauus: idem
-Patch1021:	rpm-5.4.7-kmod-dependencies.patch
+Patch1021:	%{name}-5.4.7-kmod-dependencies.patch
 # status: probably okay to merge, discuss on rpm-devel first
-Patch1022:	rpm-5.4.5-skip-dependencies-for-character-devices.patch
+Patch1022:	%{name}-5.4.5-skip-dependencies-for-character-devices.patch
 # status: ready to merge
-Patch1023:	rpm-5.4.5-rpmfc-use-strlen-not-sizeof.patch
+Patch1023:	%{name}-5.4.5-rpmfc-use-strlen-not-sizeof.patch
 # status: probably okay to merge
-Patch1024:	rpm-5.4.5-rpmfc-apply-python-coloring-from-magic.patch
+Patch1024:	%{name}-5.4.5-rpmfc-apply-python-coloring-from-magic.patch
 # status: ready to merge
-Patch1025:	rpm-5.4.7-rpmfc-fix-invalid-free-if-not-_defaultdocdir-set.patch
+Patch1025:	%{name}-5.4.7-rpmfc-fix-invalid-free-if-not-_defaultdocdir-set.patch
 # status: probably okay to merge
-Patch1026:	rpm-5.4.10-dont-try-generate-rpmfc-dependencies-from-doc-files.patch
+Patch1026:	%{name}-5.4.10-dont-try-generate-rpmfc-dependencies-from-doc-files.patch
 # status: ready
-Patch1027:	rpm-5.4.7-fix-generation-of-ruby-abi-provides.patch
+Patch1027:	%{name}-5.4.7-fix-generation-of-ruby-abi-provides.patch
 # crash reproducable with 'rpm -qa --triggers'
 # status: ready
-Patch1028:	rpm-5.4.7-hdrfmt-fix-unitialized-argv-element.patch
+Patch1028:	%{name}-5.4.7-hdrfmt-fix-unitialized-argv-element.patch
 # status: same as for other dep gen patches
-Patch1029:	rpm-5.4.7-dont-consider-trigger-dependencies-as-overlapping.patch
+Patch1029:	%{name}-5.4.7-dont-consider-trigger-dependencies-as-overlapping.patch
 # status: ready
-Patch1030:	rpm-5.4.7-fix-minor-memleaks.patch
+Patch1030:	%{name}-5.4.7-fix-minor-memleaks.patch
 # status: ready
-Patch1031:	rpm-5.4.9-mire-fix-strings-lacking-null-terminator.patch
+Patch1031:	%{name}-5.4.9-mire-fix-strings-lacking-null-terminator.patch
 # status: ready
-Patch1032:	rpm-5.4.9-rpmpython-fix-input.patch
+Patch1032:	%{name}-5.4.9-rpmpython-fix-input.patch
 # status: ready
-Patch1033:	rpm-5.4.7-no-seqid_init-on-rdonly-database.patch
+Patch1033:	%{name}-5.4.7-no-seqid_init-on-rdonly-database.patch
 # status: probably ready for merging
-Patch1034:	rpm-5.4.9-avoid-double-slash-in-path-for-dirname-filetrigger-matching.patch
+Patch1034:	%{name}-5.4.9-avoid-double-slash-in-path-for-dirname-filetrigger-matching.patch
 # status: probably ready to merge, discuss on rpm-devel first
-Patch1035:	rpm-5.4.9-fix-verify-segfault.patch
+Patch1035:	%{name}-5.4.9-fix-verify-segfault.patch
 # status: ready and should be merged
-Patch1036:	rpm-5.4.9-fix-typo-in-rpmtag-header.patch
+Patch1036:	%{name}-5.4.9-fix-typo-in-rpmtag-header.patch
 # Due to rpmdav/neon being written in a different fashion than other rpmio clients,
 # the inconsistent behaviour affects code elsewhere which expects consistent behaviour,
 # with the result being that when unable to download files, neon will save error
@@ -251,30 +251,30 @@ Patch1036:	rpm-5.4.9-fix-typo-in-rpmtag-header.patch
 # more of a workaround, while rewriting rpmdav code to behave consistently
 # would be "the right thing to do". Yet I'm not fully able to grasp all of the
 # code and don't want to spend more time just to get the API..
-Patch1037:	rpm-5.4.10-fix-neon-saving-error-pages-as-target-file.patch
+Patch1037:	%{name}-5.4.10-fix-neon-saving-error-pages-as-target-file.patch
 # As the transaction flags for ignoring arch & os are no longer used, there's
 # currently no way to ignore arch & os of packages anymore. This patch adds
 # support for doing this again by defining rpm variables and overriding
 # --ignorearch & --ignoreos to set these.
 # status: needs to be discussed upstream before thinking about merging
-Patch1038:	rpm-5.4.10-support-ignore-arch-and-os-again.patch
+Patch1038:	%{name}-5.4.10-support-ignore-arch-and-os-again.patch
 # status: ready for merge
-Patch1039:	rpm-5.4.4-fix-same-package-with-epoch-possible-to-upgrade.patch
+Patch1039:	%{name}-5.4.4-fix-same-package-with-epoch-possible-to-upgrade.patch
 # we want that patch too, a bit of builder infrastructure relies on NOSIGNATURES
-Patch1040:	rpm-5.4.9-support-signatures-and-digest-disablers.patch
+Patch1040:	%{name}-5.4.9-support-signatures-and-digest-disablers.patch
 # lack insight on actual functionality, which anyways seems broken, so let's
 # disable it to avoid errors from berkeley db..
 # status: keep locally
-Patch1041:	rpm-5.4.9-disable-l10ndir.patch
+Patch1041:	%{name}-5.4.9-disable-l10ndir.patch
 # status: ready for merge
-Patch1042:	rpm-5.4.9-fix-rpm_qa-pattern.patch
+Patch1042:	%{name}-5.4.9-fix-rpm_qa-pattern.patch
 
 URL:		http://rpm5.org/
+%{?with_db:BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_ver}}
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1.4
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.2-17
-%{?with_db:BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_ver}}
 BuildRequires:	elfutils-devel >= 0.108
 #BuildRequires:	gettext-autopoint >= 0.11.4-2
 BuildRequires:	gettext-devel >= 0.11.4-2
