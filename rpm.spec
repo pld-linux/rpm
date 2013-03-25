@@ -52,7 +52,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	44
+Release:	44.1
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -157,6 +157,7 @@ Patch63:	%{name}-pythoneggs.patch
 Patch64:	%{name}-fix-compress-doc.patch
 Patch65:	%{name}-parseSpec-skip-empty-tags.patch
 Patch66:	%{name}-payload-use-hashed-inode.patch
+Patch67:	rpm-repackage-dont-force-max-compression.patch
 
 # Patches imported from Mandriva
 
@@ -880,6 +881,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch64 -p1
 %patch65 -p1
 %patch66 -p1
+%patch67 -p1
 
 %patch1000 -p1
 %patch1001 -p1
