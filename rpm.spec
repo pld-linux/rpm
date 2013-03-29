@@ -52,7 +52,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	45
+Release:	46
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -621,7 +621,7 @@ Summary(ru.UTF-8):	Скрипты и утилиты, необходимые дл
 Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для побудови пакетів
 Group:		Applications/File
 Requires(pre):	findutils
-Requires:	%{name}-build-macros >= 1.653
+Requires:	%{name}-build-macros >= 1.656
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
@@ -1137,6 +1137,13 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/vpkg-provides*
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{prov,req}.pl
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{provides,requires}.perl
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/ruby
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/lib/liblua.a
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/lib/liblua.la
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/mono-find-provides
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/mono-find-requires
+
+%{__sed} -i -e '/macros.d\/ruby/ s/^/#/' $RPM_BUILD_ROOT%{_rpmlibdir}/macros
 
 # not installed since 4.4.8 (-tools-perl subpackage)
 install scripts/rpmdiff scripts/rpmdiff.cgi $RPM_BUILD_ROOT%{_rpmlibdir}
@@ -1471,7 +1478,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros.d/php
 %{_rpmlibdir}/macros.d/pkgconfig
 %{_rpmlibdir}/macros.d/python
-%{_rpmlibdir}/macros.d/ruby
 %{_rpmlibdir}/macros.d/selinux
 %{_rpmlibdir}/macros.d/tcl
 %{_rpmlibdir}/macros.rpmbuild
