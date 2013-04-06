@@ -1,0 +1,47 @@
+--- rpm-5.4.10/misc/librpmmisc.c.orig	2009-05-29 21:04:21.000000000 +0200
++++ rpm-5.4.10/misc/librpmmisc.c	2013-04-06 21:52:32.825238309 +0200
+@@ -33,7 +33,7 @@
+ #endif
+ 
+ /* XXX limit the fiddle up to linux for now. */
+-#if !defined(HAVE_SETPROCTITLE) && defined(__linux__)
++#if 0 && !defined(HAVE_SETPROCTITLE) && defined(__linux__)
+ #include "setproctitle.c"
+ #endif
+ 
+--- rpm-5.4.10/configure.ac.orig	2013-04-06 15:51:42.965689560 +0200
++++ rpm-5.4.10/configure.ac	2013-04-06 21:52:57.755237789 +0200
+@@ -945,13 +945,6 @@ if test $ac_cv_func_syslog = no; then
+   done
+ fi
+ 
+-AC_CHECK_FUNCS(setproctitle)
+-if test $ac_cv_func_setproctitle = no; then
+-  # setproctitle is not in the default libraries.  See if it's in some other.
+-  AC_CHECK_LIB(setproctitle, setproctitle, [AC_DEFINE(HAVE_SETPROCTITLE)
+-  LIBS="$LIBS -lsetproctitle"])
+-fi
+-
+ dnl # Check how to find out the amount of physical memory in the system. The
+ dnl # xz command line tool uses this to automatically limit its memory usage.
+ dnl # - sysconf() gives all the needed info on GNU+Linux and Solaris.
+--- rpm-5.4.10/rpmqv.c.orig	2012-07-06 17:39:16.000000000 +0200
++++ rpm-5.4.10/rpmqv.c	2013-04-06 21:52:12.351905402 +0200
+@@ -450,7 +450,7 @@ int main(int argc, const char ** argv)
+     environ = envp;
+ #else
+ /* XXX limit the fiddle up to linux for now. */
+-#if !defined(HAVE_SETPROCTITLE) && defined(__linux__)
++#if 0 && !defined(HAVE_SETPROCTITLE) && defined(__linux__)
+     (void) initproctitle(argc, (char **)argv, environ);
+ #endif
+ #endif  
+@@ -1117,7 +1117,7 @@ exit:
+     optCon = rpmcliFini(optCon);
+ 
+ /* XXX limit the fiddle up to linux for now. */
+-#if !defined(HAVE_SETPROCTITLE) && defined(__linux__)
++#if 0 && !defined(HAVE_SETPROCTITLE) && defined(__linux__)
+     (void) finiproctitle();
+ #endif
+ 
