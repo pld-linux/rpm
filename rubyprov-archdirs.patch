@@ -1,0 +1,19 @@
+--- rpm-5.4.10/scripts/rubygems.rb~	2013-04-26 00:28:59.955288629 +0300
++++ rpm-5.4.10/scripts/rubygems.rb	2013-04-26 00:43:35.122569376 +0300
+@@ -51,10 +51,16 @@
+   elsif not ruby_versioned
+     if path.match(RbConfig::CONFIG["rubylibdir"])
+       ruby_versioned = true
++    elsif path.match(RbConfig::CONFIG["archdir"])
++      ruby_versioned = true
+     elsif path.match(RbConfig::CONFIG["sitelibdir"])
+       ruby_versioned = true
++    elsif path.match(RbConfig::CONFIG["sitearchdir"])
++      ruby_versioned = true
+     elsif path.match(RbConfig::CONFIG["vendorlibdir"])
+       ruby_versioned = true
++    elsif path.match(RbConfig::CONFIG["vendorarchdir"])
++      ruby_versioned = true
+     end
+   end
+ end

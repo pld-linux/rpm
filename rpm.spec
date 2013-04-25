@@ -159,6 +159,7 @@ Patch64:	%{name}-fix-compress-doc.patch
 Patch65:	%{name}-parseSpec-skip-empty-tags.patch
 Patch66:	%{name}-payload-use-hashed-inode.patch
 Patch67:	rpm-repackage-dont-force-max-compression.patch
+Patch68:	rubyprov-archdirs.patch
 
 # Patches imported from Mandriva
 
@@ -928,6 +929,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1040 -p1
 %patch1041 -p1
 %patch1042 -p1
+%patch68 -p1
 
 install %{SOURCE2} macros/pld.in
 install %{SOURCE8} scripts/php.prov.in
