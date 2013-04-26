@@ -52,7 +52,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	48
+Release:	49
 License:	LGPL
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -160,6 +160,7 @@ Patch65:	%{name}-parseSpec-skip-empty-tags.patch
 Patch66:	%{name}-payload-use-hashed-inode.patch
 Patch67:	rpm-repackage-dont-force-max-compression.patch
 Patch68:	rubyprov-archdirs.patch
+Patch69:	rubyprov-abi-versioned.patch
 
 # Patches imported from Mandriva
 
@@ -930,6 +931,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1041 -p1
 %patch1042 -p1
 %patch68 -p1
+%patch69 -p1
 
 install %{SOURCE2} macros/pld.in
 install %{SOURCE8} scripts/php.prov.in
