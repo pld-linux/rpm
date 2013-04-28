@@ -1,0 +1,87 @@
+--- rpm-5.4.10/lib/rpmfc.h~	2013-04-28 23:05:05.000000000 +0300
++++ rpm-5.4.10/lib/rpmfc.h	2013-04-28 23:08:27.668453931 +0300
+@@ -48,6 +48,7 @@
+     RPMFC_MANPAGE		= (7 << 16),
+     RPMFC_TEXT			= (8 << 16),
+     RPMFC_DOCUMENT		= (9 << 16),
++    RPMFC_NODEJS		= (10 << 16),
+ 
+     RPMFC_ARCHIVE		= (1 << 20),
+     RPMFC_COMPRESSED		= (1 << 21),
+--- rpm-5.4.10/lib/rpmfc.c	2013-04-28 23:10:48.781649157 +0300
++++ rpm-5.4.10/lib/rpmfc.c	2013-04-28 23:24:04.738348320 +0300
+@@ -618,6 +618,8 @@
+   { "ruby script text",		RPMFC_RUBY|RPMFC_INCLUDE },
+   { "Ruby script text",		RPMFC_RUBY|RPMFC_INCLUDE },
+ 
++  { "Node.js script",		RPMFC_NODEJS|RPMFC_INCLUDE },
++
+   { "current ar archive",	RPMFC_STATIC|RPMFC_LIBRARY|RPMFC_ARCHIVE|RPMFC_INCLUDE },
+ 
+   { "Zip archive data",		RPMFC_COMPRESSED|RPMFC_ARCHIVE|RPMFC_INCLUDE },
+@@ -864,6 +866,8 @@
+ 	    fc->fcolor->vals[fc->ix] |= RPMFC_PHP;
+ 	else if (!strncmp(bn, "ruby", sizeof("ruby")-1))
+ 	    fc->fcolor->vals[fc->ix] |= RPMFC_RUBY;
++	else if (!strncmp(bn, "node", sizeof("node")-1) || !strncmp(bn, "nodejs", sizeof("nodejs")-1))
++	    fc->fcolor->vals[fc->ix] |= RPMFC_NODEJS;
+ 
+ 	break;
+     }
+@@ -921,6 +925,13 @@
+ #endif
+ 	    xx = rpmfcHelper(fc, 'R', "ruby");
+     } else
++    if (fc->fcolor->vals[fc->ix] & RPMFC_NODEJS) {
++	xx = rpmfcHelper(fc, 'P', "nodejs");
++#ifdef	NOTYET
++	if (is_executable)
++#endif
++	    xx = rpmfcHelper(fc, 'R', "nodejs");
++    } else
+     if ((fc->fcolor->vals[fc->ix] & RPMFC_FONT) == RPMFC_FONT) {
+        xx = rpmfcHelper(fc, 'P', "font");
+        /* XXX: currently of no use, but for the sake of consistency... */
+@@ -1081,7 +1092,7 @@
+ /*@unchecked@*/
+ static struct rpmfcApplyTbl_s rpmfcApplyTable[] = {
+     { rpmfcELF,		RPMFC_ELF },
+-    { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_FONT|RPMFC_HASKELL|RPMFC_RUBY|RPMFC_PERL|RPMFC_PYTHON|RPMFC_LIBTOOL|RPMFC_PKGCONFIG|RPMFC_BOURNE|RPMFC_JAVA|RPMFC_PHP|RPMFC_MONO|RPMFC_TYPELIB|RPMFC_DESKTOP_FILE) },
++    { rpmfcSCRIPT,	(RPMFC_SCRIPT|RPMFC_FONT|RPMFC_HASKELL|RPMFC_RUBY|RPMFC_NODEJS|RPMFC_PERL|RPMFC_PYTHON|RPMFC_LIBTOOL|RPMFC_PKGCONFIG|RPMFC_BOURNE|RPMFC_JAVA|RPMFC_PHP|RPMFC_MONO|RPMFC_TYPELIB|RPMFC_DESKTOP_FILE) },
+ #if defined(RPM_VENDOR_MANDRIVA)
+     { rpmfcSYMLINK,	RPMFC_SYMLINK },
+ #endif
+@@ -1096,6 +1107,7 @@
+     char * se;
+     rpmds ds;
+     const char * fn;
++    char * bn;
+     const char * N;
+     const char * EVR;
+     evrFlags Flags;
+@@ -1152,6 +1164,12 @@
+ 		    fn += 2;
+ 		if (!strncmp(fn, "/python", sizeof("/python")-1))
+ 		    fc->fcolor->vals[fc->ix] |= RPMFC_PYTHON;
++		else if (!strncmp(fn, "/node", sizeof("/node")-1) || !strncmp(fn, "/node_modules", sizeof("/node_modules")-1)) {
++		    fc->fcolor->vals[fc->ix] |= RPMFC_NODEJS;
++		    bn = basename(fn);
++		    if (!strcmp(bn, "package.json")) {
++			fc->fcolor->vals[fc->ix] |= RPMFC_MODULE;
++		    }
+ 		else if (!strncmp(fn, "/ruby", sizeof("/ruby")-1)) {
+ 		    fc->fcolor->vals[fc->ix] |= RPMFC_RUBY;
+ 		    if ((strstr(fn, ".gemspec") || strstr(fn, "rbconfig.rb"))) {
+--- rpm-5.4.10/macros/macros.in~	2013-04-28 23:35:06.000000000 +0300
++++ rpm-5.4.10/macros/macros.in	2013-04-28 23:38:01.383900982 +0300
+@@ -1068,6 +1068,10 @@
+ %{load:%{_usrlibrpm}/macros.d/mono}
+ 
+ #------------------------------------------------------------------------
++# nodejs(...) configuration.
++%{load:%{_usrlibrpm}/macros.d/nodejs}
++
++#------------------------------------------------------------------------
+ # ruby(...) configuration.
+ %{load:%{_usrlibrpm}/macros.d/ruby}
+ 

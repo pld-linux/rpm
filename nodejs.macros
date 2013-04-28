@@ -1,0 +1,12 @@
+# Node.js specific macro definitions.
+# To make use of these macros insert the following line into your spec file:
+# %{load:%{_usrlibrpm}/macros.d/nodejs}
+
+%__nodejs	/usr/bin/nodejs
+
+# Path to scripts to autogenerate Node.js package dependencies,
+#
+# Note: Used if _use_internal_dependency_generator is non-zero. The
+# helpers are also used by %{_rpmhome}/rpmdeps {--provides|--requires}.
+%__nodejs_provides	%{_rpmhome}/nodejs.prov
+%__nodejs_requires	%{_rpmhome}/nodejs.req
