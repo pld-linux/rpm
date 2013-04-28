@@ -52,8 +52,8 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	50
-License:	LGPL
+Release:	50.1
+License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
 Source0:	%{name}-%{version}.tar.gz
@@ -91,6 +91,9 @@ Source26:	%{name}db_checkversion.c
 Source27:	macros.lang
 Source28:	%{name}db_reset.c
 Source29:	dbupgrade.sh
+Source30:	nodejs.prov
+Source31:	nodejs.req
+Source32:	nodejs.macros
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
 Patch2:		%{name}-popt-aliases.patch
@@ -158,10 +161,11 @@ Patch63:	%{name}-pythoneggs.patch
 Patch64:	%{name}-fix-compress-doc.patch
 Patch65:	%{name}-parseSpec-skip-empty-tags.patch
 Patch66:	%{name}-payload-use-hashed-inode.patch
-Patch67:	rpm-repackage-dont-force-max-compression.patch
+Patch67:	%{name}-repackage-dont-force-max-compression.patch
 Patch68:	rubyprov-archdirs.patch
 Patch69:	rubyprov-abi-versioned.patch
-Patch70:	python-rpmsense-missingok.patch
+Patch70:	python-%{name}sense-missingok.patch
+Patch71:	nodejs-autodeps.patch
 
 # Patches imported from Mandriva
 
@@ -634,7 +638,7 @@ Requires:	chrpath >= 0.10-4
 Requires:	cpio
 Requires:	diffutils
 Requires:	elfutils
-Requires:	file >= 4.17
+Requires:	file >= 5.11-2
 Requires:	fileutils
 Requires:	findutils
 %ifarch athlon
@@ -766,6 +770,20 @@ software.
 %description rubyprov -l pl.UTF-8
 Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w
 Ruby.
+
+%package nodejsprov
+Summary:	Node.js tools, which simplify creation of RPM packages with Node.js software
+Summary(pl.UTF-8):	Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w Ruby
+Group:		Applications/File
+Requires:	%{name} = %{version}-%{release}
+
+%description nodejsprov
+Node.js tools, which simplifies creation of RPM packages with Node.js
+software.
+
+%description nodejsprov -l pl.UTF-8
+Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w
+Node.js.
 
 %package -n python-rpm
 Summary:	Python interface to RPM library
@@ -934,6 +952,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1042 -p1
 %patch68 -p1
 %patch69 -p1
+%patch71 -p1
 
 install %{SOURCE2} macros/pld.in
 install %{SOURCE8} scripts/php.prov.in
@@ -1159,6 +1178,9 @@ install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
 install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
 install %{SOURCE12} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
 install %{SOURCE14} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
+install -p %{SOURCE30} $RPM_BUILD_ROOT%{_rpmlibdir}
+install -p %{SOURCE31} $RPM_BUILD_ROOT%{_rpmlibdir}
+cp -p -p %{SOURCE32} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/nodejs
 install scripts/find-php*	$RPM_BUILD_ROOT%{_rpmlibdir}
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 cp -p %{SOURCE25} $RPM_BUILD_ROOT%{_rpmlibdir}/php.req.php
@@ -1479,6 +1501,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros.d/kernel
 %{_rpmlibdir}/macros.d/libtool
 %{_rpmlibdir}/macros.d/mono
+%{_rpmlibdir}/macros.d/nodejs
 %{_rpmlibdir}/macros.d/perl
 %{_rpmlibdir}/macros.d/php
 %{_rpmlibdir}/macros.d/pkgconfig
@@ -1523,6 +1546,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_rpmlibdir}/gem_helper.rb
 %attr(755,root,root) %{_rpmlibdir}/rubygems.rb
+
+%files nodejsprov
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_rpmlibdir}/nodejs.prov
+%attr(755,root,root) %{_rpmlibdir}/nodejs.req
 
 %files perlprov
 %defattr(644,root,root,755)
