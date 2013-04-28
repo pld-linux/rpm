@@ -53,7 +53,7 @@ Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
 Release:	50
-License:	LGPL
+License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
 Source0:	%{name}-%{version}.tar.gz
@@ -158,10 +158,10 @@ Patch63:	%{name}-pythoneggs.patch
 Patch64:	%{name}-fix-compress-doc.patch
 Patch65:	%{name}-parseSpec-skip-empty-tags.patch
 Patch66:	%{name}-payload-use-hashed-inode.patch
-Patch67:	rpm-repackage-dont-force-max-compression.patch
+Patch67:	%{name}-repackage-dont-force-max-compression.patch
 Patch68:	rubyprov-archdirs.patch
 Patch69:	rubyprov-abi-versioned.patch
-Patch70:	python-rpmsense-missingok.patch
+Patch70:	python-%{name}sense-missingok.patch
 
 # Patches imported from Mandriva
 
