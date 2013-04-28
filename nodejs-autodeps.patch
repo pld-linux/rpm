@@ -51,7 +51,7 @@
  #if defined(RPM_VENDOR_MANDRIVA)
      { rpmfcSYMLINK,	RPMFC_SYMLINK },
  #endif
-@@ -1152,6 +1164,11 @@
+@@ -1152,6 +1164,12 @@
  		    fn += 2;
  		if (!strncmp(fn, "/python", sizeof("/python")-1))
  		    fc->fcolor->vals[fc->ix] |= RPMFC_PYTHON;
@@ -60,6 +60,7 @@
 +		    if (!strcmp(fn, "/package.json")) {
 +			fc->fcolor->vals[fc->ix] |= RPMFC_MODULE;
 +		    }
++		}
  		else if (!strncmp(fn, "/ruby", sizeof("/ruby")-1)) {
  		    fc->fcolor->vals[fc->ix] |= RPMFC_RUBY;
  		    if ((strstr(fn, ".gemspec") || strstr(fn, "rbconfig.rb"))) {
