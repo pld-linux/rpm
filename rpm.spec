@@ -638,7 +638,7 @@ Requires:	chrpath >= 0.10-4
 Requires:	cpio
 Requires:	diffutils
 Requires:	elfutils
-Requires:	file >= 5.11-2
+Requires:	file >= 4.17
 Requires:	fileutils
 Requires:	findutils
 %ifarch athlon
@@ -776,6 +776,7 @@ Summary:	Node.js tools, which simplify creation of RPM packages with Node.js sof
 Summary(pl.UTF-8):	Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w Ruby
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
+Requires:	file >= 5.11-2
 
 %description nodejsprov
 Node.js tools, which simplifies creation of RPM packages with Node.js
