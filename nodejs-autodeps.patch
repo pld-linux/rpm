@@ -51,22 +51,13 @@
  #if defined(RPM_VENDOR_MANDRIVA)
      { rpmfcSYMLINK,	RPMFC_SYMLINK },
  #endif
-@@ -1096,6 +1107,7 @@
-     char * se;
-     rpmds ds;
-     const char * fn;
-+    char * bn;
-     const char * N;
-     const char * EVR;
-     evrFlags Flags;
-@@ -1152,6 +1164,12 @@
+@@ -1152,6 +1164,11 @@
  		    fn += 2;
  		if (!strncmp(fn, "/python", sizeof("/python")-1))
  		    fc->fcolor->vals[fc->ix] |= RPMFC_PYTHON;
 +		else if (!strncmp(fn, "/node", sizeof("/node")-1) || !strncmp(fn, "/node_modules", sizeof("/node_modules")-1)) {
 +		    fc->fcolor->vals[fc->ix] |= RPMFC_NODEJS;
-+		    bn = basename(fn);
-+		    if (!strcmp(bn, "package.json")) {
++		    if (!strcmp(fn, "/package.json")) {
 +			fc->fcolor->vals[fc->ix] |= RPMFC_MODULE;
 +		    }
  		else if (!strncmp(fn, "/ruby", sizeof("/ruby")-1)) {
