@@ -1,13 +1,14 @@
---- rpm-5.4.10/lib/rpmfc.h~	2013-04-28 23:05:05.000000000 +0300
-+++ rpm-5.4.10/lib/rpmfc.h	2013-04-28 23:08:27.668453931 +0300
-@@ -48,6 +48,7 @@
-     RPMFC_MANPAGE		= (7 << 16),
-     RPMFC_TEXT			= (8 << 16),
-     RPMFC_DOCUMENT		= (9 << 16),
-+    RPMFC_NODEJS		= (10 << 16),
+--- rpm-5.4.10/lib/rpmfc.h~	2013-04-29 13:37:08.219548479 +0300
++++ rpm-5.4.10/lib/rpmfc.h	2013-04-29 13:36:18.864082173 +0300
+@@ -36,7 +36,7 @@
+     RPMFC_SCRIPT		= (1 << 12),
+     RPMFC_STATIC		= (1 << 13),
+     RPMFC_NOTSTRIPPED		= (1 << 14),
+-	/* bit 15 unused */
++    RPMFC_NODEJS		= (1 << 15),
  
-     RPMFC_ARCHIVE		= (1 << 20),
-     RPMFC_COMPRESSED		= (1 << 21),
+ 	/* bits 16-19 are enumerated, not bits */
+     RPMFC_DIRECTORY		= (1 << 16),
 --- rpm-5.4.10/lib/rpmfc.c	2013-04-28 23:10:48.781649157 +0300
 +++ rpm-5.4.10/lib/rpmfc.c	2013-04-28 23:24:04.738348320 +0300
 @@ -618,6 +618,8 @@
