@@ -1,5 +1,5 @@
 --- rpm-5.4.10/scripts/pythoneggs.py.orig	2012-05-08 00:34:19.000000000 +0200
-+++ rpm-5.4.10/scripts/pythoneggs.py	2013-01-29 12:59:00.000000000 +0100
++++ rpm-5.4.10/scripts/pythoneggs.py	2013-05-09 13:22:26.000000000 +0200
 @@ -16,7 +16,7 @@
  from distutils.sysconfig import get_python_lib
  from subprocess import Popen, PIPE, STDOUT
@@ -23,7 +23,15 @@
  for o, a in opts:
      if o in ('-h', '--help'):
          print '-h, --help\tPrint help'
-@@ -129,7 +136,7 @@
+@@ -125,11 +132,14 @@
+                 if not name in py_deps:
+                     py_deps[name] = []
+                 py_deps[name].append(('==', dist.py_version))
+-            name = 'pythonegg(%s)' % dist.key
++            if dist.py_version .split(".")[0] == '3':
++                name = 'python3egg(%s)' % dist.key
++            else:
++                name = 'pythonegg(%s)' % dist.key
              if not name in py_deps:
                  py_deps[name] = []
              if dist.version:
@@ -32,7 +40,16 @@
                  if not spec in py_deps[name]:
                      py_deps[name].append(spec)
          if Requires or (Suggests and dist.extras):
-@@ -160,8 +167,9 @@
+@@ -155,13 +165,17 @@
+                 deps = depsextras
+             # add requires/suggests based on egg metadata
+             for dep in deps:
+-                name = 'pythonegg(%s)' % dep.key
++                if dist.py_version .split(".")[0] == '3':
++                    name = 'python3egg(%s)' % dep.key
++                else:
++                    name = 'pythonegg(%s)' % dep.key
+                 for spec in dep.specs:
                      if spec[0] != '!=':
                          if not name in py_deps:
                              py_deps[name] = []
