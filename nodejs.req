@@ -61,7 +61,8 @@ def main():
                     req = 'npm(' + name + ')'
                     deps += process_dep(req, version)
 
-    print '\n'.join(deps)
+    if deps:
+        print '\n'.join(deps)
 
 def process_dep(req, version):
     """Converts an individual npm dependency into RPM dependencies"""
