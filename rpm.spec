@@ -744,6 +744,7 @@ Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzania zależności skryptów ph
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	sed >= 4.0
+Suggests:	php-pear-PHP_CompatInfo
 
 %description php-pearprov
 Additional utilities for checking PHP PEAR provides/requires in RPM
