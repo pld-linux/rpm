@@ -861,6 +861,9 @@ for f in doc{,/ja,/pl}/rpm.8 doc{,/ja,/pl}/rpmbuild.8 ; do
 	mv -f ${f}.tmp $f
 done
 
+# simplify python devel
+ln -s ../.libs/_rpmmodule.so python/rpm
+
 %build
 %if %{with system_libmagic}
 rm -rf file
