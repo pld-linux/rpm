@@ -28,7 +28,8 @@
 
 # versions of required libraries
 %define		reqdb_pkg	db5.2
-%define		reqdb_ver	5.2.36.0-4
+%define		reqdb_ver	5.2
+%define		reqdb_pkgver	5.2.36.0-4
 %define		reqpopt_ver	1.15
 %define		beecrypt_ver	2:4.1.2-4
 %define		sover		5.4
@@ -267,11 +268,11 @@ Patch1041:	%{name}-5.4.9-disable-l10ndir.patch
 Patch1042:	%{name}-5.4.9-fix-rpm_qa-pattern.patch
 
 URL:		http://rpm5.org/
-BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_ver}
+BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
 %if %{with sqlite}
 BuildRequires:	sqlite3-devel
 %else
-BuildRequires:	%{reqdb_pkg}-sql-devel >= %{reqdb_ver}
+BuildRequires:	%{reqdb_pkg}-sql-devel >= %{reqdb_pkgver}
 %endif
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1.4
@@ -312,7 +313,7 @@ BuildRequires:	tetex-pdftex
 %endif
 %if %{with static}
 # Require static library only for static build
-BuildRequires:	%{reqdb_pkg}-static >= %{reqdb_ver}
+BuildRequires:	%{reqdb_pkg}-static >= %{reqdb_pkgver}
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
 BuildRequires:	bzip2-static >= 1.0.2-17
 BuildRequires:	elfutils-static
@@ -433,11 +434,11 @@ Zawiera on:
 Summary:	RPMs library
 Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
-Requires:	%{reqdb_pkg} >= %{reqdb_ver}
+Requires:	%{reqdb_pkg} >= %{reqdb_pkgver}
 %if %{with sqlite}
 Requires:	sqlite3 >= %{sqlite_build_version}
 %else
-Requires:	%{reqdb_pkg}-sql >= %{reqdb_ver}
+Requires:	%{reqdb_pkg}-sql >= %{reqdb_pkgver}
 %endif
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	libmagic >= 1.15-2
@@ -463,7 +464,7 @@ Summary(ru.UTF-8):	Хедеры и библиотеки для программ,
 Summary(uk.UTF-8):	Хедери та бібліотеки для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name}-lib = %{version}-%{release}
-Requires:	%{reqdb_pkg}-devel >= %{reqdb_ver}
+Requires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
 Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
 Requires:	elfutils-devel
@@ -527,7 +528,7 @@ Summary(ru.UTF-8):	Статическая библиотека для прогр
 Summary(uk.UTF-8):	Статична бібліотека для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
-Requires:	%{reqdb_pkg}-static >= %{reqdb_ver}
+Requires:	%{reqdb_pkg}-static >= %{reqdb_pkgver}
 Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
 Requires:	elfutils-static
