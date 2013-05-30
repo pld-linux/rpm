@@ -13,7 +13,7 @@
 %bcond_without	selinux		# build without selinux support
 %bcond_without	suggest_tags	# build without Suggest tag (bootstrapping)
 %bcond_with	neon		# build with HTTP/WebDAV support (neon library)
-%bcond_without	sqlite		# build with SQLite support
+%bcond_with	sqlite		# build with SQLite support
 %bcond_with	system_lua	# use system lua
 %bcond_with	keyutils	# build with keyutils support
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
@@ -28,7 +28,7 @@
 
 # versions of required libraries
 %define		reqdb_pkg	db5.2
-%define		reqdb_ver	5.2
+%define		reqdb_ver	5.2.36.0-4
 %define		reqpopt_ver	1.15
 %define		beecrypt_ver	2:4.1.2-4
 %define		sover		5.4
@@ -268,6 +268,11 @@ Patch1042:	%{name}-5.4.9-fix-rpm_qa-pattern.patch
 
 URL:		http://rpm5.org/
 BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_ver}
+%if %{with sqlite}
+BuildRequires:	sqlite3-devel
+%else
+BuildRequires:	%{reqdb_pkg}-sql-devel >= %{reqdb_ver}
+%endif
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1.4
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
@@ -296,7 +301,6 @@ BuildRequires:	popt-devel >= %{reqpopt_ver}
 %{?with_python:BuildRequires:	python-devel >= 1:2.3}
 BuildRequires:	python-modules >= 1:2.3
 %{?with_python:BuildRequires:	rpm-pythonprov}
-%{?with_sqlite:BuildRequires:	sqlite3-devel}
 BuildRequires:	tcl
 BuildRequires:	xz-devel
 BuildRequires:	zlib-devel
@@ -430,11 +434,15 @@ Summary:	RPMs library
 Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	%{reqdb_pkg} >= %{reqdb_ver}
+%if %{with sqlite}
+Requires:	sqlite3 >= %{sqlite_build_version}
+%else
+Requires:	%{reqdb_pkg}-sql >= %{reqdb_ver}
+%endif
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	libmagic >= 1.15-2
 %{?with_selinux:Requires:	libselinux >= 2.1.0}
 Requires:	popt >= %{reqpopt_ver}
-%{?with_sqlite:Requires:	sqlite3 >= %{sqlite_build_version}}
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
