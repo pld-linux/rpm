@@ -13,23 +13,13 @@
 %bcond_without	selinux		# build without selinux support
 %bcond_without	suggest_tags	# build without Suggest tag (bootstrapping)
 %bcond_with	neon		# build with HTTP/WebDAV support (neon library)
-%bcond_without	db		# BerkeleyDB
 %bcond_without	sqlite		# build with SQLite support
-%bcond_with	sqlite_dbapi	# default database backend is sqlite
 %bcond_with	system_lua	# use system lua
 %bcond_with	keyutils	# build with keyutils support
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
 # force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
 #
-%if %{with sqlite_dbapi}
-%define	with_sqlite	1
-%endif
-
-%if %{without db} && %{without sqlite}
-%{error:Need db or sqlite}
-ERROR
-%endif
 
 %if %{with sqlite}
 # Error: /lib64/librpmio-5.4.so: undefined symbol: sqlite3_enable_load_extension
@@ -277,7 +267,7 @@ Patch1041:	%{name}-5.4.9-disable-l10ndir.patch
 Patch1042:	%{name}-5.4.9-fix-rpm_qa-pattern.patch
 
 URL:		http://rpm5.org/
-%{?with_db:BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_ver}}
+BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_ver}
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1.4
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
@@ -318,7 +308,7 @@ BuildRequires:	tetex-pdftex
 %endif
 %if %{with static}
 # Require static library only for static build
-%{?with_db:BuildRequires:	%{reqdb_pkg}-static >= %{reqdb_ver}}
+BuildRequires:	%{reqdb_pkg}-static >= %{reqdb_ver}
 BuildRequires:	beecrypt-static >= %{beecrypt_ver}
 BuildRequires:	bzip2-static >= 1.0.2-17
 BuildRequires:	elfutils-static
@@ -439,7 +429,7 @@ Zawiera on:
 Summary:	RPMs library
 Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
-%{?with_db:Requires:	%{reqdb_pkg} >= %{reqdb_ver}}
+Requires:	%{reqdb_pkg} >= %{reqdb_ver}
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	libmagic >= 1.15-2
 %{?with_selinux:Requires:	libselinux >= 2.1.0}
@@ -465,7 +455,7 @@ Summary(ru.UTF-8):	Хедеры и библиотеки для программ,
 Summary(uk.UTF-8):	Хедери та бібліотеки для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name}-lib = %{version}-%{release}
-%{?with_db:Requires:	%{reqdb_pkg}-devel >= %{reqdb_ver}}
+Requires:	%{reqdb_pkg}-devel >= %{reqdb_ver}
 Requires:	beecrypt-devel >= %{beecrypt_ver}
 Requires:	bzip2-devel
 Requires:	elfutils-devel
@@ -529,7 +519,7 @@ Summary(ru.UTF-8):	Статическая библиотека для прогр
 Summary(uk.UTF-8):	Статична бібліотека для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
-%{?with_db:Requires:	%{reqdb_pkg}-static >= %{reqdb_ver}}
+Requires:	%{reqdb_pkg}-static >= %{reqdb_ver}
 Requires:	beecrypt-static >= %{beecrypt_ver}
 Requires:	bzip2-static
 Requires:	elfutils-static
@@ -993,9 +983,9 @@ sed -i \
 	--with-neon=%{?with_neon:external}%{!?with_neon:no} \
 	--with-file=external \
 	--with-popt=external \
-	--with-db=%{?with_db:external}%{!?with_db:no} \
+	--with-db=external \
+	--with-dbapi=db \
 	--with-sqlite=%{?with_sqlite:yes}%{!?with_sqlite:no} \
-	--with-dbapi=%{!?with_sqlite_dbapi:db}%{?with_sqlite_dbapi:sqlite} \
 	--with-lua=%{!?with_system_lua:internal}%{?with_system_lua:external} \
 	--with-pcre=external \
 	--with-keyutils=%{?with_keyutils:external}%{!?with_keyutils:no} \
