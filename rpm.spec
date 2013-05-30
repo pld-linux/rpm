@@ -1436,6 +1436,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
 %attr(755,root,root) %{_rpmlibdir}/bin/api-sanity-autotest.pl
 %attr(755,root,root) %{_rpmlibdir}/bin/api-sanity-checker.pl
+%{!?with_sqlite:%attr(755,root,root) %{_rpmlibdir}/bin/dbsql}
 %attr(755,root,root) %{_rpmlibdir}/bin/install-sh
 %attr(755,root,root) %{_rpmlibdir}/bin/mkinstalldirs
 %attr(755,root,root) %{_rpmlibdir}/bin/pom2spec
