@@ -43,7 +43,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	54
+Release:	55
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -155,6 +155,7 @@ Patch69:	rubyprov-abi-versioned.patch
 Patch70:	python-%{name}sense-missingok.patch
 Patch71:	%{name}-changelog-encoding.patch
 Patch72:	%{name}-preserve-tag-type.patch
+Patch73:	gem_helper-spec-arg.patch
 
 # Patches imported from Mandriva
 
@@ -760,6 +761,7 @@ Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	ruby
 Requires:	ruby-modules
+Requires:	ruby-rubygems
 
 %description rubyprov
 Ruby tools, which simplifies creation of RPM packages with Ruby
@@ -892,6 +894,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch70 -p1
 %patch71 -p1
 %patch72 -p1
+%patch73 -p1
 
 %patch1000 -p1
 %patch1001 -p1
