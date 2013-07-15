@@ -43,7 +43,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.10
-Release:	55
+Release:	56
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
@@ -1317,6 +1317,32 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %dir %{_rpmlibdir}/macros.d
 %{_rpmlibdir}/macros.d/pld
 %{_rpmlibdir}/cpuinfo.yaml
+%{_rpmlibdir}/noarch-*
+%ifarch %{ix86}
+%{_rpmlibdir}/i?86*
+%{_rpmlibdir}/pentium*
+%{_rpmlibdir}/athlon*
+%endif
+%ifarch alpha
+%{_rpmlibdir}/alpha*
+%endif
+%ifarch ia64
+%{_rpmlibdir}/ia64*
+%endif
+%ifarch mips mipsel mips64 mips64el
+%{_rpmlibdir}/mips*
+%endif
+%ifarch %{ppc}
+%{_rpmlibdir}/ppc*
+%endif
+%ifarch sparc sparc64
+%{_rpmlibdir}/sparc*
+%endif
+%ifarch %{x8664}
+%{_rpmlibdir}/amd64*
+%{_rpmlibdir}/ia32e*
+%{_rpmlibdir}/x86_64*
+%endif
 
 %attr(755,root,root) %{_rpmlibdir}/hrmib-cache
 
@@ -1447,32 +1473,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/bin/sqlite3
 %attr(755,root,root) %{_rpmlibdir}/bin/wget
 %attr(755,root,root) %{_rpmlibdir}/vcheck
-%{_rpmlibdir}/noarch-*
-%ifarch %{ix86}
-%{_rpmlibdir}/i?86*
-%{_rpmlibdir}/pentium*
-%{_rpmlibdir}/athlon*
-%endif
-%ifarch alpha
-%{_rpmlibdir}/alpha*
-%endif
-%ifarch ia64
-%{_rpmlibdir}/ia64*
-%endif
-%ifarch mips mipsel mips64 mips64el
-%{_rpmlibdir}/mips*
-%endif
-%ifarch %{ppc}
-%{_rpmlibdir}/ppc*
-%endif
-%ifarch sparc sparc64
-%{_rpmlibdir}/sparc*
-%endif
-%ifarch %{x8664}
-%{_rpmlibdir}/amd64*
-%{_rpmlibdir}/ia32e*
-%{_rpmlibdir}/x86_64*
-%endif
 # not used yet ... these six depend on perl
 %attr(755,root,root) %{_rpmlibdir}/http.req
 # we always used scripts provided by mono-devel, maybe move them here
