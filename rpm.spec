@@ -42,13 +42,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.4.10
-Release:	56
+Version:	5.4.11
+Release:	0.1
 License:	LGPL v2.1
 Group:		Base
-# http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.10-0.20120706.src.rpm
+# http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.11-0.20130708.src.rpm
 Source0:	%{name}-%{version}.tar.gz
-# Source0-md5:	5d099161bdd3203265ab32ffad3360b5
+# Source0-md5:	38d5a4b3592d523953f2bccb6d631554
 Source100:	cpu-os-macros.tar.gz
 # Source100-md5:	928034a5bdceb398881bc14b5f29973b
 Source1:	%{name}.groups
