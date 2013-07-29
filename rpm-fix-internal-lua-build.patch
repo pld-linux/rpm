@@ -1,0 +1,40 @@
+diff -ur rpm-5.4.12/lua/linit.c rpm-5.4.12.lua/lua/linit.c
+--- rpm-5.4.12/lua/linit.c	2013-07-29 12:55:10.414926615 +0200
++++ rpm-5.4.12.lua/lua/linit.c	2013-07-29 12:52:16.932990663 +0200
+@@ -41,7 +41,7 @@
+   {LUA_DBLIBNAME, luaopen_debug},
+   {"rex_posix", luaopen_rex_posix},
+   {"rex_pcre", luaopen_rex_pcre},
+-  {"posix", luaopen_posix},
++  {"posix", luaopen_posix_c},
+   {NULL, NULL}
+ };
+ 
+diff -ur rpm-5.4.12/lua/local/lposix.c rpm-5.4.12.lua/lua/local/lposix.c
+--- rpm-5.4.12/lua/local/lposix.c	2013-06-29 23:58:11.000000000 +0200
++++ rpm-5.4.12.lua/lua/local/lposix.c	2013-07-29 12:49:02.437509943 +0200
+@@ -3934,6 +3934,10 @@
+ 	MENTRY( NFILE		);
+ 	MENTRY( NOBUFS		);
+ #if !defined(__APPLE__)
++// sys/param.h defines NODEV as ((dev_t) -1) which confuses MENTRY macro
++#ifdef NODEV
++#undef NODEV
++#endif
+ 	MENTRY( NODEV		);
+ #endif
+ 	MENTRY( NOENT		);
+diff -ur rpm-5.4.12/lua/local/lposix.h rpm-5.4.12.lua/lua/local/lposix.h
+--- rpm-5.4.12/lua/local/lposix.h	2004-03-23 06:09:14.000000000 +0100
++++ rpm-5.4.12.lua/lua/local/lposix.h	2013-07-29 12:52:09.029570083 +0200
+@@ -1,7 +1,9 @@
+ #ifndef LPOSIX_H
+ #define LPOSIX_H
+ 
+-int luaopen_posix (lua_State *L)
++#include <lua.h>
++
++int luaopen_posix_c (lua_State *L)
+ 	/*@modifies L @*/;
+ 
+ #endif
