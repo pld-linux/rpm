@@ -294,7 +294,7 @@ BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libxml2-devel
 BuildRequires:	neon-devel >= 0.25.5
 %endif
-%{?with_system_lua:BuildRequires:	lua51-devel >= 5.1.2}
+%{?with_system_lua:BuildRequires:	lua52-devel >= 5.2.2}
 BuildRequires:	ossp-uuid-devel
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
@@ -951,6 +951,10 @@ awk -f %{SOURCE6} %{SOURCE1}
 
 install %{SOURCE26} tools/rpmdb_checkversion.c
 install %{SOURCE28} tools/rpmdb_reset.c
+
+for extlib in beecrypt neon pcre popt ; do
+	[ -d $extlib ] && %{__rm} -r $extlib
+done
 
 %build
 %{__libtoolize}
