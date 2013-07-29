@@ -46,7 +46,7 @@ Version:	5.4.12
 Release:	0.1
 License:	LGPL v2.1
 Group:		Base
-# http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.11-0.20130708.src.rpm
+# http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.12-0.20130725.src.rpm
 Source0:	%{name}-%{version}.tar.gz
 # Source0-md5:	1af762bbedf936240b1e1a482cc7a193
 Source100:	cpu-os-macros.tar.gz
@@ -892,6 +892,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch71 -p1
 %patch72 -p1
 %patch73 -p1
+%patch74 -p1
 
 %patch1000 -p1
 %patch1001 -p1
