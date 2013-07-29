@@ -42,13 +42,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.4.11
+Version:	5.4.12
 Release:	0.1
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.11-0.20130708.src.rpm
 Source0:	%{name}-%{version}.tar.gz
-# Source0-md5:	38d5a4b3592d523953f2bccb6d631554
+# Source0-md5:	1af762bbedf936240b1e1a482cc7a193
 Source100:	cpu-os-macros.tar.gz
 # Source100-md5:	928034a5bdceb398881bc14b5f29973b
 Source1:	%{name}.groups
@@ -141,7 +141,6 @@ Patch55:	%{name}-disable-hmac-verify.patch
 Patch56:	%{name}-macros.patch
 Patch57:	%{name}-db5.2.patch
 Patch58:	%{name}-preserve-iterator.patch
-Patch59:	%{name}-triggerin-compat.patch
 Patch60:	%{name}-python-sitescriptdir.patch
 Patch61:	%{name}-clean-docdir.patch
 Patch62:	%{name}-DB_CONFIG.patch
@@ -156,6 +155,7 @@ Patch70:	python-%{name}sense-missingok.patch
 Patch71:	%{name}-changelog-encoding.patch
 Patch72:	%{name}-preserve-tag-type.patch
 Patch73:	gem_helper-spec-arg.patch
+Patch74:	rpm-fix-internal-lua-build.patch
 
 # Patches imported from Mandriva
 
@@ -217,8 +217,6 @@ Patch1022:	%{name}-5.4.5-skip-dependencies-for-character-devices.patch
 Patch1023:	%{name}-5.4.5-rpmfc-use-strlen-not-sizeof.patch
 # status: probably okay to merge
 Patch1024:	%{name}-5.4.5-rpmfc-apply-python-coloring-from-magic.patch
-# status: ready to merge
-Patch1025:	%{name}-5.4.7-rpmfc-fix-invalid-free-if-not-_defaultdocdir-set.patch
 # status: probably okay to merge
 Patch1026:	%{name}-5.4.10-dont-try-generate-rpmfc-dependencies-from-doc-files.patch
 # status: ready
@@ -882,7 +880,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch56 -p1
 %patch57 -p1
 %patch58 -p1
-%patch59 -p1
 %patch60 -p1
 %patch61 -p1
 %patch62 -p1
@@ -921,7 +918,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1022 -p1
 %patch1023 -p1
 %patch1024 -p1
-%patch1025 -p1
 %patch1026 -p1
 %patch1027 -p1
 %patch1028 -p1

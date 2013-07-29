@@ -4,18 +4,16 @@
      MYPATH=$PATH
  fi
  
--DBXY=db53
+-DBXY=db60
 +DBXY=db5.2
  
  AC_PATH_PROG(__BASH, bash, %{_bindir}/bash, $MYPATH)
  AC_PATH_PROG(__BZIP2, bzip2, %{_bindir}/bzip2, $MYPATH)
---- rpm-5.4.10/configure.ac~	2012-10-24 23:26:28.650695811 +0200
-+++ rpm-5.4.10/configure.ac	2012-10-24 23:35:55.777342472 +0200
 @@ -1582,7 +1582,7 @@
  CPPFLAGS="${CPPFLAGS} -I${prefix}/include/${DBXY}"
  RPM_CHECK_LIB(
      [Berkeley-DB], [db],
--    [db-5.3], [db_create], [db.h],
+-    [db-6.0], [db_create], [db.h],
 +    [db-5.2], [db_create], [db.h],
      [yes,external], [db3],
      [ DBLIBSRCS="$DBLIBSRCS db3.c"
@@ -24,7 +22,7 @@
  dnl XXX error: `db3' is already registered with AC_CONFIG_SUBDIRS.
  RPM_CHECK_LIB(
      [Berkeley-DB (+SQLite3)], [dbsql],
--    [db_sql-5.3], [sqlite3_open], [dbsql.h],
+-    [db_sql-6.0], [sqlite3_open], [dbsql.h],
 +    [db_sql-5.2], [sqlite3_open], [dbsql.h],
      [yes,external], [db3/sql],
      [

@@ -14,7 +14,7 @@
 @@ -593,6 +597,10 @@
  	tag = (qva->qva_source == RPMQV_PKGID
  		? RPMTAG_SOURCEPKGID : RPMTAG_PKGID);
- 	qva->qva_mi = rpmtsInitIterator(ts, (rpmTag) tag, MD5, sizeof(MD5));
+ 	qva->qva_mi = rpmtsInitIterator(ts, (rpmTag) tag, MD5, MD5len);
 +#if defined(RPM_VENDOR_PLD)
 +	if(rpmmiCount(qva->qva_mi) == 0)
 +	    qva->qva_mi = rpmmiFree(qva->qva_mi);

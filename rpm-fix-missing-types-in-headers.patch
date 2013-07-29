@@ -315,17 +315,6 @@ diff -ur rpm-5.4.10.orig/lib/rpmversion.h rpm-5.4.10/lib/rpmversion.h
  #ifdef __cplusplus
  extern "C" {
  #endif
-diff -ur rpm-5.4.10.orig/rpmio/rpmzlog.h rpm-5.4.10/rpmio/rpmzlog.h
---- rpm-5.4.10.orig/rpmio/rpmzlog.h	2012-09-09 13:54:22.000000000 +0200
-+++ rpm-5.4.10/rpmio/rpmzlog.h	2012-09-09 14:29:32.625963694 +0200
-@@ -4,6 +4,7 @@
- /** \ingroup rpmio
-  * \file rpmio/rpmzlog.h
-  */
-+#include <stdio.h>	/* XXX FILE * typedef */
- #include <sys/time.h>
- 
- /** trace log pointer */
 diff -ur rpm-5.4.10.orig/rpmio/yarn.h rpm-5.4.10/rpmio/yarn.h
 --- rpm-5.4.10.orig/rpmio/yarn.h	2012-09-09 13:54:22.000000000 +0200
 +++ rpm-5.4.10/rpmio/yarn.h	2012-09-09 15:37:09.928349906 +0200

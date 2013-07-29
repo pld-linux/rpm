@@ -19,13 +19,17 @@
  
      /* Extract dependencies only from files with executable bit set. */
      {	struct stat sb, * st = &sb;
-@@ -904,16 +914,10 @@ static int rpmfcSCRIPT(rpmfc fc)
+@@ -904,20 +914,10 @@ static int rpmfcSCRIPT(rpmfc fc)
      (void) fclose(fp);
  
      if (fc->fcolor->vals[fc->ix] & RPMFC_PERL) {
 -    	defaultdocdir = rpmExpand("%{?_defaultdocdir}", NULL);
--    	if (defaultdocdir == NULL || *defaultdocdir == '\0') 
--            defaultdocdir = strdup("/usr/share/doc");
+-	/* XXX coverity #1035723 */
+-	/* XXX coverity #1035883 */
+-    	if (defaultdocdir == NULL || *defaultdocdir == '\0')  {
+-            defaultdocdir = _free(defaultdocdir);
+-            defaultdocdir = xstrdup("/usr/share/doc");
+-	}
 -
 -	if (strncmp(fn, defaultdocdir, strlen(defaultdocdir))) {
 -	    if (fc->fcolor->vals[fc->ix] & RPMFC_MODULE)
