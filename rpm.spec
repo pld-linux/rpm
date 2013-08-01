@@ -43,7 +43,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.12
-Release:	1
+Release:	2
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.12-0.20130725.src.rpm
@@ -265,6 +265,8 @@ Patch1040:	%{name}-5.4.9-support-signatures-and-digest-disablers.patch
 Patch1041:	%{name}-5.4.9-disable-l10ndir.patch
 # status: ready for merge
 Patch1042:	%{name}-5.4.9-fix-rpm_qa-pattern.patch
+# warning: introduces memory leak
+Patch1043:	%{name}-5.4.12-copy-Value-string.patch
 
 URL:		http://rpm5.org/
 BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
@@ -936,6 +938,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1040 -p1
 %patch1041 -p1
 %patch1042 -p1
+%patch1043 -p1
 %patch68 -p1
 %patch69 -p1
 

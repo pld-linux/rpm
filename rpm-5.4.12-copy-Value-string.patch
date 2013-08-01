@@ -1,0 +1,11 @@
+--- rpm-5.4.12/build/expression.c.strdup~	2013-07-31 18:10:52.556444318 +0200
++++ rpm-5.4.12/build/expression.c	2013-07-31 18:10:30.794081121 +0200
+@@ -63,7 +63,7 @@ static Value valueMakeString(/*@only@*/
+ 
+     v = (Value) xmalloc(sizeof(*v));
+     v->type = VALUE_TYPE_STRING;
+-    v->data.s = s;
++    v->data.s = xstrdup(s);
+     return v;
+ }
+ 
