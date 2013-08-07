@@ -988,7 +988,7 @@ sed -i \
 	%{?with_python:--with-python=%{py_ver} --with-python-lib-dir=%{py_sitedir}} \
 	%{!?with_python:--without-python} \
 	--with-selinux=%{!?with_selinux:no}%{?with_selinux:external} \
-	--with-sepol=%{!?with_selinux:not}%{?with_selinux:external} \
+	--with-sepol=%{!?with_selinux:no}%{?with_selinux:external} \
 	--with-semanage=%{!?with_selinux:no}%{?with_selinux:external} \
 	--with-libelf \
 	--with-zlib=external \
