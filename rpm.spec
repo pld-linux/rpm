@@ -31,7 +31,7 @@
 %define		reqdb_ver	5.2
 %define		reqdb_pkgver	5.2.36.0-4
 %define		reqpopt_ver	1.15
-%define		beecrypt_ver	2:4.1.2-4
+%define		beecrypt_ver	2:4.2.0
 %define		sover		5.4
 
 Summary:	RPM Package Manager
