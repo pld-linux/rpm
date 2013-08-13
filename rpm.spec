@@ -156,6 +156,7 @@ Patch71:	%{name}-changelog-encoding.patch
 Patch72:	%{name}-preserve-tag-type.patch
 Patch73:	gem_helper-spec-arg.patch
 Patch74:	rpm-fix-internal-lua-build.patch
+Patch75:	rpm-double_check_file_deps.patch
 
 # Patches imported from Mandriva
 
@@ -895,6 +896,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch72 -p1
 %patch73 -p1
 %patch74 -p1
+%patch75 -p1
 
 %patch1000 -p1
 %patch1001 -p1
