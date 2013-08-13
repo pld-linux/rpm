@@ -268,6 +268,7 @@ Patch1041:	%{name}-5.4.9-disable-l10ndir.patch
 Patch1042:	%{name}-5.4.9-fix-rpm_qa-pattern.patch
 # warning: introduces memory leak
 Patch1043:	%{name}-5.4.12-copy-Value-string.patch
+Patch1044:	%{name}-5.4.12-fix-rpmlua-print.patch
 
 URL:		http://rpm5.org/
 BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
@@ -941,6 +942,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1041 -p1
 %patch1042 -p1
 %patch1043 -p1
+%patch1044 -p1
 %patch68 -p1
 %patch69 -p1
 
