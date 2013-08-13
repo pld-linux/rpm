@@ -270,6 +270,7 @@ Patch1042:	%{name}-5.4.9-fix-rpm_qa-pattern.patch
 Patch1043:	%{name}-5.4.12-copy-Value-string.patch
 Patch1044:	%{name}-5.4.12-fix-rpmlua-print.patch
 Patch1045:	%{name}-5.4.12-fix-rpmpython-module-import-init.patch
+Patch1046:	%{name}-5.4.12-truncate-output-buffer-after-use.patch
 
 URL:		http://rpm5.org/
 BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
@@ -945,6 +946,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1043 -p1
 %patch1044 -p1
 %patch1045 -p1
+%patch1046 -p1
 %patch68 -p1
 %patch69 -p1
 
