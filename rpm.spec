@@ -42,13 +42,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.4.12
-Release:	3
+Version:	5.4.13
+Release:	0.1
 License:	LGPL v2.1
 Group:		Base
-# http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.12-0.20130725.src.rpm
+# http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.13-0.20130819.src.rpm
 Source0:	%{name}-%{version}.tar.gz
-# Source0-md5:	1af762bbedf936240b1e1a482cc7a193
+# Source0-md5:	4ce4ab33a4d5f1fcb13afcc494c92c07
 Source100:	cpu-os-macros.tar.gz
 # Source100-md5:	928034a5bdceb398881bc14b5f29973b
 Source1:	%{name}.groups
@@ -963,7 +963,7 @@ awk -f %{SOURCE6} %{SOURCE1}
 install %{SOURCE26} tools/rpmdb_checkversion.c
 install %{SOURCE28} tools/rpmdb_reset.c
 
-for extlib in beecrypt neon pcre popt ; do
+for extlib in beecrypt neon pcre popt; do
 	[ -d $extlib ] && %{__rm} -r $extlib
 done
 
