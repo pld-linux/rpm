@@ -1075,7 +1075,7 @@ install %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key
 install -d $RPM_BUILD_ROOT%{_rpmlibdir}/noarch-linux
 install cpu-os-macros/noarch-linux/macros $RPM_BUILD_ROOT%{_rpmlibdir}/noarch-linux/macros
 
-%ifarch %{ix86}
+%ifarch %{ix86} %{x8664}
 install -d $RPM_BUILD_ROOT%{_rpmlibdir}/{i386,i486,i586,i686,athlon,pentium3,pentium4}-linux
 install cpu-os-macros/athlon-linux/macros   $RPM_BUILD_ROOT%{_rpmlibdir}/athlon-linux/macros
 install cpu-os-macros/i386-linux/macros     $RPM_BUILD_ROOT%{_rpmlibdir}/i386-linux/macros
@@ -1349,7 +1349,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros.d/pld
 %{_rpmlibdir}/cpuinfo.yaml
 %{_rpmlibdir}/noarch-*
-%ifarch %{ix86}
+%ifarch %{ix86} %{x8664}
 %{_rpmlibdir}/i?86*
 %{_rpmlibdir}/pentium*
 %{_rpmlibdir}/athlon*
