@@ -1,0 +1,49 @@
+commit 47f436a57cbf1312782f7204ed72b6bdba2d154d
+Author: Kacper Kornet <draenog@pld-linux.org>
+Date:   Thu Aug 29 21:53:22 2013 +0100
+
+    Check for dir dependencies also during erasure
+
+diff --git a/lib/depends.c b/lib/depends.c
+index 20bd53a..1a07fdc 100644
+--- a/lib/depends.c
++++ b/lib/depends.c
+@@ -1860,6 +1860,21 @@ static int checkDependentPackages(rpmts ts, const char * depName)
+     return rc;
+ }
+ 
++static int checkDependentDirs(rpmts ts, const char * depName, nsType depNS)
++	/*@globals rpmGlobalMacroContext, h_errno, fileSystem, internalState @*/
++	/*@modifies ts, rpmGlobalMacroContext, fileSystem, internalState @*/
++{
++    int rc = 0;
++
++    /* XXX rpmdb can be closed here, avoid error msg. */
++    if (rpmtsGetRdb(ts) != NULL) {
++	rpmmi mi;
++	mi = rpmtsInitIterator(ts, RPMTAG_DIRNAMES, depName, 0);
++	rc = checkPackageSet(ts, depName, depNS, mi, 0);
++    }
++    return rc;
++}
++
+ /**
+  * Check to-be-added dependencies against installed conflicts.
+  * @param ts		transaction set
+@@ -1932,6 +1932,7 @@ int _rpmtsCheck(rpmts ts)
+     int terminate = 2;		/* XXX terminate if rc >= terminate */
+     int rc = 0;
+     int ourrc = 0;
++    int dirname_deps = rpmExpandNumeric("%{?_check_dirname_deps}%{?!_check_dirname_deps:1}");
+ 
+ if (_rpmts_debug)
+ fprintf(stderr, "--> %s(%p) tsFlags 0x%x\n", __FUNCTION__, ts, rpmtsFlags(ts));
+@@ -2021,6 +2036,8 @@ fprintf(stderr, "--> %s(%p) tsFlags 0x%x\n", __FUNCTION__, ts, rpmtsFlags(ts));
+ 	    /* Erasing: check filename against requiredby matches. */
+ 	    if (checkDependentPackages(ts, depName, RPMNS_TYPE_UNKNOWN))
+ 		rc = 1;
++	    if (dirname_deps && checkDependentDirs(ts, depName, RPMNS_TYPE_UNKNOWN))
++		rc = 1;
+ 	}
+ 	if (rc && (ourrc = rc) >= terminate)
+ 	    break;
