@@ -43,7 +43,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.13
-Release:	1
+Release:	2
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.13-0.20130819.src.rpm
@@ -154,9 +154,9 @@ Patch70:	python-%{name}sense-missingok.patch
 Patch71:	%{name}-changelog-encoding.patch
 Patch72:	%{name}-preserve-tag-type.patch
 Patch73:	gem_helper-spec-arg.patch
-Patch74:	rpm-fix-internal-lua-build.patch
-Patch75:	rpm-double_check_file_deps.patch
-Patch76:	rpm-revert-debugedit-breakage.patch
+Patch74:	%{name}-fix-internal-lua-build.patch
+Patch75:	%{name}-double_check_file_deps.patch
+Patch76:	%{name}-revert-debugedit-breakage.patch
 Patch77:	%{name}-lua-expat.patch
 
 # Patches imported from Mandriva
@@ -273,6 +273,7 @@ Patch1044:	%{name}-5.4.12-fix-rpmlua-print.patch
 Patch1045:	%{name}-5.4.12-fix-rpmpython-module-import-init.patch
 Patch1046:	%{name}-5.4.12-truncate-output-buffer-after-use.patch
 Patch1047:	%{name}-5.4.13-perl-bindings-do-not-use-xmalloc.patch
+Patch1048:	%{name}-5.4.13-dont-override-existing-variables-with-etc-os-release.patch
 
 URL:		http://rpm5.org/
 BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
@@ -952,6 +953,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1045 -p1
 %patch1046 -p1
 %patch1047 -p1
+%patch1048 -p1
 %patch68 -p1
 %patch69 -p1
 
