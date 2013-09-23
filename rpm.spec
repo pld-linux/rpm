@@ -156,6 +156,7 @@ Patch72:	%{name}-preserve-tag-type.patch
 Patch73:	gem_helper-spec-arg.patch
 Patch74:	rpm-fix-internal-lua-build.patch
 Patch75:	rpm-double_check_file_deps.patch
+Patch76:	rpm-revert-debugedit-breakage.patch
 
 # Patches imported from Mandriva
 
@@ -270,6 +271,7 @@ Patch1043:	%{name}-5.4.12-copy-Value-string.patch
 Patch1044:	%{name}-5.4.12-fix-rpmlua-print.patch
 Patch1045:	%{name}-5.4.12-fix-rpmpython-module-import-init.patch
 Patch1046:	%{name}-5.4.12-truncate-output-buffer-after-use.patch
+Patch1047:	%{name}-5.4.13-perl-bindings-do-not-use-xmalloc.patch
 
 URL:		http://rpm5.org/
 BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
@@ -899,6 +901,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch73 -p1
 %patch74 -p1
 %patch75 -p1
+%patch76 -p0
 
 %patch1000 -p1
 %patch1001 -p1
@@ -946,6 +949,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1044 -p1
 %patch1045 -p1
 %patch1046 -p1
+%patch1047 -p1
 %patch68 -p1
 %patch69 -p1
 
