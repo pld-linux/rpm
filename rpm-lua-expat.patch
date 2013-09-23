@@ -1,0 +1,14 @@
+--- lua/Makefile.am~	2013-06-29 22:03:22.000000000 +0100
++++ lua/Makefile.am	2013-09-23 19:07:35.157853272 +0100
+@@ -230,7 +230,10 @@
+ #	local/lwrs.h
+ #	local/lwrs.c
+ 
+-liblua_la_LIBADD = @WITH_LUA_SUBDIR_LIB@ -lm -lexpat
++liblua_la_LIBADD = @WITH_LUA_SUBDIR_LIB@ -lm
++if USE_LUA_CRYPTO
++liblua_la_LIBADD += -lexpat
++endif
+ liblua_la_SOURCES += \
+ 	local/llocal.c \
+ 	local/llocal.h \

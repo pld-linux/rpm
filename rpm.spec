@@ -157,6 +157,7 @@ Patch73:	gem_helper-spec-arg.patch
 Patch74:	rpm-fix-internal-lua-build.patch
 Patch75:	rpm-double_check_file_deps.patch
 Patch76:	rpm-revert-debugedit-breakage.patch
+Patch77:	%{name}-lua-expat.patch
 
 # Patches imported from Mandriva
 
@@ -902,6 +903,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch74 -p1
 %patch75 -p1
 %patch76 -p0
+%patch77 -p0
 
 %patch1000 -p1
 %patch1001 -p1
