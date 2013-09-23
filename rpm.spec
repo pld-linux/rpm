@@ -75,7 +75,6 @@ Source19:	%{name}.noautocompressdoc
 Source20:	%{name}.noautoprov
 Source21:	%{name}.noautoprovfiles
 Source22:	%{name}.noautoreq
-Source23:	%{name}.noautoreqdep
 Source24:	%{name}.noautoreqfiles
 Source25:	%{name}-php-requires.php
 Source26:	%{name}db_checkversion.c
@@ -1195,7 +1194,6 @@ install %{SOURCE19} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc
 install %{SOURCE20} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov
 install %{SOURCE21} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles
 install %{SOURCE22} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq
-install %{SOURCE23} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqdep
 install %{SOURCE24} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles
 
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Conflictname
