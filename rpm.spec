@@ -12,6 +12,7 @@
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
 %bcond_without	suggest_tags	# build without Suggest tag (bootstrapping)
+%bcond_with	db60		# use DB 6.0 instead of 5.2
 %bcond_with	neon		# build with HTTP/WebDAV support (neon library)
 %bcond_with	sqlite		# build with SQLite support
 %bcond_with	system_lua	# use system lua
@@ -27,9 +28,15 @@
 %endif
 
 # versions of required libraries
+%if %{with db60}
+%define		reqdb_pkg	db6.0
+%define		reqdb_ver	6.0
+%define		reqdb_pkgver	6.0.20
+%else
 %define		reqdb_pkg	db5.2
 %define		reqdb_ver	5.2
 %define		reqdb_pkgver	5.2.36.0-4
+%endif
 %define		reqpopt_ver	1.15
 %define		beecrypt_ver	2:4.2.0
 %define		sover		5.4
@@ -107,7 +114,6 @@ Patch22:	%{name}-sparc64.patch
 Patch23:	%{name}-gendiff.patch
 Patch24:	openmp.patch
 Patch25:	%{name}-URPM-build-fix.patch
-Patch26:	%{name}-db5.3.patch
 Patch27:	%{name}-helperEVR-noassert.patch
 Patch28:	%{name}-unglobal.patch
 Patch29:	%{name}-builddir-readlink.patch
@@ -856,7 +862,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch23 -p1
 %patch24 -p1
 %patch25 -p1
-####%patch26 -p1
 %patch27 -p1
 %patch28 -p1
 %patch29 -p1
@@ -887,7 +892,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch54 -p1
 %patch55 -p1
 %patch56 -p1
-%patch57 -p1
+%{!?with_db60:%patch57 -p1}
 %patch58 -p1
 %patch60 -p1
 %patch61 -p1
