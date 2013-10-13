@@ -50,7 +50,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.13
-Release:	2
+Release:	3
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.13-0.20130819.src.rpm
@@ -164,6 +164,7 @@ Patch74:	%{name}-fix-internal-lua-build.patch
 Patch75:	%{name}-double_check_file_deps.patch
 Patch76:	%{name}-revert-debugedit-breakage.patch
 Patch77:	%{name}-lua-expat.patch
+Patch78:	%{name}-double_check_unpackaged_subdirs.patch
 
 # Patches imported from Mandriva
 
@@ -910,6 +911,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch75 -p1
 %patch76 -p0
 %patch77 -p0
+%patch78 -p1
 
 %patch1000 -p1
 %patch1001 -p1
@@ -1002,34 +1004,35 @@ sed -i \
 	CPP="%{__newcpp}" \
 	WITH_PERL_VERSION=no \
 	__GST_INSPECT=%{_bindir}/gst-inspect-1.0 \
+	--disable-silent-rules \
 	--enable-shared \
 	--enable-static \
 	%{!?with_apidocs:--without-apidocs} \
+	--with-beecrypt=external \
+	--with-bugreport="http://bugs.pld-linux.org/" \
+	--with-bzip2=external \
+	--with-db=external \
+	--with-dbapi=db \
+	--with-file=external \
+	--with-keyutils=%{?with_keyutils:external}%{!?with_keyutils:no} \
+	--with-libelf \
+	--with-lua=%{!?with_system_lua:internal}%{?with_system_lua:external} \
+	--with-lzma=external \
+	--with-neon=%{?with_neon:external}%{!?with_neon:no} \
+	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/%{_target}/macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/macros.build:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%{_target}/macros:%{_sysconfdir}/rpm/macros.d/*.macros:~/etc/.rpmmacros:~/.rpmmacros' \
+	--without-path-versioned \
+	--with-pcre=external \
+	--with-popt=external \
 	%{?with_python:--with-python=%{py_ver} --with-python-lib-dir=%{py_sitedir}} \
 	%{!?with_python:--without-python} \
 	--with-selinux=%{!?with_selinux:no}%{?with_selinux:external} \
-	--with-sepol=%{!?with_selinux:no}%{?with_selinux:external} \
 	--with-semanage=%{!?with_selinux:no}%{?with_selinux:external} \
-	--with-libelf \
-	--with-zlib=external \
-	--with-bzip2=external \
-	--with-beecrypt=external \
-	--with-lzma=external \
-	--with-xz=external \
-	--with-neon=%{?with_neon:external}%{!?with_neon:no} \
-	--with-file=external \
-	--with-popt=external \
-	--with-db=external \
-	--with-dbapi=db \
+	--with-sepol=%{!?with_selinux:no}%{?with_selinux:external} \
 	--with-sqlite=%{?with_sqlite:yes}%{!?with_sqlite:no} \
-	--with-lua=%{!?with_system_lua:internal}%{?with_system_lua:external} \
-	--with-pcre=external \
-	--with-keyutils=%{?with_keyutils:external}%{!?with_keyutils:no} \
 	--with-uuid=%{_libdir}:%{_includedir}/ossp-uuid \
-	--without-path-versioned \
-	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/%{_target}/macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/macros.build:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%{_target}/macros:%{_sysconfdir}/rpm/macros.d/*.macros:~/etc/.rpmmacros:~/.rpmmacros' \
-	--with-bugreport="http://bugs.pld-linux.org/" \
-	--with-vendor=pld
+	--with-vendor=pld \
+	--with-xz=external \
+	--with-zlib=external
 
 %{__make} -j1 \
 	CC="%{__cc}" \
@@ -1172,14 +1175,14 @@ sparc-[^-]*-[Ll]inux(-gnu)?
 noarch-[^-]*-.*
 EOF
 
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/vpkg-provides*
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{prov,req}.pl
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-{provides,requires}.perl
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/lib/liblua.a
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/lib/liblua.la
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/mono-find-provides
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/mono-find-requires
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/vpkg-provides*
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-{prov,req}.pl
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-{provides,requires}.perl
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/lib/liblua.a
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/lib/liblua.la
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/mono-find-provides
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/mono-find-requires
 
 # not installed since 4.4.8 (-tools-perl subpackage)
 install scripts/rpmdiff scripts/rpmdiff.cgi $RPM_BUILD_ROOT%{_rpmlibdir}
