@@ -25,6 +25,16 @@ diff -urN rpm-5.4.13/build/rpmspec.h rpm-5.4.13-rpmspec/build/rpmspec.h
      size_t nfoo;
  /*@only@*/ /*@relnull@*/
      tagStore_t foo;
+--- rpm-5.4.13/build/spec.c~	2013-07-27 02:16:06.000000000 +0200
++++ rpm-5.4.13/build/spec.c	2013-10-23 13:01:36.596670702 +0200
+@@ -562,6 +562,7 @@
+     spec->install = rpmiobFree(spec->install);
+     spec->check = rpmiobFree(spec->check);
+     spec->clean = rpmiobFree(spec->clean);
++    spec->parsed = rpmiobFree(spec->parsed);
+     spec->foo = tagStoreFree(spec->foo, spec->nfoo);
+     spec->nfoo = 0;
+ 
 diff -urN rpm-5.4.13/tools/Makefile.am rpm-5.4.13-rpmspec/tools/Makefile.am
 --- rpm-5.4.13/tools/Makefile.am	2013-10-22 20:18:34.426372530 +0200
 +++ rpm-5.4.13-rpmspec/tools/Makefile.am	2013-10-22 20:02:30.365350944 +0200
