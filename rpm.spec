@@ -50,7 +50,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.13
-Release:	5
+Release:	6
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.13-0.20130819.src.rpm
@@ -166,6 +166,7 @@ Patch76:	%{name}-revert-debugedit-breakage.patch
 Patch77:	%{name}-lua-expat.patch
 Patch78:	%{name}-double_check_unpackaged_subdirs.patch
 Patch79:	%{name}-rpmspec.patch
+Patch80:	%{name}-revert-gpg-argv-parsing.patch
 
 # Patches imported from Mandriva
 
@@ -914,6 +915,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch77 -p0
 %patch78 -p1
 %patch79 -p1
+%patch80 -p1
 
 %patch1000 -p1
 %patch1001 -p1
