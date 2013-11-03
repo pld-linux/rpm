@@ -50,7 +50,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.13
-Release:	6
+Release:	7
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.13-0.20130819.src.rpm
@@ -723,6 +723,7 @@ Summary(de.UTF-8):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-P
 Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzenia zależności skryptów Perla w pakietach RPM
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
+Requires:	perl-Encode
 Requires:	perl-devel
 Requires:	perl-modules
 
