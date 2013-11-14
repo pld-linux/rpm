@@ -49,13 +49,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.4.13
-Release:	7
+Version:	5.4.14
+Release:	0.1
 License:	LGPL v2.1
 Group:		Base
-# http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.13-0.20130819.src.rpm
+# http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.14-0.20131024.src.rpm
 Source0:	%{name}-%{version}.tar.gz
-# Source0-md5:	4ce4ab33a4d5f1fcb13afcc494c92c07
+# Source0-md5:	9bd3fef1170f26a223a149dc1113c23c
 Source100:	cpu-os-macros.tar.gz
 # Source100-md5:	928034a5bdceb398881bc14b5f29973b
 Source1:	%{name}.groups
@@ -162,7 +162,6 @@ Patch72:	%{name}-preserve-tag-type.patch
 Patch73:	gem_helper-spec-arg.patch
 Patch74:	%{name}-fix-internal-lua-build.patch
 Patch75:	%{name}-double_check_file_deps.patch
-Patch76:	%{name}-revert-debugedit-breakage.patch
 Patch77:	%{name}-lua-expat.patch
 Patch78:	%{name}-double_check_unpackaged_subdirs.patch
 Patch79:	%{name}-rpmspec.patch
@@ -224,8 +223,6 @@ Patch1020:	%{name}-5.4.9-font-provides.patch
 Patch1021:	%{name}-5.4.7-kmod-dependencies.patch
 # status: probably okay to merge, discuss on rpm-devel first
 Patch1022:	%{name}-5.4.5-skip-dependencies-for-character-devices.patch
-# status: ready to merge
-Patch1023:	%{name}-5.4.5-rpmfc-use-strlen-not-sizeof.patch
 # status: probably okay to merge
 Patch1024:	%{name}-5.4.5-rpmfc-apply-python-coloring-from-magic.patch
 # status: probably okay to merge
@@ -249,8 +246,6 @@ Patch1033:	%{name}-5.4.7-no-seqid_init-on-rdonly-database.patch
 Patch1034:	%{name}-5.4.9-avoid-double-slash-in-path-for-dirname-filetrigger-matching.patch
 # status: probably ready to merge, discuss on rpm-devel first
 Patch1035:	%{name}-5.4.9-fix-verify-segfault.patch
-# status: ready and should be merged
-Patch1036:	%{name}-5.4.9-fix-typo-in-rpmtag-header.patch
 # Due to rpmdav/neon being written in a different fashion than other rpmio clients,
 # the inconsistent behaviour affects code elsewhere which expects consistent behaviour,
 # with the result being that when unable to download files, neon will save error
@@ -282,7 +277,6 @@ Patch1044:	%{name}-5.4.12-fix-rpmlua-print.patch
 Patch1045:	%{name}-5.4.12-fix-rpmpython-module-import-init.patch
 Patch1046:	%{name}-5.4.12-truncate-output-buffer-after-use.patch
 Patch1047:	%{name}-5.4.13-perl-bindings-do-not-use-xmalloc.patch
-Patch1048:	%{name}-5.4.13-dont-override-existing-variables-with-etc-os-release.patch
 
 URL:		http://rpm5.org/
 BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
@@ -912,7 +906,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch73 -p1
 %patch74 -p1
 %patch75 -p1
-%patch76 -p0
 %patch77 -p0
 %patch78 -p1
 %patch79 -p1
@@ -941,7 +934,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1020 -p1
 %patch1021 -p1
 %patch1022 -p1
-%patch1023 -p1
 %patch1024 -p1
 %patch1026 -p1
 %patch1027 -p1
@@ -953,7 +945,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1033 -p1
 %patch1034 -p1
 %patch1035 -p1
-%patch1036 -p1
 %patch1037 -p1
 %patch1038 -p1
 %patch1039 -p1
@@ -965,7 +956,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1045 -p1
 %patch1046 -p1
 %patch1047 -p1
-%patch1048 -p1
 %patch68 -p1
 %patch69 -p1
 
