@@ -45,3 +45,23 @@
      (void) finiproctitle();
  #endif
  
+--- rpm-5.4.14/rpmqv.cc.orig	2012-07-06 17:39:16.000000000 +0200
++++ rpm-5.4.14/rpmqv.cc	2013-04-06 21:52:12.351905402 +0200
+@@ -450,7 +450,7 @@ int main(int argc, const char ** argv)
+     environ = envp;
+ #else
+ /* XXX limit the fiddle up to linux for now. */
+-#if !defined(HAVE_SETPROCTITLE) && defined(__linux__)
++#if 0 && !defined(HAVE_SETPROCTITLE) && defined(__linux__)
+     (void) initproctitle(argc, (char **)argv, environ);
+ #endif
+ #endif  
+@@ -1117,7 +1117,7 @@ exit:
+     optCon = rpmcliFini(optCon);
+ 
+ /* XXX limit the fiddle up to linux for now. */
+-#if !defined(HAVE_SETPROCTITLE) && defined(__linux__)
++#if 0 && !defined(HAVE_SETPROCTITLE) && defined(__linux__)
+     (void) finiproctitle();
+ #endif
+ 
