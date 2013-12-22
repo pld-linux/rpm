@@ -1,5 +1,5 @@
---- rpm-5.4.10/scripts/gem_helper.rb~	2013-06-21 09:44:47.273773411 +0300
-+++ rpm-5.4.10/scripts/gem_helper.rb	2013-06-21 09:45:34.619165559 +0300
+--- rpm-5.4.10/scripts/gem_helper.rb	2013-06-21 09:45:34.619165559 +0300
++++ rpm-5.4.14/scripts/gem_helper.rb	2013-12-21 19:05:33.801507110 +0200
 @@ -6,8 +6,9 @@
  #++
  
@@ -11,7 +11,7 @@
    require 'yaml'
    require 'zlib'
  
-@@ -65,9 +66,17 @@
+@@ -65,9 +66,18 @@
  	  body[iv.to_s.gsub(/^@/,'')] = header.instance_variable_get(iv)
    end
  
@@ -25,6 +25,7 @@
 +      file.puts spec.to_ruby_for_cache
 +    end
 +    print "Wrote: %s\n" % file_name
++    exit(0)
 +  end
 +
    if ARGV[0] == "install"
