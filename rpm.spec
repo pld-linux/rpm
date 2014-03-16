@@ -50,7 +50,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.14
-Release:	2
+Release:	3
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.14-0.20131024.src.rpm
@@ -1014,7 +1014,7 @@ sed -i \
 	--with-lua=%{!?with_system_lua:internal}%{?with_system_lua:external} \
 	--with-lzma=external \
 	--with-neon=%{?with_neon:external}%{!?with_neon:no} \
-	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/%{_target}/macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/macros.build:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%{_target}/macros:%{_sysconfdir}/rpm/macros.d/*.macros:~/etc/.rpmmacros:~/.rpmmacros' \
+	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/%%{_target}/macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/macros.build:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%%{_target}/macros:%{_sysconfdir}/rpm/macros.d/*.macros:~/etc/.rpmmacros:~/.rpmmacros' \
 	--without-path-versioned \
 	--with-pcre=external \
 	--with-popt=external \
