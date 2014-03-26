@@ -481,7 +481,11 @@ Requires:	bzip2-devel
 Requires:	elfutils-devel
 %{?with_keyutils:Requires:	keyutils-devel}
 Requires:	libmagic-devel
-%{?with_selinux:Requires:	libselinux-devel}
+%if %{with selinux}
+Requires:	libselinux-devel
+Requires:	libsemanage-devel
+Requires:	libsepol-devel
+%endif
 Requires:	popt-devel >= %{reqpopt_ver}
 Requires:	zlib-devel
 
@@ -545,6 +549,11 @@ Requires:	bzip2-static
 Requires:	elfutils-static
 %{?with_keyutils:Requires:	keyutils-static}
 Requires:	libmagic-static
+%if %{with selinux}
+Requires:	libselinux-static
+Requires:	libsemanage-static
+Requires:	libsepol-static
+%endif
 Requires:	popt-static >= %{reqpopt_ver}
 Requires:	zlib-static
 
