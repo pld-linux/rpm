@@ -1101,7 +1101,6 @@ cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 # first platform file entry can't contain regexps
 %{_target_cpu}-%{_target_vendor}-linux
 
-# x86_64 things
 %ifarch x86_64
 x86_64-[^-]*-[Ll]inux(-gnu)?
 amd64-[^-]*-[Ll]inux(-gnu)?
@@ -1115,7 +1114,6 @@ ia32e-[^-]*-[Ll]inux(-gnu)?
 x86_64-[^-]*-[Ll]inux(-gnu)?
 %endif
 
-# x86 things
 %ifarch athlon %{x8664}
 athlon-[^-]*-[Ll]inux(-gnu)?
 %endif
@@ -1175,7 +1173,6 @@ sparcv9-[^-]*-[Ll]inux(-gnu)?
 sparc-[^-]*-[Ll]inux(-gnu)?
 %endif
 
-# noarch
 noarch-[^-]*-.*
 EOF
 
