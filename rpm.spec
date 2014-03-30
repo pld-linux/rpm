@@ -827,6 +827,9 @@ Python para manipular pacotes e bancos de dados RPM.
 Summary:	RPM API documentation and guides
 Summary(pl.UTF-8):	Documentacja API RPM-a i przewodniki
 Group:		Documentation
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
 
 %description apidocs
 Documentation for RPM API and guides in HTML format generated from rpm
