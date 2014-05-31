@@ -88,6 +88,7 @@ Source26:	%{name}db_checkversion.c
 Source27:	macros.lang
 Source28:	%{name}db_reset.c
 Source29:	dbupgrade.sh
+Source30:	rubygems.rb
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
 Patch2:		%{name}-popt-aliases.patch
@@ -154,8 +155,6 @@ Patch64:	%{name}-fix-compress-doc.patch
 Patch65:	%{name}-parseSpec-skip-empty-tags.patch
 Patch66:	%{name}-payload-use-hashed-inode.patch
 Patch67:	%{name}-repackage-dont-force-max-compression.patch
-Patch68:	rubyprov-archdirs.patch
-Patch69:	rubyprov-abi-versioned.patch
 Patch70:	python-%{name}sense-missingok.patch
 Patch71:	%{name}-changelog-encoding.patch
 Patch72:	%{name}-preserve-tag-type.patch
@@ -213,8 +212,6 @@ Patch1015:	%{name}-5.4.9-keep-loading-script-macros.patch
 Patch1016:	%{name}-5.4.9-update-rpmfc-when-removing-dependencies-on-self.patch
 # status: idem
 Patch1017:	%{name}-5.4.9-rpmfc-extract-dependencies-for-all-files.patch
-# status: ready for merge
-Patch1018:	%{name}-5.4.5-rubygems-add-missing-newline.patch
 # status: probably okay to merge
 Patch1019:	%{name}-5.4.5-python-export-spec-macros.patch
 # status: idem
@@ -941,7 +938,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1015 -p1
 %patch1016 -p1
 %patch1017 -p1
-%patch1018 -p1
 %patch1019 -p1
 %patch1020 -p1
 %patch1021 -p1
@@ -968,13 +964,12 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1045 -p1
 %patch1046 -p1
 %patch1047 -p1
-%patch68 -p1
-%patch69 -p1
 
 install %{SOURCE2} macros/pld.in
 install %{SOURCE8} scripts/php.prov.in
 install %{SOURCE9} scripts/php.req.in
 install %{SOURCE11} scripts/perl.prov.in
+cp -p %{SOURCE30} scripts/rubygems.rb
 
 %{__mv} -f scripts/perl.req{,.in}
 
