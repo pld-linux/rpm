@@ -30,10 +30,14 @@ if rest.size != 0 or (!provides and !requires) or (provides and requires)
   exit(1)
 end
 
-specpatt = RbConfig::CONFIG["rubylibdir"].sub(RbConfig::CONFIG["ruby_version"], ".*/specifications/.*\.gemspec$")
+require 'rubygems'
+gem_dir = Gem.respond_to?(:default_dirs) ? Gem.default_dirs[:system][:gem_dir] : Gem.path.first
+specpatt = "#{gem_dir}/specifications/.*\.gemspec$"
 gems = []
 ruby_versioned = false
 abi_provide = false
+# as ruby_version may be empty, take version from basename of archdir
+ruby_version = RbConfig::CONFIG["ruby_version"].empty? ? File.basename(RbConfig::CONFIG["archdir"]) : RbConfig::CONFIG["ruby_version"]
 
 for path in $stdin.readlines
   # way fugly, but we make the assumption that if the package has
@@ -55,11 +59,11 @@ for path in $stdin.readlines
     elsif path.match(RbConfig::CONFIG["archdir"])
       ruby_versioned = true
     elsif path.match(RbConfig::CONFIG["sitelibdir"])
-      ruby_versioned = true
+      ruby_versioned = !RbConfig::CONFIG["ruby_version"].empty?
     elsif path.match(RbConfig::CONFIG["sitearchdir"])
       ruby_versioned = true
     elsif path.match(RbConfig::CONFIG["vendorlibdir"])
-      ruby_versioned = true
+      ruby_versioned = !RbConfig::CONFIG["ruby_version"].empty?
     elsif path.match(RbConfig::CONFIG["vendorarchdir"])
       ruby_versioned = true
     end
@@ -69,7 +73,7 @@ end
 if requires or abi_provide
   abidep = "ruby(abi)"
   if ruby_versioned
-    abidep += " = %s" % RbConfig::CONFIG["ruby_version"]
+    abidep += " = %s" % ruby_version
   end
   print abidep + "\n"
 end
