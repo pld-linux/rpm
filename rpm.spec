@@ -50,7 +50,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.14
-Release:	4
+Release:	5
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.14-0.20131024.src.rpm
@@ -642,7 +642,8 @@ Summary(pt_BR.UTF-8):	Scripts e programas executáveis usados para construir pac
 Summary(ru.UTF-8):	Скрипты и утилиты, необходимые для сборки пакетов
 Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для побудови пакетів
 Group:		Applications/File
-Requires(pre):	findutils
+Requires(pretrans):	coreutils
+Requires(pretrans):	findutils
 Requires:	%{name}-build-macros >= 1.656
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
