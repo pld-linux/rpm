@@ -1175,6 +1175,9 @@ sparc-[^-]*-[Ll]inux(-gnu)?
 noarch-[^-]*-.*
 EOF
 
+# Squash Extra Blank Lines
+%{__sed} -i -e '/./,/^$/!d' $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/vpkg-provides*
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-{prov,req}.pl
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-{provides,requires}.perl
