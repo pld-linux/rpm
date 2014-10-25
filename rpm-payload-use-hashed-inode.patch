@@ -103,21 +103,3 @@ diff -ur rpm-5.4.10/build/files.c rpm-5.4.10-collision/build/files.c
      }
  
      ui32 = fl->totalFileSize;
---- rpm-5.4.10/lib/fsm.c~
-+++ rpm-5.4.10/lib/fsm.c
-@@ -898,6 +898,7 @@ int fsmMapAttrs(IOSM_t fsm)
- 
-     if (fi && i >= 0 && i < (int) fi->fc) {
- 	mode_t perms = (S_ISDIR(st->st_mode) ? fi->dperms : fi->fperms);
-+	ino_t finalInode = (fi->finodes ? (ino_t)fi->finodes[i] : 0);
- 	mode_t finalMode = (fi->fmodes ? (mode_t)fi->fmodes[i] : perms);
- 	dev_t finalRdev = (dev_t)(fi->frdevs ? fi->frdevs[i] : 0);
- 	rpmuint32_t finalMtime = (fi->fmtimes ? fi->fmtimes[i] : 0);
-@@ -937,6 +938,7 @@ int fsmMapAttrs(IOSM_t fsm)
- 	    if ((S_ISCHR(st->st_mode) || S_ISBLK(st->st_mode))
- 	    && st->st_nlink == 0)
- 		st->st_nlink = 1;
-+	    st->st_ino = finalInode;
- 	    st->st_rdev = finalRdev;
- 	    st->st_mtime = finalMtime;
- 	}

@@ -49,13 +49,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.4.14
-Release:	6
+Version:	5.4.15
+Release:	0.1
 License:	LGPL v2.1
 Group:		Base
-# http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.14-0.20131024.src.rpm
+# http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
 Source0:	%{name}-%{version}.tar.gz
-# Source0-md5:	9bd3fef1170f26a223a149dc1113c23c
+# Source0-md5:	4067f83ca8b5bf1a21e443c0cff3efa0
 Source100:	cpu-os-macros.tar.gz
 # Source100-md5:	928034a5bdceb398881bc14b5f29973b
 Source1:	%{name}.groups
@@ -960,7 +960,8 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1038 -p1
 %patch1039 -p1
 %patch1040 -p1
-%patch1041 -p1
+# don't delete, may be usefull if jbj descides to enable this again
+#%patch1041 -p1
 %patch1042 -p1
 %patch1043 -p1
 %patch1044 -p1
@@ -1257,8 +1258,6 @@ mv $RPM_BUILD_ROOT{%{_rpmlibdir},%{_bindir}}/rpm2cpio
 
 # wrong location, not used anyway
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log,xinetd}
-# utils dropped in 4.4.8 -- their manuals
-%{__rm} $RPM_BUILD_ROOT%{_mandir}/*/man8/rpmgraph.8
 # utils dropped in 5.4 -- their manuals
 %{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/rpmgrep.1
 # script obsoleted by /usr/lib/rpm/bin/dbconvert binary
@@ -1325,7 +1324,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_mandir}/man8/rpm.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
 %lang(ja) %{_mandir}/ja/man8/rpm.8*
-%lang(ko) %{_mandir}/ko/man8/rpm.8*
 %lang(pl) %{_mandir}/pl/man8/rpm.8*
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
 %lang(sk) %{_mandir}/sk/man8/rpm.8*
@@ -1389,7 +1387,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rpm
 %dir %{_rpmlibdir}
 %attr(755,root,root) %{_bindir}/banner.sh
-%attr(755,root,root) %{_bindir}/multiarch-dispatch
 %attr(755,root,root) %{_rpmlibdir}/user_group.sh
 %dir /var/lib/banner
 
@@ -1418,7 +1415,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_libdir}/librpmmisc-%{sover}.so
 %{_libdir}/librpm*.la
 %{_includedir}/rpm
-%{_includedir}/multiarch-dispatch.h
 %{_pkgconfigdir}/*.pc
 
 %files static
@@ -1455,15 +1451,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{?with_keyutils:%attr(755,root,root) %{_rpmlibdir}/bin/rpmkey}
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmrepo
 %{_mandir}/man8/rpm2cpio.8*
-%{_mandir}/man8/rpmcache.8*
 %{_mandir}/man8/rpmconstant.8*
 %{_mandir}/man8/rpmdeps.8*
 %{_mandir}/man8/rpmmtree.8*
 %lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
-%lang(ja) %{_mandir}/ja/man8/rpmcache.8*
-%lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
 %lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
-%lang(pl) %{_mandir}/pl/man8/rpmcache.8*
 %lang(pl) %{_mandir}/pl/man8/rpmdeps.8*
 %lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
 
@@ -1535,13 +1527,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros.php
 %{_rpmlibdir}/macros.python
 
-%attr(755,root,root) %{_rpmlibdir}/check-multiarch-files
 %attr(755,root,root) %{_rpmlibdir}/gstreamer.sh
 %attr(755,root,root) %{_rpmlibdir}/kmod-deps.sh
-%attr(755,root,root) %{_rpmlibdir}/mkmultiarch
 
 %attr(755,root,root) %{_bindir}/gendiff
-%attr(755,root,root) %{_bindir}/multiarch-platform
 %attr(755,root,root) %{_bindir}/rpmbuild
 
 %dir %{_rpmlibdir}/helpers
