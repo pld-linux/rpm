@@ -12,7 +12,7 @@
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
 %bcond_without	suggest_tags	# build without Suggest tag (bootstrapping)
-%bcond_with	db60		# use DB 6.0 instead of 5.2
+%bcond_with	db61		# use DB 6.1 instead of 5.2
 %bcond_with	neon		# build with HTTP/WebDAV support (neon library)
 %bcond_with	sqlite		# build with SQLite support
 %bcond_with	system_lua	# use system lua
@@ -28,10 +28,10 @@
 %endif
 
 # versions of required libraries
-%if %{with db60}
-%define		reqdb_pkg	db6.0
-%define		reqdb_ver	6.0
-%define		reqdb_pkgver	6.0.20
+%if %{with db61}
+%define		reqdb_pkg	db6.1
+%define		reqdb_ver	6.1
+%define		reqdb_pkgver	6.1.19
 %else
 %define		reqdb_pkg	db5.2
 %define		reqdb_ver	5.2
@@ -885,7 +885,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch38 -p1
 %patch39 -p1
 %patch40 -p1
-%{?with_db60:%patch41 -p1}
+%{?with_db61:%patch41 -p1}
 %patch42 -p1
 %patch43 -p1
 %patch44 -p1
@@ -901,7 +901,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch54 -p1
 %patch55 -p1
 %patch56 -p1
-%{!?with_db60:%patch57 -p1}
+%{!?with_db61:%patch57 -p1}
 %patch58 -p1
 %patch60 -p1
 %patch61 -p1
