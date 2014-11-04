@@ -16,6 +16,7 @@
 %bcond_with	neon		# build with HTTP/WebDAV support (neon library)
 %bcond_with	sqlite		# build with SQLite support
 %bcond_with	system_lua	# use system lua
+%bcond_with	system_pcre	# use system pcre
 %bcond_with	keyutils	# build with keyutils support
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
@@ -982,7 +983,7 @@ awk -f %{SOURCE6} %{SOURCE1}
 install %{SOURCE26} tools/rpmdb_checkversion.c
 install %{SOURCE28} tools/rpmdb_reset.c
 
-for extlib in beecrypt neon pcre popt; do
+for extlib in beecrypt neon %{?with_system_pcre:pcre} popt; do
 	[ -d $extlib ] && %{__rm} -r $extlib
 done
 
@@ -1026,7 +1027,7 @@ sed -i \
 	--with-neon=%{?with_neon:external}%{!?with_neon:no} \
 	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/%%{_target}/macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/macros.build:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%%{_target}/macros:%{_sysconfdir}/rpm/macros.d/*.macros:~/etc/.rpmmacros:~/.rpmmacros' \
 	--without-path-versioned \
-	--with-pcre=external \
+	--with-pcre=%{!?with_system_pcre:internal}%{?with_system_pcre:external} \
 	--with-popt=external \
 	%{?with_python:--with-python=%{py_ver} --with-python-lib-dir=%{py_sitedir}} \
 	%{!?with_python:--without-python} \
