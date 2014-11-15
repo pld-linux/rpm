@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.15
-Release:	1
+Release:	2
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
@@ -167,6 +167,7 @@ Patch78:	%{name}-double_check_unpackaged_subdirs.patch
 Patch79:	%{name}-rpmspec.patch
 Patch80:	%{name}-revert-gpg-argv-parsing.patch
 Patch81:	%{name}-perl-magic.patch
+Patch82:	%{name}-5.4.15-use-DSA-sig.patch
 
 # Patches imported from Mandriva
 
@@ -922,6 +923,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch79 -p1
 %patch80 -p1
 %patch81 -p0
+%patch82 -p1
 
 %patch1000 -p1
 %patch1001 -p1
