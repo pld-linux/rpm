@@ -16,7 +16,7 @@
 %bcond_with	neon		# build with HTTP/WebDAV support (neon library)
 %bcond_with	sqlite		# build with SQLite support
 %bcond_with	system_lua	# use system lua
-%bcond_with	system_pcre	# use system pcre
+%bcond_without	system_pcre	# use system pcre
 %bcond_with	keyutils	# build with keyutils support
 # force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
 # force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.15
-Release:	2
+Release:	3
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
