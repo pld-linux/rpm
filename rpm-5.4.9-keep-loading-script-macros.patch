@@ -74,7 +74,7 @@
  #------------------------------------------------------------------------
  # typelib(...) configuration.
 -#%%{load:%{_usrlibrpm}/macros.d/typelib}
-+%{load:%{_usrlibrpm}/macros.d/typelib}
++#%%{load:%{_usrlibrpm}/macros.d/typelib}
  
  # \endverbatim
  #*/
