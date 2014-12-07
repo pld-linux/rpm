@@ -7,11 +7,11 @@
 -		rc |= rpmLoadMacroFile(mc, argv[i], nesting - 1);
 +		/* Skip backups, non existing files and %config leftovers. */
 +#define	_suffix(_s, _x) \
-+    (slen >= sizeof(_x) && !strcmp((_s)+slen-(sizeof(_x)-1), (_x)))
-+		if (!(_suffix(fn, "~")
-+		   || _suffix(fn, ".rpmnew")
-+		   || _suffix(fn, ".rpmorig")
-+		   || _suffix(fn, ".rpmsave"))
++    (strlen(_s) >= sizeof(_x) && !strcmp((_s)+strlen(_s)-(sizeof(_x)-1), (_x)))
++		if (!(_suffix(argv[i], "~")
++		   || _suffix(argv[i], ".rpmnew")
++		   || _suffix(argv[i], ".rpmorig")
++		   || _suffix(argv[i], ".rpmsave"))
 +		   && !Access(argv[i], R_OK)
 +		   )
 +		    rc |= rpmLoadMacroFile(mc, argv[i], nesting - 1);
