@@ -1,3 +1,22 @@
+--- rpm-5.4.15/lib/rpmfc.c~	2014-12-08 16:25:43.000000000 +0200
++++ rpm-5.4.15/lib/rpmfc.c	2014-12-08 16:41:11.900465719 +0200
+@@ -1181,6 +1181,15 @@
+ 		fn += sizeof("/usr/share")-1;
+ 		if (!strncmp(fn, "/python", sizeof("/python")-1))
+ 		    fc->fcolor->vals[fc->ix] |= RPMFC_PYTHON;
++		else if (!strncmp(fn, "/ruby", sizeof("/ruby")-1)) {
++		    fc->fcolor->vals[fc->ix] |= RPMFC_RUBY;
++		    if ((strstr(fn, ".gemspec") || strstr(fn, "rbconfig.rb"))) {
++			miRE mire = mireNew(RPMMIRE_REGEX, RPMTAG_FILEPATHS);
++			if (!mireRegcomp(mire, ".*/(specifications/.*\\.gemspec|rbconfig\\.rb)$"))
++			    if (mireRegexec(mire, fc->fn[fc->ix], (size_t) 0) >= 0)
++				fc->fcolor->vals[fc->ix] |= RPMFC_MODULE;
++			mire = mireFree(mire);
++		    }
+ 		}
+ 	    }
+ 	}
+
 --- rpm-5.4.7/lib/rpmfc.c.rubyabi_prov~	2012-03-10 21:50:02.143073469 +0100
 +++ rpm-5.4.7/lib/rpmfc.c	2012-03-10 21:57:13.898394232 +0100
 @@ -1204,9 +1204,13 @@ assert(fc->fn != NULL);

@@ -9,7 +9,7 @@
  	/* XXX HACK: classification by path is intrinsically stupid. */
  	{   fn = strstr(fc->fn[fc->ix], "/usr/lib");
  	    if (fn) {
-@@ -1166,6 +1166,22 @@
+@@ -1166,6 +1166,13 @@
  			fc->fcolor->vals[fc->ix] & RPMFC_LIBRARY)
  		    fc->fcolor->vals[fc->ix] |= (RPMFC_MODULE|RPMFC_SCRIPT);
  	    }
@@ -18,15 +18,6 @@
 +		fn += sizeof("/usr/share")-1;
 +		if (!strncmp(fn, "/python", sizeof("/python")-1))
 +		    fc->fcolor->vals[fc->ix] |= RPMFC_PYTHON;
-+		else if (!strncmp(fn, "/ruby", sizeof("/ruby")-1)) {
-+		    fc->fcolor->vals[fc->ix] |= RPMFC_RUBY;
-+		    if ((strstr(fn, ".gemspec") || strstr(fn, "rbconfig.rb"))) {
-+			miRE mire = mireNew(RPMMIRE_REGEX, RPMTAG_FILEPATHS);
-+			if (!mireRegcomp(mire, ".*/(specifications/.*\\.gemspec|rbconfig\\.rb)$"))
-+			    if (mireRegexec(mire, fc->fn[fc->ix], (size_t) 0) >= 0)
-+				fc->fcolor->vals[fc->ix] |= RPMFC_MODULE;
-+			mire = mireFree(mire);
-+		    }
 +		}
 +	    }
  	}
