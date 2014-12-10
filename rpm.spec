@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.15
-Release:	5
+Release:	6
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
@@ -647,7 +647,7 @@ Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для
 Group:		Applications/File
 Requires(pretrans):	coreutils
 Requires(pretrans):	findutils
-Requires:	%{name}-build-macros >= 1.656
+Requires:	%{name}-build-macros >= 1.699
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
@@ -1513,7 +1513,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros.d/cmake
 %{_rpmlibdir}/macros.d/gstreamer
 %{_rpmlibdir}/macros.d/java
-%{_rpmlibdir}/macros.d/kernel
+# moved to rpm-build-macros 1.699
+#%{_rpmlibdir}/macros.d/kernel
 %{_rpmlibdir}/macros.d/libtool
 %{_rpmlibdir}/macros.d/mono
 %{_rpmlibdir}/macros.d/perl
