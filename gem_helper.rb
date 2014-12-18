@@ -58,10 +58,13 @@ if ARGV[0] == "build" or ARGV[0] == "install" or ARGV[0] == "spec"
     argv.delete_at(0)
   end
 
-  file_data = Zlib::GzipReader.open("metadata.gz")
+  file_data = Zlib::GzipReader.open("metadata.gz") {|io| io.read}
   header = YAML::load(file_data)
-  file_data.close()
-  body = header.instance_variable_get :@ivars
+  body = {}
+  # I don't know any better.. :/
+  header.instance_variables.each do |iv|
+	  body[iv.to_s.gsub(/^@/,'')] = header.instance_variable_get(iv)
+  end
 
   spec = Gem::Specification.from_yaml(YAML.dump(header))
 
