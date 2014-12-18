@@ -6,8 +6,9 @@
 #++
 
 require 'optparse'
+require 'rubygems'
 
-if ARGV[0] == "build" or ARGV[0] == "install"
+if ARGV[0] == "build" or ARGV[0] == "install" or ARGV[0] == "spec"
   require 'yaml'
   require 'zlib'
 
@@ -62,8 +63,17 @@ if ARGV[0] == "build" or ARGV[0] == "install"
   file_data.close()
   body = header.instance_variable_get :@ivars
 
-  require 'rubygems'
   spec = Gem::Specification.from_yaml(YAML.dump(header))
+
+  if ARGV[0] == "spec"
+    # Write the .gemspec specification (in Ruby)
+    file_name = spec.full_name.untaint + '.gemspec'
+    File.open(file_name, "w") do |file|
+      file.puts spec.to_ruby_for_cache
+    end
+    print "Wrote: %s\n" % file_name
+    exit(0)
+  end
 
   if ARGV[0] == "install"
     system("gem %s %s.gem" % [ARGV.join(' '), spec.full_name])

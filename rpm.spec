@@ -160,7 +160,6 @@ Patch67:	%{name}-repackage-dont-force-max-compression.patch
 Patch70:	python-%{name}sense-missingok.patch
 Patch71:	%{name}-changelog-encoding.patch
 Patch72:	%{name}-preserve-tag-type.patch
-Patch73:	gem_helper-spec-arg.patch
 Patch74:	%{name}-fix-internal-lua-build.patch
 Patch75:	%{name}-double_check_file_deps.patch
 Patch77:	%{name}-lua-expat.patch
@@ -917,7 +916,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch70 -p1
 %patch71 -p1
 %patch72 -p1
-%patch73 -p1
 %patch74 -p1
 %patch75 -p1
 %patch77 -p0
