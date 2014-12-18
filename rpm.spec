@@ -90,6 +90,7 @@ Source27:	macros.lang
 Source28:	%{name}db_reset.c
 Source29:	dbupgrade.sh
 Source30:	rubygems.rb
+Source31:	gem_helper.rb
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
 Patch2:		%{name}-popt-aliases.patch
@@ -979,6 +980,7 @@ install %{SOURCE8} scripts/php.prov.in
 install %{SOURCE9} scripts/php.req.in
 install %{SOURCE11} scripts/perl.prov.in
 cp -p %{SOURCE30} scripts/rubygems.rb
+cp -p %{SOURCE31} scripts/gem_helper.rb
 
 %{__mv} -f scripts/perl.req{,.in}
 
