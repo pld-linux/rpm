@@ -90,6 +90,7 @@ Source27:	macros.lang
 Source28:	%{name}db_reset.c
 Source29:	dbupgrade.sh
 Source30:	rubygems.rb
+Source31:	gem_helper.rb
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
 Patch2:		%{name}-popt-aliases.patch
@@ -159,7 +160,6 @@ Patch67:	%{name}-repackage-dont-force-max-compression.patch
 Patch70:	python-%{name}sense-missingok.patch
 Patch71:	%{name}-changelog-encoding.patch
 Patch72:	%{name}-preserve-tag-type.patch
-Patch73:	gem_helper-spec-arg.patch
 Patch74:	%{name}-fix-internal-lua-build.patch
 Patch75:	%{name}-double_check_file_deps.patch
 Patch77:	%{name}-lua-expat.patch
@@ -916,7 +916,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch70 -p1
 %patch71 -p1
 %patch72 -p1
-%patch73 -p1
 %patch74 -p1
 %patch75 -p1
 %patch77 -p0
@@ -979,6 +978,7 @@ install %{SOURCE8} scripts/php.prov.in
 install %{SOURCE9} scripts/php.req.in
 install %{SOURCE11} scripts/perl.prov.in
 cp -p %{SOURCE30} scripts/rubygems.rb
+cp -p %{SOURCE31} scripts/gem_helper.rb
 
 %{__mv} -f scripts/perl.req{,.in}
 

@@ -40,23 +40,3 @@ diff -urN rpm-5.4.9/macros/ruby.in rpm-5.4.9-patched/macros/ruby.in
  
  %__gem_helper %{_usrlibrpm}/gem_helper.rb
  
-diff -urN rpm-5.4.9/scripts/gem_helper.rb rpm-5.4.9-patched/scripts/gem_helper.rb
---- rpm-5.4.9/scripts/gem_helper.rb	2010-10-16 20:58:48.000000000 +1100
-+++ rpm-5.4.9-patched/scripts/gem_helper.rb	2012-08-30 18:12:11.233007114 +1100
-@@ -57,10 +57,13 @@
-     argv.delete_at(0)
-   end
- 
--  file_data = Zlib::GzipReader.open("metadata.gz")
-+  file_data = Zlib::GzipReader.open("metadata.gz") {|io| io.read}
-   header = YAML::load(file_data)
--  file_data.close()
--  body = header.instance_variable_get :@ivars
-+  body = {}
-+  # I don't know any better.. :/
-+  header.instance_variables.each do |iv|
-+	  body[iv.to_s.gsub(/^@/,'')] = header.instance_variable_get(iv)
-+  end
- 
-   require 'rubygems'
-   spec = Gem::Specification.from_yaml(YAML.dump(header))
