@@ -291,7 +291,7 @@ BuildRequires:	automake >= 1.4
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	elfutils-devel >= 0.108
-BuildRequires:	gettext-devel >= 0.19.2
+BuildRequires:	gettext-tools >= 0.19.2
 %{?with_keyutils:BuildRequires:	keyutils-devel}
 BuildRequires:	libmagic-devel
 %if %{with selinux}
