@@ -57,8 +57,9 @@ Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
 Source0:	%{name}-%{version}.tar.gz
 # Source0-md5:	4067f83ca8b5bf1a21e443c0cff3efa0
-Source100:	cpu-os-macros.tar.gz
-# Source100-md5:	928034a5bdceb398881bc14b5f29973b
+# See README.cpu-os-macros how to update cpu-os-macros.a
+Source100:	cpu-os-macros.a
+Source101:	README.cpu-os-macros
 Source1:	%{name}.groups
 Source2:	macros.pld.in
 Source3:	%{name}-install-tree
@@ -850,7 +851,12 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 źrodeł RPM-a przez doxygen.
 
 %prep
-%setup -q -n %{name}-%{version}%{?subver} -a100
+%setup -q -n %{name}-%{version}%{?subver}
+install -d platform
+cd platform
+ar x %{SOURCE100}
+cd -
+
 #patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -1088,32 +1094,44 @@ install %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key
 	pkgconfigdir=%{_pkgconfigdir} \
 	DESTDIR=$RPM_BUILD_ROOT
 
-# install ARCH macros
-install -d $RPM_BUILD_ROOT%{_rpmlibdir}/noarch-linux
-install cpu-os-macros/noarch-linux/macros $RPM_BUILD_ROOT%{_rpmlibdir}/noarch-linux/macros
+# install platform macros
+for f in platform/*macros; do
+	bn=${f#*/}
+	fn=${bn%.macros}/macros
+	install -m644 $f -D %{buildroot}%{_rpmlibdir}/$fn
+done
 
-%ifarch %{ix86}
-install -d $RPM_BUILD_ROOT%{_rpmlibdir}/{i386,i486,i586,i686,athlon,pentium3,pentium4}-linux
-install cpu-os-macros/athlon-linux/macros   $RPM_BUILD_ROOT%{_rpmlibdir}/athlon-linux/macros
-install cpu-os-macros/i386-linux/macros     $RPM_BUILD_ROOT%{_rpmlibdir}/i386-linux/macros
-install cpu-os-macros/i486-linux/macros     $RPM_BUILD_ROOT%{_rpmlibdir}/i486-linux/macros
-install cpu-os-macros/i586-linux/macros     $RPM_BUILD_ROOT%{_rpmlibdir}/i586-linux/macros
-install cpu-os-macros/i686-linux/macros     $RPM_BUILD_ROOT%{_rpmlibdir}/i686-linux/macros
-install cpu-os-macros/pentium3-linux/macros $RPM_BUILD_ROOT%{_rpmlibdir}/pentium3-linux/macros
-install cpu-os-macros/pentium4-linux/macros $RPM_BUILD_ROOT%{_rpmlibdir}/pentium4-linux/macros
+# cleanup
+%ifnarch %{ix86}
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/athlon-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/i386-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/i486-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/i586-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/i686-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/pentium3-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/pentium4-linux/macros
 %endif
 
-%ifarch %{x8664}
-install -d $RPM_BUILD_ROOT%{_rpmlibdir}/{x86_64,ia32e,amd64}-linux
-install cpu-os-macros/x86_64-linux/macros $RPM_BUILD_ROOT%{_rpmlibdir}/x86_64-linux/macros
-install cpu-os-macros/ia32e-linux/macros  $RPM_BUILD_ROOT%{_rpmlibdir}/ia32e-linux/macros
-install cpu-os-macros/amd64-linux/macros  $RPM_BUILD_ROOT%{_rpmlibdir}/amd64-linux/macros
+%ifnarch %{x8664}
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/x86_64-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/ia32e-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/amd64-linux/macros
 %endif
 
-%ifarch %{ppc}
-install -d $RPM_BUILD_ROOT%{_rpmlibdir}/ppc-linux
-install cpu-os-macros/ppc-linux/macros $RPM_BUILD_ROOT%{_rpmlibdir}/ppc-linux/macros
+%ifnarch %{ppc}
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/ppc-linux/macros
 %endif
+
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/alpha*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/arm*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/ia64-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/k6-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/mips*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/ppc*series-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/ppc64*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/s390*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/sparc*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/x32*-linux/macros
 
 cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 # first platform file entry can't contain regexps
