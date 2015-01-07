@@ -1250,6 +1250,9 @@ for m in gstreamer java mono perl php python; do
 	echo "%%{load:%{_rpmlibdir}/macros.d/$m}" >$RPM_BUILD_ROOT%{_rpmlibdir}/macros.$m
 done
 
+# moved to rpm-build-macros 1.699
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/kernel
+
 # for rpm -e|-U --repackage
 install -d $RPM_BUILD_ROOT/var/{spool/repackage,lock/rpm}
 touch $RPM_BUILD_ROOT/var/lock/rpm/transaction
@@ -1525,8 +1528,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros.d/cmake
 %{_rpmlibdir}/macros.d/gstreamer
 %{_rpmlibdir}/macros.d/java
-# moved to rpm-build-macros 1.699
-#%{_rpmlibdir}/macros.d/kernel
 %{_rpmlibdir}/macros.d/libtool
 %{_rpmlibdir}/macros.d/mono
 %{_rpmlibdir}/macros.d/perl
