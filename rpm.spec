@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.15
-Release:	6
+Release:	7
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
@@ -278,6 +278,15 @@ Patch1044:	%{name}-5.4.12-fix-rpmlua-print.patch
 Patch1045:	%{name}-5.4.12-fix-rpmpython-module-import-init.patch
 Patch1046:	%{name}-5.4.12-truncate-output-buffer-after-use.patch
 Patch1047:	%{name}-5.4.13-perl-bindings-do-not-use-xmalloc.patch
+# proyvind:
+# there's a rpmdbchk tool I wrote a while back, which might help you. although
+# the incidents it's able to deal with is rather limited ATM... it might help
+# you out, if not and you'll be able to solve yer problem, you could take a
+# stab at adding support for fixing your specific problem to the util ;)
+# https://abf.io/openmandriva/rpm/raw/master/rpm-5.4.14-rpmdbchk.patch
+Patch1048:	%{name}-5.4.14-rpmdbchk.patch
+# https://abf.io/openmandriva/rpm/raw/master/rpm-5.4.14-no-assert-abort-with-broken-headers.patch
+Patch1049:	%{name}-5.4.14-no-assert-abort-with-broken-headers.patch
 
 URL:		http://rpm5.org/
 BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
@@ -970,6 +979,8 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch1045 -p1
 %patch1046 -p1
 %patch1047 -p1
+%patch1048 -p1
+%patch1049 -p1
 
 %patch83 -p1
 
@@ -1385,6 +1396,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/bin/dbupgrade.sh
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmdb_checkversion
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmdb_reset
+%attr(755,root,root) %{_rpmlibdir}/bin/rpmdbchk
 
 %files base
 %defattr(644,root,root,755)
