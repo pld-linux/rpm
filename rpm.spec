@@ -1113,9 +1113,10 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/pentium4-linux/macros
 %endif
 
 %ifnarch %{x8664}
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/x86_64-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/ia32e-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/amd64-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/ia32e-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/x32*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/x86_64-linux/macros
 %endif
 
 %ifnarch %{ppc}
@@ -1131,7 +1132,6 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/ppc*series-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/ppc64*-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/s390*-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/sparc*-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/x32*-linux/macros
 
 cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 # first platform file entry can't contain regexps
