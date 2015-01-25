@@ -632,28 +632,33 @@ k6-linux.macros/0           0     0     644     708       `
 #	Multilibs
 %_multilibno		1
 %_multilibpatt		(/%{_lib}|/usr/%{_lib}(|/gconv)|/usr/local/%{_lib}|/usr/X11R6/%{_lib}|/opt/%{_lib})/[^/]*\\.([oa]|la|so[0-9.]*)$
-/668            0           0     0     644     791       `
+/668            0           0     0     644     1014      `
 # Per-platform rpm configuration file.
 
 #==============================================================================
 # ---- per-platform macros.
 #
-%_arch			x86_64
+%_arch			x32
 %_os			linux
-%_gnu			-gnu
-%_target_platform	%{_arch}-%{_target_vendor}-%{_target_os}%{?_gnu}
-%optflags		%{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fPIC}%{!?__common_cflags_with_ssp:-Os -g -mx32 -march=atom -mtune=core-avx-i} %{!?nospecflags:%{?specflags_x32}}
+%_gnu			-gnux32
+%_target_platform	x86_64-%{_target_vendor}-%{_target_os}%{?_gnu}
+%optflags		%{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fPIC}%{!?__common_cflags_with_ssp:-O2 -g} -mtune=generic -march=x86-64 %{!?nospecflags:%{?specflags_x32}}
+
+#==============================================================================
+# ---- x86_64 cross-compilation macros.
+#__cc			x86_64-pld-linux-gcc -mx32
+#__cpp			x86_64-pld-linux-gcc -mx32 -E
+#__cxx			x86_64-pld-linux-g++ -mx32
 
 #==============================================================================
 # ---- configure macros.
 #
-%_lib			lib32
+%_lib			libx32
 
 #---------------------------------------------------------------------
 #	Multilibs
-%_multilibno		1
+%_multilibno		3
 %_multilibpatt		(/%{_lib}|/usr/%{_lib}(|/gconv)|/usr/local/%{_lib}|/usr/X11R6/%{_lib}|/opt/%{_lib})/[^/]*\\.([oa]|la|so[0-9.]*)$
-
 /686            0           0     0     644     725       `
 # Per-platform rpm configuration file.
 
@@ -672,6 +677,6 @@ k6-linux.macros/0           0     0     644     708       `
 
 #---------------------------------------------------------------------
 #	Multilibs
-%_multilibno		2
+%_multilibno		3
 %_multilibpatt		(/%{_lib}|/usr/%{_lib}(|/gconv)|/usr/local/%{_lib}|/usr/X11R6/%{_lib}|/opt/%{_lib})/[^/]*\\.([oa]|la|so[0-9.]*)$
 
