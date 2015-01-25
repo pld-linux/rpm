@@ -9,4 +9,5 @@ cd foo
 ar x ../cpu-os-macros.a
 <perform your changes>
 cd -
-ar cDr cpu-os-macros.a foo/*macros
+# preserve order of files within the archive
+LC_ALL=C /bin/sh -c 'ar cDr cpu-os-macros.a foo/*macros'
