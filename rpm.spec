@@ -171,6 +171,8 @@ Patch81:	%{name}-perl-magic.patch
 Patch82:	%{name}-5.4.15-use-DSA-sig.patch
 Patch83:	%{name}-ignore-missing-macro-files.patch
 Patch84:	x32.patch
+Patch85:	rpm-CVE-2013-6435.patch
+Patch86:	rpm-CVE-2014-8118.patch
 
 # Patches imported from Mandriva
 
@@ -948,6 +950,8 @@ cd -
 %patch81 -p0
 %patch82 -p1
 %patch84 -p1
+%patch85 -p1
+%patch86 -p1
 
 %patch1000 -p1
 %patch1001 -p1
