@@ -374,9 +374,16 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		x8664	amd64 ia32e x86_64
 
 # stabilize new build environment
+%ifnarch x32
 %define		__newcc %{?force_cc}%{!?force_cc:%{_target_cpu}-pld-linux-gcc}
 %define		__newcxx %{?force_cxx}%{!?force_cxx:%{_target_cpu}-pld-linux-g++}
 %define		__newcpp %{?force_cpp}%{!?force_cpp:%{_target_cpu}-pld-linux-gcc -E}
+%else
+# x32 is a very special case
+%define		__newcc %{?force_cc}%{!?force_cc:x86_64-pld-linux-gnux32-gcc}
+%define		__newcxx %{?force_cxx}%{!?force_cxx:x86_64-pld-linux-gnux32-g++}
+%define		__newcpp %{?force_cpp}%{!?force_cpp:x86_64-pld-linux-gnux32-gcc -E}
+%endif
 
 %define		_rpmlibdir /usr/lib/rpm
 %define		_noautocompressdoc	RPM-GPG-KEY
