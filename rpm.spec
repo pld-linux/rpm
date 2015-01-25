@@ -1102,7 +1102,7 @@ for f in platform/*macros; do
 done
 
 # cleanup
-%ifnarch %{ix86}
+%ifnarch %{ix86} %{x8664} x32
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/athlon-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/i386-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/i486-linux/macros
@@ -1112,10 +1112,10 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/pentium3-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/pentium4-linux/macros
 %endif
 
-%ifnarch %{x8664}
+%ifnarch %{x8664} x32
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/amd64-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/ia32e-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/x32*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/x32-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/x86_64-linux/macros
 %endif
 
@@ -1135,40 +1135,51 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/sparc*-linux/macros
 
 cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 # first platform file entry can't contain regexps
+%ifarch x32
+%{_target_cpu}-%{_target_vendor}-linux-gnux32
+%else
 %{_target_cpu}-%{_target_vendor}-linux
+%endif
 
 %ifarch x86_64
 x86_64-[^-]*-[Ll]inux(-gnu)?
 amd64-[^-]*-[Ll]inux(-gnu)?
+x32-[^-]*-[Ll]inux(-gnu(x32)?)?
 %endif
 %ifarch amd64
 amd64-[^-]*-[Ll]inux(-gnu)?
 x86_64-[^-]*-[Ll]inux(-gnu)?
+x32-[^-]*-[Ll]inux(-gnu(x32)?)?
 %endif
 %ifarch ia32e
 ia32e-[^-]*-[Ll]inux(-gnu)?
 x86_64-[^-]*-[Ll]inux(-gnu)?
 %endif
+%ifarch x32
+x32-[^-]*-[Ll]inux(-gnu(x32)?)?
+x86_64-[^-]*-[Ll]inux(-gnu)?
+amd64-[^-]*-[Ll]inux(-gnu)?
+%endif
 
-%ifarch athlon %{x8664}
+%ifarch athlon %{x8664} x32
 athlon-[^-]*-[Ll]inux(-gnu)?
 %endif
-%ifarch pentium4 athlon %{x8664}
+%ifarch pentium4 athlon %{x8664} x32
 pentium4-[^-]*-[Ll]inux(-gnu)?
 %endif
-%ifarch pentium3 pentium4 athlon %{x8664}
+%ifarch pentium3 pentium4 athlon %{x8664} x32
 pentium3-[^-]*-[Ll]inux(-gnu)?
 %endif
-%ifarch i686 pentium3 pentium4 athlon %{x8664}
+%ifarch i686 pentium3 pentium4 athlon %{x8664} x32
 i686-[^-]*-[Ll]inux(-gnu)?
 %endif
-%ifarch i586 i686 pentium3 pentium4 athlon %{x8664}
+%ifarch i586 i686 pentium3 pentium4 athlon %{x8664} x32
 i586-[^-]*-[Ll]inux(-gnu)?
 %endif
-%ifarch i486 i586 i686 pentium3 pentium4 athlon %{x8664}
+%ifarch i486 i586 i686 pentium3 pentium4 athlon %{x8664} x32
 i486-[^-]*-[Ll]inux(-gnu)?
 %endif
-%ifarch %{ix86} %{x8664}
+%ifarch %{ix86} %{x8664} x32
 i386-[^-]*-[Ll]inux(-gnu)?
 %endif
 
@@ -1384,7 +1395,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros.d/pld
 %{_rpmlibdir}/cpuinfo.yaml
 %{_rpmlibdir}/noarch-*
-%ifarch %{ix86}
+%ifarch %{ix86} %{x8664} x32
 %{_rpmlibdir}/i?86*
 %{_rpmlibdir}/pentium*
 %{_rpmlibdir}/athlon*
@@ -1404,10 +1415,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %ifarch sparc sparc64
 %{_rpmlibdir}/sparc*
 %endif
-%ifarch %{x8664}
+%ifarch %{x8664} x32
 %{_rpmlibdir}/amd64*
 %{_rpmlibdir}/ia32e*
 %{_rpmlibdir}/x86_64*
+%{_rpmlibdir}/x32*
 %endif
 
 %attr(755,root,root) %{_rpmlibdir}/hrmib-cache
