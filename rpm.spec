@@ -170,6 +170,7 @@ Patch80:	%{name}-revert-gpg-argv-parsing.patch
 Patch81:	%{name}-perl-magic.patch
 Patch82:	%{name}-5.4.15-use-DSA-sig.patch
 Patch83:	%{name}-ignore-missing-macro-files.patch
+Patch84:	x32.patch
 
 # Patches imported from Mandriva
 
@@ -946,6 +947,7 @@ cd -
 %patch80 -p1
 %patch81 -p0
 %patch82 -p1
+%patch84 -p1
 
 %patch1000 -p1
 %patch1001 -p1
