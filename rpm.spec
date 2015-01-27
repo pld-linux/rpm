@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.15
-Release:	8
+Release:	9
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
@@ -173,6 +173,7 @@ Patch83:	%{name}-ignore-missing-macro-files.patch
 Patch84:	x32.patch
 Patch85:	rpm-CVE-2013-6435.patch
 Patch86:	rpm-CVE-2014-8118.patch
+Patch87:	%{name}-file-output-for-ELF.patch
 
 # Patches imported from Mandriva
 
@@ -952,6 +953,7 @@ cd -
 %patch84 -p1
 %patch85 -p1
 %patch86 -p1
+%patch87 -p1
 
 %patch1000 -p1
 %patch1001 -p1

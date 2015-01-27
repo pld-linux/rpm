@@ -1,0 +1,34 @@
+diff -dur -x '*~' rpm-5.4.15.orig/scripts/brp-strip rpm-5.4.15/scripts/brp-strip
+--- rpm-5.4.15.orig/scripts/brp-strip	2011-09-06 14:53:10.000000000 +0200
++++ rpm-5.4.15/scripts/brp-strip	2015-01-27 11:09:22.000000000 +0100
+@@ -16,6 +16,6 @@
+ for f in `find "$RPM_BUILD_ROOT" -type f \( -perm -0100 -or -perm -0010 -or -perm -0001 \) -exec file {} \; | \
+         grep -v "^${RPM_BUILD_ROOT}/\?usr/lib/debug"  | \
+ 	grep -v ' shared object,' | \
+-	sed -n -e 's/^\(.*\):[ 	]*ELF.*, not stripped/\1/p'`; do
++	sed -n -e 's/^\(.*\):[ 	]*ELF.*, not stripped.*/\1/p'`; do
+ 	$STRIP -g "$f" || :
+ done
+diff -dur -x '*~' rpm-5.4.15.orig/scripts/brp-strip-shared rpm-5.4.15/scripts/brp-strip-shared
+--- rpm-5.4.15.orig/scripts/brp-strip-shared	2012-05-08 05:00:44.000000000 +0200
++++ rpm-5.4.15/scripts/brp-strip-shared	2015-01-27 11:09:41.000000000 +0100
+@@ -21,6 +21,6 @@
+ for f in `find "$RPM_BUILD_ROOT" -type f -a -exec file {} \; | \
+         grep -v "^${RPM_BUILD_ROOT}/\?usr/lib/debug"  | \
+ 	grep ' shared object,' | \
+-	sed -n -e 's/^\(.*\):[ 	]*ELF.*, not stripped/\1/p'`; do
++	sed -n -e 's/^\(.*\):[ 	]*ELF.*, not stripped.*/\1/p'`; do
+ 	$STRIP --strip-unneeded "$f"
+ done
+diff -dur -x '*~' rpm-5.4.15.orig/scripts/find-debuginfo.sh rpm-5.4.15/scripts/find-debuginfo.sh
+--- rpm-5.4.15.orig/scripts/find-debuginfo.sh	2015-01-27 11:10:52.000000000 +0100
++++ rpm-5.4.15/scripts/find-debuginfo.sh	2015-01-27 11:09:54.000000000 +0100
+@@ -194,7 +194,7 @@
+ find "$RPM_BUILD_ROOT" ! -path "${debugdir}/*.debug" -type f \
+      		     \( -perm -0100 -or -perm -0010 -or -perm -0001 \) \
+ 		     -print | LANG=C sort |
+-file -N -f - | sed -n -e 's/^\(.*\):[ 	]*.*ELF.*, not stripped/\1/p' |
++file -N -f - | sed -n -e 's/^\(.*\):[ 	]*.*ELF.*, not stripped.*/\1/p' |
+ xargs --no-run-if-empty stat -c '%h %D_%i %n' |
+ while read nlinks inum f; do
+   [ -n "$EXCLUDE_REGEXP" ] && grep -E -q "$EXCLUDE_REGEXP" <<< "$f" && \
