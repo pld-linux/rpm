@@ -1,0 +1,12 @@
+--- rpm-5.4.15/lib/rpm46compat.h.rpmtdnext	2015-02-02 21:41:55.016116655 +0100
++++ rpm-5.4.15/lib/rpm46compat.h	2015-02-02 21:47:06.407763121 +0100
+@@ -223,6 +223,9 @@ static inline int headerGet_RPMorg(Heade
+ 	rflags &= ~HEADERGET_NOI18NSTRING;
+ 
+     rc = headerGet(h, (HE_t)he, rflags);
++    
++    /* XXX: Hack. headerGet() sets he->ix to 0 whereas rpmtdNext expects it to be -1 initially */
++    he->ix = -1;
+ 
+     return rc;
+ }
