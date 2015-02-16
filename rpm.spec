@@ -176,6 +176,7 @@ Patch86:	rpm-CVE-2014-8118.patch
 Patch87:	%{name}-file-output-for-ELF.patch
 Patch88:	%{name}-rpmtdnext.patch
 Patch89:	disable-header-verification.patch
+Patch90:	%{name}-cppcompat.patch
 
 # Patches imported from Mandriva
 
@@ -958,6 +959,7 @@ cd -
 %patch87 -p1
 %patch88 -p1
 %patch89 -p1
+%patch90 -p1
 
 %patch1000 -p1
 %patch1001 -p1
