@@ -1,0 +1,10 @@
+--- rpm-5.4.15/lib/rpmfc.c.old	2015-02-27 14:41:47.000000000 +0000
++++ rpm-5.4.15/lib/rpmfc.c	2015-02-27 14:59:44.000000000 +0000
+@@ -1153,6 +1153,7 @@ assert(fc->fn != NULL);
+ 	{   fn = strstr(fc->fn[fc->ix], "/usr/lib");
+ 	    if (fn) {
+ 		fn += sizeof("/usr/lib")-1;
++		if (fn[0] == 'x') fn++;
+ 		if ((fn[0] == '3' && fn[1] == '2') || 
+ 			(fn[0] == '6' && fn[1] == '4'))
+ 		    fn += 2;
