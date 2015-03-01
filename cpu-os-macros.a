@@ -632,7 +632,7 @@ k6-linux.macros/0           0     0     644     708       `
 #	Multilibs
 %_multilibno		1
 %_multilibpatt		(/%{_lib}|/usr/%{_lib}(|/gconv)|/usr/local/%{_lib}|/usr/X11R6/%{_lib}|/opt/%{_lib})/[^/]*\\.([oa]|la|so[0-9.]*)$
-/668            0           0     0     644     1014      `
+/668            0           0     0     644     1091      `
 # Per-platform rpm configuration file.
 
 #==============================================================================
@@ -659,6 +659,10 @@ k6-linux.macros/0           0     0     644     708       `
 #	Multilibs
 %_multilibno		3
 %_multilibpatt		(/%{_lib}|/usr/%{_lib}(|/gconv)|/usr/local/%{_lib}|/usr/X11R6/%{_lib}|/opt/%{_lib})/[^/]*\\.([oa]|la|so[0-9.]*)$
+
+# ---- 0x1 - x86, 0x2 - x86_64 (rpm default), 0x4 - x32
+%_prefer_color		0x4
+
 /686            0           0     0     644     725       `
 # Per-platform rpm configuration file.
 
