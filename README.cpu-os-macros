@@ -5,6 +5,7 @@ Unfortunately the format doesn't support paths..
 
 recommended way of making changes and updating archive:
 rm -rf foo
+mkdir foo
 cd foo
 ar x ../cpu-os-macros.a
 <perform your changes>
