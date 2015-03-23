@@ -98,7 +98,7 @@ if gems.length > 0
               pessimistic = "rubygem(%s) < %s\n" % [name, Gem::Version.create(version[3..-1]).bump]
               version = version.gsub(/\!=/, '=>')
             end
-            version = version.gsub(/^/, ' ')
+            version = version.sub(/^/, ' ')
           end
           version = "rubygem(%s)%s\n%s" % [name, version, pessimistic]
         end

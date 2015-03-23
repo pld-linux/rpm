@@ -63,7 +63,7 @@ if ARGV[0] == "build" or ARGV[0] == "install" or ARGV[0] == "spec"
   body = {}
   # I don't know any better.. :/
   header.instance_variables.each do |iv|
-	  body[iv.to_s.gsub(/^@/,'')] = header.instance_variable_get(iv)
+	  body[iv.to_s.sub(/^@/,'')] = header.instance_variable_get(iv)
   end
 
   spec = Gem::Specification.from_yaml(YAML.dump(header))
