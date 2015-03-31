@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.15
-Release:	17
+Release:	18
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
@@ -774,7 +774,7 @@ Summary(pl.UTF-8):	Makra ułatwiające tworzenie pakietów RPM z programami napi
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	python
-Requires:	python-distribute
+Requires:	python-setuptools
 Requires:	python-modules
 
 %description pythonprov
