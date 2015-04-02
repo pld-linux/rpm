@@ -214,3 +214,25 @@ diff -ur rpm-5.4.15/lib/rpmds.c rpm-5.4.15.x32/lib/rpmds.c
  	xx = add(context, ds);
  	(void)rpmdsFree(ds);
  	ds = NULL;
+--- rpm-5.4.15/build/parseSpec.c~	2015-04-02 19:31:50.000000000 +0200
++++ rpm-5.4.15/build/parseSpec.c	2015-04-02 20:19:46.549637451 +0200
+@@ -732,9 +732,19 @@
+ 	 * to use a separate platform tag for these (mdvbz#61746).
+ 	 */
+ 	if(pkg->noarch && !platformNoarch && strcmp(arch, "noarch")) {
++#ifdef RPM_VENDOR_PLD
++	/*
++	 * This is a hack for x32 compatibility, on x32 _target_platform
++	 * does not use _target_cpu, it must use hardcoded x86-64.
++	 * This results in noarch packages using platform x86_64-pld-linux-gnux32
++	 * and being unusable on ix86.
++	 */
++	    platformNoarch = xstrdup("noarch-pld-linux");
++#else
+ 	    addMacro(NULL, "_target_cpu", NULL, "noarch", RMIL_RPMRC);
+ 	    platformNoarch = rpmExpand("%{_target_platform}", NULL);
+ 	    addMacro(NULL, "_target_cpu", NULL, arch, RMIL_RPMRC);
++#endif
+ 	}
+ 	he->tag = RPMTAG_PLATFORM;
+ 	he->t = RPM_STRING_TYPE;
