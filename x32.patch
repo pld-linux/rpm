@@ -217,10 +217,15 @@ diff -ur rpm-5.4.15/lib/rpmds.c rpm-5.4.15.x32/lib/rpmds.c
 diff -ur rpm-5.4.15/build/parseSpec.c rpm-5.4.15-fixed/build/parseSpec.c
 --- rpm-5.4.15/build/parseSpec.c	2015-04-02 20:52:18.192956656 +0200
 +++ rpm-5.4.15-fixed/build/parseSpec.c	2015-04-02 20:49:57.416291008 +0200
-@@ -709,7 +709,17 @@
+@@ -707,10 +708,25 @@
+ 
      /* Check for description in each package and add arch and os */
    {
-     const char *platform = rpmExpand("%{_target_platform}", NULL);
+-    const char *platform = rpmExpand("%{_target_platform}", NULL);
+-    const char *platformNoarch = NULL;
++    const char *platform = NULL;
+     const char *arch = rpmExpand("%{_target_cpu}", NULL);
+     const char *os = rpmExpand("%{_target_os}", NULL);
 +#ifdef RPM_VENDOR_PLD
 +/*
 + * This is a hack for x32 compatibility, on x32 _target_platform
@@ -229,24 +234,14 @@ diff -ur rpm-5.4.15/build/parseSpec.c rpm-5.4.15-fixed/build/parseSpec.c
 + * and being unusable on ix86.
 + */
 +    const char *platformNoarch = xstrdup("noarch-pld-linux");
++    if (strcmp(arch,"noarch"))
++        platform = rpmExpand("%{_target_platform}", NULL);
++    else
++        platform = xstrdup("noarch-pld-linux");
 +#else
-     const char *platformNoarch = NULL;
++    const char *platformNoarch = NULL;
++    platform = rpmExpand("%{_target_platform}", NULL);
 +#endif
-     const char *arch = rpmExpand("%{_target_cpu}", NULL);
-     const char *os = rpmExpand("%{_target_os}", NULL);
  
-@@ -731,12 +741,14 @@
- 	 * If "noarch" subpackages of different arch, we need
- 	 * to use a separate platform tag for these (mdvbz#61746).
- 	 */
-+#ifndef RPM_VENDOR_PLD
- 	if(pkg->noarch && !platformNoarch && strcmp(arch, "noarch")) {
- 	    addMacro(NULL, "_target_cpu", NULL, "noarch", RMIL_RPMRC);
- 	    platformNoarch = rpmExpand("%{_target_platform}", NULL);
- 	    addMacro(NULL, "_target_cpu", NULL, arch, RMIL_RPMRC);
- 	}
-+#endif
- 	he->tag = RPMTAG_PLATFORM;
- 	he->t = RPM_STRING_TYPE;
- 	he->p.str = (pkg->noarch && platformNoarch ? platformNoarch : platform);
- 
+     for (pkg = spec->packages; pkg != NULL; pkg = pkg->next) {
+ 	he->tag = RPMTAG_OS;
