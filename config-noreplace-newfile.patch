@@ -1,0 +1,40 @@
+patch from mailinglist
+http://lists.pld-linux.org/mailman/pipermail/pld-devel-en/2015-May/024380.html
+
+So the problem comes down to user expectations of behavior when the new
+package has a file marked %config(noreplace).
+
+The observed behavior is exactly what I personally expect of RPM (and
+is what has been implemented all this century AFAIK).
+
+If you wish to change the behavior to, say, create foo.rpmnew instead of foo
+when the new package file is marked %config(noreplace), then patch
+lib/rpmfi.c to return FA_ALTNAME instead of FA_CREATE when marked
+%config(noreplace) in lib/rpmfi.c rpmfiDecideFate()
+
+The patch will likely be as simple as
+
+-	return FA_CREATE;
++	return save;
+
+I won't make the change in RPM upstream because I believe it's
+more important to have consistent %config handling than it is to
+preserve unpackaged configuration files on upgrade when the
+new (but not the old) package has file content (which almost never happens).
+
+I can be convinced otherwise if there is a demonstrable consensus that a different
+behavior is needed and necessary.
+
+73 de Jeff
+
+--- rpm-5.4.15/lib/rpmfi.c~	2014-05-05 22:36:07.000000000 +0300
++++ rpm-5.4.15/lib/rpmfi.c	2015-05-29 22:46:43.168874713 +0300
+@@ -687,7 +687,7 @@
+ 			fn);
+ 	    return FA_SKIP;
+ 	} else {
+-	    return FA_CREATE;
++	    return save;
+ 	}
+     }
+ 
