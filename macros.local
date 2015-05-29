@@ -18,4 +18,4 @@
 # A colon separated list of paths where files should *not* be installed.
 # Usually, these are (network) file system mount points.
 # For static /dev not to update perms if upgraded and tmpfs mounted
-#%_netsharedpath /dev/shm:/proc:/dev
+#%_netsharedpath /dev/shm:/proc:/dev:/sys
