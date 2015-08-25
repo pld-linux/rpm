@@ -47,7 +47,6 @@ for path in $stdin.readlines
      abi_provide = true
      ruby_versioned = true
   elsif path.match(specpatt)
-    ruby_versioned = true
     gems.push(path.chomp)
   # this is quite ugly and lame, but the assumption made is that if any files
   # found in any of these directories specific to this ruby version, the
