@@ -178,7 +178,7 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 # cf http://wiki.mandriva.com/en/Development/Packaging/Problems#format_not_a_string_literal_and_no_format_arguments
 %Werror_cflags		-Wformat -Werror=format-security
 
-%_ssp_cflags		-fstack-protector-strong
+%_ssp_cflags		-fstack-protector-strong --param=ssp-buffer-size=4
 %__common_cflags	-O2 -fwrapv -pipe %{Werror_cflags} %{debuginfocflags} %{?_fortify_cflags} %{!?nospecflags:%{?specflags}}
 %__common_cflags_with_ssp	%{__common_cflags} %{?_ssp_cflags}
 
