@@ -1,0 +1,34 @@
+disable fetching sources.
+annoying if you just want to get .spec structure!
+
+it could be parameter to s.parseSpec(), but as prevous code hardcoded, i'll
+just "hardcode" different value here.
+
+http://lists.pld-linux.org/mailman/pipermail/pld-devel-en/2015-November/024529.html
+
+one could play with '__urlgetfile' macro, and just tell it 'OK':
+%__urlgetfile OK
+
+but then ugly "Fetching" messages are still displayed, which maybe even more confusing.
+
+http://comments.gmane.org/gmane.comp.package-management.rpm.user/159
+
+--- rpm-5.4.15/python/rpmts-py.c~	2014-07-28 00:52:21.000000000 +0300
++++ rpm-5.4.15/python/rpmts-py.c	2015-11-04 22:00:33.989058412 +0200
+@@ -1333,13 +1333,15 @@
+     char * passPhrase = "";
+     char *cookie = NULL;
+     int anyarch = 1;
+-    int verify = 1;
++    int verify;
+     int force = 1;
+     char * kwlist[] = {"specfile", NULL};
+ 
+     if (!PyArg_ParseTupleAndKeywords(args, kwds, "s:Parse", kwlist, &specfile))
+ 	return NULL;
+ 
++    verify = rpmExpandNumeric("%{?_py_parsespec_verify}%{?!_py_parsespec_verify:0}");
++
+     if (parseSpec(s->ts, specfile,"/", recursing, passPhrase,
+              cookie, anyarch, force, verify)!=0) {
+              PyErr_SetString(pyrpmError, "can't parse specfile\n");
