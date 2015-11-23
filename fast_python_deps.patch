@@ -1,0 +1,78 @@
+diff -dur -x '*~' -x '*.orig' rpm-5.4.15.orig/lib/rpmfc.c rpm-5.4.15/lib/rpmfc.c
+--- rpm-5.4.15.orig/lib/rpmfc.c	2015-11-23 20:38:44.516459734 +0100
++++ rpm-5.4.15/lib/rpmfc.c	2015-11-23 20:39:56.267070624 +0100
+@@ -604,8 +604,6 @@
+   /* XXX "a /usr/bin/python -t script text executable" */
+   /* XXX "python 2.3 byte-compiled" */
+   { " /usr/bin/python",		RPMFC_PYTHON|RPMFC_INCLUDE },
+-  { "python ",			RPMFC_PYTHON|RPMFC_INCLUDE },
+-  { "Python script",		RPMFC_PYTHON|RPMFC_INCLUDE },
+ 
+   { "libtool library ",		RPMFC_LIBTOOL|RPMFC_INCLUDE },
+   { "pkgconfig ",		RPMFC_PKGCONFIG|RPMFC_INCLUDE },
+@@ -1114,6 +1112,9 @@
+     int i;
+     int xx;
+     int skipping;
++    int l;
++    const char * lastPycDir = NULL;
++    const char * p;
+ 
+     miRE mire;
+     int skipProv = fc->skipProv;
+@@ -1156,8 +1157,25 @@
+ 		if ((fn[0] == '3' && fn[1] == '2') || 
+ 			(fn[0] == '6' && fn[1] == '4'))
+ 		    fn += 2;
+-		if (!strncmp(fn, "/python", sizeof("/python")-1))
+-		    fc->fcolor->vals[fc->ix] |= RPMFC_PYTHON;
++		if (!strncmp(fn, "/python", sizeof("/python")-1)) {
++		    l = strlen(fn);
++		    if (fn[l-4] == '.' && fn[l-3] == 'p' && fn[l-2] == 'y'
++			    && (fn[l-1] == 'c' || fn[l-1] == 'o')) {
++			p = strchr(fn, '/');
++			if (p) {
++			    l = p - fc->fn[fc->ix];
++			    if (!lastPycDir || strncmp(lastPycDir, fc->fn[fc->ix], l)) {
++				/* one pyc/pyo file per python library directory should be enough to get the dependency */
++				fc->fcolor->vals[fc->ix] |= RPMFC_PYTHON;
++				lastPycDir = fc->fn[fc->ix];
++			    }
++			}
++		    }
++		    else if (l > 17 && !strcmp(fn + l - 17, "egg-info/PKG-INFO")) {
++			/* get all PKG-INFO files for egg-info data */
++			fc->fcolor->vals[fc->ix] |= RPMFC_PYTHON;
++		    }
++		}
+ 		else if (!strncmp(fn, "/ruby", sizeof("/ruby")-1)) {
+ 		    fc->fcolor->vals[fc->ix] |= RPMFC_RUBY;
+ 		    if ((strstr(fn, ".gemspec") || strstr(fn, "rbconfig.rb"))) {
+@@ -1184,8 +1202,25 @@
+ 	    fn = strstr(fc->fn[fc->ix], "/usr/share");
+ 	    if (fn) {
+ 		fn += sizeof("/usr/share")-1;
+-		if (!strncmp(fn, "/python", sizeof("/python")-1))
+-		    fc->fcolor->vals[fc->ix] |= RPMFC_PYTHON;
++		if (!strncmp(fn, "/python", sizeof("/python")-1)) {
++		    l = strlen(fn);
++		    if (fn[l-4] == '.' && fn[l-3] == 'p' && fn[l-2] == 'y'
++			    && (fn[l-1] == 'c' || fn[l-1] == 'o')) {
++			p = strchr(fn, '/');
++			if (p) {
++			    l = p - fc->fn[fc->ix];
++			    if (!lastPycDir || strncmp(lastPycDir, fc->fn[fc->ix], l)) {
++				/* one pyc/pyo file per python library directory should be enough to get the dependency */
++				fc->fcolor->vals[fc->ix] |= RPMFC_PYTHON;
++				lastPycDir = fc->fn[fc->ix];
++			    }
++			}
++		    }
++		    else if (l > 17 && !strcmp(fn + l - 17, "egg-info/PKG-INFO")) {
++			/* get all PKG-INFO files for egg-info data */
++			fc->fcolor->vals[fc->ix] |= RPMFC_PYTHON;
++		    }
++		}
+ 		else if (!strncmp(fn, "/ruby", sizeof("/ruby")-1) || !strncmp(fn, "/gems/specifications", sizeof("/gems/specifications")-1)) {
+ 		    fc->fcolor->vals[fc->ix] |= RPMFC_RUBY;
+ 		    if ((strstr(fn, ".gemspec") || strstr(fn, "rbconfig.rb"))) {
