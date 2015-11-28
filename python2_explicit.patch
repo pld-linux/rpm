@@ -1,0 +1,11 @@
+--- rpm-5.4.15/configure.ac~	2015-11-28 13:11:46.816903917 +0100
++++ rpm-5.4.15/configure.ac	2015-11-28 13:14:39.887776863 +0100
+@@ -604,7 +604,7 @@
+ AC_PATH_PROG(__PERL, perl, %{_bindir}/perl, $MYPATH)
+ AC_PATH_PROG(__PGP, pgp, %{_bindir}/pgp, $MYPATH)
+ AC_PATH_PROG(__PHP, php, %{_bindir}/php, $MYPATH)
+-AC_PATH_PROG(__PYTHON, python, %{_bindir}/python, $MYPATH)
++AC_PATH_PROG(__PYTHON, python2, %{_bindir}/python2, $MYPATH)
+ AC_PATH_PROG(__RM, rm, /bin/rm, $MYPATH)
+ AC_PATH_PROG(__RMDIR, rmdir, /bin/rmdir, $MYPATH)
+ AC_PATH_PROG(__RSH, rsh, %{_bindir}/rsh, $MYPATH)
