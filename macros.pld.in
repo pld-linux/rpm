@@ -51,6 +51,7 @@
 %{__spec_install_post_compress_modules}\
 %{__spec_install_post_check_so}\
 %{__spec_install_post_check_tmpfiles}\
+%{__spec_install_post_check_shebangs}\
 %{__spec_install_post_compress_docs}\
 %{__spec_install_post_py_hardlink}\
 %{__spec_install_post_perl_clean}\

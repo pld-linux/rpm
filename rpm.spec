@@ -677,7 +677,7 @@ Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для
 Group:		Applications/File
 Requires(pretrans):	coreutils
 Requires(pretrans):	findutils
-Requires:	%{name}-build-macros >= 1.699
+Requires:	%{name}-build-macros >= 1.712
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
