@@ -1,4 +1,5 @@
-diff -dur rpm-5.4.15.orig/rpmio/macro.c rpm-5.4.15/rpmio/macro.c
+http://lists.pld-linux.org/mailman/pipermail/pld-devel-en/2015-November/thread.html#24537
+
 --- rpm-5.4.15.orig/rpmio/macro.c	2015-11-28 20:47:15.000000000 +0100
 +++ rpm-5.4.15/rpmio/macro.c	2015-11-28 20:51:05.634724202 +0100
 @@ -706,7 +706,9 @@
@@ -20,4 +21,3 @@ diff -dur rpm-5.4.15.orig/rpmio/macro.c rpm-5.4.15/rpmio/macro.c
  	*(mb->t--) = '\0';
  	mb->nb++;
      }
-Only in rpm-5.4.15/rpmio: macro.c~
