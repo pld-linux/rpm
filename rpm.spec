@@ -130,7 +130,7 @@ Patch34:	%{name}-libmagic-locale.patch
 Patch35:	%{name}-namespace-compare.patch
 Patch36:	%{name}-popt-coreutils.patch
 Patch37:	%{name}-postun-nofail.patch
-Patch38:	%{name}-silence-RPM_CHAR_TYPE.patch
+
 Patch39:	%{name}-fix-missing-types-in-headers.patch
 Patch40:	%{name}-fix--p-interpreter-and-empty-script.patch
 Patch41:	%{name}-db_buffer_small.patch
@@ -920,7 +920,7 @@ cd -
 %patch35 -p1
 %patch36 -p1
 %patch37 -p1
-%patch38 -p1
+
 %patch39 -p1
 %patch40 -p1
 %{?with_db61:%patch41 -p1}
@@ -931,7 +931,7 @@ cd -
 %patch46 -p1
 %patch47 -p1
 %patch48 -p1
-%patch49 -p1
+#%patch49 -p1 # REDIFF
 %patch50 -p1
 %patch51 -p1
 %patch52 -p0

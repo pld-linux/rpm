@@ -4,8 +4,8 @@
  	- glen: do not skip %clean from spec file
  	- robert: install rpmdeps and debugedit to pkglibdir as on HEAD
  	- jbj: fix: python ts.hdrFromFdno(fdno) segfault.
---- rpm-5.4.10/lib/order.c~	2012-07-06 17:39:16.000000000 +0200
-+++ rpm-5.4.10/lib/order.c	2012-09-03 23:09:03.706487979 +0200
+--- rpm-5.4.16/lib/order.c~	2016-03-16 00:20:19.000000000 +0200
++++ rpm-5.4.16/lib/order.c	2016-03-16 00:20:57.082078559 +0200
 @@ -1631,7 +1631,7 @@
  	    (void) orgrpmAddRelation(ts, al, p, requires);
  	}
@@ -24,12 +24,12 @@
  
  #ifdef	NOTYET
  	/* Order by requiring parent directories as prerequisites. */
-@@ -2175,7 +2175,7 @@
+@@ -2182,7 +2182,7 @@
  		const char * dp;
  		rpmlogLvl msglvl = (anaconda || (rpmtsDFlags(ts) & RPMDEPS_FLAG_DEPLOOPS))
  			? RPMLOG_WARNING : RPMLOG_ERR;
--#if defined(RPM_VENDOR_MANDRIVA) /* loop-detection-optional-loglevel */
-+#if defined(RPM_VENDOR_MANDRIVA) || defined(RPM_VENDOR_PLD) /* loop-detection-optional-loglevel */
+-#if defined(RPM_VENDOR_MANDRIVA) || defined(RPM_VENDOR_OE) /* loop-detection-optional-loglevel */
++#if defined(RPM_VENDOR_MANDRIVA) || defined(RPM_VENDOR_OE) || defined(RPM_VENDOR_PLD) /* loop-detection-optional-loglevel */
  		// Report loops as debug-level message by default (7 = RPMLOG_DEBUG), overridable
  		msglvl = rpmExpandNumeric("%{?_loop_detection_loglevel}%{?!_loop_detection_loglevel:7}");
  #endif

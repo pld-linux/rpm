@@ -1,12 +1,12 @@
---- rpm-5.4.10/lib/rpmfc.c~	2012-12-01 21:13:39.985319735 +0100
-+++ rpm-5.4.10/lib/rpmfc.c	2013-01-24 12:21:26.379891972 +0100
-@@ -1142,7 +1142,7 @@
+--- rpm-5.4.16/lib/rpmfc.c~	2016-03-16 00:28:12.000000000 +0200
++++ rpm-5.4.16/lib/rpmfc.c	2016-03-16 00:29:01.267117051 +0200
+@@ -1139,7 +1139,7 @@
      /* Generate package and per-file dependencies. */
      for (fc->ix = 0; fc->fn[fc->ix] != NULL; fc->ix++) {
  
 -	/* XXX Insure that /usr/lib{,64}/python files are marked RPMFC_PYTHON */
 +	/* XXX Insure that /usr/{share,lib{,64}}/python files are marked RPMFC_PYTHON */
- 	/* XXX HACK: classification by path is intrinsically stupid. */
+ 	/* XXX HACK: classification by path is intrinsically non-portable. */
  	{   fn = strstr(fc->fn[fc->ix], "/usr/lib");
  	    if (fn) {
 @@ -1166,6 +1166,13 @@

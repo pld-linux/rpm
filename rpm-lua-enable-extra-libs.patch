@@ -1,5 +1,5 @@
---- rpm-5.4.10/lua/linit.c~	2012-10-03 14:46:45.303935753 +0200
-+++ rpm-5.4.10/lua/linit.c	2012-10-03 14:48:19.503932430 +0200
+--- rpm-5.4.16/lua/linit.c~	2016-03-16 00:26:03.000000000 +0200
++++ rpm-5.4.16/lua/linit.c	2016-03-16 00:26:42.479945350 +0200
 @@ -13,6 +13,8 @@
  #include "lualib.h"
  #include "lauxlib.h"
@@ -9,10 +9,10 @@
  
  static const luaL_Reg lualibs[] = {
    {"", luaopen_base},
-@@ -26,6 +26,9 @@
-   {LUA_STRLIBNAME, luaopen_string},
-   {LUA_MATHLIBNAME, luaopen_math},
-   {LUA_DBLIBNAME, luaopen_debug},
+@@ -55,6 +55,9 @@
+ #if defined(LUA_COMPAT_BITLIB)
+   {LUA_BITLIBNAME, luaopen_bit32},
+ #endif
 +  {"rex_posix", luaopen_rex_posix},
 +  {"rex_pcre", luaopen_rex_pcre},
 +  {"posix", luaopen_posix},

@@ -1,5 +1,5 @@
---- rpm-5.4.10/macros/macros.in~	2012-11-17 00:38:23.000000000 +0200
-+++ rpm-5.4.10/macros/macros.in	2012-11-17 00:38:55.871401871 +0200
+--- rpm-5.4.16/macros/macros.in~	2016-03-16 00:27:05.000000000 +0200
++++ rpm-5.4.16/macros/macros.in	2016-03-16 00:27:42.513047506 +0200
 @@ -561,9 +561,10 @@
  
  # Horowitz Key Protocol server configuration
@@ -12,7 +12,7 @@
  %_hkp_keyserver_query   %{_hkp_keyserver}/pks/lookup?op=get&search=
  
 
-@@ -670,18 +670,7 @@
+@@ -698,23 +698,7 @@
  # XXX	Note: that there cannot be any whitespace within the string "p>q",
  #	and that both p and q are package names (i.e. no version/release).
  #
@@ -24,8 +24,13 @@
 -	glibc>nscd			\
 -	filesystem>setup
 -
+-%_dependency_whiteout_OWL31		\
+-	dhcp-server>dhcp		\
+-	which>bash			\
+-
+-
 -%_dependency_whiteout			\
--	%{?_dependency_whiteout_caos_core} \
+-	%{?_dependency_whiteout_OWL31} \
 -	%{?_dependency_whiteout_system} \
 -	%{nil}
 +%_dependency_whiteout	%{nil}
