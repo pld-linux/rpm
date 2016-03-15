@@ -1,10 +1,10 @@
---- rpm-5.4.15/macros/macros.rpmbuild.in~	2014-11-15 19:23:32.000000000 +0100
-+++ rpm-5.4.15/macros/macros.rpmbuild.in	2014-11-15 19:24:15.545692422 +0100
+--- rpm-5.4.16/macros/macros.rpmbuild.in~	2016-03-16 00:35:33.000000000 +0200
++++ rpm-5.4.16/macros/macros.rpmbuild.in	2016-03-16 00:36:00.832131027 +0200
 @@ -282,7 +282,7 @@
  # 	ECDSA/SHA384	(using NIST P-384)
  # 	ECDSA/SHA512	(using NIST P-521)
  #
--%_build_sign	RSA/SHA1
+-%_build_sign	ECDSA/SHA256
 +%_build_sign	DSA
  
  #

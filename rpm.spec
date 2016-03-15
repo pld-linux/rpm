@@ -967,7 +967,7 @@ cd -
 %patch88 -p1
 %patch89 -p1
 %patch90 -p1
-%patch91 -p1
+#%patch91 -p1 REDIFF
 
 %patch1000 -p1
 %patch1001 -p1
