@@ -167,7 +167,7 @@ Patch75:	%{name}-double_check_file_deps.patch
 Patch77:	%{name}-lua-expat.patch
 Patch78:	%{name}-double_check_unpackaged_subdirs.patch
 Patch79:	%{name}-rpmspec.patch
-Patch80:	%{name}-revert-gpg-argv-parsing.patch
+
 Patch81:	%{name}-perl-magic.patch
 Patch82:	%{name}-5.4.15-use-DSA-sig.patch
 Patch83:	%{name}-ignore-missing-macro-files.patch
@@ -951,13 +951,13 @@ cd -
 %patch67 -p1
 %patch70 -p1
 %patch71 -p1
-%patch72 -p1
+#%patch72 -p1 REDIFF
 %patch74 -p1
 %patch75 -p1
 %patch77 -p0
 %patch78 -p1
 %patch79 -p1
-%patch80 -p1
+
 %patch81 -p0
 %patch82 -p1
 %patch84 -p1
