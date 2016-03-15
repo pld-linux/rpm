@@ -157,7 +157,7 @@ Patch62:	%{name}-DB_CONFIG.patch
 Patch63:	%{name}-pythoneggs.patch
 Patch64:	%{name}-fix-compress-doc.patch
 Patch65:	%{name}-parseSpec-skip-empty-tags.patch
-Patch66:	%{name}-payload-use-hashed-inode.patch
+
 Patch67:	%{name}-repackage-dont-force-max-compression.patch
 Patch70:	python-%{name}sense-missingok.patch
 Patch71:	%{name}-changelog-encoding.patch
@@ -941,13 +941,13 @@ cd -
 %patch56 -p1
 %{!?with_db61:%patch57 -p1}
 %patch58 -p1
-%patch60 -p1
+#%patch60 -p1 REDIFF
 %patch61 -p1
 %patch62 -p1
 %patch63 -p1
 %patch64 -p1
 %patch65 -p1
-%patch66 -p1
+
 %patch67 -p1
 %patch70 -p1
 %patch71 -p1
