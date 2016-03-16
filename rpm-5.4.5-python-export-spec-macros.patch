@@ -1,5 +1,5 @@
---- rpm-5.4.5/python/spec-py.c.py_macros~	2012-03-01 22:55:19.592995392 +0100
-+++ rpm-5.4.5/python/spec-py.c	2012-03-01 22:56:02.081016570 +0100
+--- rpm-5.4.16/python/spec-py.c~	2016-03-16 17:22:00.000000000 +0200
++++ rpm-5.4.16/python/spec-py.c	2016-03-16 17:24:05.660232743 +0200
 @@ -6,6 +6,8 @@
  
  #include <rpmiotypes.h>
@@ -9,12 +9,12 @@
  #include "spec-py.h"
  
  /** \ingroup python
-@@ -146,6 +148,50 @@ spec_get_sources(specObject *s)
- 
+@@ -257,6 +257,50 @@
+     return makeHeader(spec->sourceHeader);
  }
  
 +static PyObject *
-+spec_get_macros(specObject *s)
++spec_get_macros(specObject *s, void *closure)
 +    /*@*/
 +{
 +    MacroContext mc;
@@ -57,14 +57,14 @@
 +
 +}
 +
- /**
-  */
-  /*@unchecked@*/ /*@observer@*/
-@@ -161,6 +207,7 @@ static PyMethodDef spec_Spec_methods[] =
-     {"check",   (PyCFunction) spec_get_check, METH_VARARGS,  NULL },
-     {"clean",   (PyCFunction) spec_get_clean, METH_VARARGS,  NULL },
-     {"buildRoot",   (PyCFunction) spec_get_buildroot, METH_VARARGS,  NULL },
-+    {"macros",   (PyCFunction) spec_get_macros, METH_VARARGS,  NULL },
+ static char spec_doc[] = "RPM Spec file object";
+ 
+ static PyGetSetDef spec_getseters[] = {
+@@ -269,6 +313,7 @@
+     {"buildRoot",   (getter) spec_get_buildroot, NULL, NULL },
+     {"packages", (getter) spec_get_packages, NULL, NULL },
+     {"sourceHeader", (getter) spec_get_source_header, NULL, NULL },
++    {"macros",   (getter) spec_get_macros, NULL,  NULL },
      {NULL}  /* Sentinel */
  };
- /*@=fullinitblock@*/
+ 
