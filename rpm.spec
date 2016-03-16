@@ -256,8 +256,6 @@ Patch1031:	%{name}-5.4.9-mire-fix-strings-lacking-null-terminator.patch
 Patch1032:	%{name}-5.4.9-rpmpython-fix-input.patch
 # status: ready
 Patch1033:	%{name}-5.4.7-no-seqid_init-on-rdonly-database.patch
-# status: probably ready for merging
-Patch1034:	%{name}-5.4.9-avoid-double-slash-in-path-for-dirname-filetrigger-matching.patch
 # status: probably ready to merge, discuss on rpm-devel first
 Patch1035:	%{name}-5.4.9-fix-verify-segfault.patch
 # Due to rpmdav/neon being written in a different fashion than other rpmio clients,
@@ -1000,7 +998,7 @@ cd -
 %patch1031 -p1
 %patch1032 -p1
 %patch1033 -p1
-%patch1034 -p1
+
 %patch1035 -p1
 %patch1037 -p1
 %patch1038 -p1
