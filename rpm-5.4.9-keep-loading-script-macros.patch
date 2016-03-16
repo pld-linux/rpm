@@ -1,11 +1,6 @@
---- rpm-5.4.9/macros/macros.in.script_macros~	2012-05-07 00:36:51.000000000 +0200
-+++ rpm-5.4.9/macros/macros.in	2012-05-15 01:39:37.382649841 +0200
-@@ -993,63 +993,63 @@ $_arbitrary_tags_tests	Foo:Bar
- # XXX	%{load:...}, then loading will CEASE at that point in the file.
- #==============================================================================
- # ---- SELinux configuration macros.
--#%%{load:%{_usrlibrpm}/macros.d/selinux}
-+%{load:%{_usrlibrpm}/macros.d/selinux}
+--- rpm-5.4.16/macros/macros.in~	2016-03-16 17:20:06.000000000 +0200
++++ rpm-5.4.16/macros/macros.in	2016-03-16 17:21:36.845860496 +0200
+@@ -1050,15 +1050,15 @@
  
  #==============================================================================
  # ---- rpmbuild macros.
@@ -24,7 +19,7 @@
  
  #------------------------------------------------------------------------
  # haskell(...) configuration.
- #%%{load:%{_usrlibrpm}/macros.d/haskell}
+@@ -1066,43 +1066,43 @@
  
  #------------------------------------------------------------------------
  # perl(...) configuration
@@ -74,7 +69,7 @@
  #------------------------------------------------------------------------
  # typelib(...) configuration.
 -#%%{load:%{_usrlibrpm}/macros.d/typelib}
-+#%%{load:%{_usrlibrpm}/macros.d/typelib}
++%{load:%{_usrlibrpm}/macros.d/typelib}
  
  # \endverbatim
  #*/

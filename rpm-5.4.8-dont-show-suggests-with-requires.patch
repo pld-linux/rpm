@@ -1,5 +1,5 @@
---- rpm-5.4.8/rpmdb/hdrfmt.c.suggests~	2012-04-25 17:58:22.721144146 +0200
-+++ rpm-5.4.8/rpmdb/hdrfmt.c	2012-04-25 18:33:32.293704707 +0200
+--- rpm-5.4.16/rpmdb/hdrfmt.c~	2016-03-16 17:16:18.000000000 +0200
++++ rpm-5.4.16/rpmdb/hdrfmt.c	2016-03-16 17:17:06.301851778 +0200
 @@ -1607,6 +1607,38 @@ static const char * bfstring(unsigned in
  #endif
  
@@ -39,14 +39,15 @@
   * Retrieve install prefixes.
   * @param h		header
   * @retval *he		tag container
-@@ -5201,6 +5233,8 @@ static struct headerSprintfExtension_s _
- 	{ .fmtFunction = digestFormat } },
-     { HEADER_EXT_FORMAT, "fflags",
+@@ -5583,6 +5583,8 @@
  	{ .fmtFunction = fflagsFormat } },
+     { HEADER_EXT_FORMAT, "fstate",
+ 	{ .fmtFunction = fstateFormat } },
 +    { HEADER_EXT_FORMAT, "hint",
 +	{ .fmtFunction = hintFormat } },
      { HEADER_EXT_FORMAT, "iconv",
  	{ .fmtFunction = iconvFormat } },
+     { HEADER_EXT_FORMAT, "json",
      { HEADER_EXT_FORMAT, "json",
 --- rpm-5.4.8/rpmpopt.in.suggests~	2012-04-25 17:58:22.439141788 +0200
 +++ rpm-5.4.8/rpmpopt.in	2012-04-25 18:33:32.295704719 +0200

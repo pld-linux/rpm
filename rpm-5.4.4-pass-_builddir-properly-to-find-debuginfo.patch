@@ -13,13 +13,13 @@ macros.rpmbuild fixed with rpm-fix-___build_pre-macro.patch
 #   %{?buildroot:RPM_BUILD_ROOT=\"%{u2p:%{buildroot}}\"\
 #   export RPM_BUILD_ROOT}\
 #   %{?_javaclasspath:CLASSPATH=\"%{_javaclasspath}\"\
---- rpm-5.4.4/scripts/find-debuginfo.sh.builddir~	2011-12-20 15:36:31.962846125 +0100
-+++ rpm-5.4.4/scripts/find-debuginfo.sh	2011-12-20 15:36:49.492836503 +0100
-@@ -32,7 +32,6 @@ strip_r=false
+--- rpm-5.4.16/scripts/find-debuginfo.sh~	2016-03-16 17:17:59.000000000 +0200
++++ rpm-5.4.16/scripts/find-debuginfo.sh	2016-03-16 17:18:58.327652453 +0200
+@@ -28,7 +28,6 @@
  # Barf on missing build IDs.
  strict=false
  
--RPM_BUILD_DIR="`pwd`"
+-RPM_BUILD_DIR="$(pwd)"
  # canon RPM_BUILD_DIR, the DW_AT_comp_dir in ELF objects is real a real path
  # and debugedit will ignore them as they are out of build dir.
  RPM_BUILD_DIR=$(readlink -f "$RPM_BUILD_DIR")

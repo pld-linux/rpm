@@ -971,7 +971,7 @@ cd -
 
 %patch1000 -p1
 %patch1001 -p1
-%patch1002 -p1
+#%patch1002 -p1 REDIFF
 %patch1003 -p1
 %patch1004 -p1
 %patch1005 -p1
@@ -979,7 +979,7 @@ cd -
 %patch1007 -p1
 %patch1008 -p1
 %patch1009 -p1
-%patch1010 -p1
+#%patch1010 -p1 REDIFF
 %patch1011 -p1
 %patch1012 -p1
 %patch1013 -p1
