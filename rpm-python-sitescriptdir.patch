@@ -9,17 +9,3 @@
  	/* XXX HACK: classification by path is intrinsically non-portable. */
  	{   fn = strstr(fc->fn[fc->ix], "/usr/lib");
  	    if (fn) {
-@@ -1166,6 +1166,13 @@
- 			fc->fcolor->vals[fc->ix] & RPMFC_LIBRARY)
- 		    fc->fcolor->vals[fc->ix] |= (RPMFC_MODULE|RPMFC_SCRIPT);
- 	    }
-+	    fn = strstr(fc->fn[fc->ix], "/usr/share");
-+	    if (fn) {
-+		fn += sizeof("/usr/share")-1;
-+		if (!strncmp(fn, "/python", sizeof("/python")-1))
-+		    fc->fcolor->vals[fc->ix] |= RPMFC_PYTHON;
-+		}
-+	    }
- 	}
- 
-        /* XXX ugly quick & dirty integration of haskell() dependencies */

@@ -43,7 +43,7 @@
      *.pc)
 -	[ -n "$oneshot" ] && echo "$oneshot"; oneshot=""
 -	# Query the dependencies of the package.
--	DIR=`dirname ${filename}`
+-	DIR=$(dirname ${filename})
 -	PKG_CONFIG_PATH="$DIR:$DIR/../../share/pkgconfig"
 -	export PKG_CONFIG_PATH
 -	$pkgconfig --print-requires "$filename" 2> /dev/null | while read n r v ; do
@@ -58,7 +58,7 @@
 +	if [[ "$(dirname ${filename})" =~ pkgconfig ]]; then
 +	    [ -n "$oneshot" ] && echo "$oneshot"; oneshot=""
 +	    # Query the dependencies of the package.
-+	    DIR=`dirname ${filename}`
++	    DIR=$(dirname ${filename})
 +	    PKG_CONFIG_PATH="$DIR:$DIR/../../share/pkgconfig"
 +	    export PKG_CONFIG_PATH
 +	    $pkgconfig --print-requires --print-requires-private "$filename" 2> /dev/null | while read n r v ; do

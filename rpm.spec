@@ -926,7 +926,7 @@ cd -
 %patch46 -p1
 %patch47 -p1
 %patch48 -p1
-#%patch49 -p1 # REDIFF
+%patch49 -p1
 %patch50 -p1
 %patch51 -p1
 %patch52 -p0
@@ -936,7 +936,7 @@ cd -
 %patch56 -p1
 %{!?with_db61:%patch57 -p1}
 %patch58 -p1
-#%patch60 -p1 REDIFF
+%patch60 -p1
 %patch61 -p1
 %patch62 -p1
 %patch63 -p1
@@ -946,7 +946,7 @@ cd -
 %patch67 -p1
 %patch70 -p1
 %patch71 -p1
-#%patch72 -p1 REDIFF
+%patch72 -p1
 %patch74 -p1
 %patch75 -p1
 %patch77 -p0
@@ -962,11 +962,11 @@ cd -
 %patch88 -p1
 %patch89 -p1
 %patch90 -p1
-#%patch91 -p1 REDIFF
+%patch91 -p1
 
 %patch1000 -p1
 %patch1001 -p1
-#%patch1002 -p1 REDIFF
+%patch1002 -p1
 %patch1003 -p1
 %patch1004 -p1
 %patch1005 -p1
@@ -974,7 +974,7 @@ cd -
 %patch1007 -p1
 %patch1008 -p1
 %patch1009 -p1
-#%patch1010 -p1 REDIFF
+%patch1010 -p1
 %patch1011 -p1
 %patch1012 -p1
 %patch1013 -p1

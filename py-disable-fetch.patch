@@ -13,9 +13,9 @@ but then ugly "Fetching" messages are still displayed, which maybe even more con
 
 http://comments.gmane.org/gmane.comp.package-management.rpm.user/159
 
---- rpm-5.4.15/python/rpmts-py.c~	2014-07-28 00:52:21.000000000 +0300
-+++ rpm-5.4.15/python/rpmts-py.c	2015-11-04 22:00:33.989058412 +0200
-@@ -1333,13 +1333,15 @@
+--- rpm-5.4.16/python/spec-py.c~	2014-10-06 22:44:50.000000000 +0300
++++ rpm-5.4.16/python/spec-py.c	2016-03-16 18:26:35.334750440 +0200
+@@ -280,7 +280,7 @@
      char * passPhrase = "";
      char *cookie = NULL;
      int anyarch = 1;
@@ -24,11 +24,12 @@ http://comments.gmane.org/gmane.comp.package-management.rpm.user/159
      int force = 1;
      char * kwlist[] = {"specfile", NULL};
  
-     if (!PyArg_ParseTupleAndKeywords(args, kwds, "s:Parse", kwlist, &specfile))
+@@ -288,6 +288,8 @@
+ 				     &specfile))
  	return NULL;
  
 +    verify = rpmExpandNumeric("%{?_py_parsespec_verify}%{?!_py_parsespec_verify:0}");
 +
-     if (parseSpec(s->ts, specfile,"/", recursing, passPhrase,
-              cookie, anyarch, force, verify)!=0) {
-              PyErr_SetString(pyrpmError, "can't parse specfile\n");
+     ts = rpmtsCreate();
+     if (parseSpec(ts, specfile, "/", recursing, passPhrase,
+              	  cookie, anyarch, force, verify) == 0)
