@@ -17,19 +17,3 @@
  		}
  		/* XXX: lacking better, more generic classifier... */
  		else if (!strncmp(fn, "/gstreamer", sizeof("/gstreamer")-1) &&
-@@ -1177,6 +1181,15 @@
- 		fn += sizeof("/usr/share")-1;
- 		if (!strncmp(fn, "/python", sizeof("/python")-1))
- 		    fc->fcolor->vals[fc->ix] |= RPMFC_PYTHON;
-+		else if (!strncmp(fn, "/ruby", sizeof("/ruby")-1) || !strncmp(fn, "/gems/specifications", sizeof("/gems/specifications")-1)) {
-+		    fc->fcolor->vals[fc->ix] |= RPMFC_RUBY;
-+		    if ((strstr(fn, ".gemspec") || strstr(fn, "rbconfig.rb"))) {
-+			miRE mire = mireNew(RPMMIRE_REGEX, RPMTAG_FILEPATHS);
-+			if (!mireRegcomp(mire, ".*/(specifications/.*\\.gemspec|rbconfig\\.rb)$"))
-+			    if (mireRegexec(mire, fc->fn[fc->ix], (size_t) 0) >= 0)
-+				fc->fcolor->vals[fc->ix] |= RPMFC_MODULE;
-+			mire = mireFree(mire);
-+		    }
- 		}
- 	    }
- 	}

@@ -1,5 +1,5 @@
---- rpm-5.4.10/rpmio/rpmdav.c.dl_error~	2012-07-06 17:39:19.000000000 +0200
-+++ rpm-5.4.10/rpmio/rpmdav.c	2012-07-11 19:49:00.504968365 +0200
+--- rpm-5.4.16/rpmio/rpmdav.c~	2016-03-16 18:36:34.000000000 +0200
++++ rpm-5.4.16/rpmio/rpmdav.c	2016-03-16 18:40:59.883064408 +0200
 @@ -1722,6 +1722,7 @@ int davReq(FD_t ctrl, const char * httpC
  {
      urlinfo u;
@@ -8,18 +8,15 @@
  
  assert(ctrl != NULL);
      u = (urlinfo) ctrl->u;
-@@ -1789,10 +1790,24 @@ assert(ctrl->req != NULL);
+@@ -2032,10 +2032,21 @@
      }
  
  /* XXX somewhere else instead? */
--if (_dav_debug) {
+-if (_dav_debug) {		/* HACK: tools/wget.c */
 -    const ne_status *status = ne_get_status((ne_request *)ctrl->req);
 -fprintf(stderr, "HTTP request sent, awaiting response... %d %s\n", status->code, status->reason_phrase);
 -}
 +    status = ne_get_status((ne_request *)ctrl->req);
-+    if (_dav_debug)
-+	fprintf(stderr, "HTTP request sent, awaiting response... %d %s\n", status->code, status->reason_phrase);
-+
 +    switch (status->code) {
 +	case 200:
 +	case 201:			/* 201 Created. */

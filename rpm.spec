@@ -985,7 +985,7 @@ cd -
 %patch1021 -p1
 %patch1022 -p1
 %patch1024 -p1
-#%patch1027 -p1 REDIFF
+%patch1027 -p1
 %patch1028 -p1
 %patch1029 -p1
 %patch1030 -p1
@@ -994,7 +994,7 @@ cd -
 %patch1033 -p1
 
 %patch1035 -p1
-#%patch1037 -p1 REDIFF
+%patch1037 -p1
 %patch1038 -p1
 %patch1039 -p1
 %patch1040 -p1
@@ -1009,7 +1009,7 @@ cd -
 %patch1049 -p1
 
 %patch83 -p1
-#%patch92 -p1 REDIFF after other rpmfc patches
+%patch92 -p1
 %patch93 -p1
 %patch94 -p1
 
