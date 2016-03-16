@@ -1063,7 +1063,9 @@ sed -i \
 	--enable-shared \
 	--enable-static \
 	%{!?with_apidocs:--without-apidocs} \
+	--with-usecrypto=beecrypt \
 	--with-beecrypt=external \
+	--with-tomcrypt=no \
 	--with-bugreport="http://bugs.pld-linux.org/" \
 	--with-bzip2=external \
 	--with-db=external \
