@@ -26,7 +26,7 @@ Date:   Sun May 5 21:56:02 2013 +0100
 -    if ((he->tag & 0x40000000)
 -     && (he->t == RPM_STRING_TYPE || he->t == RPM_STRING_ARRAY_TYPE))
 +    if ((he_s.tag & 0x40000000)
-+     && (he-s->t == RPM_STRING_TYPE || he_s.t == RPM_STRING_ARRAY_TYPE))
++     && (he_s->t == RPM_STRING_TYPE || he_s.t == RPM_STRING_ARRAY_TYPE))
  	return;
  
      /* XXX Make 0x3fffffff disappear for now. Signature? */
