@@ -283,8 +283,6 @@ Patch1040:	%{name}-5.4.9-support-signatures-and-digest-disablers.patch
 Patch1041:	%{name}-5.4.9-disable-l10ndir.patch
 # status: ready for merge
 Patch1042:	%{name}-5.4.9-fix-rpm_qa-pattern.patch
-# warning: introduces memory leak
-Patch1043:	%{name}-5.4.12-copy-Value-string.patch
 Patch1044:	%{name}-5.4.12-fix-rpmlua-print.patch
 Patch1045:	%{name}-5.4.12-fix-rpmpython-module-import-init.patch
 Patch1046:	%{name}-5.4.12-truncate-output-buffer-after-use.patch
@@ -1000,14 +998,14 @@ cd -
 %patch1033 -p1
 
 %patch1035 -p1
-%patch1037 -p1
+#%patch1037 -p1 REDIFF
 %patch1038 -p1
 %patch1039 -p1
 %patch1040 -p1
-# don't delete, may be usefull if jbj descides to enable this again
+# don't delete, may be useful if jbj decides to enable this again
 #%patch1041 -p1
 %patch1042 -p1
-%patch1043 -p1
+
 %patch1044 -p1
 %patch1045 -p1
 %patch1046 -p1
