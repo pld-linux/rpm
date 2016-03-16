@@ -992,8 +992,8 @@ cd -
 %patch1021 -p1
 %patch1022 -p1
 %patch1024 -p1
-%patch1026 -p1
-%patch1027 -p1
+#%patch1026 -p1 REDIFF
+#%patch1027 -p1 REDIFF
 %patch1028 -p1
 %patch1029 -p1
 %patch1030 -p1
