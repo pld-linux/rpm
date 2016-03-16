@@ -15,12 +15,3 @@
  HKPDEBUG((stderr, "--> %s(%p,%s)\n", __FUNCTION__, hkp, keyname));
  
      /* Do a lazy lookup before validating. */
-@@ -1065,7 +1073,7 @@ SPEW((stderr, "\t%s\n", pgpHexStr(hkp->p
-     }
- 
- exit:
--    if ((hkp->uidx >= 0 && hkp->uidx < hkp->npkts) && hkp->tvalid > 0) {
-+    if ((hkp->uvalidx >= 0 && hkp->uvalidx < hkp->npkts) && hkp->tvalid > 0) {
- 	char user[256+1];
- 	size_t nuser;
- 	pgpPktUid * u;
