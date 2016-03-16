@@ -1012,7 +1012,7 @@ cd -
 %patch1049 -p1
 
 %patch83 -p1
-%patch92 -p1
+#%patch92 -p1 REDIFF after other rpmfc patches
 %patch93 -p1
 %patch94 -p1
 
