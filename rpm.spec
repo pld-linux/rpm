@@ -285,7 +285,7 @@ Patch1041:	%{name}-5.4.9-disable-l10ndir.patch
 Patch1042:	%{name}-5.4.9-fix-rpm_qa-pattern.patch
 Patch1044:	%{name}-5.4.12-fix-rpmlua-print.patch
 Patch1045:	%{name}-5.4.12-fix-rpmpython-module-import-init.patch
-Patch1046:	%{name}-5.4.12-truncate-output-buffer-after-use.patch
+
 Patch1047:	%{name}-5.4.13-perl-bindings-do-not-use-xmalloc.patch
 # proyvind:
 # there's a rpmdbchk tool I wrote a while back, which might help you. although
@@ -1006,9 +1006,9 @@ cd -
 #%patch1041 -p1
 %patch1042 -p1
 
-%patch1044 -p1
+#%patch1044 -p1 RECHECK
 %patch1045 -p1
-%patch1046 -p1
+
 %patch1047 -p1
 %patch1048 -p1
 %patch1049 -p1
