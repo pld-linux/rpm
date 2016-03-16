@@ -239,8 +239,6 @@ Patch1021:	%{name}-5.4.7-kmod-dependencies.patch
 Patch1022:	%{name}-5.4.5-skip-dependencies-for-character-devices.patch
 # status: probably okay to merge
 Patch1024:	%{name}-5.4.5-rpmfc-apply-python-coloring-from-magic.patch
-# status: probably okay to merge
-Patch1026:	%{name}-5.4.10-dont-try-generate-rpmfc-dependencies-from-doc-files.patch
 # status: ready
 Patch1027:	%{name}-5.4.7-fix-generation-of-ruby-abi-provides.patch
 # crash reproducable with 'rpm -qa --triggers'
@@ -987,7 +985,6 @@ cd -
 %patch1021 -p1
 %patch1022 -p1
 %patch1024 -p1
-#%patch1026 -p1 REDIFF
 #%patch1027 -p1 REDIFF
 %patch1028 -p1
 %patch1029 -p1
