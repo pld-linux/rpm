@@ -286,7 +286,6 @@ Patch1042:	%{name}-5.4.9-fix-rpm_qa-pattern.patch
 Patch1044:	%{name}-5.4.12-fix-rpmlua-print.patch
 Patch1045:	%{name}-5.4.12-fix-rpmpython-module-import-init.patch
 
-Patch1047:	%{name}-5.4.13-perl-bindings-do-not-use-xmalloc.patch
 # proyvind:
 # there's a rpmdbchk tool I wrote a while back, which might help you. although
 # the incidents it's able to deal with is rather limited ATM... it might help
@@ -1009,7 +1008,6 @@ cd -
 #%patch1044 -p1 RECHECK
 %patch1045 -p1
 
-%patch1047 -p1
 %patch1048 -p1
 %patch1049 -p1
 
