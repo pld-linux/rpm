@@ -57,7 +57,7 @@ Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
 # http://rpm5.org/files/rpm/rpm-5.4/SNAPSHOT/rpm-5.4.16-0.20160315.src.rpm
 Source0:	%{name}-%{version}.tar.gz
-# Source0-md5:	f96fa6d4d418b2ec6df8ba4b7cb2985a
+# Source0-md5:	d995d6ca11180ada2b7599e83fbaf43b
 # See README.cpu-os-macros how to update cpu-os-macros.a
 Source100:	cpu-os-macros.a
 Source101:	README.cpu-os-macros
@@ -1069,6 +1069,7 @@ sed -i \
 	--with-bugreport="http://bugs.pld-linux.org/" \
 	--with-bzip2=external \
 	--with-db=external \
+	--with-acl=external \
 	--with-dbapi=db \
 	--with-file=external \
 	--with-keyutils=%{?with_keyutils:external}%{!?with_keyutils:no} \
