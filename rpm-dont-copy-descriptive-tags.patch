@@ -1,3 +1,6 @@
+http://rpm5.org/cvs/chngview?cn=18690
+
+
 --- rpm-5.4.9/build/parseDescription.c.mdvbz62979~	2012-05-03 20:39:51.000000000 +0200
 +++ rpm-5.4.9/build/parseDescription.c	2012-05-15 01:55:31.332318888 +0200
 @@ -92,6 +92,7 @@ int parseDescription(Spec spec)

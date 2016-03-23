@@ -57,7 +57,7 @@ Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
 # http://rpm5.org/files/rpm/rpm-5.4/SNAPSHOT/rpm-5.4.16-0.20160315.src.rpm
 Source0:	%{name}-%{version}.tar.gz
-# Source0-md5:	d995d6ca11180ada2b7599e83fbaf43b
+# Source0-md5:	ccdc3bae1cf32b4cdfbd7ec187f0c8a6
 # See README.cpu-os-macros how to update cpu-os-macros.a
 Source100:	cpu-os-macros.a
 Source101:	README.cpu-os-macros
@@ -887,7 +887,7 @@ cd -
 %patch11 -p1
 %endif
 %patch12 -p1
-%patch13 -p1
+#%patch13 -p1 NEEDS UPDATING
 %patch14 -p0
 %patch15 -p1
 %patch16 -p1
@@ -1330,7 +1330,7 @@ mv $RPM_BUILD_ROOT{%{_rpmlibdir},%{_bindir}}/rpm2cpio
 %py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
 %py_comp $RPM_BUILD_ROOT%{py_sitedir}
 
-%{__rm} $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,a,py}
+%{__rm} $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,py}
 %endif
 
 # wrong location, not used anyway
