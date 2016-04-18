@@ -55,7 +55,7 @@ Release:	0.1
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
-# http://rpm5.org/files/rpm/rpm-5.4/SNAPSHOT/rpm-5.4.16-0.20160315.src.rpm
+# http://rpm5.org/files/rpm/rpm-5.4/SNAPSHOT/rpm-5.4.16-0.20160321.src.rpm
 Source0:	%{name}-%{version}.tar.gz
 # Source0-md5:	ccdc3bae1cf32b4cdfbd7ec187f0c8a6
 # See README.cpu-os-macros how to update cpu-os-macros.a
