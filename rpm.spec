@@ -945,7 +945,7 @@ cd -
 %patch71 -p1
 %patch74 -p1
 %patch75 -p1
-%patch77 -p0
+%patch77 -p1
 %patch78 -p1
 %patch79 -p1
 
