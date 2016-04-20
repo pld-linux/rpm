@@ -290,8 +290,6 @@ Patch1045:	%{name}-5.4.12-fix-rpmpython-module-import-init.patch
 # stab at adding support for fixing your specific problem to the util ;)
 # https://abf.io/openmandriva/rpm/raw/master/rpm-5.4.14-rpmdbchk.patch
 Patch1048:	%{name}-5.4.14-rpmdbchk.patch
-# https://abf.io/openmandriva/rpm/raw/master/rpm-5.4.14-no-assert-abort-with-broken-headers.patch
-Patch1049:	%{name}-5.4.14-no-assert-abort-with-broken-headers.patch
 
 Patch1050:	python-libx32.patch
 
@@ -1004,7 +1002,6 @@ cd -
 %patch1045 -p1
 
 %patch1048 -p1
-%patch1049 -p1
 
 %patch83 -p1
 %patch92 -p1
