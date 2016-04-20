@@ -161,7 +161,6 @@ Patch65:	%{name}-parseSpec-skip-empty-tags.patch
 Patch67:	%{name}-repackage-dont-force-max-compression.patch
 Patch70:	python-%{name}sense-missingok.patch
 Patch71:	%{name}-changelog-encoding.patch
-Patch72:	%{name}-preserve-tag-type.patch
 Patch74:	%{name}-fix-internal-lua-build.patch
 Patch75:	%{name}-double_check_file_deps.patch
 Patch77:	%{name}-lua-expat.patch
@@ -944,7 +943,6 @@ cd -
 %patch67 -p1
 %patch70 -p1
 %patch71 -p1
-%patch72 -p1
 %patch74 -p1
 %patch75 -p1
 %patch77 -p0
