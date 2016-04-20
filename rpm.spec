@@ -883,7 +883,7 @@ cd -
 %patch11 -p1
 %endif
 %patch12 -p1
-#%patch13 -p1 NEEDS UPDATING
+#%patch13 -p1 POSSIBLY SOLVED, decrypt what jbj said on SUPPORT_I18NSTRING_TYPE in ml
 %patch14 -p0
 %patch15 -p1
 %patch16 -p1
@@ -997,7 +997,7 @@ cd -
 #%patch1041 -p1
 %patch1042 -p1
 
-#%patch1044 -p1 RECHECK
+#%patch1044 -p1 SOLVED? need testcase to test
 %patch1045 -p1
 
 %patch1048 -p1
