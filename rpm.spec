@@ -1253,8 +1253,10 @@ EOF
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-{prov,req}.pl
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-{provides,requires}.perl
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
+%if %{without system_lua}
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/lib/liblua.a
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/lib/liblua.la
+%endif
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/mono-find-provides
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/mono-find-requires
 
