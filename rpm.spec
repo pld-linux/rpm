@@ -180,7 +180,6 @@ Patch90:	%{name}-cppcompat.patch
 Patch91:	py-disable-fetch.patch
 Patch92:	fast_python_deps.patch
 Patch93:	python2_explicit.patch
-Patch94:	do_not_write_before_macro_buffer.patch
 
 # Patches imported from Mandriva
 
@@ -1006,7 +1005,6 @@ cd -
 %patch83 -p1
 %patch92 -p1
 %patch93 -p1
-%patch94 -p1
 
 %patch1050 -p1
 
