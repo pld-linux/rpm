@@ -1062,7 +1062,7 @@ sed -i \
 	--with-bugreport="http://bugs.pld-linux.org/" \
 	--with-bzip2=external \
 	--with-db=external \
-	--with-acl=external \
+	--without-acl \
 	--with-dbapi=db \
 	--with-file=external \
 	--with-keyutils=%{?with_keyutils:external}%{!?with_keyutils:no} \
