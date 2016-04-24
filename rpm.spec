@@ -197,7 +197,7 @@ BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
 BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.2-17
-%{!?with_internal_db:BuildRequires:	db-devel >= %{reqdb_ver}}
+%{!?with_internal_db:BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_ver}}
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gettext-devel >= 0.11.4-2
 BuildRequires:	keyutils-devel
