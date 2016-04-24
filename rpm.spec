@@ -1253,7 +1253,7 @@ EOF
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-{prov,req}.pl
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-{provides,requires}.perl
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
-%if %{without system_lua}
+%if %{without system_lua} && 0
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/lib/liblua.a
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/lib/liblua.la
 %endif
@@ -1516,7 +1516,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/bin/semodule
 %attr(755,root,root) %{_rpmlibdir}/bin/spooktool
 %endif
-%if %{without system_lua}
+%if %{without system_lua} && 0
 %attr(755,root,root) %{_rpmlibdir}/bin/lua
 %attr(755,root,root) %{_rpmlibdir}/bin/luac
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmlua
