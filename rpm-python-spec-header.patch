@@ -1,0 +1,56 @@
+diff -ur rpm-5.4.15/python/spec-py.c rpm-5.4.15-pyspec/python/spec-py.c
+--- rpm-5.4.15/python/spec-py.c	2016-05-11 21:38:24.970137574 +0200
++++ rpm-5.4.15-pyspec/python/spec-py.c	2016-05-10 22:47:04.748529737 +0200
+@@ -8,6 +8,9 @@
+ #include <rpmio.h>
+ #define _MACRO_INTERNAL
+ #include <rpmmacro.h>
++#define	_RPMTAG_INTERNAL
++#include "header_internal.h"	/* XXX HEADERFLAG_ALLOCATED */
++#include "header-py.h"
+ #include "spec-py.h"
+ 
+ /** \ingroup python
+@@ -192,6 +195,34 @@
+ 
+ }
+ 
++static PyObject *
++spec_get_headers(specObject *s)
++    /*@*/
++{
++    PyObject *headerList;
++    Spec spec;
++    Package package;
++    Header header;
++
++    headerList = PyList_New(0);
++    if (!headerList) {
++        return NULL;
++    }
++    spec = specFromSpec(s);
++    if ( spec != NULL) {
++        package = spec->packages;
++
++         while (package != NULL) {
++            header = package->header;
++	    if (header != NULL)
++                PyList_Append(headerList, (PyObject *) hdr_Wrap(header));
++            package = package->next;
++        } 
++    }
++
++    return PyList_AsTuple(headerList);
++}
++
+ /**
+  */
+  /*@unchecked@*/ /*@observer@*/
+@@ -208,6 +239,7 @@
+     {"clean",   (PyCFunction) spec_get_clean, METH_VARARGS,  NULL },
+     {"buildRoot",   (PyCFunction) spec_get_buildroot, METH_VARARGS,  NULL },
+     {"macros",   (PyCFunction) spec_get_macros, METH_VARARGS,  NULL },
++    {"headers",   (PyCFunction) spec_get_headers, METH_VARARGS,  NULL },
+     {NULL}  /* Sentinel */
+ };
+ /*@=fullinitblock@*/

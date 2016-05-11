@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.15
-Release:	32
+Release:	33
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
@@ -181,6 +181,7 @@ Patch91:	py-disable-fetch.patch
 Patch92:	fast_python_deps.patch
 Patch93:	python2_explicit.patch
 Patch94:	do_not_write_before_macro_buffer.patch
+Patch95:	rpm-python-spec-header.patch
 
 # Patches imported from Mandriva
 
@@ -1020,6 +1021,7 @@ cd -
 %patch92 -p1
 %patch93 -p1
 %patch94 -p1
+%patch95 -p1
 
 %patch1050 -p1
 
