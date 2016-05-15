@@ -112,7 +112,6 @@ Patch15:	%{name}-debuginfo.patch
 Patch16:	vendor-pld.patch
 Patch17:	%{name}-old-fileconflicts-behaviour.patch
 Patch18:	%{name}-javadeps.patch
-Patch19:	%{name}-truncate-cvslog.patch
 Patch20:	%{name}-libtool-deps.patch
 Patch21:	%{name}-mimetype.patch
 Patch22:	%{name}-sparc64.patch
@@ -889,7 +888,6 @@ cd -
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
-%patch19 -p1
 %patch20 -p1
 %patch21 -p1
 %ifarch sparc64
