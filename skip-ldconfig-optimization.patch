@@ -1,0 +1,74 @@
+http://lists.pld-linux.org/mailman/pipermail/pld-devel-en/2016-May/024910.html
+
+patch from jbj answer:
+http://lists.pld-linux.org/mailman/pipermail/pld-devel-en/2016-May/024913.html
+
+On May 31, 2016, at 2:52 AM, Elan Ruusamäe wrote:
+
+> On 31.05.2016 09:45, Elan Ruusamäe wrote:
+>> [root@57c8cccdc671 bin]# poldek -u procps 
+> oh, and it's 100% reproducible:
+>
+
+Yes. And it has been discussed many times over the last 15y,
+several times on this list.
+
+Short answer:
+	Disable the mechanism with attached patch to lib/psm.c
+		- OR --
+	Don't use
+		%scriptlet -p /sbin/ldconfig
+	in packages that are known to invoke an executable that depends on
+	a new library.
+
+Longer answer:
+	Libraries often have scriptlets like this:
+		%post -p /sbin/ldconfig
+		%postun -p /sbin/ldconfig
+	(or the equivalent within a scriptlet body).
+
+	On upgrade, with install before erase, this results in 2 executions of /sbin/ldconfig.
+
+	One of those invocations is redundant when a library is being replaced, the
+	install %post is sufficient to make the library avaialble for loading.
+
+	The redundant invocation of /sbin/ldconfig  was deemed a performance flaw @redhat,
+	where I was asked to implement the current optimization.
+
+	So the RPM optimization detects when /sbin/ldconfig has just been run, and skips the next
+		%scriptlet -p /sbin/ldconfig
+	(when written exactly like that) if /sbin/ldconfig has been executed.
+
+	Issues are only seen when a scriptlet contains an executable that needs
+	a changed API: this is usually a very rare occurrence
+
+	There are other flaws with the optimization when dependency loops break the sorted order
+	(and/or --noorder is used). , and the fix of running /sbin/ldconfig manually is rather simple
+	(even if the problem is obscure).
+
+	There is another flaw (as in your report), when the very last package
+	has a pending skipped /sbin/ldconfig invocation.
+
+	The fix of running /sbin/ldconfig manually is rather simple
+	(even if the problem is obscure).
+
+hth
+
+73 de Jeff
+===================================================================
+RCS file: /v/rpm/cvs/rpm/lib/psm.c,v
+retrieving revision 2.399.2.20
+diff -p -u -w -r2.399.2.20 psm.c
+--- ./lib/psm.c	11 May 2015 21:10:16 -0000	2.399.2.20
++++ ./lib/psm.c	31 May 2016 15:19:20 -0000
+@@ -800,7 +800,7 @@ static rpmRC runEmbeddedScript(rpmpsm ps
+ static int ldconfig_done = 0;
+ 
+ /*@unchecked@*/ /*@observer@*/ /*@null@*/
+-static const char * ldconfig_path = "/sbin/ldconfig";
++static const char * ldconfig_path = NULL;
+ 
+ /**
+  * Run scriptlet with args.
+
+
