@@ -8,6 +8,22 @@
 require 'optparse'
 require 'rubygems'
 
+# Write the .gemspec specification (in Ruby)
+def writespec(spec)
+	file_name = spec.full_name.untaint + '.gemspec'
+	File.open(file_name, "w") do |file|
+		file.puts spec.to_ruby_for_cache
+	end
+	print "Wrote: %s\n" % file_name
+end
+
+# make gemspec self-contained
+if ARGV[0] == "spec-dump"
+	spec = eval(File.read(ARGV[1]))
+	writespec(spec)
+	exit(0)
+end
+
 if ARGV[0] == "build" or ARGV[0] == "install" or ARGV[0] == "spec"
   require 'yaml'
   require 'zlib'
@@ -69,12 +85,7 @@ if ARGV[0] == "build" or ARGV[0] == "install" or ARGV[0] == "spec"
   spec = Gem::Specification.from_yaml(YAML.dump(header))
 
   if ARGV[0] == "spec"
-    # Write the .gemspec specification (in Ruby)
-    file_name = spec.full_name.untaint + '.gemspec'
-    File.open(file_name, "w") do |file|
-      file.puts spec.to_ruby_for_cache
-    end
-    print "Wrote: %s\n" % file_name
+    writespec(spec)
     exit(0)
   end
 
