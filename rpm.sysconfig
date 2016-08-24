@@ -26,9 +26,3 @@ RPM_USERDEL=yes
 #   for newly installed packages),
 # - by %systemd_trigger (upgrade) disobeying systemd presets.
 RPM_ENABLE_SYSTEMD_SERVICE=yes
-
-# Run update-mime-database with(out) fdatasync(): this causes really
-# long and quiet delay on every invocation.
-# https://bugs.freedesktop.org/show_bug.cgi?id=70366
-# https://bugzilla.redhat.com/show_bug.cgi?id=1052173
-PKGSYSTEM_ENABLE_FSYNC=0
