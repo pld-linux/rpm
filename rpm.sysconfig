@@ -11,16 +11,17 @@ RPM_USERDEL=yes
 # Should automatic restarts from rpm upgrades be skipped?
 # You can also disable this per service, if service supports it from
 # /etc/sysconfig/SERVICE
+# This is NOT used by %systemd_service_{restart,reload} nor %systemd_post
+# (which issues try-restart unless package itself contains NORESTART).
 #RPM_SKIP_AUTO_RESTART=yes
-
-# Should package upgrades enable SysV service?
-# You don't want to disable this unless you're planning to fully
-# migrate to systemd or want serviceless system.
-RPM_ENABLE_SYSV_SERVICE=yes
 
 # Should package upgrades enable systemd service?
 # This means migrating init scripts from SysV to systemd.
 # If you disable this, systemd units will not be enabled for
 # upgraded services. Newly installed packages will still have
 # systemd services enabled.
+# This is used:
+# - if set to "no" while upgrading from systemd-units < 1:187-3
+#   sets default.preset to "disable *" (one-time configuration),
+# - by %systemd_trigger disobeying systemd presets,
 RPM_ENABLE_SYSTEMD_SERVICE=yes
