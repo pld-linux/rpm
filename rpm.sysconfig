@@ -11,8 +11,11 @@ RPM_USERDEL=yes
 # Should automatic restarts from rpm upgrades be skipped?
 # You can also disable this per service, if service supports it from
 # /etc/sysconfig/SERVICE
-# This is NOT used by %systemd_service_{restart,reload} nor %systemd_post
-# (which issues try-restart unless package itself contains NORESTART).
+# This is NOT used by %systemd_service_{restart,reload}. %systemd_post
+# issues try-restart unless package itself contains NORESTART or
+# %service macro before exists (maps value below to NORESTART). I.e.
+# %systemd_post honours this setting only after %service, while
+# %service-less packages would try-restart anyway.
 #RPM_SKIP_AUTO_RESTART=yes
 
 # Should package upgrades enable systemd service?
