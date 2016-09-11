@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.15
-Release:	37
+Release:	36
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
@@ -76,7 +76,7 @@ Source13:	%{name}.sysconfig
 Source14:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source15:	banner.sh
-Source16:	ftp://ftp.pld-linux.org/dists/3.0/PLD-3.0-Th-GPG-key.asc
+Source16:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source16-md5:	23914bb49fafe7153cee87126d966461
 Source17:	%{name}-mimetypedeps
 Source18:	macros.local
