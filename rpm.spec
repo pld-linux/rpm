@@ -80,8 +80,8 @@ Source12:	%{name}-user_group.sh
 Source13:	%{name}.sysconfig
 # http://svn.pld-linux.org/banner.sh/
 Source15:	banner.sh
-Source16:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
-# Source16-md5:	08b29584dd349aac9caa7610131a0a88
+Source16:	ftp://ftp.pld-linux.org/dists/3.0/PLD-3.0-Th-GPG-key.asc
+# Source16-md5:	23914bb49fafe7153cee87126d966461
 Source17:	%{name}-mimetypedeps
 Source18:	macros.local
 Source19:	%{name}.noautocompressdoc
