@@ -1233,7 +1233,7 @@ rm -f $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,a,py}
 %{__rm} $RPM_BUILD_ROOT%{perl_archlib}/perllocal.pod
 %{__rm} $RPM_BUILD_ROOT%{perl_vendorarch}/RPM.pm
 %{__rm} $RPM_BUILD_ROOT%{perl_vendorarch}/auto/RPM/.packlist
-%{__rm} $RPM_BUILD_ROOT%{perl_vendorarch}/auto/RPM/RPM.bs
+%{__rm} -f $RPM_BUILD_ROOT%{perl_vendorarch}/auto/RPM/RPM.bs
 %{__rm} $RPM_BUILD_ROOT%{perl_vendorarch}/auto/RPM/RPM.so
 %{__rm} $RPM_BUILD_ROOT%{_mandir}/man3/RPM.3pm
 %{__rm} $RPM_BUILD_ROOT%{_mandir}/{,ja,pl}/man8/rpm{cache,graph}.8
