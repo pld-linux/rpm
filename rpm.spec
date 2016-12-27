@@ -60,7 +60,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.5
-Release:	70
+Release:	71
 License:	LGPL
 Group:		Base
 Source0:	%{name}-%{version}.tar.gz
@@ -192,6 +192,7 @@ Patch105:	%{name}-am.patch
 Patch106:	%{name}-automake_1.12.patch
 Patch107:	%{name}-debugedit-dwarf4.patch
 Patch108:	%{name}-changelog_order_check_nonfatal.patch
+Patch109:	notrans.patch
 URL:		http://rpm5.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1.4
@@ -833,6 +834,7 @@ install %{SOURCE13} scripts/perl.prov
 %patch106 -p1
 %patch107 -p1
 %patch108 -p1
+%patch109 -p1
 
 mv -f po/{sr,sr@Latn}.po
 rm -rf sqlite zlib popt
