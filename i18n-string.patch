@@ -1,0 +1,11 @@
+--- rpm-5.4.17/system.h~	2017-01-10 18:47:02.000000000 +0200
++++ rpm-5.4.17/system.h	2017-01-10 20:46:05.575589766 +0200
+@@ -783,7 +783,7 @@
+ /**
+  * Eliminate RPM_I18NSTRING_TYPE.
+  */
+-#undef	SUPPORT_I18NSTRING_TYPE
++#define SUPPORT_I18NSTRING_TYPE 1
+ 
+ /**
+  * Eliminate signature/digest disablers.
