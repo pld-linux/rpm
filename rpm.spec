@@ -51,7 +51,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.17
-Release:	0.5
+Release:	0.6
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.17-0.20160512.src.rpm
@@ -1116,6 +1116,10 @@ install %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key
 %{__make} -j1 install \
 	pkgconfigdir=%{_pkgconfigdir} \
 	DESTDIR=$RPM_BUILD_ROOT
+
+%{__rm} -r $RPM_BUILD_ROOT%{_localedir}/ht
+%{__rm} -r $RPM_BUILD_ROOT%{_localedir}/no
+%{__rm} -r $RPM_BUILD_ROOT%{_localedir}/pt_PT
 
 # install platform macros
 for f in platform/*macros; do
