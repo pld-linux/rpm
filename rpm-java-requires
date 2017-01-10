@@ -16,8 +16,22 @@ export PATH="/sbin:/usr/sbin:/bin:/usr/bin"
 # xsltproc for eclipse feature.xml
 : ${xsltproc=/usr/bin/xsltproc}
 
+# "%define java_min_classdataversion 51.0" in spec to minimum version to be 51.0
+: ${MIN_CLASSDATAVERSION=}
+
 # save $- state, to enable in functions
 debug=$-
+
+javaclassversionfilter() {
+	if [ "$MIN_CLASSDATAVERSION" ]; then
+		set -- $* "$MIN_CLASSDATAVERSION"
+	fi
+
+	local v
+	for v in $*; do
+		echo "java(ClassDataVersion) >= $v"
+	done | sort -V | tail -n 1
+}
 
 javaclassversion() {
 	set -$debug
@@ -33,10 +47,7 @@ javaclassversion() {
 		return 1
 	fi
 
-	local v
-	for v in $classver; do
-		echo "java(ClassDataVersion) >= $v"
-	done
+	javaclassversionfilter $classver
 	return 0
 }
 
