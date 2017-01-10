@@ -882,6 +882,7 @@ cd -
 %patch11 -p1
 %endif
 %patch12 -p1
+# http://lists.pld-linux.org/mailman/pipermail/pld-devel-en/2016-March/024760.html
 #%patch13 -p1 POSSIBLY SOLVED, decrypt what jbj said on SUPPORT_I18NSTRING_TYPE in ml
 %patch14 -p0
 %patch15 -p1
