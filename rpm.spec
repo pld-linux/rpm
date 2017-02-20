@@ -13,6 +13,7 @@
 %bcond_without	selinux		# build without selinux support
 %bcond_without	suggest_tags	# build without Suggest tag (bootstrapping)
 %bcond_with	db61		# use DB 6.1 instead of 5.2
+%bcond_with	db62		# use DB 6.2 instead of 5.2
 %bcond_with	neon		# build with HTTP/WebDAV support (neon library)
 %bcond_with	sqlite		# build with SQLite support
 %bcond_with	system_lua	# use system lua
@@ -29,14 +30,20 @@
 %endif
 
 # versions of required libraries
+%if %{with db62}
+%define		reqdb_pkg	db6.2
+%define		reqdb_ver	6.2
+%define		reqdb_pkgver	6.2.23
+%else
 %if %{with db61}
 %define		reqdb_pkg	db6.1
 %define		reqdb_ver	6.1
-%define		reqdb_pkgver	6.1.19
+%define		reqdb_pkgver	6.1.26
 %else
 %define		reqdb_pkg	db5.2
 %define		reqdb_ver	5.2
 %define		reqdb_pkgver	5.2.36.0-4
+%endif
 %endif
 %define		reqpopt_ver	1.15
 %define		beecrypt_ver	2:4.2.0
@@ -148,7 +155,7 @@ Patch53:	%{name}-lua-enable-extra-libs.patch
 Patch54:	%{name}-fix-filedigests-verify.patch
 Patch55:	%{name}-disable-hmac-verify.patch
 Patch56:	%{name}-macros.patch
-Patch57:	%{name}-db5.2.patch
+
 Patch58:	%{name}-preserve-iterator.patch
 Patch60:	%{name}-python-sitescriptdir.patch
 Patch61:	%{name}-clean-docdir.patch
@@ -928,7 +935,7 @@ cd -
 %patch54 -p1
 %patch55 -p1
 %patch56 -p1
-%{!?with_db61:%patch57 -p1}
+
 %patch58 -p1
 %patch60 -p1
 %patch61 -p1
@@ -1015,7 +1022,7 @@ install %{SOURCE11} scripts/perl.prov.in
 cp -p %{SOURCE30} scripts/rubygems.rb
 cp -p %{SOURCE31} scripts/gem_helper.rb
 
-rm scripts/find-php*
+%{__rm} scripts/find-php*
 
 %{__mv} -f scripts/perl.req{,.in}
 
@@ -1028,6 +1035,12 @@ install %{SOURCE28} tools/rpmdb_reset.c
 for extlib in beecrypt neon %{?with_system_pcre:pcre} popt libtpm; do
 	[ -d $extlib ] && %{__rm} -r $extlib
 done
+
+%if %{without db62}
+%{__sed} -e 's/^DBXY=db62$/DBXY=db%{reqdb_ver}/' \
+	 -e 's/db-6\.2/db-%{reqdb_ver}/' \
+	 -e 's/db_sql-6\.2/db_sql-%{reqdb_ver}/' -i configure.ac
+%endif
 
 %build
 %{__libtoolize}
