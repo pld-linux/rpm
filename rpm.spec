@@ -125,6 +125,7 @@ Patch22:	%{name}-sparc64.patch
 Patch23:	%{name}-gendiff.patch
 Patch24:	openmp.patch
 Patch25:	%{name}-URPM-build-fix.patch
+Patch26:	%{name}-semanage.patch
 Patch27:	%{name}-helperEVR-noassert.patch
 Patch28:	%{name}-unglobal.patch
 Patch29:	%{name}-builddir-readlink.patch
@@ -905,6 +906,7 @@ cd -
 %patch23 -p1
 %patch24 -p1
 %patch25 -p1
+%patch26 -p1
 %patch27 -p1
 %patch28 -p1
 %patch29 -p1
