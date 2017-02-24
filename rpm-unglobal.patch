@@ -1,9 +1,11 @@
 --- rpm-4.5/rpmio/macro.c.org	2009-08-08 15:42:25.574860247 +0200
 +++ rpm-4.5/rpmio/macro.c	2009-08-08 15:47:20.495455961 +0200
-@@ -807,6 +807,41 @@
+@@ -807,6 +807,43 @@
      return se;
  }
  
++void delMacroAll(MacroContext mc, const char * n);
++
 +/**
 + * Parse (and execute) macro undefinition.
 + * @param mc		macro context

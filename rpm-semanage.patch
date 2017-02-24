@@ -1,29 +1,11 @@
---- rpm-5.4.15/rpmio/macro.c.orig	2017-02-20 18:33:02.615449768 +0100
-+++ rpm-5.4.15/rpmio/macro.c	2017-02-20 19:38:27.348738287 +0100
-@@ -102,7 +102,7 @@
- #include "debug.h"
+--- rpm-5.4.17/rpmio/macro.c.orig	2016-04-10 02:18:38.000000000 +0200
++++ rpm-5.4.17/rpmio/macro.c	2017-02-25 00:03:03.071277546 +0100
+@@ -111,7 +111,7 @@
+ #endif
  
  /*@unchecked@*/
--#if defined(WITH_AUGEAS) || defined(WITH_FICL) || defined(WITH_GPSEE) || defined(WITH_NIX) || defined(WITH_PERLEMBED) || defined(WITH_PYTHONEMBED) || defined(WITH_RUBYEMBED) || defined(WITH_SQLITE) || defined(WITH_SQUIRREL) || defined(WITH_TCL)
-+#if defined(WITH_AUGEAS) || defined(WITH_FICL) || defined(WITH_GPSEE) || defined(WITH_NIX) || defined(WITH_PERLEMBED) || defined(WITH_PYTHONEMBED) || defined(WITH_RUBYEMBED) || defined(WITH_SQLITE) || defined(WITH_SQUIRREL) || defined(WITH_TCL) || defined(WITH_SEMANAGE)
+-#if defined(WITH_AUGEAS) || defined(WITH_FICL) || defined(WITH_MOZJS) || defined(WITH_NIX) || defined(WITH_PERLEMBED) || defined(WITH_PYTHONEMBED) || defined(WITH_RUBYEMBED) || defined(WITH_SQLITE) || defined(WITH_SQUIRREL) || defined(WITH_TCL)
++#if defined(WITH_AUGEAS) || defined(WITH_FICL) || defined(WITH_MOZJS) || defined(WITH_NIX) || defined(WITH_PERLEMBED) || defined(WITH_PYTHONEMBED) || defined(WITH_RUBYEMBED) || defined(WITH_SQLITE) || defined(WITH_SQUIRREL) || defined(WITH_TCL) || defined(WITH_SEMANAGE)
  static int _globalI = 0x80000000;
  #endif
  
-@@ -866,6 +866,8 @@
-     return se;
- }
- 
-+void delMacroAll(MacroContext mc, const char * n);
-+
- /**
-  * Parse (and execute) macro undefinition.
-  * @param mc		macro context
-@@ -1643,7 +1645,7 @@
-  * @retval *avp		invocation args
-  * @return		script string
-  */
--#if defined(WITH_AUGEAS) || defined(WITH_FICL) || defined(WITH_GPSEE) || defined(WITH_JNIEMBED) || defined(WITH_PERLEMBED) || defined(WITH_PYTHONEMBED) || defined(WITH_RUBYEMBED) || defined(WITH_MRUBY_EMBED) || defined(WITH_SQLITE) || defined(WITH_SQUIRREL) || defined(WITH_TCL)
-+#if defined(WITH_AUGEAS) || defined(WITH_FICL) || defined(WITH_GPSEE) || defined(WITH_JNIEMBED) || defined(WITH_PERLEMBED) || defined(WITH_PYTHONEMBED) || defined(WITH_RUBYEMBED) || defined(WITH_MRUBY_EMBED) || defined(WITH_SQLITE) || defined(WITH_SQUIRREL) || defined(WITH_TCL) || defined(WITH_SEMANAGE)
- static char _FIXME_embedded_interpreter_eval_returned_null[] =
-     "FIXME: embedded interpreter eval returned null.";
- static char * parseEmbedded(const char * s, size_t nb, char *** avp)
