@@ -1,13 +1,13 @@
---- rpm-5.4.10/rpmdb/DB_CONFIG.in~	2012-02-18 20:19:37.000000000 +0100
-+++ rpm-5.4.10/rpmdb/DB_CONFIG.in	2012-11-22 17:32:56.647805060 +0100
-@@ -5,6 +5,10 @@
- set_lg_dir ./log
- set_tmp_dir ./tmp
+--- rpm-5.4.17/rpmdb/DB_CONFIG.in.orig	2016-05-08 20:36:21.000000000 +0200
++++ rpm-5.4.17/rpmdb/DB_CONFIG.in	2017-02-24 23:48:50.487953949 +0100
+@@ -31,7 +31,9 @@
+ #set_verbose DB_VERB_WAITSFOR
  
+ # ================ Logging
+-#log_set_config DB_LOG_AUTO_REMOVE  on
 +# prevent recovery logs (log/log.*) from growing forever and keep only active log by default
 +# this makes BDB "catastrophic" (re-creation of db from logs) recovery impossible
-+log_set_config DB_LOG_AUTO_REMOVE
-+
- # -- thread_count must be >= 8
- set_thread_count 64
++log_set_config DB_LOG_AUTO_REMOVE on
  
+ # ================ Memory Pool
+ #XXX initializing dbenv with set_cachesize has unimplemented prerequsites

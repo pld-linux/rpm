@@ -1,0 +1,14 @@
+DB_RDONLY DB->open flag has the same value as DB_READ_COMMITTED DB->cursor flag,
+but DB_READ_COMMITTED cannot be used with read-only database.
+
+--- rpm-5.4.17/rpmdb/db3.c.orig	2017-02-21 22:16:39.337643373 +0100
++++ rpm-5.4.17/rpmdb/db3.c	2017-02-24 23:44:44.324623426 +0100
+@@ -1459,7 +1459,7 @@
+ 	flags |= DB_WRITECURSOR;
+     } else
+     if (dbi->dbi_eflags & DB_INIT_TXN) {
+-#define	FMASK	(DB_READ_UNCOMMITTED|DB_READ_COMMITTED)
++#define	FMASK	(DB_READ_UNCOMMITTED)
+ 	flags |= (dbi->dbi_oflags & FMASK);
+ #undef	FMASK
+ 	if (dbi->dbi_oflags & DB_MULTIVERSION)

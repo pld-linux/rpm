@@ -136,7 +136,7 @@ Patch34:	%{name}-libmagic-locale.patch
 Patch35:	%{name}-namespace-compare.patch
 Patch36:	%{name}-popt-coreutils.patch
 Patch37:	%{name}-postun-nofail.patch
-
+Patch38:	%{name}-DB_RDONLY.patch
 Patch39:	%{name}-fix-missing-types-in-headers.patch
 Patch40:	%{name}-fix--p-interpreter-and-empty-script.patch
 Patch41:	%{name}-db_buffer_small.patch
@@ -916,7 +916,7 @@ cd -
 %patch35 -p1
 %patch36 -p1
 %patch37 -p1
-
+%patch38 -p1
 %patch39 -p1
 %patch40 -p1
 %{?with_db61:%patch41 -p1}
