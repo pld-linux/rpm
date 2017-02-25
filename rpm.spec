@@ -58,7 +58,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.17
-Release:	0.7
+Release:	0.8
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.17-0.20160512.src.rpm
@@ -921,7 +921,9 @@ cd -
 %patch38 -p1
 %patch39 -p1
 %patch40 -p1
-%{?with_db61:%patch41 -p1}
+%if %{with db61} || %{with db62}
+%patch41 -p1
+%endif
 %patch42 -p1
 %patch43 -p1
 %patch44 -p1
