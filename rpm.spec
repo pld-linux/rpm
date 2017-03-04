@@ -58,7 +58,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.17
-Release:	0.8
+Release:	0.9
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.17-0.20160512.src.rpm
@@ -156,7 +156,7 @@ Patch53:	%{name}-lua-enable-extra-libs.patch
 Patch54:	%{name}-fix-filedigests-verify.patch
 Patch55:	%{name}-disable-hmac-verify.patch
 Patch56:	%{name}-macros.patch
-
+Patch57:	%{name}-headerChecks.patch
 Patch58:	%{name}-preserve-iterator.patch
 Patch60:	%{name}-python-sitescriptdir.patch
 Patch61:	%{name}-clean-docdir.patch
@@ -164,7 +164,7 @@ Patch62:	%{name}-DB_CONFIG.patch
 Patch63:	%{name}-pythoneggs.patch
 Patch64:	%{name}-fix-compress-doc.patch
 Patch65:	%{name}-parseSpec-skip-empty-tags.patch
-
+Patch66:	%{name}-rpm4compat-update.patch
 Patch67:	%{name}-repackage-dont-force-max-compression.patch
 Patch70:	python-%{name}sense-missingok.patch
 Patch71:	%{name}-changelog-encoding.patch
@@ -939,7 +939,7 @@ cd -
 %patch54 -p1
 %patch55 -p1
 %patch56 -p1
-
+%patch57 -p1
 %patch58 -p1
 %patch60 -p1
 %patch61 -p1
@@ -947,7 +947,7 @@ cd -
 %patch63 -p1
 %patch64 -p1
 %patch65 -p1
-
+%patch66 -p1
 %patch67 -p1
 %patch70 -p1
 %patch71 -p1

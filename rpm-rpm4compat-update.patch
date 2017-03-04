@@ -1,0 +1,17 @@
+fdSize is now extern function, declared in <rpmio.h>.
+--- rpm-5.4.17/lib/rpm4compat.h.orig	2017-03-02 21:47:58.792117545 +0100
++++ rpm-5.4.17/lib/rpm4compat.h	2017-03-04 09:14:59.103993683 +0100
+@@ -352,13 +352,6 @@
+ 	return rpmProblemGetDiskNeed(prob);
+ }
+ 
+-static inline off_t fdSize(FD_t fd){
+-	struct stat sb;
+-	Fstat(fd, &sb);
+-	return sb.st_size;
+-}
+-
+-
+ static inline unsigned int rpmdbGetIteratorOffset(rpmdbMatchIterator mi) {
+     return rpmmiInstance(mi);
+ }

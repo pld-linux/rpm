@@ -1,0 +1,22 @@
+--- rpm-5.4.17/rpmdb/header.c.orig	2017-02-25 09:37:52.627550403 +0100
++++ rpm-5.4.17/rpmdb/header.c	2017-03-02 21:12:16.348808677 +0100
+@@ -998,14 +998,15 @@
+ 	    if (off < 0)
+ 		goto errxit;
+ 	    if (off) {
++                rpmuint32_t * stei;
+ 		size_t nb = REGION_TAG_COUNT;
+-		/* XXX copy to fix alignment problems */
+-                rpmuint32_t * stei = (rpmuint32_t *)
+-                          memcpy(alloca(nb), dataStart + off, nb);
+ 		if ((off + nb) > dl)
+ 		    goto errxit;
++		/* XXX copy to fix alignment problems */
++                stei = (rpmuint32_t *)
++                          memcpy(alloca(nb), dataStart + off, nb);
+ 		rdl = (rpmuint32_t)-ntohl(stei[2]);	/* negative offset */
+-		if (rdl < REGION_TAG_COUNT || rdl > (rpmuint32_t)(off+nb))
++		if (rdl < REGION_TAG_COUNT || rdl > (rpmuint32_t)(il * REGION_TAG_COUNT))
+ 		    goto errxit;
+ 		ril = (rpmuint32_t)(rdl/sizeof(*pe));
+ 	    } else {
