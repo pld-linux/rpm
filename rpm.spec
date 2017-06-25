@@ -18,10 +18,6 @@
 %bcond_with	system_lua	# use system lua
 %bcond_without	system_pcre	# use system pcre
 %bcond_with	keyutils	# build with keyutils support
-# force_cc		- force using __cc other than "%{_target_cpu}-pld-linux-gcc"
-# force_cxx		- force using __cxx other than "%{_target_cpu}-pld-linux-g++"
-# force_cpp		- force using __cpp other than "%{_target_cpu}-pld-linux-gcc -E"
-#
 
 %if %{with sqlite}
 # Error: /lib64/librpmio-5.4.so: undefined symbol: sqlite3_enable_load_extension
@@ -389,18 +385,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		ix86	i386 i486 i586 i686 athlon pentium3 pentium4
 %define		ppc	ppc ppc7400 ppc7450
 %define		x8664	amd64 ia32e x86_64
-
-# stabilize new build environment
-%ifnarch x32
-%define		__newcc %{?force_cc}%{!?force_cc:%{_target_cpu}-pld-linux-gcc}
-%define		__newcxx %{?force_cxx}%{!?force_cxx:%{_target_cpu}-pld-linux-g++}
-%define		__newcpp %{?force_cpp}%{!?force_cpp:%{_target_cpu}-pld-linux-gcc -E}
-%else
-# x32 is a very special case
-%define		__newcc %{?force_cc}%{!?force_cc:x86_64-pld-linux-gnux32-gcc}
-%define		__newcxx %{?force_cxx}%{!?force_cxx:x86_64-pld-linux-gnux32-g++}
-%define		__newcpp %{?force_cpp}%{!?force_cpp:x86_64-pld-linux-gnux32-gcc -E}
-%endif
 
 %define		_rpmlibdir /usr/lib/rpm
 %define		_noautocompressdoc	RPM-GPG-KEY
@@ -1068,11 +1052,7 @@ sed -i \
 	macros/macros.in
 
 %{?with_system_lua:CPPFLAGS="-I/usr/include/lua51 %{rpmcppflags}"}
-# pass CC and CXX too in case of building with some older configure macro
 %configure \
-	CC="%{__newcc}" \
-	CXX="%{__newcxx}" \
-	CPP="%{__newcpp}" \
 	WITH_PERL_VERSION=no \
 	__GST_INSPECT=%{_bindir}/gst-inspect-1.0 \
 	--disable-silent-rules \
@@ -1105,10 +1085,7 @@ sed -i \
 	--with-xz=external \
 	--with-zlib=external
 
-%{__make} -j1 \
-	CC="%{__cc}" \
-	CXX="%{__cxx}" \
-	CPP="%{__cpp}"
+%{__make} -j1
 
 %{?with_apidocs:%{__make} apidocs}
 
