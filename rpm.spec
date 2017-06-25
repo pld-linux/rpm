@@ -151,6 +151,7 @@ Patch55:	%{name}-disable-hmac-verify.patch
 Patch56:	%{name}-macros.patch
 Patch57:	%{name}-db5.2.patch
 Patch58:	%{name}-preserve-iterator.patch
+Patch59:	gcc6-stdlib.patch
 Patch60:	%{name}-python-sitescriptdir.patch
 Patch61:	%{name}-clean-docdir.patch
 Patch62:	%{name}-DB_CONFIG.patch
@@ -944,6 +945,7 @@ cd -
 %patch56 -p1
 %{!?with_db61:%patch57 -p1}
 %patch58 -p1
+%patch59 -p1
 %patch60 -p1
 %patch61 -p1
 %patch62 -p1

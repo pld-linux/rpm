@@ -1,0 +1,31 @@
+gcc6 hack
+
+http://lists.pld-linux.org/mailman/pipermail/pld-devel-en/2017-June/025365.html
+https://patchwork.openembedded.org/patch/122245/
+
+ ---
+
+gcc6 has fixed a long standing c++ include issue where <cheader>
+was different from <header.h> inclusion via
+
+https://gcc.gnu.org/ml/libstdc++/2016-01/msg00025.html
+
+and its also descibed in https://gcc.gnu.org/gcc-6/porting_to.html
+rpmio component uses some .cpp and .cc fies which need to use
+C stdlib.h from C library and not the C++ libstdc++ header
+therefore we pass _GLIBCXX_INCLUDE_NEXT_C_HEADERS so that it
+keeps the old behavior
+--- rpm-5.4.15/rpmio/rpmjni.cc~	2014-08-09 01:08:50.000000000 +0300
++++ rpm-5.4.15/rpmio/rpmjni.cc	2017-06-25 16:42:23.383464974 +0300
+@@ -1,3 +1,4 @@
++#define _GLIBCXX_INCLUDE_NEXT_C_HEADERS
+ #include "system.h"
+ #include <rpmlog.h>
+ #include <rpmmacro.h>
+--- rpm-5.4.15/rpmqv.cc~	2017-06-25 17:37:53.000000000 +0300
++++ rpm-5.4.15/rpmqv.cc	2017-06-25 18:01:37.158939691 +0300
+@@ -1,3 +1,4 @@
++#define _GLIBCXX_INCLUDE_NEXT_C_HEADERS
+ #include "system.h"
+ extern const char *__progname;
+ 
