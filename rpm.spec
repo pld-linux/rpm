@@ -57,13 +57,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.4.17
-Release:	0.9
+Version:	5.4.18
+Release:	0.1
 License:	LGPL v2.1
 Group:		Base
-# http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.17-0.20160512.src.rpm
+# http://rpm5.org/files/rpm/rpm-5.4/SNAPSHOT/rpm-5.4.18-0.20170718.src.rpm
 Source0:	%{name}-%{version}.tar.gz
-# Source0-md5:	7783b1d49c5a4bc3789dfe1e30b5140f
+# Source0-md5:	4a0f6fb37be9c3657de64c9e9944a3ae
 # See README.cpu-os-macros how to update cpu-os-macros.a
 Source100:	cpu-os-macros.a
 Source101:	README.cpu-os-macros
