@@ -1,5 +1,5 @@
---- rpm-4.5/rpmio/macro.c.org	2009-08-08 15:42:25.574860247 +0200
-+++ rpm-4.5/rpmio/macro.c	2009-08-08 15:47:20.495455961 +0200
+--- rpm-5.4.18/rpmio/macro.c~	2017-07-18 16:19:04.000000000 +0300
++++ rpm-5.4.18/rpmio/macro.c	2017-07-18 16:30:30.419934771 +0300
 @@ -807,6 +807,43 @@
      return se;
  }
@@ -55,7 +55,7 @@
  
  	if (STREQ("echo", f, fn) ||
  	    STREQ("warn", f, fn) ||
-@@ -1984,6 +2023,18 @@
+@@ -3207,6 +3207,18 @@
      }
  }
  
@@ -71,6 +71,6 @@
 +	}
 +}
 +
- /*@-mustmod@*/ /* LCL: mc is modified through mb->mc, mb is abstract */
  int
  rpmDefineMacro(MacroContext mc, const char * macro, int level)
+ {

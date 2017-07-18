@@ -1,5 +1,5 @@
---- rpm-5.4.10/build/files.c~	2013-01-25 13:14:36.692060288 +0100
-+++ rpm-5.4.10/build/files.c	2013-02-25 12:03:26.110910465 +0100
+--- rpm-5.4.18/build/files.c~	2017-07-18 18:00:51.000000000 +0300
++++ rpm-5.4.18/build/files.c	2017-07-18 18:01:41.326747116 +0300
 @@ -1041,7 +1041,6 @@
  	/* XXX FIXME: this is easy to do as macro expansion */
  
@@ -8,7 +8,7 @@
  	    	char *mkdir_p;
  
  		pkg->specialDoc = rpmiobNew(0);
-@@ -1056,11 +1055,6 @@
+@@ -1064,11 +1064,6 @@
  		mkdir_p = _free(mkdir_p);
  		pkg->specialDoc = rpmiobAppend(pkg->specialDoc, " \"$DOCDIR\"", 1);
  
@@ -17,9 +17,9 @@
 -	    	    pkg->specialDoc = rpmiobAppend(pkg->specialDoc, compress_doc, 1);
 -		compress_doc = _free(compress_doc);
 -
- 		/*@-temptrans@*/
  		*fileName = buf;
- 		/*@=temptrans@*/
+ 		fl->passedSpecialDoc = 1;
+ 		fl->isSpecialDoc = 1;
 @@ -1071,6 +1065,15 @@
  	    pkg->specialDoc = rpmiobAppend(pkg->specialDoc, "cp -pr ", 0);
  	    pkg->specialDoc = rpmiobAppend(pkg->specialDoc, specialDocBuf, 0);

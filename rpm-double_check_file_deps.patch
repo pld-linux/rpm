@@ -1,6 +1,5 @@
-diff -dur rpm-5.4.12.orig/lib/rpmal.c rpm-5.4.12/lib/rpmal.c
---- rpm-5.4.12.orig/lib/rpmal.c	2012-04-15 23:20:57.000000000 +0200
-+++ rpm-5.4.12/lib/rpmal.c	2013-08-13 13:46:28.000000000 +0200
+--- rpm-5.4.18/lib/rpmal.c~	2017-07-18 19:41:25.000000000 +0300
++++ rpm-5.4.18/lib/rpmal.c	2017-07-18 19:42:21.707538362 +0300
 @@ -7,6 +7,10 @@
  #include <rpmio.h>
  #include <rpmiotypes.h>		/* XXX fnpyKey */
@@ -38,14 +37,14 @@ diff -dur rpm-5.4.12.orig/lib/rpmal.c rpm-5.4.12/lib/rpmal.c
  
      memset(alp, 0, sizeof(*alp));	/* XXX trash and burn */
      return;
-@@ -244,6 +253,7 @@
- /*@-assignexpose -castexpose @*/
+@@ -210,6 +210,7 @@
+ 
      alp->provides = rpmdsLink(provides, "Provides (rpmalAdd)");
      alp->bf = rpmbfLink(rpmfiFNBF(fi));
 +    alp->fi = rpmfiLink(fi, "file list (rpmalAdd)");
- /*@=assignexpose =castexpose @*/
  
      rpmalFreeIndex(al);
+ 
 @@ -350,17 +360,17 @@
  rpmalAllFileSatisfiesDepend(const rpmal al, const rpmds ds, alKey * keyp)
  {

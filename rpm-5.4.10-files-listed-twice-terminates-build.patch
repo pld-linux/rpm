@@ -1,14 +1,14 @@
---- rpm-5.4.10/build/files.c.twice_terminate~	2012-07-10 20:18:14.613329633 +0200
-+++ rpm-5.4.10/build/files.c	2012-07-10 20:18:14.677328833 +0200
-@@ -1329,7 +1329,7 @@ static rpmuint32_t getDigestAlgo(Header
-  * @param h
-  * @param isSrc
+--- rpm-5.4.18/build/files.c~	2017-07-18 20:02:53.000000000 +0300
++++ rpm-5.4.18/build/files.c	2017-07-18 20:03:43.702134699 +0300
+@@ -1353,7 +1353,7 @@
+  * @param h		h
+  * @param isSrc		isSrc
   */
--static void genCpioListAndHeader(/*@partial@*/ FileList fl,
-+static rpmRC genCpioListAndHeader(/*@partial@*/ FileList fl,
+-static void genCpioListAndHeader(FileList fl,
++static rpmRC genCpioListAndHeader(FileList fl,
  		rpmfi * fip, Header h, int isSrc)
- 	/*@globals rpmGlobalMacroContext, h_errno, fileSystem, internalState @*/
- 	/*@modifies h, *fip, fl->processingFailed, fl->fileList,
+ {
+     HE_t he = (HE_t) memset(alloca(sizeof(*he)), 0, sizeof(*he));
 @@ -1349,6 +1349,7 @@ static void genCpioListAndHeader(/*@part
      rpmuint32_t dalgo = getDigestAlgo(h, isSrc);
      char buf[BUFSIZ];

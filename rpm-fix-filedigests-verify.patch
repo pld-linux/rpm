@@ -1,10 +1,10 @@
---- rpm-5.4.10.orig/build/files.c	2012-10-15 23:29:13.601832730 +0200
-+++ rpm-5.4.10/build/files.c	2012-10-15 23:29:50.264308164 +0200
-@@ -393,7 +393,6 @@
+--- rpm-5.4.18/build/files.c~	2017-07-18 17:50:47.000000000 +0300
++++ rpm-5.4.18/build/files.c	2017-07-18 17:57:03.435875760 +0300
+@@ -362,7 +362,6 @@
  		if (strcmp(p, vfa->attribute))
- 		    /*@innercontinue@*/ continue;
+ 		    continue;
  		verifyFlags |= vfa->flag;
 -		    verifyFlags &= ~RPMVERIFY_FDIGEST;
- 		/*@innerbreak@*/ break;
+ 		break;
  	    }
  	    if (vfa->attribute)

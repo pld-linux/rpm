@@ -1,13 +1,13 @@
---- rpm-5.4.7/rpmdb/hdrfmt.c.unitialized~	2012-03-19 14:21:14.907225418 +0100
-+++ rpm-5.4.7/rpmdb/hdrfmt.c	2012-03-19 14:21:17.327228582 +0100
-@@ -2048,8 +2048,10 @@ static int triggertypeTag(Header h, HE_t
+--- rpm-5.4.18/rpmdb/hdrfmt.c~	2017-07-18 20:05:47.000000000 +0300
++++ rpm-5.4.18/rpmdb/hdrfmt.c	2017-07-18 20:06:11.192944908 +0300
+@@ -2092,8 +2092,10 @@
      he->p.argv = xmalloc(sizeof(*he->p.argv) * he->c);
      for (i = 0; i < (unsigned) he->c; i++) {
  	for (j = 0; j < (unsigned) numNames; j++) {
 -	    if (indices.ui32p[j] != i)
 +	    if (indices.ui32p[j] != i) {
 +		he->p.argv[i] = NULL;
- 		/*@innercontinue@*/ continue;
+ 		continue;
 +	    }
  
  	    /* XXX FIXME: there's memory leaks here. */

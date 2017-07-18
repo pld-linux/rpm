@@ -877,7 +877,7 @@ cd -
 #patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
+#%patch3 -p1 do we still want to disable setproctitle
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
@@ -915,11 +915,11 @@ cd -
 %patch32 -p1
 %patch33 -p1
 %patch34 -p1
-%patch35 -p1
+#%patch35 -p1 rpm-namespace-compare.patch -- UPDATE!
 %patch36 -p1
 %patch37 -p1
 %patch38 -p1
-%patch39 -p1
+#%patch39 -p1 rpm-fix-missing-types-in-headers.patch - oudated?
 %patch40 -p1
 %if %{with db61} || %{with db62}
 %patch41 -p1
@@ -939,7 +939,7 @@ cd -
 %patch54 -p1
 %patch55 -p1
 %patch56 -p1
-%patch57 -p1
+#%patch57 -p1 rpm-headerChecks.patch - applied in 5.4.18 ?
 %patch58 -p1
 %patch60 -p1
 %patch61 -p1
@@ -955,12 +955,12 @@ cd -
 %patch75 -p1
 %patch77 -p1
 %patch78 -p1
-%patch79 -p1
+#%patch79 -p1 rpm-rpmspec.patch - update rpm.org port
 
 %patch81 -p0
 %patch82 -p1
 %patch84 -p1
-%patch85 -p1
+#%patch85 -p1 rpm-CVE-2013-6435.patch - solved differently upstream?
 %patch86 -p1
 %patch87 -p1
 %patch88 -p1

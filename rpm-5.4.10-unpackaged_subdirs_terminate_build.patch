@@ -1,14 +1,14 @@
---- rpm-5.4.10/build/files.c.subdir_terminate~	2012-07-10 20:14:36.357058212 +0200
-+++ rpm-5.4.10/build/files.c	2012-07-10 20:14:36.367058087 +0200
-@@ -3025,7 +3025,7 @@ static inline int packagedDir(Package pk
+--- rpm-5.4.18/build/files.c~	2017-07-18 20:01:13.000000000 +0300
++++ rpm-5.4.18/build/files.c	2017-07-18 20:02:01.770304167 +0300
+@@ -2987,7 +2987,7 @@
   *       /A/B/C/D
   * Now directories "/A/B" and "/A/B/C" should also be packaged.
   */
 -static int pkgUnpackagedSubdirs(Package pkg, size_t buildrootL)
 +static int pkgUnpackagedSubdirs(Package pkg, size_t buildrootL, int _unpackaged_subdirs_terminate_build)
- 	/*@globals rpmGlobalMacroContext, h_errno, fileSystem, internalState @*/
- 	/*@modifies pkg->header,
- 		rpmGlobalMacroContext, fileSystem, internalState @*/
+ {
+     int n = 0;
+     int i, j;
 @@ -3103,7 +3103,7 @@ static int pkgUnpackagedSubdirs(Package
  	}
  	unpackaged = _free(unpackaged);
@@ -18,15 +18,15 @@
  	       _("Unpackaged subdir(s) in %s:\n%s"),
  	       N, rpmiobStr(list));
  
-@@ -3119,7 +3119,7 @@ static int pkgUnpackagedSubdirs(Package
+@@ -3080,7 +3080,7 @@
   * @param spec		spec file control structure
   * @return		number of unpackaged subdirectories
   */
 -static int checkUnpackagedSubdirs(Spec spec, size_t buildrootL)
 +static int checkUnpackagedSubdirs(Spec spec, size_t buildrootL, int _unpackaged_subdirs_terminate_build)
- 	/*@globals rpmGlobalMacroContext, h_errno, fileSystem, internalState @*/
- 	/*@modifies *spec->packages,
- 		rpmGlobalMacroContext, fileSystem, internalState @*/
+ {
+     int n = 0;
+     Package pkg;
 @@ -3128,7 +3128,7 @@ static int checkUnpackagedSubdirs(Spec s
      Package pkg;
  

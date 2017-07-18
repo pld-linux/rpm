@@ -1,6 +1,6 @@
---- rpm-5.4.16/scripts/rpm2cpio~	2015-04-20 19:42:37.000000000 +0300
-+++ rpm-5.4.16/scripts/rpm2cpio	2016-03-16 00:23:31.243396707 +0200
-@@ -25,13 +25,13 @@
+--- rpm-5.4.18/scripts/rpm2cpio~	2017-07-16 07:42:40.000000000 +0300
++++ rpm-5.4.18/scripts/rpm2cpio	2017-07-18 17:50:00.490906514 +0300
+@@ -25,15 +25,15 @@
  EXTRACTOR="dd if=$pkg ibs=$o skip=1"
  
  COMPRESSION=$(($EXTRACTOR |file -) 2>/dev/null)
@@ -12,6 +12,9 @@
  	DECOMPRESSOR=bunzip2
 -elif echo $COMPRESSION |grep -q xz; then
 +elif echo $COMPRESSION |grep -qi xz; then
+ 	DECOMPRESSOR=unxz
+-elif echo $COMPRESSION |grep -q zstd; then
++elif echo $COMPRESSION |grep -qi zstd; then
  	DECOMPRESSOR=unxz
 -elif echo $COMPRESSION |grep -q cpio; then
 +elif echo $COMPRESSION |grep -qi cpio; then

@@ -122,25 +122,21 @@ diff -ur rpm-5.4.15/autodeps/linux.req rpm-5.4.15.x32/autodeps/linux.req
      $OBJDUMP -p $f | awk 'BEGIN { START=0; LIBNAME=""; needed='$needed'; }
  	/^$/ { START=0; }
  	/^Dynamic Section:$/ { START=1; }
-diff -ur rpm-5.4.15/lib/rpmds.c rpm-5.4.15.x32/lib/rpmds.c
---- rpm-5.4.15/lib/rpmds.c	2014-12-20 19:35:31.114557975 +0100
-+++ rpm-5.4.15.x32/lib/rpmds.c	2014-12-20 19:34:54.958087185 +0100
-@@ -2922,19 +2922,26 @@
+--- rpm-5.4.18/lib/rpmds.c~	2017-07-18 19:50:07.000000000 +0300
++++ rpm-5.4.18/lib/rpmds.c	2017-07-18 19:51:31.551747419 +0300
+@@ -2825,9 +2825,10 @@
   * @retval t		soname dependency
   * @param s		elf string (NULL uses "")
   * @param isElf64	is this an ELF64 symbol?
 + * @param isX32		is this an X32 symbol?
   */
  #if defined(HAVE_GELF_H) && defined(HAVE_LIBELF) && !defined(__FreeBSD__)
--static char * sonameDep(/*@returned@*/ char * t, const char * s, int isElf64)
-+static char * sonameDep(/*@returned@*/ char * t, const char * s, int isElf64, int isX32)
- 	/*@modifies t @*/
+-static char * sonameDep(char * t, const char * s, int isElf64)
++static char * sonameDep(char * t, const char * s, int isElf64, int isX32)
  {
      *t = '\0';
  #if !defined(__alpha__) && !defined(__sun)
-     if (isElf64) {
- 	if (s[strlen(s)-1] != ')')
- 	(void) stpcpy( stpcpy(t, s), "()(64bit)");
+@@ -2837,6 +2838,12 @@
      else
  	    (void) stpcpy( stpcpy(t, s), "(64bit)");
      }else

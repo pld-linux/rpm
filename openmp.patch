@@ -1,11 +1,15 @@
---- rpm-5.3.1/rpmio/Makefile.am.wiget	2010-05-24 17:23:09.000000000 +0200
-+++ rpm-5.3.1/rpmio/Makefile.am	2010-06-01 21:29:20.521227268 +0200
-@@ -102,7 +102,7 @@ librpmio_la_SOURCES = \
- 	xzdio.c \
- 	yarn.c
+
+outdated? there's already in rpmio/Makefile.am:
+AM_CFLAGS = $(OPENMP_CFLAGS)
+
+--- rpm-5.4.18/rpmio/Makefile.am~	2017-07-16 22:47:06.000000000 +0300
++++ rpm-5.4.18/rpmio/Makefile.am	2017-07-18 16:16:56.558291408 +0300
+@@ -274,7 +274,7 @@
+ 	yarn.c \
+ 	zstdio.c
  
--librpmio_la_LDFLAGS = -release $(LT_CURRENT).$(LT_REVISION)
-+librpmio_la_LDFLAGS = -release $(LT_CURRENT).$(LT_REVISION) $(OPENMP_CFLAGS)
+-librpmio_la_LDFLAGS = -no-undefined -release $(LT_CURRENT).$(LT_REVISION)
++librpmio_la_LDFLAGS = -no-undefined -release $(LT_CURRENT).$(LT_REVISION) $(OPENMP_CFLAGS)
  if HAVE_LD_VERSION_SCRIPT
  librpmio_la_LDFLAGS += -Wl,@LD_VERSION_SCRIPT_FLAG@,@top_srcdir@/rpmio/librpmio.vers
  endif

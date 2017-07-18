@@ -1,15 +1,14 @@
---- rpm-5.4.10/build/files.c.dups_terminate~	2012-07-10 20:09:01.125249185 +0200
-+++ rpm-5.4.10/build/files.c	2012-07-10 20:09:01.135249061 +0200
-@@ -2917,7 +2917,8 @@ exit:
+--- rpm-5.4.18/build/files.c~	2017-07-18 19:57:37.000000000 +0300
++++ rpm-5.4.18/build/files.c	2017-07-18 19:58:47.210448958 +0300
+@@ -2873,7 +2873,7 @@
  
  /* auxiliary function for checkDuplicateFiles() */
  /* XXX need to pass Header because fi->h is NULL */
--static int fiIntersect(/*@null@*/ rpmfi fi1, /*@null@*/ rpmfi fi2, size_t buildrootL)
-+static int fiIntersect(/*@null@*/ rpmfi fi1, /*@null@*/ rpmfi fi2,
-+	size_t buildrootL, int _duplicate_files_terminate_build)
- 	/*@globals internalState @*/
- 	/*@modifies fi1, fi2, internalState @*/
+-static int fiIntersect(rpmfi fi1, rpmfi fi2, size_t buildrootL)
++static int fiIntersect(rpmfi fi1, rpmfi fi2, size_t buildrootL, int _duplicate_files_terminate_build)
  {
+     int n = 0;
+     int i1, i2;
 @@ -2955,7 +2956,7 @@ static int fiIntersect(/*@null@*/ rpmfi
  	he->tag = RPMTAG_NVRA;
  	N2 = (headerGet(fi2->h, he, 0) ? he->p.str : NULL);
@@ -19,16 +18,15 @@
  	       _("File(s) packaged into both %s and %s:\n%s"),
  	       N1, N2, rpmiobStr(dups));
  
-@@ -2972,7 +2973,8 @@ static int fiIntersect(/*@null@*/ rpmfi
+@@ -2926,7 +2926,7 @@
   * @param spec		spec file control structure
   * @return		number of duplicate files
   */
 -static int checkDuplicateFiles(Spec spec, size_t buildrootL)
-+static int checkDuplicateFiles(Spec spec, size_t buildrootL,
-+	int _duplicate_files_terminate_build)
- 	/*@globals rpmGlobalMacroContext, h_errno, fileSystem, internalState @*/
- 	/*@modifies *spec->packages,
- 		rpmGlobalMacroContext, fileSystem, internalState @*/
++static int checkDuplicateFiles(Spec spec, size_t buildrootL, int _duplicate_files_terminate_build)
+ {
+     int n = 0;
+     Package pkg1, pkg2;
 @@ -2997,7 +2999,7 @@ static int checkDuplicateFiles(Spec spec
  #endif
  	    if (fi2 == NULL) continue;

@@ -1,5 +1,5 @@
---- rpm-5.4.16/lua/Makefile.am~	2016-04-19 19:19:35.000000000 +0300
-+++ rpm-5.4.16/lua/Makefile.am	2016-04-20 16:51:20.574586445 +0300
+--- rpm-5.4.18/lua/Makefile.am~	2016-08-06 20:39:54.000000000 +0300
++++ rpm-5.4.18/lua/Makefile.am	2017-07-18 19:44:32.874014686 +0300
 @@ -326,7 +326,10 @@
  	lzio.c
  
@@ -9,6 +9,6 @@
 +if USE_LUA_CRYPTO
 +liblua_la_LIBADD += -lexpat
 +endif
- liblua_la_LDFLAGS = $(LDFLAGS)
+ liblua_la_LDFLAGS = -no-undefined $(LDFLAGS)
  
  liblua.la: $(liblua_la_OBJECTS) $(liblua_la_DEPENDENCIES) 

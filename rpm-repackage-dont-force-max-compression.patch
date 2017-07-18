@@ -1,11 +1,11 @@
---- rpm-5.4.10/lib/psm.c~	2013-03-17 13:34:31.534601434 +0100
-+++ rpm-5.4.10/lib/psm.c	2013-03-25 13:46:18.326658890 +0100
-@@ -3017,7 +3017,7 @@
+--- rpm-5.4.18/lib/psm.c~	2017-07-18 19:37:38.000000000 +0300
++++ rpm-5.4.18/lib/psm.c	2017-07-18 19:40:53.713076772 +0300
+@@ -2905,7 +2905,7 @@
  
- 	psm->rpmio_flags = t = (char *) xmalloc(sizeof("w9.gzdio"));
- 	*t = '\0';
--	t = stpcpy(t, ((psm->goal == PSM_PKGSAVE) ? "w9" : "r"));
-+	t = stpcpy(t, ((psm->goal == PSM_PKGSAVE) ? "w6" : "r"));
+ 	psm->rpmio_flags = te = (char *) xmalloc(sizeof("w9.zstdio")+32);
+ 	*te = '\0';
+-	te = stpcpy(te, ((psm->goal == PSM_PKGSAVE) ? "w9" : "r"));
++	te = stpcpy(te, ((psm->goal == PSM_PKGSAVE) ? "w6" : "r"));
  	if (!strcmp(payload_compressor, "gzip"))
- 	    t = stpcpy(t, ".gzdio");
+ 	    te = stpcpy(te, ".gzdio");
  	if (!strcmp(payload_compressor, "bzip2"))

@@ -1,14 +1,14 @@
---- rpm-5.4.9/build/files.c.buildroot_dups~	2012-04-15 17:04:14.000000000 +0200
-+++ rpm-5.4.9/build/files.c	2012-05-15 02:11:03.734983519 +0200
-@@ -2917,7 +2917,7 @@ exit:
+--- rpm-5.4.18/build/files.c~	2017-07-18 19:55:03.000000000 +0300
++++ rpm-5.4.18/build/files.c	2017-07-18 19:56:17.522870262 +0300
+@@ -2873,7 +2873,7 @@
  
  /* auxiliary function for checkDuplicateFiles() */
  /* XXX need to pass Header because fi->h is NULL */
--static int fiIntersect(/*@null@*/ rpmfi fi1, /*@null@*/ rpmfi fi2)
-+static int fiIntersect(/*@null@*/ rpmfi fi1, /*@null@*/ rpmfi fi2, size_t buildrootL)
- 	/*@globals internalState @*/
- 	/*@modifies fi1, fi2, internalState @*/
+-static int fiIntersect(rpmfi fi1, rpmfi fi2)
++static int fiIntersect(rpmfi fi1, rpmfi fi2, size_t buildrootL)
  {
+     int n = 0;
+     int i1, i2;
 @@ -2941,7 +2941,7 @@ static int fiIntersect(/*@null@*/ rpmfi
  	    if (!dups)
  		dups = rpmiobNew(0);
@@ -18,15 +18,15 @@
  	    n++;
  	}
      }
-@@ -2972,7 +2972,7 @@ static int fiIntersect(/*@null@*/ rpmfi
+@@ -2926,7 +2926,7 @@
   * @param spec		spec file control structure
   * @return		number of duplicate files
   */
 -static int checkDuplicateFiles(Spec spec)
 +static int checkDuplicateFiles(Spec spec, size_t buildrootL)
- 	/*@globals rpmGlobalMacroContext, h_errno, fileSystem, internalState @*/
- 	/*@modifies *spec->packages,
- 		rpmGlobalMacroContext, fileSystem, internalState @*/
+ {
+     int n = 0;
+     Package pkg1, pkg2;
 @@ -2997,7 +2997,7 @@ static int checkDuplicateFiles(Spec spec
  #endif
  	    if (fi2 == NULL) continue;
@@ -36,15 +36,15 @@
  	    (void) rpmfiSetHeader(fi2, NULL);
  	    fi2 = rpmfiFree(fi2);
  	}
-@@ -3023,7 +3023,7 @@ static inline int packagedDir(Package pk
+@@ -2987,7 +2987,7 @@
   *       /A/B/C/D
   * Now directories "/A/B" and "/A/B/C" should also be packaged.
   */
 -static int pkgUnpackagedSubdirs(Package pkg)
 +static int pkgUnpackagedSubdirs(Package pkg, size_t buildrootL)
- 	/*@globals rpmGlobalMacroContext, h_errno, fileSystem, internalState @*/
- 	/*@modifies pkg->header,
- 		rpmGlobalMacroContext, fileSystem, internalState @*/
+ {
+     int n = 0;
+     int i, j;
 @@ -3096,7 +3096,7 @@ static int pkgUnpackagedSubdirs(Package
  
  	for (i = 0; i < n; i++) {
@@ -54,15 +54,15 @@
  	    unpackaged[i] = _free(unpackaged[i]);
  	}
  	unpackaged = _free(unpackaged);
-@@ -3117,7 +3117,7 @@ static int pkgUnpackagedSubdirs(Package
+@@ -3080,7 +3080,7 @@
   * @param spec		spec file control structure
   * @return		number of unpackaged subdirectories
   */
 -static int checkUnpackagedSubdirs(Spec spec)
 +static int checkUnpackagedSubdirs(Spec spec, size_t buildrootL)
- 	/*@globals rpmGlobalMacroContext, h_errno, fileSystem, internalState @*/
- 	/*@modifies *spec->packages,
- 		rpmGlobalMacroContext, fileSystem, internalState @*/
+ {
+     int n = 0;
+     Package pkg;
 @@ -3126,7 +3126,7 @@ static int checkUnpackagedSubdirs(Spec s
      Package pkg;
  
