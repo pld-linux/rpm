@@ -328,3 +328,13 @@ diff -ur rpm-5.4.10.orig/rpmio/yarn.h rpm-5.4.10/rpmio/yarn.h
  #ifdef __cplusplus
  extern "C" {
  #endif
+--- rpm-5.4.17/rpmio/yajl.h.orig	2016-04-08 02:13:34.000000000 +0200
++++ rpm-5.4.17/rpmio/yajl.h	2018-04-02 12:51:38.355299177 +0200
+@@ -23,6 +23,7 @@
+  */
+ 
+ #include <stdarg.h>
++#include <stdint.h>
+ #include <math.h>
+ 
+ #ifdef __cplusplus
