@@ -33,7 +33,7 @@
 %if %{with db62}
 %define		reqdb_pkg	db6.2
 %define		reqdb_ver	6.2
-%define		reqdb_pkgver	6.2.32
+%define		reqdb_pkgver	6.2.23
 %else
 %if %{with db61}
 %define		reqdb_pkg	db6.1
