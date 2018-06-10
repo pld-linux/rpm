@@ -1,6 +1,6 @@
---- rpm-5.4.15/lib/rpmfc.c	2014-12-08 16:52:23.628067323 +0200
-+++ rpm-5.4.15.orig/lib/rpmfc.c	2014-12-08 16:23:46.377110108 +0200
-@@ -1155,9 +1155,13 @@
+--- rpm-5.4.17/lib/rpmfc.c.orig	2018-06-10 09:46:56.795334224 +0200
++++ rpm-5.4.17/lib/rpmfc.c	2018-06-10 09:52:10.905330637 +0200
+@@ -1164,9 +1164,13 @@
  		    fc->fcolor->vals[fc->ix] |= RPMFC_PYTHON;
  		else if (!strncmp(fn, "/ruby", sizeof("/ruby")-1)) {
  		    fc->fcolor->vals[fc->ix] |= RPMFC_RUBY;
@@ -17,3 +17,12 @@
  		}
  		/* XXX: lacking better, more generic classifier... */
  		else if (!strncmp(fn, "/gstreamer", sizeof("/gstreamer")-1) &&
+@@ -1188,7 +1192,7 @@
+ 		fn += sizeof("/usr/share")-1;
+ 		if (!strncmp(fn, "/python", sizeof("/python")-1))
+ 		    fc->fcolor->vals[fc->ix] |= RPMFC_PYTHON;
+-		else if (!strncmp(fn, "/ruby", sizeof("/ruby")-1)) {
++		else if (!strncmp(fn, "/ruby", sizeof("/ruby")-1) || !strncmp(fn, "/gems/specifications", sizeof("/gems/specifications")-1)) {
+ 		    fc->fcolor->vals[fc->ix] |= RPMFC_RUBY;
+ /* XXX specification/{*.gemspec,rpmconfig.rb} should use rpmGlob/fnmatch. */
+ 		    if ((strstr(fn, ".gemspec") || strstr(fn, "rbconfig.rb"))) {

@@ -1,6 +1,6 @@
---- rpm-5.4.16/lib/rpmfc.c~	2016-03-16 18:42:01.000000000 +0200
-+++ rpm-5.4.16/lib/rpmfc.c	2016-03-16 18:43:00.049306865 +0200
-@@ -604,8 +604,6 @@
+--- rpm-5.4.17/lib/rpmfc.c.orig	2018-06-10 09:52:43.111996936 +0200
++++ rpm-5.4.17/lib/rpmfc.c	2018-06-10 09:54:23.968662453 +0200
+@@ -606,8 +606,6 @@
    /* XXX "a /usr/bin/python -t script text executable" */
    /* XXX "python 2.3 byte-compiled" */
    { " /usr/bin/python",		RPMFC_PYTHON|RPMFC_INCLUDE },
@@ -9,7 +9,7 @@
  
    { "libtool library ",		RPMFC_LIBTOOL|RPMFC_INCLUDE },
    { "pkgconfig ",		RPMFC_PKGCONFIG|RPMFC_INCLUDE },
-@@ -1114,6 +1112,9 @@
+@@ -1118,6 +1116,9 @@
      int i;
      int xx;
      int skipping;
@@ -19,7 +19,7 @@
  
      miRE mire;
      int skipProv = fc->skipProv;
-@@ -1156,8 +1157,29 @@
+@@ -1160,8 +1161,29 @@
  		if ((fn[0] == '3' && fn[1] == '2') || 
  			(fn[0] == '6' && fn[1] == '4'))
  		    fn += 2;
@@ -51,7 +51,7 @@
  		else if (!strncmp(fn, "/ruby", sizeof("/ruby")-1)) {
  		    fc->fcolor->vals[fc->ix] |= RPMFC_RUBY;
  		    if ((strstr(fn, ".gemspec") || strstr(fn, "rbconfig.rb"))) {
-@@ -1212,8 +1212,29 @@
+@@ -1190,8 +1212,29 @@
  	    fn = strstr(fc->fn[fc->ix], "/usr/share");
  	    if (fn) {
  		fn += sizeof("/usr/share")-1;
@@ -80,6 +80,6 @@
 +			fc->fcolor->vals[fc->ix] |= RPMFC_PYTHON;
 +		    }
 +		}
- 		else if (!strncmp(fn, "/ruby", sizeof("/ruby")-1)) {
+ 		else if (!strncmp(fn, "/ruby", sizeof("/ruby")-1) || !strncmp(fn, "/gems/specifications", sizeof("/gems/specifications")-1)) {
  		    fc->fcolor->vals[fc->ix] |= RPMFC_RUBY;
  /* XXX specification/{*.gemspec,rpmconfig.rb} should use rpmGlob/fnmatch. */
