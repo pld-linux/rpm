@@ -58,7 +58,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.17
-Release:	0.11
+Release:	0.12
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.17-0.20160512.src.rpm
@@ -187,6 +187,7 @@ Patch90:	%{name}-cppcompat.patch
 Patch91:	py-disable-fetch.patch
 Patch92:	fast_python_deps.patch
 Patch93:	python2_explicit.patch
+Patch97:	glibc.patch
 
 # Patches imported from Mandriva
 
@@ -1016,6 +1017,7 @@ cd -
 %patch83 -p1
 %patch92 -p1
 %patch93 -p1
+%patch97 -p1
 
 %patch1050 -p1
 
