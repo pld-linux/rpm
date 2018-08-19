@@ -47,7 +47,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.15
-Release:	43
+Release:	44
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
@@ -182,6 +182,7 @@ Patch94:	do_not_write_before_macro_buffer.patch
 Patch95:	rpm-python-spec-header.patch
 Patch96:	skip-ldconfig-optimization.patch
 Patch97:	glibc.patch
+Patch98:	extension-based-compression-detection.patch
 
 # Patches imported from Mandriva
 
@@ -1015,6 +1016,7 @@ cd -
 %patch95 -p1
 %patch96 -p1
 %patch97 -p1
+%patch98 -p1
 
 %patch1050 -p1
 
