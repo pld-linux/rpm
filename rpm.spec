@@ -183,6 +183,7 @@ Patch95:	rpm-python-spec-header.patch
 Patch96:	skip-ldconfig-optimization.patch
 Patch97:	glibc.patch
 Patch98:	extension-based-compression-detection.patch
+Patch99:	%{name}-gpg-pinentry.patch
 
 # Patches imported from Mandriva
 
@@ -960,6 +961,7 @@ cd -
 %patch89 -p1
 %patch90 -p1
 %patch91 -p1
+%patch99 -p1
 
 %patch1000 -p1
 %patch1001 -p1
