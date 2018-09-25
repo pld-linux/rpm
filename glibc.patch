@@ -34,6 +34,17 @@ diff -upr rpm-5.4.15.org/rpmio/rpmio.c rpm-5.4.15/rpmio/rpmio.c
 diff -upr rpm-5.4.15.org/rpmio/rpmio.h rpm-5.4.15/rpmio/rpmio.h
 --- rpm-5.4.15.org/rpmio/rpmio.h	2014-07-20 01:01:26.000000000 +0200
 +++ rpm-5.4.15/rpmio/rpmio.h	2018-08-11 12:36:48.761296851 +0200
+@@ -1,6 +1,10 @@
+ #ifndef	H_RPMIO
+ #define	H_RPMIO
+ 
++#ifndef	_GNU_SOURCE
++#define	_GNU_SOURCE	1
++#endif
++
+ /** \ingroup rpmio
+  * \file rpmio/rpmio.h
+  *
 @@ -25,7 +25,7 @@
  #if !defined(__LCLINT__) && !defined(__UCLIBC__) && defined(__GLIBC__) && \
  	(__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 2))
