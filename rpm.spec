@@ -47,7 +47,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.15
-Release:	48
+Release:	50
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
@@ -156,6 +156,7 @@ Patch64:	%{name}-fix-compress-doc.patch
 Patch65:	%{name}-parseSpec-skip-empty-tags.patch
 Patch66:	%{name}-payload-use-hashed-inode.patch
 Patch67:	%{name}-repackage-dont-force-max-compression.patch
+Patch68:	rpm-bug-420.patch
 Patch70:	python-%{name}sense-missingok.patch
 Patch71:	%{name}-changelog-encoding.patch
 Patch72:	%{name}-preserve-tag-type.patch
@@ -942,6 +943,7 @@ cd -
 %patch65 -p1
 %patch66 -p1
 %patch67 -p1
+%patch68 -p1
 %patch70 -p1
 %patch71 -p1
 %patch72 -p1

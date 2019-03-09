@@ -1,0 +1,22 @@
+--- rpm-5.4.15/rpmdb/legacy.c~	2019-03-09 00:37:45.000000000 +0100
++++ rpm-5.4.15/rpmdb/legacy.c	2019-03-09 00:38:28.799270580 +0100
+@@ -113,7 +113,7 @@ ANNOTATE_IGNORE_READS_AND_WRITES_END();
+     bingo = 0;
+     while (!bingo && (scn = elf_nextscn(elf, scn)) != NULL) {
+ 	(void) gelf_getshdr(scn, &shdr);
+-	if (shdr.sh_type != SHT_DYNAMIC)
++	if (shdr.sh_type != SHT_DYNAMIC || shdr.sh_entsize == 0)
+ 	    continue;
+ 	while (!bingo && (data = elf_getdata (scn, data)) != NULL) {
+ 	    unsigned maxndx = (unsigned) (data->d_size / shdr.sh_entsize);
+--- rpm-5.4.15/lib/rpmds.c~	2019-03-09 01:04:27.000000000 +0100
++++ rpm-5.4.15/lib/rpmds.c	2019-03-09 01:11:06.792636867 +0100
+@@ -3187,7 +3187,7 @@ fprintf(stderr, "*** rpmdsELF(%s, %d, %p
+ 	case SHT_DYNAMIC:
+ 	    data = NULL;
+ 	    while ((data = elf_getdata (scn, data)) != NULL) {
+-		for (cnt = 0; cnt < (int)(shdr->sh_size / shdr->sh_entsize); ++cnt) {
++		for (cnt = 0; shdr->sh_entsize && cnt < (int)(shdr->sh_size / shdr->sh_entsize); ++cnt) {
+ 		    dyn = gelf_getdyn (data, cnt, &dyn_mem);
+ 		    if (dyn == NULL)
+ 			/*@innerbreak@*/ break;
