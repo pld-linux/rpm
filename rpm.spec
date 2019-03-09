@@ -58,7 +58,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.17
-Release:	0.14
+Release:	0.15
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.17-0.20160512.src.rpm
@@ -173,7 +173,7 @@ Patch75:	%{name}-double_check_file_deps.patch
 Patch77:	%{name}-lua-expat.patch
 Patch78:	%{name}-double_check_unpackaged_subdirs.patch
 Patch79:	%{name}-rpmspec.patch
-
+Patch80:	%{name}-elf-entsize.patch
 Patch81:	%{name}-perl-magic.patch
 Patch82:	%{name}-5.4.15-use-DSA-sig.patch
 Patch83:	%{name}-ignore-missing-macro-files.patch
@@ -958,7 +958,6 @@ cd -
 %patch77 -p1
 %patch78 -p1
 %patch79 -p1
-
 %patch81 -p0
 %patch82 -p1
 %patch84 -p1
@@ -969,6 +968,7 @@ cd -
 %patch89 -p1
 %patch90 -p1
 %patch91 -p1
+%patch80 -p1
 
 %patch1000 -p1
 %patch1001 -p1

@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <errno.h>
 #include <db.h>
@@ -36,10 +37,8 @@ main(argc, argv)
 	enum { NOTSET, FILEID_RESET, LSN_RESET, STANDARD_LOAD } mode;
 	extern char *optarg;
 	extern int optind;
-	DBTYPE dbtype;
 	DB_ENV	*dbenv;
 	LDG ldg;
-	u_int ldf;
 	int ch, exitval, ret;
 
 	if ((exitval = version_check()) != 0)
@@ -55,9 +54,7 @@ main(argc, argv)
 	ldg.passwd = NULL;
 
 	mode = NOTSET;
-	ldf = 0;
 	exitval = 0;
-	dbtype = DB_UNKNOWN;
 
 	/*
 	 * There are two modes for db_load: -r and everything else.  The -r
@@ -112,7 +109,7 @@ main(argc, argv)
 	case LSN_RESET:
 		exitval = dbenv->lsn_reset(dbenv, argv[0], 0);
 		break;
-	case NOTSET:
+	default:
 		break;
 	}
 

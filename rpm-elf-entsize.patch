@@ -1,0 +1,44 @@
+Avoid SIGFPE on semi-ELF files, like guile cache (*.go).
+--- rpm-5.4.17/rpmdb/legacy.c.orig	2019-02-14 18:13:07.961620012 +0100
++++ rpm-5.4.17/rpmdb/legacy.c	2019-02-14 19:54:24.235368679 +0100
+@@ -116,7 +116,7 @@
+ 	if (shdr.sh_type != SHT_DYNAMIC)
+ 	    continue;
+ 	while (!bingo && (data = elf_getdata (scn, data)) != NULL) {
+-	    unsigned maxndx = (unsigned) (data->d_size / shdr.sh_entsize);
++	    unsigned maxndx = (shdr.sh_entsize == 0) ? 0 : (unsigned) (data->d_size / shdr.sh_entsize);
+ 	    unsigned ndx;
+ 
+             for (ndx = 0; ndx < maxndx; ++ndx) {
+--- rpm-5.4.17/lib/rpmds.c.orig	2019-02-14 21:51:17.514041154 +0100
++++ rpm-5.4.17/lib/rpmds.c	2019-02-14 21:51:20.570691261 +0100
+@@ -2933,6 +2933,11 @@
+  * @param isX32		is this an X32 symbol?
+  */
+ #if defined(HAVE_GELF_H) && defined(HAVE_LIBELF) && !defined(__FreeBSD__)
++static int getShdrEntries(GElf_Shdr *shdr)
++{
++    return shdr->sh_entsize == 0 ? 0 : ((int)(shdr->sh_size / shdr->sh_entsize));
++}
++
+ static char * sonameDep(/*@returned@*/ char * t, const char * s, int isElf64, int isX32)
+ 	/*@modifies t @*/
+ {
+@@ -3195,7 +3200,7 @@
+ 	case SHT_DYNAMIC:
+ 	    data = NULL;
+ 	    while ((data = elf_getdata (scn, data)) != NULL) {
+-		for (cnt = 0; cnt < (int)(shdr->sh_size / shdr->sh_entsize); ++cnt) {
++		for (cnt = 0; cnt < getShdrEntries(shdr); ++cnt) {
+ 		    dyn = gelf_getdyn (data, cnt, &dyn_mem);
+ 		    if (dyn == NULL)
+ 			/*@innerbreak@*/ break;
+@@ -3436,7 +3441,7 @@
+ 	case SHT_DYNAMIC:
+ 	    data = NULL;
+ 	    while ((data = elf_getdata (scn, data)) != NULL) {
+-		for (cnt = 0; cnt < (int)(shdr->sh_size / shdr->sh_entsize); ++cnt) {
++		for (cnt = 0; cnt < getShdrEntries(shdr); ++cnt) {
+ 		    dyn = gelf_getdyn (data, cnt, &dyn_mem);
+ 		    if (dyn == NULL)
+ 			/*@innerbreak@*/ break;
