@@ -46,13 +46,12 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.4.15
-Release:	51
-License:	LGPL v2.1
+Version:	4.14.2.1
+Release:	0.1
+License:	GPL v2 / LGPL v2.1
 Group:		Base
-# http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
-Source0:	%{name}-%{version}.tar.gz
-# Source0-md5:	4067f83ca8b5bf1a21e443c0cff3efa0
+Source0:	http://ftp.rpm.org/releases/rpm-4.14.x/%{name}-%{version}.tar.bz2
+# Source0-md5:	fdb8b8857f103b087b6aed5b78dd9b4f
 # See README.cpu-os-macros how to update cpu-os-macros.a
 Source100:	cpu-os-macros.a
 Source101:	README.cpu-os-macros
@@ -185,126 +184,7 @@ Patch96:	skip-ldconfig-optimization.patch
 Patch97:	glibc.patch
 Patch98:	extension-based-compression-detection.patch
 Patch99:	%{name}-gpg-pinentry.patch
-
-# Patches imported from Mandriva
-
-# status: ready to merge, it's already been merged on HEAD, so commiting it to rpm-5_4
-# would basically just mean backporting it..
-Patch1000:	%{name}-5.4.4-add-_specfile-macro.patch
-# status: needs to be cleaned up and properly reviewed together with rest
-# of the patches related to dependency generation
-Patch1001:	%{name}-5.4.9-avoid-dependencies-on-self.patch
-# status: probably ready to merge
-Patch1002:	%{name}-5.4.4-pkgconfigdeps-check-path.patch
-# status: probably okay to merge, but discuss on rpm-devel first
-Patch1003:	%{name}-5.4.4-glob-wildcards-for-loading-macro-files.patch
-# status: needs to be discussed
-Patch1004:	%{name}-5.4.4-allow-installation-of-repackaged-rpms.patch
-# status: ready to merge
-Patch1005:	%{name}-5.4.8-dont-show-suggests-with-requires.patch
-# status: ready for merge
-Patch1006:	%{name}-5.4.9-strip-buildroot-away-from-duplicate-files-list.patch
-# status: probably okay to merge, but discuss on rpm-devel first
-Patch1007:	%{name}-5.4.10-duplicate_files_terminate_build.patch
-# status: same as above
-Patch1008:	%{name}-5.4.10-unpackaged_subdirs_terminate_build.patch
-# mdvbz#64898
-# status: uncertain, might be okay to merge, discuss on rpm-devel first
-Patch1009:	%{name}-5.4.4-rpmbuild-withoutclean.patch
-# no sense in having an additional dependency on 'pkgconfig' on all packages that
-# have a pkgconfig file, it's not needed for them to be made useful and anything
-# actuallly using pkgconfig for this purpose will pull it in as a dependency anyways...
-# status: might be okay to merge, but discuss on rpm-devel first
-Patch1010:	%{name}-5.4.4-drop-useless-auto-generated-pkgconfig-dependency.patch
-# status: ready for merge
-Patch1011:	%{name}-5.4.4-fix-rpmconstant-to-always-use-LC_CTYPE-C-for-case-conversion.patch
-# $RPM_BUILD_DIR isn't necessarily the same as $PWD, it's %%{_builddir}, not
-# %%{_builddir}/%%{?buildsubdir}, messing up paths in debug packages created..
-# status: needs to be discussed and investigated a bit better..
-Patch1012:	%{name}-5.4.4-pass-_builddir-properly-to-find-debuginfo.patch
-# status: probably okay to merge, but discuss on rpm-devel first
-Patch1013:	%{name}-5.4.10-files-listed-twice-terminates-build.patch
-# status: probably okay to merge
-Patch1014:	%{name}-5.4.9-ruby1.9-fixes.patch
-# status: keep locally
-Patch1015:	%{name}-5.4.9-keep-loading-script-macros.patch
-# status: same as for other dep gen patches
-Patch1016:	%{name}-5.4.9-update-rpmfc-when-removing-dependencies-on-self.patch
-# status: idem
-Patch1017:	%{name}-5.4.9-rpmfc-extract-dependencies-for-all-files.patch
-# status: probably okay to merge
-Patch1019:	%{name}-5.4.5-python-export-spec-macros.patch
-# status: idem
-Patch1020:	%{name}-5.4.9-font-provides.patch
-# stauus: idem
-Patch1021:	%{name}-5.4.7-kmod-dependencies.patch
-# status: probably okay to merge, discuss on rpm-devel first
-Patch1022:	%{name}-5.4.5-skip-dependencies-for-character-devices.patch
-# status: probably okay to merge
-Patch1024:	%{name}-5.4.5-rpmfc-apply-python-coloring-from-magic.patch
-# status: probably okay to merge
-Patch1026:	%{name}-5.4.10-dont-try-generate-rpmfc-dependencies-from-doc-files.patch
-# status: ready
-Patch1027:	%{name}-5.4.7-fix-generation-of-ruby-abi-provides.patch
-# crash reproducable with 'rpm -qa --triggers'
-# status: ready
-Patch1028:	%{name}-5.4.7-hdrfmt-fix-unitialized-argv-element.patch
-# status: same as for other dep gen patches
-Patch1029:	%{name}-5.4.7-dont-consider-trigger-dependencies-as-overlapping.patch
-# status: ready
-Patch1030:	%{name}-5.4.7-fix-minor-memleaks.patch
-# status: ready
-Patch1031:	%{name}-5.4.9-mire-fix-strings-lacking-null-terminator.patch
-# status: ready
-Patch1032:	%{name}-5.4.9-rpmpython-fix-input.patch
-# status: ready
-Patch1033:	%{name}-5.4.7-no-seqid_init-on-rdonly-database.patch
-# status: probably ready for merging
-Patch1034:	%{name}-5.4.9-avoid-double-slash-in-path-for-dirname-filetrigger-matching.patch
-# status: probably ready to merge, discuss on rpm-devel first
-Patch1035:	%{name}-5.4.9-fix-verify-segfault.patch
-# Due to rpmdav/neon being written in a different fashion than other rpmio clients,
-# the inconsistent behaviour affects code elsewhere which expects consistent behaviour,
-# with the result being that when unable to download files, neon will save error
-# page as the target file.
-# status: should go upstream, but uncertain about "correct" fix, ie. this is
-# more of a workaround, while rewriting rpmdav code to behave consistently
-# would be "the right thing to do". Yet I'm not fully able to grasp all of the
-# code and don't want to spend more time just to get the API..
-Patch1037:	%{name}-5.4.10-fix-neon-saving-error-pages-as-target-file.patch
-# As the transaction flags for ignoring arch & os are no longer used, there's
-# currently no way to ignore arch & os of packages anymore. This patch adds
-# support for doing this again by defining rpm variables and overriding
-# --ignorearch & --ignoreos to set these.
-# status: needs to be discussed upstream before thinking about merging
-Patch1038:	%{name}-5.4.10-support-ignore-arch-and-os-again.patch
-# status: ready for merge
-Patch1039:	%{name}-5.4.4-fix-same-package-with-epoch-possible-to-upgrade.patch
-# we want that patch too, a bit of builder infrastructure relies on NOSIGNATURES
-Patch1040:	%{name}-5.4.9-support-signatures-and-digest-disablers.patch
-# lack insight on actual functionality, which anyways seems broken, so let's
-# disable it to avoid errors from berkeley db..
-# status: keep locally
-Patch1041:	%{name}-5.4.9-disable-l10ndir.patch
-# status: ready for merge
-Patch1042:	%{name}-5.4.9-fix-rpm_qa-pattern.patch
-# warning: introduces memory leak
-Patch1043:	%{name}-5.4.12-copy-Value-string.patch
-Patch1044:	%{name}-5.4.12-fix-rpmlua-print.patch
-Patch1045:	%{name}-5.4.12-fix-rpmpython-module-import-init.patch
-Patch1046:	%{name}-5.4.12-truncate-output-buffer-after-use.patch
-Patch1047:	%{name}-5.4.13-perl-bindings-do-not-use-xmalloc.patch
-# proyvind:
-# there's a rpmdbchk tool I wrote a while back, which might help you. although
-# the incidents it's able to deal with is rather limited ATM... it might help
-# you out, if not and you'll be able to solve yer problem, you could take a
-# stab at adding support for fixing your specific problem to the util ;)
-# https://abf.io/openmandriva/rpm/raw/master/rpm-5.4.14-rpmdbchk.patch
-Patch1048:	%{name}-5.4.14-rpmdbchk.patch
-# https://abf.io/openmandriva/rpm/raw/master/rpm-5.4.14-no-assert-abort-with-broken-headers.patch
-Patch1049:	%{name}-5.4.14-no-assert-abort-with-broken-headers.patch
-
-Patch1050:	python-libx32.patch
+Patch100:	python-libx32.patch
 
 URL:		http://rpm5.org/
 BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
@@ -965,54 +845,6 @@ cd -
 %patch91 -p1
 %patch99 -p1
 
-%patch1000 -p1
-%patch1001 -p1
-%patch1002 -p1
-%patch1003 -p1
-%patch1004 -p1
-%patch1005 -p1
-%patch1006 -p1
-%patch1007 -p1
-%patch1008 -p1
-%patch1009 -p1
-%patch1010 -p1
-%patch1011 -p1
-%patch1012 -p1
-%patch1013 -p1
-%patch1014 -p1
-%patch1015 -p1
-%patch1016 -p1
-%patch1017 -p1
-%patch1019 -p1
-%patch1020 -p1
-%patch1021 -p1
-%patch1022 -p1
-%patch1024 -p1
-%patch1026 -p1
-%patch1027 -p1
-%patch1028 -p1
-%patch1029 -p1
-%patch1030 -p1
-%patch1031 -p1
-%patch1032 -p1
-%patch1033 -p1
-%patch1034 -p1
-%patch1035 -p1
-%patch1037 -p1
-%patch1038 -p1
-%patch1039 -p1
-%patch1040 -p1
-# don't delete, may be usefull if jbj descides to enable this again
-#%patch1041 -p1
-%patch1042 -p1
-%patch1043 -p1
-%patch1044 -p1
-%patch1045 -p1
-%patch1046 -p1
-%patch1047 -p1
-%patch1048 -p1
-%patch1049 -p1
-
 %patch83 -p1
 %patch92 -p1
 %patch93 -p1
@@ -1022,7 +854,7 @@ cd -
 %patch97 -p1
 %patch98 -p1
 
-%patch1050 -p1
+%patch100 -p1
 
 install %{SOURCE2} macros/pld.in
 install %{SOURCE8} scripts/php.prov.in
