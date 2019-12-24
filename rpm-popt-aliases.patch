@@ -1,9 +1,9 @@
 --- rpm-4.4.9/rpmpopt.in	2008-03-24 22:09:33.709972364 +0200
 +++ rpm-4.4.9/rpmpopt.in	2008-04-04 18:51:45.658923774 +0300
-@@ -240,6 +249,18 @@
- 	--POPTdesc=$"override build root" \
- 	--POPTargs=$"DIRECTORY"
- 
+@@ -240,5 +249,35 @@
+ 	--POPTdesc=$"trace macro expansion"
+ rpmspec alias --nodebuginfo	--define 'debug_package %{nil}' \
+ 	--POPTdesc=$"do not generate debuginfo for this package"
 +# (PLD-specific) Make RPM build tree
 +rpmbuild exec --install-build-tree install-build-tree \
 +	--POPTdesc=$"make all needed dirs for building binary rpms"
@@ -16,12 +16,6 @@
 +rpmbuild exec  --bcond find-spec-bcond \
 +	--POPTdesc=$"find all --with/--without values"
 +
- rpmbuild alias --lsb --noautoreq --noautoprov \
- 	--define '_use_internal_dependency_generator 0' \
- 	--notinlsb
-@@ -595,4 +595,22 @@
- rpmv	alias --httpproxy	--define '_httpproxy !#:+'
- 
 +rpm	alias --initdb	-qa --quiet \
 +	--POPTdesc=$"Compatibility option with old rpm. Database is created lazily now."
 +

@@ -1,11 +1,11 @@
 --- rpm-5.0.2/configure.ac~	2008-02-19 20:09:59.000000000 +0200
 +++ rpm-5.0.2/configure.ac	2008-02-19 20:21:41.000000000 +0200
 @@ -1042,7 +1042,7 @@
- WITH_LUA_SUBDIR_LIB=""
- RPM_CHECK_LIB(
-     [Lua], [lua],
--    [lua], [lua_newstate], [lua.h],
-+    [lua51], [lua_newstate], [lua.h],
-     [no,internal:external:none], [lua:local],
-     [ if test ".$RPM_CHECK_LIB_LOCATION" = .internal; then
-           AC_CHECK_LIB(m, fabs)
+ 
+ AS_IF([test "$with_lua" != no],[
+   PKG_CHECK_MODULES([LUA],
+-    [lua >= 5.1],
++    [lua51 >= 5.1],
+     [AC_DEFINE(WITH_LUA, 1, [Build with lua support?])],
+     [AC_MSG_ERROR([lua not present (--without-lua to disable)])])
+   AC_SUBST(LUA_CFLAGS)

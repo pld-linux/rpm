@@ -1,20 +1,21 @@
 --- rpm-5.3.1/configure.ac.wiget	2010-05-22 17:15:11.000000000 +0200
 +++ rpm-5.3.1/configure.ac	2010-05-30 16:37:59.526924459 +0200
-@@ -2198,6 +2198,7 @@ AC_CONFIG_FILES([ po/Makefile.in
-     build/Makefile build/auto/Makefile build/auto/desc build/auto/types
-     tools/Makefile
-     scripts/Makefile
-+    scripts/perl.req scripts/perl.prov
-     rpmdb/DB_CONFIG
-     macros/macros macros/macros.rpmbuild
-     macros/java macros/libtool macros/mono macros/perl 
+@@ -1100,7 +1100,7 @@ AC_CONFIG_FILES([ po/Makefile.in
+ 
+ AC_CONFIG_FILES([Makefile
+ 	rpmio/Makefile lib/Makefile build/Makefile sign/Makefile
+-	po/Makefile.in scripts/Makefile fileattrs/Makefile
++	po/Makefile.in scripts/Makefile scripts/perl.req scripts/perl.prov fileattrs/Makefile
+ 	misc/Makefile 
+ 	doc/Makefile
+ 	python/Makefile
 --- rpm-5.3.1/scripts/perl.req.wiget	2008-10-26 10:50:53.000000000 +0100
 +++ rpm-5.3.1/scripts/perl.req	2010-05-30 16:35:36.999438206 +0200
 @@ -1,4 +1,4 @@
 -#!/usr/bin/perl
 +#!@__PERL@
- 
- # RPM (and its source code) is covered under two separate licenses. 
+  
+ # RPM (and its source code) is covered under two separate licenses.
  
 @@ -41,7 +41,11 @@
  
@@ -28,10 +29,10 @@
 +    }
    }
  } else {
-   
+ 
 @@ -49,7 +53,11 @@ if ("@ARGV") {
    # contents of the file.
-   
+ 
    foreach (<>) {
 -    process_file($_);
 +     if (m=/usr/(sbin|bin|lib|share|X11R6/(lib|bin))/=) {
@@ -51,13 +52,13 @@
        # if module is a number then both require and use interpret that
        # to mean that a particular version of perl is specified
  
--      my $ver=$1;
+-      my $ver = $1;
 -      if ($ver =~ /5.00/) {
--        print "perl >= 0:$ver\n";
+-        $perlreq{"0:$ver"} = 1;
 -        next;
 -      }
 -      else {
--        print "perl >= 1:$ver\n";
+-        $perlreq{"1:$ver"} = 1;
 -        next;
 -      }
 +	my $ver=$2;
@@ -95,12 +96,12 @@
        };
  
 @@ -244,7 +274,31 @@ sub process_file {
-       # will be included with the name sys/systeminfo.ph so only use the
+       #  will be included with the name sys/systeminfo.ph so only use the
        # basename of *.ph files
  
--      ($module  =~ m/\.ph$/) && next;
+-      ($module =~ m/\.ph$/) && next;
 +      # ($module  =~ m/\.ph$/) && ($module =~ s!.*/!!g );
-+ 
++
 +      # there is no need to generate dependencies for ph, pl or test files
 +      # so let's just skip them.
 +
@@ -125,5 +126,5 @@
 +
 +      $module =~ s/\(\s*\)$//;
  
-       $require{$module}=$version;
-       $line{$module}=$_;
+       # use base|parent qw(Foo) dependencies
+       if ($statement eq "use" && ($module eq "base" || $module eq "parent")) {

@@ -46,12 +46,12 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	4.14.2.1
+Version:	4.15.1
 Release:	0.1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
-Source0:	http://ftp.rpm.org/releases/rpm-4.14.x/%{name}-%{version}.tar.bz2
-# Source0-md5:	fdb8b8857f103b087b6aed5b78dd9b4f
+Source0:	http://ftp.rpm.org/releases/rpm-4.15.x/%{name}-%{version}.tar.bz2
+# Source0-md5:	ed72147451a5ed93b2a48e2f8f5413c3
 # See README.cpu-os-macros how to update cpu-os-macros.a
 Source100:	cpu-os-macros.a
 Source101:	README.cpu-os-macros
@@ -90,17 +90,11 @@ Source31:	gem_helper.rb
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
 Patch2:		%{name}-popt-aliases.patch
-Patch3:		%{name}-nosetproctitle.patch
 Patch4:		%{name}-perl-macros.patch
 Patch5:		%{name}-perl-req-perlfile.patch
 Patch6:		%{name}-scripts-closefds.patch
 Patch7:		%{name}-php-macros.patch
-Patch8:		%{name}-gettext-in-header.patch
 Patch9:		%{name}-lua.patch
-Patch10:	%{name}-php-deps.patch
-Patch11:	%{name}-notsc.patch
-Patch12:	%{name}-hack-norpmlibdep.patch
-Patch13:	%{name}-dont-copy-descriptive-tags.patch
 Patch14:	%{name}-perl_req-INC_dirs.patch
 Patch15:	%{name}-debuginfo.patch
 Patch16:	vendor-pld.patch
@@ -753,20 +747,11 @@ cd -
 #patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
-%patch8 -p1
+#%patch7 -p1
 %{?with_system_lua:%patch9 -p1}
-%patch10 -p1
-%ifnarch i386 i486
-# enable TSC for capable archs
-%patch11 -p1
-%endif
-%patch12 -p1
-%patch13 -p1
 %patch14 -p0
 %patch15 -p1
 %patch16 -p1
@@ -857,8 +842,8 @@ cd -
 %patch100 -p1
 
 install %{SOURCE2} macros/pld.in
-install %{SOURCE8} scripts/php.prov.in
-install %{SOURCE9} scripts/php.req.in
+#install %{SOURCE8} scripts/php.prov.in
+#install %{SOURCE9} scripts/php.req.in
 install %{SOURCE11} scripts/perl.prov.in
 cp -p %{SOURCE30} scripts/rubygems.rb
 cp -p %{SOURCE31} scripts/gem_helper.rb
