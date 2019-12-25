@@ -1,13 +1,13 @@
 --- rpm-4.5/lib/psm.c.org	2008-11-21 17:20:34.293584455 +0100
 +++ rpm-4.5/lib/psm.c	2008-11-21 17:21:41.482728047 +0100
-@@ -2114,8 +2114,8 @@
- 	    psm->countCorrection = -1;
+@@ -789,8 +789,8 @@
+ 	}
  
- 	    if (!(rpmtsFlags(ts) & RPMTRANS_FLAG_NOPOSTUN)) {
--		rc = (rpmRC) rpmpsmNext(psm, PSM_SCRIPT);
--		if (rc) break;
-+		if (rpmpsmNext(psm, PSM_SCRIPT))
-+		    rpmlog(RPMLOG_INFO, _("Ignoring failed %%postun scriptlet\n"));
- 	    }
+ 	if (!(rpmtsFlags(ts) & RPMTRANS_FLAG_NOPOSTUN)) {
+-	    rc = runInstScript(psm, RPMTAG_POSTUN);
+-	    if (rc) break;
++	    if (runInstScript(psm, RPMTAG_POSTUN))
++		rpmlog(RPMLOG_INFO, _("Ignoring failed %%postun scriptlet\n"));
+ 	}
  
- 	    if (!(rpmtsFlags(ts) & RPMTRANS_FLAG_NOTRIGGERPOSTUN)) {
+ 	if (!(rpmtsFlags(ts) & RPMTRANS_FLAG_NOTRIGGERPOSTUN)) {

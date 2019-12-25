@@ -1,13 +1,13 @@
 --- rpm-4.5/build/parseChangelog.c.orig	2012-07-24 14:46:12.856158625 +0200
 +++ rpm-4.5/build/parseChangelog.c	2012-07-24 14:47:55.293158624 +0200
 @@ -181,9 +181,8 @@
- 	    return RPMRC_FAIL;
+ 	    goto exit;
  	}
  	if (lastTime && lastTime < time) {
 -	    rpmlog(RPMLOG_ERR,
 +	    rpmlog(RPMLOG_WARNING,
  		     _("%%changelog not in descending chronological order\n"));
--	    return RPMRC_FAIL;
+-	    goto exit;
  	}
- 	lastTime = time;
- 
+ 	for (i = 0; i < date_words; i++) {
+ 	    SKIPSPACE(s);

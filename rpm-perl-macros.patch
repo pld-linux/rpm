@@ -14,7 +14,7 @@
 @@ -1,4 +1,4 @@
 -#!/usr/bin/perl
 +#!@__PERL@
-  
+ 
  # RPM (and its source code) is covered under two separate licenses.
  
 @@ -41,7 +41,11 @@

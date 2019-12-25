@@ -1,18 +1,16 @@
 --- rpm-4.5/scripts/find-debuginfo.sh~	2010-01-27 19:25:48.000000000 +0200
 +++ rpm-4.5/scripts/find-debuginfo.sh	2010-01-27 20:23:37.279516094 +0200
-@@ -24,6 +24,11 @@
- strict=false
- 
- RPM_BUILD_DIR="`pwd`"
-+# canon RPM_BUILD_DIR, the DW_AT_comp_dir in ELF objects is real a real path
+@@ -385,6 +385,9 @@
+     debug_base_name="$BUILDDIR"
+     debug_dest_name="/usr/src/debug/${unique_debug_src_base}"
+   fi
++# canon debug_base_name, the DW_AT_comp_dir in ELF objects is real a real path
 +# and debugedit will ignore them as they are out of build dir.
-+RPM_BUILD_DIR=$(readlink -f "$RPM_BUILD_DIR")
-+echo "RPM_BUILD_DIR=$RPM_BUILD_DIR"
-+
- BUILDDIR=.
- out=debugfiles.list
- nout=0
-@@ -201,6 +203,11 @@
++  debug_base_name=$(readlink -f "$debug_base_name")
+   no_recompute=
+   if [ "$no_recompute_build_id" = "true" ]; then
+     no_recompute="-n"
+@@ -398,6 +400,11 @@
      $strict && exit 2
    fi
  
@@ -21,6 +19,6 @@
 +    $strict && exit 2
 +  fi
 +
-   [ -x /usr/bin/gdb-add-index ] && /usr/bin/gdb-add-index "$f" > /dev/null 2>&1
- 
-   # A binary already copied into /usr/lib/debug doesn't get stripped,
+   # Add .gdb_index if requested.
+   if $include_gdb_index; then
+     if type gdb-add-index >/dev/null 2>&1; then

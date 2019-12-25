@@ -15,7 +15,6 @@
 %bcond_with	db61		# use DB 6.1 instead of 5.2
 %bcond_with	neon		# build with HTTP/WebDAV support (neon library)
 %bcond_with	sqlite		# build with SQLite support
-%bcond_with	system_lua	# use system lua
 %bcond_without	system_pcre	# use system pcre
 %bcond_with	keyutils	# build with keyutils support
 
@@ -98,31 +97,12 @@ Patch9:		%{name}-lua.patch
 Patch14:	%{name}-perl_req-INC_dirs.patch
 Patch15:	%{name}-debuginfo.patch
 Patch16:	vendor-pld.patch
-Patch17:	%{name}-old-fileconflicts-behaviour.patch
 Patch18:	%{name}-javadeps.patch
-Patch19:	%{name}-truncate-cvslog.patch
 Patch20:	%{name}-libtool-deps.patch
-Patch21:	%{name}-mimetype.patch
-Patch22:	%{name}-sparc64.patch
-Patch23:	%{name}-gendiff.patch
-Patch24:	openmp.patch
-Patch25:	%{name}-URPM-build-fix.patch
-Patch26:	%{name}-semanage.patch
-Patch27:	%{name}-helperEVR-noassert.patch
-Patch28:	%{name}-unglobal.patch
 Patch29:	%{name}-builddir-readlink.patch
 Patch30:	%{name}-changelog_order_check_nonfatal.patch
-Patch31:	%{name}-cleanbody.patch
-Patch32:	%{name}-dirdeps-macro.patch
-Patch33:	%{name}-installbeforeerase.patch
-Patch34:	%{name}-libmagic-locale.patch
 Patch35:	%{name}-namespace-compare.patch
-Patch36:	%{name}-popt-coreutils.patch
 Patch37:	%{name}-postun-nofail.patch
-Patch38:	%{name}-silence-RPM_CHAR_TYPE.patch
-Patch39:	%{name}-fix-missing-types-in-headers.patch
-Patch40:	%{name}-fix--p-interpreter-and-empty-script.patch
-Patch41:	%{name}-db_buffer_small.patch
 Patch42:	%{name}-pattern_Release.patch
 Patch43:	%{name}-fix-___build_pre-macro.patch
 Patch44:	%{name}-missing-patch-file-fails-build.patch
@@ -207,7 +187,7 @@ BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libxml2-devel
 BuildRequires:	neon-devel >= 0.25.5
 %endif
-%{?with_system_lua:BuildRequires:	lua52-devel >= 5.2.2}
+BuildRequires:	lua52-devel >= 5.2.2
 BuildRequires:	ossp-uuid-devel
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
@@ -751,37 +731,16 @@ cd -
 %patch5 -p1
 %patch6 -p1
 #%patch7 -p1
-%{?with_system_lua:%patch9 -p1}
+%patch9 -p1
 %patch14 -p0
 %patch15 -p1
-%patch16 -p1
-%patch17 -p1
-%patch18 -p1
-%patch19 -p1
+#%patch16 -p1
+#%patch18 -p1
 %patch20 -p1
-%patch21 -p1
-%ifarch sparc64
-%patch22 -p1
-%endif
-%patch23 -p1
-%patch24 -p1
-%patch25 -p1
-%patch26 -p1
-%patch27 -p1
-%patch28 -p1
 %patch29 -p1
 %patch30 -p1
-%patch31 -p1
-%patch32 -p1
-%patch33 -p1
-%patch34 -p1
-%patch35 -p1
-%patch36 -p1
+#%patch35 -p1
 %patch37 -p1
-%patch38 -p1
-%patch39 -p1
-%patch40 -p1
-%{?with_db61:%patch41 -p1}
 %patch42 -p1
 %patch43 -p1
 %patch44 -p1
@@ -877,7 +836,7 @@ sed -i \
 	-e 's|@host_os@|%{_target_os}|' \
 	macros/macros.in
 
-%{?with_system_lua:CPPFLAGS="-I/usr/include/lua51 %{rpmcppflags}"}
+CPPFLAGS="-I/usr/include/lua51 %{rpmcppflags}"
 %configure \
 	WITH_PERL_VERSION=no \
 	__GST_INSPECT=%{_bindir}/gst-inspect-1.0 \
@@ -894,7 +853,7 @@ sed -i \
 	--with-file=external \
 	--with-keyutils=%{?with_keyutils:external}%{!?with_keyutils:no} \
 	--with-libelf \
-	--with-lua=%{!?with_system_lua:internal}%{?with_system_lua:external} \
+	--with-lua \
 	--with-lzma=external \
 	--with-neon=%{?with_neon:external}%{!?with_neon:no} \
 	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/%%{_target}/macros:%{_rpmlibdir}/macros.build:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%%{_target}/macros:%{_sysconfdir}/rpm/macros.d/*.macros:~/etc/.rpmmacros:~/.rpmmacros' \
@@ -1337,12 +1296,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %if %{with selinux}
 %attr(755,root,root) %{_rpmlibdir}/bin/semodule
 %attr(755,root,root) %{_rpmlibdir}/bin/spooktool
-%endif
-%if %{without system_lua}
-%attr(755,root,root) %{_rpmlibdir}/bin/lua
-%attr(755,root,root) %{_rpmlibdir}/bin/luac
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmlua
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmluac
 %endif
 %{?with_keyutils:%attr(755,root,root) %{_rpmlibdir}/bin/rpmkey}
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmrepo
