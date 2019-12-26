@@ -136,7 +136,7 @@ BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libxml2-devel
 BuildRequires:	neon-devel >= 0.25.5
 %endif
-BuildRequires:	lua52-devel >= 5.2.2
+BuildRequires:	lua53-devel >= 5.3.5
 BuildRequires:	ossp-uuid-devel
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
@@ -730,7 +730,7 @@ sed -i \
 	-e 's|@host_os@|%{_target_os}|' \
 	macros.in
 
-CPPFLAGS="-I/usr/include/lua51 %{rpmcppflags}"
+CPPFLAGS="-I/usr/include/lua53 %{rpmcppflags}"
 %configure \
 	WITH_PERL_VERSION=no \
 	__GST_INSPECT=%{_bindir}/gst-inspect-1.0 \
@@ -765,9 +765,7 @@ CPPFLAGS="-I/usr/include/lua51 %{rpmcppflags}"
 	--with-xz=external \
 	--with-zlib=external
 
-%{__make} -j1
-
-%{?with_apidocs:%{__make} apidocs}
+%{__make}
 
 %{__cc} %{rpmcflags} -I/usr/include/db%{reqdb_ver} tools/rpmdb_checkversion.c \
 	-o tools/rpmdb_checkversion -ldb-%{reqdb_ver}
@@ -926,7 +924,6 @@ EOF
 # Squash Extra Blank Lines
 %{__sed} -i -e '/./,/^$/!d' $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/vpkg-provides*
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-{prov,req}.pl
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-{provides,requires}.perl
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
