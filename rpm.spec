@@ -12,7 +12,7 @@
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
 %bcond_without	suggest_tags	# build without Suggest tag (bootstrapping)
-%bcond_with	db61		# use DB 6.1 instead of 5.2
+%bcond_with	db61		# use DB 6.1 instead of 5.3
 %bcond_with	neon		# build with HTTP/WebDAV support (neon library)
 %bcond_with	sqlite		# build with SQLite support
 %bcond_without	system_pcre	# use system pcre
@@ -29,12 +29,12 @@
 %define		reqdb_ver	6.1
 %define		reqdb_pkgver	6.1.19
 %else
-%define		reqdb_pkg	db5.2
-%define		reqdb_ver	5.2
-%define		reqdb_pkgver	5.2.36.0-4
+%define		reqdb_pkg	db5.3
+%define		reqdb_ver	5.3
+%define		reqdb_pkgver	5.3.28.0
 %endif
 %define		reqpopt_ver	1.15
-%define		beecrypt_ver	2:4.2.0
+%define		openssl_ver	1.1.1d
 %define		sover		5.4
 
 Summary:	RPM Package Manager
@@ -103,62 +103,11 @@ Patch29:	%{name}-builddir-readlink.patch
 Patch30:	%{name}-changelog_order_check_nonfatal.patch
 Patch35:	%{name}-namespace-compare.patch
 Patch37:	%{name}-postun-nofail.patch
-Patch42:	%{name}-pattern_Release.patch
-Patch43:	%{name}-fix-___build_pre-macro.patch
-Patch44:	%{name}-missing-patch-file-fails-build.patch
-Patch45:	%{name}-remove-misleading-missing-patch-message.patch
-Patch46:	%{name}-file-magic-can-be-mixed-case.patch
-Patch47:	%{name}-query-always-noisy.patch
-Patch48:	%{name}-verify-ghosts-broken-logic.patch
-Patch49:	%{name}-python-enable-compat-RPMSENSE.patch
-Patch50:	%{name}-dont-treat-gstreamer-modules-as-font.patch
-Patch51:	%{name}-gst-inspect-typo.patch
-Patch52:	%{name}-null-term-ascii-digest.patch
-Patch53:	%{name}-lua-enable-extra-libs.patch
-Patch54:	%{name}-fix-filedigests-verify.patch
-Patch55:	%{name}-disable-hmac-verify.patch
-Patch56:	%{name}-macros.patch
-Patch57:	%{name}-db5.2.patch
-Patch58:	%{name}-preserve-iterator.patch
-Patch59:	gcc6-stdlib.patch
-Patch60:	%{name}-python-sitescriptdir.patch
 Patch61:	%{name}-clean-docdir.patch
-Patch62:	%{name}-DB_CONFIG.patch
-Patch63:	%{name}-pythoneggs.patch
 Patch64:	%{name}-fix-compress-doc.patch
-Patch65:	%{name}-parseSpec-skip-empty-tags.patch
-Patch66:	%{name}-payload-use-hashed-inode.patch
-Patch67:	%{name}-repackage-dont-force-max-compression.patch
-Patch68:	rpm-bug-420.patch
-Patch70:	python-%{name}sense-missingok.patch
-Patch71:	%{name}-changelog-encoding.patch
-Patch72:	%{name}-preserve-tag-type.patch
-Patch74:	%{name}-fix-internal-lua-build.patch
-Patch75:	%{name}-double_check_file_deps.patch
-Patch77:	%{name}-lua-expat.patch
-Patch78:	%{name}-double_check_unpackaged_subdirs.patch
-Patch79:	%{name}-rpmspec.patch
-Patch80:	%{name}-revert-gpg-argv-parsing.patch
 Patch81:	%{name}-perl-magic.patch
-Patch82:	%{name}-5.4.15-use-DSA-sig.patch
 Patch83:	%{name}-ignore-missing-macro-files.patch
 Patch84:	x32.patch
-Patch85:	rpm-CVE-2013-6435.patch
-Patch86:	rpm-CVE-2014-8118.patch
-Patch87:	%{name}-file-output-for-ELF.patch
-Patch88:	%{name}-rpmtdnext.patch
-Patch89:	disable-header-verification.patch
-Patch90:	%{name}-cppcompat.patch
-Patch91:	py-disable-fetch.patch
-Patch92:	fast_python_deps.patch
-Patch93:	python2_explicit.patch
-Patch94:	do_not_write_before_macro_buffer.patch
-Patch95:	rpm-python-spec-header.patch
-Patch96:	skip-ldconfig-optimization.patch
-Patch97:	glibc.patch
-Patch98:	extension-based-compression-detection.patch
-Patch99:	%{name}-gpg-pinentry.patch
-Patch100:	python-libx32.patch
 
 URL:		http://rpm5.org/
 BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
@@ -169,7 +118,7 @@ BuildRequires:	%{reqdb_pkg}-sql-devel >= %{reqdb_pkgver}
 %endif
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1.4
-BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
+BuildRequires:	openssl-devel >= %{openssl_ver}
 BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gettext-tools >= 0.19.2
@@ -206,7 +155,7 @@ BuildRequires:	tetex-pdftex
 %if %{with static}
 # Require static library only for static build
 BuildRequires:	%{reqdb_pkg}-static >= %{reqdb_pkgver}
-BuildRequires:	beecrypt-static >= %{beecrypt_ver}
+BuildRequires:	openssl-static >= %{openssl_ver}
 BuildRequires:	bzip2-static >= 1.0.2-17
 BuildRequires:	elfutils-static
 BuildRequires:	glibc-static >= 2.2.94
@@ -223,7 +172,7 @@ Requires(posttrans):	coreutils
 Requires:	FHS >= 3.0-2
 Requires:	%{name}-base = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
-Requires:	beecrypt >= %{beecrypt_ver}
+Requires:	openssl >= %{openssl_ver}
 Requires:	popt >= %{reqpopt_ver}
 Provides:	rpm-db-ver = %{reqdb_ver}
 Obsoletes:	rpm-getdeps
@@ -328,7 +277,7 @@ Requires:	sqlite3 >= %{sqlite_build_version}
 %else
 Requires:	%{reqdb_pkg}-sql >= %{reqdb_pkgver}
 %endif
-Requires:	beecrypt >= %{beecrypt_ver}
+Requires:	openssl >= %{openssl_ver}
 Requires:	libmagic >= 1.15-2
 %{?with_selinux:Requires:	libselinux >= 2.1.0}
 Requires:	popt >= %{reqpopt_ver}
@@ -353,7 +302,7 @@ Summary(uk.UTF-8):	Хедери та бібліотеки для програм,
 Group:		Development/Libraries
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
-Requires:	beecrypt-devel >= %{beecrypt_ver}
+Requires:	openssl-devel >= %{openssl_ver}
 Requires:	bzip2-devel
 Requires:	elfutils-devel
 %{?with_keyutils:Requires:	keyutils-devel}
@@ -421,7 +370,7 @@ Summary(uk.UTF-8):	Статична бібліотека для програм, 
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	%{reqdb_pkg}-static >= %{reqdb_pkgver}
-Requires:	beecrypt-static >= %{beecrypt_ver}
+Requires:	openssl-static >= %{openssl_ver}
 Requires:	bzip2-static
 Requires:	elfutils-static
 %{?with_keyutils:Requires:	keyutils-static}
@@ -741,73 +690,18 @@ cd -
 %patch30 -p1
 #%patch35 -p1
 %patch37 -p1
-%patch42 -p1
-%patch43 -p1
-%patch44 -p1
-%patch45 -p1
-%patch46 -p1
-%patch47 -p1
-%patch48 -p1
-%patch49 -p1
-%patch50 -p1
-%patch51 -p1
-%patch52 -p0
-%patch53 -p1
-%patch54 -p1
-%patch55 -p1
-%patch56 -p1
-%{!?with_db61:%patch57 -p1}
-%patch58 -p1
-%patch59 -p1
-%patch60 -p1
 %patch61 -p1
-%patch62 -p1
-%patch63 -p1
-%patch64 -p1
-%patch65 -p1
-%patch66 -p1
-%patch67 -p1
-%patch68 -p1
-%patch70 -p1
-%patch71 -p1
-%patch72 -p1
-%patch74 -p1
-%patch75 -p1
-%patch77 -p0
-%patch78 -p1
-%patch79 -p1
-%patch80 -p1
-%patch81 -p0
-%patch82 -p1
-%patch84 -p1
-%patch85 -p1
-%patch86 -p1
-%patch87 -p1
-%patch88 -p1
-%patch89 -p1
-%patch90 -p1
-%patch91 -p1
-%patch99 -p1
-
+#%patch64 -p1
+%patch81 -p1
 %patch83 -p1
-%patch92 -p1
-%patch93 -p1
-%patch94 -p1
-%patch95 -p1
-%patch96 -p1
-%patch97 -p1
-%patch98 -p1
+#%patch84 -p1
 
-%patch100 -p1
-
-install %{SOURCE2} macros/pld.in
+install %{SOURCE2} pld.in
 #install %{SOURCE8} scripts/php.prov.in
 #install %{SOURCE9} scripts/php.req.in
 install %{SOURCE11} scripts/perl.prov.in
 cp -p %{SOURCE30} scripts/rubygems.rb
 cp -p %{SOURCE31} scripts/gem_helper.rb
-
-rm scripts/find-php*
 
 %{__mv} -f scripts/perl.req{,.in}
 
@@ -817,7 +711,7 @@ awk -f %{SOURCE6} %{SOURCE1}
 install %{SOURCE26} tools/rpmdb_checkversion.c
 install %{SOURCE28} tools/rpmdb_reset.c
 
-for extlib in beecrypt neon %{?with_system_pcre:pcre} popt; do
+for extlib in openssl neon %{?with_system_pcre:pcre} popt; do
 	[ -d $extlib ] && %{__rm} -r $extlib
 done
 
@@ -834,7 +728,7 @@ sed -i \
 	-e 's|@host@|%{_target_cpu}-%{_target_vendor}-%{_target_os}|' \
 	-e 's|@host_cpu@|%{_target_cpu}|' \
 	-e 's|@host_os@|%{_target_os}|' \
-	macros/macros.in
+	macros.in
 
 CPPFLAGS="-I/usr/include/lua51 %{rpmcppflags}"
 %configure \
@@ -845,7 +739,7 @@ CPPFLAGS="-I/usr/include/lua51 %{rpmcppflags}"
 	--enable-shared \
 	--enable-static \
 	%{!?with_apidocs:--without-apidocs} \
-	--with-beecrypt=external \
+	--with-crypto=openssl \
 	--with-bugreport="http://bugs.pld-linux.org/" \
 	--with-bzip2=external \
 	--with-db=external \
@@ -862,7 +756,7 @@ CPPFLAGS="-I/usr/include/lua51 %{rpmcppflags}"
 	--with-popt=external \
 	%{?with_python:--with-python=%{py_ver} --with-python-lib-dir=%{py_sitedir}} \
 	%{!?with_python:--without-python} \
-	--with-selinux=%{!?with_selinux:no}%{?with_selinux:external} \
+	--with-selinux=%{!?with_selinux:no}%{?with_selinux:yes} \
 	--with-semanage=%{!?with_selinux:no}%{?with_selinux:external} \
 	--with-sepol=%{!?with_selinux:no}%{?with_selinux:external} \
 	--with-sqlite=%{?with_sqlite:yes}%{!?with_sqlite:no} \

@@ -12,20 +12,20 @@
  alpha*)		RPMCANONARCH=alpha ;;
  sparc64*)	RPMCANONARCH=sparc64 ;;
  sparc*)		RPMCANONARCH=sparc ;;
---- rpm-5.4.15/lib/rpmfc.c.orig	2014-12-20 16:50:32.000000000 +0100
-+++ rpm-5.4.15/lib/rpmfc.c	2014-12-20 18:32:11.641808153 +0100
+--- rpm-5.4.15/build/rpmfc.c.orig	2014-12-20 16:50:32.000000000 +0100
++++ rpm-5.4.15/build/rpmfc.c	2014-12-20 18:32:11.641808153 +0100
 @@ -581,6 +581,7 @@
-   { "MIPS, N32 MIPS32",		RPMFC_ELFMIPSN32|RPMFC_INCLUDE },
+ 
    { "ELF 32-bit",		RPMFC_ELF32|RPMFC_INCLUDE },
    { "ELF 64-bit",		RPMFC_ELF64|RPMFC_INCLUDE },
 +//  { "ELF 32-bit",		RPMFC_ELFX32|RPMFC_INCLUDE },
  
-   { " script",			RPMFC_SCRIPT },
-   { " text",			RPMFC_TEXT },
+   { "troff or preprocessor input",	RPMFC_INCLUDE },
+   { "GNU Info",			RPMFC_INCLUDE },
 @@ -685,7 +686,11 @@
-     for (fct = rpmfcTokens; fct->token != NULL; fct++) {
  	if (strstr(fmstr, fct->token) == NULL)
  	    continue;
+ 
 -	fcolor |= fct->colors;
 +	// This is a nasty hack, but will have to do for now
 +	if ((fct->colors & RPMFC_ELF32) && (strstr(fmstr, "x86-64") != NULL))
@@ -35,8 +35,8 @@
  	if (fcolor & RPMFC_INCLUDE)
  	    return fcolor;
      }
---- rpm-5.4.15/lib/rpmfc.h.orig	2014-12-20 17:51:48.584934979 +0100
-+++ rpm-5.4.15/lib/rpmfc.h	2014-12-20 17:56:14.690160030 +0100
+--- rpm-5.4.15/build/rpmfc.h.orig	2014-12-20 17:51:48.584934979 +0100
++++ rpm-5.4.15/build/rpmfc.h	2014-12-20 17:56:14.690160030 +0100
 @@ -20,8 +20,9 @@
      RPMFC_BLACK			= 0,
      RPMFC_ELF32			= (1 <<  0),
@@ -48,80 +48,6 @@
  	/* (1 << 3) leaks into package headers, reserved */
  
      RPMFC_DESKTOP_FILE		= (1 <<  4),
-diff -ur rpm-5.4.15/autodeps/linux.prov rpm-5.4.15.x32/autodeps/linux.prov
---- rpm-5.4.15/autodeps/linux.prov	2010-03-18 10:54:56.000000000 +0100
-+++ rpm-5.4.15.x32/autodeps/linux.prov	2014-12-20 19:18:57.339941715 +0100
-@@ -16,8 +16,12 @@
- 
- #
- # --- Alpha does not mark 64bit dependencies
-+# --- Only x86_64 has x32bit dependencies
-+markx32=""
- case `uname -m` in
-   alpha*)	mark64="" ;;
-+  x86_64)	markx32="()(x32bit)"
-+  		mark64="()(64bit)" ;;
-   *)		mark64="()(64bit)" ;;
- esac
- 
-@@ -28,6 +32,10 @@
- 
-     lib64=`if file -L $f 2>/dev/null | \
- 	grep "ELF 64-bit" >/dev/null; then echo "$mark64"; fi`
-+    libx32=`if file -L $f 2>/dev/null | \
-+	grep "ELF 32-bit.*x86-64" > /dev/null; \
-+	then echo "$markx32"; fi`
-+    lib64="$lib64$libx32"
-     if [ "$soname" != "" ]; then
- 	if [ ! -L $f ]; then
- 	    echo $soname$lib64
-Only in rpm-5.4.15.x32/autodeps: linux.prov.orig
-diff -ur rpm-5.4.15/autodeps/linux.req rpm-5.4.15.x32/autodeps/linux.req
---- rpm-5.4.15/autodeps/linux.req	2010-03-18 10:54:56.000000000 +0100
-+++ rpm-5.4.15.x32/autodeps/linux.req	2014-12-20 19:20:04.622910545 +0100
-@@ -38,8 +38,12 @@
- 
- #
- # --- Alpha does not mark 64bit dependencies
-+# --- Only x86_64 has x32bit dependencies
-+markx32=""
- case `uname -m` in
-   alpha*)	mark64="" ;;
-+  x86_64)	markx32="()(x32bit)"
-+  		mark64="()(64bit)" ;;
-   *)		mark64="()(64bit)" ;;
- esac
- 
-@@ -50,6 +54,9 @@
-     [ -r $f -a -x $f ] || continue
-     lib64=`if file -L $f 2>/dev/null | \
- 	grep "ELF 64-bit" >/dev/null; then echo "$mark64"; fi`
-+    libx32=`if file -L $f 2>/dev/null | \
-+	grep "ELF 32-bit.*x86-64" >/dev/null; then echo "$markx32"; fi`
-+    lib64="$lib64$libx32"
-     ldd $f | awk '/=>/ {
- 	if ($1 !~ /libNoVersion.so/ && $1 !~ /4[um]lib.so/ && $1 !~ /libredhat-kernel.so/) {
- 	    gsub(/'\''"/,"\\&",$1);
-@@ -64,6 +71,9 @@
-     [ -r $f ] || continue
-     lib64=`if file -L $f 2>/dev/null | \
- 	grep "ELF 64-bit" >/dev/null; then echo "$mark64"; fi`
-+    libx32=`if file -L $f 2>/dev/null | \
-+	grep "ELF 32-bit.*x86-64" >/dev/null; then echo "$markx32"; fi`
-+    lib64="$lib64$libx32"
-     ldd $f | awk '/=>/ {
- 	if ($1 !~ /libNoVersion.so/ && $1 !~ /4[um]lib.so/ && $1 !~ /libredhat-kernel.so/) {
- 	    gsub(/'\''"/,"\\&",$1);
-@@ -98,6 +108,9 @@
-     [ -r $f ] || continue
-     lib64=`if file -L $f 2>/dev/null | \
- 	grep "ELF 64-bit" >/dev/null; then echo "$mark64"; fi`
-+    libx32=`if file -L $f 2>/dev/null | \
-+	grep "ELF 32-bit.*x86-64" >/dev/null; then echo "$markx32"; fi`
-+    lib64="$lib64$libx32"
-     $OBJDUMP -p $f | awk 'BEGIN { START=0; LIBNAME=""; needed='$needed'; }
- 	/^$/ { START=0; }
- 	/^Dynamic Section:$/ { START=1; }
 diff -ur rpm-5.4.15/lib/rpmds.c rpm-5.4.15.x32/lib/rpmds.c
 --- rpm-5.4.15/lib/rpmds.c	2014-12-20 19:35:31.114557975 +0100
 +++ rpm-5.4.15.x32/lib/rpmds.c	2014-12-20 19:34:54.958087185 +0100
@@ -245,3 +171,76 @@ diff -ur rpm-5.4.15/build/parseSpec.c rpm-5.4.15-fixed/build/parseSpec.c
  
      for (pkg = spec->packages; pkg != NULL; pkg = pkg->next) {
  	he->tag = RPMTAG_OS;
+diff -ur rpm-5.4.15/autodeps/linux.prov rpm-5.4.15.x32/autodeps/linux.prov
+--- rpm-5.4.15/autodeps/linux.prov	2010-03-18 10:54:56.000000000 +0100
++++ rpm-5.4.15.x32/autodeps/linux.prov	2014-12-20 19:18:57.339941715 +0100
+@@ -16,8 +16,12 @@
+ 
+ #
+ # --- Alpha does not mark 64bit dependencies
++# --- Only x86_64 has x32bit dependencies
++markx32=""
+ case `uname -m` in
+   alpha*)	mark64="" ;;
++  x86_64)	markx32="()(x32bit)"
++  		mark64="()(64bit)" ;;
+   *)		mark64="()(64bit)" ;;
+ esac
+ 
+@@ -28,6 +32,10 @@
+ 
+     lib64=`if file -L $f 2>/dev/null | \
+ 	grep "ELF 64-bit" >/dev/null; then echo "$mark64"; fi`
++    libx32=`if file -L $f 2>/dev/null | \
++	grep "ELF 32-bit.*x86-64" > /dev/null; \
++	then echo "$markx32"; fi`
++    lib64="$lib64$libx32"
+     if [ "$soname" != "" ]; then
+ 	if [ ! -L $f ]; then
+ 	    echo $soname$lib64
+diff -ur rpm-5.4.15/autodeps/linux.req rpm-5.4.15.x32/autodeps/linux.req
+--- rpm-5.4.15/autodeps/linux.req	2010-03-18 10:54:56.000000000 +0100
++++ rpm-5.4.15.x32/autodeps/linux.req	2014-12-20 19:20:04.622910545 +0100
+@@ -38,8 +38,12 @@
+ 
+ #
+ # --- Alpha does not mark 64bit dependencies
++# --- Only x86_64 has x32bit dependencies
++markx32=""
+ case `uname -m` in
+   alpha*)	mark64="" ;;
++  x86_64)	markx32="()(x32bit)"
++  		mark64="()(64bit)" ;;
+   *)		mark64="()(64bit)" ;;
+ esac
+ 
+@@ -50,6 +54,9 @@
+     [ -r $f -a -x $f ] || continue
+     lib64=`if file -L $f 2>/dev/null | \
+ 	grep "ELF 64-bit" >/dev/null; then echo "$mark64"; fi`
++    libx32=`if file -L $f 2>/dev/null | \
++	grep "ELF 32-bit.*x86-64" >/dev/null; then echo "$markx32"; fi`
++    lib64="$lib64$libx32"
+     ldd $f | awk '/=>/ {
+ 	if ($1 !~ /libNoVersion.so/ && $1 !~ /4[um]lib.so/ && $1 !~ /libredhat-kernel.so/) {
+ 	    gsub(/'\''"/,"\\&",$1);
+@@ -64,6 +71,9 @@
+     [ -r $f ] || continue
+     lib64=`if file -L $f 2>/dev/null | \
+ 	grep "ELF 64-bit" >/dev/null; then echo "$mark64"; fi`
++    libx32=`if file -L $f 2>/dev/null | \
++	grep "ELF 32-bit.*x86-64" >/dev/null; then echo "$markx32"; fi`
++    lib64="$lib64$libx32"
+     ldd $f | awk '/=>/ {
+ 	if ($1 !~ /libNoVersion.so/ && $1 !~ /4[um]lib.so/ && $1 !~ /libredhat-kernel.so/) {
+ 	    gsub(/'\''"/,"\\&",$1);
+@@ -98,6 +108,9 @@
+     [ -r $f ] || continue
+     lib64=`if file -L $f 2>/dev/null | \
+ 	grep "ELF 64-bit" >/dev/null; then echo "$mark64"; fi`
++    libx32=`if file -L $f 2>/dev/null | \
++	grep "ELF 32-bit.*x86-64" >/dev/null; then echo "$markx32"; fi`
++    lib64="$lib64$libx32"
+     $OBJDUMP -p $f | awk 'BEGIN { START=0; LIBNAME=""; needed='$needed'; }
+ 	/^$/ { START=0; }
+ 	/^Dynamic Section:$/ { START=1; }
