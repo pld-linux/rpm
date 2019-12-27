@@ -708,6 +708,8 @@ for extlib in openssl neon %{?with_system_pcre:pcre} popt; do
 	[ -d $extlib ] && %{__rm} -r $extlib
 done
 
+%{__sed} -i -e '1s,/usr/bin/python,%{__python},' scripts/pythondistdeps.py
+
 %build
 %{__libtoolize}
 #%{__autopoint}
@@ -951,16 +953,12 @@ for m in gstreamer java mono perl php python; do
 	echo "%%{load:%{_rpmlibdir}/macros.d/$m}" >$RPM_BUILD_ROOT%{_rpmlibdir}/macros.$m
 done
 
-# for rpm -e|-U --repackage
-install -d $RPM_BUILD_ROOT/var/{spool/repackage,lock/rpm}
-touch $RPM_BUILD_ROOT/var/lock/rpm/transaction
-
 # move rpm to /bin
 mv $RPM_BUILD_ROOT%{_bindir}/rpm $RPM_BUILD_ROOT/bin
 # move essential libs to /lib (libs that /bin/rpm links to)
-for a in librpm.so.%{sover} librpmbuild.so.%{sover} librpmio.so.%{sover} librpmsign.so.%{sover}; do
-	mv -f $RPM_BUILD_ROOT%{_libdir}/$a $RPM_BUILD_ROOT/%{_lib}
-	ln -s /%{_lib}/$a $RPM_BUILD_ROOT%{_libdir}/$a
+for a in librpm.so librpmbuild.so librpmio.so librpmsign.so; do
+	mv -f $RPM_BUILD_ROOT%{_libdir}/${a}.* $RPM_BUILD_ROOT/%{_lib}
+	ln -sf /%{_lib}/$(basename $RPM_BUILD_ROOT/%{_lib}/${a}.*.*.*) $RPM_BUILD_ROOT%{_libdir}/${a}
 done
 
 %if %{with python}
@@ -1017,7 +1015,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc CHANGES CREDITS README pubkeys/JBJ-GPG-KEY manual/*
+%doc ChangeLog CREDITS README manual/*
 
 %dir /etc/pki/rpm-gpg
 /etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
@@ -1038,60 +1036,55 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
 %lang(sk) %{_mandir}/sk/man8/rpm.8*
 
-%dir /var/lib/rpm
-%dir /var/lib/rpm/log
-%dir /var/lib/rpm/tmp
-%config(noreplace) %verify(not md5 mtime size) /var/lib/rpm/DB_CONFIG
-%dir %attr(700,root,root) /var/spool/repackage
-%dir /var/lock/rpm
-/var/lock/rpm/transaction
+#%dir /var/lib/rpm
+#%dir /var/lib/rpm/log
+#%dir /var/lib/rpm/tmp
+#%config(noreplace) %verify(not md5 mtime size) /var/lib/rpm/DB_CONFIG
 
 # exported package NVRA (stamped with install tid)
 # net-snmp hrSWInstalledName queries, bash-completions
 %dir /var/cache/hrmib
 
-%{_rpmlibdir}/qf
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/macros
 %dir %{_rpmlibdir}/macros.d
-%{_rpmlibdir}/macros.d/pld
-%{_rpmlibdir}/cpuinfo.yaml
-%{_rpmlibdir}/noarch-*
+#%{_rpmlibdir}/macros.d/pld
+%{_rpmlibdir}/platform/noarch-*
 %ifarch %{ix86} %{x8664} x32
-%{_rpmlibdir}/i?86*
-%{_rpmlibdir}/pentium*
-%{_rpmlibdir}/athlon*
+%{_rpmlibdir}/platform/i?86*
+%{_rpmlibdir}/platform/pentium*
+%{_rpmlibdir}/platform/athlon*
 %endif
 %ifarch alpha
-%{_rpmlibdir}/alpha*
+%{_rpmlibdir}/platform/alpha*
 %endif
 %ifarch ia64
-%{_rpmlibdir}/ia64*
+%{_rpmlibdir}/platform/ia64*
 %endif
 %ifarch mips mipsel mips64 mips64el
-%{_rpmlibdir}/mips*
+%{_rpmlibdir}/platform/mips*
 %endif
 %ifarch %{ppc}
-%{_rpmlibdir}/ppc*
+%{_rpmlibdir}/platform/ppc*
 %endif
 %ifarch sparc sparc64
-%{_rpmlibdir}/sparc*
+%{_rpmlibdir}/platform/sparc*
 %endif
 %ifarch %{x8664} x32
-%{_rpmlibdir}/amd64*
-%{_rpmlibdir}/ia32e*
-%{_rpmlibdir}/x86_64*
-%{_rpmlibdir}/x32*
+%{_rpmlibdir}/platform/amd64*
+%{_rpmlibdir}/platform/ia32e*
+%{_rpmlibdir}/platform/x86_64*
+#%{_rpmlibdir}/platform/x32*
 %endif
 
 %attr(755,root,root) %{_rpmlibdir}/hrmib-cache
 
 %dir %{_rpmlibdir}/bin
-%attr(755,root,root) %{_rpmlibdir}/bin/dbconvert
-%attr(755,root,root) %{_rpmlibdir}/bin/dbupgrade.sh
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmdb_checkversion
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmdb_reset
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmdbchk
+#%attr(755,root,root) %{_rpmlibdir}/bin/dbconvert
+#%attr(755,root,root) %{_rpmlibdir}/bin/dbupgrade.sh
+#%attr(755,root,root) %{_rpmlibdir}/bin/rpmdb_checkversion
+#%attr(755,root,root) %{_rpmlibdir}/bin/rpmdb_reset
+#%attr(755,root,root) %{_rpmlibdir}/bin/rpmdbchk
 
 %files base
 %defattr(644,root,root,755)
@@ -1104,27 +1097,21 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files lib
 %defattr(644,root,root,755)
-%attr(755,root,root) /%{_lib}/librpm-%{sover}.so
-%attr(755,root,root) /%{_lib}/librpmdb-%{sover}.so
-%attr(755,root,root) /%{_lib}/librpmio-%{sover}.so
-%attr(755,root,root) /%{_lib}/librpmbuild-%{sover}.so
-%attr(755,root,root) /%{_lib}/librpmmisc-%{sover}.so
-%attr(755,root,root) /%{_lib}/librpmconstant-%{sover}.so
+%attr(755,root,root) /%{_lib}/librpm.so.9
+%attr(755,root,root) /%{_lib}/librpm.so.%{sover}
+%attr(755,root,root) /%{_lib}/librpmbuild.so.9
+%attr(755,root,root) /%{_lib}/librpmbuild.so.%{sover}
+%attr(755,root,root) /%{_lib}/librpmio.so.9
+%attr(755,root,root) /%{_lib}/librpmio.so.%{sover}
+%attr(755,root,root) /%{_lib}/librpmsign.so.9
+%attr(755,root,root) /%{_lib}/librpmsign.so.%{sover}
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/librpm.so
-%attr(755,root,root) %{_libdir}/librpm-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmbuild.so
-%attr(755,root,root) %{_libdir}/librpmbuild-%{sover}.so
-%attr(755,root,root) %{_libdir}/librpmconstant.so
-%attr(755,root,root) %{_libdir}/librpmconstant-%{sover}.so
-%attr(755,root,root) %{_libdir}/librpmdb.so
-%attr(755,root,root) %{_libdir}/librpmdb-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmio.so
-%attr(755,root,root) %{_libdir}/librpmio-%{sover}.so
-%attr(755,root,root) %{_libdir}/librpmmisc.so
-%attr(755,root,root) %{_libdir}/librpmmisc-%{sover}.so
+%attr(755,root,root) %{_libdir}/librpmsign.so
 %{_libdir}/librpm*.la
 %{_includedir}/rpm
 %{_pkgconfigdir}/*.pc
@@ -1136,30 +1123,30 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files utils
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rpm2cpio
-%attr(755,root,root) %{_bindir}/rpmconstant
+#%attr(755,root,root) %{_bindir}/rpmconstant
 %attr(755,root,root) %{_rpmlibdir}/find-debuginfo.sh
 %attr(755,root,root) %{_rpmlibdir}/rpmdb_loadcvt
 %attr(755,root,root) %{_rpmlibdir}/tgpg
-%attr(755,root,root) %{_rpmlibdir}/bin/chroot
-%attr(755,root,root) %{_rpmlibdir}/bin/cp
-%attr(755,root,root) %{_rpmlibdir}/bin/debugedit
-%attr(755,root,root) %{_rpmlibdir}/bin/find
-%attr(755,root,root) %{_rpmlibdir}/bin/mgo
-%attr(755,root,root) %{_rpmlibdir}/bin/mtree
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmcache
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmcmp
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmdeps
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmdigest
+#%attr(755,root,root) %{_rpmlibdir}/bin/chroot
+#%attr(755,root,root) %{_rpmlibdir}/bin/cp
+#%attr(755,root,root) %{_rpmlibdir}/bin/debugedit
+#%attr(755,root,root) %{_rpmlibdir}/bin/find
+#%attr(755,root,root) %{_rpmlibdir}/bin/mgo
+#%attr(755,root,root) %{_rpmlibdir}/bin/mtree
+#%attr(755,root,root) %{_rpmlibdir}/bin/rpmcache
+#%attr(755,root,root) %{_rpmlibdir}/bin/rpmcmp
+#%attr(755,root,root) %{_rpmlibdir}/bin/rpmdeps
+#%attr(755,root,root) %{_rpmlibdir}/bin/rpmdigest
 %if %{with selinux}
-%attr(755,root,root) %{_rpmlibdir}/bin/semodule
-%attr(755,root,root) %{_rpmlibdir}/bin/spooktool
+#%attr(755,root,root) %{_rpmlibdir}/bin/semodule
+#%attr(755,root,root) %{_rpmlibdir}/bin/spooktool
 %endif
 %{?with_keyutils:%attr(755,root,root) %{_rpmlibdir}/bin/rpmkey}
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmrepo
+#%attr(755,root,root) %{_rpmlibdir}/bin/rpmrepo
 %{_mandir}/man8/rpm2cpio.8*
-%{_mandir}/man8/rpmconstant.8*
+#%{_mandir}/man8/rpmconstant.8*
 %{_mandir}/man8/rpmdeps.8*
-%{_mandir}/man8/rpmmtree.8*
+#%{_mandir}/man8/rpmmtree.8*
 %lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
 %lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
 %lang(pl) %{_mandir}/pl/man8/rpmdeps.8*
@@ -1167,7 +1154,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files utils-perl
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_rpmlibdir}/rpmdiff*
+#%attr(755,root,root) %{_rpmlibdir}/rpmdiff*
 
 %if %{with static}
 %files utils-static
@@ -1182,64 +1169,64 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/brp-*
 %attr(755,root,root) %{_rpmlibdir}/check-files
 %attr(755,root,root) %{_rpmlibdir}/compress-doc
-%attr(755,root,root) %{_rpmlibdir}/cross-build
+#%attr(755,root,root) %{_rpmlibdir}/cross-build
 %attr(755,root,root) %{_rpmlibdir}/find-spec-bcond
-%attr(755,root,root) %{_rpmlibdir}/getpo.sh
+#%attr(755,root,root) %{_rpmlibdir}/getpo.sh
 %attr(755,root,root) %{_rpmlibdir}/install-build-tree
-%attr(755,root,root) %{_rpmlibdir}/u_pkg.sh
-%attr(755,root,root) %{_rpmlibdir}/executabledeps.sh
+#%attr(755,root,root) %{_rpmlibdir}/u_pkg.sh
+#%attr(755,root,root) %{_rpmlibdir}/executabledeps.sh
 %attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
 %attr(755,root,root) %{_rpmlibdir}/mimetypedeps.sh
 # needs hacked pkg-config to return anything
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
-%attr(755,root,root) %{_rpmlibdir}/bin/api-sanity-autotest.pl
-%attr(755,root,root) %{_rpmlibdir}/bin/api-sanity-checker.pl
-%{!?with_sqlite:%attr(755,root,root) %{_rpmlibdir}/bin/dbsql}
-%attr(755,root,root) %{_rpmlibdir}/bin/install-sh
-%attr(755,root,root) %{_rpmlibdir}/bin/mkinstalldirs
-%attr(755,root,root) %{_rpmlibdir}/bin/pom2spec
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmspec
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmspecdump
-%attr(755,root,root) %{_rpmlibdir}/bin/sqlite3
-%attr(755,root,root) %{_rpmlibdir}/bin/wget
-%attr(755,root,root) %{_rpmlibdir}/vcheck
+#%attr(755,root,root) %{_rpmlibdir}/bin/api-sanity-autotest.pl
+#%attr(755,root,root) %{_rpmlibdir}/bin/api-sanity-checker.pl
+#%{!?with_sqlite:%attr(755,root,root) %{_rpmlibdir}/bin/dbsql}
+#%attr(755,root,root) %{_rpmlibdir}/bin/install-sh
+#%attr(755,root,root) %{_rpmlibdir}/bin/mkinstalldirs
+#%attr(755,root,root) %{_rpmlibdir}/bin/pom2spec
+#%attr(755,root,root) %{_rpmlibdir}/bin/rpmspec
+#%attr(755,root,root) %{_rpmlibdir}/bin/rpmspecdump
+#%attr(755,root,root) %{_rpmlibdir}/bin/sqlite3
+#%attr(755,root,root) %{_rpmlibdir}/bin/wget
+#%attr(755,root,root) %{_rpmlibdir}/vcheck
 # not used yet ... these six depend on perl
-%attr(755,root,root) %{_rpmlibdir}/http.req
+#%attr(755,root,root) %{_rpmlibdir}/http.req
 # we always used scripts provided by mono-devel, maybe move them here
 #%attr(755,root,root) %{_rpmlibdir}/mono-find-provides
 #%attr(755,root,root) %{_rpmlibdir}/mono-find-requires
 
 %attr(755,root,root) %{_rpmlibdir}/fontconfig.prov
 # must be here for "Requires: rpm-*prov" to work
-%{_rpmlibdir}/macros.d/cmake
-%{_rpmlibdir}/macros.d/gstreamer
-%{_rpmlibdir}/macros.d/java
-%{_rpmlibdir}/macros.d/libtool
-%{_rpmlibdir}/macros.d/mono
-%{_rpmlibdir}/macros.d/perl
-%{_rpmlibdir}/macros.d/php
-%{_rpmlibdir}/macros.d/pkgconfig
-%{_rpmlibdir}/macros.d/python
-%{_rpmlibdir}/macros.d/ruby
-%{_rpmlibdir}/macros.d/selinux
-%{_rpmlibdir}/macros.d/tcl
-%{_rpmlibdir}/macros.rpmbuild
+#%{_rpmlibdir}/macros.d/cmake
+#%{_rpmlibdir}/macros.d/gstreamer
+#%{_rpmlibdir}/macros.d/java
+#%{_rpmlibdir}/macros.d/libtool
+#%{_rpmlibdir}/macros.d/mono
+#%{_rpmlibdir}/macros.d/perl
+#%{_rpmlibdir}/macros.d/php
+#%{_rpmlibdir}/macros.d/pkgconfig
+#%{_rpmlibdir}/macros.d/python
+#%{_rpmlibdir}/macros.d/ruby
+#%{_rpmlibdir}/macros.d/selinux
+#%{_rpmlibdir}/macros.d/tcl
+#%{_rpmlibdir}/macros.rpmbuild
 # compat wrappers
-%{_rpmlibdir}/macros.gstreamer
+#%{_rpmlibdir}/macros.gstreamer
 %{_rpmlibdir}/macros.java
 %{_rpmlibdir}/macros.mono
 %{_rpmlibdir}/macros.perl
 %{_rpmlibdir}/macros.php
 %{_rpmlibdir}/macros.python
 
-%attr(755,root,root) %{_rpmlibdir}/gstreamer.sh
-%attr(755,root,root) %{_rpmlibdir}/kmod-deps.sh
+#%attr(755,root,root) %{_rpmlibdir}/gstreamer.sh
+#%attr(755,root,root) %{_rpmlibdir}/kmod-deps.sh
 
 %attr(755,root,root) %{_bindir}/gendiff
 %attr(755,root,root) %{_bindir}/rpmbuild
 
-%dir %{_rpmlibdir}/helpers
-%attr(755,root,root) %{_rpmlibdir}/helpers/makeshlibs
+#%dir %{_rpmlibdir}/helpers
+#%attr(755,root,root) %{_rpmlibdir}/helpers/makeshlibs
 
 %{_mandir}/man1/gendiff.1*
 %{_mandir}/man8/rpmbuild.8*
@@ -1251,40 +1238,40 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_rpmlibdir}/java-find-requires
 # needs jar (any jdk), jcf-dump (gcc-java) to work
-%attr(755,root,root) %{_rpmlibdir}/javadeps.sh
+#%attr(755,root,root) %{_rpmlibdir}/javadeps.sh
 
 %files rubyprov
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_rpmlibdir}/gem_helper.rb
-%attr(755,root,root) %{_rpmlibdir}/rubygems.rb
+#%attr(755,root,root) %{_rpmlibdir}/gem_helper.rb
+#%attr(755,root,root) %{_rpmlibdir}/rubygems.rb
 
 %files perlprov
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_rpmlibdir}/perl.*
-%attr(755,root,root) %{_rpmlibdir}/osgideps.pl
-%attr(755,root,root) %{_rpmlibdir}/perldeps.pl
+#%attr(755,root,root) %{_rpmlibdir}/osgideps.pl
+#%attr(755,root,root) %{_rpmlibdir}/perldeps.pl
 
 %files pythonprov
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_rpmlibdir}/pythoneggs.py
+#%attr(755,root,root) %{_rpmlibdir}/pythoneggs.py
 %attr(755,root,root) %{_rpmlibdir}/pythondeps.sh
 
 %files php-pearprov
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_rpmlibdir}/php.prov
-%attr(755,root,root) %{_rpmlibdir}/php.req
+#%attr(755,root,root) %{_rpmlibdir}/php.prov
+#%attr(755,root,root) %{_rpmlibdir}/php.req
 %attr(755,root,root) %{_rpmlibdir}/php.req.php
 
 %if %{with python}
 %files -n python-rpm
 %defattr(644,root,root,755)
-%dir %{py_sitedir}/rpm
-%attr(755,root,root) %{py_sitedir}/rpm/*.so
-%{py_sitedir}/rpm/*.py[co]
+#%dir %{py_sitedir}/rpm
+#%attr(755,root,root) %{py_sitedir}/rpm/*.so
+#%{py_sitedir}/rpm/*.py[co]
 %endif
 
 %if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
-%doc apidocs
+#%doc apidocs
 %endif
