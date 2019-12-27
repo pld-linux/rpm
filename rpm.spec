@@ -35,7 +35,7 @@
 %endif
 %define		reqpopt_ver	1.15
 %define		openssl_ver	1.1.1d
-%define		sover		5.4
+%define		sover		9.0.1
 
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
@@ -51,9 +51,6 @@ License:	GPL v2 / LGPL v2.1
 Group:		Base
 Source0:	http://ftp.rpm.org/releases/rpm-4.15.x/%{name}-%{version}.tar.bz2
 # Source0-md5:	ed72147451a5ed93b2a48e2f8f5413c3
-# See README.cpu-os-macros how to update cpu-os-macros.a
-Source100:	cpu-os-macros.a
-Source101:	README.cpu-os-macros
 Source1:	%{name}.groups
 Source2:	macros.pld.in
 Source3:	%{name}-install-tree
@@ -668,10 +665,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 
 %prep
 %setup -q -n %{name}-%{version}%{?subver}
-install -d platform
-cd platform
-ar x %{SOURCE100}
-cd -
 
 #patch0 -p1
 %patch1 -p1
@@ -792,44 +785,36 @@ install %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key
 	pkgconfigdir=%{_pkgconfigdir} \
 	DESTDIR=$RPM_BUILD_ROOT
 
-# install platform macros
-for f in platform/*macros; do
-	bn=${f#*/}
-	fn=${bn%.macros}/macros
-	install -m644 $f -D %{buildroot}%{_rpmlibdir}/$fn
-done
-
 # cleanup
 %ifnarch %{ix86} %{x8664} x32
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/athlon-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/i386-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/i486-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/i586-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/i686-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/pentium3-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/pentium4-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/athlon-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i386-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i486-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i586-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i686-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/pentium3-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/pentium4-linux/macros
 %endif
 
 %ifnarch %{x8664} x32
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/amd64-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/ia32e-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/x32-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/x86_64-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/amd64-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ia32e-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/x32-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/x86_64-linux/macros
 %endif
 
 %ifnarch %{ppc}
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/ppc-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc-linux/macros
 %endif
 
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/alpha*-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/arm*-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/ia64-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/k6-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/mips*-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/ppc*series-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/ppc64*-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/s390*-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/sparc*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/alpha*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/arm*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ia64-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/mips*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc*series-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc64*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/s390*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sparc*-linux/macros
 
 cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 # first platform file entry can't contain regexps
@@ -924,16 +909,7 @@ EOF
 # Squash Extra Blank Lines
 %{__sed} -i -e '/./,/^$/!d' $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-{prov,req}.pl
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-{provides,requires}.perl
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/lib/liblua.a
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/lib/liblua.la
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/mono-find-provides
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/mono-find-requires
-
-# not installed since 4.4.8 (-tools-perl subpackage)
-install scripts/rpmdiff scripts/rpmdiff.cgi $RPM_BUILD_ROOT%{_rpmlibdir}
 
 install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
@@ -941,7 +917,7 @@ install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
 install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
 install %{SOURCE12} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
 install %{SOURCE14} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
-install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
+#install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 cp -p %{SOURCE25} $RPM_BUILD_ROOT%{_rpmlibdir}/php.req.php
 install %{SOURCE17} $RPM_BUILD_ROOT%{_rpmlibdir}/mimetypedeps.sh
 install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
@@ -968,15 +944,12 @@ touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
 
 install tools/rpmdb_checkversion $RPM_BUILD_ROOT%{_rpmlibdir}/bin
 install tools/rpmdb_reset $RPM_BUILD_ROOT%{_rpmlibdir}/bin
-install %{SOURCE29} $RPM_BUILD_ROOT%{_rpmlibdir}/bin/dbupgrade.sh
+#install %{SOURCE29} $RPM_BUILD_ROOT%{_rpmlibdir}/bin/dbupgrade.sh
 
 # create macro loading wrappers for backward compatibility
 for m in gstreamer java mono perl php python; do
 	echo "%%{load:%{_rpmlibdir}/macros.d/$m}" >$RPM_BUILD_ROOT%{_rpmlibdir}/macros.$m
 done
-
-# moved to rpm-build-macros 1.699
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/kernel
 
 # for rpm -e|-U --repackage
 install -d $RPM_BUILD_ROOT/var/{spool/repackage,lock/rpm}
@@ -985,27 +958,20 @@ touch $RPM_BUILD_ROOT/var/lock/rpm/transaction
 # move rpm to /bin
 mv $RPM_BUILD_ROOT%{_bindir}/rpm $RPM_BUILD_ROOT/bin
 # move essential libs to /lib (libs that /bin/rpm links to)
-for a in librpm-%{sover}.so librpmdb-%{sover}.so librpmio-%{sover}.so librpmbuild-%{sover}.so librpmmisc-%{sover}.so librpmconstant-%{sover}.so; do
+for a in librpm.so.%{sover} librpmbuild.so.%{sover} librpmio.so.%{sover} librpmsign.so.%{sover}; do
 	mv -f $RPM_BUILD_ROOT%{_libdir}/$a $RPM_BUILD_ROOT/%{_lib}
 	ln -s /%{_lib}/$a $RPM_BUILD_ROOT%{_libdir}/$a
 done
-
-# Bourne shell script vs ELF executable linked with rpm,rpmdb,rpmio
-mv $RPM_BUILD_ROOT{%{_rpmlibdir},%{_bindir}}/rpm2cpio
 
 %if %{with python}
 %py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
 %py_comp $RPM_BUILD_ROOT%{py_sitedir}
 
-%{__rm} $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,a,py}
+#%{__rm} $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,a,py}
 %endif
 
 # wrong location, not used anyway
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log,xinetd}
-# utils dropped in 5.4 -- their manuals
-%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/rpmgrep.1
-# script obsoleted by /usr/lib/rpm/bin/dbconvert binary
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/dbconvert.sh
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log}
 
 %find_lang %{name}
 
