@@ -1,28 +1,29 @@
 --- rpm-5.3.1/configure.ac.wiget	2010-05-30 16:43:06.000000000 +0200
 +++ rpm-5.3.1/configure.ac	2010-05-30 16:43:38.482725491 +0200
 @@ -2199,6 +2199,7 @@ AC_CONFIG_FILES([ po/Makefile.in
-     tools/Makefile
-     scripts/Makefile
-     scripts/perl.req scripts/perl.prov
-+    scripts/php.req scripts/php.prov
-     rpmdb/DB_CONFIG
-     macros/macros macros/macros.rpmbuild
-     macros/java macros/libtool macros/mono macros/perl 
---- rpm-5.4.10/macros/php.in	2012-09-05 18:12:29.474278958 +0200
-+++ rpm-5.4.15/macros/php.in	2015-09-03 11:16:04.928898067 +0300
-@@ -5,12 +5,9 @@
--%__php		@__PHP@
--
- # Path to scripts to autogenerate php package dependencies,
- #
- # Note: Used iff _use_internal_dependency_generator is non-zero. The
- # helpers are also used by %{_rpmhome}/rpmdeps {--provides|--requires}.
- #%__php_provides	%{_rpmhome}/phpdeps.sh --provides
- #%__php_requires	%{_rpmhome}/phpdeps.sh --requires
--#%__php_provides		%{_rpmhome}/php.prov
--#%__php_requires		%{_rpmhome}/php.req
--
--%php_pear_dir	%{_datadir}/pear
-+%__php_provides		%{_rpmhome}/php.prov
+ AC_CONFIG_FILES([Makefile
+ 	rpmio/Makefile lib/Makefile build/Makefile sign/Makefile
+ 	po/Makefile.in scripts/Makefile scripts/perl.req scripts/perl.prov fileattrs/Makefile
++	scripts/php.req scripts/php.prov
+ 	misc/Makefile 
+ 	doc/Makefile
+ 	python/Makefile
+--- rpm-4.15.1/fileattrs/Makefile.am~	2019-06-26 23:17:31.000000000 +0900
++++ rpm-4.15.1/fileattrs/Makefile.am	2019-12-29 00:23:02.120085588 +0900
+@@ -8,6 +8,6 @@
+ fattrs_DATA = \
+ 	debuginfo.attr desktop.attr elf.attr font.attr libtool.attr metainfo.attr \
+ 	perl.attr perllib.attr pkgconfig.attr python.attr pythondist.attr ocaml.attr \
+-	script.attr
++	script.attr php.attr
+ 
+ EXTRA_DIST = $(fattrs_DATA)
+--- /dev/null	2019-12-23 19:28:16.334291624 +0900
++++ rpm-4.15.1/fileattrs/php.attr	2019-12-29 00:22:52.989864428 +0900
+@@ -0,0 +1,6 @@
++%__php_provides		%{_rpmconfigdir}/php.prov
 +# define 'php_req_new' in ~/.rpmmacros to use php version of req finder
-+%__php_requires		env PHP_MIN_VERSION=%{?php_min_version} %{_rpmhome}/php.req%{?php_req_new:.php}
++%__php_requires		env PHP_MIN_VERSION=%{?php_min_version} %{_rpmconfigdir}/php.req%{?php_req_new:.php}
++%__php_magic		^PHP script.*
++%__php_path		\\.php$
++%__php_flags		magic_and_path

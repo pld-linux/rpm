@@ -14,14 +14,7 @@
 %bcond_without	suggest_tags	# build without Suggest tag (bootstrapping)
 %bcond_with	db61		# use DB 6.1 instead of 5.3
 %bcond_with	neon		# build with HTTP/WebDAV support (neon library)
-%bcond_with	sqlite		# build with SQLite support
-%bcond_without	system_pcre	# use system pcre
 %bcond_with	keyutils	# build with keyutils support
-
-%if %{with sqlite}
-# Error: /lib64/librpmio-5.4.so: undefined symbol: sqlite3_enable_load_extension
-%define		sqlite_build_version %(pkg-config --silence-errors --modversion sqlite3 2>/dev/null || echo ERROR)
-%endif
 
 # versions of required libraries
 %if %{with db61}
@@ -83,7 +76,6 @@ Source28:	%{name}db_reset.c
 Source29:	dbupgrade.sh
 Source30:	rubygems.rb
 Source31:	gem_helper.rb
-Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
 Patch2:		%{name}-popt-aliases.patch
 Patch4:		%{name}-perl-macros.patch
@@ -108,11 +100,7 @@ Patch84:	x32.patch
 
 URL:		http://rpm5.org/
 BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
-%if %{with sqlite}
-BuildRequires:	sqlite3-devel
-%else
 BuildRequires:	%{reqdb_pkg}-sql-devel >= %{reqdb_pkgver}
-%endif
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1.4
 BuildRequires:	openssl-devel >= %{openssl_ver}
@@ -143,6 +131,7 @@ BuildRequires:	python-modules >= 1:2.3
 BuildRequires:	tcl
 BuildRequires:	xz-devel
 BuildRequires:	zlib-devel
+BuildRequires:	zstd-devel
 %if %{with apidocs}
 BuildRequires:	doxygen
 BuildRequires:	ghostscript
@@ -164,6 +153,7 @@ BuildRequires:	libsepol-static >= 2.1.0
 %endif
 BuildRequires:	popt-static >= %{reqpopt_ver}
 BuildRequires:	zlib-static
+BuildRequires:	zstd-static
 %endif
 Requires(posttrans):	coreutils
 Requires:	FHS >= 3.0-2
@@ -269,11 +259,7 @@ Summary:	RPMs library
 Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	%{reqdb_pkg} >= %{reqdb_pkgver}
-%if %{with sqlite}
-Requires:	sqlite3 >= %{sqlite_build_version}
-%else
 Requires:	%{reqdb_pkg}-sql >= %{reqdb_pkgver}
-%endif
 Requires:	openssl >= %{openssl_ver}
 Requires:	libmagic >= 1.15-2
 %{?with_selinux:Requires:	libselinux >= 2.1.0}
@@ -666,13 +652,12 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %prep
 %setup -q -n %{name}-%{version}%{?subver}
 
-#patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-#%patch7 -p1
+%patch7 -p1
 %patch9 -p1
 %patch14 -p0
 %patch15 -p1
@@ -690,8 +675,8 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 #%patch84 -p1
 
 install %{SOURCE2} pld.in
-#install %{SOURCE8} scripts/php.prov.in
-#install %{SOURCE9} scripts/php.req.in
+install %{SOURCE8} scripts/php.prov.in
+install %{SOURCE9} scripts/php.req.in
 install %{SOURCE11} scripts/perl.prov.in
 cp -p %{SOURCE30} scripts/rubygems.rb
 cp -p %{SOURCE31} scripts/gem_helper.rb
@@ -703,10 +688,6 @@ awk -f %{SOURCE6} %{SOURCE1}
 
 install %{SOURCE26} tools/rpmdb_checkversion.c
 install %{SOURCE28} tools/rpmdb_reset.c
-
-for extlib in openssl neon %{?with_system_pcre:pcre} popt; do
-	[ -d $extlib ] && %{__rm} -r $extlib
-done
 
 %{__sed} -i -e '1s,/usr/bin/python,%{__python},' scripts/pythondistdeps.py
 
@@ -730,35 +711,26 @@ CPPFLAGS="-I/usr/include/lua53 %{rpmcppflags}"
 	WITH_PERL_VERSION=no \
 	__GST_INSPECT=%{_bindir}/gst-inspect-1.0 \
 	__GPG=%{_bindir}/gpg \
+	%{?with_python:PYTHON=python%{py_ver}} \
 	--disable-silent-rules \
 	--enable-shared \
 	--enable-static \
-	%{!?with_apidocs:--without-apidocs} \
+	--with-hackingdocs=%{!?with_apidocs:no}%{?with_apidocs:yes} \
+	--enable-bdb \
 	--with-crypto=openssl \
-	--with-bugreport="http://bugs.pld-linux.org/" \
-	--with-bzip2=external \
-	--with-db=external \
-	--with-dbapi=db \
-	--with-file=external \
-	--with-keyutils=%{?with_keyutils:external}%{!?with_keyutils:no} \
-	--with-libelf \
 	--with-lua \
-	--with-lzma=external \
-	--with-neon=%{?with_neon:external}%{!?with_neon:no} \
-	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/%%{_target}/macros:%{_rpmlibdir}/macros.build:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%%{_target}/macros:%{_sysconfdir}/rpm/macros.d/*.macros:~/etc/.rpmmacros:~/.rpmmacros' \
-	--without-path-versioned \
-	--with-pcre=%{!?with_system_pcre:internal}%{?with_system_pcre:external} \
-	--with-popt=external \
-	%{?with_python:--with-python=%{py_ver} --with-python-lib-dir=%{py_sitedir}} \
-	%{!?with_python:--without-python} \
+	--with-cap \
+	--with-acl \
+	--with-audit \
+	%{?with_python:--enable-python} \
 	--with-selinux=%{!?with_selinux:no}%{?with_selinux:yes} \
-	--with-semanage=%{!?with_selinux:no}%{?with_selinux:external} \
-	--with-sepol=%{!?with_selinux:no}%{?with_selinux:external} \
-	--with-sqlite=%{?with_sqlite:yes}%{!?with_sqlite:no} \
-	--with-uuid=%{_libdir}:%{_includedir}/ossp-uuid \
-	--with-vendor=pld \
-	--with-xz=external \
-	--with-zlib=external
+	--with-vendor=pld
+
+#  --enable-zstd=[yes/no/auto] build without zstd support (default=auto)
+#  --enable-ndb (EXPERIMENTAL) enable the new rpm database format
+#  --enable-lmdb=[yes/no/auto] (EXPERIMENTAL) build with LMDB rpm database format support (default=auto)
+#  --with-archive          build rpm2archive - requires libarchive
+#  --with-imaevm           build with imaevm support
 
 %{__make}
 
@@ -790,6 +762,7 @@ install %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key
 # cleanup
 %ifnarch %{ix86} %{x8664} x32
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/athlon-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/geode-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i386-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i486-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i586-linux/macros
@@ -806,16 +779,23 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/x86_64-linux/macros
 %endif
 
 %ifnarch %{ppc}
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/m68k-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc32dy4-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc64*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc8260-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc8560-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc*series-linux/macros
 %endif
 
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/aarch64-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/alpha*-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/arm*-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ia64-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/mips*-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc*series-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc64*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/riscv64-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/s390*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sh*-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sparc*-linux/macros
 
 cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
@@ -919,7 +899,7 @@ install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
 install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
 install %{SOURCE12} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
 install %{SOURCE14} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
-#install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
+install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 cp -p %{SOURCE25} $RPM_BUILD_ROOT%{_rpmlibdir}/php.req.php
 install %{SOURCE17} $RPM_BUILD_ROOT%{_rpmlibdir}/mimetypedeps.sh
 install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
@@ -965,7 +945,7 @@ done
 %py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
 %py_comp $RPM_BUILD_ROOT%{py_sitedir}
 
-#%{__rm} $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,a,py}
+%{__rm} $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,py}
 %endif
 
 # wrong location, not used anyway
@@ -1051,9 +1031,16 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%{_rpmlibdir}/macros.d/pld
 %{_rpmlibdir}/platform/noarch-*
 %ifarch %{ix86} %{x8664} x32
+%{_rpmlibdir}/platform/athlon*
+%{_rpmlibdir}/platform/geode*
 %{_rpmlibdir}/platform/i?86*
 %{_rpmlibdir}/platform/pentium*
-%{_rpmlibdir}/platform/athlon*
+%endif
+%ifarch %{x8664} x32
+%{_rpmlibdir}/platform/amd64*
+%{_rpmlibdir}/platform/ia32e*
+%{_rpmlibdir}/platform/x86_64*
+#%{_rpmlibdir}/platform/x32*
 %endif
 %ifarch alpha
 %{_rpmlibdir}/platform/alpha*
@@ -1069,12 +1056,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %endif
 %ifarch sparc sparc64
 %{_rpmlibdir}/platform/sparc*
-%endif
-%ifarch %{x8664} x32
-%{_rpmlibdir}/platform/amd64*
-%{_rpmlibdir}/platform/ia32e*
-%{_rpmlibdir}/platform/x86_64*
-#%{_rpmlibdir}/platform/x32*
 %endif
 
 %attr(755,root,root) %{_rpmlibdir}/hrmib-cache
@@ -1181,13 +1162,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
 #%attr(755,root,root) %{_rpmlibdir}/bin/api-sanity-autotest.pl
 #%attr(755,root,root) %{_rpmlibdir}/bin/api-sanity-checker.pl
-#%{!?with_sqlite:%attr(755,root,root) %{_rpmlibdir}/bin/dbsql}
 #%attr(755,root,root) %{_rpmlibdir}/bin/install-sh
 #%attr(755,root,root) %{_rpmlibdir}/bin/mkinstalldirs
 #%attr(755,root,root) %{_rpmlibdir}/bin/pom2spec
 #%attr(755,root,root) %{_rpmlibdir}/bin/rpmspec
 #%attr(755,root,root) %{_rpmlibdir}/bin/rpmspecdump
-#%attr(755,root,root) %{_rpmlibdir}/bin/sqlite3
 #%attr(755,root,root) %{_rpmlibdir}/bin/wget
 #%attr(755,root,root) %{_rpmlibdir}/vcheck
 # not used yet ... these six depend on perl
@@ -1258,16 +1237,16 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files php-pearprov
 %defattr(644,root,root,755)
-#%attr(755,root,root) %{_rpmlibdir}/php.prov
-#%attr(755,root,root) %{_rpmlibdir}/php.req
+%attr(755,root,root) %{_rpmlibdir}/php.prov
+%attr(755,root,root) %{_rpmlibdir}/php.req
 %attr(755,root,root) %{_rpmlibdir}/php.req.php
 
 %if %{with python}
 %files -n python-rpm
 %defattr(644,root,root,755)
-#%dir %{py_sitedir}/rpm
-#%attr(755,root,root) %{py_sitedir}/rpm/*.so
-#%{py_sitedir}/rpm/*.py[co]
+%dir %{py_sitedir}/rpm
+%attr(755,root,root) %{py_sitedir}/rpm/*.so
+%{py_sitedir}/rpm/*.py[co]
 %endif
 
 %if %{with apidocs}
