@@ -796,99 +796,6 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/s390*-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sh*-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sparc*-linux/macros
 
-cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-# first platform file entry can't contain regexps
-%ifarch x32
-%{_target_cpu}-%{_target_vendor}-linux-gnux32
-%else
-%{_target_cpu}-%{_target_vendor}-linux
-%endif
-
-%ifarch x86_64
-x86_64-[^-]*-[Ll]inux(-gnu)?
-amd64-[^-]*-[Ll]inux(-gnu)?
-x32-[^-]*-[Ll]inux(-gnu(x32)?)?
-%endif
-%ifarch amd64
-amd64-[^-]*-[Ll]inux(-gnu)?
-x86_64-[^-]*-[Ll]inux(-gnu)?
-x32-[^-]*-[Ll]inux(-gnu(x32)?)?
-%endif
-%ifarch ia32e
-ia32e-[^-]*-[Ll]inux(-gnu)?
-x86_64-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch x32
-x32-[^-]*-[Ll]inux(-gnu(x32)?)?
-x86_64-[^-]*-[Ll]inux(-gnu)?
-amd64-[^-]*-[Ll]inux(-gnu)?
-%endif
-
-%ifarch athlon %{x8664} x32
-athlon-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch pentium4 athlon %{x8664} x32
-pentium4-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch pentium3 pentium4 athlon %{x8664} x32
-pentium3-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch i686 pentium3 pentium4 athlon %{x8664} x32
-i686-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch i586 i686 pentium3 pentium4 athlon %{x8664} x32
-i586-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch i486 i586 i686 pentium3 pentium4 athlon %{x8664} x32
-i486-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch %{ix86} %{x8664} x32
-i386-[^-]*-[Ll]inux(-gnu)?
-%endif
-
-%ifarch alpha
-alpha-[^-]*-[Ll]inux(-gnu)?
-%endif
-
-%ifarch ia64
-ia64-[^-]*-[Ll]inux(-gnu)?
-%endif
-
-%ifarch ppc64
-powerpc64-[^-]*-[Ll]inux(-gnu)?
-ppc64-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch %{ppc} ppc64
-powerpc-[^-]*-[Ll]inux(-gnu)?
-ppc-[^-]*-[Ll]inux(-gnu)?
-%endif
-
-%ifarch s390x
-s390x-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch s390 s390x
-s390-[^-]*-[Ll]inux(-gnu)?
-%endif
-
-%ifarch sparc64
-sparc64-[^-]*-[Ll]inux(-gnu)?
-sparcv8-[^-]*-[Ll]inux(-gnu)?
-sparcv9-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch sparcv9
-sparcv8-[^-]*-[Ll]inux(-gnu)?
-sparcv9-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch sparc sparcv9 sparc64
-sparc-[^-]*-[Ll]inux(-gnu)?
-%endif
-
-noarch-[^-]*-.*
-EOF
-
-# Squash Extra Blank Lines
-%{__sed} -i -e '/./,/^$/!d' $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
 
 install %{SOURCE1} doc/manual/groups
@@ -1005,7 +912,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %dir %{_sysconfdir}/rpm/sysinfo
 # these are ok to be replaced
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo/*
-%config %verify(not md5 mtime size) %{_sysconfdir}/rpm/platform
 
 %{_mandir}/man8/rpm.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
