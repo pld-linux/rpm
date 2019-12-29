@@ -90,7 +90,6 @@ Patch18:	%{name}-javadeps.patch
 Patch20:	%{name}-libtool-deps.patch
 Patch29:	%{name}-builddir-readlink.patch
 Patch30:	%{name}-changelog_order_check_nonfatal.patch
-Patch35:	%{name}-namespace-compare.patch
 Patch37:	%{name}-postun-nofail.patch
 Patch61:	%{name}-clean-docdir.patch
 Patch64:	%{name}-fix-compress-doc.patch
@@ -662,11 +661,10 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch14 -p0
 %patch15 -p1
 #%patch16 -p1
-#%patch18 -p1
+%patch18 -p1
 %patch20 -p1
 %patch29 -p1
 %patch30 -p1
-#%patch35 -p1
 %patch37 -p1
 %patch61 -p1
 #%patch64 -p1
