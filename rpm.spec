@@ -670,7 +670,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 #%patch64 -p1
 %patch81 -p1
 %patch83 -p1
-#%patch84 -p1
+%patch84 -p1
 
 install %{SOURCE2} pld.in
 install %{SOURCE8} scripts/php.prov.in
@@ -1038,7 +1038,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/platform/amd64*
 %{_rpmlibdir}/platform/ia32e*
 %{_rpmlibdir}/platform/x86_64*
-#%{_rpmlibdir}/platform/x32*
+%{_rpmlibdir}/platform/x32*
 %endif
 %ifarch alpha
 %{_rpmlibdir}/platform/alpha*
