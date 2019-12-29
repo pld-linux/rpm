@@ -1,9 +1,5 @@
 #
 # TODO:
-# - make key infrastructure code fallback from keyutils to plain mode in case keyctl
-#   returns -ENOSYS
-# - add macros for some ppc, mipsel, alpha and sparc
-#
 # - when adopting, use 4.5 ticket for checklist: https://bugs.launchpad.net/pld-linux/+bug/262985
 #
 # Conditional build:
@@ -11,10 +7,8 @@
 %bcond_without	apidocs		# don't generate documentation with doxygen
 %bcond_without	python		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
-%bcond_without	suggest_tags	# build without Suggest tag (bootstrapping)
+%bcond_without	recommends_tags	# build without Recommends tag (bootstrapping)
 %bcond_with	db61		# use DB 6.1 instead of 5.3
-%bcond_with	neon		# build with HTTP/WebDAV support (neon library)
-%bcond_with	keyutils	# build with keyutils support
 
 # versions of required libraries
 %if %{with db61}
@@ -76,26 +70,26 @@ Source28:	%{name}db_reset.c
 Source29:	dbupgrade.sh
 Source30:	rubygems.rb
 Source31:	gem_helper.rb
-Patch1:		%{name}-man_pl.patch
-Patch2:		%{name}-popt-aliases.patch
-Patch4:		%{name}-perl-macros.patch
-Patch5:		%{name}-perl-req-perlfile.patch
-Patch6:		%{name}-scripts-closefds.patch
-Patch7:		%{name}-php-macros.patch
-Patch9:		%{name}-lua.patch
-Patch14:	%{name}-perl_req-INC_dirs.patch
-Patch15:	%{name}-debuginfo.patch
-Patch16:	vendor-pld.patch
-Patch18:	%{name}-javadeps.patch
-Patch20:	%{name}-libtool-deps.patch
-Patch29:	%{name}-builddir-readlink.patch
-Patch30:	%{name}-changelog_order_check_nonfatal.patch
-Patch37:	%{name}-postun-nofail.patch
-Patch61:	%{name}-clean-docdir.patch
-Patch64:	%{name}-fix-compress-doc.patch
-Patch81:	%{name}-perl-magic.patch
-Patch83:	%{name}-ignore-missing-macro-files.patch
-Patch84:	x32.patch
+Patch0:		%{name}-man_pl.patch
+Patch1:		%{name}-popt-aliases.patch
+Patch2:		%{name}-perl-macros.patch
+Patch3:		%{name}-perl-req-perlfile.patch
+Patch4:		%{name}-scripts-closefds.patch
+Patch5:		%{name}-php-macros.patch
+Patch6:		%{name}-lua.patch
+Patch7:		%{name}-perl_req-INC_dirs.patch
+Patch8:		%{name}-debuginfo.patch
+Patch9:		%{name}-javadeps.patch
+Patch10:	%{name}-libtool-deps.patch
+Patch11:	%{name}-builddir-readlink.patch
+Patch12:	%{name}-changelog_order_check_nonfatal.patch
+Patch13:	%{name}-postun-nofail.patch
+Patch14:	%{name}-clean-docdir.patch
+Patch15:	%{name}-perl-magic.patch
+Patch16:	%{name}-ignore-missing-macro-files.patch
+Patch17:	x32.patch
+Patch18:	%{name}-fix-compress-doc.patch
+Patch19:	vendor-pld.patch
 
 URL:		http://rpm5.org/
 BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
@@ -106,7 +100,7 @@ BuildRequires:	openssl-devel >= %{openssl_ver}
 BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gettext-tools >= 0.19.2
-%{?with_keyutils:BuildRequires:	keyutils-devel}
+BuildRequires:	libarchive-devel
 BuildRequires:	libmagic-devel
 %if %{with selinux}
 BuildRequires:	libselinux-devel >= 2.1.0
@@ -116,10 +110,6 @@ BuildRequires:	libsepol-devel >= 2.1.0
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 1:1.4.2-9
-%if %{with neon}
-BuildRequires:	libxml2-devel
-BuildRequires:	neon-devel >= 0.25.5
-%endif
 BuildRequires:	lua53-devel >= 5.3.5
 BuildRequires:	ossp-uuid-devel
 BuildRequires:	patch >= 2.2
@@ -174,9 +164,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_binary_payload		w9.gzdio
 
 # don't require very fresh rpm.macros to build
-%define		__gettextize gettextize --copy --force --intl ; cp -f po/Makevars{.template,}
 %define		find_lang sh ./scripts/find-lang.sh $RPM_BUILD_ROOT
-%define		ix86	i386 i486 i586 i686 athlon pentium3 pentium4
+%define		ix86	i386 i486 i586 i686 athlon geode pentium3 pentium4
 %define		ppc	ppc ppc7400 ppc7450
 %define		x8664	amd64 ia32e x86_64
 
@@ -287,7 +276,6 @@ Requires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
 Requires:	openssl-devel >= %{openssl_ver}
 Requires:	bzip2-devel
 Requires:	elfutils-devel
-%{?with_keyutils:Requires:	keyutils-devel}
 Requires:	libmagic-devel
 %if %{with selinux}
 Requires:	libselinux-devel
@@ -355,7 +343,6 @@ Requires:	%{reqdb_pkg}-static >= %{reqdb_pkgver}
 Requires:	openssl-static >= %{openssl_ver}
 Requires:	bzip2-static
 Requires:	elfutils-static
-%{?with_keyutils:Requires:	keyutils-static}
 Requires:	libmagic-static
 %if %{with selinux}
 Requires:	libselinux-static
@@ -394,9 +381,9 @@ Summary(pl.UTF-8):	Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
-%if %{with suggest_tags}
-Suggests:	bzip2
-Suggests:	gzip
+%if %{with recommends_tags}
+Recommends:	bzip2
+Recommends:	gzip
 %endif
 Conflicts:	filesystem-debuginfo < 3.0-16
 
@@ -650,27 +637,26 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 
 %prep
 %setup -q -n %{name}-%{version}%{?subver}
-
+%patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
+%patch7 -p0
+%patch8 -p1
 %patch9 -p1
-%patch14 -p0
+%patch10 -p1
+%patch11 -p1
+%patch12 -p1
+%patch13 -p1
+%patch14 -p1
 %patch15 -p1
-#%patch16 -p1
-%patch18 -p1
-%patch20 -p1
-%patch29 -p1
-%patch30 -p1
-%patch37 -p1
-%patch61 -p1
-#%patch64 -p1
-%patch81 -p1
-%patch83 -p1
-%patch84 -p1
+%patch16 -p1
+%patch17 -p1
+#%patch18 -p1
+#%patch19 -p1
 
 install %{SOURCE2} pld.in
 install %{SOURCE8} scripts/php.prov.in
@@ -691,7 +677,6 @@ install %{SOURCE28} tools/rpmdb_reset.c
 
 %build
 %{__libtoolize}
-#%{__autopoint}
 %{__aclocal}
 %{__autoheader}
 %{__autoconf}
@@ -715,19 +700,19 @@ CPPFLAGS="-I/usr/include/lua53 %{rpmcppflags}"
 	--enable-static \
 	--with-hackingdocs=%{!?with_apidocs:no}%{?with_apidocs:yes} \
 	--enable-bdb \
+	--enable-zstd \
 	--with-crypto=openssl \
 	--with-lua \
 	--with-cap \
 	--with-acl \
 	--with-audit \
+	--with-archive \
 	%{?with_python:--enable-python} \
 	--with-selinux=%{!?with_selinux:no}%{?with_selinux:yes} \
 	--with-vendor=pld
 
-#  --enable-zstd=[yes/no/auto] build without zstd support (default=auto)
 #  --enable-ndb (EXPERIMENTAL) enable the new rpm database format
 #  --enable-lmdb=[yes/no/auto] (EXPERIMENTAL) build with LMDB rpm database format support (default=auto)
-#  --with-archive          build rpm2archive - requires libarchive
 #  --with-imaevm           build with imaevm support
 
 %{__make}
@@ -1026,7 +1011,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_rpmlibdir}/bin/semodule
 #%attr(755,root,root) %{_rpmlibdir}/bin/spooktool
 %endif
-%{?with_keyutils:%attr(755,root,root) %{_rpmlibdir}/bin/rpmkey}
 #%attr(755,root,root) %{_rpmlibdir}/bin/rpmrepo
 %{_mandir}/man8/rpm2cpio.8*
 #%{_mandir}/man8/rpmconstant.8*
