@@ -95,12 +95,12 @@ BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
 BuildRequires:	%{reqdb_pkg}-sql-devel >= %{reqdb_pkgver}
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1.4
-BuildRequires:	openssl-devel >= %{openssl_ver}
 BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gettext-tools >= 0.19.2
 BuildRequires:	libarchive-devel
 BuildRequires:	libmagic-devel
+BuildRequires:	openssl-devel >= %{openssl_ver}
 %if %{with selinux}
 BuildRequires:	libselinux-devel >= 2.1.0
 BuildRequires:	libsemanage-devel >= 2.1.0
@@ -129,11 +129,11 @@ BuildRequires:	tetex-pdftex
 %if %{with static}
 # Require static library only for static build
 BuildRequires:	%{reqdb_pkg}-static >= %{reqdb_pkgver}
-BuildRequires:	openssl-static >= %{openssl_ver}
 BuildRequires:	bzip2-static >= 1.0.2-17
 BuildRequires:	elfutils-static
 BuildRequires:	glibc-static >= 2.2.94
 BuildRequires:	libmagic-static
+BuildRequires:	openssl-static >= %{openssl_ver}
 %if %{with selinux}
 BuildRequires:	libselinux-static >= 2.1.0
 BuildRequires:	libsemanage-static >= 2.1.0
@@ -144,13 +144,14 @@ BuildRequires:	zlib-static
 BuildRequires:	zstd-static
 %endif
 Requires(posttrans):	coreutils
-Requires:	FHS >= 3.0-2
 Requires:	%{name}-base = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
+Requires:	FHS >= 3.0-2
 Requires:	openssl >= %{openssl_ver}
 Requires:	popt >= %{reqpopt_ver}
 Provides:	rpm-db-ver = %{reqdb_ver}
 Obsoletes:	rpm-getdeps
+Obsoletes:	rpm-utils-perl
 %{!?with_static:Obsoletes:	rpm-utils-static}
 Conflicts:	glibc < 2.2.92
 # db4.6 poldek needed
@@ -247,9 +248,9 @@ Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	%{reqdb_pkg} >= %{reqdb_pkgver}
 Requires:	%{reqdb_pkg}-sql >= %{reqdb_pkgver}
-Requires:	openssl >= %{openssl_ver}
 Requires:	libmagic >= 1.15-2
 %{?with_selinux:Requires:	libselinux >= 2.1.0}
+Requires:	openssl >= %{openssl_ver}
 Requires:	popt >= %{reqpopt_ver}
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
@@ -272,10 +273,10 @@ Summary(uk.UTF-8):	Хедери та бібліотеки для програм,
 Group:		Development/Libraries
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
-Requires:	openssl-devel >= %{openssl_ver}
 Requires:	bzip2-devel
 Requires:	elfutils-devel
 Requires:	libmagic-devel
+Requires:	openssl-devel >= %{openssl_ver}
 %if %{with selinux}
 Requires:	libselinux-devel
 Requires:	libsemanage-devel
@@ -339,10 +340,10 @@ Summary(uk.UTF-8):	Статична бібліотека для програм, 
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	%{reqdb_pkg}-static >= %{reqdb_pkgver}
-Requires:	openssl-static >= %{openssl_ver}
 Requires:	bzip2-static
 Requires:	elfutils-static
 Requires:	libmagic-static
+Requires:	openssl-static >= %{openssl_ver}
 %if %{with selinux}
 Requires:	libselinux-static
 Requires:	libsemanage-static
@@ -542,8 +543,8 @@ Summary(pl.UTF-8):	Makra ułatwiające tworzenie pakietów RPM z programami napi
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
 Requires:	python
-Requires:	python-setuptools
 Requires:	python-modules
+Requires:	python-setuptools
 
 %description pythonprov
 Python macros, which simplifies creation of RPM packages with Python
@@ -622,9 +623,7 @@ Python para manipular pacotes e bancos de dados RPM.
 Summary:	RPM API documentation and guides
 Summary(pl.UTF-8):	Documentacja API RPM-a i przewodniki
 Group:		Documentation
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description apidocs
 Documentation for RPM API and guides in HTML format generated from rpm
@@ -697,7 +696,6 @@ CPPFLAGS="-I/usr/include/lua53 %{rpmcppflags}"
 	--disable-silent-rules \
 	--enable-shared \
 	--enable-static \
-	--with-hackingdocs=%{!?with_apidocs:no}%{?with_apidocs:yes} \
 	--enable-bdb \
 	--enable-zstd \
 	--with-crypto=openssl \
@@ -732,12 +730,12 @@ fi
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm} \
-	$RPM_BUILD_ROOT{/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg}
+install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/{rpm,pki/rpm-gpg}} \
+	$RPM_BUILD_ROOT{/var/lib/banner,/var/cache/hrmib}
 
-install %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
+cp -p %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
-%{__make} -j1 install \
+%{__make} install \
 	pkgconfigdir=%{_pkgconfigdir} \
 	DESTDIR=$RPM_BUILD_ROOT
 
@@ -782,39 +780,38 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sparc*-linux/macros
 
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
 
-install %{SOURCE1} doc/manual/groups
-install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
-install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
-install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
-install %{SOURCE12} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
-install %{SOURCE14} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
-install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
+cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
+cp -p %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
+cp -p %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
+cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
+cp -p %{SOURCE14} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
+cp -p scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 cp -p %{SOURCE25} $RPM_BUILD_ROOT%{_rpmlibdir}/php.req.php
-install %{SOURCE17} $RPM_BUILD_ROOT%{_rpmlibdir}/mimetypedeps.sh
-install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
-install %{SOURCE13} $RPM_BUILD_ROOT/etc/sysconfig/rpm
+cp -p %{SOURCE17} $RPM_BUILD_ROOT%{_rpmlibdir}/mimetypedeps.sh
+cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
+cp -p %{SOURCE13} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
-install %{SOURCE15} $RPM_BUILD_ROOT%{_bindir}/banner.sh
+cp -p %{SOURCE15} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
 
-install %{SOURCE18} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros
-install %{SOURCE27} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.lang
-install %{SOURCE19} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc
-install %{SOURCE20} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov
-install %{SOURCE21} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles
-install %{SOURCE22} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq
-install %{SOURCE24} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles
+cp -p %{SOURCE18} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros
+cp -p %{SOURCE27} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.lang
+cp -p %{SOURCE19} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc
+cp -p %{SOURCE20} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov
+cp -p %{SOURCE21} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles
+cp -p %{SOURCE22} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq
+cp -p %{SOURCE24} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles
 
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Conflictname
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Dirnames
-install %{SOURCE10} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
+cp -p %{SOURCE10} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Obsoletename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Providename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
 
-install tools/rpmdb_checkversion $RPM_BUILD_ROOT%{_rpmlibdir}/bin
-install tools/rpmdb_reset $RPM_BUILD_ROOT%{_rpmlibdir}/bin
+cp -p tools/rpmdb_checkversion $RPM_BUILD_ROOT%{_rpmlibdir}/bin
+cp -p tools/rpmdb_reset $RPM_BUILD_ROOT%{_rpmlibdir}/bin
 #install %{SOURCE29} $RPM_BUILD_ROOT%{_rpmlibdir}/bin/dbupgrade.sh
 
 # create macro loading wrappers for backward compatibility
@@ -837,14 +834,12 @@ done
 %{__rm} $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,py}
 %endif
 
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/rpm-plugins/*.la
+
 # wrong location, not used anyway
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log}
 
 %find_lang %{name}
-
-%{__rm} -rf manual
-cp -a doc/manual manual
-%{__rm} -f manual/Makefile*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -884,7 +879,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc ChangeLog CREDITS README manual/*
+%doc ChangeLog CREDITS README
 
 %dir /etc/pki/rpm-gpg
 /etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
@@ -900,6 +895,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_mandir}/man8/rpm.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
 %lang(ja) %{_mandir}/ja/man8/rpm.8*
+%lang(ko) %{_mandir}/ko/man8/rpm.8*
 %lang(pl) %{_mandir}/pl/man8/rpm.8*
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
 %lang(sk) %{_mandir}/sk/man8/rpm.8*
@@ -991,38 +987,21 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files utils
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/rpm2archive
 %attr(755,root,root) %{_bindir}/rpm2cpio
-#%attr(755,root,root) %{_bindir}/rpmconstant
+%attr(755,root,root) %{_rpmlibdir}/rpm2cpio.sh
 %attr(755,root,root) %{_rpmlibdir}/find-debuginfo.sh
 %attr(755,root,root) %{_rpmlibdir}/rpmdb_loadcvt
 %attr(755,root,root) %{_rpmlibdir}/tgpg
-#%attr(755,root,root) %{_rpmlibdir}/bin/chroot
-#%attr(755,root,root) %{_rpmlibdir}/bin/cp
-#%attr(755,root,root) %{_rpmlibdir}/bin/debugedit
-#%attr(755,root,root) %{_rpmlibdir}/bin/find
-#%attr(755,root,root) %{_rpmlibdir}/bin/mgo
-#%attr(755,root,root) %{_rpmlibdir}/bin/mtree
-#%attr(755,root,root) %{_rpmlibdir}/bin/rpmcache
-#%attr(755,root,root) %{_rpmlibdir}/bin/rpmcmp
-#%attr(755,root,root) %{_rpmlibdir}/bin/rpmdeps
-#%attr(755,root,root) %{_rpmlibdir}/bin/rpmdigest
-%if %{with selinux}
-#%attr(755,root,root) %{_rpmlibdir}/bin/semodule
-#%attr(755,root,root) %{_rpmlibdir}/bin/spooktool
-%endif
-#%attr(755,root,root) %{_rpmlibdir}/bin/rpmrepo
+%attr(755,root,root) %{_rpmlibdir}/debugedit
+%attr(755,root,root) %{_rpmlibdir}/rpmdeps
 %{_mandir}/man8/rpm2cpio.8*
-#%{_mandir}/man8/rpmconstant.8*
 %{_mandir}/man8/rpmdeps.8*
-#%{_mandir}/man8/rpmmtree.8*
 %lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
+%lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
 %lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
-%lang(pl) %{_mandir}/pl/man8/rpmdeps.8*
 %lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
-
-%files utils-perl
-%defattr(644,root,root,755)
-#%attr(755,root,root) %{_rpmlibdir}/rpmdiff*
+%lang(pl) %{_mandir}/pl/man8/rpmdeps.8*
 
 %if %{with static}
 %files utils-static
@@ -1037,27 +1016,14 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/brp-*
 %attr(755,root,root) %{_rpmlibdir}/check-files
 %attr(755,root,root) %{_rpmlibdir}/compress-doc
-#%attr(755,root,root) %{_rpmlibdir}/cross-build
 %attr(755,root,root) %{_rpmlibdir}/find-spec-bcond
-#%attr(755,root,root) %{_rpmlibdir}/getpo.sh
 %attr(755,root,root) %{_rpmlibdir}/install-build-tree
-#%attr(755,root,root) %{_rpmlibdir}/u_pkg.sh
-#%attr(755,root,root) %{_rpmlibdir}/executabledeps.sh
+%attr(755,root,root) %{_rpmlibdir}/elfdeps
 %attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
 %attr(755,root,root) %{_rpmlibdir}/mimetypedeps.sh
 # needs hacked pkg-config to return anything
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
-#%attr(755,root,root) %{_rpmlibdir}/bin/api-sanity-autotest.pl
-#%attr(755,root,root) %{_rpmlibdir}/bin/api-sanity-checker.pl
-#%attr(755,root,root) %{_rpmlibdir}/bin/install-sh
-#%attr(755,root,root) %{_rpmlibdir}/bin/mkinstalldirs
-#%attr(755,root,root) %{_rpmlibdir}/bin/pom2spec
-#%attr(755,root,root) %{_rpmlibdir}/bin/rpmspec
-#%attr(755,root,root) %{_rpmlibdir}/bin/rpmspecdump
-#%attr(755,root,root) %{_rpmlibdir}/bin/wget
-#%attr(755,root,root) %{_rpmlibdir}/vcheck
-# not used yet ... these six depend on perl
-#%attr(755,root,root) %{_rpmlibdir}/http.req
+%attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
 # we always used scripts provided by mono-devel, maybe move them here
 #%attr(755,root,root) %{_rpmlibdir}/mono-find-provides
 #%attr(755,root,root) %{_rpmlibdir}/mono-find-requires
@@ -1078,27 +1044,23 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%{_rpmlibdir}/macros.d/tcl
 #%{_rpmlibdir}/macros.rpmbuild
 # compat wrappers
-#%{_rpmlibdir}/macros.gstreamer
+%{_rpmlibdir}/macros.gstreamer
 %{_rpmlibdir}/macros.java
 %{_rpmlibdir}/macros.mono
 %{_rpmlibdir}/macros.perl
 %{_rpmlibdir}/macros.php
 %{_rpmlibdir}/macros.python
 
-#%attr(755,root,root) %{_rpmlibdir}/gstreamer.sh
-#%attr(755,root,root) %{_rpmlibdir}/kmod-deps.sh
-
 %attr(755,root,root) %{_bindir}/gendiff
 %attr(755,root,root) %{_bindir}/rpmbuild
-
-#%dir %{_rpmlibdir}/helpers
-#%attr(755,root,root) %{_rpmlibdir}/helpers/makeshlibs
+%attr(755,root,root) %{_bindir}/rpmspec
 
 %{_mandir}/man1/gendiff.1*
+%lang(pl) %{_mandir}/pl/man1/gendiff.1*
 %{_mandir}/man8/rpmbuild.8*
 %lang(ja) %{_mandir}/ja/man8/rpmbuild.8*
-%lang(pl) %{_mandir}/pl/man1/gendiff.1*
 %lang(pl) %{_mandir}/pl/man8/rpmbuild.8*
+%{_mandir}/man8/rpmspec.8*
 
 %files javaprov
 %defattr(644,root,root,755)
@@ -1114,13 +1076,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files perlprov
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_rpmlibdir}/perl.*
-#%attr(755,root,root) %{_rpmlibdir}/osgideps.pl
-#%attr(755,root,root) %{_rpmlibdir}/perldeps.pl
 
 %files pythonprov
 %defattr(644,root,root,755)
-#%attr(755,root,root) %{_rpmlibdir}/pythoneggs.py
 %attr(755,root,root) %{_rpmlibdir}/pythondeps.sh
+%attr(755,root,root) %{_rpmlibdir}/pythondistdeps.py
 
 %files php-pearprov
 %defattr(644,root,root,755)
@@ -1139,5 +1099,64 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
-#%doc apidocs
+%doc doc/librpm/html/*
+%endif
+
+
+%if 0
+%attr(755,root,root) %{_bindir}/rpmdb
+%attr(755,root,root) %{_bindir}/rpmgraph
+%attr(755,root,root) %{_bindir}/rpmkeys
+%attr(755,root,root) %{_bindir}/rpmquery
+%attr(755,root,root) %{_bindir}/rpmsign
+%attr(755,root,root) %{_bindir}/rpmverify
+%attr(755,root,root) %{_rpmlibdir}/check-buildroot
+%attr(755,root,root) %{_rpmlibdir}/check-prereqs
+%attr(755,root,root) %{_rpmlibdir}/check-rpaths
+%attr(755,root,root) %{_rpmlibdir}/check-rpaths-worker
+%attr(755,root,root) %{_rpmlibdir}/config.guess
+%attr(755,root,root) %{_rpmlibdir}/config.sub
+%attr(755,root,root) %{_rpmlibdir}/debuginfo.prov
+%attr(755,root,root) %{_rpmlibdir}/desktop-file.prov
+%attr(755,root,root) %{_rpmlibdir}/find-provides
+%attr(755,root,root) %{_rpmlibdir}/find-requires
+%attr(755,root,root) %{_rpmlibdir}/metainfo.prov
+%attr(755,root,root) %{_rpmlibdir}/ocaml-find-provides.sh
+%attr(755,root,root) %{_rpmlibdir}/ocaml-find-requires.sh
+# valgrind suppression file for rpm
+%{_rpmlibdir}/rpm.supp
+%{_rpmlibdir}/rpmrc
+%attr(755,root,root) %{_rpmlibdir}/script.req
+%attr(755,root,root) %{_rpmlibdir}/sepdebugcrcfix
+
+%{_rpmlibdir}/fileattrs/debuginfo.attr
+%{_rpmlibdir}/fileattrs/desktop.attr
+%{_rpmlibdir}/fileattrs/elf.attr
+%{_rpmlibdir}/fileattrs/font.attr
+%{_rpmlibdir}/fileattrs/libtool.attr
+%{_rpmlibdir}/fileattrs/metainfo.attr
+%{_rpmlibdir}/fileattrs/ocaml.attr
+%{_rpmlibdir}/fileattrs/perl.attr
+%{_rpmlibdir}/fileattrs/perllib.attr
+%{_rpmlibdir}/fileattrs/php.attr
+%{_rpmlibdir}/fileattrs/pkgconfig.attr
+%{_rpmlibdir}/fileattrs/python.attr
+%{_rpmlibdir}/fileattrs/pythondist.attr
+%{_rpmlibdir}/fileattrs/script.attr
+
+%attr(755,root,root) %{_libdir}/rpm-plugins/audit.so
+%attr(755,root,root) %{_libdir}/rpm-plugins/ima.so
+%attr(755,root,root) %{_libdir}/rpm-plugins/prioreset.so
+%attr(755,root,root) %{_libdir}/rpm-plugins/selinux.so
+%attr(755,root,root) %{_libdir}/rpm-plugins/syslog.so
+%attr(755,root,root) %{_libdir}/rpm-plugins/systemd_inhibit.so
+%{_mandir}/man8/rpm-plugin-systemd-inhibit.8*
+
+%{_mandir}/man8/rpm-misc.8*
+%{_mandir}/man8/rpmdb.8*
+%{_mandir}/man8/rpmkeys.8*
+%{_mandir}/man8/rpmsign.8*
+%{_mandir}/man8/rpmgraph.8*
+%lang(ja) %{_mandir}/ja/man8/rpmgraph.8*
+%lang(pl) %{_mandir}/pl/man8/rpmgraph.8*
 %endif
