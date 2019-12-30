@@ -343,23 +343,6 @@ Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
 %description utils -l pl.UTF-8
 Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami.
 
-%package utils-perl
-Summary:	Additional utilities for managing RPM packages and database
-Summary(de.UTF-8):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
-Summary(pl.UTF-8):	Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
-Group:		Applications/File
-Requires:	%{name}-utils = %{version}-%{release}
-Requires:	popt >= %{reqpopt_ver}
-
-%description utils-perl
-Additional utilities for managing RPM packages and database.
-
-%description utils-perl -l de.UTF-8
-Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
-
-%description utils-perl -l pl.UTF-8
-Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami.
-
 %package build
 Summary:	Scripts for building binary RPM packages
 Summary(de.UTF-8):	Scripts fürs Bauen binärer RPM-Pakete
@@ -1013,6 +996,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rpm2archive
 %attr(755,root,root) %{_bindir}/rpm2cpio
+%attr(755,root,root) %{_bindir}/rpmgraph
 %attr(755,root,root) %{_rpmlibdir}/rpm2cpio.sh
 %attr(755,root,root) %{_rpmlibdir}/find-debuginfo.sh
 %attr(755,root,root) %{_rpmlibdir}/rpmdb_loadcvt
@@ -1021,11 +1005,14 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/rpmdeps
 %{_mandir}/man8/rpm2cpio.8*
 %{_mandir}/man8/rpmdeps.8*
+%{_mandir}/man8/rpmgraph.8*
 %lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
 %lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
 %lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
 %lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
 %lang(pl) %{_mandir}/pl/man8/rpmdeps.8*
+%lang(ja) %{_mandir}/ja/man8/rpmgraph.8*
+%lang(pl) %{_mandir}/pl/man8/rpmgraph.8*
 
 %files build
 %defattr(644,root,root,755)
@@ -1168,7 +1155,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %if 0
 %attr(755,root,root) %{_bindir}/rpmdb
-%attr(755,root,root) %{_bindir}/rpmgraph
 %attr(755,root,root) %{_bindir}/rpmkeys
 %attr(755,root,root) %{_bindir}/rpmquery
 %attr(755,root,root) %{_bindir}/rpmsign
@@ -1195,7 +1181,4 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_mandir}/man8/rpmdb.8*
 %{_mandir}/man8/rpmkeys.8*
 %{_mandir}/man8/rpmsign.8*
-%{_mandir}/man8/rpmgraph.8*
-%lang(ja) %{_mandir}/ja/man8/rpmgraph.8*
-%lang(pl) %{_mandir}/pl/man8/rpmgraph.8*
 %endif
