@@ -3,7 +3,6 @@
 # - when adopting, use 4.5 ticket for checklist: https://bugs.launchpad.net/pld-linux/+bug/262985
 #
 # Conditional build:
-%bcond_with	static		# build static rpm+rpmi
 %bcond_without	apidocs		# don't generate documentation with doxygen
 %bcond_without	python2		# don't build python bindings
 %bcond_without	python3		# don't build python bindings
@@ -130,23 +129,6 @@ BuildRequires:	ghostscript
 BuildRequires:	graphviz
 BuildRequires:	tetex-pdftex
 %endif
-%if %{with static}
-# Require static library only for static build
-BuildRequires:	%{reqdb_pkg}-static >= %{reqdb_pkgver}
-BuildRequires:	bzip2-static >= 1.0.2-17
-BuildRequires:	elfutils-static
-BuildRequires:	glibc-static >= 2.2.94
-BuildRequires:	libmagic-static
-BuildRequires:	openssl-static >= %{openssl_ver}
-%if %{with selinux}
-BuildRequires:	libselinux-static >= 2.1.0
-BuildRequires:	libsemanage-static >= 2.1.0
-BuildRequires:	libsepol-static >= 2.1.0
-%endif
-BuildRequires:	popt-static >= %{reqpopt_ver}
-BuildRequires:	zlib-static
-BuildRequires:	zstd-static
-%endif
 Requires(posttrans):	coreutils
 Requires:	%{name}-base = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
@@ -156,7 +138,7 @@ Requires:	popt >= %{reqpopt_ver}
 Provides:	rpm-db-ver = %{reqdb_ver}
 Obsoletes:	rpm-getdeps
 Obsoletes:	rpm-utils-perl
-%{!?with_static:Obsoletes:	rpm-utils-static}
+Obsoletes:	rpm-utils-static
 Conflicts:	glibc < 2.2.92
 # db4.6 poldek needed
 Conflicts:	poldek < 0.21-0.20070703.00.3
@@ -334,50 +316,6 @@ ferramentas que precisem de conhecimento profundo de pacotes RPM.
 призначена для полегшення створення графічних пакетних менеджерів та
 інших утиліт, що працюють з пакетами RPM.
 
-%package static
-Summary:	RPM static libraries
-Summary(de.UTF-8):	RPMs statische Libraries
-Summary(pl.UTF-8):	Biblioteki statyczne RPM-a
-Summary(pt_BR.UTF-8):	Bibliotecas estáticas para o desenvolvimento de aplicações RPM
-Summary(ru.UTF-8):	Статическая библиотека для программ, работающих с rpm-пакетами
-Summary(uk.UTF-8):	Статична бібліотека для програм, що працюють з пакетами rpm
-Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
-Requires:	%{reqdb_pkg}-static >= %{reqdb_pkgver}
-Requires:	bzip2-static
-Requires:	elfutils-static
-Requires:	libmagic-static
-Requires:	openssl-static >= %{openssl_ver}
-%if %{with selinux}
-Requires:	libselinux-static
-Requires:	libsemanage-static
-Requires:	libsepol-static
-%endif
-Requires:	popt-static >= %{reqpopt_ver}
-Requires:	zlib-static
-
-%description static
-RPM static libraries.
-
-%description static -l de.UTF-8
-RPMs statische Libraries.
-
-%description static -l pl.UTF-8
-Biblioteki statyczne RPM-a.
-
-%description static -l pt_BR.UTF-8
-Bibliotecas estáticas para desenvolvimento.
-
-%description static -l ru.UTF-8
-Система управления пакетами RPM содержит библиотеку C, которая
-упрощает манипуляцию пакетами RPM и соответствующими базами данных.
-Это статическая библиотека RPM.
-
-%description static -l uk.UTF-8
-Система керування пакетами RPM містить бібліотеку C, котра спрощує
-роботу з пакетами RPM та відповідними базами даних. Це статична
-бібліотека RPM.
-
 %package utils
 Summary:	Additional utilities for managing RPM packages and database
 Summary(de.UTF-8):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
@@ -416,25 +354,6 @@ Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
 
 %description utils-perl -l pl.UTF-8
 Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami.
-
-%package utils-static
-Summary:	Static rpm utilities
-Summary(pl.UTF-8):	Statyczne narzędzia rpm
-Group:		Applications/System
-Requires:	%{name} = %{version}-%{release}
-
-%description utils-static
-Static rpm utilities for repairing system in case something with
-shared libraries used by rpm become broken. Currently it contains rpmi
-binary, which can be used to install/upgrade/remove packages without
-using shared libraries (well, in fact with exception of NSS modules).
-
-%description utils-static -l pl.UTF-8
-Statyczne narzędzia rpm do naprawy systemu w przypadku zepsucia czegoś
-związanego z bibliotekami współdzielonymi używanymi przez rpm-a.
-Aktualnie pakiet zawiera binarkę rpmi, którą można użyć do instalacji,
-uaktualniania lub usuwania pakietów bez udziału bibliotek statycznych
-(z wyjątkiem modułów NSS).
 
 %package build
 Summary:	Scripts for building binary RPM packages
@@ -731,7 +650,6 @@ CPPFLAGS="-I/usr/include/lua53 %{rpmcppflags}"
 	%{!?with_python3:%{?with_python2:PYTHON=python2}} \
 	--disable-silent-rules \
 	--enable-shared \
-	--enable-static \
 	--enable-bdb \
 	--enable-zstd \
 	--with-crypto=openssl \
@@ -1032,10 +950,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_includedir}/rpm
 %{_pkgconfigdir}/*.pc
 
-%files static
-%defattr(644,root,root,755)
-%{_libdir}/librpm*.a
-
 %files utils
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rpm2archive
@@ -1053,13 +967,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
 %lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
 %lang(pl) %{_mandir}/pl/man8/rpmdeps.8*
-
-%if %{with static}
-%files utils-static
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/rpm[ieu]
-%attr(755,root,root) %{_rpmlibdir}/rpm[ieu]
-%endif
 
 %files build
 %defattr(644,root,root,755)
