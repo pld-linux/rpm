@@ -5,7 +5,8 @@
 # Conditional build:
 %bcond_with	static		# build static rpm+rpmi
 %bcond_without	apidocs		# don't generate documentation with doxygen
-%bcond_without	python		# don't build python bindings
+%bcond_without	python2		# don't build python bindings
+%bcond_without	python3		# don't build python bindings
 %bcond_without	selinux		# build without selinux support
 %bcond_without	recommends_tags	# build without Recommends tag (bootstrapping)
 %bcond_with	db61		# use DB 6.1 instead of 5.3
@@ -113,9 +114,12 @@ BuildRequires:	lua53-devel >= 5.3.5
 BuildRequires:	ossp-uuid-devel
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{reqpopt_ver}
-%{?with_python:BuildRequires:	python-devel >= 1:2.3}
+%{?with_python2:BuildRequires:	python-devel >= 1:2.3}
+%{?with_python3:BuildRequires:	python3-devel}
 BuildRequires:	python-modules >= 1:2.3
-%{?with_python:BuildRequires:	rpm-pythonprov}
+%if %{with python2} || %{with python3}
+BuildRequires:	rpm-pythonprov
+%endif
 BuildRequires:	tcl
 BuildRequires:	xz-devel
 BuildRequires:	zlib-devel
@@ -597,7 +601,7 @@ Requires:	python
 Obsoletes:	rpm-python
 
 %description -n python-rpm
-The rpm-python package contains a module which permits applications
+The python-rpm package contains a module which permits applications
 written in the Python programming language to use the interface
 supplied by RPM (RPM Package Manager) libraries.
 
@@ -605,19 +609,50 @@ This package should be installed if you want to develop Python
 programs that will manipulate RPM packages and databases.
 
 %description -n python-rpm -l pl.UTF-8
-Pakiet rpm-python zawiera moduł, który pozwala aplikacjom napisanym w
+Pakiet python-rpm zawiera moduł, który pozwala aplikacjom napisanym w
 Pythonie na używanie interfejsu dostarczanego przez biblioteki RPM-a.
 
 Pakiet ten powinien zostać zainstalowany, jeśli chcesz pisać w
 Pythonie programy manipulujące pakietami i bazami danych rpm.
 
 %description -n python-rpm -l pt_BR.UTF-8
-O pacote rpm-python contém um módulo que permite que aplicações
+O pacote python-rpm contém um módulo que permite que aplicações
 escritas em Python utilizem a interface fornecida pelas bibliotecas
 RPM (RPM Package Manager).
 
 Esse pacote deve ser instalado se você quiser desenvolver programas em
 Python para manipular pacotes e bancos de dados RPM.
+
+%package -n python3-rpm
+Summary:	Python 3 interface to RPM library
+Summary(pl.UTF-8):	Interfejs Pythona 3 do biblioteki RPM-a
+Summary(pt_BR.UTF-8):	Módulo Python 3 para aplicativos que manipulam pacotes RPM
+Group:		Development/Languages/Python
+Requires:	%{name} = %{version}-%{release}
+Requires:	python3
+
+%description -n python3-rpm
+The python3-rpm package contains a module which permits applications
+written in the Python 3 programming language to use the interface
+supplied by RPM (RPM Package Manager) libraries.
+
+This package should be installed if you want to develop Python 3
+programs that will manipulate RPM packages and databases.
+
+%description -n python3-rpm -l pl.UTF-8
+Pakiet python3-rpm zawiera moduł, który pozwala aplikacjom napisanym w
+Pythonie 3 na używanie interfejsu dostarczanego przez biblioteki RPM-a.
+
+Pakiet ten powinien zostać zainstalowany, jeśli chcesz pisać w
+Pythonie 3 programy manipulujące pakietami i bazami danych rpm.
+
+%description -n python3-rpm -l pt_BR.UTF-8
+O pacote python3-rpm contém um módulo que permite que aplicações
+escritas em Python 3 utilizem a interface fornecida pelas bibliotecas
+RPM (RPM Package Manager).
+
+Esse pacote deve ser instalado se você quiser desenvolver programas em
+Python 3 para manipular pacotes e bancos de dados RPM.
 
 %package apidocs
 Summary:	RPM API documentation and guides
@@ -692,7 +727,8 @@ CPPFLAGS="-I/usr/include/lua53 %{rpmcppflags}"
 	WITH_PERL_VERSION=no \
 	__GST_INSPECT=%{_bindir}/gst-inspect-1.0 \
 	__GPG=%{_bindir}/gpg \
-	%{?with_python:PYTHON=python%{py_ver}} \
+	%{?with_python3:PYTHON=python3} \
+	%{!?with_python3:%{?with_python2:PYTHON=python2}} \
 	--disable-silent-rules \
 	--enable-shared \
 	--enable-static \
@@ -704,7 +740,9 @@ CPPFLAGS="-I/usr/include/lua53 %{rpmcppflags}"
 	--with-acl \
 	--with-audit \
 	--with-archive \
-	%{?with_python:--enable-python} \
+%if %{with python2} || %{with python3}
+	--enable-python \
+%endif
 	--with-selinux=%{!?with_selinux:no}%{?with_selinux:yes} \
 	--with-vendor=pld
 
@@ -727,6 +765,17 @@ if tools/rpmdb_reset -V 2>&1 | grep "t match library version"; then
 	echo "Error linking rpmdb tools!"
 	exit 1
 fi
+
+%if %{with python2}
+cd python
+%py_build
+cd ..
+%endif
+
+%if %{with python3}
+cd python
+%py3_build
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -810,14 +859,9 @@ touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Obsoletename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Providename
 touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
 
-cp -p tools/rpmdb_checkversion $RPM_BUILD_ROOT%{_rpmlibdir}/bin
-cp -p tools/rpmdb_reset $RPM_BUILD_ROOT%{_rpmlibdir}/bin
-#install %{SOURCE29} $RPM_BUILD_ROOT%{_rpmlibdir}/bin/dbupgrade.sh
-
-# create macro loading wrappers for backward compatibility
-for m in gstreamer java mono perl php python; do
-	echo "%%{load:%{_rpmlibdir}/macros.d/$m}" >$RPM_BUILD_ROOT%{_rpmlibdir}/macros.$m
-done
+cp -p tools/rpmdb_checkversion $RPM_BUILD_ROOT%{_rpmlibdir}/
+cp -p tools/rpmdb_reset $RPM_BUILD_ROOT%{_rpmlibdir}/
+cp -p %{SOURCE29} $RPM_BUILD_ROOT%{_rpmlibdir}/dbupgrade.sh
 
 # move rpm to /bin
 mv $RPM_BUILD_ROOT%{_bindir}/rpm $RPM_BUILD_ROOT/bin
@@ -827,11 +871,21 @@ for a in librpm.so librpmbuild.so librpmio.so librpmsign.so; do
 	ln -sf /%{_lib}/$(basename $RPM_BUILD_ROOT/%{_lib}/${a}.*.*.*) $RPM_BUILD_ROOT%{_libdir}/${a}
 done
 
-%if %{with python}
-%py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
-%py_comp $RPM_BUILD_ROOT%{py_sitedir}
+%if %{with python2}
+# Remove anything that rpm make install might put there
+%{__rm} -rf $RPM_BUILD_ROOT%{py_sitedir}
+cd python
+%py_install
+%py_postclean
+cd ..
+%endif
 
-%{__rm} $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,py}
+%if %{with python3}
+# Remove anything that rpm make install might put there
+%{__rm} -rf $RPM_BUILD_ROOT%{py3_sitedir}
+cd python
+%py3_install
+cd ..
 %endif
 
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/rpm-plugins/*.la
@@ -854,7 +908,7 @@ fi
 
 %posttrans
 if [ -e /var/lib/rpm/Packages ] && \
-		! %{_rpmlibdir}/bin/rpmdb_checkversion -h /var/lib/rpm -d /var/lib/rpm; then
+		! %{_rpmlibdir}/rpmdb_checkversion -h /var/lib/rpm -d /var/lib/rpm; then
 	if [ ! -e /var/lib/rpm.rpmbackup-%{version}-%{release} ] && \
 			/bin/cp -a /var/lib/rpm /var/lib/rpm.rpmbackup-%{version}-%{release}; then
 		echo
@@ -865,7 +919,7 @@ if [ -e /var/lib/rpm/Packages ] && \
 	echo 'If poldek aborts after migration with rpmdb error, this is expected behaviour,'
 	echo 'you should ignore it and restart poldek'
 	echo
-	%{_rpmlibdir}/bin/dbupgrade.sh
+	%{_rpmlibdir}/dbupgrade.sh
 fi
 
 %triggerpostun -- %{name} < 4.4.9-44
@@ -944,12 +998,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %attr(755,root,root) %{_rpmlibdir}/hrmib-cache
 
-%dir %{_rpmlibdir}/bin
-#%attr(755,root,root) %{_rpmlibdir}/bin/dbconvert
-#%attr(755,root,root) %{_rpmlibdir}/bin/dbupgrade.sh
-#%attr(755,root,root) %{_rpmlibdir}/bin/rpmdb_checkversion
-#%attr(755,root,root) %{_rpmlibdir}/bin/rpmdb_reset
-#%attr(755,root,root) %{_rpmlibdir}/bin/rpmdbchk
+%attr(755,root,root) %{_rpmlibdir}/dbupgrade.sh
+%attr(755,root,root) %{_rpmlibdir}/rpmdb_checkversion
+%attr(755,root,root) %{_rpmlibdir}/rpmdb_reset
 
 %files base
 %defattr(644,root,root,755)
@@ -1043,13 +1094,22 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%{_rpmlibdir}/macros.d/selinux
 #%{_rpmlibdir}/macros.d/tcl
 #%{_rpmlibdir}/macros.rpmbuild
-# compat wrappers
-%{_rpmlibdir}/macros.gstreamer
-%{_rpmlibdir}/macros.java
-%{_rpmlibdir}/macros.mono
-%{_rpmlibdir}/macros.perl
-%{_rpmlibdir}/macros.php
-%{_rpmlibdir}/macros.python
+
+%dir %{_rpmlibdir}/fileattrs
+%{_rpmlibdir}/fileattrs/debuginfo.attr
+%{_rpmlibdir}/fileattrs/desktop.attr
+%{_rpmlibdir}/fileattrs/elf.attr
+%{_rpmlibdir}/fileattrs/font.attr
+%{_rpmlibdir}/fileattrs/libtool.attr
+%{_rpmlibdir}/fileattrs/metainfo.attr
+%{_rpmlibdir}/fileattrs/ocaml.attr
+%{_rpmlibdir}/fileattrs/perl.attr
+%{_rpmlibdir}/fileattrs/perllib.attr
+%{_rpmlibdir}/fileattrs/php.attr
+%{_rpmlibdir}/fileattrs/pkgconfig.attr
+%{_rpmlibdir}/fileattrs/python.attr
+%{_rpmlibdir}/fileattrs/pythondist.attr
+%{_rpmlibdir}/fileattrs/script.attr
 
 %attr(755,root,root) %{_bindir}/gendiff
 %attr(755,root,root) %{_bindir}/rpmbuild
@@ -1088,12 +1148,23 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/php.req
 %attr(755,root,root) %{_rpmlibdir}/php.req.php
 
-%if %{with python}
+%if %{with python2}
 %files -n python-rpm
 %defattr(644,root,root,755)
 %dir %{py_sitedir}/rpm
 %attr(755,root,root) %{py_sitedir}/rpm/*.so
 %{py_sitedir}/rpm/*.py[co]
+%{py_sitedir}/rpm-%{version}-py*.egg-info
+%endif
+
+%if %{with python3}
+%files -n python3-rpm
+%defattr(644,root,root,755)
+%dir %{py3_sitedir}/rpm
+%attr(755,root,root) %{py3_sitedir}/rpm/*.so
+%{py3_sitedir}/rpm/*.py
+%{py3_sitedir}/rpm-%{version}-py*.egg-info
+%{py3_sitedir}/rpm/__pycache__
 %endif
 
 %if %{with apidocs}
@@ -1129,20 +1200,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/script.req
 %attr(755,root,root) %{_rpmlibdir}/sepdebugcrcfix
 
-%{_rpmlibdir}/fileattrs/debuginfo.attr
-%{_rpmlibdir}/fileattrs/desktop.attr
-%{_rpmlibdir}/fileattrs/elf.attr
-%{_rpmlibdir}/fileattrs/font.attr
-%{_rpmlibdir}/fileattrs/libtool.attr
-%{_rpmlibdir}/fileattrs/metainfo.attr
-%{_rpmlibdir}/fileattrs/ocaml.attr
-%{_rpmlibdir}/fileattrs/perl.attr
-%{_rpmlibdir}/fileattrs/perllib.attr
-%{_rpmlibdir}/fileattrs/php.attr
-%{_rpmlibdir}/fileattrs/pkgconfig.attr
-%{_rpmlibdir}/fileattrs/python.attr
-%{_rpmlibdir}/fileattrs/pythondist.attr
-%{_rpmlibdir}/fileattrs/script.attr
 
 %attr(755,root,root) %{_libdir}/rpm-plugins/audit.so
 %attr(755,root,root) %{_libdir}/rpm-plugins/ima.so
