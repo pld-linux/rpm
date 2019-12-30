@@ -607,11 +607,20 @@ systemd systems.
 
 %package plugin-selinux
 Summary:	Plugin for SELinux functionality
+Group:		Base
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	libselinux >= 2.1.0
 
 %description plugin-selinux
 Plugin for SELinux functionality.
+
+%package sign
+Summary:	Package signing support
+Group:		Base
+Requires:	%{name}-lib = %{version}-%{release}
+
+%description sign
+This package contains support for digitally signing RPM packages.
 
 %package apidocs
 Summary:	RPM API documentation and guides
@@ -823,7 +832,10 @@ cp -p tools/rpmdb_reset $RPM_BUILD_ROOT%{_rpmlibdir}/
 cp -p %{SOURCE29} $RPM_BUILD_ROOT%{_rpmlibdir}/dbupgrade.sh
 
 # move rpm to /bin
-mv $RPM_BUILD_ROOT%{_bindir}/rpm $RPM_BUILD_ROOT/bin
+%{__mv} $RPM_BUILD_ROOT%{_bindir}/rpm $RPM_BUILD_ROOT/bin
+ln -sf /bin/rpm $RPM_BUILD_ROOT%{_bindir}/rpmquery
+ln -sf /bin/rpm $RPM_BUILD_ROOT%{_bindir}/rpmverify
+
 # move essential libs to /lib (libs that /bin/rpm links to)
 for a in librpm.so librpmbuild.so librpmio.so librpmsign.so; do
 	mv -f $RPM_BUILD_ROOT%{_libdir}/${a}.* $RPM_BUILD_ROOT/%{_lib}
@@ -898,6 +910,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 /etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
 %attr(755,root,root) /bin/rpm
+%attr(755,root,root) %{_bindir}/rpmdb
+%attr(755,root,root) %{_bindir}/rpmkeys
+%attr(755,root,root) %{_bindir}/rpmquery
+%attr(755,root,root) %{_bindir}/rpmverify
 
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros.lang
@@ -906,6 +922,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo/*
 
 %{_mandir}/man8/rpm.8*
+%{_mandir}/man8/rpmdb.8*
+%{_mandir}/man8/rpmkeys.8*
+%{_mandir}/man8/rpm-misc.8*
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
 %lang(ja) %{_mandir}/ja/man8/rpm.8*
 %lang(ko) %{_mandir}/ko/man8/rpm.8*
@@ -923,6 +942,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %dir /var/cache/hrmib
 
 %{_rpmlibdir}/rpmpopt*
+%{_rpmlibdir}/rpmrc
 %{_rpmlibdir}/macros
 %dir %{_rpmlibdir}/macros.d
 #%{_rpmlibdir}/macros.d/pld
@@ -1147,6 +1167,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_libdir}/rpm-plugins/selinux.so
 %endif
 
+%files sign
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/rpmsign
+%{_mandir}/man8/rpmsign.8*
+
 %if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
@@ -1154,11 +1179,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %endif
 
 %if 0
-%attr(755,root,root) %{_bindir}/rpmdb
-%attr(755,root,root) %{_bindir}/rpmkeys
-%attr(755,root,root) %{_bindir}/rpmquery
-%attr(755,root,root) %{_bindir}/rpmsign
-%attr(755,root,root) %{_bindir}/rpmverify
 %attr(755,root,root) %{_rpmlibdir}/check-buildroot
 %attr(755,root,root) %{_rpmlibdir}/check-prereqs
 %attr(755,root,root) %{_rpmlibdir}/check-rpaths
@@ -1174,11 +1194,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/ocaml-find-requires.sh
 # valgrind suppression file for rpm
 %{_rpmlibdir}/rpm.supp
-%{_rpmlibdir}/rpmrc
 %attr(755,root,root) %{_rpmlibdir}/script.req
 %attr(755,root,root) %{_rpmlibdir}/sepdebugcrcfix
-%{_mandir}/man8/rpm-misc.8*
-%{_mandir}/man8/rpmdb.8*
-%{_mandir}/man8/rpmkeys.8*
-%{_mandir}/man8/rpmsign.8*
 %endif
