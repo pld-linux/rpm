@@ -90,8 +90,7 @@ Patch16:	%{name}-ignore-missing-macro-files.patch
 Patch17:	x32.patch
 Patch18:	%{name}-fix-compress-doc.patch
 Patch19:	vendor-pld.patch
-
-URL:		http://rpm5.org/
+URL:		https://rpm.org/
 BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
 BuildRequires:	%{reqdb_pkg}-sql-devel >= %{reqdb_pkgver}
 BuildRequires:	autoconf >= 2.63
