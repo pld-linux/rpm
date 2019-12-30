@@ -6,7 +6,7 @@
 %bcond_without	apidocs		# don't generate documentation with doxygen
 %bcond_without	python2		# don't build python bindings
 %bcond_without	python3		# don't build python bindings
-%bcond_without	selinux		# build without selinux support
+%bcond_without	plugins		# build plugins
 %bcond_without	recommends_tags	# build without Recommends tag (bootstrapping)
 %bcond_with	db61		# use DB 6.1 instead of 5.3
 
@@ -101,10 +101,10 @@ BuildRequires:	gettext-tools >= 0.19.2
 BuildRequires:	libarchive-devel
 BuildRequires:	libmagic-devel
 BuildRequires:	openssl-devel >= %{openssl_ver}
-%if %{with selinux}
+%if %{with plugins}
+BuildRequires:	audit-libs-devel
+BuildRequires:	dbus-devel
 BuildRequires:	libselinux-devel >= 2.1.0
-BuildRequires:	libsemanage-devel >= 2.1.0
-BuildRequires:	libsepol-devel >= 2.1.0
 %endif
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
@@ -135,6 +135,12 @@ Requires:	%{name}-lib = %{version}-%{release}
 Requires:	FHS >= 3.0-2
 Requires:	openssl >= %{openssl_ver}
 Requires:	popt >= %{reqpopt_ver}
+%if %{with recommends_tags}
+Recommends:	rpm-plugin-audit
+Recommends:	rpm-plugin-prioreset
+Recommends:	rpm-plugin-syslog
+Recommends:	rpm-plugin-systemd-inhibit
+%endif
 Provides:	rpm-db-ver = %{reqdb_ver}
 Obsoletes:	rpm-getdeps
 Obsoletes:	rpm-utils-perl
@@ -235,7 +241,6 @@ Group:		Libraries
 Requires:	%{reqdb_pkg} >= %{reqdb_pkgver}
 Requires:	%{reqdb_pkg}-sql >= %{reqdb_pkgver}
 Requires:	libmagic >= 1.15-2
-%{?with_selinux:Requires:	libselinux >= 2.1.0}
 Requires:	openssl >= %{openssl_ver}
 Requires:	popt >= %{reqpopt_ver}
 Obsoletes:	rpm-libs
@@ -573,6 +578,58 @@ RPM (RPM Package Manager).
 Esse pacote deve ser instalado se você quiser desenvolver programas em
 Python 3 para manipular pacotes e bancos de dados RPM.
 
+%package plugin-audit
+Summary:	Plugin for logging audit events on package operations
+Group:		System/Base
+Requires:	%{name}-lib = %{version}-%{release}
+
+%description plugin-audit
+Plugin for libaudit support
+
+%package plugin-syslog
+Summary:	Plugin for syslog functionality
+Group:		System/Base
+Requires:	%{name}-lib = %{version}-%{release}
+
+%description plugin-syslog
+This plugin exports RPM actions to the system log.
+
+%package plugin-systemd-inhibit
+Summary:	Plugin for systemd inhibit functionality
+Group:		System/Base
+Requires:	%{name}-lib = %{version}-%{release}
+
+%description plugin-systemd-inhibit
+This plugin blocks systemd from entering idle, sleep or shutdown while
+an rpm transaction is running using the systemd-inhibit mechanism.
+
+%package plugin-ima
+Summary:	Plugin for IMA file signatures
+Group:		Base
+Requires:	%{name}-lib = %{version}-%{release}
+
+%description plugin-ima
+This plugin adds support for enforcing and verifying IMA file
+signatures in an rpm.
+
+%package plugin-prioreset
+Summary:	Plugin for resetting scriptlet priorities for SysV init
+Group:		Base
+Requires:	%{name}-lib = %{version}-%{release}
+
+%description plugin-prioreset
+This plugin is useful on legacy SysV init systems if you run rpm
+transactions with nice/ionice priorities. Should not be used on
+systemd systems.
+
+%package plugin-selinux
+Summary:	Plugin for SELinux functionality
+Requires:	%{name}-lib = %{version}-%{release}
+Requires:	libselinux >= 2.1.0
+
+%description plugin-selinux
+Plugin for SELinux functionality.
+
 %package apidocs
 Summary:	RPM API documentation and guides
 Summary(pl.UTF-8):	Documentacja API RPM-a i przewodniki
@@ -661,7 +718,8 @@ CPPFLAGS="-I/usr/include/lua53 %{rpmcppflags}"
 %if %{with python2} || %{with python3}
 	--enable-python \
 %endif
-	--with-selinux=%{!?with_selinux:no}%{?with_selinux:yes} \
+	--with-selinux=%{!?with_plugins:no}%{?with_plugins:yes} \
+	%{!?with_plugins:--disable-plugins} \
 	--with-vendor=pld
 
 #  --enable-ndb (EXPERIMENTAL) enable the new rpm database format
@@ -939,6 +997,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) /%{_lib}/librpmio.so.%{sover}
 %attr(755,root,root) /%{_lib}/librpmsign.so.9
 %attr(755,root,root) /%{_lib}/librpmsign.so.%{sover}
+%{?with_plugins:%dir %{_libdir}/rpm-plugins}
 
 %files devel
 %defattr(644,root,root,755)
@@ -1074,12 +1133,38 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{py3_sitedir}/rpm/__pycache__
 %endif
 
+%if %{with plugins}
+%files plugin-audit
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/rpm-plugins/audit.so
+
+%files plugin-syslog
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/rpm-plugins/syslog.so
+
+%files plugin-systemd-inhibit
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/rpm-plugins/systemd_inhibit.so
+%{_mandir}/man8/rpm-plugin-systemd-inhibit.8*
+
+%files plugin-ima
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/rpm-plugins/ima.so
+
+%files plugin-prioreset
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/rpm-plugins/prioreset.so
+
+%files plugin-selinux
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/rpm-plugins/selinux.so
+%endif
+
 %if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
 %doc doc/librpm/html/*
 %endif
-
 
 %if 0
 %attr(755,root,root) %{_bindir}/rpmdb
@@ -1106,16 +1191,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/rpmrc
 %attr(755,root,root) %{_rpmlibdir}/script.req
 %attr(755,root,root) %{_rpmlibdir}/sepdebugcrcfix
-
-
-%attr(755,root,root) %{_libdir}/rpm-plugins/audit.so
-%attr(755,root,root) %{_libdir}/rpm-plugins/ima.so
-%attr(755,root,root) %{_libdir}/rpm-plugins/prioreset.so
-%attr(755,root,root) %{_libdir}/rpm-plugins/selinux.so
-%attr(755,root,root) %{_libdir}/rpm-plugins/syslog.so
-%attr(755,root,root) %{_libdir}/rpm-plugins/systemd_inhibit.so
-%{_mandir}/man8/rpm-plugin-systemd-inhibit.8*
-
 %{_mandir}/man8/rpm-misc.8*
 %{_mandir}/man8/rpmdb.8*
 %{_mandir}/man8/rpmkeys.8*
