@@ -1,6 +1,5 @@
 #
 # TODO:
-# - build python stuff with libs from build tree
 # - rebuild database after upgrading from rpm5
 # - when adopting, use 4.5 ticket for checklist: https://bugs.launchpad.net/pld-linux/+bug/262985
 #
@@ -94,6 +93,7 @@ Patch17:	x32.patch
 Patch18:	%{name}-fix-compress-doc.patch
 Patch19:	vendor-pld.patch
 Patch20:	rpm5-db-compat.patch
+Patch21:	python-internal-build.patch
 URL:		https://rpm.org/
 BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
 BuildRequires:	%{reqdb_pkg}-sql-devel >= %{reqdb_pkgver}
@@ -663,6 +663,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 #%patch18 -p1
 #%patch19 -p1
 %patch20 -p1
+%patch21 -p1
 
 install %{SOURCE2} pld.in
 install %{SOURCE8} scripts/php.prov.in
