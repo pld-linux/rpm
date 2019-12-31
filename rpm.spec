@@ -34,6 +34,7 @@ Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.15.1
 Release:	0.1
+Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
 Source0:	http://ftp.rpm.org/releases/rpm-4.15.x/%{name}-%{version}.tar.bz2
@@ -130,8 +131,8 @@ BuildRequires:	graphviz
 BuildRequires:	tetex-pdftex
 %endif
 Requires(posttrans):	coreutils
-Requires:	%{name}-base = %{version}-%{release}
-Requires:	%{name}-lib = %{version}-%{release}
+Requires:	%{name}-base = %{epoch}:%{version}-%{release}
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 Requires:	FHS >= 3.0-2
 Requires:	openssl >= %{openssl_ver}
 Requires:	popt >= %{reqpopt_ver}
@@ -262,7 +263,7 @@ Summary(pt_BR.UTF-8):	Arquivos de inclusão e bibliotecas para programas de mani
 Summary(ru.UTF-8):	Хедеры и библиотеки для программ, работающих с rpm-пакетами
 Summary(uk.UTF-8):	Хедери та бібліотеки для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
-Requires:	%{name}-lib = %{version}-%{release}
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 Requires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
 Requires:	bzip2-devel
 Requires:	elfutils-devel
@@ -326,7 +327,7 @@ Summary:	Additional utilities for managing RPM packages and database
 Summary(de.UTF-8):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
 Summary(pl.UTF-8):	Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
 Group:		Applications/File
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	popt >= %{reqpopt_ver}
 %if %{with recommends_tags}
 Recommends:	bzip2
@@ -354,7 +355,7 @@ Group:		Applications/File
 Requires(pretrans):	coreutils
 Requires(pretrans):	findutils
 Requires:	%{name}-build-macros >= 1.712
-Requires:	%{name}-utils = %{version}-%{release}
+Requires:	%{name}-utils = %{epoch}:%{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
 Requires:	bzip2
@@ -413,7 +414,7 @@ construir pacotes usando o RPM.
 Summary:	Additional utilities for checking Java provides/requires in RPM packages
 Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzania zależności kodu w Javie w pakietach RPM
 Group:		Applications/File
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	file
 Requires:	findutils >= 1:4.2.26
 Requires:	mktemp
@@ -432,7 +433,7 @@ Summary:	Additional utilities for checking Perl provides/requires in RPM package
 Summary(de.UTF-8):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
 Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzenia zależności skryptów Perla w pakietach RPM
 Group:		Applications/File
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	perl-Encode
 Requires:	perl-devel
 Requires:	perl-modules
@@ -452,7 +453,7 @@ pakietach RPM.
 Summary:	Python macros, which simplifies creation of RPM packages with Python software
 Summary(pl.UTF-8):	Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w Pythonie
 Group:		Applications/File
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	python
 Requires:	python-modules
 Requires:	python-setuptools
@@ -469,7 +470,7 @@ Pythonie.
 Summary:	Additional utilities for checking PHP PEAR provides/requires in RPM packages
 Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzania zależności skryptów php w RPM
 Group:		Applications/File
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	sed >= 4.0
 Suggests:	php-pear-PHP_CompatInfo
 
@@ -485,7 +486,7 @@ pakietach RPM.
 Summary:	Ruby tools, which simplify creation of RPM packages with Ruby software
 Summary(pl.UTF-8):	Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w Ruby
 Group:		Applications/File
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	ruby
 Requires:	ruby-modules
 Requires:	ruby-rubygems
@@ -503,7 +504,7 @@ Summary:	Python interface to RPM library
 Summary(pl.UTF-8):	Pythonowy interfejs do biblioteki RPM-a
 Summary(pt_BR.UTF-8):	Módulo Python para aplicativos que manipulam pacotes RPM
 Group:		Development/Languages/Python
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	python
 Obsoletes:	rpm-python
 
@@ -535,7 +536,7 @@ Summary:	Python 3 interface to RPM library
 Summary(pl.UTF-8):	Interfejs Pythona 3 do biblioteki RPM-a
 Summary(pt_BR.UTF-8):	Módulo Python 3 para aplicativos que manipulam pacotes RPM
 Group:		Development/Languages/Python
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	python3
 
 %description -n python3-rpm
@@ -564,7 +565,7 @@ Python 3 para manipular pacotes e bancos de dados RPM.
 %package plugin-audit
 Summary:	Plugin for logging audit events on package operations
 Group:		System/Base
-Requires:	%{name}-lib = %{version}-%{release}
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
 %description plugin-audit
 Plugin for libaudit support
@@ -572,7 +573,7 @@ Plugin for libaudit support
 %package plugin-syslog
 Summary:	Plugin for syslog functionality
 Group:		System/Base
-Requires:	%{name}-lib = %{version}-%{release}
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
 %description plugin-syslog
 This plugin exports RPM actions to the system log.
@@ -580,7 +581,7 @@ This plugin exports RPM actions to the system log.
 %package plugin-systemd-inhibit
 Summary:	Plugin for systemd inhibit functionality
 Group:		System/Base
-Requires:	%{name}-lib = %{version}-%{release}
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
 %description plugin-systemd-inhibit
 This plugin blocks systemd from entering idle, sleep or shutdown while
@@ -589,7 +590,7 @@ an rpm transaction is running using the systemd-inhibit mechanism.
 %package plugin-ima
 Summary:	Plugin for IMA file signatures
 Group:		Base
-Requires:	%{name}-lib = %{version}-%{release}
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
 %description plugin-ima
 This plugin adds support for enforcing and verifying IMA file
@@ -598,7 +599,7 @@ signatures in an rpm.
 %package plugin-prioreset
 Summary:	Plugin for resetting scriptlet priorities for SysV init
 Group:		Base
-Requires:	%{name}-lib = %{version}-%{release}
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
 %description plugin-prioreset
 This plugin is useful on legacy SysV init systems if you run rpm
@@ -608,7 +609,7 @@ systemd systems.
 %package plugin-selinux
 Summary:	Plugin for SELinux functionality
 Group:		Base
-Requires:	%{name}-lib = %{version}-%{release}
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 Requires:	libselinux >= 2.1.0
 
 %description plugin-selinux
@@ -617,7 +618,7 @@ Plugin for SELinux functionality.
 %package sign
 Summary:	Package signing support
 Group:		Base
-Requires:	%{name}-lib = %{version}-%{release}
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
 %description sign
 This package contains support for digitally signing RPM packages.
