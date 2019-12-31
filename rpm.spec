@@ -1093,6 +1093,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/fileattrs/desktop.attr
 %{_rpmlibdir}/fileattrs/elf.attr
 %{_rpmlibdir}/fileattrs/font.attr
+%{_rpmlibdir}/fileattrs/java.attr
 %{_rpmlibdir}/fileattrs/libtool.attr
 %{_rpmlibdir}/fileattrs/metainfo.attr
 %{_rpmlibdir}/fileattrs/ocaml.attr
