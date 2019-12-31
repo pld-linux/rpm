@@ -1,0 +1,15 @@
+--- rpm-4.15.1/lib/header.c~	2019-11-04 21:13:13.000000000 +0900
++++ rpm-4.15.1/lib/header.c	2019-12-31 19:48:06.709777565 +0900
+@@ -277,6 +277,12 @@
+     for (i = 0; i < il; i++) {
+ 	ei2h(&pe[i], &info);
+ 
++	/* XXX rpm5 compat: convert RPMTAG_FILESTATE to RPM_CHAR_TYPE. */
++	if (info.tag == RPMTAG_FILESTATES && info.type == RPM_INT8_TYPE) {
++	    info.type = RPM_CHAR_TYPE;
++	    pe[i].type = htonl(info.type);
++	}
++
+ 	/* Previous data must not overlap */
+ 	if (end > info.offset)
+ 	    goto err;

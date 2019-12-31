@@ -1,5 +1,7 @@
 #
 # TODO:
+# - build python stuff with libs from build tree
+# - rebuild database after upgrading from rpm5
 # - when adopting, use 4.5 ticket for checklist: https://bugs.launchpad.net/pld-linux/+bug/262985
 #
 # Conditional build:
@@ -91,6 +93,7 @@ Patch16:	%{name}-ignore-missing-macro-files.patch
 Patch17:	x32.patch
 Patch18:	%{name}-fix-compress-doc.patch
 Patch19:	vendor-pld.patch
+Patch20:	rpm5-db-compat.patch
 URL:		https://rpm.org/
 BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
 BuildRequires:	%{reqdb_pkg}-sql-devel >= %{reqdb_pkgver}
@@ -659,6 +662,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch17 -p1
 #%patch18 -p1
 #%patch19 -p1
+%patch20 -p1
 
 install %{SOURCE2} pld.in
 install %{SOURCE8} scripts/php.prov.in
@@ -946,6 +950,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros
 %dir %{_rpmlibdir}/macros.d
 #%{_rpmlibdir}/macros.d/pld
+%dir %{_rpmlibdir}/platform
 %{_rpmlibdir}/platform/noarch-*
 %ifarch %{ix86} %{x8664} x32
 %{_rpmlibdir}/platform/athlon*
