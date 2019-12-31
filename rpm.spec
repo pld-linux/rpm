@@ -748,7 +748,7 @@ cd python
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/{rpm,pki/rpm-gpg}} \
-	$RPM_BUILD_ROOT{/var/lib/banner,/var/cache/hrmib}
+	$RPM_BUILD_ROOT{/var/lib/{banner,rpm},/var/cache/hrmib}
 
 cp -p %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
@@ -842,6 +842,8 @@ for a in librpm.so librpmbuild.so librpmio.so librpmsign.so; do
 	ln -sf /%{_lib}/$(basename $RPM_BUILD_ROOT/%{_lib}/${a}.*.*.*) $RPM_BUILD_ROOT%{_libdir}/${a}
 done
 
+#./rpmdb --macros=macros --rcfile=rpmrc --dbpath=/home/users/baggins/devel/PLD/rpm/BUILD/rpm-4.15.1/x/ --initdb
+
 %if %{with python2}
 # Remove anything that rpm make install might put there
 %{__rm} -rf $RPM_BUILD_ROOT%{py_sitedir}
@@ -932,10 +934,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
 %lang(sk) %{_mandir}/sk/man8/rpm.8*
 
-#%dir /var/lib/rpm
-#%dir /var/lib/rpm/log
-#%dir /var/lib/rpm/tmp
-#%config(noreplace) %verify(not md5 mtime size) /var/lib/rpm/DB_CONFIG
+%dir /var/lib/rpm
 
 # exported package NVRA (stamped with install tid)
 # net-snmp hrSWInstalledName queries, bash-completions
@@ -980,6 +979,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/dbupgrade.sh
 %attr(755,root,root) %{_rpmlibdir}/rpmdb_checkversion
 %attr(755,root,root) %{_rpmlibdir}/rpmdb_reset
+
+# valgrind suppression file for rpm
+%{_rpmlibdir}/rpm.supp
 
 %files base
 %defattr(644,root,root,755)
@@ -1067,6 +1069,23 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%{_rpmlibdir}/macros.d/selinux
 #%{_rpmlibdir}/macros.d/tcl
 #%{_rpmlibdir}/macros.rpmbuild
+
+%attr(755,root,root) %{_rpmlibdir}/check-buildroot
+%attr(755,root,root) %{_rpmlibdir}/check-prereqs
+%attr(755,root,root) %{_rpmlibdir}/check-rpaths
+%attr(755,root,root) %{_rpmlibdir}/check-rpaths-worker
+%attr(755,root,root) %{_rpmlibdir}/debuginfo.prov
+%attr(755,root,root) %{_rpmlibdir}/desktop-file.prov
+%attr(755,root,root) %{_rpmlibdir}/find-provides
+%attr(755,root,root) %{_rpmlibdir}/find-requires
+%attr(755,root,root) %{_rpmlibdir}/metainfo.prov
+%attr(755,root,root) %{_rpmlibdir}/ocaml-find-provides.sh
+%attr(755,root,root) %{_rpmlibdir}/ocaml-find-requires.sh
+%attr(755,root,root) %{_rpmlibdir}/script.req
+%attr(755,root,root) %{_rpmlibdir}/sepdebugcrcfix
+# Fedora has this in -build, but shouldn't this be in -devel?
+%attr(755,root,root) %{_rpmlibdir}/config.guess
+%attr(755,root,root) %{_rpmlibdir}/config.sub
 
 %dir %{_rpmlibdir}/fileattrs
 %{_rpmlibdir}/fileattrs/debuginfo.attr
@@ -1176,24 +1195,4 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files apidocs
 %defattr(644,root,root,755)
 %doc doc/librpm/html/*
-%endif
-
-%if 0
-%attr(755,root,root) %{_rpmlibdir}/check-buildroot
-%attr(755,root,root) %{_rpmlibdir}/check-prereqs
-%attr(755,root,root) %{_rpmlibdir}/check-rpaths
-%attr(755,root,root) %{_rpmlibdir}/check-rpaths-worker
-%attr(755,root,root) %{_rpmlibdir}/config.guess
-%attr(755,root,root) %{_rpmlibdir}/config.sub
-%attr(755,root,root) %{_rpmlibdir}/debuginfo.prov
-%attr(755,root,root) %{_rpmlibdir}/desktop-file.prov
-%attr(755,root,root) %{_rpmlibdir}/find-provides
-%attr(755,root,root) %{_rpmlibdir}/find-requires
-%attr(755,root,root) %{_rpmlibdir}/metainfo.prov
-%attr(755,root,root) %{_rpmlibdir}/ocaml-find-provides.sh
-%attr(755,root,root) %{_rpmlibdir}/ocaml-find-requires.sh
-# valgrind suppression file for rpm
-%{_rpmlibdir}/rpm.supp
-%attr(755,root,root) %{_rpmlibdir}/script.req
-%attr(755,root,root) %{_rpmlibdir}/sepdebugcrcfix
 %endif
