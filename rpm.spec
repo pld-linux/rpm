@@ -72,6 +72,7 @@ Source28:	%{name}db_reset.c
 Source29:	dbupgrade.sh
 Source30:	rubygems.rb
 Source31:	gem_helper.rb
+Source32:	rpmrc.pld
 Patch0:		%{name}-man_pl.patch
 Patch1:		%{name}-popt-aliases.patch
 Patch2:		%{name}-perl-macros.patch
@@ -802,6 +803,7 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sparc*-linux/macros
 
 install -d $RPM_BUILD_ROOT%{_rpmlibdir}/pld
 cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_rpmlibdir}/pld/macros
+cp -p %{SOURCE32} $RPM_BUILD_ROOT%{_rpmlibdir}/pld/rpmrc
 
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
 cp -p %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond

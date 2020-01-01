@@ -1,0 +1,76 @@
+include: /usr/lib/rpm/rpmrc
+
+#############################################################
+# Values for RPM_OPT_FLAGS for various platforms
+
+optflags: alpha %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -mieee %{!?nospecflags:%{?specflags_alpha}}
+optflags: alphaev5 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -mieee -mcpu=ev5 %{!?nospecflags:%{?specflags_alpha} %{?specflags_alphaev5}}
+optflags: alphaev56 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -mieee -mcpu=ev56 %{!?nospecflags:%{?specflags_alpha} %{?specflags_alphaev56}}
+optflags: alphaev6 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -mieee -mcpu=ev6 %{!?nospecflags:%{?specflags_alpha} %{?specflags_alphaev6}}
+optflags: alphaev67 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -mieee -mcpu=ev67 %{!?nospecflags:%{?specflags_alpha} %{?specflags_alphaev67}}
+optflags: alphapca56 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -mieee -mcpu=pca56 %{!?nospecflags:%{?specflags_alpha} %{?specflags_alphapca56}}
+
+optflags: aarch64 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} %{!?nospecflags:%{?specflags_aarch64}}
+optflags: riscv64 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -march=rv64imafdc -mabi=lp64d %{!?nospecflags:%{?specflags_riscv64}}
+
+optflags: armv6j %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -march=armv6j -mfpu=vfp -mfloat-abi=hard %{!?nospecflags:%{?specflags_arm} %{?specflags_arm6j}}
+optflags: armv7l %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 %{!?nospecflags:%{?specflags_arm} %{?specflags_arm7l}}
+optflags: armv7hl %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -march=armv7-a -mfloat-abi=hard %{!?nospecflags:%{?specflags_arm} %{?specflags_arm7hl}}
+optflags: armv7hnl %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} %{?!_disable_neon:-mfpu=neon-vfpv4} -march=armv7-a -mfloat-abi=hard %{!?nospecflags:%{?specflags_arm} %{?specflags_arm7hnl}}
+optflags: armv8l %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -march=armv8-a -mfloat-abi=softfp -mfpu=vfpv3-d16 %{!?nospecflags:%{?specflags_arm} %{?specflags_arm8l}}
+optflags: armv8hl %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -march=armv8-a -mfloat-abi=hard %{!?nospecflags:%{?specflags_arm} %{?specflags_arm8hl}}
+optflags: armv8hnl %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} %{?!_disable_neon:-mfpu=neon-vfpv4} -march=armv8-a -mfloat-abi=hard %{!?nospecflags:%{?specflags_arm} %{?specflags_arm8hnl}}
+optflags: armv8hcnl %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} %{?!_disable_neon:-mfpu=neon-vfpv4} -march=armv8-a+crypto -mfloat-abi=hard %{!?nospecflags:%{?specflags_arm} %{?specflags_arm8hcnl}}
+
+ooptflags: athlon %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g -m32} %{?!_disable_lto:-flto} -march=athlon -fasynchronous-unwind-tables %{!?nospecflags:%{?specflags_ia32} %{?specflags_athlon}}
+ooptflags: geode %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g -m32} %{?!_disable_lto:-flto} -march=geode -fasynchronous-unwind-tables %{!?nospecflags:%{?specflags_ia32} %{?specflags_geode}}
+ooptflags: i386 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g -m32} %{?!_disable_lto:-flto} -march=i386 -mtune=generic -fasynchronous-unwind-tables %{!?nospecflags:%{?specflags_ia32:} %{?specflags_i386}}
+ooptflags: i486 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g -m32} %{?!_disable_lto:-flto} -march=i486 -fasynchronous-unwind-tables %{!?nospecflags:%{?specflags_ia32} %{?specflags_i486}}
+ooptflags: i586 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer -mtune=generic}%{!?__common_cflags_with_ssp:-O2 -g -m32} %{?!_disable_lto:-flto} -march=i586 -fasynchronous-unwind-tables %{!?nospecflags:%{?specflags_ia32} %{?specflags_i586}}
+ooptflags: i686 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g -m32 -mtune=generic} %{?!_disable_lto:-flto} -march=i686 -fasynchronous-unwind-tables -mtune=pentium4 %{!?nospecflags:%{?specflags_ia32} %{?specflags_i686}}
+ooptflags: pentium3 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g -m32} %{?!_disable_lto:-flto} -march=pentium3 -fasynchronous-unwind-tables %{!?nospecflags:%{?specflags_ia32} %{?specflags_pentium3}}
+ooptflags: pentium4 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g -m32} %{?!_disable_lto:-flto} -march=pentium4 -fasynchronous-unwind-tables %{!?nospecflags:%{?specflags_ia32} %{?specflags_pentium4}}
+
+ooptflags: ia64 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} %{!?nospecflags:%{?specflags_ia64}}
+
+ooptflags: mips %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -march=mips3 %{!?nospecflags:%{?specflags_mips}}
+ooptflags: mipsel %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fomit-frame-pointer}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -march=mips3 -mtune=loongson2f %{!?nospecflags:%{?specflags_mipsel}}
+
+ooptflags: ppc64 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fPIC}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -m64 -mminimal-toc %{!?nospecflags:%{?specflags_ppc64}}} 
+ooptflags: ppc64iseries %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fPIC}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -m64 -mminimal-toc %{!?nospecflags:%{?specflags_ppc64}}} 
+ooptflags: ppc64pseries %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fPIC}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -m64 -mminimal-toc %{!?nospecflags:%{?specflags_ppc64}}} 
+ooptflags: ppc %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fPIC}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -m32 -fsigned-char %{!?nospecflags:%{?specflags_ppc}}} 
+ooptflags: ppciseries %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fPIC}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -m32 %{!?nospecflags:%{?specflags_ppc}}} 
+ooptflags: ppcpseries %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fPIC}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -m32 %{!?nospecflags:%{?specflags_ppc}}} 
+
+ooptflags: s390 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fPIC}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -m31 %{!?nospecflags:%{?specflags_s390}}
+ooptflags: s390x %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fPIC}%{!?__common_cflags_with_ssp:-O2 -g} %{?!_disable_lto:-flto} -m64 %{!?nospecflags:%{?specflags_s390x}}
+
+ooptflags: sparc %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fPIC}%{!?__common_cflags_with_ssp:-O2 -g} -m32 -mcpu=v7 -mtune=ultrasparc %{!?nospecflags:%{?specflags_sparc}}
+ooptflags: sparcv9 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fPIC}%{!?__common_cflags_with_ssp:-O2 -g} -m32 -mcpu=ultrasparc %{!?nospecflags:%{?specflags_sparc}}
+ooptflags: sparc64 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fPIC}%{!?__common_cflags_with_ssp:-O2 -g} -m64 -mcpu=ultrasparc %{!?nospecflags:%{?specflags_sparc64}}
+
+ooptflags: x32 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fPIC}%{!?__common_cflags_with_ssp:-O2 -g -mx32} %{?!_disable_lto:-flto} -mtune=generic -march=x86-64 %{!?nospecflags:%{?specflags_x32}}
+
+ooptflags: amd64 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fPIC}%{!?__common_cflags_with_ssp:-O2 -g -m64} %{?!_disable_lto:-flto} -march=x86-64 -mtune=generic %{!?nospecflags:%{?specflags_x86_64}}
+ooptflags: ia32e %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fPIC}%{!?__common_cflags_with_ssp:-O2 -g -m64} %{?!_disable_lto:-flto} -march=x86-64 -mtune=generic %{!?nospecflags:%{?specflags_x86_64}}
+ooptflags: x86_64 %{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fPIC}%{!?__common_cflags_with_ssp:-O2 -g -m64} %{?!_disable_lto:-flto} -march=x86-64 -mtune=generic %{!?nospecflags:%{?specflags_x86_64}}
+
+#############################################################
+# For a given uname().machine, the default build arch
+
+buildarchtranslate: athlon: i686
+buildarchtranslate: geode: i686
+buildarchtranslate: i386: i686
+buildarchtranslate: i486: i686
+buildarchtranslate: i586: i686
+buildarchtranslate: pentium3: i686
+buildarchtranslate: pentium4: i686
+
+buildarchtranslate: amd64: x86_64
+buildarchtranslate: ia32e: x86_64
+
+buildarchtranslate: armv7hl: armv7hnl
+buildarchtranslate: armv8hl: armv7hnl
+buildarchtranslate: armv8hnl: armv7hnl
+buildarchtranslate: armv8hcnl: armv7hnl
