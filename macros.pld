@@ -1,0 +1,205 @@
+# PLD Linux rpm macros
+# vim:ft=spec
+
+%distribution		PLD Linux
+%vendor		        pld
+%bugurl			http://bugs.pld-linux.org/
+%disturl		http://www.pld-linux.org/
+%pld_release		th
+
+#
+# Per-platform rpm configuration file.
+
+#==============================================================================
+# ---- per-platform macros.
+#
+%_vendor		pld
+%_os			linux
+%_target_platform	%{_target_cpu}-%{_vendor}-%{_target_os}
+
+#==============================================================================
+# ---- configure macros.  note that most of these are inherited
+#      from the defaults.
+#
+%_prefix		/usr
+%_exec_prefix		%{_prefix}
+%_bindir		%{_exec_prefix}/bin
+%_sbindir		%{_exec_prefix}/sbin
+%_libexecdir		%{_exec_prefix}/libexec
+%_datadir		%{_prefix}/share
+%_sysconfdir		%{_prefix}/etc
+%_sharedstatedir	/var/lib
+%_localstatedir		/var
+%_libdir		%{_exec_prefix}/%{_lib}
+%_includedir		%{_prefix}/include
+%_oldincludedir		/usr/include
+%_infodir		%{_prefix}/share/info
+%_mandir		%{_prefix}/share/man
+%_initrddir		%{_sysconfdir}/rc.d/init.d
+%_sysconfdir		/etc
+
+%_defaultdocdir		%{_usr}/share/doc
+
+%_fmoddir		%{_libdir}/gfortran/modules
+
+# Executed at after copying %doc to DOCDIR, with $DOCDIR set
+%__compress_doc		%{_rpmconfigdir}/compress-doc%{?_noautocompressdoc: --noautocompressdoc='%{_noautocompressdoc}'}
+
+%__os_install_post \
+%{__spec_install_post_strip}\
+%{__spec_install_post_chrpath}\
+%{__spec_install_post_compress_modules}\
+%{__spec_install_post_check_so}\
+%{__spec_install_post_check_tmpfiles}\
+%{__spec_install_post_check_shebangs}\
+%{__spec_install_post_compress_docs}\
+%{__spec_install_post_py_hardlink}\
+%{__spec_install_post_perl_clean}\
+%{__arch_install_post}\
+%{nil}
+
+%__spec_install_post\
+%{expand:%%define __sip_%{?_enable_debug_packages} 1}%{?__sip_1:%{?__debug_package:%{__debug_install_post}}}%{expand:%%undefine __sip_%{?_enable_debug_packages}}\
+%{__arch_install_post}\
+%{__os_install_post}\
+%{nil}
+
+#---------------------------------------------------------------------
+#	Template for debug information sub-package.
+%_enable_debug_packages		1
+
+%debug_package \
+%ifnarch noarch\
+%global __debug_package 1\
+%package debuginfo\
+Summary: Debug information for package %{name}\
+Summary(pl.UTF-8): Informacje dla debuggera dla pakietu %{name}\
+Group: Development/Debug\
+Requires: filesystem-debuginfo >= 3.0-16\
+AutoReqProv: 0\
+%description debuginfo\
+This package provides debug information for package %{name}.\
+Debug information is useful when developing applications that use this\
+package or when debugging this package.\
+%description debuginfo -l pl.UTF-8\
+Ten pakiet dostarcza informacje dla debuggera dla pakietu %{name}.\
+Informacje te są przydatne przy rozwijaniu aplikacji używających tego\
+pakietu oraz przy odpluskwianiu samego pakietu.\
+%files debuginfo -f debugfiles.list\
+%defattr(-,root,root)\
+%endif\
+%{nil}
+
+#---------------------------------------------------------------------
+# Overwrite RPM macros with PLD specific one here.
+
+%__cp			/bin/cp
+%__find			/usr/bin/find
+%__grep			/bin/grep
+%__lua			%{_bindir}/lua
+%__rc			%{_bindir}/rc
+%__xar			%{_bindir}/xar
+
+%_tmppath		%(echo "${TMPDIR:-/var/tmp}")
+%tmpdir			%{_tmppath}
+
+%_topdir		%(echo $HOME)/rpm
+
+%buildroot		%{_tmppath}/%{name}-%{version}-root-%(id -u -n)
+
+%_source_payload	w9.gzdio
+%_binary_payload	w6.lzdio
+
+%_rpmfc_magic_path	/usr/share/file/magic
+
+# provides don't obsolete
+%_upgrade_tag		name
+
+# Disable automatic dependencies on symlinks for now (debuginfo packages pull too many deps)
+%_check_symlink_deps    0 
+ 
+# Do not generate executable() dependencies for scriptlets,
+# as it may give false positives, for example:
+# [ ! -x /bin/prog ] || /bin/prog
+# will generate R:/bin/prog and we don't want that as /bin/prog is optional in this case
+# 0 - Use external generator
+# 1 - Use internal generator if available
+# 2 - Use __scriptlet_requires to process scriptlet dependencies
+%_use_internal_dependency_generator	1
+
+%_duplicate_files_terminate_build	1
+%_files_listed_twice_terminate_build	1
+%_unpackaged_subdirs_terminate_build	0
+
+#
+# Export package NEVRA (stamped with install tid) info for HRMIB on this path.
+#
+# XXX	Note: escaped %% for use in headerSprintf()
+%_hrmib_path	/var/cache/hrmib/%{___NVRA}
+
+#-----------------------------------------------------------------
+# CFLAGS and LDFLAGS used to build
+
+%debuginfocflags	%{expand:%%define __dic_%{?_enable_debug_packages} 1}%{?__dic_1: -gdwarf-4 -fno-debug-types-section -fvar-tracking-assignments -g2}%{expand:%%undefine __dic_%{?_enable_debug_packages}}
+# -feliminate-dwarf2-dups disabled until PR ld/3290 is fixed.
+
+%debugcflags	-O0 -g -Wall
+%debugcppflags	%{nil}
+%debugldflags	%{nil}
+
+%optldflags	-Wl,--as-needed -Wl,--no-copy-dt-needed-entries -Wl,-z,relro -Wl,-z,combreloc
+%optcppflags	%{nil}
+
+# Warning: those macros are overwritten by macros.build,
+#          left here for compatibility
+%rpmcflags %(awk 'BEGIN {
+       split("%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}",I);
+       split("%{?filterout} %{?filterout_c} %{?filterout_ld}",F);
+       %{filter_out}
+}')
+%rpmcppflags       %(awk 'BEGIN {
+       split("%{?debug:%debugcppflags}%{!?debug:%optcppflags}%{?debuginfocppflags}",I);
+       split("%{?filterout} %{?filterout_cpp} %{?filterout_cpp}",F);
+       %{filter_out}
+}')
+%rpmcxxflags       %(awk 'BEGIN {
+       split("%{?debug:%debugcflags}%{!?debug:%optflags}%{?debuginfocflags}",I);
+       split("%{?filterout} %{?filterout_cxx} %{?filterout_ld}",F);
+       %{filter_out}
+}')
+%rpmldflags        %(awk 'BEGIN {
+       split("%{?optldflags}",I);
+       split("%{?filterout_ld}",F)
+       %{filter_out}
+}')
+
+# common compilation flags
+%_fortify_cflags	-Wp,-D_FORTIFY_SOURCE=2
+
+# cf http://wiki.mandriva.com/en/Development/Packaging/Problems#format_not_a_string_literal_and_no_format_arguments
+%Werror_cflags		-Wformat -Werror=format-security
+
+# Use -Werror=trampolines to prevent GCC from generating code that require executable stack
+%_ssp_cflags		-fstack-protector-strong --param=ssp-buffer-size=4 -Werror=trampolines
+%__common_cflags	-O2 -fwrapv -pipe %{Werror_cflags} %{debuginfocflags} %{?_fortify_cflags} %{!?nospecflags:%{?specflags}}
+%__common_cflags_with_ssp	%{__common_cflags} %{?_ssp_cflags}
+
+# arch macros
+%ix86  i386 i486 i586 i686 pentium3 pentium4 athlon
+%x8664 x86_64 amd64 ia32e
+%ppc   ppc ppc7400 ppc7450
+
+# avoid fdatasync syscall flood during database operations.
+%__nofsync	nofsync
+
+#---------------------------------------------------------------------
+#	Expanded at end of %prep
+#
+%__id_u		%{__id} -u
+%__chown_Rhf	%{__chown} -Rhf
+%__chgrp_Rhf	%{__chgrp} -Rhf
+%_fixowner	[ `%{__id_u}` = '0' ] && %{__chown_Rhf} root
+%_fixgroup	[ `%{__id_u}` = '0' ] && %{__chgrp_Rhf} root
+%_fixperms	%{__chmod} -Rf a+rX,u+w,g-w,o-w
+
+%__id		/bin/id
