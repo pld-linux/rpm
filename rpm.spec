@@ -41,7 +41,7 @@ Group:		Base
 Source0:	http://ftp.rpm.org/releases/rpm-4.15.x/%{name}-%{version}.tar.bz2
 # Source0-md5:	ed72147451a5ed93b2a48e2f8f5413c3
 Source1:	%{name}.groups
-Source2:	macros.pld.in
+Source2:	macros.pld
 Source3:	%{name}-install-tree
 Source4:	%{name}-find-spec-bcond
 Source5:	%{name}-hrmib-cache
@@ -91,7 +91,6 @@ Patch15:	%{name}-perl-magic.patch
 Patch16:	%{name}-ignore-missing-macro-files.patch
 Patch17:	x32.patch
 Patch18:	%{name}-fix-compress-doc.patch
-Patch19:	vendor-pld.patch
 Patch20:	rpm5-db-compat.patch
 Patch21:	python-internal-build.patch
 URL:		https://rpm.org/
@@ -661,11 +660,9 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch16 -p1
 %patch17 -p1
 #%patch18 -p1
-#%patch19 -p1
 %patch20 -p1
 %patch21 -p1
 
-install %{SOURCE2} pld.in
 install %{SOURCE8} scripts/php.prov.in
 install %{SOURCE9} scripts/php.req.in
 install %{SOURCE11} scripts/perl.prov.in
@@ -802,6 +799,9 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sh*-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sparc*-linux/macros
 
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
+
+install -d $RPM_BUILD_ROOT%{_rpmlibdir}/pld
+cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_rpmlibdir}/pld/macros
 
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
 cp -p %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
@@ -950,7 +950,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/rpmrc
 %{_rpmlibdir}/macros
 %dir %{_rpmlibdir}/macros.d
-#%{_rpmlibdir}/macros.d/pld
 %dir %{_rpmlibdir}/platform
 %{_rpmlibdir}/platform/noarch-*
 %ifarch %{ix86} %{x8664} x32
@@ -980,6 +979,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %ifarch sparc sparc64
 %{_rpmlibdir}/platform/sparc*
 %endif
+
+%{_rpmlibdir}/pld/macros
 
 %attr(755,root,root) %{_rpmlibdir}/hrmib-cache
 
