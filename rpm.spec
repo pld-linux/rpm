@@ -983,6 +983,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %endif
 
 %{_rpmlibdir}/pld/macros
+%{_rpmlibdir}/pld/rpmrc
 
 %attr(755,root,root) %{_rpmlibdir}/hrmib-cache
 
