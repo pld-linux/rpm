@@ -63,8 +63,6 @@ Source4:	%{name}-find-spec-bcond
 Source5:	%{name}-hrmib-cache
 Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
-Source8:	%{name}-php-provides
-Source9:	%{name}-php-requires
 Source10:	%{name}.sysinfo
 Source11:	perl.prov
 Source12:	%{name}-user_group.sh
@@ -80,7 +78,6 @@ Source20:	%{name}.noautoprov
 Source21:	%{name}.noautoprovfiles
 Source22:	%{name}.noautoreq
 Source24:	%{name}.noautoreqfiles
-Source25:	%{name}-php-requires.php
 Source26:	%{name}db_checkversion.c
 Source27:	macros.lang
 Source28:	%{name}db_reset.c
@@ -92,7 +89,6 @@ Patch3:		%{name}-nosetproctitle.patch
 Patch4:		%{name}-perl-macros.patch
 Patch5:		%{name}-perl-req-perlfile.patch
 Patch6:		%{name}-scripts-closefds.patch
-Patch7:		%{name}-php-macros.patch
 Patch8:		%{name}-gettext-in-header.patch
 Patch9:		%{name}-lua.patch
 Patch10:	%{name}-php-deps.patch
@@ -759,22 +755,6 @@ software.
 Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w
 Pythonie.
 
-%package php-pearprov
-Summary:	Additional utilities for checking PHP PEAR provides/requires in RPM packages
-Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzania zależności skryptów php w RPM
-Group:		Applications/File
-Requires:	%{name} = %{version}-%{release}
-Requires:	sed >= 4.0
-Suggests:	php-pear-PHP_CompatInfo
-
-%description php-pearprov
-Additional utilities for checking PHP PEAR provides/requires in RPM
-packages.
-
-%description php-pearprov -l pl.UTF-8
-Dodatkowe narzędzia do sprawdzenia zależności skryptów PHP PEAR w
-pakietach RPM.
-
 %package -n python-rpm
 Summary:	Python interface to RPM library
 Summary(pl.UTF-8):	Pythonowy interfejs do biblioteki RPM-a
@@ -837,7 +817,6 @@ cd -
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
 %patch8 -p1
 %{?with_system_lua:%patch9 -p1}
 %patch10 -p1
@@ -984,8 +963,6 @@ cd -
 %patch1050 -p1
 
 install %{SOURCE2} macros/pld.in
-install %{SOURCE8} scripts/php.prov.in
-install %{SOURCE9} scripts/php.req.in
 install %{SOURCE11} scripts/perl.prov.in
 
 rm scripts/find-php*
@@ -1230,8 +1207,6 @@ install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
 install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
 install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
 install %{SOURCE12} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
-install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
-cp -p %{SOURCE25} $RPM_BUILD_ROOT%{_rpmlibdir}/php.req.php
 install %{SOURCE17} $RPM_BUILD_ROOT%{_rpmlibdir}/mimetypedeps.sh
 install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
 install %{SOURCE13} $RPM_BUILD_ROOT/etc/sysconfig/rpm
@@ -1260,7 +1235,7 @@ install tools/rpmdb_reset $RPM_BUILD_ROOT%{_rpmlibdir}/bin
 install %{SOURCE29} $RPM_BUILD_ROOT%{_rpmlibdir}/bin/dbupgrade.sh
 
 # create macro loading wrappers for backward compatibility
-for m in gstreamer mono perl php python; do
+for m in gstreamer mono perl python; do
 	echo "%%{load:%{_rpmlibdir}/macros.d/$m}" >$RPM_BUILD_ROOT%{_rpmlibdir}/macros.$m
 done
 
@@ -1548,7 +1523,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros.d/libtool
 %{_rpmlibdir}/macros.d/mono
 %{_rpmlibdir}/macros.d/perl
-%{_rpmlibdir}/macros.d/php
 %{_rpmlibdir}/macros.d/pkgconfig
 %{_rpmlibdir}/macros.d/python
 %{_rpmlibdir}/macros.d/selinux
@@ -1558,7 +1532,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros.gstreamer
 %{_rpmlibdir}/macros.mono
 %{_rpmlibdir}/macros.perl
-%{_rpmlibdir}/macros.php
 %{_rpmlibdir}/macros.python
 
 %attr(755,root,root) %{_rpmlibdir}/gstreamer.sh
@@ -1586,12 +1559,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_rpmlibdir}/pythoneggs.py
 %attr(755,root,root) %{_rpmlibdir}/pythondeps.sh
-
-%files php-pearprov
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_rpmlibdir}/php.prov
-%attr(755,root,root) %{_rpmlibdir}/php.req
-%attr(755,root,root) %{_rpmlibdir}/php.req.php
 
 %if %{with python}
 %files -n python-rpm
