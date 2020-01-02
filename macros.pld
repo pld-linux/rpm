@@ -1,42 +1,20 @@
 # PLD Linux rpm macros
 # vim:ft=spec
 
-%distribution		PLD Linux
-%vendor		        pld
-%bugurl			http://bugs.pld-linux.org/
-%disturl		http://www.pld-linux.org/
-%pld_release		th
-
-#
-# Per-platform rpm configuration file.
-
-#==============================================================================
-# ---- per-platform macros.
-#
-%_vendor		pld
-%_os			linux
-%_target_platform	%{_target_cpu}-%{_vendor}-%{_target_os}
+%distribution	PLD Linux
+%vendor		pld
+%bugurl		http://bugs.pld-linux.org/
+%disturl	http://www.pld-linux.org/
+%pld_release	th
+%disttag	%{pld_release}
 
 #==============================================================================
 # ---- configure macros.  note that most of these are inherited
 #      from the defaults.
 #
-%_prefix		/usr
-%_exec_prefix		%{_prefix}
-%_bindir		%{_exec_prefix}/bin
-%_sbindir		%{_exec_prefix}/sbin
-%_libexecdir		%{_exec_prefix}/libexec
-%_datadir		%{_prefix}/share
-%_sysconfdir		%{_prefix}/etc
 %_sharedstatedir	/var/lib
 %_localstatedir		/var
-%_libdir		%{_exec_prefix}/%{_lib}
-%_includedir		%{_prefix}/include
-%_oldincludedir		/usr/include
-%_infodir		%{_prefix}/share/info
-%_mandir		%{_prefix}/share/man
 %_initrddir		%{_sysconfdir}/rc.d/init.d
-%_sysconfdir		/etc
 
 %_defaultdocdir		%{_usr}/share/doc
 
@@ -93,9 +71,7 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 #---------------------------------------------------------------------
 # Overwrite RPM macros with PLD specific one here.
 
-%__cp			/bin/cp
 %__find			/usr/bin/find
-%__grep			/bin/grep
 %__lua			%{_bindir}/lua
 %__rc			%{_bindir}/rc
 %__xar			%{_bindir}/xar
@@ -108,7 +84,7 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 %buildroot		%{_tmppath}/%{name}-%{version}-root-%(id -u -n)
 
 %_source_payload	w9.gzdio
-%_binary_payload	w6.lzdio
+%_binary_payload	w6.xzdio
 
 %_rpmfc_magic_path	/usr/share/file/magic
 
@@ -129,6 +105,7 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 
 %_duplicate_files_terminate_build	1
 %_files_listed_twice_terminate_build	1
+%_unpackaged_files_terminate_build	0
 %_unpackaged_subdirs_terminate_build	0
 
 #
@@ -185,7 +162,7 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 %__common_cflags_with_ssp	%{__common_cflags} %{?_ssp_cflags}
 
 # arch macros
-%ix86  i386 i486 i586 i686 pentium3 pentium4 athlon
+%ix86  i386 i486 i586 i686 pentium3 pentium4 athlon geode
 %x8664 x86_64 amd64 ia32e
 %ppc   ppc ppc7400 ppc7450
 
@@ -195,11 +172,7 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 #---------------------------------------------------------------------
 #	Expanded at end of %prep
 #
-%__id_u		%{__id} -u
 %__chown_Rhf	%{__chown} -Rhf
 %__chgrp_Rhf	%{__chgrp} -Rhf
 %_fixowner	[ `%{__id_u}` = '0' ] && %{__chown_Rhf} root
 %_fixgroup	[ `%{__id_u}` = '0' ] && %{__chgrp_Rhf} root
-%_fixperms	%{__chmod} -Rf a+rX,u+w,g-w,o-w
-
-%__id		/bin/id
