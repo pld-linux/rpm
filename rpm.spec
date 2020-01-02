@@ -97,8 +97,6 @@ Source26:	%{name}db_checkversion.c
 Source27:	macros.lang
 Source28:	%{name}db_reset.c
 Source29:	dbupgrade.sh
-Source30:	rubygems.rb
-Source31:	gem_helper.rb
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
 Patch2:		%{name}-popt-aliases.patch
@@ -676,7 +674,7 @@ Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для
 Group:		Applications/File
 Requires(pretrans):	coreutils
 Requires(pretrans):	findutils
-Requires:	%{name}-build-macros >= 1.712
+Requires:	%{name}-build-macros >= 1.744-3
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
@@ -803,23 +801,6 @@ packages.
 %description php-pearprov -l pl.UTF-8
 Dodatkowe narzędzia do sprawdzenia zależności skryptów PHP PEAR w
 pakietach RPM.
-
-%package rubyprov
-Summary:	Ruby tools, which simplify creation of RPM packages with Ruby software
-Summary(pl.UTF-8):	Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w Ruby
-Group:		Applications/File
-Requires:	%{name} = %{version}-%{release}
-Requires:	ruby
-Requires:	ruby-modules
-Requires:	ruby-rubygems
-
-%description rubyprov
-Ruby tools, which simplifies creation of RPM packages with Ruby
-software.
-
-%description rubyprov -l pl.UTF-8
-Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w
-Ruby.
 
 %package -n python-rpm
 Summary:	Python interface to RPM library
@@ -1027,8 +1008,6 @@ install %{SOURCE2} macros/pld.in
 install %{SOURCE8} scripts/php.prov.in
 install %{SOURCE9} scripts/php.req.in
 install %{SOURCE11} scripts/perl.prov.in
-cp -p %{SOURCE30} scripts/rubygems.rb
-cp -p %{SOURCE31} scripts/gem_helper.rb
 
 %{__rm} scripts/find-php*
 
@@ -1331,6 +1310,8 @@ done
 
 # moved to rpm-build-macros 1.699
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/kernel
+# moved to rpm-build-macros 1.744
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/ruby
 
 # for rpm -e|-U --repackage
 install -d $RPM_BUILD_ROOT/var/{spool/repackage,lock/rpm}
@@ -1614,7 +1595,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros.d/php
 %{_rpmlibdir}/macros.d/pkgconfig
 %{_rpmlibdir}/macros.d/python
-%{_rpmlibdir}/macros.d/ruby
 %{_rpmlibdir}/macros.d/selinux
 %{_rpmlibdir}/macros.d/tcl
 %{_rpmlibdir}/macros.rpmbuild
@@ -1646,11 +1626,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/java-find-requires
 # needs jar (any jdk), jcf-dump (gcc-java) to work
 %attr(755,root,root) %{_rpmlibdir}/javadeps.sh
-
-%files rubyprov
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_rpmlibdir}/gem_helper.rb
-%attr(755,root,root) %{_rpmlibdir}/rubygems.rb
 
 %files perlprov
 %defattr(644,root,root,755)
