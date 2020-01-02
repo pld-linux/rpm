@@ -1289,7 +1289,7 @@ done
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/kernel
 # moved to rpm-build-macros 1.744
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/{macros.d/java,javadeps.sh}
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/ruby
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/{macros.d/ruby,{gem_helper,rubygems}.rb}
 
 # for rpm -e|-U --repackage
 install -d $RPM_BUILD_ROOT/var/{spool/repackage,lock/rpm}
