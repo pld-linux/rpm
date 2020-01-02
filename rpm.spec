@@ -47,13 +47,10 @@ Source4:	%{name}-find-spec-bcond
 Source5:	%{name}-hrmib-cache
 Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
-Source8:	%{name}-php-provides
-Source9:	%{name}-php-requires
 Source10:	%{name}.sysinfo
 Source11:	perl.prov
 Source12:	%{name}-user_group.sh
 Source13:	%{name}.sysconfig
-Source14:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source15:	banner.sh
 Source16:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
@@ -65,24 +62,19 @@ Source20:	%{name}.noautoprov
 Source21:	%{name}.noautoprovfiles
 Source22:	%{name}.noautoreq
 Source24:	%{name}.noautoreqfiles
-Source25:	%{name}-php-requires.php
 Source26:	%{name}db_checkversion.c
 Source27:	macros.lang
 Source28:	%{name}db_reset.c
 Source29:	dbupgrade.sh
-Source30:	rubygems.rb
-Source31:	gem_helper.rb
 Source32:	rpmrc.pld
 Patch0:		%{name}-man_pl.patch
 Patch1:		%{name}-popt-aliases.patch
 Patch2:		%{name}-perl-macros.patch
 Patch3:		%{name}-perl-req-perlfile.patch
 Patch4:		%{name}-scripts-closefds.patch
-Patch5:		%{name}-php-macros.patch
 Patch6:		%{name}-lua.patch
 Patch7:		%{name}-perl_req-INC_dirs.patch
 Patch8:		%{name}-debuginfo.patch
-Patch9:		%{name}-javadeps.patch
 Patch10:	%{name}-libtool-deps.patch
 Patch11:	%{name}-builddir-readlink.patch
 Patch12:	%{name}-changelog_order_check_nonfatal.patch
@@ -413,24 +405,6 @@ construir pacotes usando o RPM.
 Різноманітні допоміжні скрипти та утиліти, які використовуються для
 побудови RPM'ів.
 
-%package javaprov
-Summary:	Additional utilities for checking Java provides/requires in RPM packages
-Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzania zależności kodu w Javie w pakietach RPM
-Group:		Applications/File
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	file
-Requires:	findutils >= 1:4.2.26
-Requires:	mktemp
-Requires:	unzip
-
-%description javaprov
-Additional utilities for checking Java provides/requires in RPM
-packages.
-
-%description javaprov -l pl.UTF-8
-Dodatkowe narzędzia do sprawdzania zależności kodu w Javie w pakietach
-RPM.
-
 %package perlprov
 Summary:	Additional utilities for checking Perl provides/requires in RPM packages
 Summary(de.UTF-8):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
@@ -468,39 +442,6 @@ software.
 %description pythonprov -l pl.UTF-8
 Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w
 Pythonie.
-
-%package php-pearprov
-Summary:	Additional utilities for checking PHP PEAR provides/requires in RPM packages
-Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzania zależności skryptów php w RPM
-Group:		Applications/File
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	sed >= 4.0
-Suggests:	php-pear-PHP_CompatInfo
-
-%description php-pearprov
-Additional utilities for checking PHP PEAR provides/requires in RPM
-packages.
-
-%description php-pearprov -l pl.UTF-8
-Dodatkowe narzędzia do sprawdzenia zależności skryptów PHP PEAR w
-pakietach RPM.
-
-%package rubyprov
-Summary:	Ruby tools, which simplify creation of RPM packages with Ruby software
-Summary(pl.UTF-8):	Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w Ruby
-Group:		Applications/File
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	ruby
-Requires:	ruby-modules
-Requires:	ruby-rubygems
-
-%description rubyprov
-Ruby tools, which simplifies creation of RPM packages with Ruby
-software.
-
-%description rubyprov -l pl.UTF-8
-Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w
-Ruby.
 
 %package -n python-rpm
 Summary:	Python interface to RPM library
@@ -647,11 +588,9 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 %patch6 -p1
 %patch7 -p0
 %patch8 -p1
-%patch9 -p1
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
@@ -664,11 +603,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch20 -p1
 %patch21 -p1
 
-install %{SOURCE8} scripts/php.prov.in
-install %{SOURCE9} scripts/php.req.in
 install %{SOURCE11} scripts/perl.prov.in
-cp -p %{SOURCE30} scripts/rubygems.rb
-cp -p %{SOURCE31} scripts/gem_helper.rb
 
 %{__mv} -f scripts/perl.req{,.in}
 
@@ -809,9 +744,6 @@ cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
 cp -p %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
 cp -p %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
 cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
-cp -p %{SOURCE14} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
-cp -p scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
-cp -p %{SOURCE25} $RPM_BUILD_ROOT%{_rpmlibdir}/php.req.php
 cp -p %{SOURCE17} $RPM_BUILD_ROOT%{_rpmlibdir}/mimetypedeps.sh
 cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
 cp -p %{SOURCE13} $RPM_BUILD_ROOT/etc/sysconfig/rpm
@@ -1069,14 +1001,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 # must be here for "Requires: rpm-*prov" to work
 #%{_rpmlibdir}/macros.d/cmake
 #%{_rpmlibdir}/macros.d/gstreamer
-#%{_rpmlibdir}/macros.d/java
 #%{_rpmlibdir}/macros.d/libtool
 #%{_rpmlibdir}/macros.d/mono
 #%{_rpmlibdir}/macros.d/perl
-#%{_rpmlibdir}/macros.d/php
 #%{_rpmlibdir}/macros.d/pkgconfig
 #%{_rpmlibdir}/macros.d/python
-#%{_rpmlibdir}/macros.d/ruby
 #%{_rpmlibdir}/macros.d/selinux
 #%{_rpmlibdir}/macros.d/tcl
 #%{_rpmlibdir}/macros.rpmbuild
@@ -1103,13 +1032,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/fileattrs/desktop.attr
 %{_rpmlibdir}/fileattrs/elf.attr
 %{_rpmlibdir}/fileattrs/font.attr
-%{_rpmlibdir}/fileattrs/java.attr
 %{_rpmlibdir}/fileattrs/libtool.attr
 %{_rpmlibdir}/fileattrs/metainfo.attr
 %{_rpmlibdir}/fileattrs/ocaml.attr
 %{_rpmlibdir}/fileattrs/perl.attr
 %{_rpmlibdir}/fileattrs/perllib.attr
-%{_rpmlibdir}/fileattrs/php.attr
 %{_rpmlibdir}/fileattrs/pkgconfig.attr
 %{_rpmlibdir}/fileattrs/python.attr
 %{_rpmlibdir}/fileattrs/pythondist.attr
@@ -1126,17 +1053,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %lang(pl) %{_mandir}/pl/man8/rpmbuild.8*
 %{_mandir}/man8/rpmspec.8*
 
-%files javaprov
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_rpmlibdir}/java-find-requires
-# needs jar (any jdk), jcf-dump (gcc-java) to work
-#%attr(755,root,root) %{_rpmlibdir}/javadeps.sh
-
-%files rubyprov
-%defattr(644,root,root,755)
-#%attr(755,root,root) %{_rpmlibdir}/gem_helper.rb
-#%attr(755,root,root) %{_rpmlibdir}/rubygems.rb
-
 %files perlprov
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_rpmlibdir}/perl.*
@@ -1145,12 +1061,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_rpmlibdir}/pythondeps.sh
 %attr(755,root,root) %{_rpmlibdir}/pythondistdeps.py
-
-%files php-pearprov
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_rpmlibdir}/php.prov
-%attr(755,root,root) %{_rpmlibdir}/php.req
-%attr(755,root,root) %{_rpmlibdir}/php.req.php
 
 %if %{with python2}
 %files -n python-rpm
