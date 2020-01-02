@@ -221,8 +221,6 @@ Patch1011:	%{name}-5.4.4-fix-rpmconstant-to-always-use-LC_CTYPE-C-for-case-conve
 Patch1012:	%{name}-5.4.4-pass-_builddir-properly-to-find-debuginfo.patch
 # status: probably okay to merge, but discuss on rpm-devel first
 Patch1013:	%{name}-5.4.10-files-listed-twice-terminates-build.patch
-# status: probably okay to merge
-Patch1014:	%{name}-5.4.9-ruby1.9-fixes.patch
 # status: keep locally
 Patch1015:	%{name}-5.4.9-keep-loading-script-macros.patch
 # status: same as for other dep gen patches
@@ -941,7 +939,6 @@ cd -
 %patch1011 -p1
 %patch1012 -p1
 %patch1013 -p1
-%patch1014 -p1
 %patch1015 -p1
 %patch1016 -p1
 %patch1017 -p1
