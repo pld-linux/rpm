@@ -80,7 +80,6 @@ Source10:	%{name}.sysinfo
 Source11:	perl.prov
 Source12:	%{name}-user_group.sh
 Source13:	%{name}.sysconfig
-Source14:	%{name}-java-requires
 # http://svn.pld-linux.org/banner.sh/
 Source15:	banner.sh
 Source16:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
@@ -730,24 +729,6 @@ construir pacotes usando o RPM.
 Різноманітні допоміжні скрипти та утиліти, які використовуються для
 побудови RPM'ів.
 
-%package javaprov
-Summary:	Additional utilities for checking Java provides/requires in RPM packages
-Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzania zależności kodu w Javie w pakietach RPM
-Group:		Applications/File
-Requires:	%{name} = %{version}-%{release}
-Requires:	file
-Requires:	findutils >= 1:4.2.26
-Requires:	mktemp
-Requires:	unzip
-
-%description javaprov
-Additional utilities for checking Java provides/requires in RPM
-packages.
-
-%description javaprov -l pl.UTF-8
-Dodatkowe narzędzia do sprawdzania zależności kodu w Javie w pakietach
-RPM.
-
 %package perlprov
 Summary:	Additional utilities for checking Perl provides/requires in RPM packages
 Summary(de.UTF-8):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
@@ -1273,7 +1254,6 @@ install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
 install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
 install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
 install %{SOURCE12} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
-install %{SOURCE14} $RPM_BUILD_ROOT%{_rpmlibdir}/java-find-requires
 install scripts/php.{prov,req}	$RPM_BUILD_ROOT%{_rpmlibdir}
 cp -p %{SOURCE25} $RPM_BUILD_ROOT%{_rpmlibdir}/php.req.php
 install %{SOURCE17} $RPM_BUILD_ROOT%{_rpmlibdir}/mimetypedeps.sh
@@ -1304,13 +1284,14 @@ install tools/rpmdb_reset $RPM_BUILD_ROOT%{_rpmlibdir}/bin
 install %{SOURCE29} $RPM_BUILD_ROOT%{_rpmlibdir}/bin/dbupgrade.sh
 
 # create macro loading wrappers for backward compatibility
-for m in gstreamer java mono perl php python; do
+for m in gstreamer mono perl php python; do
 	echo "%%{load:%{_rpmlibdir}/macros.d/$m}" >$RPM_BUILD_ROOT%{_rpmlibdir}/macros.$m
 done
 
 # moved to rpm-build-macros 1.699
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/kernel
 # moved to rpm-build-macros 1.744
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/{macros.d/java,javadeps.sh}
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/ruby
 
 # for rpm -e|-U --repackage
@@ -1588,7 +1569,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 # must be here for "Requires: rpm-*prov" to work
 %{_rpmlibdir}/macros.d/cmake
 %{_rpmlibdir}/macros.d/gstreamer
-%{_rpmlibdir}/macros.d/java
 %{_rpmlibdir}/macros.d/libtool
 %{_rpmlibdir}/macros.d/mono
 %{_rpmlibdir}/macros.d/perl
@@ -1600,7 +1580,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros.rpmbuild
 # compat wrappers
 %{_rpmlibdir}/macros.gstreamer
-%{_rpmlibdir}/macros.java
 %{_rpmlibdir}/macros.mono
 %{_rpmlibdir}/macros.perl
 %{_rpmlibdir}/macros.php
@@ -1620,12 +1599,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %lang(ja) %{_mandir}/ja/man8/rpmbuild.8*
 %lang(pl) %{_mandir}/pl/man1/gendiff.1*
 %lang(pl) %{_mandir}/pl/man8/rpmbuild.8*
-
-%files javaprov
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_rpmlibdir}/java-find-requires
-# needs jar (any jdk), jcf-dump (gcc-java) to work
-%attr(755,root,root) %{_rpmlibdir}/javadeps.sh
 
 %files perlprov
 %defattr(644,root,root,755)

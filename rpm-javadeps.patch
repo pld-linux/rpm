@@ -11,16 +11,3 @@
      }
  
  /*@-observertrans@*/
---- rpm-4.4.9/macros/java.in.orig	2007-05-24 21:20:49.657284000 +0200
-+++ rpm-4.4.9/macros/java.in	2007-05-24 21:22:32.823163996 +0200
-@@ -1416,8 +1416,8 @@
- #
- # Note: Used iff _use_internal_dependency_generator is non-zero. The
- # helpers are also used by %{_rpmhome}/rpmdeps {--provides|--requires}.
--%__java_provides	%{_rpmhome}/javadeps.sh --provides
--%__java_requires	%{_rpmhome}/javadeps.sh --requires
-+%__java_provides	%{nil}
-+%__java_requires	env RPM_BUILD_ROOT=%{buildroot} MIN_CLASSDATAVERSION=%{?java_min_classdataversion} %{_rpmhome}/java-find-requires
- 
- #	The value of CLASSPATH in build scriptlets (iff configured).
- #	
