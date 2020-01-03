@@ -82,6 +82,7 @@ Source26:	%{name}db_checkversion.c
 Source27:	macros.lang
 Source28:	%{name}db_reset.c
 Source29:	dbupgrade.sh
+Source30:	prov-req-macros
 Patch0:		%{name}-branch.patch
 Patch1:		%{name}-man_pl.patch
 Patch2:		%{name}-popt-aliases.patch
@@ -1239,6 +1240,8 @@ for m in gstreamer mono; do
 	echo "%%{load:%{_rpmlibdir}/macros.d/$m}" >$RPM_BUILD_ROOT%{_rpmlibdir}/macros.$m
 done
 
+install %{SOURCE30} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/prov-req
+
 # moved to rpm-build-macros 1.699
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/kernel
 # moved to rpm-build-macros 1.744
@@ -1524,6 +1527,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros.d/libtool
 %{_rpmlibdir}/macros.d/mono
 %{_rpmlibdir}/macros.d/pkgconfig
+%{_rpmlibdir}/macros.d/prov-req
 %{_rpmlibdir}/macros.d/selinux
 %{_rpmlibdir}/macros.rpmbuild
 # compat wrappers

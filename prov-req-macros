@@ -1,0 +1,4 @@
+%__perl_provides	%{_rpmhome}/perl.prov
+%__perl_requires	%{_rpmhome}/perl.req
+%__python_provides	%{_rpmhome}/pythoneggs.py --provides
+%__python_requires	%{_rpmhome}/pythoneggs.py --requires
