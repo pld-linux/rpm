@@ -1256,16 +1256,17 @@ install tools/rpmdb_reset $RPM_BUILD_ROOT%{_rpmlibdir}/bin
 install %{SOURCE29} $RPM_BUILD_ROOT%{_rpmlibdir}/bin/dbupgrade.sh
 
 # create macro loading wrappers for backward compatibility
-for m in gstreamer mono perl python; do
+for m in gstreamer mono; do
 	echo "%%{load:%{_rpmlibdir}/macros.d/$m}" >$RPM_BUILD_ROOT%{_rpmlibdir}/macros.$m
 done
 
 # moved to rpm-build-macros 1.699
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/kernel
 # moved to rpm-build-macros 1.744
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/{macros.d/java,javadeps.sh}
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/{macros.d/ruby,{gem_helper,rubygems}.rb}
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/{macros.d/php,php.{prov,req}}
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/javadeps.sh
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/{gem_helper,rubygems}.rb
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/php.{prov,req}
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/{cmake,java,perl,php,python,ruby,tcl}
 
 # for rpm -e|-U --repackage
 install -d $RPM_BUILD_ROOT/var/{spool/repackage,lock/rpm}
@@ -1540,21 +1541,15 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %attr(755,root,root) %{_rpmlibdir}/fontconfig.prov
 # must be here for "Requires: rpm-*prov" to work
-%{_rpmlibdir}/macros.d/cmake
 %{_rpmlibdir}/macros.d/gstreamer
 %{_rpmlibdir}/macros.d/libtool
 %{_rpmlibdir}/macros.d/mono
-%{_rpmlibdir}/macros.d/perl
 %{_rpmlibdir}/macros.d/pkgconfig
-%{_rpmlibdir}/macros.d/python
 %{_rpmlibdir}/macros.d/selinux
-%{_rpmlibdir}/macros.d/tcl
 %{_rpmlibdir}/macros.rpmbuild
 # compat wrappers
 %{_rpmlibdir}/macros.gstreamer
 %{_rpmlibdir}/macros.mono
-%{_rpmlibdir}/macros.perl
-%{_rpmlibdir}/macros.python
 
 %attr(755,root,root) %{_rpmlibdir}/gstreamer.sh
 %attr(755,root,root) %{_rpmlibdir}/kmod-deps.sh
