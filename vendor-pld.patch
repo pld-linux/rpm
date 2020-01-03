@@ -15,7 +15,7 @@
      macros/macros macros/macros.rpmbuild
      macros/cmake macros/gstreamer macros/java macros/kernel macros/libtool
 -    macros/mandriva macros/suse macros/fedora macros/mono macros/perl macros/pkgconfig macros/php
-+    macros/pld macros/mandriva macros/suse macros/fedora macros/mono macros/perl macros/pkgconfig macros/php
++    pld/macros macros/mandriva macros/suse macros/fedora macros/mono macros/perl macros/pkgconfig macros/php
      macros/python macros/ruby macros/selinux macros/tcl
      doc/Makefile
      doc/manual/Makefile doc/fr/Makefile doc/ja/Makefile doc/ko/Makefile
@@ -26,7 +26,7 @@
  pkgcfg_DATA = \
  	macros/cmake macros/gstreamer macros/java macros/kernel macros/libtool \
 -	macros/mandriva macros/mono macros/perl macros/pkgconfig macros/php \
-+	macros/pld macros/mono macros/perl macros/pkgconfig macros/php \
++	macros/mono macros/perl macros/pkgconfig macros/php \
  	macros/python macros/ruby macros/selinux macros/tcl
  
  noinst_HEADERS = build.h debug.h system.h
