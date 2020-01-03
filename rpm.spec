@@ -377,7 +377,6 @@ Requires:	tar >= 1:1.22
 Requires:	textutils
 Requires:	which
 Requires:	xz
-Provides:	rpmbuild(monoautodeps)
 Provides:	rpmbuild(noauto) = 3
 %ifarch %{x8664}
 Conflicts:	automake < 1:1.7.9-2
@@ -993,16 +992,12 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 # needs hacked pkg-config to return anything
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
 %attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
-# we always used scripts provided by mono-devel, maybe move them here
-#%attr(755,root,root) %{_rpmlibdir}/mono-find-provides
-#%attr(755,root,root) %{_rpmlibdir}/mono-find-requires
 
 %attr(755,root,root) %{_rpmlibdir}/fontconfig.prov
 # must be here for "Requires: rpm-*prov" to work
 #%{_rpmlibdir}/macros.d/cmake
 #%{_rpmlibdir}/macros.d/gstreamer
 #%{_rpmlibdir}/macros.d/libtool
-#%{_rpmlibdir}/macros.d/mono
 #%{_rpmlibdir}/macros.d/perl
 #%{_rpmlibdir}/macros.d/pkgconfig
 #%{_rpmlibdir}/macros.d/python
