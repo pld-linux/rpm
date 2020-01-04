@@ -180,3 +180,18 @@ diff -ur rpm-4.15.1.orig/tools/elfdeps.c rpm-4.15.1/tools/elfdeps.c
      return marker;
  }
  
+--- rpm-4.15.1/fileattrs/python.attr~	2019-06-26 23:17:31.000000000 +0900
++++ rpm-4.15.1/fileattrs/python.attr	2020-01-04 23:33:40.929651751 +0900
+@@ -1,4 +1,4 @@
+ %__python_provides	%{_rpmconfigdir}/pythondeps.sh --provides
+ %__python_requires	%{_rpmconfigdir}/pythondeps.sh --requires
+-%__python_path	((/lib(64)?/python[[:digit:]]\\.[[:digit:]]+/.*\\.(py[oc]?|so))|(^%{_bindir}/python[[:digit:]]\\.[[:digit:]]+))$
++%__python_path	((/lib(64|x32)?/python[[:digit:]]\\.[[:digit:]]+/.*\\.(py[oc]?|so))|(^%{_bindir}/python[[:digit:]]\\.[[:digit:]]+))$
+ %__python_magic		[Pp]ython.*(executable|byte-compiled)
+--- rpm-4.15.1/fileattrs/pythondist.attr~	2019-06-26 23:17:31.000000000 +0900
++++ rpm-4.15.1/fileattrs/pythondist.attr	2020-01-04 23:34:05.680366882 +0900
+@@ -1,3 +1,3 @@
+ %__pythondist_provides	%{_rpmconfigdir}/pythondistdeps.py --provides --majorver-provides
+ %__pythondist_requires	%{_rpmconfigdir}/pythondistdeps.py --requires
+-%__pythondist_path		/lib(64)?/python[[:digit:]]\\.[[:digit:]]+/site-packages/[^/]+\\.(dist-info|egg-info|egg-link)$
++%__pythondist_path		/lib(64|x32)?/python[[:digit:]]\\.[[:digit:]]+/site-packages/[^/]+\\.(dist-info|egg-info|egg-link)$
