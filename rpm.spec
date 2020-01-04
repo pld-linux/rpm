@@ -963,8 +963,7 @@ cd -
 
 %patch1050 -p1
 
-install -d pld
-install %{SOURCE2} pld/macros.in
+install %{SOURCE2} macros/pld.in
 install %{SOURCE11} scripts/perl.prov.in
 
 rm scripts/find-php*
@@ -1016,7 +1015,7 @@ sed -i \
 	--with-lua=%{!?with_system_lua:internal}%{?with_system_lua:external} \
 	--with-lzma=external \
 	--with-neon=%{?with_neon:external}%{!?with_neon:no} \
-	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/pld/macros:%{_rpmlibdir}/%%{_target}/macros:%{_rpmlibdir}/macros.build:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%%{_target}/macros:%{_sysconfdir}/rpm/macros.d/*.macros:~/etc/.rpmmacros:~/.rpmmacros' \
+	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/%%{_target}/macros:%{_rpmlibdir}/macros.build:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%%{_target}/macros:%{_sysconfdir}/rpm/macros.d/*.macros:~/etc/.rpmmacros:~/.rpmmacros' \
 	--without-path-versioned \
 	--with-pcre=%{!?with_system_pcre:internal}%{?with_system_pcre:external} \
 	--with-popt=external \
@@ -1052,15 +1051,13 @@ fi
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm} \
-	$RPM_BUILD_ROOT{/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg,%{_rpmlibdir}/pld}
+	$RPM_BUILD_ROOT{/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg}
 
 install %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
 %{__make} -j1 install \
 	pkgconfigdir=%{_pkgconfigdir} \
 	DESTDIR=$RPM_BUILD_ROOT
-
-cp -p pld/macros $RPM_BUILD_ROOT%{_rpmlibdir}/pld/macros
 
 # install platform macros
 for f in platform/*macros; do
@@ -1362,9 +1359,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/qf
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/macros
-%dir %{_rpmlibdir}/pld
-%{_rpmlibdir}/pld/macros
 %dir %{_rpmlibdir}/macros.d
+%{_rpmlibdir}/macros.d/pld
 %{_rpmlibdir}/cpuinfo.yaml
 %{_rpmlibdir}/noarch-*
 %ifarch %{ix86} %{x8664} x32
