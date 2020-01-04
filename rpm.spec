@@ -1026,7 +1026,7 @@ sed -i \
 	--with-lua=%{!?with_system_lua:internal}%{?with_system_lua:external} \
 	--with-lzma=external \
 	--with-neon=%{?with_neon:external}%{!?with_neon:no} \
-	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/%%{_target}/macros:%{_rpmlibdir}/macros.build:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%%{_target}/macros:%{_sysconfdir}/rpm/macros.d/*.macros:~/etc/.rpmmacros:~/.rpmmacros' \
+	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/pld/macros:%{_rpmlibdir}/%%{_target}/macros:%{_rpmlibdir}/macros.build:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%%{_target}/macros:%{_sysconfdir}/rpm/macros.d/*.macros:~/etc/.rpmmacros:~/.rpmmacros' \
 	--without-path-versioned \
 	--with-pcre=%{!?with_system_pcre:internal}%{?with_system_pcre:external} \
 	--with-popt=external \
@@ -1066,7 +1066,7 @@ fi
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm} \
-	$RPM_BUILD_ROOT{/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg}
+	$RPM_BUILD_ROOT{/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg,%{_rpmlibdir}/pld}
 
 install %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
@@ -1382,6 +1382,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros
 %dir %{_rpmlibdir}/macros.d
 %{_rpmlibdir}/macros.d/pld
+%dir %{_rpmlibdir}/pld
 %{_rpmlibdir}/cpuinfo.yaml
 %{_rpmlibdir}/noarch-*
 %ifarch %{ix86} %{x8664} x32
