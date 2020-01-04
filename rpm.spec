@@ -1051,7 +1051,7 @@ fi
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm} \
-	$RPM_BUILD_ROOT{/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg}
+	$RPM_BUILD_ROOT{/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg,%{_rpmlibdir}/pld}
 
 install %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
@@ -1361,6 +1361,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/macros
 %dir %{_rpmlibdir}/macros.d
 %{_rpmlibdir}/macros.d/pld
+%dir %{_rpmlibdir}/pld
 %{_rpmlibdir}/cpuinfo.yaml
 %{_rpmlibdir}/noarch-*
 %ifarch %{ix86} %{x8664} x32
