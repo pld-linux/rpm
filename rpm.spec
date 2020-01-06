@@ -67,20 +67,20 @@ Patch1:		%{name}-popt-aliases.patch
 Patch2:		%{name}-perl-macros.patch
 Patch3:		%{name}-perl-req-perlfile.patch
 Patch4:		%{name}-scripts-closefds.patch
-Patch6:		%{name}-lua.patch
-Patch7:		%{name}-perl_req-INC_dirs.patch
-Patch8:		%{name}-debuginfo.patch
-Patch10:	%{name}-libtool-deps.patch
-Patch11:	%{name}-builddir-readlink.patch
-Patch12:	%{name}-changelog_order_check_nonfatal.patch
-Patch13:	%{name}-postun-nofail.patch
-Patch14:	%{name}-clean-docdir.patch
-Patch15:	%{name}-perl-magic.patch
-Patch16:	%{name}-ignore-missing-macro-files.patch
-Patch17:	x32.patch
-Patch18:	%{name}-add-compress-doc.patch
-Patch20:	rpm5-db-compat.patch
-Patch21:	python-internal-build.patch
+Patch5:		%{name}-lua.patch
+Patch6:		%{name}-perl_req-INC_dirs.patch
+Patch7:		%{name}-debuginfo.patch
+Patch8:		%{name}-libtool-deps.patch
+Patch9:		%{name}-builddir-readlink.patch
+Patch10:	%{name}-changelog_order_check_nonfatal.patch
+Patch11:	%{name}-postun-nofail.patch
+Patch12:	%{name}-clean-docdir.patch
+Patch13:	%{name}-perl-magic.patch
+Patch14:	%{name}-ignore-missing-macro-files.patch
+Patch15:	x32.patch
+Patch16:	%{name}-add-compress-doc.patch
+Patch17:	rpm5-db-compat.patch
+Patch18:	python-internal-build.patch
 URL:		https://rpm.org/
 BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
 BuildRequires:	%{reqdb_pkg}-sql-devel >= %{reqdb_pkgver}
@@ -583,9 +583,11 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch6 -p1
-%patch7 -p0
+%patch5 -p1
+%patch6 -p0
+%patch7 -p1
 %patch8 -p1
+%patch9 -p1
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
@@ -595,8 +597,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
-%patch20 -p1
-%patch21 -p1
 
 install %{SOURCE11} scripts/perl.prov.in
 
