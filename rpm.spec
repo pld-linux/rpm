@@ -70,10 +70,8 @@ Source101:	README.cpu-os-macros
 Source1:	%{name}.groups
 Source2:	macros.pld.in
 Source3:	%{name}-install-tree
-Source4:	%{name}-find-spec-bcond
 Source5:	%{name}-hrmib-cache
 Source6:	%{name}-groups-po.awk
-Source7:	%{name}-compress-doc
 Source10:	%{name}.sysinfo
 Source11:	perl.prov
 Source12:	%{name}-user_group.sh
@@ -82,7 +80,6 @@ Source13:	%{name}.sysconfig
 Source15:	banner.sh
 Source16:	ftp://ftp.pld-linux.org/dists/3.0/PLD-3.0-Th-GPG-key.asc
 # Source16-md5:	23914bb49fafe7153cee87126d966461
-Source17:	%{name}-mimetypedeps
 Source18:	macros.local
 Source19:	%{name}.noautocompressdoc
 Source20:	%{name}.noautoprov
@@ -1226,10 +1223,7 @@ install scripts/rpmdiff scripts/rpmdiff.cgi $RPM_BUILD_ROOT%{_rpmlibdir}
 
 install %{SOURCE1} doc/manual/groups
 install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
-install %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
-install %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
 install %{SOURCE12} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
-install %{SOURCE17} $RPM_BUILD_ROOT%{_rpmlibdir}/mimetypedeps.sh
 install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
 install %{SOURCE13} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
@@ -1515,15 +1509,12 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/noauto*
 %attr(755,root,root) %{_rpmlibdir}/brp-*
 %attr(755,root,root) %{_rpmlibdir}/check-files
-%attr(755,root,root) %{_rpmlibdir}/compress-doc
 %attr(755,root,root) %{_rpmlibdir}/cross-build
-%attr(755,root,root) %{_rpmlibdir}/find-spec-bcond
 %attr(755,root,root) %{_rpmlibdir}/getpo.sh
 %attr(755,root,root) %{_rpmlibdir}/install-build-tree
 %attr(755,root,root) %{_rpmlibdir}/u_pkg.sh
 %attr(755,root,root) %{_rpmlibdir}/executabledeps.sh
 %attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
-%attr(755,root,root) %{_rpmlibdir}/mimetypedeps.sh
 # needs hacked pkg-config to return anything
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
 %attr(755,root,root) %{_rpmlibdir}/bin/api-sanity-autotest.pl
