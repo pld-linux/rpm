@@ -47,7 +47,6 @@ Source4:	%{name}-find-spec-bcond
 Source5:	%{name}-hrmib-cache
 Source6:	%{name}-groups-po.awk
 Source7:	%{name}-compress-doc
-Source10:	%{name}.sysinfo
 Source11:	perl.prov
 Source12:	%{name}-user_group.sh
 Source13:	%{name}.sysconfig
@@ -749,8 +748,6 @@ cp -p %{SOURCE13} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
 cp -p %{SOURCE15} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
-
 cp -p %{SOURCE18} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros
 cp -p %{SOURCE27} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.lang
 cp -p %{SOURCE19} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc
@@ -758,13 +755,6 @@ cp -p %{SOURCE20} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov
 cp -p %{SOURCE21} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles
 cp -p %{SOURCE22} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq
 cp -p %{SOURCE24} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles
-
-touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Conflictname
-touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Dirnames
-cp -p %{SOURCE10} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
-touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Obsoletename
-touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Providename
-touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
 
 cp -p tools/rpmdb_checkversion $RPM_BUILD_ROOT%{_rpmlibdir}/
 cp -p tools/rpmdb_reset $RPM_BUILD_ROOT%{_rpmlibdir}/
@@ -810,14 +800,6 @@ cd ..
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%pretrans
-# this needs to be a dir
-if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
-	umask 022
-	mv -f %{_sysconfdir}/rpm/sysinfo{,.rpmsave}
-	mkdir %{_sysconfdir}/rpm/sysinfo
-fi
-
 %posttrans
 if [ -e /var/lib/rpm/Packages ] && \
 		! %{_rpmlibdir}/rpmdb_checkversion -h /var/lib/rpm -d /var/lib/rpm; then
@@ -858,9 +840,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros.lang
-%dir %{_sysconfdir}/rpm/sysinfo
-# these are ok to be replaced
-%config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo/*
 
 %{_mandir}/man8/rpm.8*
 %{_mandir}/man8/rpmdb.8*
