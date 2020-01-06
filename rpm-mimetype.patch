@@ -51,23 +51,3 @@ diff -urN rpm-5.1.4/lib/rpmfc.h rpm-5.1.4.new/lib/rpmfc.h
      RPMFC_TYPELIB		= (1 <<  5),
      RPMFC_HASKELL		= (1 <<  6),
      RPMFC_RUBY			= (1 <<  7),
-diff -urN rpm-5.1.4/macros/macros.in rpm-5.1.4.new/macros/macros.in
---- rpm-5.1.4/macros/macros.in	2008-07-29 19:36:38.000000000 +0200
-+++ rpm-5.1.4.new/macros/macros.in	2008-07-29 19:45:45.000000000 +0200
-@@ -1617,6 +1617,16 @@
- #}1}%{rpm_license_check}
- 
- #------------------------------------------------------------------------
-+# mimetype(...) configuration.
-+#
-+# Path to script to autogenerate mimetype(foo) provides, based on MimeType
-+# key from desktop files.
-+#
-+# Note: Used if _use_internal_dependency_generator is non-zero. The
-+# helper is also used by %{_uselibrpm}/rpmdeps --provides
-+%__mimetype_provides %{_usrlibrpm}/mimetypedeps.sh --provides
-+
-+#------------------------------------------------------------------------
- # executable(...) configuration.
- #
- # Path to scripts to autogenerate executable(foo) script dependencies,
