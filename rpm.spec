@@ -40,28 +40,27 @@ License:	GPL v2 / LGPL v2.1
 Group:		Base
 Source0:	http://ftp.rpm.org/releases/rpm-4.15.x/%{name}-%{version}.tar.bz2
 # Source0-md5:	ed72147451a5ed93b2a48e2f8f5413c3
-Source1:	%{name}.groups
-Source3:	%{name}-install-tree
-Source5:	%{name}-hrmib-cache
+Source1:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
+# Source1-md5:	23914bb49fafe7153cee87126d966461
+Source2:	macros.local
+Source3:	macros.lang
+Source4:	%{name}.sysconfig
+Source5:	%{name}.groups
 Source6:	%{name}-groups-po.awk
-Source11:	perl.prov
-Source12:	%{name}-user_group.sh
-Source13:	%{name}.sysconfig
+Source7:	%{name}-install-tree
+Source8:	%{name}-hrmib-cache
+Source9:	%{name}-user_group.sh
 # http://svn.pld-linux.org/banner.sh/
-Source15:	banner.sh
-Source16:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
-# Source16-md5:	23914bb49fafe7153cee87126d966461
-Source18:	macros.local
-Source19:	%{name}.noautocompressdoc
-Source20:	%{name}.noautoprov
-Source21:	%{name}.noautoprovfiles
-Source22:	%{name}.noautoreq
-Source24:	%{name}.noautoreqfiles
-Source26:	%{name}db_checkversion.c
-Source27:	macros.lang
-Source28:	%{name}db_reset.c
-Source29:	dbupgrade.sh
-Source32:	rpmrc.pld
+Source10:	banner.sh
+Source11:	%{name}.noautocompressdoc
+Source12:	%{name}.noautoprov
+Source13:	%{name}.noautoprovfiles
+Source14:	%{name}.noautoreq
+Source15:	%{name}.noautoreqfiles
+Source16:	perl.prov
+Source17:	%{name}db_checkversion.c
+Source18:	%{name}db_reset.c
+Source19:	dbupgrade.sh
 Patch0:		%{name}-man_pl.patch
 Patch1:		%{name}-popt-aliases.patch
 Patch2:		%{name}-perl-macros.patch
@@ -598,15 +597,15 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch17 -p1
 %patch18 -p1
 
-install %{SOURCE11} scripts/perl.prov.in
+install %{SOURCE16} scripts/perl.prov.in
 
 %{__mv} -f scripts/perl.req{,.in}
 
 # generate Group translations to *.po
-awk -f %{SOURCE6} %{SOURCE1}
+awk -f %{SOURCE6} %{SOURCE5}
 
-install %{SOURCE26} tools/rpmdb_checkversion.c
-install %{SOURCE28} tools/rpmdb_reset.c
+install %{SOURCE17} tools/rpmdb_checkversion.c
+install %{SOURCE18} tools/rpmdb_reset.c
 
 %{__sed} -i -e '1s,/usr/bin/python,%{__python},' scripts/pythondistdeps.py
 
@@ -684,7 +683,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/{rpm,pki/rpm-gpg}} \
 	$RPM_BUILD_ROOT{/var/lib/{banner,rpm},/var/cache/hrmib}
 
-cp -p %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
+cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
 %{__make} install \
 	pkgconfigdir=%{_pkgconfigdir} \
@@ -733,24 +732,24 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sparc*-linux/macros
 
 install -d $RPM_BUILD_ROOT%{_rpmlibdir}/pld
 
-cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
-cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
-cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
-cp -p %{SOURCE13} $RPM_BUILD_ROOT/etc/sysconfig/rpm
+cp -p %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
+cp -p %{SOURCE9} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
+cp -p %{SOURCE8} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
+cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
-cp -p %{SOURCE15} $RPM_BUILD_ROOT%{_bindir}/banner.sh
+cp -p %{SOURCE10} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
-cp -p %{SOURCE18} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros
-cp -p %{SOURCE27} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.lang
-cp -p %{SOURCE19} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc
-cp -p %{SOURCE20} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov
-cp -p %{SOURCE21} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles
-cp -p %{SOURCE22} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq
-cp -p %{SOURCE24} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles
+cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros
+cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.lang
+cp -p %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc
+cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov
+cp -p %{SOURCE13} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles
+cp -p %{SOURCE14} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq
+cp -p %{SOURCE15} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles
 
 cp -p tools/rpmdb_checkversion $RPM_BUILD_ROOT%{_rpmlibdir}/
 cp -p tools/rpmdb_reset $RPM_BUILD_ROOT%{_rpmlibdir}/
-cp -p %{SOURCE29} $RPM_BUILD_ROOT%{_rpmlibdir}/dbupgrade.sh
+cp -p %{SOURCE19} $RPM_BUILD_ROOT%{_rpmlibdir}/dbupgrade.sh
 
 # move rpm to /bin
 %{__mv} $RPM_BUILD_ROOT%{_bindir}/rpm $RPM_BUILD_ROOT/bin
