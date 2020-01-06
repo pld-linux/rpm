@@ -1,0 +1,18 @@
+--- rpm-5.4.10/build/files.c~	2013-01-25 13:14:36.692060288 +0100
++++ rpm-5.4.10/build/files.c	2013-02-25 12:03:26.110910465 +0100
+@@ -2380,6 +2380,15 @@
+ 	appendLineStringBuf(docScript, " ||:");
+ 	free(efn);
+     }
++
++    {
++	char *compress_doc;
++
++	compress_doc = rpmExpand("%{__compress_doc}", NULL);
++	if (compress_doc && *compress_doc != '%')
++	    appendLineStringBuf(docScript, compress_doc);
++	compress_doc = _free(compress_doc);
++    }
+ 
+     if (install) {
+ 	if (doScript(spec, RPMBUILD_STRINGBUF, sdname,

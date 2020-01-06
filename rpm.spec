@@ -79,7 +79,7 @@ Patch14:	%{name}-clean-docdir.patch
 Patch15:	%{name}-perl-magic.patch
 Patch16:	%{name}-ignore-missing-macro-files.patch
 Patch17:	x32.patch
-Patch18:	%{name}-fix-compress-doc.patch
+Patch18:	%{name}-add-compress-doc.patch
 Patch20:	rpm5-db-compat.patch
 Patch21:	python-internal-build.patch
 URL:		https://rpm.org/
@@ -594,7 +594,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
-#%patch18 -p1
+%patch18 -p1
 %patch20 -p1
 %patch21 -p1
 
