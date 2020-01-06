@@ -41,7 +41,6 @@ Group:		Base
 Source0:	http://ftp.rpm.org/releases/rpm-4.15.x/%{name}-%{version}.tar.bz2
 # Source0-md5:	ed72147451a5ed93b2a48e2f8f5413c3
 Source1:	%{name}.groups
-Source2:	macros.pld
 Source3:	%{name}-install-tree
 Source5:	%{name}-hrmib-cache
 Source6:	%{name}-groups-po.awk
@@ -124,6 +123,7 @@ BuildRequires:	tetex-pdftex
 Requires(posttrans):	coreutils
 Requires:	%{name}-base = %{epoch}:%{version}-%{release}
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
+Requires:	rpm-pld-macros >= 1.744
 Requires:	FHS >= 3.0-2
 Requires:	openssl >= %{openssl_ver}
 Requires:	popt >= %{reqpopt_ver}
@@ -345,8 +345,8 @@ Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для
 Group:		Applications/File
 Requires(pretrans):	coreutils
 Requires(pretrans):	findutils
-Requires:	%{name}-build-macros >= 1.712
 Requires:	%{name}-utils = %{epoch}:%{version}-%{release}
+Requires:	rpm-pld-macros-build >= 1.744
 Requires:	/bin/id
 Requires:	awk
 Requires:	bzip2
@@ -732,8 +732,6 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sparc*-linux/macros
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
 
 install -d $RPM_BUILD_ROOT%{_rpmlibdir}/pld
-cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_rpmlibdir}/pld/macros
-cp -p %{SOURCE32} $RPM_BUILD_ROOT%{_rpmlibdir}/pld/rpmrc
 
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
 cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
@@ -886,8 +884,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/platform/sparc*
 %endif
 
-%{_rpmlibdir}/pld/macros
-%{_rpmlibdir}/pld/rpmrc
+%dir %{_rpmlibdir}/pld
 
 %attr(755,root,root) %{_rpmlibdir}/hrmib-cache
 
