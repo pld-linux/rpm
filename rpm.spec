@@ -43,10 +43,8 @@ Source0:	http://ftp.rpm.org/releases/rpm-4.15.x/%{name}-%{version}.tar.bz2
 Source1:	%{name}.groups
 Source2:	macros.pld
 Source3:	%{name}-install-tree
-Source4:	%{name}-find-spec-bcond
 Source5:	%{name}-hrmib-cache
 Source6:	%{name}-groups-po.awk
-Source7:	%{name}-compress-doc
 Source11:	perl.prov
 Source12:	%{name}-user_group.sh
 Source13:	%{name}.sysconfig
@@ -54,7 +52,6 @@ Source13:	%{name}.sysconfig
 Source15:	banner.sh
 Source16:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source16-md5:	23914bb49fafe7153cee87126d966461
-Source17:	%{name}-mimetypedeps
 Source18:	macros.local
 Source19:	%{name}.noautocompressdoc
 Source20:	%{name}.noautoprov
@@ -739,10 +736,7 @@ cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_rpmlibdir}/pld/macros
 cp -p %{SOURCE32} $RPM_BUILD_ROOT%{_rpmlibdir}/pld/rpmrc
 
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
-cp -p %{SOURCE4} $RPM_BUILD_ROOT%{_rpmlibdir}/find-spec-bcond
-cp -p %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/compress-doc
 cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
-cp -p %{SOURCE17} $RPM_BUILD_ROOT%{_rpmlibdir}/mimetypedeps.sh
 cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
 cp -p %{SOURCE13} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
@@ -962,12 +956,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/noauto*
 %attr(755,root,root) %{_rpmlibdir}/brp-*
 %attr(755,root,root) %{_rpmlibdir}/check-files
-%attr(755,root,root) %{_rpmlibdir}/compress-doc
-%attr(755,root,root) %{_rpmlibdir}/find-spec-bcond
 %attr(755,root,root) %{_rpmlibdir}/install-build-tree
 %attr(755,root,root) %{_rpmlibdir}/elfdeps
 %attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
-%attr(755,root,root) %{_rpmlibdir}/mimetypedeps.sh
 # needs hacked pkg-config to return anything
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
 %attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
