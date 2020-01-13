@@ -80,6 +80,7 @@ Patch15:	x32.patch
 Patch16:	%{name}-add-compress-doc.patch
 Patch17:	rpm5-db-compat.patch
 Patch18:	python-internal-build.patch
+Patch19:	create-build-tree-after-parse.patch
 URL:		https://rpm.org/
 BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
 BuildRequires:	%{reqdb_pkg}-sql-devel >= %{reqdb_pkgver}
@@ -596,6 +597,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
+%patch19 -p1
 
 install %{SOURCE16} scripts/perl.prov.in
 
