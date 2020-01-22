@@ -665,7 +665,7 @@ Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для
 Group:		Applications/File
 Requires(pretrans):	coreutils
 Requires(pretrans):	findutils
-Requires:	%{name}-build-macros >= 1.744-3
+Requires:	%{name}-pld-macros-build >= 1.744-3
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
@@ -1257,9 +1257,9 @@ done
 
 install %{SOURCE30} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/prov-req
 
-# moved to rpm-build-macros 1.699
+# moved to rpm-pld-macros-macros 1.699
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/kernel
-# moved to rpm-build-macros 1.744
+# moved to rpm-pld-macros-build 1.744
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/javadeps.sh
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/{gem_helper,rubygems}.rb
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/php.{prov,req}
