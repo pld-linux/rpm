@@ -1023,7 +1023,7 @@ sed -i \
 	--with-lua=%{!?with_system_lua:internal}%{?with_system_lua:external} \
 	--with-lzma=external \
 	--with-neon=%{?with_neon:external}%{!?with_neon:no} \
-	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/pld/macros:%{_rpmlibdir}/%%{_target}/macros:%{_rpmlibdir}/macros.build:%{_rpmlibdir}/macros.d/macros.*:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%%{_target}/macros:%{_sysconfdir}/rpm/macros.d/*.macros:~/etc/.rpmmacros:~/.rpmmacros' \
+	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/pld/macros:%{_rpmlibdir}/%%{_target}/macros:%{_rpmlibdir}/macros.build:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%%{_target}/macros:%{_sysconfdir}/rpm/macros.d/*.macros:~/etc/.rpmmacros:~/.rpmmacros' \
 	--without-path-versioned \
 	--with-pcre=%{!?with_system_pcre:internal}%{?with_system_pcre:external} \
 	--with-popt=external \
@@ -1251,11 +1251,11 @@ install tools/rpmdb_reset $RPM_BUILD_ROOT%{_rpmlibdir}/bin
 install %{SOURCE29} $RPM_BUILD_ROOT%{_rpmlibdir}/bin/dbupgrade.sh
 
 # create macro loading wrappers for backward compatibility
-for m in gstreamer mono; do
-	echo "%%{load:%{_rpmlibdir}/macros.d/$m}" >$RPM_BUILD_ROOT%{_rpmlibdir}/macros.$m
+for m in gstreamer libtool mono pkgconfig selinux; do
+	%{__mv} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/{$m,macros.$m}
 done
 
-install %{SOURCE30} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/prov-req
+install %{SOURCE30} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/macros.prov-req
 
 # moved to rpm-pld-macros-macros 1.699
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/kernel
@@ -1535,17 +1535,13 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 #%attr(755,root,root) %{_rpmlibdir}/mono-find-requires
 
 %attr(755,root,root) %{_rpmlibdir}/fontconfig.prov
-# must be here for "Requires: rpm-*prov" to work
-%{_rpmlibdir}/macros.d/gstreamer
-%{_rpmlibdir}/macros.d/libtool
-%{_rpmlibdir}/macros.d/mono
-%{_rpmlibdir}/macros.d/pkgconfig
-%{_rpmlibdir}/macros.d/prov-req
-%{_rpmlibdir}/macros.d/selinux
+%{_rpmlibdir}/macros.d/macros.gstreamer
+%{_rpmlibdir}/macros.d/macros.libtool
+%{_rpmlibdir}/macros.d/macros.mono
+%{_rpmlibdir}/macros.d/macros.pkgconfig
+%{_rpmlibdir}/macros.d/macros.prov-req
+%{_rpmlibdir}/macros.d/macros.selinux
 %{_rpmlibdir}/macros.rpmbuild
-# compat wrappers
-%{_rpmlibdir}/macros.gstreamer
-%{_rpmlibdir}/macros.mono
 
 %attr(755,root,root) %{_rpmlibdir}/gstreamer.sh
 %attr(755,root,root) %{_rpmlibdir}/kmod-deps.sh
