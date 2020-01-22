@@ -208,4 +208,4 @@ pakietu oraz przy odpluskwianiu samego pakietu.\
 # DO NOT put anything after this %%{load:...} !
 #
 # rpm5 prolog for loading the standard macro
-%{load:/etc/rpm/macros.d/macros.*}
+%{load:/etc/rpm/macros.d/*.macros}
