@@ -51,16 +51,3 @@
  # helpers are also used by %{_rpmhome}/rpmdeps {--provides|--requires}.
  %__kernel_provides	%{_rpmhome}/kmod-deps.sh --provides --modinfo %__modinfo
  #%__kernel_requires	%{_rpmhome}/kmod-deps.sh --requires --modinfo %__modinfo
---- rpm-5.4.7/macros/macros.in.kmod~	2012-03-16 16:34:04.614654786 +0100
-+++ rpm-5.4.7/macros/macros.in	2012-03-16 16:34:04.645654836 +0100
-@@ -981,6 +981,10 @@ $_arbitrary_tags_tests	Foo:Bar
- %{load:%{_usrlibrpm}/macros.d/haskell}
- 
- #------------------------------------------------------------------------
-+# kmod(...) configuration.
-+%{load:%{_usrlibrpm}/macros.d/kernel}
-+
-+#------------------------------------------------------------------------
- # perl(...) configuration
- %{load:%{_usrlibrpm}/macros.d/perl}
- 

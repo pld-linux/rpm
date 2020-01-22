@@ -47,7 +47,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.15
-Release:	54
+Release:	55
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
@@ -1027,7 +1027,7 @@ sed -i \
 	--with-xz=external \
 	--with-zlib=external
 
-%{__make} -j1
+%{__make}
 
 %{?with_apidocs:%{__make} apidocs}
 
@@ -1052,7 +1052,7 @@ install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm} \
 
 install %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
-%{__make} -j1 install \
+%{__make} install \
 	pkgconfigdir=%{_pkgconfigdir} \
 	DESTDIR=$RPM_BUILD_ROOT
 
@@ -1231,7 +1231,7 @@ install %{SOURCE29} $RPM_BUILD_ROOT%{_rpmlibdir}/bin/dbupgrade.sh
 
 # create macro loading wrappers for backward compatibility
 for m in gstreamer libtool mono pkgconfig selinux; do
-	%{__mv} RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/{$m,macros.$m}
+	%{__mv} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/{$m,macros.$m}
 done
 
 install %{SOURCE30} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/macros.prov-req
