@@ -9,19 +9,9 @@
 %bcond_without	python3		# don't build python bindings
 %bcond_without	plugins		# build plugins
 %bcond_without	recommends_tags	# build without Recommends tag (bootstrapping)
-%bcond_with	db61		# use DB 6.1 instead of 5.3
 
-# versions of required libraries
-%if %{with db61}
-%define		reqdb_pkg	db6.1
-%define		reqdb_ver	6.1
-%define		reqdb_pkgver	6.1.19
-%else
-%define		reqdb_pkg	db5.3
-%define		reqdb_ver	5.3
-%define		reqdb_pkgver	5.3.28.0
-%endif
-%define		reqpopt_ver	1.15
+%define		db_ver		5.3.28.0
+%define		popt_ver	1.15
 %define		openssl_ver	1.1.1d
 %define		sover		9.0.1
 
@@ -82,8 +72,7 @@ Patch17:	rpm5-db-compat.patch
 Patch18:	python-internal-build.patch
 Patch19:	create-build-tree-after-parse.patch
 URL:		https://rpm.org/
-BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
-BuildRequires:	%{reqdb_pkg}-sql-devel >= %{reqdb_pkgver}
+BuildRequires:	db-devel >= %{db_ver}
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1.4
 BuildRequires:	bzip2-devel >= 1.0.2-17
@@ -103,7 +92,7 @@ BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	lua53-devel >= 5.3.5
 BuildRequires:	ossp-uuid-devel
 BuildRequires:	patch >= 2.2
-BuildRequires:	popt-devel >= %{reqpopt_ver}
+BuildRequires:	popt-devel >= %{popt_ver}
 %{?with_python2:BuildRequires:	python-devel >= 1:2.3}
 %{?with_python3:BuildRequires:	python3-devel}
 BuildRequires:	python-modules >= 1:2.3
@@ -126,14 +115,13 @@ Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 Requires:	rpm-pld-macros >= 1.744
 Requires:	FHS >= 3.0-2
 Requires:	openssl >= %{openssl_ver}
-Requires:	popt >= %{reqpopt_ver}
+Requires:	popt >= %{popt_ver}
 %if %{with recommends_tags}
 Recommends:	rpm-plugin-audit
 Recommends:	rpm-plugin-prioreset
 Recommends:	rpm-plugin-syslog
 Recommends:	rpm-plugin-systemd-inhibit
 %endif
-Provides:	rpm-db-ver = %{reqdb_ver}
 Obsoletes:	rpm-getdeps
 Obsoletes:	rpm-utils-perl
 Obsoletes:	rpm-utils-static
@@ -230,11 +218,10 @@ Zawiera on:
 Summary:	RPMs library
 Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
-Requires:	%{reqdb_pkg} >= %{reqdb_pkgver}
-Requires:	%{reqdb_pkg}-sql >= %{reqdb_pkgver}
+Requires:	db >= %{db_ver}
 Requires:	libmagic >= 1.15-2
 Requires:	openssl >= %{openssl_ver}
-Requires:	popt >= %{reqpopt_ver}
+Requires:	popt >= %{popt_ver}
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
@@ -255,7 +242,7 @@ Summary(ru.UTF-8):	Хедеры и библиотеки для программ,
 Summary(uk.UTF-8):	Хедери та бібліотеки для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
-Requires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
+Requires:	db-devel >= %{db_ver}
 Requires:	bzip2-devel
 Requires:	elfutils-devel
 Requires:	libmagic-devel
@@ -265,7 +252,7 @@ Requires:	libselinux-devel
 Requires:	libsemanage-devel
 Requires:	libsepol-devel
 %endif
-Requires:	popt-devel >= %{reqpopt_ver}
+Requires:	popt-devel >= %{popt_ver}
 Requires:	zlib-devel
 
 %description devel
@@ -319,7 +306,7 @@ Summary(de.UTF-8):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
 Summary(pl.UTF-8):	Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
 Group:		Applications/File
 Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	popt >= %{reqpopt_ver}
+Requires:	popt >= %{popt_ver}
 %if %{with recommends_tags}
 Recommends:	bzip2
 Recommends:	gzip
@@ -655,10 +642,8 @@ CPPFLAGS="-I/usr/include/lua53 %{rpmcppflags}"
 
 %{__make}
 
-%{__cc} %{rpmcflags} -I/usr/include/db%{reqdb_ver} tools/rpmdb_checkversion.c \
-	-o tools/rpmdb_checkversion -ldb-%{reqdb_ver}
-%{__cc} %{rpmcflags} -I/usr/include/db%{reqdb_ver} tools/rpmdb_reset.c \
-	-o tools/rpmdb_reset -ldb-%{reqdb_ver}
+%{__cc} %{rpmcflags} tools/rpmdb_checkversion.c -o tools/rpmdb_checkversion -ldb
+%{__cc} %{rpmcflags} tools/rpmdb_reset.c -o tools/rpmdb_reset -ldb
 
 if tools/rpmdb_checkversion -V 2>&1 | grep "t match library version"; then
 	echo "Error linking rpmdb tools!"
