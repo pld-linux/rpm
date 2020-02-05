@@ -180,6 +180,7 @@ Patch92:	fast_python_deps.patch
 Patch93:	python2_explicit.patch
 Patch97:	glibc.patch
 Patch98:	extension-based-compression-detection.patch
+Patch100:	%{name}-gettid.patch
 
 # Patches imported from Mandriva
 
@@ -956,6 +957,7 @@ cd -
 %patch93 -p1
 %patch97 -p1
 %patch98 -p1
+%patch100 -p1
 
 %patch1050 -p1
 

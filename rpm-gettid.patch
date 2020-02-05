@@ -1,0 +1,23 @@
+--- rpm-5.4.17/rpmio/bson.c.orig	2016-05-07 17:56:27.000000000 +0200
++++ rpm-5.4.17/rpmio/bson.c	2020-02-05 21:07:41.212048107 +0100
+@@ -3755,7 +3755,7 @@
+ static bson_context_t gContextDefault;
+ 
+ 
+-#if defined(__linux__)
++#if defined(__linux__) && !defined(HAVE_GETTID)
+ static uint16_t
+ gettid (void)
+ {
+--- rpm-5.4.17/configure.ac.orig	2020-02-05 18:18:27.663721262 +0100
++++ rpm-5.4.17/configure.ac	2020-02-05 21:09:41.408063616 +0100
+@@ -1578,6 +1578,9 @@
+     time atoi atol getopt fclose fgetc fgets fopen fwrite dnl
+ ])
+ 
++dnl # for bson
++AC_CHECK_FUNCS([gettid])
++
+ dnl # check for getmntent and alternatives
+ AC_CHECK_FUNC(getmntent, AC_DEFINE(HAVE_GETMNTENT, 1, [Define if you have the getmntent() function]), [
+   AC_CHECK_FUNC(mntctl, AC_DEFINE(HAVE_MNTCTL, 1, [Define as 1 if you have mntctl() (only aix?)]),[
