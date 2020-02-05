@@ -1,70 +1,68 @@
---- rpm-5.4.16/macros/macros.in~	2016-04-20 16:52:06.000000000 +0300
-+++ rpm-5.4.16/macros/macros.in	2016-04-20 16:52:40.148730512 +0300
-@@ -1054,11 +1054,11 @@
+--- rpm-5.4.17/macros/macros.in.orig	2020-02-05 17:52:34.415469263 +0100
++++ rpm-5.4.17/macros/macros.in	2020-02-05 18:03:36.605215206 +0100
+@@ -1035,64 +1035,11 @@
+ # XXX	if the file %{_usrlibrpm}/macros.d/cmake attempts another
+ # XXX	%{load:...}, then loading will CEASE at that point in the file.
+ #==============================================================================
+-# ---- SELinux configuration macros.
+-%{load:%{_usrlibrpm}/macros.d/selinux}
+-
+-#==============================================================================
+ # ---- rpmbuild macros.
+ %{load:%{_usrlibrpm}/macros.rpmbuild}
  
  #------------------------------------------------------------------------
- # cmake(...) configuration
+-# cmake(...) configuration
 -#%%{load:%{_usrlibrpm}/macros.d/cmake}
-+%{load:%{_usrlibrpm}/macros.d/cmake}
- 
- #------------------------------------------------------------------------
- # gstreamer(...) configuration.
+-
+-#------------------------------------------------------------------------
+-# gstreamer(...) configuration.
 -#%%{load:%{_usrlibrpm}/macros.d/gstreamer}
-+%{load:%{_usrlibrpm}/macros.d/gstreamer}
- 
- #------------------------------------------------------------------------
- # haskell(...) configuration.
-@@ -1066,43 +1066,43 @@
- 
- #------------------------------------------------------------------------
- # perl(...) configuration
+-
+-#------------------------------------------------------------------------
+-# haskell(...) configuration.
+-#%%{load:%{_usrlibrpm}/macros.d/haskell}
+-
+-#------------------------------------------------------------------------
+-# perl(...) configuration
 -#%%{load:%{_usrlibrpm}/macros.d/perl}
-+%{load:%{_usrlibrpm}/macros.d/perl}
- 
- #------------------------------------------------------------------------
- # python(...) configuration.
+-
+-#------------------------------------------------------------------------
+-# python(...) configuration.
 -#%%{load:%{_usrlibrpm}/macros.d/python}
-+%{load:%{_usrlibrpm}/macros.d/python}
- 
- #------------------------------------------------------------------------
- # php(...) configuration.
+-
+-#------------------------------------------------------------------------
+-# php(...) configuration.
 -#%%{load:%{_usrlibrpm}/macros.d/php}
-+%{load:%{_usrlibrpm}/macros.d/php}
- 
- #------------------------------------------------------------------------
- # java(...) configuration.
+-
+-#------------------------------------------------------------------------
+-# java(...) configuration.
 -#%%{load:%{_usrlibrpm}/macros.d/java}
-+%{load:%{_usrlibrpm}/macros.d/java}
- 
- #------------------------------------------------------------------------
- # libtool(...) configuration.
+-
+-#------------------------------------------------------------------------
+-# libtool(...) configuration.
 -#%%{load:%{_usrlibrpm}/macros.d/libtool}
-+%{load:%{_usrlibrpm}/macros.d/libtool}
- 
- #------------------------------------------------------------------------
- # pkgconfig(...) configuration.
+-
+-#------------------------------------------------------------------------
+-# pkgconfig(...) configuration.
 -#%%{load:%{_usrlibrpm}/macros.d/pkgconfig}
-+%{load:%{_usrlibrpm}/macros.d/pkgconfig}
- 
- #------------------------------------------------------------------------
- # mono(...) configuration.
+-
+-#------------------------------------------------------------------------
+-# mono(...) configuration.
 -#%%{load:%{_usrlibrpm}/macros.d/mono}
-+%{load:%{_usrlibrpm}/macros.d/mono}
- 
- #------------------------------------------------------------------------
- # ruby(...) configuration.
+-
+-#------------------------------------------------------------------------
+-# ruby(...) configuration.
 -#%%{load:%{_usrlibrpm}/macros.d/ruby}
-+%{load:%{_usrlibrpm}/macros.d/ruby}
- 
- #------------------------------------------------------------------------
- # tcl(...) configuration.
+-
+-#------------------------------------------------------------------------
+-# tcl(...) configuration.
 -#%%{load:%{_usrlibrpm}/macros.d/tcl}
-+%{load:%{_usrlibrpm}/macros.d/tcl}
- 
- #------------------------------------------------------------------------
- # typelib(...) configuration.
+-
+-#------------------------------------------------------------------------
+-# typelib(...) configuration.
 -#%%{load:%{_usrlibrpm}/macros.d/typelib}
-+%{load:%{_usrlibrpm}/macros.d/typelib}
++%{load:%{_usrlibrpm}/macros.d/macros.*}
  
  # \endverbatim
  #*/
