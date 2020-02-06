@@ -666,7 +666,6 @@ Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для
 Group:		Applications/File
 Requires(pretrans):	coreutils
 Requires(pretrans):	findutils
-Requires:	%{name}-pld-macros-build >= 1.744-3
 Requires:	%{name}-utils = %{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
@@ -688,6 +687,7 @@ Requires:	grep
 Requires:	gzip
 Requires:	make
 Requires:	patch
+Requires:	rpm-pld-macros-build >= 1.744-3
 Requires:	sed >= 4.0
 Requires:	sh-utils
 Requires:	tar >= 1:1.22
