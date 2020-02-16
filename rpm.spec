@@ -125,7 +125,7 @@ Patch42:	%{name}-pattern_Release.patch
 Patch43:	%{name}-fix-___build_pre-macro.patch
 Patch44:	%{name}-missing-patch-file-fails-build.patch
 Patch45:	%{name}-remove-misleading-missing-patch-message.patch
-Patch46:	%{name}-file-magic-can-be-mixed-case.patch
+Patch46:	%{name}-rpm2cpio.patch
 Patch47:	%{name}-query-always-noisy.patch
 Patch48:	%{name}-verify-ghosts-broken-logic.patch
 Patch49:	%{name}-python-enable-compat-RPMSENSE.patch
