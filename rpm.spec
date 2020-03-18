@@ -47,7 +47,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	5.4.15
-Release:	56
+Release:	57
 License:	LGPL v2.1
 Group:		Base
 # http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
@@ -360,7 +360,6 @@ Requires:	%{name}-base = %{version}-%{release}
 Requires:	%{name}-lib = %{version}-%{release}
 Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	popt >= %{reqpopt_ver}
-Provides:	rpm-db-ver = %{reqdb_ver}
 Obsoletes:	rpm-getdeps
 %{!?with_static:Obsoletes:	rpm-utils-static}
 Conflicts:	glibc < 2.2.92
@@ -467,6 +466,7 @@ Requires:	beecrypt >= %{beecrypt_ver}
 Requires:	libmagic >= 1.15-2
 %{?with_selinux:Requires:	libselinux >= 2.1.0}
 Requires:	popt >= %{reqpopt_ver}
+Provides:	rpm-db-ver = %{reqdb_ver}
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
