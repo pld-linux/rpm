@@ -180,7 +180,8 @@ Patch92:	fast_python_deps.patch
 Patch93:	python2_explicit.patch
 Patch97:	glibc.patch
 Patch98:	extension-based-compression-detection.patch
-Patch100:	%{name}-gettid.patch
+Patch100:	dont-install-useless-scripts.patch
+Patch101:	%{name}-gettid.patch
 
 # Patches imported from Mandriva
 
@@ -958,6 +959,7 @@ cd -
 %patch97 -p1
 %patch98 -p1
 %patch100 -p1
+%patch101 -p1
 
 %patch1050 -p1
 
@@ -1468,7 +1470,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/bin/cp
 %attr(755,root,root) %{_rpmlibdir}/bin/debugedit
 %attr(755,root,root) %{_rpmlibdir}/bin/find
-%attr(755,root,root) %{_rpmlibdir}/bin/mgo
 %attr(755,root,root) %{_rpmlibdir}/bin/mtree
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmcache
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmcmp
@@ -1519,19 +1520,14 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
 # needs hacked pkg-config to return anything
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
-%attr(755,root,root) %{_rpmlibdir}/bin/api-sanity-autotest.pl
-%attr(755,root,root) %{_rpmlibdir}/bin/api-sanity-checker.pl
 %{!?with_sqlite:%attr(755,root,root) %{_rpmlibdir}/bin/dbsql}
 %attr(755,root,root) %{_rpmlibdir}/bin/install-sh
 %attr(755,root,root) %{_rpmlibdir}/bin/mkinstalldirs
-%attr(755,root,root) %{_rpmlibdir}/bin/pom2spec
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmspec
 %attr(755,root,root) %{_rpmlibdir}/bin/rpmspecdump
 %attr(755,root,root) %{_rpmlibdir}/bin/sqlite3
 %attr(755,root,root) %{_rpmlibdir}/bin/wget
 %attr(755,root,root) %{_rpmlibdir}/vcheck
-# not used yet ... these six depend on perl
-%attr(755,root,root) %{_rpmlibdir}/http.req
 # we always used scripts provided by mono-devel, maybe move them here
 #%attr(755,root,root) %{_rpmlibdir}/mono-find-provides
 #%attr(755,root,root) %{_rpmlibdir}/mono-find-requires

@@ -1,0 +1,30 @@
+--- rpm-5.4.17/scripts/Makefile.am.orig	2020-04-13 14:51:12.941558924 +0200
++++ rpm-5.4.17/scripts/Makefile.am	2020-04-13 15:11:37.324925869 +0200
+@@ -48,7 +48,7 @@
+ 
+ noinst_SCRIPTS =
+ 
+-noinst_SCRIPTS += multiarch-dispatch multiarch-platform
++noinst_SCRIPTS += multiarch-dispatch multiarch-platform api-sanity-autotest.pl api-sanity-checker.pl mgo pom2spec http.req
+ bin_SCRIPTS = gendiff
+ 
+ 
+@@ -61,7 +61,7 @@
+ 	check-files cross-build dbconvert.sh executabledeps.sh \
+ 	find-debuginfo.sh find-lang.sh find-prov.pl find-req.pl \
+ 	find-provides.perl find-requires.perl \
+-	fontconfig.prov gem_helper.rb getpo.sh http.req \
++	fontconfig.prov gem_helper.rb getpo.sh \
+ 	kmod-deps.sh gstreamer.sh javadeps.sh libtooldeps.sh \
+ 	mono-find-provides mono-find-requires \
+ 	osgideps.pl pkgconfigdeps.sh \
+@@ -74,9 +74,6 @@
+ 	vcheck vpkg-provides.sh vpkg-provides2.sh
+ 
+ 
+-pkgbindir =		@USRLIBRPM@/bin
+-pkgbin_SCRIPTS = api-sanity-autotest.pl api-sanity-checker.pl mgo pom2spec
+-
+ pkghelperdir =		@USRLIBRPM@/helpers
+ pkghelper_SCRIPTS = 	${HELPERS}
+ 
