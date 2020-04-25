@@ -1,0 +1,13 @@
+--- rpm-4.16.0/installplatform.orig	2020-10-24 21:48:07.586493242 +0200
++++ rpm-4.16.0/installplatform	2020-10-24 21:48:23.069703643 +0200
+@@ -207,6 +207,10 @@
+       LIB=${LIB}x32
+   fi
+ 
++  if [ "$OS" = "linux" ] && [ "$CANONARCH" = "aarch64" ]; then
++      LIB=${LIB}64
++  fi
++
+   PPD="${DESTDIR}/${platformdir}/${ARCH}-${OS}"
+   [ -d $PPD ] || mkdir -p $PPD
+ 

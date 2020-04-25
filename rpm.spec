@@ -72,6 +72,7 @@ Patch17:	python-internal-build.patch
 Patch18:	rpmversion.patch
 Patch19:	pkgconfig.patch
 Patch20:	uname-deps.patch
+Patch21:	aarch64.patch
 URL:		https://rpm.org/
 BuildRequires:	db-devel >= %{db_ver}
 BuildRequires:	autoconf >= 2.63
@@ -555,6 +556,9 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch18 -p1
 %patch19 -p1
 %patch20 -p1
+%ifarch aarch64
+%patch21 -p1
+%endif
 
 install %{SOURCE15} scripts/perl.prov.in
 
@@ -665,7 +669,10 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc*series-linux/macros
 %endif
 
+%ifnarch aarch64
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/aarch64-linux/macros
+%endif
+
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/alpha*-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/arm*-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ia64-linux/macros
@@ -810,6 +817,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %endif
 %ifarch alpha
 %{_rpmlibdir}/platform/alpha*
+%endif
+%ifarch aarch64
+%{_rpmlibdir}/platform/aarch64*
 %endif
 %ifarch ia64
 %{_rpmlibdir}/platform/ia64*
