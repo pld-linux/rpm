@@ -1087,6 +1087,10 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/x86_64-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/ppc-linux/macros
 %endif
 
+%ifnarch aarch64
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/aarch64-linux/macros
+%endif
+
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/alpha*-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/arm*-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/ia64-linux/macros
@@ -1149,6 +1153,10 @@ i386-[^-]*-[Ll]inux(-gnu)?
 
 %ifarch alpha
 alpha-[^-]*-[Ll]inux(-gnu)?
+%endif
+
+%ifarch aarch64
+aarch64-[^-]*-[Ll]inux(-gnu)?
 %endif
 
 %ifarch ia64
@@ -1367,6 +1375,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %endif
 %ifarch alpha
 %{_rpmlibdir}/alpha*
+%endif
+%ifarch aarch64
+%{_rpmlibdir}/aarch64*
 %endif
 %ifarch ia64
 %{_rpmlibdir}/ia64*

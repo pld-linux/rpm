@@ -1,5 +1,5 @@
 !<arch>
-//                                              708       `
+//                                              730       `
 alpha-linux.macros/
 alphaev5-linux.macros/
 alphaev56-linux.macros/
@@ -33,6 +33,7 @@ sparc64-linux.macros/
 sparcv9-linux.macros/
 x32-linux.macros/
 x86_64-linux.macros/
+aarch64-linux.macros/
 
 /0              0           0     0     644     336       `
 # Per-platform rpm configuration file.
@@ -682,5 +683,26 @@ k6-linux.macros/0           0     0     644     708       `
 #---------------------------------------------------------------------
 #	Multilibs
 %_multilibno		3
+%_multilibpatt		(/%{_lib}|/usr/%{_lib}(|/gconv)|/usr/local/%{_lib}|/usr/X11R6/%{_lib}|/opt/%{_lib})/[^/]*\\.([oa]|la|so[0-9.]*)$
+
+/707            1587845877  1000  1000  100644  723       `
+# Per-platform rpm configuration file.
+
+#==============================================================================
+# ---- per-platform macros.
+#
+%_arch			aarch64
+%_os			linux
+%_gnu			-gnu
+%optflags		%{?__common_cflags_with_ssp:%{__common_cflags_with_ssp} -fPIC}%{!?__common_cflags_with_ssp:-O2 -g -mtune=generic} -march=armv8-a %{!?nospecflags:%{?specflags_aarch64}}
+
+#==============================================================================
+# ---- configure macros.
+#
+%_lib			lib64
+
+#---------------------------------------------------------------------
+#	Multilibs
+%_multilibno		2
 %_multilibpatt		(/%{_lib}|/usr/%{_lib}(|/gconv)|/usr/local/%{_lib}|/usr/X11R6/%{_lib}|/opt/%{_lib})/[^/]*\\.([oa]|la|so[0-9.]*)$
 
