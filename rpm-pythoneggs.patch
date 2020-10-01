@@ -62,7 +62,7 @@
              deps = dist.requires()
              if Suggests:
                  depsextras = dist.requires(extras=dist.extras)
-@@ -153,15 +172,20 @@ for f in files:
+@@ -153,15 +172,23 @@ for f in files:
                          if dep in deps:
                              depsextras.remove(dep)
                  deps = depsextras
@@ -80,9 +80,24 @@
                              py_deps[name] = []
 -                        if not spec in py_deps[name]:
 -                            py_deps[name].append(spec)
-+                        plddep = (spec[0], make_pldver(spec[1]))
++                        if spec[0] == '~=':
++                            plddep = ('>=', make_pldver(spec[1]))
++                        else:
++                            plddep = (spec[0], make_pldver(spec[1]))
 +                        if not plddep in py_deps[name]:
 +                            py_deps[name].append(plddep)
                  if not dep.specs:
                      py_deps[name] = []
          # Unused, for automatic sub-package generation based on 'extras' from egg metadata
+@@ -208,7 +211,10 @@
+                         if spec[0] == '!=':
+                             print 'Conflicts:\t%s %s %s' % (dep.key, '==', spec[1])
+                         else:
+-                            print 'Requires:\t%s %s %s' % (dep.key, spec[0], spec[1])
++                            if spec[0] == '~=':
++                                print 'Requires:\t%s %s %s' % (dep.key, '>=', spec[1])
++                            else:
++                                print 'Requires:\t%s %s %s' % (dep.key, spec[0], spec[1])
+                 print '%%description\t%s' % extra
+                 print '%s extra for %s python egg' % (extra, dist.key)
+                 print '%%files\t\textras-%s\n' % extra
