@@ -42,15 +42,14 @@ Source8:	%{name}-hrmib-cache
 Source9:	%{name}-user_group.sh
 # http://svn.pld-linux.org/banner.sh/
 Source10:	banner.sh
-Source11:	%{name}.noautocompressdoc
-Source12:	%{name}.noautoprov
-Source13:	%{name}.noautoprovfiles
-Source14:	%{name}.noautoreq
-Source15:	%{name}.noautoreqfiles
-Source16:	perl.prov
-Source17:	%{name}db_checkversion.c
-Source18:	%{name}db_reset.c
-Source19:	dbupgrade.sh
+Source11:	%{name}.noautoprov
+Source12:	%{name}.noautoprovfiles
+Source13:	%{name}.noautoreq
+Source14:	%{name}.noautoreqfiles
+Source15:	perl.prov
+Source16:	%{name}db_checkversion.c
+Source17:	%{name}db_reset.c
+Source18:	dbupgrade.sh
 Patch0:		%{name}-man_pl.patch
 Patch1:		%{name}-popt-aliases.patch
 Patch2:		%{name}-perl-macros.patch
@@ -67,9 +66,8 @@ Patch12:	%{name}-clean-docdir.patch
 Patch13:	%{name}-perl-magic.patch
 Patch14:	%{name}-ignore-missing-macro-files.patch
 Patch15:	x32.patch
-Patch16:	%{name}-add-compress-doc.patch
-Patch17:	rpm5-db-compat.patch
-Patch18:	python-internal-build.patch
+Patch16:	rpm5-db-compat.patch
+Patch17:	python-internal-build.patch
 URL:		https://rpm.org/
 BuildRequires:	db-devel >= %{db_ver}
 BuildRequires:	autoconf >= 2.63
@@ -142,7 +140,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		x8664	amd64 ia32e x86_64
 
 %define		_rpmlibdir /usr/lib/rpm
-%define		_noautocompressdoc	RPM-GPG-KEY
 
 %description
 RPM is a powerful package manager, which can be used to build,
@@ -554,17 +551,16 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
-%patch18 -p1
 
-install %{SOURCE16} scripts/perl.prov.in
+install %{SOURCE15} scripts/perl.prov.in
 
 %{__mv} -f scripts/perl.req{,.in}
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE5}
 
-install %{SOURCE17} tools/rpmdb_checkversion.c
-install %{SOURCE18} tools/rpmdb_reset.c
+install %{SOURCE16} tools/rpmdb_checkversion.c
+install %{SOURCE17} tools/rpmdb_reset.c
 
 %{__sed} -i -e '1s,/usr/bin/python,%{__python3},' scripts/pythondistdeps.py
 
@@ -690,15 +686,14 @@ cp -p %{SOURCE10} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
 cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.lang
-cp -p %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc
-cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov
-cp -p %{SOURCE13} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles
-cp -p %{SOURCE14} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq
-cp -p %{SOURCE15} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles
+cp -p %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov
+cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles
+cp -p %{SOURCE13} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq
+cp -p %{SOURCE14} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles
 
 cp -p tools/rpmdb_checkversion $RPM_BUILD_ROOT%{_rpmlibdir}/
 cp -p tools/rpmdb_reset $RPM_BUILD_ROOT%{_rpmlibdir}/
-cp -p %{SOURCE19} $RPM_BUILD_ROOT%{_rpmlibdir}/dbupgrade.sh
+cp -p %{SOURCE18} $RPM_BUILD_ROOT%{_rpmlibdir}/dbupgrade.sh
 
 # move rpm to /bin
 %{__mv} $RPM_BUILD_ROOT%{_bindir}/rpm $RPM_BUILD_ROOT/bin
