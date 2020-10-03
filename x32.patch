@@ -180,14 +180,6 @@ diff -ur rpm-4.15.1.orig/tools/elfdeps.c rpm-4.15.1/tools/elfdeps.c
      return marker;
  }
  
---- rpm-4.15.1/fileattrs/python.attr~	2019-06-26 23:17:31.000000000 +0900
-+++ rpm-4.15.1/fileattrs/python.attr	2020-01-04 23:33:40.929651751 +0900
-@@ -1,4 +1,4 @@
- %__python_provides	%{_rpmconfigdir}/pythondeps.sh --provides
- %__python_requires	%{_rpmconfigdir}/pythondeps.sh --requires
--%__python_path	((/lib(64)?/python[[:digit:]]\\.[[:digit:]]+/.*\\.(py[oc]?|so))|(^%{_bindir}/python[[:digit:]]\\.[[:digit:]]+))$
-+%__python_path	((/lib(64|x32)?/python[[:digit:]]\\.[[:digit:]]+/.*\\.(py[oc]?|so))|(^%{_bindir}/python[[:digit:]]\\.[[:digit:]]+))$
- %__python_magic		[Pp]ython.*(executable|byte-compiled)
 --- rpm-4.15.1/fileattrs/pythondist.attr~	2019-06-26 23:17:31.000000000 +0900
 +++ rpm-4.15.1/fileattrs/pythondist.attr	2020-01-04 23:34:05.680366882 +0900
 @@ -1,3 +1,3 @@
@@ -195,3 +187,25 @@ diff -ur rpm-4.15.1.orig/tools/elfdeps.c rpm-4.15.1/tools/elfdeps.c
  %__pythondist_requires	%{_rpmconfigdir}/pythondistdeps.py --requires
 -%__pythondist_path		/lib(64)?/python[[:digit:]]\\.[[:digit:]]+/site-packages/[^/]+\\.(dist-info|egg-info|egg-link)$
 +%__pythondist_path		/lib(64|x32)?/python[[:digit:]]\\.[[:digit:]]+/site-packages/[^/]+\\.(dist-info|egg-info|egg-link)$
+--- rpm-4.16.0/fileattrs/python.attr.orig	2020-08-31 11:14:07.991087349 +0200
++++ rpm-4.16.0/fileattrs/python.attr	2020-10-03 10:47:16.560360859 +0200
+@@ -14,14 +14,15 @@
+ %__python_requires() %{lua:
+     -- Match buildroot paths of the form
+     --    /PATH/OF/BUILDROOT/usr/lib/pythonMAJOR.MINOR/  and
+-    --    /PATH/OF/BUILDROOT/usr/lib64/pythonMAJOR.MINOR/
++    --    /PATH/OF/BUILDROOT/usr/lib64/pythonMAJOR.MINOR/ and
++    --    /PATH/OF/BUILDROOT/usr/libx32/pythonMAJOR.MINOR/
+     -- generating a line of the form:
+     --    python(abi) = MAJOR.MINOR
+     local path = rpm.expand('%1')
+-    if path:match('/usr/lib%d*/python%d+%.%d+/.*') then
+-        local requires = path:gsub('.*/usr/lib%d*/python(%d+%.%d+)/.*', 'python(abi) = %1')
++    if path:match('/usr/lib%w*/python%d+%.%d+/.*') then
++        local requires = path:gsub('.*/usr/lib%w*/python(%d+%.%d+)/.*', 'python(abi) = %1')
+         print(requires)
+     end
+ }
+ 
+-%__python_path ^((%{_prefix}/lib(64)?/python[[:digit:]]+\\.[[:digit:]]+/.*\\.(py[oc]?|so))|(%{_bindir}/python[[:digit:]]+\\.[[:digit:]]+))$
++%__python_path ^((%{_prefix}/lib(64|x32)?/python[[:digit:]]+\\.[[:digit:]]+/.*\\.(py[oc]?|so))|(%{_bindir}/python[[:digit:]]+\\.[[:digit:]]+))$

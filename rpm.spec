@@ -5,7 +5,7 @@
 #
 # Conditional build:
 %bcond_without	apidocs		# don't generate documentation with doxygen
-%bcond_without	python2		# don't build python bindings
+%bcond_with	python2		# don't build python bindings
 %bcond_without	python3		# don't build python bindings
 %bcond_without	plugins		# build plugins
 %bcond_without	recommends_tags	# build without Recommends tag (bootstrapping)
@@ -13,7 +13,7 @@
 %define		db_ver		5.3.28.0
 %define		popt_ver	1.15
 %define		openssl_ver	1.1.1d
-%define		sover		9.0.1
+%define		sover		9.1.0
 
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
@@ -23,13 +23,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	4.15.1
+Version:	4.16.0
 Release:	0.1
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
-Source0:	http://ftp.rpm.org/releases/rpm-4.15.x/%{name}-%{version}.tar.bz2
-# Source0-md5:	ed72147451a5ed93b2a48e2f8f5413c3
+Source0:	http://ftp.rpm.org/releases/rpm-4.16.x/%{name}-%{version}.tar.bz2
+# Source0-md5:	434e166a812e35ef181f6dd176326920
 Source1:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source1-md5:	23914bb49fafe7153cee87126d966461
 Source2:	macros.local
@@ -70,7 +70,6 @@ Patch15:	x32.patch
 Patch16:	%{name}-add-compress-doc.patch
 Patch17:	rpm5-db-compat.patch
 Patch18:	python-internal-build.patch
-Patch19:	create-build-tree-after-parse.patch
 URL:		https://rpm.org/
 BuildRequires:	db-devel >= %{db_ver}
 BuildRequires:	autoconf >= 2.63
@@ -94,8 +93,8 @@ BuildRequires:	ossp-uuid-devel
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{popt_ver}
 %{?with_python2:BuildRequires:	python-devel >= 1:2.3}
-%{?with_python3:BuildRequires:	python3-devel}
 BuildRequires:	python-modules >= 1:2.3
+%{?with_python3:BuildRequires:	python3-devel}
 %if %{with python2} || %{with python3}
 BuildRequires:	rpm-pythonprov
 %endif
@@ -242,8 +241,8 @@ Summary(ru.UTF-8):	Хедеры и библиотеки для программ,
 Summary(uk.UTF-8):	Хедери та бібліотеки для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
-Requires:	db-devel >= %{db_ver}
 Requires:	bzip2-devel
+Requires:	db-devel >= %{db_ver}
 Requires:	elfutils-devel
 Requires:	libmagic-devel
 Requires:	openssl-devel >= %{openssl_ver}
@@ -475,7 +474,8 @@ programs that will manipulate RPM packages and databases.
 
 %description -n python3-rpm -l pl.UTF-8
 Pakiet python3-rpm zawiera moduł, który pozwala aplikacjom napisanym w
-Pythonie 3 na używanie interfejsu dostarczanego przez biblioteki RPM-a.
+Pythonie 3 na używanie interfejsu dostarczanego przez biblioteki
+RPM-a.
 
 Pakiet ten powinien zostać zainstalowany, jeśli chcesz pisać w
 Pythonie 3 programy manipulujące pakietami i bazami danych rpm.
@@ -490,7 +490,7 @@ Python 3 para manipular pacotes e bancos de dados RPM.
 
 %package plugin-audit
 Summary:	Plugin for logging audit events on package operations
-Group:		System/Base
+Group:		Base
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
 %description plugin-audit
@@ -498,7 +498,7 @@ Plugin for libaudit support
 
 %package plugin-syslog
 Summary:	Plugin for syslog functionality
-Group:		System/Base
+Group:		Base
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
 %description plugin-syslog
@@ -506,7 +506,7 @@ This plugin exports RPM actions to the system log.
 
 %package plugin-systemd-inhibit
 Summary:	Plugin for systemd inhibit functionality
-Group:		System/Base
+Group:		Base
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
 %description plugin-systemd-inhibit
@@ -584,7 +584,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
-%patch19 -p1
 
 install %{SOURCE16} scripts/perl.prov.in
 
@@ -596,7 +595,7 @@ awk -f %{SOURCE6} %{SOURCE5}
 install %{SOURCE17} tools/rpmdb_checkversion.c
 install %{SOURCE18} tools/rpmdb_reset.c
 
-%{__sed} -i -e '1s,/usr/bin/python,%{__python},' scripts/pythondistdeps.py
+%{__sed} -i -e '1s,/usr/bin/python,%{__python3},' scripts/pythondistdeps.py
 
 %build
 %{__libtoolize}
@@ -823,6 +822,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_mandir}/man8/rpmdb.8*
 %{_mandir}/man8/rpmkeys.8*
 %{_mandir}/man8/rpm-misc.8*
+%{?with_plugins:%{_mandir}/man8/rpm-plugins.8*}
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
 %lang(ja) %{_mandir}/ja/man8/rpm.8*
 %lang(ko) %{_mandir}/ko/man8/rpm.8*
@@ -877,6 +877,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/dbupgrade.sh
 %attr(755,root,root) %{_rpmlibdir}/rpmdb_checkversion
 %attr(755,root,root) %{_rpmlibdir}/rpmdb_reset
+%attr(755,root,root) %{_rpmlibdir}/rpmdb_dump
+%attr(755,root,root) %{_rpmlibdir}/rpmdb_load
 
 # valgrind suppression file for rpm
 %{_rpmlibdir}/rpm.supp
@@ -919,10 +921,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/rpmgraph
 %attr(755,root,root) %{_rpmlibdir}/rpm2cpio.sh
 %attr(755,root,root) %{_rpmlibdir}/find-debuginfo.sh
-%attr(755,root,root) %{_rpmlibdir}/rpmdb_loadcvt
 %attr(755,root,root) %{_rpmlibdir}/tgpg
 %attr(755,root,root) %{_rpmlibdir}/debugedit
 %attr(755,root,root) %{_rpmlibdir}/rpmdeps
+%{_mandir}/man8/rpm2archive.8*
 %{_mandir}/man8/rpm2cpio.8*
 %{_mandir}/man8/rpmdeps.8*
 %{_mandir}/man8/rpmgraph.8*
@@ -962,18 +964,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/check-prereqs
 %attr(755,root,root) %{_rpmlibdir}/check-rpaths
 %attr(755,root,root) %{_rpmlibdir}/check-rpaths-worker
-%attr(755,root,root) %{_rpmlibdir}/debuginfo.prov
-%attr(755,root,root) %{_rpmlibdir}/desktop-file.prov
 %attr(755,root,root) %{_rpmlibdir}/find-provides
 %attr(755,root,root) %{_rpmlibdir}/find-requires
-%attr(755,root,root) %{_rpmlibdir}/metainfo.prov
-%attr(755,root,root) %{_rpmlibdir}/ocaml-find-provides.sh
-%attr(755,root,root) %{_rpmlibdir}/ocaml-find-requires.sh
+%attr(755,root,root) %{_rpmlibdir}/ocamldeps.sh
 %attr(755,root,root) %{_rpmlibdir}/script.req
 %attr(755,root,root) %{_rpmlibdir}/sepdebugcrcfix
-# Fedora has this in -build, but shouldn't this be in -devel?
-%attr(755,root,root) %{_rpmlibdir}/config.guess
-%attr(755,root,root) %{_rpmlibdir}/config.sub
 
 %dir %{_rpmlibdir}/fileattrs
 %{_rpmlibdir}/fileattrs/debuginfo.attr
@@ -1007,7 +1002,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files pythonprov
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_rpmlibdir}/pythondeps.sh
+#%attr(755,root,root) %{_rpmlibdir}/pythondeps.sh
 %attr(755,root,root) %{_rpmlibdir}/pythondistdeps.py
 
 %if %{with python2}
@@ -1033,10 +1028,12 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files plugin-audit
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/rpm-plugins/audit.so
+%{_mandir}/man8/rpm-plugin-audit.8*
 
 %files plugin-syslog
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/rpm-plugins/syslog.so
+%{_mandir}/man8/rpm-plugin-syslog.8*
 
 %files plugin-systemd-inhibit
 %defattr(644,root,root,755)
@@ -1046,14 +1043,17 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files plugin-ima
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/rpm-plugins/ima.so
+%{_mandir}/man8/rpm-plugin-ima.8*
 
 %files plugin-prioreset
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/rpm-plugins/prioreset.so
+%{_mandir}/man8/rpm-plugin-prioreset.8*
 
 %files plugin-selinux
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/rpm-plugins/selinux.so
+%{_mandir}/man8/rpm-plugin-selinux.8*
 %endif
 
 %files sign
