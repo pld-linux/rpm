@@ -5,10 +5,10 @@
 #
 # Conditional build:
 %bcond_without	apidocs		# don't generate documentation with doxygen
-%bcond_with	python2		# don't build python bindings
 %bcond_without	python3		# don't build python bindings
 %bcond_without	plugins		# build plugins
 %bcond_without	recommends_tags	# build without Recommends tag (bootstrapping)
+%bcond_with	imaevm		# build with IMA/EVM support (requires libimaevm from ima-evm-utils)
 
 %define		db_ver		5.3.28.0
 %define		popt_ver	1.15
@@ -83,6 +83,7 @@ BuildRequires:	openssl-devel >= %{openssl_ver}
 %if %{with plugins}
 BuildRequires:	audit-libs-devel
 BuildRequires:	dbus-devel
+%{?with_imaevm:BuildRequires:	libimaevm-devel >= 1.0}
 BuildRequires:	libselinux-devel >= 2.1.0
 %endif
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
@@ -92,12 +93,12 @@ BuildRequires:	lua53-devel >= 5.3.5
 BuildRequires:	ossp-uuid-devel
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{popt_ver}
-%{?with_python2:BuildRequires:	python-devel >= 1:2.3}
-BuildRequires:	python-modules >= 1:2.3
-%{?with_python3:BuildRequires:	python3-devel}
-%if %{with python2} || %{with python3}
+BuildRequires:	python3-modules
+%if %{with python3}
+BuildRequires:	python3-devel
 BuildRequires:	rpm-pythonprov
 %endif
+BuildRequires:	sqlite3-devel >= 3.22.0
 BuildRequires:	tcl
 BuildRequires:	xz-devel
 BuildRequires:	zlib-devel
@@ -412,9 +413,9 @@ Summary:	Python macros, which simplifies creation of RPM packages with Python so
 Summary(pl.UTF-8):	Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w Pythonie
 Group:		Applications/File
 Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	python
-Requires:	python-modules
-Requires:	python-setuptools
+Requires:	python3
+Requires:	python3-modules
+Requires:	python3-setuptools
 
 %description pythonprov
 Python macros, which simplifies creation of RPM packages with Python
@@ -424,38 +425,6 @@ software.
 Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w
 Pythonie.
 
-%package -n python-rpm
-Summary:	Python interface to RPM library
-Summary(pl.UTF-8):	Pythonowy interfejs do biblioteki RPM-a
-Summary(pt_BR.UTF-8):	Módulo Python para aplicativos que manipulam pacotes RPM
-Group:		Development/Languages/Python
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	python
-Obsoletes:	rpm-python
-
-%description -n python-rpm
-The python-rpm package contains a module which permits applications
-written in the Python programming language to use the interface
-supplied by RPM (RPM Package Manager) libraries.
-
-This package should be installed if you want to develop Python
-programs that will manipulate RPM packages and databases.
-
-%description -n python-rpm -l pl.UTF-8
-Pakiet python-rpm zawiera moduł, który pozwala aplikacjom napisanym w
-Pythonie na używanie interfejsu dostarczanego przez biblioteki RPM-a.
-
-Pakiet ten powinien zostać zainstalowany, jeśli chcesz pisać w
-Pythonie programy manipulujące pakietami i bazami danych rpm.
-
-%description -n python-rpm -l pt_BR.UTF-8
-O pacote python-rpm contém um módulo que permite que aplicações
-escritas em Python utilizem a interface fornecida pelas bibliotecas
-RPM (RPM Package Manager).
-
-Esse pacote deve ser instalado se você quiser desenvolver programas em
-Python para manipular pacotes e bancos de dados RPM.
-
 %package -n python3-rpm
 Summary:	Python 3 interface to RPM library
 Summary(pl.UTF-8):	Interfejs Pythona 3 do biblioteki RPM-a
@@ -463,6 +432,8 @@ Summary(pt_BR.UTF-8):	Módulo Python 3 para aplicativos que manipulam pacotes RP
 Group:		Development/Languages/Python
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	python3
+Obsoletes:	python-rpm < 1:4.16.0
+Obsoletes:	rpm-python
 
 %description -n python3-rpm
 The python3-rpm package contains a module which permits applications
@@ -616,28 +587,26 @@ CPPFLAGS="-I/usr/include/lua53 %{rpmcppflags}"
 	WITH_PERL_VERSION=no \
 	__GST_INSPECT=%{_bindir}/gst-inspect-1.0 \
 	__GPG=%{_bindir}/gpg \
-	%{?with_python3:PYTHON=python3} \
-	%{!?with_python3:%{?with_python2:PYTHON=python2}} \
+%if %{with python3}
+	PYTHON=python3 \
+	--enable-python \
+%endif
 	--disable-silent-rules \
 	--enable-shared \
 	--enable-bdb \
+	--enable-ndb \
+	--enable-sqlite \
 	--enable-zstd \
 	--with-crypto=openssl \
 	--with-lua \
+	%{?with_imaevm:--with-imaevm} \
 	--with-cap \
 	--with-acl \
 	--with-audit \
 	--with-archive \
-%if %{with python2} || %{with python3}
-	--enable-python \
-%endif
 	--with-selinux=%{!?with_plugins:no}%{?with_plugins:yes} \
 	%{!?with_plugins:--disable-plugins} \
 	--with-vendor=pld
-
-#  --enable-ndb (EXPERIMENTAL) enable the new rpm database format
-#  --enable-lmdb=[yes/no/auto] (EXPERIMENTAL) build with LMDB rpm database format support (default=auto)
-#  --with-imaevm           build with imaevm support
 
 %{__make}
 
@@ -652,12 +621,6 @@ if tools/rpmdb_reset -V 2>&1 | grep "t match library version"; then
 	echo "Error linking rpmdb tools!"
 	exit 1
 fi
-
-%if %{with python2}
-cd python
-%py_build
-cd ..
-%endif
 
 %if %{with python3}
 cd python
@@ -750,14 +713,8 @@ done
 
 #./rpmdb --macros=macros --rcfile=rpmrc --dbpath=/home/users/baggins/devel/PLD/rpm/BUILD/rpm-4.15.1/x/ --initdb
 
-%if %{with python2}
-# Remove anything that rpm make install might put there
-%{__rm} -rf $RPM_BUILD_ROOT%{py_sitedir}
-cd python
-%py_install
-%py_postclean
-cd ..
-%endif
+# Make sure we have bdb set a default backend
+grep -qE "db_backend[[:blank:]]+bdb" $RPM_BUILD_ROOT%{_rpmlibdir}/macros
 
 %if %{with python3}
 # Remove anything that rpm make install might put there
@@ -1002,17 +959,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files pythonprov
 %defattr(644,root,root,755)
-#%attr(755,root,root) %{_rpmlibdir}/pythondeps.sh
 %attr(755,root,root) %{_rpmlibdir}/pythondistdeps.py
-
-%if %{with python2}
-%files -n python-rpm
-%defattr(644,root,root,755)
-%dir %{py_sitedir}/rpm
-%attr(755,root,root) %{py_sitedir}/rpm/*.so
-%{py_sitedir}/rpm/*.py[co]
-%{py_sitedir}/rpm-%{version}-py*.egg-info
-%endif
 
 %if %{with python3}
 %files -n python3-rpm
