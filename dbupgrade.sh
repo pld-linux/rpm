@@ -20,12 +20,12 @@ if ! /usr/lib/rpm/rpmdb_reset -r lsn "$ROOTDIR"/var/lib/rpm/Packages ; then
 	echo
 	echo "	/usr/lib/rpm/rpmdb_reset -r lsn /var/lib/rpm/Packages"
 	echo "	/bin/rm -f /var/lib/rpm/__db.00*"
-	echo "	/bin/rm -f /var/lib/rpm/log/*"
+	echo "	/bin/rm -rf /var/lib/rpm/log"
 	echo "	/usr/bin/rpmdb --rebuilddb"
 	echo
 else
 	/bin/rm --interactive=never -f "$ROOTDIR"/var/lib/rpm/__db.00* >/dev/null 2>/dev/null || :
-	/bin/rm --interactive=never -f "$ROOTDIR"/var/lib/rpm/log/* >/dev/null 2>/dev/null || :
+	/bin/rm --interactive=never -rf "$ROOTDIR"/var/lib/rpm/log >/dev/null 2>/dev/null || :
 
 	if ! /usr/bin/rpmdb --rebuilddb ${ROOTDIR:+--root="$ROOTDIR"}; then
 		echo
