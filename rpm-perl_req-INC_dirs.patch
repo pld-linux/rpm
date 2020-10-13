@@ -1,6 +1,6 @@
 --- scripts/perl.req~	2004-04-16 13:27:10.000000000 +0200
 +++ scripts/perl.req	2004-04-26 23:54:42.128568344 +0200
-@@ -39,8 +39,17 @@
+@@ -39,9 +39,18 @@
  eval { require version; $HAVE_VERSION = 1; };
  
  
@@ -20,6 +20,7 @@
 +    if (m=/usr/(sbin|bin|lib|lib64|libx32|share|X11R6/(lib|lib64|libx32|bin))/=) {
        if (! m=(/(doc|man|info|usr/src)/|\.(so|ph|h|html|pod)$)=) {
          process_file($_) if -f;
+       }
 @@ -53,7 +64,9 @@
  foreach $perlver (sort keys %perlreq) {
    print "perl >= $perlver\n";

@@ -21,7 +21,7 @@
  rpmmod = Extension('rpm._rpm',
                     sources = ['header-py.c', 'rpmds-py.c', 'rpmfd-py.c',
 @@ -33,11 +24,9 @@
-                               'rpmte-py.c', 'rpmts-py.c',
+                               'rpmte-py.c', 'rpmts-py.c', 'rpmver-py.c',
                                'spec-py.c',
                                'rpmmodule.c'],
 -                   include_dirs = pkgconfig('--cflags'),

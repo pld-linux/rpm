@@ -11,7 +11,7 @@
  	python/Makefile
 --- rpm-5.3.1/scripts/perl.req.wiget	2008-10-26 10:50:53.000000000 +0100
 +++ rpm-5.3.1/scripts/perl.req	2010-05-30 16:35:36.999438206 +0200
-@@ -41,7 +41,11 @@
+@@ -45,7 +45,11 @@
  
  if ("@ARGV") {
    foreach (@ARGV) {
@@ -24,7 +24,7 @@
    }
  } else {
  
-@@ -49,7 +53,11 @@ if ("@ARGV") {
+@@ -53,7 +57,11 @@
    # contents of the file.
  
    foreach (<>) {
@@ -37,7 +37,7 @@
    }
  }
  
-@@ -215,19 +223,41 @@ sub process_file {
+@@ -261,19 +269,41 @@
  
        $module =~ s/\(\s*\)$//;
  
@@ -89,8 +89,8 @@
  
        };
  
-@@ -244,7 +274,31 @@ sub process_file {
-       #  will be included with the name sys/systeminfo.ph so only use the
+@@ -290,7 +320,31 @@
+       # will be included with the name sys/systeminfo.ph so only use the
        # basename of *.ph files
  
 -      ($module =~ m/\.ph$/) && next;

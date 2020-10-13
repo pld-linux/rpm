@@ -1,7 +1,7 @@
---- rpm/doc/pl/rpm.8~	2007-11-24 23:21:26.000000000 +0100
-+++ rpm/doc/pl/rpm.8	2007-11-24 23:21:26.000000000 +0100
-@@ -325,6 +325,7 @@
- Instaluje pakiety nawet je∂li niektÛre z nich s± juø zainstalowane na tym
+--- rpm-4.16.0/doc/pl/rpm.8.orig	2020-05-28 12:04:25.022136604 +0200
++++ rpm-4.16.0/doc/pl/rpm.8	2020-10-13 08:06:11.442087617 +0200
+@@ -318,6 +318,7 @@
+ Instaluje pakiety nawet je≈õli niekt√≥re z nich sƒÖ ju≈º zainstalowane na tym
  systemie.
  .TP
 +\fB--test\fR
