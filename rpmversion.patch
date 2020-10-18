@@ -1,0 +1,10 @@
+--- rpm-4.16.0/macros.in~	2020-09-30 09:48:01.000000000 +0200
++++ rpm-4.16.0/macros.in	2020-10-18 17:23:24.762186901 +0200
+@@ -6,6 +6,7 @@
+ # should be added to /etc/rpm/macros, while per-user configuration should
+ # be added to ~/.rpmmacros.
+ #
++%_rpmversion		@VERSION@
+ 
+ #==============================================================================
+ # ---- A macro that expands to nothing.
