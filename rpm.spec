@@ -70,6 +70,7 @@ Patch16:	rpm5-db-compat.patch
 Patch17:	python-internal-build.patch
 Patch18:	rpmversion.patch
 Patch19:	pkgconfig.patch
+Patch20:	uname-deps.patch
 URL:		https://rpm.org/
 BuildRequires:	db-devel >= %{db_ver}
 BuildRequires:	autoconf >= 2.63
@@ -555,6 +556,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch17 -p1
 %patch18 -p1
 %patch19 -p1
+%patch20 -p1
 
 install %{SOURCE15} scripts/perl.prov.in
 

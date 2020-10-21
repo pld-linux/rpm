@@ -1,0 +1,98 @@
+diff --git a/lib/depends.c b/lib/depends.c
+index 28a4a784d..1d8ce1f8a 100644
+--- a/lib/depends.c
++++ b/lib/depends.c
+@@ -690,6 +690,17 @@ retry:
+ 	goto unsatisfied;
+     }
+ 
++    char * N = rpmdsN(dep);
++    if (strstr(N, "uname") == N) {
++	if (tsmem->uname == NULL)
++	    rpmdsUnamePool(rpmtsPool(ts), &(tsmem->uname), NULL);
++	
++	if (tsmem->uname != NULL && rpmdsSearch(tsmem->uname, dep) >= 0) {
++	    rpmdsNotify(dep, "(uname provides)", rc);
++	    goto exit;
++	}
++    }
++
+     /* Dont look at pre-requisites of already installed packages */
+     if (!adding && isTransientReq(dsflags))
+ 	goto exit;
+diff --git a/lib/rpmds.c b/lib/rpmds.c
+index f7ee76392..754969e39 100644
+--- a/lib/rpmds.c
++++ b/lib/rpmds.c
+@@ -2,6 +2,7 @@
+  * \file lib/rpmds.c
+  */
+ #include "system.h"
++#include <sys/utsname.h>
+ 
+ #include <rpm/rpmtypes.h>
+ #include <rpm/rpmlib.h>		/* rpmvercmp */
+@@ -1596,3 +1597,51 @@ rpmRC rpmdsParseRichDep(rpmds dep, rpmds *leftds, rpmds *rightds, rpmrichOp *op,
+     return rc;
+ }
+ 
++int rpmdsUnamePool(rpmstrPool pool, rpmds * dsp)
++{
++    int rc = -1;
++    static const char * NS = "uname";
++    struct utsname un;
++    rpmds ds;
++
++    if (uname(&un) < 0)
++	goto exit;
++
++    ds = rpmdsSinglePool(pool, RPMTAG_PROVIDENAME, "uname(sysname)", un.sysname, RPMSENSE_EQUAL);
++    rc = rpmdsMerge(dsp, ds);
++    rpmdsFree(ds);
++    if (rc < 0)
++	goto exit;
++    ds = rpmdsSinglePool(pool, RPMTAG_PROVIDENAME, "uname(nodename)", un.nodename, RPMSENSE_EQUAL);
++    rc = rpmdsMerge(dsp, ds);
++    rpmdsFree(ds);
++    if (rc < 0)
++	goto exit;
++    ds = rpmdsSinglePool(pool, RPMTAG_PROVIDENAME, "uname(release)", un.release, RPMSENSE_EQUAL);
++    rc = rpmdsMerge(dsp, ds);
++    rpmdsFree(ds);
++    if (rc < 0)
++	goto exit;
++    ds = rpmdsSinglePool(pool, RPMTAG_PROVIDENAME, "uname(machine)", un.machine, RPMSENSE_EQUAL);
++    rc = rpmdsMerge(dsp, ds);
++    rpmdsFree(ds);
++    if (rc < 0)
++	goto exit;
++#if defined(__linux__)
++    ds = rpmdsSinglePool(pool, RPMTAG_PROVIDENAME, "uname(domainname)", un.domainname, RPMSENSE_EQUAL);
++    rc = rpmdsMerge(dsp, ds);
++    rpmdsFree(ds);
++    if (rc < 0)
++	goto exit;
++#endif
++exit:
++    /* freeze the pool to save memory, but only if private pool */
++    if (*dsp && (*dsp)->pool != pool)
++	rpmstrPoolFreeze((*dsp)->pool, 0);
++    return (rc < 0) ? -1 : 0;
++}
++
++int rpmdsUname(rpmds * dsp)
++{
++    return rpmdsUnamePool(NULL, dsp);
++}
+diff --git a/lib/rpmts_internal.h b/lib/rpmts_internal.h
+index e69ef2584..ecdb12f0c 100644
+--- a/lib/rpmts_internal.h
++++ b/lib/rpmts_internal.h
+@@ -21,6 +21,7 @@ typedef struct tsMembers_s {
+     rpmal addedPackages;	/*!< Set of packages being installed. */
+ 
+     rpmds rpmlib;		/*!< rpmlib() dependency set. */
++    rpmds uname;		/*!< uname() dependency set. */
+     rpmte * order;		/*!< Packages sorted by dependencies. */
+     int orderCount;		/*!< No. of transaction elements. */
+     int orderAlloced;		/*!< No. of allocated transaction elements. */
