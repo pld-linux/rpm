@@ -84,6 +84,39 @@ index f7ee76392..754969e39 100644
 +{
 +    return rpmdsUnamePool(NULL, dsp);
 +}
+diff --git a/lib/rpmds.h b/lib/rpmds.h
+index 90d54aa27..558252c04 100644
+--- a/lib/rpmds.h
++++ b/lib/rpmds.h
+@@ -412,6 +412,13 @@ int rpmdsNVRMatchesDep(const Header h, const rpmds req, int nopromote);
+  */
+ int rpmdsRpmlib(rpmds * dsp, const void * tblp);
+ 
++/**
++ * Load uname provides into a dependency set.
++ * @retval *dsp		(loaded) dependency set
++ * @return		0 on success
++ */
++int rpmdsUname(rpmds * dsp);
++
+ /** \ingroup rpmds
+  * Create and load a dependency set.
+  * @param pool		shared string pool (or NULL for private pool)
+@@ -468,6 +475,14 @@ rpmds rpmdsSinglePoolTix(rpmstrPool pool, rpmTagVal tagN,
+  */
+ int rpmdsRpmlibPool(rpmstrPool pool, rpmds * dsp, const void * tblp);
+ 
++/**
++ * Load uname provides into a dependency set.
++ * @param pool		shared string pool (or NULL for private pool)
++ * @retval *dsp		(loaded) dependency set
++ * @return		0 on success
++ */
++int rpmdsUnamePool(rpmstrPool pool, rpmds * dsp);
++
+ 
+ typedef enum rpmrichOp_e {
+     RPMRICHOP_SINGLE  = 1,
 diff --git a/lib/rpmts_internal.h b/lib/rpmts_internal.h
 index e69ef2584..ecdb12f0c 100644
 --- a/lib/rpmts_internal.h
