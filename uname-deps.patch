@@ -9,7 +9,7 @@ index 28a4a784d..1d8ce1f8a 100644
 +    char * N = rpmdsN(dep);
 +    if (strstr(N, "uname") == N) {
 +	if (tsmem->uname == NULL)
-+	    rpmdsUnamePool(rpmtsPool(ts), &(tsmem->uname), NULL);
++	    rpmdsUnamePool(rpmtsPool(ts), &(tsmem->uname));
 +	
 +	if (tsmem->uname != NULL && rpmdsSearch(tsmem->uname, dep) >= 0) {
 +	    rpmdsNotify(dep, "(uname provides)", rc);
