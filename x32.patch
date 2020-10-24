@@ -71,7 +71,7 @@ diff -ur rpm-4.15.1.orig/installplatform rpm-4.15.1/installplatform
 +	ISABITS=32
 +	CANONARCH=x32
  	CANONCOLOR=3
-+	RPMRC_GNU="${RPMRC_GNU}x32"
++	FORCE_RPMRC_GNU="${RPMRC_GNU}x32"
 +	TARGETCPU="x86_64"
  	;;
      ia64)
@@ -92,14 +92,25 @@ diff -ur rpm-4.15.1.orig/installplatform rpm-4.15.1/installplatform
    PPD="${DESTDIR}/${platformdir}/${ARCH}-${OS}"
    [ -d $PPD ] || mkdir -p $PPD
  
-@@ -202,6 +215,7 @@
+@@ -201,7 +214,8 @@
+   | sed -e "s,@RPMRC_OPTFLAGS@,$RPMRC_OPTFLAGS," \
  	-e "s,@RPMCANONARCH@,$CANONARCH,g" \
  	-e "s,@RPMCANONCOLOR@,$CANONCOLOR," \
- 	-e "s,@RPMRC_GNU@,$RPMRC_GNU," \
+-	-e "s,@RPMRC_GNU@,$RPMRC_GNU," \
++	-e "s,@RPMRC_GNU@,${FORCE_RPMRC_GNU:-$RPMRC_GNU}," \
 +	-e "s,@TARGETCPU@,$TARGETCPU," \
  	-e "s,@LIB@,$LIB," \
  	-e "s,@ARCH_INSTALL_POST@,$ARCH_INSTALL_POST," \
  	-e '/\${\w*:-/!s,\${,%{_,' \
+@@ -212,6 +226,8 @@
+   | ${FILTER} \
+   > ${PPD}/macros
+ 
++  FORCE_RPMRC_GNU=
++
+ done
+ 
+ # gently adjust undefined autoconf variables to rpm macros...
 diff -ur rpm-4.15.1.orig/platform.in rpm-4.15.1/platform.in
 --- rpm-4.15.1.orig/platform.in	2019-11-13 10:19:29.371710954 +0100
 +++ rpm-4.15.1/platform.in	2019-12-29 14:47:30.886959421 +0100
