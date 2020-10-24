@@ -1,6 +1,5 @@
 #
 # TODO:
-# - rebuild database after upgrading from rpm5
 # - when adopting, use 4.5 ticket for checklist: https://bugs.launchpad.net/pld-linux/+bug/262985
 #
 # Conditional build:
@@ -14,6 +13,10 @@
 %define		popt_ver	1.15
 %define		openssl_ver	1.1.1d
 %define		sover		9.1.0
+
+ %if %{_ver_ge '%{_rpmversion}' '4.12'} && %{_ver_lt '%{_rpmversion}' '5.0'}
+ %define	with_recommends_tags
+ %endif
 
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
