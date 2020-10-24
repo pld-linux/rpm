@@ -74,6 +74,7 @@ Patch19:	pkgconfig.patch
 Patch20:	uname-deps.patch
 Patch21:	aarch64.patch
 URL:		https://rpm.org/
+BuildRequires:	acl-devel
 BuildRequires:	db-devel >= %{db_ver}
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1.4
@@ -81,6 +82,7 @@ BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gettext-tools >= 0.19.2
 BuildRequires:	libarchive-devel
+BuildRequires:	libcap-devel
 BuildRequires:	libmagic-devel
 BuildRequires:	libgcrypt-devel
 %if %{with plugins}
