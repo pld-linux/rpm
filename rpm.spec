@@ -102,6 +102,7 @@ BuildRequires:	python3-modules
 %if %{with python3}
 BuildRequires:	python3-devel
 BuildRequires:	rpm-pythonprov
+BuildRequires:	rpmbuild(macros) >= 1.750
 %endif
 BuildRequires:	sqlite3-devel >= 3.22.0
 BuildRequires:	tcl
