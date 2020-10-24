@@ -11,7 +11,6 @@
 
 %define		db_ver		5.3.28.0
 %define		popt_ver	1.15
-%define		openssl_ver	1.1.1d
 %define		sover		9.1.0
 
  %if %{_ver_ge '%{_rpmversion}' '4.12'} && %{_ver_lt '%{_rpmversion}' '5.0'}
@@ -82,7 +81,7 @@ BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gettext-tools >= 0.19.2
 BuildRequires:	libarchive-devel
 BuildRequires:	libmagic-devel
-BuildRequires:	openssl-devel >= %{openssl_ver}
+BuildRequires:	libgcrypt-devel
 %if %{with plugins}
 BuildRequires:	audit-libs-devel
 BuildRequires:	dbus-devel
@@ -117,7 +116,7 @@ Requires:	%{name}-base = %{epoch}:%{version}-%{release}
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 Requires:	rpm-pld-macros >= 1.744
 Requires:	FHS >= 3.0-2
-Requires:	openssl >= %{openssl_ver}
+Requires:	libgcrypt
 Requires:	popt >= %{popt_ver}
 %if %{with recommends_tags}
 Recommends:	rpm-plugin-audit
@@ -221,7 +220,6 @@ Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
 Requires:	db >= %{db_ver}
 Requires:	libmagic >= 1.15-2
-Requires:	openssl >= %{openssl_ver}
 Requires:	popt >= %{popt_ver}
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
@@ -247,7 +245,7 @@ Requires:	bzip2-devel
 Requires:	db-devel >= %{db_ver}
 Requires:	elfutils-devel
 Requires:	libmagic-devel
-Requires:	openssl-devel >= %{openssl_ver}
+Requires:	libgcrypt-devel
 %if %{with selinux}
 Requires:	libselinux-devel
 Requires:	libsemanage-devel
@@ -598,7 +596,6 @@ sed -i \
 	--enable-ndb \
 	--enable-sqlite \
 	--enable-zstd \
-	--with-crypto=openssl \
 	--with-lua \
 	%{?with_imaevm:--with-imaevm} \
 	--with-cap \
