@@ -55,7 +55,6 @@ Patch1:		%{name}-popt-aliases.patch
 Patch2:		%{name}-perl-macros.patch
 Patch3:		%{name}-perl-req-perlfile.patch
 Patch4:		%{name}-scripts-closefds.patch
-Patch5:		%{name}-lua.patch
 Patch6:		%{name}-perl_req-INC_dirs.patch
 Patch7:		%{name}-debuginfo.patch
 Patch8:		%{name}-libtool-deps.patch
@@ -90,7 +89,7 @@ BuildRequires:	libselinux-devel >= 2.1.0
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 1:1.4.2-9
-BuildRequires:	lua53-devel >= 5.3.5
+BuildRequires:	lua-devel >= 5.1
 BuildRequires:	ossp-uuid-devel
 BuildRequires:	patch >= 2.2
 BuildRequires:	popt-devel >= %{popt_ver}
@@ -123,7 +122,6 @@ Recommends:	rpm-plugin-prioreset
 Recommends:	rpm-plugin-syslog
 Recommends:	rpm-plugin-systemd-inhibit
 %endif
-Obsoletes:	rpm-getdeps
 Obsoletes:	rpm-utils-perl
 Obsoletes:	rpm-utils-static
 Conflicts:	glibc < 2.2.92
@@ -541,7 +539,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 %patch6 -p0
 %patch7 -p1
 %patch8 -p1
@@ -584,7 +581,6 @@ sed -i \
 	-e 's|@host_os@|%{_target_os}|' \
 	macros.in
 
-CPPFLAGS="-I/usr/include/lua53 %{rpmcppflags}"
 %configure \
 	WITH_PERL_VERSION=no \
 	__GST_INSPECT=%{_bindir}/gst-inspect-1.0 \
