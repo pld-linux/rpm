@@ -64,13 +64,14 @@ diff -ur rpm-4.15.1.orig/installplatform rpm-4.15.1/installplatform
  	ISANAME=x86
  	ISABITS=64
  	CANONARCH=x86_64
+-	CANONCOLOR=3
 +	CANONCOLOR=7
 +	;;
 +    x32)
 +	ISANAME=x86
 +	ISABITS=32
 +	CANONARCH=x32
- 	CANONCOLOR=3
++	CANONCOLOR=4
 +	FORCE_RPMRC_GNU="${RPMRC_GNU}x32"
 +	TARGETCPU="x86_64"
  	;;
