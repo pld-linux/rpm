@@ -13,9 +13,9 @@
 %define		popt_ver	1.15
 %define		sover		9.1.0
 
- %if %{_ver_ge '%{_rpmversion}' '4.12'} && %{_ver_lt '%{_rpmversion}' '5.0'}
- %define	with_recommends_tags
- %endif
+%if "%{_rpmversion}" >= "4.12" && "%{_rpmversion}" < "5"
+%define	with_recommends_tags	1
+%endif
 
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
