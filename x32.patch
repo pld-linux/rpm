@@ -22,6 +22,18 @@ diff -ur rpm-4.15.1.orig/build/rpmfc.c rpm-4.15.1/build/rpmfc.c
  	if (fcolor & RPMFC_INCLUDE)
  	    break;
      }
+@@ -1152,7 +1152,10 @@
+ 		color = RPMFC_ELF64;
+ 		break;
+ 	    case ELFCLASS32:
+-		color = RPMFC_ELF32;
++		if (ehdr.e_machine == EM_X86_64)
++		    color = RPMFC_ELFX32;
++		else
++		    color = RPMFC_ELF32;
+ 		break;
+ 	    }
+ 	    elf_end(elf);
 diff -ur rpm-4.15.1.orig/build/rpmfc.h rpm-4.15.1/build/rpmfc.h
 --- rpm-4.15.1.orig/build/rpmfc.h	2019-06-26 16:17:31.397985717 +0200
 +++ rpm-4.15.1/build/rpmfc.h	2019-12-29 13:45:05.936980833 +0100
