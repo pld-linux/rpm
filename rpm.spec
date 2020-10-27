@@ -685,6 +685,14 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/s390*-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sh*-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sparc*-linux/macros
 
+cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
+%ifarch x32
+%{_target_cpu}-%{_target_vendor}-linux-gnux32
+%else
+%{_target_cpu}-%{_target_vendor}-linux
+%endif
+EOF
+
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
 
 install -d $RPM_BUILD_ROOT%{_rpmlibdir}/pld
@@ -781,6 +789,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros.lang
+# this is ok to be replaced
+%config %verify(not md5 mtime size) %{_sysconfdir}/rpm/platform
 
 %{_mandir}/man8/rpm.8*
 %{_mandir}/man8/rpmdb.8*
