@@ -1,0 +1,14 @@
+diff --color -urN rpm-4.16.0.orig/build/pack.c rpm-4.16.0/build/pack.c
+--- rpm-4.16.0.orig/build/pack.c	2020-06-23 14:13:01.894628368 +0200
++++ rpm-4.16.0/build/pack.c	2020-10-30 21:38:40.630227852 +0100
+@@ -709,10 +709,6 @@
+ 	headerPutBin(pkg->header, RPMTAG_SOURCEPKGID, spec->sourcePkgId,16);
+     }
+ 
+-    if (cheating) {
+-	(void) rpmlibNeedsFeature(pkg, "ShortCircuited", "4.9.0-1");
+-    }
+-
+     if ((rc = getPkgFilename(pkg->header, filename)))
+ 	return rc;
+ 
