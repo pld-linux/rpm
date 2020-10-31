@@ -8,7 +8,6 @@
 %bcond_without	plugins		# build plugins
 %bcond_without	recommends_tags	# build without Recommends tag (bootstrapping)
 %bcond_with	imaevm		# build with IMA/EVM support (requires libimaevm from ima-evm-utils)
-%bcond_with	cheating	# do not add spurious deps to short-circuited builds
 
 %define		db_ver		5.3.28.0
 %define		popt_ver	1.15
@@ -27,7 +26,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.16.0
-Release:	0.4
+Release:	0.5
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -75,7 +74,7 @@ Patch19:	pkgconfig.patch
 Patch20:	uname-deps.patch
 Patch21:	aarch64.patch
 Patch22:	ix86-platforms.patch
-Patch23:	%{name}-enable_cheating.patch
+Patch23:	shortcircuited-deps.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 BuildRequires:	db-devel >= %{db_ver}
@@ -564,9 +563,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch20 -p1
 %patch21 -p1
 %patch22 -p1
-%if %{with cheating}
 %patch23 -p1
-%endif
 
 install %{SOURCE15} scripts/perl.prov.in
 
