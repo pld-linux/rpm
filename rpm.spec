@@ -602,6 +602,7 @@ sed -i \
 	--disable-silent-rules \
 	--enable-shared \
 	--enable-bdb \
+	--enable-bdb-ro \
 	--enable-ndb \
 	--enable-sqlite \
 	--enable-zstd \
