@@ -26,7 +26,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.16.0
-Release:	0.5
+Release:	0.7
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -75,6 +75,8 @@ Patch20:	uname-deps.patch
 Patch21:	aarch64.patch
 Patch22:	ix86-platforms.patch
 Patch23:	shortcircuited-deps.patch
+Patch24:	cpuinfo-deps.patch
+Patch25:	rpmio-read-proc-files.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 BuildRequires:	db-devel >= %{db_ver}
@@ -564,6 +566,8 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch21 -p1
 %patch22 -p1
 %patch23 -p1
+%patch24 -p1
+%patch25 -p1
 
 install %{SOURCE15} scripts/perl.prov.in
 

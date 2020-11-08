@@ -7,7 +7,7 @@ index 28a4a784d..1d8ce1f8a 100644
      }
  
 +    char * N = rpmdsN(dep);
-+    if (strstr(N, "uname") == N) {
++    if (strstr(N, "uname(") == N) {
 +	if (tsmem->uname == NULL)
 +	    rpmdsUnamePool(rpmtsPool(ts), &(tsmem->uname));
 +	
@@ -32,44 +32,53 @@ index f7ee76392..754969e39 100644
  
  #include <rpm/rpmtypes.h>
  #include <rpm/rpmlib.h>		/* rpmvercmp */
-@@ -1596,3 +1597,51 @@ rpmRC rpmdsParseRichDep(rpmds dep, rpmds *leftds, rpmds *rightds, rpmrichOp *op,
+@@ -1596,3 +1597,60 @@ rpmRC rpmdsParseRichDep(rpmds dep, rpmds *leftds, rpmds *rightds, rpmrichOp *op,
      return rc;
  }
  
++/**
++ * Merge a single provides, wrapping N as "NS(N)".
++ */
++static int rpmdsNSAdd(rpmstrPool pool, rpmds *dsp, const char * NS,
++		const char *N, const char *EVR, rpmsenseFlags Flags)
++{
++    char *t;
++    rpmds ds;
++    int rc;
++
++    t = (char *) alloca(strlen(NS)+sizeof("()")+strlen(N));
++    *t = '\0';
++    (void) stpcpy( stpcpy( stpcpy( stpcpy(t, NS), "("), N), ")");
++
++    ds = rpmdsSinglePool(pool, RPMTAG_PROVIDENAME, t, EVR, Flags);
++    rc = rpmdsMerge(dsp, ds);
++    rpmdsFree(ds);
++    return rc;
++}
++
 +int rpmdsUnamePool(rpmstrPool pool, rpmds * dsp)
 +{
 +    int rc = -1;
 +    static const char * NS = "uname";
 +    struct utsname un;
-+    rpmds ds;
 +
 +    if (uname(&un) < 0)
 +	goto exit;
 +
-+    ds = rpmdsSinglePool(pool, RPMTAG_PROVIDENAME, "uname(sysname)", un.sysname, RPMSENSE_EQUAL);
-+    rc = rpmdsMerge(dsp, ds);
-+    rpmdsFree(ds);
++    rc = rpmdsNSAdd(pool, dsp, NS, "sysname", un.sysname, RPMSENSE_EQUAL);
 +    if (rc < 0)
 +	goto exit;
-+    ds = rpmdsSinglePool(pool, RPMTAG_PROVIDENAME, "uname(nodename)", un.nodename, RPMSENSE_EQUAL);
-+    rc = rpmdsMerge(dsp, ds);
-+    rpmdsFree(ds);
++    rc = rpmdsNSAdd(pool, dsp, NS, "nodename", un.nodename, RPMSENSE_EQUAL);
 +    if (rc < 0)
 +	goto exit;
-+    ds = rpmdsSinglePool(pool, RPMTAG_PROVIDENAME, "uname(release)", un.release, RPMSENSE_EQUAL);
-+    rc = rpmdsMerge(dsp, ds);
-+    rpmdsFree(ds);
++    rc = rpmdsNSAdd(pool, dsp, NS, "release", un.release, RPMSENSE_EQUAL);
 +    if (rc < 0)
 +	goto exit;
-+    ds = rpmdsSinglePool(pool, RPMTAG_PROVIDENAME, "uname(machine)", un.machine, RPMSENSE_EQUAL);
-+    rc = rpmdsMerge(dsp, ds);
-+    rpmdsFree(ds);
++    rc = rpmdsNSAdd(pool, dsp, NS, "machine", un.machine, RPMSENSE_EQUAL);
 +    if (rc < 0)
 +	goto exit;
 +#if defined(__linux__)
-+    ds = rpmdsSinglePool(pool, RPMTAG_PROVIDENAME, "uname(domainname)", un.domainname, RPMSENSE_EQUAL);
-+    rc = rpmdsMerge(dsp, ds);
-+    rpmdsFree(ds);
++    rc = rpmdsNSAdd(pool, dsp, NS, "domainname", un.domainname, RPMSENSE_EQUAL);
 +    if (rc < 0)
 +	goto exit;
 +#endif

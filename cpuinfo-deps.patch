@@ -1,0 +1,289 @@
+diff -ur rpm-4.16.0/lib/depends.c rpm-4.16.0-cpuinfo/lib/depends.c
+--- rpm-4.16.0/lib/depends.c	2020-11-08 20:19:15.625093667 +0100
++++ rpm-4.16.0-cpuinfo/lib/depends.c	2020-11-08 20:23:46.685893216 +0100
+@@ -697,6 +697,16 @@
+ 	}
+     }
+ 
++    if (strstr(N, "cpuinfo(") == N) {
++	if (tsmem->cpuinfo == NULL)
++	    rpmdsCpuinfoPool(rpmtsPool(ts), &(tsmem->cpuinfo));
++	
++	if (tsmem->cpuinfo != NULL && rpmdsSearch(tsmem->cpuinfo, dep) >= 0) {
++	    rpmdsNotify(dep, "(cpuinfo provides)", rc);
++	    goto exit;
++	}
++    }
++
+     /* Dont look at pre-requisites of already installed packages */
+     if (!adding && isTransientReq(dsflags))
+ 	goto exit;
+diff -ur rpm-4.16.0/lib/rpmds.c rpm-4.16.0-cpuinfo/lib/rpmds.c
+--- rpm-4.16.0/lib/rpmds.c	2020-11-08 20:19:15.625093667 +0100
++++ rpm-4.16.0-cpuinfo/lib/rpmds.c	2020-11-08 20:16:25.941242497 +0100
+@@ -2,6 +2,8 @@
+  * \file lib/rpmds.c
+  */
+ #include "system.h"
++#include <popt.h>
++#include <ctype.h>
+ #include <sys/utsname.h>
+ 
+ #include <rpm/rpmtypes.h>
+@@ -9,6 +11,9 @@
+ #include <rpm/rpmstring.h>
+ #include <rpm/rpmlog.h>
+ #include <rpm/rpmstrpool.h>
++#include <rpm/rpmmacro.h>
++
++#include "rpmio/rpmio_internal.h"	/* XXX for rpmioSlurp */
+ 
+ #include "lib/rpmds_internal.h"
+ 
+@@ -1655,3 +1670,203 @@
+ {
+     return rpmdsUnamePool(NULL, dsp);
+ }
++
++struct cpuinfo_s {
++    const char *name;
++    int done;
++    int flags;
++};
++
++static struct cpuinfo_s ctags[] = {
++    { "processor",	0,  0 },
++    { "Processor",	0,  1 },	/* XXX armv5 */
++    { "vendor_id",	0,  0 },
++    { "cpu_family",	0,  1 },
++    { "model",		0,  1 },
++    { "model_name",	0,  0 },
++    { "stepping",	0,  1 },
++    { "cpu_MHz",	0,  1 },
++    { "CPU_implementer",0,  1 },	/* XXX armv5 */
++    { "CPU_architecture",0,  1 },	/* XXX armv5 */
++    { "CPU_variant",	0,  1 },	/* XXX armv5 */
++    { "CPU_part",	0,  1 },	/* XXX armv5 */
++    { "CPU_revision",	0,  1 },	/* XXX armv5 */
++    { "Hardware",	0,  2 },	/* XXX armv5 */
++    { "Revision",	0,  1 },	/* XXX armv5 */
++    { "Serial",		0,  1 },	/* XXX armv5 */
++    { "cache_size",	0,  1 },
++    { "physical_id",	0,  0 },
++    { "siblings",	0,  0 },
++    { "core_id",	0,  0 },
++    { "cpu_cores",	0,  0 },
++    { "fdiv_bug",	0,  3 },
++    { "hlt_bug",	0,  3 },
++    { "f00f_bug",	0,  3 },
++    { "coma_bug",	0,  3 },
++    { "fpu",		0,  0 },	/* XXX use flags attribute instead. */
++    { "fpu_exception",	0,  3 },
++    { "cpuid_level",	0,  0 },
++    { "wp",		0,  3 },
++    { "flags",		0,  4 },
++    { "Features",	0,  4 },	/* XXX armv5 */
++    { "bogomips",	0,  1 },
++    { "BogoMIPS",	0,  1 },	/* XXX armv5 */
++    { "clflush_size",	0,  1 },
++    { NULL,		0, -1 }
++};
++
++/**
++ * Return dependency format to use for a cpuinfo line.
++ * @param name		field name
++ * @return		type of format (0 == ignore, -1 == not found)
++ */
++static int rpmdsCpuinfoCtagFlags(const char * name)
++{
++    struct cpuinfo_s * ct;
++    int flags = -1;
++
++    for (ct = ctags; ct->name != NULL; ct++) {
++	if (strcmp(ct->name, name))
++	    continue;
++	if (ct->done)
++	    continue;
++	ct->done = 1;		/* XXX insure single occurrence */
++	flags = ct->flags;
++	break;
++    }
++    return flags;
++}
++
++#define	_PROC_CPUINFO	"/proc/cpuinfo"
++
++int rpmdsCpuinfoPool(rpmstrPool pool, rpmds *dsp)
++{
++    char * cpuinfo_path = NULL;
++    struct cpuinfo_s * ct;
++    const char * NS = "cpuinfo";
++    char * iob = NULL;
++    char * f, * fe, * fend;
++    char * g, * ge;
++    char * t;
++    int rc = -1;
++
++	cpuinfo_path = rpmExpand("%{?_rpmds_cpuinfo_path}", NULL);
++	/* XXX may need to validate path existence somewhen. */
++	if (cpuinfo_path == NULL || *cpuinfo_path != '/') {
++	    cpuinfo_path = _free(cpuinfo_path);
++	    cpuinfo_path = xstrdup(_PROC_CPUINFO);
++	}
++
++    /* Reset done variables. */
++    for (ct = ctags; ct->name != NULL; ct++)
++	ct->done = 0;
++
++    rc = rpmioSlurp(cpuinfo_path, (uint8_t **) &iob, NULL);
++    if (rc != 0 || iob == NULL)
++	goto exit;
++
++    for (f = (char *)iob; *f != '\0'; f = fend) {
++	/* find EOL */
++	fe = f;
++	while (*fe != '\0' && !(*fe == '\n' || *fe == '\r'))
++	    fe++;
++	ge = fe;
++	while (*fe != '\0' && (*fe == '\n' || *fe == '\r'))
++	    *fe++ = '\0';
++	fend = fe;
++
++	/* rtrim on line. */
++	while (--ge > f && isspace(*ge))
++	    *ge = '\0';
++
++	/* ltrim on line. */
++	while (*f && isspace(*f))
++	    f++;
++
++	/* split on ':' */
++	fe = f;
++	while (*fe && *fe != ':')
++            fe++;
++	if (*fe == '\0')
++	    continue;
++	g = fe + 1;
++
++	/* rtrim on field 1. */
++	*fe = '\0';
++	while (--fe > f && isspace(*fe))
++	    *fe = '\0';
++	if (*f == '\0')
++	    continue;
++
++	/* ltrim on field 2. */
++	while (*g && isspace(*g))
++            g++;
++	if (*g == '\0')
++	    continue;
++
++	for (t = f; *t != '\0'; t++) {
++	    if (isspace(*t))
++		*t = '_';
++	}
++
++	switch (rpmdsCpuinfoCtagFlags(f)) {
++	case -1:	/* not found */
++	case 0:		/* ignore */
++	default:
++	    continue;
++	    break;
++	case 1:		/* Provides: cpuinfo(f) = g */
++	    for (t = g; *t != '\0'; t++) {
++		if (isspace(*t) || *t == '(' || *t == ')')
++		    *t = '_';
++	    }
++	    rc = rpmdsNSAdd(pool, dsp, NS, f, g, RPMSENSE_EQUAL);
++            if (rc < 0)
++       		goto exit;
++	    break;
++	case 2:		/* Provides: cpuinfo(g) */
++	    for (t = g; *t != '\0'; t++) {
++		if (isspace(*t) || *t == '(' || *t == ')')
++		    *t = '_';
++	    }
++	    rc = rpmdsNSAdd(pool, dsp, NS, g, "", RPMSENSE_ANY);
++            if (rc < 0)
++       		goto exit;
++	    break;
++	case 3:		/* if ("yes") Provides: cpuinfo(f) */
++	   if (!strcmp(g, "yes")) {
++		rc = rpmdsNSAdd(pool, dsp, NS, f, "", RPMSENSE_ANY);
++                if (rc < 0)
++          		goto exit;
++	   }
++	    break;
++	case 4:		/* Provides: cpuinfo(g[i]) */
++	{   char ** av = NULL;
++	    int i = 0;
++	    rc = poptParseArgvString(g, NULL, (const char ***)&av);
++	    if (!rc && av != NULL)
++	    while ((t = av[i++]) != NULL) {
++		rc = rpmdsNSAdd(pool, dsp, NS, t, "", RPMSENSE_ANY);
++                if (rc < 0)
++       		    goto exit;
++	    }
++	    t = NULL;
++	    if (av != NULL)
++		free(av);
++	}   break;
++	}
++    }
++
++exit:
++    _free(cpuinfo_path);
++    free(iob);
++    /* freeze the pool to save memory, but only if private pool */
++    if (*dsp && (*dsp)->pool != pool)
++	rpmstrPoolFreeze((*dsp)->pool, 0);
++    return (rc < 0) ? -1 : 0;
++}
++
++int rpmdsCpuinfo(rpmds * dsp)
++{
++    return rpmdsCpuinfoPool(NULL, dsp);
++}
+diff -ur rpm-4.16.0/lib/rpmds.h rpm-4.16.0-cpuinfo/lib/rpmds.h
+--- rpm-4.16.0/lib/rpmds.h	2020-11-08 20:19:15.625093667 +0100
++++ rpm-4.16.0-cpuinfo/lib/rpmds.h	2020-11-08 20:03:44.001865655 +0100
+@@ -419,6 +419,13 @@
+  */
+ int rpmdsUname(rpmds * dsp);
+ 
++/**
++ * Load cpuinfo provides into a dependency set.
++ * @retval *dsp		(loaded) dependency set
++ * @return		0 on success
++ */
++int rpmdsCpuinfo(rpmds * dsp);
++
+ /** \ingroup rpmds
+  * Create and load a dependency set.
+  * @param pool		shared string pool (or NULL for private pool)
+@@ -483,6 +490,14 @@
+  */
+ int rpmdsUnamePool(rpmstrPool pool, rpmds * dsp);
+ 
++/**
++ * Load cpuinfo provides into a dependency set.
++ * @param pool		shared string pool (or NULL for private pool)
++ * @retval *dsp		(loaded) dependency set
++ * @return		0 on success
++ */
++int rpmdsCpuinfoPool(rpmstrPool pool, rpmds * dsp);
++
+ 
+ typedef enum rpmrichOp_e {
+     RPMRICHOP_SINGLE  = 1,
+diff -ur rpm-4.16.0/lib/rpmts_internal.h rpm-4.16.0-cpuinfo/lib/rpmts_internal.h
+--- rpm-4.16.0/lib/rpmts_internal.h	2020-11-08 20:19:15.625093667 +0100
++++ rpm-4.16.0-cpuinfo/lib/rpmts_internal.h	2020-11-08 20:22:24.382319931 +0100
+@@ -22,6 +22,7 @@
+ 
+     rpmds rpmlib;		/*!< rpmlib() dependency set. */
+     rpmds uname;		/*!< uname() dependency set. */
++    rpmds cpuinfo;		/*!< cpuinfo() dependency set. */
+     rpmte * order;		/*!< Packages sorted by dependencies. */
+     int orderCount;		/*!< No. of transaction elements. */
+     int orderAlloced;		/*!< No. of allocated transaction elements. */

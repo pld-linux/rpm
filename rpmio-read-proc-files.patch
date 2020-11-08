@@ -1,0 +1,25 @@
+--- rpm-4.16.0/rpmio/rpmio.c~	2020-08-27 15:13:08.000000000 +0200
++++ rpm-4.16.0/rpmio/rpmio.c	2020-11-08 21:31:26.311430982 +0100
+@@ -1709,6 +1709,22 @@
+ 	}
+ 	b[blen] = '\0';
+     }
++#if defined(__linux__)
++    /* XXX st->st_size = 0 for /proc files on linux, see stat(2). */
++    /* XXX glibc mmap'd libio no workie for /proc files on linux?!? */
++    else if (!strncmp(fn, "/proc/", sizeof("/proc/")-1)) {
++	blen = blenmax;
++	b = xmalloc(blen+1);
++	b[0] = '\0';
++
++	size = read(Fileno(fd), b, blen);
++	if (size < 0) {
++		rc = 1;
++		goto exit;
++	}
++	blen = size;
++    }
++#endif
+ 
+ exit:
+     if (fd) (void) Fclose(fd);
