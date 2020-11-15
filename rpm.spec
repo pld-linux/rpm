@@ -40,7 +40,6 @@ Source4:	%{name}.sysconfig
 Source5:	%{name}.groups
 Source6:	%{name}-groups-po.awk
 Source7:	%{name}-install-tree
-Source8:	%{name}-hrmib-cache
 Source9:	%{name}-user_group.sh
 # http://svn.pld-linux.org/banner.sh/
 Source10:	banner.sh
@@ -642,7 +641,7 @@ cd python
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/{rpm,pki/rpm-gpg}} \
-	$RPM_BUILD_ROOT{/var/lib/{banner,rpm},/var/cache/hrmib}
+	$RPM_BUILD_ROOT/var/lib/{banner,rpm}
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
@@ -706,7 +705,6 @@ install -d $RPM_BUILD_ROOT%{_rpmlibdir}/pld
 
 cp -p %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
 cp -p %{SOURCE9} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
-cp -p %{SOURCE8} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
 cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
 cp -p %{SOURCE10} $RPM_BUILD_ROOT%{_bindir}/banner.sh
@@ -772,9 +770,6 @@ if [ -e /var/lib/rpm/Packages ] && \
 	%{_rpmlibdir}/dbupgrade.sh
 fi
 
-%triggerpostun -- %{name} < 4.4.9-44
-%{_rpmlibdir}/hrmib-cache
-
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
 
@@ -812,10 +807,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %lang(sk) %{_mandir}/sk/man8/rpm.8*
 
 %dir /var/lib/rpm
-
-# exported package NVRA (stamped with install tid)
-# net-snmp hrSWInstalledName queries, bash-completions
-%dir /var/cache/hrmib
 
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/rpmrc
@@ -855,8 +846,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %endif
 
 %dir %{_rpmlibdir}/pld
-
-%attr(755,root,root) %{_rpmlibdir}/hrmib-cache
 
 %attr(755,root,root) %{_rpmlibdir}/dbupgrade.sh
 %attr(755,root,root) %{_rpmlibdir}/rpmdb_checkversion
