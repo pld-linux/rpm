@@ -1,0 +1,36 @@
+--- rpm-4.16.0/configure.ac~	2020-11-22 19:47:14.000000000 +0100
++++ rpm-4.16.0/configure.ac	2020-11-22 19:49:03.093877834 +0100
+@@ -76,6 +76,7 @@
+ dnl Find some common programs
+ dnl
+ AC_PATH_PROGS(__7ZIP, [7zip 7za 7z], /usr/bin/7za, $MYPATH)
++AC_PATH_PROG(__BASH, bash, /bin/bash, $MYPATH)
+ AC_PATH_PROG(__BZIP2, bzip2, /usr/bin/bzip2, $MYPATH)
+ AC_PATH_PROG(__CAT, cat, /bin/cat, $MYPATH)
+ AC_PATH_PROG(__CHGRP, chgrp, /bin/chgrp, $MYPATH)
+@@ -91,6 +92,7 @@
+ AC_PATH_PROG(__UNZIP, unzip, /usr/bin/unzip, $MYPATH)
+ AC_PATH_PROG(__ID, id, /usr/bin/id, $MYPATH)
+ AC_PATH_PROG(__INSTALL, install, /usr/bin/install, $MYPATH)
++AC_PATH_PROG(__LN, ln, /bin/ln, $MYPATH)
+ AC_PATH_PROG(__LRZIP, lrzip, /usr/bin/lrzip, $MYPATH)
+ AC_PATH_PROG(__LZIP, lzip, /usr/bin/lzip, $MYPATH)
+ AC_PATH_PROG(__XZ, xz, /usr/bin/xz, $MYPATH)
+--- rpm-4.16.0/macros.in~	2020-11-21 19:41:19.000000000 +0100
++++ rpm-4.16.0/macros.in	2020-11-22 19:45:24.182620411 +0100
+@@ -25,6 +25,7 @@
+ #
+ %__7zip			@__7ZIP@
+ %__awk			@AWK@
++%__bash			@__BASH@
+ %__bzip2		@__BZIP2@
+ %__cat			@__CAT@
+ %__chgrp		@__CHGRP@
+@@ -39,6 +40,7 @@
+ %__id			@__ID@
+ %__id_u			%{__id} -u
+ %__install		@__INSTALL@
++%__ln			@__LN@
+ %__ln_s			@LN_S@
+ %__lrzip		@__LRZIP@
+ %__lzip			@__LZIP@
