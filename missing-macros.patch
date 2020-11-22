@@ -18,6 +18,14 @@
  AC_PATH_PROG(__XZ, xz, /usr/bin/xz, $MYPATH)
 --- rpm-4.16.0/macros.in~	2020-11-21 19:41:19.000000000 +0100
 +++ rpm-4.16.0/macros.in	2020-11-22 19:45:24.182620411 +0100
+@@ -6,6 +6,7 @@
+ # should be added to /etc/rpm/macros, while per-user configuration should
+ # be added to ~/.rpmmacros.
+ #
++%_rpmversion		@VERSION@
+ 
+ #==============================================================================
+ # ---- A macro that expands to nothing.
 @@ -25,6 +25,7 @@
  #
  %__7zip			@__7ZIP@

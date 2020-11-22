@@ -68,7 +68,7 @@ Patch14:	%{name}-ignore-missing-macro-files.patch
 Patch15:	x32.patch
 Patch16:	rpm5-db-compat.patch
 Patch17:	python-internal-build.patch
-Patch18:	rpmversion.patch
+Patch18:	missing-macros.patch
 Patch19:	pkgconfig.patch
 Patch20:	uname-deps.patch
 Patch21:	aarch64.patch
@@ -78,7 +78,6 @@ Patch24:	cpuinfo-deps.patch
 Patch25:	rpmio-read-proc-files.patch
 Patch26:	allow-at-in-ver-rel.patch
 Patch27:	no-exeonly-for-elf-reqprov.patch
-Patch28:	missing-macros.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 BuildRequires:	db-devel >= %{db_ver}
@@ -572,7 +571,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch25 -p1
 %patch26 -p1
 %patch27 -p1
-%patch28 -p1
 
 install %{SOURCE15} scripts/perl.prov.in
 
