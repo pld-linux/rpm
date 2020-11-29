@@ -686,8 +686,11 @@ rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc*series-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/aarch64-linux/macros
 %endif
 
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/alpha*-linux/macros
+%ifnarch %{arm}
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/arm*-linux/macros
+%endif
+
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/alpha*-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ia64-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/mips*-linux/macros
 rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/riscv64-linux/macros
@@ -835,6 +838,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %endif
 %ifarch aarch64
 %{_rpmlibdir}/platform/aarch64*
+%endif
+%ifarch %{arm}
+%{_rpmlibdir}/platform/arm*
 %endif
 %ifarch ia64
 %{_rpmlibdir}/platform/ia64*
