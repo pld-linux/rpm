@@ -81,7 +81,7 @@ diff -ur rpm-4.15.1.orig/installplatform rpm-4.15.1/installplatform
 +	;;
 +    x32)
 +	ISANAME=x86
-+	ISABITS=32
++	ISABITS=x32
 +	CANONARCH=x32
 +	CANONCOLOR=4
 +	FORCE_RPMRC_GNU="${RPMRC_GNU}x32"
