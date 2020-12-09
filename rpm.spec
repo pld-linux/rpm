@@ -79,6 +79,7 @@ Patch25:	rpmio-read-proc-files.patch
 Patch26:	allow-at-in-ver-rel.patch
 Patch27:	no-exeonly-for-elf-reqprov.patch
 Patch28:	default-patch-flags.patch
+Patch29:	%{name}-noarch_py_prov.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 BuildRequires:	db-devel >= %{db_ver}
@@ -573,6 +574,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch26 -p1
 %patch27 -p1
 %patch28 -p1
+%patch29 -p1
 
 install %{SOURCE15} scripts/perl.prov.in
 
