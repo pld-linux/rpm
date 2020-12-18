@@ -26,7 +26,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.16.0
-Release:	0.12
+Release:	0.13
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -82,6 +82,7 @@ Patch28:	default-patch-flags.patch
 Patch29:	%{name}-noarch_py_prov.patch
 Patch30:	missing-ghost-terminate-build.patch
 Patch31:	missing-doc-terminate-build.patch
+Patch32:	noexpand.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 BuildRequires:	db-devel >= %{db_ver}
@@ -579,6 +580,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch29 -p1
 %patch30 -p1
 %patch31 -p1
+%patch32 -p1
 
 install %{SOURCE15} scripts/perl.prov.in
 
