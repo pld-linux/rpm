@@ -1,0 +1,19 @@
+--- rpm-4.16.0/build/files.c~	2020-12-18 19:15:59.000000000 +0100
++++ rpm-4.16.0/build/files.c	2020-12-18 19:34:33.456509321 +0100
+@@ -1401,7 +1401,6 @@
+      * various cases, preserving historical behavior wrt %dev():
+      * - for %dev() entries we fake it up whether the file exists or not
+      * - otherwise try to grab the data by lstat()
+-     * - %ghost entries might not exist, fake it up
+      */
+     if (statp == NULL) {
+ 	memset(&statbuf, 0, sizeof(statbuf));
+@@ -1410,8 +1409,6 @@
+ 	    statp = fakeStat(&(fl->cur), &statbuf);
+ 	} else if (lstat(diskPath, &statbuf) == 0) {
+ 	    statp = &statbuf;
+-	} else if (fl->cur.attrFlags & RPMFILE_GHOST) {
+-	    statp = fakeStat(&(fl->cur), &statbuf);
+ 	} else {
+ 	    int lvl = RPMLOG_ERR;
+ 	    int ignore = 0;
