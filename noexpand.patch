@@ -10,18 +10,6 @@ diff -ur rpm-4.16.0/build/parseChangelog.c rpm-4.16.0-noexpand/build/parseChange
  	goto exit;
  
      if (sb && addChangelog(spec->packages->header, sb)) {
-diff -ur rpm-4.16.0/build/parseDescription.c rpm-4.16.0-noexpand/build/parseDescription.c
---- rpm-4.16.0/build/parseDescription.c	2020-05-28 12:04:25.002136494 +0200
-+++ rpm-4.16.0-noexpand/build/parseDescription.c	2020-12-18 20:02:38.770619734 +0100
-@@ -64,7 +64,7 @@
-     if (lookupPackage(spec, name, flag, &pkg))
- 	goto exit;
- 
--    if ((nextPart = parseLines(spec, (STRIP_TRAILINGSPACE |STRIP_COMMENTS),
-+    if ((nextPart = parseLines(spec, (STRIP_TRAILINGSPACE |STRIP_COMMENTS | STRIP_NOEXPAND),
- 				NULL, &sb)) == PART_ERROR) {
- 	goto exit;
-     }
 diff -ur rpm-4.16.0/build/parseSpec.c rpm-4.16.0-noexpand/build/parseSpec.c
 --- rpm-4.16.0/build/parseSpec.c	2020-05-28 12:04:25.007136522 +0200
 +++ rpm-4.16.0-noexpand/build/parseSpec.c	2020-12-18 20:08:13.791373996 +0100
