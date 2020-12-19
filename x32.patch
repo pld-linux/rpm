@@ -83,7 +83,7 @@ diff -ur rpm-4.15.1.orig/installplatform rpm-4.15.1/installplatform
 +	ISANAME=x86
 +	ISABITS=x32
 +	CANONARCH=x32
-+	CANONCOLOR=4
++	CANONCOLOR=7
 +	FORCE_RPMRC_GNU="${RPMRC_GNU}x32"
 +	TARGETCPU="x86_64"
  	;;
@@ -173,11 +173,16 @@ diff -ur rpm-4.15.1.orig/rpmrc.in rpm-4.15.1/rpmrc.in
  buildarchtranslate: sh3: sh3
  buildarchtranslate: sh4: sh4
  buildarchtranslate: sh4a: sh4
-@@ -490,6 +496,8 @@
+@@ -486,10 +492,11 @@
+ 
+ arch_compat: ia64: noarch
+ 
+-arch_compat: x86_64: amd64 em64t athlon noarch
++arch_compat: x86_64: amd64 em64t athlon x32 noarch
  arch_compat: amd64: x86_64 em64t athlon noarch
  arch_compat: ia32e: x86_64 em64t athlon noarch
  
-+arch_compat: x32: x32 noarch
++arch_compat: x32: x32 x86_64 noarch
 +
  arch_compat: sh3: noarch
  arch_compat: sh4: noarch
