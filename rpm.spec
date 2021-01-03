@@ -104,7 +104,6 @@ BuildRequires:	libselinux-devel >= 2.1.0
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 1:1.4.2-9
-BuildRequires:	ossp-uuid-devel
 BuildRequires:	patch >= 2.2
 BuildRequires:	pkgconfig(lua) >= 5.1
 BuildRequires:	popt-devel >= %{popt_ver}
