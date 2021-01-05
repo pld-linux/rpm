@@ -26,7 +26,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.16.1.2
-Release:	0.1
+Release:	0.2
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -48,9 +48,6 @@ Source12:	%{name}.noautoprovfiles
 Source13:	%{name}.noautoreq
 Source14:	%{name}.noautoreqfiles
 Source15:	perl.prov
-Source16:	%{name}db_checkversion.c
-Source17:	%{name}db_reset.c
-Source18:	dbupgrade.sh
 Patch0:		%{name}-man_pl.patch
 Patch1:		%{name}-popt-aliases.patch
 Patch2:		%{name}-perl-macros.patch
@@ -83,6 +80,7 @@ Patch29:	%{name}-noarch_py_prov.patch
 Patch30:	missing-ghost-terminate-build.patch
 Patch31:	missing-doc-terminate-build.patch
 Patch32:	noexpand.patch
+Patch33:	sqlite-db-backend.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 BuildRequires:	db-devel >= %{db_ver}
@@ -580,6 +578,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch30 -p1
 %patch31 -p1
 %patch32 -p1
+%patch33 -p1
 
 install %{SOURCE15} scripts/perl.prov.in
 
@@ -587,9 +586,6 @@ install %{SOURCE15} scripts/perl.prov.in
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE5}
-
-install %{SOURCE16} tools/rpmdb_checkversion.c
-install %{SOURCE17} tools/rpmdb_reset.c
 
 %{__sed} -i -e '1s,/usr/bin/python,%{__python3},' scripts/pythondistdeps.py
 
@@ -633,18 +629,6 @@ sed -i \
 	--with-vendor=pld
 
 %{__make}
-
-%{__cc} %{rpmcflags} tools/rpmdb_checkversion.c -o tools/rpmdb_checkversion -ldb
-%{__cc} %{rpmcflags} tools/rpmdb_reset.c -o tools/rpmdb_reset -ldb
-
-if tools/rpmdb_checkversion -V 2>&1 | grep "t match library version"; then
-	echo "Error linking rpmdb tools!"
-	exit 1
-fi
-if tools/rpmdb_reset -V 2>&1 | grep "t match library version"; then
-	echo "Error linking rpmdb tools!"
-	exit 1
-fi
 
 %if %{with python3}
 cd python
@@ -732,10 +716,6 @@ cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles
 cp -p %{SOURCE13} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq
 cp -p %{SOURCE14} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles
 
-cp -p tools/rpmdb_checkversion $RPM_BUILD_ROOT%{_rpmlibdir}/
-cp -p tools/rpmdb_reset $RPM_BUILD_ROOT%{_rpmlibdir}/
-cp -p %{SOURCE18} $RPM_BUILD_ROOT%{_rpmlibdir}/dbupgrade.sh
-
 # move rpm to /bin
 %{__mv} $RPM_BUILD_ROOT%{_bindir}/rpm $RPM_BUILD_ROOT/bin
 ln -sf /bin/rpm $RPM_BUILD_ROOT%{_bindir}/rpmquery
@@ -747,10 +727,16 @@ for a in librpm.so librpmbuild.so librpmio.so librpmsign.so; do
 	ln -sf /%{_lib}/$(basename $RPM_BUILD_ROOT/%{_lib}/${a}.*.*.*) $RPM_BUILD_ROOT%{_libdir}/${a}
 done
 
-#./rpmdb --macros=macros --rcfile=rpmrc --dbpath=/home/users/baggins/devel/PLD/rpm/BUILD/rpm-4.15.1/x/ --initdb
-
-# Make sure we have bdb set a default backend
-grep -qE "db_backend[[:blank:]]+bdb" $RPM_BUILD_ROOT%{_rpmlibdir}/macros
+# init an empty database for %ghost'ing for all supported backends
+for be in sqlite bdb ndb; do
+	./rpmdb \
+		--macros=$RPM_BUILD_ROOT%{_rpmlibdir}/macros \
+		--rcfile=$RPM_BUILD_ROOT%{_rpmlibdir}/rpmrc \
+		--dbpath=${PWD}/${be} \
+		--define "_db_backend ${be}" \
+		--initdb
+	cp -va ${be}/. $RPM_BUILD_ROOT/var/lib/rpm/
+done
 
 %if %{with python3}
 # Remove anything that rpm make install might put there
@@ -771,8 +757,7 @@ cd ..
 rm -rf $RPM_BUILD_ROOT
 
 %posttrans
-if [ -e /var/lib/rpm/Packages ] && \
-		! %{_rpmlibdir}/rpmdb_checkversion -h /var/lib/rpm -d /var/lib/rpm; then
+if [ -e /var/lib/rpm/Packages ]; then
 	if [ ! -e /var/lib/rpm.rpmbackup-%{version}-%{release} ] && \
 			/bin/cp -a /var/lib/rpm /var/lib/rpm.rpmbackup-%{version}-%{release}; then
 		echo
@@ -783,7 +768,15 @@ if [ -e /var/lib/rpm/Packages ] && \
 	echo 'If poldek aborts after migration with rpmdb error, this is expected behaviour,'
 	echo 'you should ignore it and restart poldek'
 	echo
-	%{_rpmlibdir}/dbupgrade.sh
+	%{__rm} -rf /var/lib/rpm/log >/dev/null 2>/dev/null || :
+	%{__rm} -rf /var/lib/rpm/tmp >/dev/null 2>/dev/null || :
+	if ! /usr/bin/rpmdb --rebuilddb; then
+		echo
+		echo "rpm database conversion failed!"
+		echo "You have to run '/usr/bin/rpmdb --rebuilddb' manually"
+		echo
+		exit 1
+	fi
 fi
 
 %post	lib -p /sbin/ldconfig
@@ -823,6 +816,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %lang(sk) %{_mandir}/sk/man8/rpm.8*
 
 %dir /var/lib/rpm
+%ghost %config(missingok,noreplace) /var/lib/rpm/*
+%ghost /var/lib/rpm/.*.lock
 
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/rpmrc
@@ -866,9 +861,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %dir %{_rpmlibdir}/pld
 
-%attr(755,root,root) %{_rpmlibdir}/dbupgrade.sh
-%attr(755,root,root) %{_rpmlibdir}/rpmdb_checkversion
-%attr(755,root,root) %{_rpmlibdir}/rpmdb_reset
 %attr(755,root,root) %{_rpmlibdir}/rpmdb_dump
 %attr(755,root,root) %{_rpmlibdir}/rpmdb_load
 
