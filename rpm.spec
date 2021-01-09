@@ -26,7 +26,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.16.1.2
-Release:	0.2
+Release:	0.3
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -770,6 +770,8 @@ if [ -e /var/lib/rpm/Packages ]; then
 	echo
 	%{__rm} -rf /var/lib/rpm/log >/dev/null 2>/dev/null || :
 	%{__rm} -rf /var/lib/rpm/tmp >/dev/null 2>/dev/null || :
+	# Unlock database for rebuild, safe since this is posttrans
+	%{__rm} -rf /var/lib/rpm/.rpm.lock >/dev/null 2>/dev/null || :
 	if ! /usr/bin/rpmdb --rebuilddb; then
 		echo
 		echo "rpm database conversion failed!"
