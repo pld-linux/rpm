@@ -771,7 +771,7 @@ if [ -e /var/lib/rpm/Packages ]; then
 	%{__rm} -rf /var/lib/rpm/log >/dev/null 2>/dev/null || :
 	%{__rm} -rf /var/lib/rpm/tmp >/dev/null 2>/dev/null || :
 	# Unlock database for rebuild, safe since this is posttrans
-	%{__rm} -rf /var/lib/rpm/.rpm.lock >/dev/null 2>/dev/null || :
+	%{__rm} -f /var/lib/rpm/.rpm.lock >/dev/null 2>/dev/null || :
 	if ! /usr/bin/rpmdb --rebuilddb; then
 		echo
 		echo "rpm database conversion failed!"
