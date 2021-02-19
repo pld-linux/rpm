@@ -81,6 +81,7 @@ Patch30:	missing-ghost-terminate-build.patch
 Patch31:	missing-doc-terminate-build.patch
 Patch32:	noexpand.patch
 Patch33:	sqlite-db-backend.patch
+Patch34:	skip-symlinks.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 BuildRequires:	db-devel >= %{db_ver}
@@ -579,6 +580,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch31 -p1
 %patch32 -p1
 %patch33 -p1
+%patch34 -p1
 
 install %{SOURCE15} scripts/perl.prov.in
 
