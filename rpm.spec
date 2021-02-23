@@ -26,7 +26,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.16.1.2
-Release:	2
+Release:	3
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -82,6 +82,7 @@ Patch31:	missing-doc-terminate-build.patch
 Patch32:	noexpand.patch
 Patch33:	sqlite-db-backend.patch
 Patch34:	skip-symlinks.patch
+Patch35:	pl-po.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 BuildRequires:	db-devel >= %{db_ver}
@@ -581,6 +582,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch32 -p1
 %patch33 -p1
 %patch34 -p1
+%patch35 -p1
 
 install %{SOURCE15} scripts/perl.prov.in
 
