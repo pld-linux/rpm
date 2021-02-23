@@ -852,9 +852,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %ifarch %{arm}
 %{_rpmlibdir}/platform/arm*
 %endif
-%ifarch aarch64
-%{_rpmlibdir}/aarch64*
-%endif
 %ifarch ia64
 %{_rpmlibdir}/platform/ia64*
 %endif
