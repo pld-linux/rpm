@@ -26,7 +26,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.16.1.2
-Release:	3
+Release:	4
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -584,6 +584,8 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch34 -p1
 %patch35 -p1
 
+%{__rm} po/*.gmo
+
 install %{SOURCE15} scripts/perl.prov.in
 
 %{__mv} -f scripts/perl.req{,.in}
@@ -633,6 +635,8 @@ sed -i \
 	--with-vendor=pld
 
 %{__make}
+
+%{__make} -C po update-gmo
 
 %if %{with python3}
 cd python
