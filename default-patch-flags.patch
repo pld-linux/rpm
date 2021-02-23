@@ -1,0 +1,12 @@
+--- rpm-4.16.0/macros.in~	2020-11-22 20:06:30.000000000 +0100
++++ rpm-4.16.0/macros.in	2020-12-04 23:07:19.298019290 +0100
+@@ -419,8 +419,7 @@
+ %_default_patch_fuzz	0
+ 
+ #	Default patch flags
+-#%_default_patch_flags	-s
+-%_default_patch_flags --no-backup-if-mismatch
++%_default_patch_flags	-s
+ 
+ #==============================================================================
+ # ---- Build configuration macros.

@@ -1,0 +1,45 @@
+diff -ur rpm-4.16.0/build/parseChangelog.c rpm-4.16.0-noexpand/build/parseChangelog.c
+--- rpm-4.16.0/build/parseChangelog.c	2020-12-18 20:09:28.341535424 +0100
++++ rpm-4.16.0-noexpand/build/parseChangelog.c	2020-12-18 20:01:53.963847399 +0100
+@@ -321,7 +321,7 @@
+ 	goto exit;
+     }
+     
+-    if ((res = parseLines(spec, STRIP_COMMENTS, &sb, NULL)) == PART_ERROR)
++    if ((res = parseLines(spec, STRIP_COMMENTS | STRIP_NOEXPAND, &sb, NULL)) == PART_ERROR)
+ 	goto exit;
+ 
+     if (sb && addChangelog(spec->packages->header, sb)) {
+diff -ur rpm-4.16.0/build/parseSpec.c rpm-4.16.0-noexpand/build/parseSpec.c
+--- rpm-4.16.0/build/parseSpec.c	2020-05-28 12:04:25.007136522 +0200
++++ rpm-4.16.0-noexpand/build/parseSpec.c	2020-12-18 20:08:13.791373996 +0100
+@@ -242,6 +242,9 @@
+ 	if (!spec->readStack->reading)
+ 	    return 0;
+     }
++    /* Also don't expand macros in %changelog and %description, where we set STRIP_NOEXPAND flag */
++    if (strip & STRIP_NOEXPAND)
++	return 0;
+ 
+     if (specExpand(spec, ofi->lineNum, spec->lbuf, &lbuf))
+ 	return 1;
+@@ -476,7 +476,7 @@
+     lineType = copyNextLineFinish(spec, strip);
+     s = spec->line;
+     SKIPSPACE(s);
+-    if (!lineType)
++    if (!lineType || (strip & STRIP_NOEXPAND))
+ 	goto after_classification;
+ 
+     /* check ordering of the conditional */
+diff -ur rpm-4.16.0/build/rpmbuild_internal.h rpm-4.16.0-noexpand/build/rpmbuild_internal.h
+--- rpm-4.16.0/build/rpmbuild_internal.h	2020-12-18 20:09:28.354868788 +0100
++++ rpm-4.16.0-noexpand/build/rpmbuild_internal.h	2020-12-18 20:09:09.054827168 +0100
+@@ -246,6 +246,7 @@
+ #define STRIP_NOTHING             0
+ #define STRIP_TRAILINGSPACE (1 << 0)
+ #define STRIP_COMMENTS      (1 << 1)
++#define STRIP_NOEXPAND      (1 << 2)
+ 
+ #define ALLOW_EMPTY         (1 << 16)
+ 

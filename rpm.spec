@@ -1,42 +1,21 @@
 #
 # TODO:
-# - make key infrastructure code fallback from keyutils to plain mode in case keyctl
-#   returns -ENOSYS
-# - add macros for some ppc, mipsel, alpha and sparc
-#
 # - when adopting, use 4.5 ticket for checklist: https://bugs.launchpad.net/pld-linux/+bug/262985
 #
 # Conditional build:
-%bcond_with	static		# build static rpm+rpmi
 %bcond_without	apidocs		# don't generate documentation with doxygen
-%bcond_without	python		# don't build python bindings
-%bcond_without	selinux		# build without selinux support
-%bcond_without	suggest_tags	# build without Suggest tag (bootstrapping)
-%bcond_with	db61		# use DB 6.1 instead of 5.2
-%bcond_with	neon		# build with HTTP/WebDAV support (neon library)
-%bcond_with	sqlite		# build with SQLite support
-%bcond_with	system_lua	# use system lua
-%bcond_without	system_pcre	# use system pcre
-%bcond_with	keyutils	# build with keyutils support
+%bcond_without	python3		# don't build python bindings
+%bcond_without	plugins		# build plugins
+%bcond_without	recommends_tags	# build without Recommends tag (bootstrapping)
+%bcond_with	imaevm		# build with IMA/EVM support (requires libimaevm from ima-evm-utils)
 
-%if %{with sqlite}
-# Error: /lib64/librpmio-5.4.so: undefined symbol: sqlite3_enable_load_extension
-%define		sqlite_build_version %(pkg-config --silence-errors --modversion sqlite3 2>/dev/null || echo ERROR)
-%endif
+%define		db_ver		5.3.28.0
+%define		popt_ver	1.15
+%define		sover		9.1.2
 
-# versions of required libraries
-%if %{with db61}
-%define		reqdb_pkg	db6.1
-%define		reqdb_ver	6.1
-%define		reqdb_pkgver	6.1.19
-%else
-%define		reqdb_pkg	db5.2
-%define		reqdb_ver	5.2
-%define		reqdb_pkgver	5.2.36.0-4
+%if "%{_rpmversion}" >= "4.12" && "%{_rpmversion}" < "5"
+%define	with_recommends_tags	1
 %endif
-%define		reqpopt_ver	1.15
-%define		beecrypt_ver	2:4.2.0
-%define		sover		5.4
 
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
@@ -46,323 +25,120 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	5.4.15
-Release:	59
-License:	LGPL v2.1
+Version:	4.16.1.2
+Release:	3
+Epoch:		1
+License:	GPL v2 / LGPL v2.1
 Group:		Base
-# http://rpm5.org/files/rpm/rpm-5.4/rpm-5.4.15-0.20140824.src.rpm
-Source0:	%{name}-%{version}.tar.gz
-# Source0-md5:	4067f83ca8b5bf1a21e443c0cff3efa0
-# See README.cpu-os-macros how to update cpu-os-macros.a
-Source100:	cpu-os-macros.a
-Source101:	README.cpu-os-macros
-Source1:	%{name}.groups
-Source2:	macros.pld.in
-Source3:	%{name}-install-tree
-Source5:	%{name}-hrmib-cache
+Source0:	http://ftp.rpm.org/releases/rpm-4.16.x/%{name}-%{version}.tar.bz2
+# Source0-md5:	0d10f63a0a4c9517cf3808a601378399
+Source1:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
+# Source1-md5:	23914bb49fafe7153cee87126d966461
+Source2:	macros.local
+Source3:	macros.lang
+Source4:	%{name}.sysconfig
+Source5:	%{name}.groups
 Source6:	%{name}-groups-po.awk
-Source10:	%{name}.sysinfo
-Source11:	perl.prov
-Source12:	%{name}-user_group.sh
-Source13:	%{name}.sysconfig
+Source7:	%{name}-install-tree
+Source9:	%{name}-user_group.sh
 # http://svn.pld-linux.org/banner.sh/
-Source15:	banner.sh
-Source16:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
-# Source16-md5:	23914bb49fafe7153cee87126d966461
-Source18:	macros.local
-Source19:	%{name}.noautocompressdoc
-Source20:	%{name}.noautoprov
-Source21:	%{name}.noautoprovfiles
-Source22:	%{name}.noautoreq
-Source24:	%{name}.noautoreqfiles
-Source26:	%{name}db_checkversion.c
-Source27:	macros.lang
-Source28:	%{name}db_reset.c
-Source29:	dbupgrade.sh
-Source30:	prov-req-macros
-Patch0:		%{name}-branch.patch
-Patch1:		%{name}-man_pl.patch
-Patch2:		%{name}-popt-aliases.patch
-Patch3:		%{name}-nosetproctitle.patch
-Patch4:		%{name}-perl-macros.patch
-Patch5:		%{name}-perl-req-perlfile.patch
-Patch6:		%{name}-scripts-closefds.patch
-Patch8:		%{name}-gettext-in-header.patch
-Patch9:		%{name}-lua.patch
-Patch10:	%{name}-php-deps.patch
-Patch11:	%{name}-notsc.patch
-Patch12:	%{name}-hack-norpmlibdep.patch
-Patch13:	%{name}-dont-copy-descriptive-tags.patch
-Patch14:	%{name}-perl_req-INC_dirs.patch
-Patch15:	%{name}-debuginfo.patch
-Patch16:	vendor-pld.patch
-Patch17:	%{name}-old-fileconflicts-behaviour.patch
-Patch18:	%{name}-javadeps.patch
-Patch19:	%{name}-truncate-cvslog.patch
-Patch20:	%{name}-libtool-deps.patch
-Patch21:	%{name}-mimetype.patch
-Patch22:	%{name}-sparc64.patch
-Patch23:	%{name}-gendiff.patch
-Patch24:	openmp.patch
-Patch25:	%{name}-URPM-build-fix.patch
-Patch26:	%{name}-semanage.patch
-Patch27:	%{name}-helperEVR-noassert.patch
-Patch28:	%{name}-unglobal.patch
-Patch29:	%{name}-builddir-readlink.patch
-Patch30:	%{name}-changelog_order_check_nonfatal.patch
-Patch31:	%{name}-cleanbody.patch
-Patch32:	%{name}-dirdeps-macro.patch
-Patch33:	%{name}-installbeforeerase.patch
-Patch34:	%{name}-libmagic-locale.patch
-Patch35:	%{name}-namespace-compare.patch
-Patch36:	%{name}-popt-coreutils.patch
-Patch37:	%{name}-postun-nofail.patch
-Patch38:	%{name}-silence-RPM_CHAR_TYPE.patch
-Patch39:	%{name}-fix-missing-types-in-headers.patch
-Patch40:	%{name}-fix--p-interpreter-and-empty-script.patch
-Patch41:	%{name}-db_buffer_small.patch
-Patch42:	%{name}-pattern_Release.patch
-Patch43:	%{name}-fix-___build_pre-macro.patch
-Patch44:	%{name}-missing-patch-file-fails-build.patch
-Patch45:	%{name}-remove-misleading-missing-patch-message.patch
-Patch46:	%{name}-rpm2cpio.patch
-Patch47:	%{name}-query-always-noisy.patch
-Patch48:	%{name}-verify-ghosts-broken-logic.patch
-Patch49:	%{name}-python-enable-compat-RPMSENSE.patch
-Patch50:	%{name}-dont-treat-gstreamer-modules-as-font.patch
-Patch51:	%{name}-gst-inspect-typo.patch
-Patch52:	%{name}-null-term-ascii-digest.patch
-Patch53:	%{name}-lua-enable-extra-libs.patch
-Patch54:	%{name}-fix-filedigests-verify.patch
-Patch55:	%{name}-disable-hmac-verify.patch
-Patch56:	%{name}-macros.patch
-Patch57:	%{name}-db5.2.patch
-Patch58:	%{name}-preserve-iterator.patch
-Patch59:	gcc6-stdlib.patch
-Patch60:	%{name}-python-sitescriptdir.patch
-Patch61:	%{name}-clean-docdir.patch
-Patch62:	%{name}-DB_CONFIG.patch
-Patch63:	%{name}-pythoneggs.patch
-Patch64:	%{name}-fix-compress-doc.patch
-Patch65:	%{name}-parseSpec-skip-empty-tags.patch
-Patch66:	%{name}-payload-use-hashed-inode.patch
-Patch67:	%{name}-repackage-dont-force-max-compression.patch
-Patch68:	rpm-bug-420.patch
-Patch70:	python-%{name}sense-missingok.patch
-Patch71:	%{name}-changelog-encoding.patch
-Patch72:	%{name}-preserve-tag-type.patch
-Patch74:	%{name}-fix-internal-lua-build.patch
-Patch75:	%{name}-double_check_file_deps.patch
-Patch77:	%{name}-lua-expat.patch
-Patch78:	%{name}-double_check_unpackaged_subdirs.patch
-Patch79:	%{name}-rpmspec.patch
-Patch80:	%{name}-revert-gpg-argv-parsing.patch
-Patch81:	%{name}-perl-magic.patch
-Patch82:	%{name}-5.4.15-use-DSA-sig.patch
-Patch83:	%{name}-ignore-missing-macro-files.patch
-Patch84:	x32.patch
-Patch85:	rpm-CVE-2013-6435.patch
-Patch86:	rpm-CVE-2014-8118.patch
-Patch87:	%{name}-file-output-for-ELF.patch
-Patch88:	%{name}-rpmtdnext.patch
-Patch89:	disable-header-verification.patch
-Patch90:	%{name}-cppcompat.patch
-Patch91:	py-disable-fetch.patch
-Patch92:	fast_python_deps.patch
-Patch93:	python2_explicit.patch
-Patch94:	do_not_write_before_macro_buffer.patch
-Patch95:	rpm-python-spec-header.patch
-Patch96:	skip-ldconfig-optimization.patch
-Patch97:	glibc.patch
-Patch98:	extension-based-compression-detection.patch
-Patch99:	%{name}-gpg-pinentry.patch
-Patch100:	dont-install-useless-scripts.patch
-
-# Patches imported from Mandriva
-
-# status: ready to merge, it's already been merged on HEAD, so commiting it to rpm-5_4
-# would basically just mean backporting it..
-Patch1000:	%{name}-5.4.4-add-_specfile-macro.patch
-# status: needs to be cleaned up and properly reviewed together with rest
-# of the patches related to dependency generation
-Patch1001:	%{name}-5.4.9-avoid-dependencies-on-self.patch
-# status: probably ready to merge
-Patch1002:	%{name}-5.4.4-pkgconfigdeps-check-path.patch
-# status: probably okay to merge, but discuss on rpm-devel first
-Patch1003:	%{name}-5.4.4-glob-wildcards-for-loading-macro-files.patch
-# status: needs to be discussed
-Patch1004:	%{name}-5.4.4-allow-installation-of-repackaged-rpms.patch
-# status: ready to merge
-Patch1005:	%{name}-5.4.8-dont-show-suggests-with-requires.patch
-# status: ready for merge
-Patch1006:	%{name}-5.4.9-strip-buildroot-away-from-duplicate-files-list.patch
-# status: probably okay to merge, but discuss on rpm-devel first
-Patch1007:	%{name}-5.4.10-duplicate_files_terminate_build.patch
-# status: same as above
-Patch1008:	%{name}-5.4.10-unpackaged_subdirs_terminate_build.patch
-# mdvbz#64898
-# status: uncertain, might be okay to merge, discuss on rpm-devel first
-Patch1009:	%{name}-5.4.4-rpmbuild-withoutclean.patch
-# no sense in having an additional dependency on 'pkgconfig' on all packages that
-# have a pkgconfig file, it's not needed for them to be made useful and anything
-# actuallly using pkgconfig for this purpose will pull it in as a dependency anyways...
-# status: might be okay to merge, but discuss on rpm-devel first
-Patch1010:	%{name}-5.4.4-drop-useless-auto-generated-pkgconfig-dependency.patch
-# status: ready for merge
-Patch1011:	%{name}-5.4.4-fix-rpmconstant-to-always-use-LC_CTYPE-C-for-case-conversion.patch
-# $RPM_BUILD_DIR isn't necessarily the same as $PWD, it's %%{_builddir}, not
-# %%{_builddir}/%%{?buildsubdir}, messing up paths in debug packages created..
-# status: needs to be discussed and investigated a bit better..
-Patch1012:	%{name}-5.4.4-pass-_builddir-properly-to-find-debuginfo.patch
-# status: probably okay to merge, but discuss on rpm-devel first
-Patch1013:	%{name}-5.4.10-files-listed-twice-terminates-build.patch
-# status: keep locally
-Patch1015:	%{name}-5.4.9-keep-loading-script-macros.patch
-# status: same as for other dep gen patches
-Patch1016:	%{name}-5.4.9-update-rpmfc-when-removing-dependencies-on-self.patch
-# status: idem
-Patch1017:	%{name}-5.4.9-rpmfc-extract-dependencies-for-all-files.patch
-# status: probably okay to merge
-Patch1019:	%{name}-5.4.5-python-export-spec-macros.patch
-# status: idem
-Patch1020:	%{name}-5.4.9-font-provides.patch
-# stauus: idem
-Patch1021:	%{name}-5.4.7-kmod-dependencies.patch
-# status: probably okay to merge, discuss on rpm-devel first
-Patch1022:	%{name}-5.4.5-skip-dependencies-for-character-devices.patch
-# status: probably okay to merge
-Patch1024:	%{name}-5.4.5-rpmfc-apply-python-coloring-from-magic.patch
-# status: probably okay to merge
-Patch1026:	%{name}-5.4.10-dont-try-generate-rpmfc-dependencies-from-doc-files.patch
-# status: ready
-Patch1027:	%{name}-5.4.7-fix-generation-of-ruby-abi-provides.patch
-# crash reproducable with 'rpm -qa --triggers'
-# status: ready
-Patch1028:	%{name}-5.4.7-hdrfmt-fix-unitialized-argv-element.patch
-# status: same as for other dep gen patches
-Patch1029:	%{name}-5.4.7-dont-consider-trigger-dependencies-as-overlapping.patch
-# status: ready
-Patch1030:	%{name}-5.4.7-fix-minor-memleaks.patch
-# status: ready
-Patch1031:	%{name}-5.4.9-mire-fix-strings-lacking-null-terminator.patch
-# status: ready
-Patch1032:	%{name}-5.4.9-rpmpython-fix-input.patch
-# status: ready
-Patch1033:	%{name}-5.4.7-no-seqid_init-on-rdonly-database.patch
-# status: probably ready for merging
-Patch1034:	%{name}-5.4.9-avoid-double-slash-in-path-for-dirname-filetrigger-matching.patch
-# status: probably ready to merge, discuss on rpm-devel first
-Patch1035:	%{name}-5.4.9-fix-verify-segfault.patch
-# Due to rpmdav/neon being written in a different fashion than other rpmio clients,
-# the inconsistent behaviour affects code elsewhere which expects consistent behaviour,
-# with the result being that when unable to download files, neon will save error
-# page as the target file.
-# status: should go upstream, but uncertain about "correct" fix, ie. this is
-# more of a workaround, while rewriting rpmdav code to behave consistently
-# would be "the right thing to do". Yet I'm not fully able to grasp all of the
-# code and don't want to spend more time just to get the API..
-Patch1037:	%{name}-5.4.10-fix-neon-saving-error-pages-as-target-file.patch
-# As the transaction flags for ignoring arch & os are no longer used, there's
-# currently no way to ignore arch & os of packages anymore. This patch adds
-# support for doing this again by defining rpm variables and overriding
-# --ignorearch & --ignoreos to set these.
-# status: needs to be discussed upstream before thinking about merging
-Patch1038:	%{name}-5.4.10-support-ignore-arch-and-os-again.patch
-# status: ready for merge
-Patch1039:	%{name}-5.4.4-fix-same-package-with-epoch-possible-to-upgrade.patch
-# we want that patch too, a bit of builder infrastructure relies on NOSIGNATURES
-Patch1040:	%{name}-5.4.9-support-signatures-and-digest-disablers.patch
-# lack insight on actual functionality, which anyways seems broken, so let's
-# disable it to avoid errors from berkeley db..
-# status: keep locally
-Patch1041:	%{name}-5.4.9-disable-l10ndir.patch
-# status: ready for merge
-Patch1042:	%{name}-5.4.9-fix-rpm_qa-pattern.patch
-# warning: introduces memory leak
-Patch1043:	%{name}-5.4.12-copy-Value-string.patch
-Patch1044:	%{name}-5.4.12-fix-rpmlua-print.patch
-Patch1045:	%{name}-5.4.12-fix-rpmpython-module-import-init.patch
-Patch1046:	%{name}-5.4.12-truncate-output-buffer-after-use.patch
-Patch1047:	%{name}-5.4.13-perl-bindings-do-not-use-xmalloc.patch
-# proyvind:
-# there's a rpmdbchk tool I wrote a while back, which might help you. although
-# the incidents it's able to deal with is rather limited ATM... it might help
-# you out, if not and you'll be able to solve yer problem, you could take a
-# stab at adding support for fixing your specific problem to the util ;)
-# https://abf.io/openmandriva/rpm/raw/master/rpm-5.4.14-rpmdbchk.patch
-Patch1048:	%{name}-5.4.14-rpmdbchk.patch
-# https://abf.io/openmandriva/rpm/raw/master/rpm-5.4.14-no-assert-abort-with-broken-headers.patch
-Patch1049:	%{name}-5.4.14-no-assert-abort-with-broken-headers.patch
-
-Patch1050:	python-libx32.patch
-
-URL:		http://rpm5.org/
-BuildRequires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
-%if %{with sqlite}
-BuildRequires:	sqlite3-devel
-%else
-BuildRequires:	%{reqdb_pkg}-sql-devel >= %{reqdb_pkgver}
-%endif
+Source10:	banner.sh
+Source11:	%{name}.noautoprov
+Source12:	%{name}.noautoprovfiles
+Source13:	%{name}.noautoreq
+Source14:	%{name}.noautoreqfiles
+Source15:	perl.prov
+Patch0:		%{name}-man_pl.patch
+Patch1:		%{name}-popt-aliases.patch
+Patch2:		%{name}-perl-macros.patch
+Patch3:		%{name}-perl-req-perlfile.patch
+Patch4:		%{name}-scripts-closefds.patch
+Patch6:		%{name}-perl_req-INC_dirs.patch
+Patch7:		%{name}-debuginfo.patch
+Patch8:		%{name}-libtool-deps.patch
+Patch9:		%{name}-builddir-readlink.patch
+Patch10:	%{name}-changelog_order_check_nonfatal.patch
+Patch11:	%{name}-postun-nofail.patch
+Patch12:	%{name}-clean-docdir.patch
+Patch13:	%{name}-perl-magic.patch
+Patch14:	%{name}-ignore-missing-macro-files.patch
+Patch15:	x32.patch
+Patch16:	rpm5-db-compat.patch
+Patch17:	python-internal-build.patch
+Patch18:	missing-macros.patch
+Patch19:	pkgconfig.patch
+Patch20:	uname-deps.patch
+Patch21:	aarch64.patch
+Patch22:	ix86-platforms.patch
+Patch23:	shortcircuited-deps.patch
+Patch24:	cpuinfo-deps.patch
+Patch25:	rpmio-read-proc-files.patch
+Patch26:	allow-at-in-ver-rel.patch
+Patch27:	no-exeonly-for-elf-reqprov.patch
+Patch28:	default-patch-flags.patch
+Patch29:	%{name}-noarch_py_prov.patch
+Patch30:	missing-ghost-terminate-build.patch
+Patch31:	missing-doc-terminate-build.patch
+Patch32:	noexpand.patch
+Patch33:	sqlite-db-backend.patch
+Patch34:	skip-symlinks.patch
+Patch35:	pl-po.patch
+URL:		https://rpm.org/
+BuildRequires:	acl-devel
+BuildRequires:	db-devel >= %{db_ver}
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1.4
-BuildRequires:	beecrypt-devel >= %{beecrypt_ver}
 BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gettext-tools >= 0.19.2
-%{?with_keyutils:BuildRequires:	keyutils-devel}
+BuildRequires:	libarchive-devel
+BuildRequires:	libcap-devel
 BuildRequires:	libmagic-devel
-%if %{with selinux}
+BuildRequires:	libgcrypt-devel
+%if %{with plugins}
+BuildRequires:	audit-libs-devel
+BuildRequires:	dbus-devel
+%{?with_imaevm:BuildRequires:	libimaevm-devel >= 1.0}
 BuildRequires:	libselinux-devel >= 2.1.0
-BuildRequires:	libsemanage-devel >= 2.1.0
-BuildRequires:	libsepol-devel >= 2.1.0
 %endif
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 1:1.4.2-9
-%if %{with neon}
-BuildRequires:	libxml2-devel
-BuildRequires:	neon-devel >= 0.25.5
-%endif
-%{?with_system_lua:BuildRequires:	lua52-devel >= 5.2.2}
-BuildRequires:	ossp-uuid-devel
 BuildRequires:	patch >= 2.2
-BuildRequires:	popt-devel >= %{reqpopt_ver}
-%{?with_python:BuildRequires:	python-devel >= 1:2.3}
-BuildRequires:	python-modules >= 1:2.3
-%{?with_python:BuildRequires:	rpm-pythonprov}
+BuildRequires:	pkgconfig(lua) >= 5.1
+BuildRequires:	popt-devel >= %{popt_ver}
+BuildRequires:	python3-modules
+%if %{with python3}
+BuildRequires:	python3-devel
+BuildRequires:	rpm-pythonprov
+BuildRequires:	rpmbuild(macros) >= 1.750
+%endif
+BuildRequires:	sqlite3-devel >= 3.22.0
 BuildRequires:	tcl
 BuildRequires:	xz-devel
 BuildRequires:	zlib-devel
+BuildRequires:	zstd-devel
 %if %{with apidocs}
 BuildRequires:	doxygen
 BuildRequires:	ghostscript
 BuildRequires:	graphviz
 BuildRequires:	tetex-pdftex
 %endif
-%if %{with static}
-# Require static library only for static build
-BuildRequires:	%{reqdb_pkg}-static >= %{reqdb_pkgver}
-BuildRequires:	beecrypt-static >= %{beecrypt_ver}
-BuildRequires:	bzip2-static >= 1.0.2-17
-BuildRequires:	elfutils-static
-BuildRequires:	glibc-static >= 2.2.94
-BuildRequires:	libmagic-static
-%if %{with selinux}
-BuildRequires:	libselinux-static >= 2.1.0
-BuildRequires:	libsemanage-static >= 2.1.0
-BuildRequires:	libsepol-static >= 2.1.0
-%endif
-BuildRequires:	popt-static >= %{reqpopt_ver}
-BuildRequires:	zlib-static
-%endif
 Requires(posttrans):	coreutils
+Requires:	%{name}-base = %{epoch}:%{version}-%{release}
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
+Requires:	rpm-pld-macros >= 1.744
 Requires:	FHS >= 3.0-2
-Requires:	%{name}-base = %{version}-%{release}
-Requires:	%{name}-lib = %{version}-%{release}
-Requires:	beecrypt >= %{beecrypt_ver}
-Requires:	popt >= %{reqpopt_ver}
-Obsoletes:	rpm-getdeps
-%{!?with_static:Obsoletes:	rpm-utils-static}
+Requires:	libgcrypt
+Requires:	popt >= %{popt_ver}
+%if %{with recommends_tags}
+Recommends:	rpm-plugin-audit
+Recommends:	rpm-plugin-prioreset
+Recommends:	rpm-plugin-syslog
+Recommends:	rpm-plugin-systemd-inhibit
+%endif
+Obsoletes:	rpm-utils-perl
+Obsoletes:	rpm-utils-static
 Conflicts:	glibc < 2.2.92
 # db4.6 poldek needed
 Conflicts:	poldek < 0.21-0.20070703.00.3
@@ -374,14 +150,12 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_binary_payload		w9.gzdio
 
 # don't require very fresh rpm.macros to build
-%define		__gettextize gettextize --copy --force --intl ; cp -f po/Makevars{.template,}
 %define		find_lang sh ./scripts/find-lang.sh $RPM_BUILD_ROOT
-%define		ix86	i386 i486 i586 i686 athlon pentium3 pentium4
+%define		ix86	i386 i486 i586 i686 athlon geode pentium3 pentium4
 %define		ppc	ppc ppc7400 ppc7450
 %define		x8664	amd64 ia32e x86_64
 
 %define		_rpmlibdir /usr/lib/rpm
-%define		_noautocompressdoc	RPM-GPG-KEY
 
 %description
 RPM is a powerful package manager, which can be used to build,
@@ -457,17 +231,9 @@ Zawiera on:
 Summary:	RPMs library
 Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
-Requires:	%{reqdb_pkg} >= %{reqdb_pkgver}
-%if %{with sqlite}
-Requires:	sqlite3 >= %{sqlite_build_version}
-%else
-Requires:	%{reqdb_pkg}-sql >= %{reqdb_pkgver}
-%endif
-Requires:	beecrypt >= %{beecrypt_ver}
+Requires:	db >= %{db_ver}
 Requires:	libmagic >= 1.15-2
-%{?with_selinux:Requires:	libselinux >= 2.1.0}
-Requires:	popt >= %{reqpopt_ver}
-Provides:	rpm-db-ver = %{reqdb_ver}
+Requires:	popt >= %{popt_ver}
 Obsoletes:	rpm-libs
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
@@ -487,19 +253,18 @@ Summary(pt_BR.UTF-8):	Arquivos de inclusão e bibliotecas para programas de mani
 Summary(ru.UTF-8):	Хедеры и библиотеки для программ, работающих с rpm-пакетами
 Summary(uk.UTF-8):	Хедери та бібліотеки для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
-Requires:	%{name}-lib = %{version}-%{release}
-Requires:	%{reqdb_pkg}-devel >= %{reqdb_pkgver}
-Requires:	beecrypt-devel >= %{beecrypt_ver}
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 Requires:	bzip2-devel
+Requires:	db-devel >= %{db_ver}
 Requires:	elfutils-devel
-%{?with_keyutils:Requires:	keyutils-devel}
 Requires:	libmagic-devel
+Requires:	libgcrypt-devel
 %if %{with selinux}
 Requires:	libselinux-devel
 Requires:	libsemanage-devel
 Requires:	libsepol-devel
 %endif
-Requires:	popt-devel >= %{reqpopt_ver}
+Requires:	popt-devel >= %{popt_ver}
 Requires:	zlib-devel
 
 %description devel
@@ -547,61 +312,16 @@ ferramentas que precisem de conhecimento profundo de pacotes RPM.
 призначена для полегшення створення графічних пакетних менеджерів та
 інших утиліт, що працюють з пакетами RPM.
 
-%package static
-Summary:	RPM static libraries
-Summary(de.UTF-8):	RPMs statische Libraries
-Summary(pl.UTF-8):	Biblioteki statyczne RPM-a
-Summary(pt_BR.UTF-8):	Bibliotecas estáticas para o desenvolvimento de aplicações RPM
-Summary(ru.UTF-8):	Статическая библиотека для программ, работающих с rpm-пакетами
-Summary(uk.UTF-8):	Статична бібліотека для програм, що працюють з пакетами rpm
-Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
-Requires:	%{reqdb_pkg}-static >= %{reqdb_pkgver}
-Requires:	beecrypt-static >= %{beecrypt_ver}
-Requires:	bzip2-static
-Requires:	elfutils-static
-%{?with_keyutils:Requires:	keyutils-static}
-Requires:	libmagic-static
-%if %{with selinux}
-Requires:	libselinux-static
-Requires:	libsemanage-static
-Requires:	libsepol-static
-%endif
-Requires:	popt-static >= %{reqpopt_ver}
-Requires:	zlib-static
-
-%description static
-RPM static libraries.
-
-%description static -l de.UTF-8
-RPMs statische Libraries.
-
-%description static -l pl.UTF-8
-Biblioteki statyczne RPM-a.
-
-%description static -l pt_BR.UTF-8
-Bibliotecas estáticas para desenvolvimento.
-
-%description static -l ru.UTF-8
-Система управления пакетами RPM содержит библиотеку C, которая
-упрощает манипуляцию пакетами RPM и соответствующими базами данных.
-Это статическая библиотека RPM.
-
-%description static -l uk.UTF-8
-Система керування пакетами RPM містить бібліотеку C, котра спрощує
-роботу з пакетами RPM та відповідними базами даних. Це статична
-бібліотека RPM.
-
 %package utils
 Summary:	Additional utilities for managing RPM packages and database
 Summary(de.UTF-8):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
 Summary(pl.UTF-8):	Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
 Group:		Applications/File
-Requires:	%{name} = %{version}-%{release}
-Requires:	popt >= %{reqpopt_ver}
-%if %{with suggest_tags}
-Suggests:	bzip2
-Suggests:	gzip
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	popt >= %{popt_ver}
+%if %{with recommends_tags}
+Recommends:	bzip2
+Recommends:	gzip
 %endif
 Conflicts:	filesystem-debuginfo < 3.0-16
 
@@ -614,42 +334,6 @@ Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
 %description utils -l pl.UTF-8
 Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami.
 
-%package utils-perl
-Summary:	Additional utilities for managing RPM packages and database
-Summary(de.UTF-8):	Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken
-Summary(pl.UTF-8):	Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami
-Group:		Applications/File
-Requires:	%{name}-utils = %{version}-%{release}
-Requires:	popt >= %{reqpopt_ver}
-
-%description utils-perl
-Additional utilities for managing RPM packages and database.
-
-%description utils-perl -l de.UTF-8
-Zusatzwerkzeuge für Verwaltung RPM-Pakete und Datenbanken.
-
-%description utils-perl -l pl.UTF-8
-Dodatkowe narzędzia do zarządzania bazą RPM-a i pakietami.
-
-%package utils-static
-Summary:	Static rpm utilities
-Summary(pl.UTF-8):	Statyczne narzędzia rpm
-Group:		Applications/System
-Requires:	%{name} = %{version}-%{release}
-
-%description utils-static
-Static rpm utilities for repairing system in case something with
-shared libraries used by rpm become broken. Currently it contains rpmi
-binary, which can be used to install/upgrade/remove packages without
-using shared libraries (well, in fact with exception of NSS modules).
-
-%description utils-static -l pl.UTF-8
-Statyczne narzędzia rpm do naprawy systemu w przypadku zepsucia czegoś
-związanego z bibliotekami współdzielonymi używanymi przez rpm-a.
-Aktualnie pakiet zawiera binarkę rpmi, którą można użyć do instalacji,
-uaktualniania lub usuwania pakietów bez udziału bibliotek statycznych
-(z wyjątkiem modułów NSS).
-
 %package build
 Summary:	Scripts for building binary RPM packages
 Summary(de.UTF-8):	Scripts fürs Bauen binärer RPM-Pakete
@@ -660,8 +344,8 @@ Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для
 Group:		Applications/File
 Requires(pretrans):	coreutils
 Requires(pretrans):	findutils
-Requires:	%{name}-pld-macros-build >= 1.744-3
-Requires:	%{name}-utils = %{version}-%{release}
+Requires:	%{name}-utils = %{epoch}:%{version}-%{release}
+Requires:	rpm-pld-macros-build >= 1.744
 Requires:	/bin/id
 Requires:	awk
 Requires:	bzip2
@@ -688,7 +372,6 @@ Requires:	tar >= 1:1.22
 Requires:	textutils
 Requires:	which
 Requires:	xz
-Provides:	rpmbuild(monoautodeps)
 Provides:	rpmbuild(noauto) = 3
 %ifarch %{x8664}
 Conflicts:	automake < 1:1.7.9-2
@@ -721,7 +404,7 @@ Summary:	Additional utilities for checking Perl provides/requires in RPM package
 Summary(de.UTF-8):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
 Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzenia zależności skryptów Perla w pakietach RPM
 Group:		Applications/File
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	perl-Encode
 Requires:	perl-devel
 Requires:	perl-modules
@@ -741,10 +424,10 @@ pakietach RPM.
 Summary:	Python macros, which simplifies creation of RPM packages with Python software
 Summary(pl.UTF-8):	Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w Pythonie
 Group:		Applications/File
-Requires:	%{name} = %{version}-%{release}
-Requires:	python
-Requires:	python-setuptools
-Requires:	python-modules
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	python3
+Requires:	python3-modules
+Requires:	python3-setuptools
 
 %description pythonprov
 Python macros, which simplifies creation of RPM packages with Python
@@ -754,45 +437,106 @@ software.
 Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w
 Pythonie.
 
-%package -n python-rpm
-Summary:	Python interface to RPM library
-Summary(pl.UTF-8):	Pythonowy interfejs do biblioteki RPM-a
-Summary(pt_BR.UTF-8):	Módulo Python para aplicativos que manipulam pacotes RPM
+%package -n python3-rpm
+Summary:	Python 3 interface to RPM library
+Summary(pl.UTF-8):	Interfejs Pythona 3 do biblioteki RPM-a
+Summary(pt_BR.UTF-8):	Módulo Python 3 para aplicativos que manipulam pacotes RPM
 Group:		Development/Languages/Python
-Requires:	%{name} = %{version}-%{release}
-Requires:	python
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	python3
+Obsoletes:	python-rpm < 1:4.16.0
 Obsoletes:	rpm-python
 
-%description -n python-rpm
-The rpm-python package contains a module which permits applications
-written in the Python programming language to use the interface
+%description -n python3-rpm
+The python3-rpm package contains a module which permits applications
+written in the Python 3 programming language to use the interface
 supplied by RPM (RPM Package Manager) libraries.
 
-This package should be installed if you want to develop Python
+This package should be installed if you want to develop Python 3
 programs that will manipulate RPM packages and databases.
 
-%description -n python-rpm -l pl.UTF-8
-Pakiet rpm-python zawiera moduł, który pozwala aplikacjom napisanym w
-Pythonie na używanie interfejsu dostarczanego przez biblioteki RPM-a.
+%description -n python3-rpm -l pl.UTF-8
+Pakiet python3-rpm zawiera moduł, który pozwala aplikacjom napisanym w
+Pythonie 3 na używanie interfejsu dostarczanego przez biblioteki
+RPM-a.
 
 Pakiet ten powinien zostać zainstalowany, jeśli chcesz pisać w
-Pythonie programy manipulujące pakietami i bazami danych rpm.
+Pythonie 3 programy manipulujące pakietami i bazami danych rpm.
 
-%description -n python-rpm -l pt_BR.UTF-8
-O pacote rpm-python contém um módulo que permite que aplicações
-escritas em Python utilizem a interface fornecida pelas bibliotecas
+%description -n python3-rpm -l pt_BR.UTF-8
+O pacote python3-rpm contém um módulo que permite que aplicações
+escritas em Python 3 utilizem a interface fornecida pelas bibliotecas
 RPM (RPM Package Manager).
 
 Esse pacote deve ser instalado se você quiser desenvolver programas em
-Python para manipular pacotes e bancos de dados RPM.
+Python 3 para manipular pacotes e bancos de dados RPM.
+
+%package plugin-audit
+Summary:	Plugin for logging audit events on package operations
+Group:		Base
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
+
+%description plugin-audit
+Plugin for libaudit support
+
+%package plugin-syslog
+Summary:	Plugin for syslog functionality
+Group:		Base
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
+
+%description plugin-syslog
+This plugin exports RPM actions to the system log.
+
+%package plugin-systemd-inhibit
+Summary:	Plugin for systemd inhibit functionality
+Group:		Base
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
+
+%description plugin-systemd-inhibit
+This plugin blocks systemd from entering idle, sleep or shutdown while
+an rpm transaction is running using the systemd-inhibit mechanism.
+
+%package plugin-ima
+Summary:	Plugin for IMA file signatures
+Group:		Base
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
+
+%description plugin-ima
+This plugin adds support for enforcing and verifying IMA file
+signatures in an rpm.
+
+%package plugin-prioreset
+Summary:	Plugin for resetting scriptlet priorities for SysV init
+Group:		Base
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
+
+%description plugin-prioreset
+This plugin is useful on legacy SysV init systems if you run rpm
+transactions with nice/ionice priorities. Should not be used on
+systemd systems.
+
+%package plugin-selinux
+Summary:	Plugin for SELinux functionality
+Group:		Base
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
+Requires:	libselinux >= 2.1.0
+
+%description plugin-selinux
+Plugin for SELinux functionality.
+
+%package sign
+Summary:	Package signing support
+Group:		Base
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
+
+%description sign
+This package contains support for digitally signing RPM packages.
 
 %package apidocs
 Summary:	RPM API documentation and guides
 Summary(pl.UTF-8):	Documentacja API RPM-a i przewodniki
 Group:		Documentation
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description apidocs
 Documentation for RPM API and guides in HTML format generated from rpm
@@ -804,28 +548,20 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 
 %prep
 %setup -q -n %{name}-%{version}%{?subver}
-install -d platform
-cd platform
-ar x %{SOURCE100}
-cd -
-
-#patch0 -p1
+%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
-%patch6 -p1
+%patch6 -p0
+%patch7 -p1
 %patch8 -p1
-%{?with_system_lua:%patch9 -p1}
+%patch9 -p1
 %patch10 -p1
-%ifnarch i386 i486
-# enable TSC for capable archs
 %patch11 -p1
-%endif
 %patch12 -p1
 %patch13 -p1
-%patch14 -p0
+%patch14 -p1
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
@@ -833,9 +569,7 @@ cd -
 %patch19 -p1
 %patch20 -p1
 %patch21 -p1
-%ifarch sparc64
 %patch22 -p1
-%endif
 %patch23 -p1
 %patch24 -p1
 %patch25 -p1
@@ -849,139 +583,18 @@ cd -
 %patch33 -p1
 %patch34 -p1
 %patch35 -p1
-%patch36 -p1
-%patch37 -p1
-%patch38 -p1
-%patch39 -p1
-%patch40 -p1
-%{?with_db61:%patch41 -p1}
-%patch42 -p1
-%patch43 -p1
-%patch44 -p1
-%patch45 -p1
-%patch46 -p1
-%patch47 -p1
-%patch48 -p1
-%patch49 -p1
-%patch50 -p1
-%patch51 -p1
-%patch52 -p0
-%patch53 -p1
-%patch54 -p1
-%patch55 -p1
-%patch56 -p1
-%{!?with_db61:%patch57 -p1}
-%patch58 -p1
-%patch59 -p1
-%patch60 -p1
-%patch61 -p1
-%patch62 -p1
-%patch63 -p1
-%patch64 -p1
-%patch65 -p1
-%patch66 -p1
-%patch67 -p1
-%patch68 -p1
-%patch70 -p1
-%patch71 -p1
-%patch72 -p1
-%patch74 -p1
-%patch75 -p1
-%patch77 -p0
-%patch78 -p1
-%patch79 -p1
-%patch80 -p1
-%patch81 -p0
-%patch82 -p1
-%patch84 -p1
-%patch85 -p1
-%patch86 -p1
-%patch87 -p1
-%patch88 -p1
-%patch89 -p1
-%patch90 -p1
-%patch91 -p1
-%patch99 -p1
 
-%patch1000 -p1
-%patch1001 -p1
-%patch1002 -p1
-%patch1003 -p1
-%patch1004 -p1
-%patch1005 -p1
-%patch1006 -p1
-%patch1007 -p1
-%patch1008 -p1
-%patch1009 -p1
-%patch1010 -p1
-%patch1011 -p1
-%patch1012 -p1
-%patch1013 -p1
-%patch1015 -p1
-%patch1016 -p1
-%patch1017 -p1
-%patch1019 -p1
-%patch1020 -p1
-%patch1021 -p1
-%patch1022 -p1
-%patch1024 -p1
-%patch1026 -p1
-%patch1027 -p1
-%patch1028 -p1
-%patch1029 -p1
-%patch1030 -p1
-%patch1031 -p1
-%patch1032 -p1
-%patch1033 -p1
-%patch1034 -p1
-%patch1035 -p1
-%patch1037 -p1
-%patch1038 -p1
-%patch1039 -p1
-%patch1040 -p1
-# don't delete, may be usefull if jbj descides to enable this again
-#%patch1041 -p1
-%patch1042 -p1
-%patch1043 -p1
-%patch1044 -p1
-%patch1045 -p1
-%patch1046 -p1
-%patch1047 -p1
-%patch1048 -p1
-%patch1049 -p1
-
-%patch83 -p1
-%patch92 -p1
-%patch93 -p1
-%patch94 -p1
-%patch95 -p1
-%patch96 -p1
-%patch97 -p1
-%patch98 -p1
-%patch100 -p1
-
-%patch1050 -p1
-
-install %{SOURCE2} macros/pld.in
-install %{SOURCE11} scripts/perl.prov.in
-
-rm scripts/find-php*
+install %{SOURCE15} scripts/perl.prov.in
 
 %{__mv} -f scripts/perl.req{,.in}
 
 # generate Group translations to *.po
-awk -f %{SOURCE6} %{SOURCE1}
+awk -f %{SOURCE6} %{SOURCE5}
 
-install %{SOURCE26} tools/rpmdb_checkversion.c
-install %{SOURCE28} tools/rpmdb_reset.c
-
-for extlib in beecrypt neon %{?with_system_pcre:pcre} popt; do
-	[ -d $extlib ] && %{__rm} -r $extlib
-done
+%{__sed} -i -e '1s,/usr/bin/python,%{__python3},' scripts/pythondistdeps.py
 
 %build
 %{__libtoolize}
-#%{__autopoint}
 %{__aclocal}
 %{__autoheader}
 %{__autoconf}
@@ -992,317 +605,163 @@ sed -i \
 	-e 's|@host@|%{_target_cpu}-%{_target_vendor}-%{_target_os}|' \
 	-e 's|@host_cpu@|%{_target_cpu}|' \
 	-e 's|@host_os@|%{_target_os}|' \
-	macros/macros.in
+	macros.in
 
-%{?with_system_lua:CPPFLAGS="-I/usr/include/lua51 %{rpmcppflags}"}
 %configure \
 	WITH_PERL_VERSION=no \
 	__GST_INSPECT=%{_bindir}/gst-inspect-1.0 \
 	__GPG=%{_bindir}/gpg \
+%if %{with python3}
+	PYTHON=python3 \
+	--enable-python \
+%endif
 	--disable-silent-rules \
 	--enable-shared \
-	--enable-static \
-	%{!?with_apidocs:--without-apidocs} \
-	--with-beecrypt=external \
-	--with-bugreport="http://bugs.pld-linux.org/" \
-	--with-bzip2=external \
-	--with-db=external \
-	--with-dbapi=db \
-	--with-file=external \
-	--with-keyutils=%{?with_keyutils:external}%{!?with_keyutils:no} \
-	--with-libelf \
-	--with-lua=%{!?with_system_lua:internal}%{?with_system_lua:external} \
-	--with-lzma=external \
-	--with-neon=%{?with_neon:external}%{!?with_neon:no} \
-	--with-path-macros='%{_rpmlibdir}/macros:%{_rpmlibdir}/macros.d/pld:%{_rpmlibdir}/pld/macros:%{_rpmlibdir}/%%{_target}/macros:%{_rpmlibdir}/macros.build:%{_sysconfdir}/rpm/macros.*:%{_sysconfdir}/rpm/macros:%{_sysconfdir}/rpm/%%{_target}/macros:%{_sysconfdir}/rpm/macros.d/*.macros:~/etc/.rpmmacros:~/.rpmmacros' \
-	--without-path-versioned \
-	--with-pcre=%{!?with_system_pcre:internal}%{?with_system_pcre:external} \
-	--with-popt=external \
-	%{?with_python:--with-python=%{py_ver} --with-python-lib-dir=%{py_sitedir}} \
-	%{!?with_python:--without-python} \
-	--with-selinux=%{!?with_selinux:no}%{?with_selinux:external} \
-	--with-semanage=%{!?with_selinux:no}%{?with_selinux:external} \
-	--with-sepol=%{!?with_selinux:no}%{?with_selinux:external} \
-	--with-sqlite=%{?with_sqlite:yes}%{!?with_sqlite:no} \
-	--with-uuid=%{_libdir}:%{_includedir}/ossp-uuid \
-	--with-vendor=pld \
-	--with-xz=external \
-	--with-zlib=external
+	--enable-bdb \
+	--enable-bdb-ro \
+	--enable-ndb \
+	--enable-sqlite \
+	--enable-zstd \
+	--with-lua \
+	%{?with_imaevm:--with-imaevm} \
+	--with-cap \
+	--with-acl \
+	--with-audit \
+	--with-archive \
+	--with-selinux=%{!?with_plugins:no}%{?with_plugins:yes} \
+	%{!?with_plugins:--disable-plugins} \
+	--with-vendor=pld
 
 %{__make}
 
-%{?with_apidocs:%{__make} apidocs}
-
-%{__cc} %{rpmcflags} -I/usr/include/db%{reqdb_ver} tools/rpmdb_checkversion.c \
-	-o tools/rpmdb_checkversion -ldb-%{reqdb_ver}
-%{__cc} %{rpmcflags} -I/usr/include/db%{reqdb_ver} tools/rpmdb_reset.c \
-	-o tools/rpmdb_reset -ldb-%{reqdb_ver}
-
-if tools/rpmdb_checkversion -V 2>&1 | grep "t match library version"; then
-	echo "Error linking rpmdb tools!"
-	exit 1
-fi
-if tools/rpmdb_reset -V 2>&1 | grep "t match library version"; then
-	echo "Error linking rpmdb tools!"
-	exit 1
-fi
+%if %{with python3}
+cd python
+%py3_build
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/rpm} \
-	$RPM_BUILD_ROOT{/var/lib/banner,/var/cache/hrmib,/etc/pki/rpm-gpg,%{_rpmlibdir}/pld}
+install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/{rpm,pki/rpm-gpg}} \
+	$RPM_BUILD_ROOT{/var/lib/{banner,rpm},/usr/lib/.build-id}
 
-install %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
+cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
 %{__make} install \
 	pkgconfigdir=%{_pkgconfigdir} \
 	DESTDIR=$RPM_BUILD_ROOT
 
-# install platform macros
-for f in platform/*macros; do
-	bn=${f#*/}
-	fn=${bn%.macros}/macros
-	install -m644 $f -D %{buildroot}%{_rpmlibdir}/$fn
-done
-
 # cleanup
 %ifnarch %{ix86} %{x8664} x32
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/athlon-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/i386-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/i486-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/i586-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/i686-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/pentium3-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/pentium4-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/athlon-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/geode-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i386-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i486-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i586-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i686-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/pentium3-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/pentium4-linux/macros
 %endif
 
 %ifnarch %{x8664} x32
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/amd64-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/ia32e-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/x32-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/x86_64-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/amd64-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ia32e-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/x32-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/x86_64-linux/macros
 %endif
 
 %ifnarch %{ppc}
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/ppc-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/m68k-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc32dy4-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc64*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc8260-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc8560-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc*series-linux/macros
 %endif
 
 %ifnarch aarch64
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/aarch64-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/aarch64-linux/macros
 %endif
 
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/alpha*-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/arm*-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/ia64-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/k6-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/mips*-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/ppc*series-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/ppc64*-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/s390*-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/sparc*-linux/macros
+%ifnarch %{arm}
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/arm*-linux/macros
+%endif
+
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/alpha*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ia64-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/mips*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/riscv64-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/s390*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sh*-linux/macros
+rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sparc*-linux/macros
 
 cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-# first platform file entry can't contain regexps
 %ifarch x32
 %{_target_cpu}-%{_target_vendor}-linux-gnux32
 %else
 %{_target_cpu}-%{_target_vendor}-linux
 %endif
-
-%ifarch x86_64
-x86_64-[^-]*-[Ll]inux(-gnu)?
-amd64-[^-]*-[Ll]inux(-gnu)?
-x32-[^-]*-[Ll]inux(-gnu(x32)?)?
-%endif
-%ifarch amd64
-amd64-[^-]*-[Ll]inux(-gnu)?
-x86_64-[^-]*-[Ll]inux(-gnu)?
-x32-[^-]*-[Ll]inux(-gnu(x32)?)?
-%endif
-%ifarch ia32e
-ia32e-[^-]*-[Ll]inux(-gnu)?
-x86_64-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch x32
-x32-[^-]*-[Ll]inux(-gnu(x32)?)?
-x86_64-[^-]*-[Ll]inux(-gnu)?
-amd64-[^-]*-[Ll]inux(-gnu)?
-%endif
-
-%ifarch athlon %{x8664} x32
-athlon-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch pentium4 athlon %{x8664} x32
-pentium4-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch pentium3 pentium4 athlon %{x8664} x32
-pentium3-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch i686 pentium3 pentium4 athlon %{x8664} x32
-i686-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch i586 i686 pentium3 pentium4 athlon %{x8664} x32
-i586-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch i486 i586 i686 pentium3 pentium4 athlon %{x8664} x32
-i486-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch %{ix86} %{x8664} x32
-i386-[^-]*-[Ll]inux(-gnu)?
-%endif
-
-%ifarch alpha
-alpha-[^-]*-[Ll]inux(-gnu)?
-%endif
-
-%ifarch aarch64
-aarch64-[^-]*-[Ll]inux(-gnu)?
-%endif
-
-%ifarch ia64
-ia64-[^-]*-[Ll]inux(-gnu)?
-%endif
-
-%ifarch ppc64
-powerpc64-[^-]*-[Ll]inux(-gnu)?
-ppc64-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch %{ppc} ppc64
-powerpc-[^-]*-[Ll]inux(-gnu)?
-ppc-[^-]*-[Ll]inux(-gnu)?
-%endif
-
-%ifarch s390x
-s390x-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch s390 s390x
-s390-[^-]*-[Ll]inux(-gnu)?
-%endif
-
-%ifarch sparc64
-sparc64-[^-]*-[Ll]inux(-gnu)?
-sparcv8-[^-]*-[Ll]inux(-gnu)?
-sparcv9-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch sparcv9
-sparcv8-[^-]*-[Ll]inux(-gnu)?
-sparcv9-[^-]*-[Ll]inux(-gnu)?
-%endif
-%ifarch sparc sparcv9 sparc64
-sparc-[^-]*-[Ll]inux(-gnu)?
-%endif
-
-noarch-[^-]*-.*
 EOF
 
-# Squash Extra Blank Lines
-%{__sed} -i -e '/./,/^$/!d' $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
-
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/vpkg-provides*
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-{prov,req}.pl
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-{provides,requires}.perl
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/find-lang.sh
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/lib/liblua.a
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/lib/liblua.la
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/mono-find-provides
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/mono-find-requires
 
-# not installed since 4.4.8 (-tools-perl subpackage)
-install scripts/rpmdiff scripts/rpmdiff.cgi $RPM_BUILD_ROOT%{_rpmlibdir}
+install -d $RPM_BUILD_ROOT%{_rpmlibdir}/pld
 
-install %{SOURCE1} doc/manual/groups
-install %{SOURCE3} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
-install %{SOURCE12} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
-install %{SOURCE5} $RPM_BUILD_ROOT%{_rpmlibdir}/hrmib-cache
-install %{SOURCE13} $RPM_BUILD_ROOT/etc/sysconfig/rpm
+cp -p %{SOURCE7} $RPM_BUILD_ROOT%{_rpmlibdir}/install-build-tree
+cp -p %{SOURCE9} $RPM_BUILD_ROOT%{_rpmlibdir}/user_group.sh
+cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/rpm
 
-install %{SOURCE15} $RPM_BUILD_ROOT%{_bindir}/banner.sh
+cp -p %{SOURCE10} $RPM_BUILD_ROOT%{_bindir}/banner.sh
 
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo
-
-install %{SOURCE18} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros
-install %{SOURCE27} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.lang
-install %{SOURCE19} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautocompressdoc
-install %{SOURCE20} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov
-install %{SOURCE21} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles
-install %{SOURCE22} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq
-install %{SOURCE24} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles
-
-touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Conflictname
-touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Dirnames
-install %{SOURCE10} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Filelinktos
-touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Obsoletename
-touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Providename
-touch $RPM_BUILD_ROOT%{_sysconfdir}/rpm/sysinfo/Requirename
-
-install tools/rpmdb_checkversion $RPM_BUILD_ROOT%{_rpmlibdir}/bin
-install tools/rpmdb_reset $RPM_BUILD_ROOT%{_rpmlibdir}/bin
-install %{SOURCE29} $RPM_BUILD_ROOT%{_rpmlibdir}/bin/dbupgrade.sh
-
-# create macro loading wrappers for backward compatibility
-for m in gstreamer libtool mono pkgconfig selinux; do
-	%{__mv} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/{$m,macros.$m}
-done
-
-install %{SOURCE30} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/macros.prov-req
-
-# moved to rpm-pld-macros-macros 1.699
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/kernel
-# moved to rpm-pld-macros-build 1.744
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/javadeps.sh
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/{gem_helper,rubygems}.rb
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/php.{prov,req}
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/macros.d/{cmake,java,perl,php,python,ruby,tcl}
-
-# for rpm -e|-U --repackage
-install -d $RPM_BUILD_ROOT/var/{spool/repackage,lock/rpm}
-touch $RPM_BUILD_ROOT/var/lock/rpm/transaction
+cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros
+cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.lang
+cp -p %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov
+cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles
+cp -p %{SOURCE13} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq
+cp -p %{SOURCE14} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles
 
 # move rpm to /bin
-mv $RPM_BUILD_ROOT%{_bindir}/rpm $RPM_BUILD_ROOT/bin
+%{__mv} $RPM_BUILD_ROOT%{_bindir}/rpm $RPM_BUILD_ROOT/bin
+ln -sf /bin/rpm $RPM_BUILD_ROOT%{_bindir}/rpmquery
+ln -sf /bin/rpm $RPM_BUILD_ROOT%{_bindir}/rpmverify
+
 # move essential libs to /lib (libs that /bin/rpm links to)
-for a in librpm-%{sover}.so librpmdb-%{sover}.so librpmio-%{sover}.so librpmbuild-%{sover}.so librpmmisc-%{sover}.so librpmconstant-%{sover}.so; do
-	mv -f $RPM_BUILD_ROOT%{_libdir}/$a $RPM_BUILD_ROOT/%{_lib}
-	ln -s /%{_lib}/$a $RPM_BUILD_ROOT%{_libdir}/$a
+for a in librpm.so librpmbuild.so librpmio.so librpmsign.so; do
+	mv -f $RPM_BUILD_ROOT%{_libdir}/${a}.* $RPM_BUILD_ROOT/%{_lib}
+	ln -sf /%{_lib}/$(basename $RPM_BUILD_ROOT/%{_lib}/${a}.*.*.*) $RPM_BUILD_ROOT%{_libdir}/${a}
 done
 
-# Bourne shell script vs ELF executable linked with rpm,rpmdb,rpmio
-mv $RPM_BUILD_ROOT{%{_rpmlibdir},%{_bindir}}/rpm2cpio
+# init an empty database for %ghost'ing for all supported backends
+for be in sqlite bdb ndb; do
+	./rpmdb \
+		--macros=$RPM_BUILD_ROOT%{_rpmlibdir}/macros \
+		--rcfile=$RPM_BUILD_ROOT%{_rpmlibdir}/rpmrc \
+		--dbpath=${PWD}/${be} \
+		--define "_db_backend ${be}" \
+		--initdb
+	cp -va ${be}/. $RPM_BUILD_ROOT/var/lib/rpm/
+done
 
-%if %{with python}
-%py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
-%py_comp $RPM_BUILD_ROOT%{py_sitedir}
-
-%{__rm} $RPM_BUILD_ROOT%{py_sitedir}/rpm/*.{la,a,py}
+%if %{with python3}
+# Remove anything that rpm make install might put there
+%{__rm} -rf $RPM_BUILD_ROOT%{py3_sitedir}
+cd python
+%py3_install
+cd ..
 %endif
 
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/rpm-plugins/*.la
+
 # wrong location, not used anyway
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log,xinetd}
-# utils dropped in 5.4 -- their manuals
-%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/rpmgrep.1
-# script obsoleted by /usr/lib/rpm/bin/dbconvert binary
-%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/dbconvert.sh
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log}
 
 %find_lang %{name}
-
-%{__rm} -rf manual
-cp -a doc/manual manual
-%{__rm} -f manual/Makefile*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%pretrans
-# this needs to be a dir
-if [ -f %{_sysconfdir}/rpm/sysinfo ]; then
-	umask 022
-	mv -f %{_sysconfdir}/rpm/sysinfo{,.rpmsave}
-	mkdir %{_sysconfdir}/rpm/sysinfo
-fi
-
 %posttrans
-if [ -e /var/lib/rpm/Packages ] && \
-		! %{_rpmlibdir}/bin/rpmdb_checkversion -h /var/lib/rpm -d /var/lib/rpm; then
+if [ -e /var/lib/rpm/Packages ]; then
 	if [ ! -e /var/lib/rpm.rpmbackup-%{version}-%{release} ] && \
 			/bin/cp -a /var/lib/rpm /var/lib/rpm.rpmbackup-%{version}-%{release}; then
 		echo
@@ -1313,11 +772,18 @@ if [ -e /var/lib/rpm/Packages ] && \
 	echo 'If poldek aborts after migration with rpmdb error, this is expected behaviour,'
 	echo 'you should ignore it and restart poldek'
 	echo
-	%{_rpmlibdir}/bin/dbupgrade.sh
+	%{__rm} -rf /var/lib/rpm/log >/dev/null 2>/dev/null || :
+	%{__rm} -rf /var/lib/rpm/tmp >/dev/null 2>/dev/null || :
+	# Unlock database for rebuild, safe since this is posttrans
+	%{__rm} -f /var/lib/rpm/.rpm.lock >/dev/null 2>/dev/null || :
+	if ! /usr/bin/rpmdb --rebuilddb; then
+		echo
+		echo "rpm database conversion failed!"
+		echo "You have to run '/usr/bin/rpmdb --rebuilddb' manually"
+		echo
+		exit 1
+	fi
 fi
-
-%triggerpostun -- %{name} < 4.4.9-44
-%{_rpmlibdir}/hrmib-cache
 
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
@@ -1327,85 +793,90 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc CHANGES CREDITS README pubkeys/JBJ-GPG-KEY manual/*
+%doc ChangeLog CREDITS README
 
 %dir /etc/pki/rpm-gpg
 /etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
 %attr(755,root,root) /bin/rpm
+%attr(755,root,root) %{_bindir}/rpmdb
+%attr(755,root,root) %{_bindir}/rpmkeys
+%attr(755,root,root) %{_bindir}/rpmquery
+%attr(755,root,root) %{_bindir}/rpmverify
 
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros.lang
-%dir %{_sysconfdir}/rpm/sysinfo
-# these are ok to be replaced
-%config %verify(not md5 mtime size) %{_sysconfdir}/rpm/sysinfo/*
+# this is ok to be replaced
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/platform
 
 %{_mandir}/man8/rpm.8*
+%{_mandir}/man8/rpmdb.8*
+%{_mandir}/man8/rpmkeys.8*
+%{_mandir}/man8/rpm-misc.8*
+%{?with_plugins:%{_mandir}/man8/rpm-plugins.8*}
 %lang(fr) %{_mandir}/fr/man8/rpm.8*
 %lang(ja) %{_mandir}/ja/man8/rpm.8*
+%lang(ko) %{_mandir}/ko/man8/rpm.8*
 %lang(pl) %{_mandir}/pl/man8/rpm.8*
 %lang(ru) %{_mandir}/ru/man8/rpm.8*
 %lang(sk) %{_mandir}/sk/man8/rpm.8*
 
 %dir /var/lib/rpm
-%dir /var/lib/rpm/log
-%dir /var/lib/rpm/tmp
-%config(noreplace) %verify(not md5 mtime size) /var/lib/rpm/DB_CONFIG
-%dir %attr(700,root,root) /var/spool/repackage
-%dir /var/lock/rpm
-/var/lock/rpm/transaction
+%ghost %config(missingok,noreplace) /var/lib/rpm/*
+%ghost /var/lib/rpm/.*.lock
 
-# exported package NVRA (stamped with install tid)
-# net-snmp hrSWInstalledName queries, bash-completions
-%dir /var/cache/hrmib
-
-%{_rpmlibdir}/qf
 %{_rpmlibdir}/rpmpopt*
+%{_rpmlibdir}/rpmrc
 %{_rpmlibdir}/macros
 %dir %{_rpmlibdir}/macros.d
-%{_rpmlibdir}/macros.d/pld
-%dir %{_rpmlibdir}/pld
-%{_rpmlibdir}/cpuinfo.yaml
-%{_rpmlibdir}/noarch-*
+%dir %{_rpmlibdir}/platform
+%{_rpmlibdir}/platform/noarch-*
 %ifarch %{ix86} %{x8664} x32
-%{_rpmlibdir}/i?86*
-%{_rpmlibdir}/pentium*
-%{_rpmlibdir}/athlon*
+%{_rpmlibdir}/platform/athlon*
+%{_rpmlibdir}/platform/geode*
+%{_rpmlibdir}/platform/i?86*
+%{_rpmlibdir}/platform/pentium*
+%endif
+%ifarch %{x8664} x32
+%{_rpmlibdir}/platform/amd64*
+%{_rpmlibdir}/platform/ia32e*
+%{_rpmlibdir}/platform/x86_64*
+%{_rpmlibdir}/platform/x32*
 %endif
 %ifarch alpha
-%{_rpmlibdir}/alpha*
+%{_rpmlibdir}/platform/alpha*
+%endif
+%ifarch aarch64
+%{_rpmlibdir}/platform/aarch64*
+%endif
+%ifarch %{arm}
+%{_rpmlibdir}/platform/arm*
 %endif
 %ifarch aarch64
 %{_rpmlibdir}/aarch64*
 %endif
 %ifarch ia64
-%{_rpmlibdir}/ia64*
+%{_rpmlibdir}/platform/ia64*
 %endif
 %ifarch mips mipsel mips64 mips64el
-%{_rpmlibdir}/mips*
+%{_rpmlibdir}/platform/mips*
 %endif
 %ifarch %{ppc}
-%{_rpmlibdir}/ppc*
+%{_rpmlibdir}/platform/ppc*
 %endif
 %ifarch sparc sparc64
-%{_rpmlibdir}/sparc*
-%endif
-%ifarch %{x8664} x32
-%{_rpmlibdir}/amd64*
-%{_rpmlibdir}/ia32e*
-%{_rpmlibdir}/x86_64*
-%{_rpmlibdir}/x32*
+%{_rpmlibdir}/platform/sparc*
 %endif
 
-%attr(755,root,root) %{_rpmlibdir}/hrmib-cache
+%dir %{_rpmlibdir}/pld
 
-%dir %{_rpmlibdir}/bin
-%attr(755,root,root) %{_rpmlibdir}/bin/dbconvert
-%attr(755,root,root) %{_rpmlibdir}/bin/dbupgrade.sh
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmdb_checkversion
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmdb_reset
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmdbchk
+%attr(755,root,root) %{_rpmlibdir}/rpmdb_dump
+%attr(755,root,root) %{_rpmlibdir}/rpmdb_load
+
+# valgrind suppression file for rpm
+%{_rpmlibdir}/rpm.supp
+
+%dir /usr/lib/.build-id
 
 %files base
 %defattr(644,root,root,755)
@@ -1418,153 +889,165 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files lib
 %defattr(644,root,root,755)
-%attr(755,root,root) /%{_lib}/librpm-%{sover}.so
-%attr(755,root,root) /%{_lib}/librpmdb-%{sover}.so
-%attr(755,root,root) /%{_lib}/librpmio-%{sover}.so
-%attr(755,root,root) /%{_lib}/librpmbuild-%{sover}.so
-%attr(755,root,root) /%{_lib}/librpmmisc-%{sover}.so
-%attr(755,root,root) /%{_lib}/librpmconstant-%{sover}.so
+%attr(755,root,root) /%{_lib}/librpm.so.9
+%attr(755,root,root) /%{_lib}/librpm.so.%{sover}
+%attr(755,root,root) /%{_lib}/librpmbuild.so.9
+%attr(755,root,root) /%{_lib}/librpmbuild.so.%{sover}
+%attr(755,root,root) /%{_lib}/librpmio.so.9
+%attr(755,root,root) /%{_lib}/librpmio.so.%{sover}
+%attr(755,root,root) /%{_lib}/librpmsign.so.9
+%attr(755,root,root) /%{_lib}/librpmsign.so.%{sover}
+%{?with_plugins:%dir %{_libdir}/rpm-plugins}
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/librpm.so
-%attr(755,root,root) %{_libdir}/librpm-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmbuild.so
-%attr(755,root,root) %{_libdir}/librpmbuild-%{sover}.so
-%attr(755,root,root) %{_libdir}/librpmconstant.so
-%attr(755,root,root) %{_libdir}/librpmconstant-%{sover}.so
-%attr(755,root,root) %{_libdir}/librpmdb.so
-%attr(755,root,root) %{_libdir}/librpmdb-%{sover}.so
 %attr(755,root,root) %{_libdir}/librpmio.so
-%attr(755,root,root) %{_libdir}/librpmio-%{sover}.so
-%attr(755,root,root) %{_libdir}/librpmmisc.so
-%attr(755,root,root) %{_libdir}/librpmmisc-%{sover}.so
+%attr(755,root,root) %{_libdir}/librpmsign.so
 %{_libdir}/librpm*.la
 %{_includedir}/rpm
 %{_pkgconfigdir}/*.pc
 
-%files static
-%defattr(644,root,root,755)
-%{_libdir}/librpm*.a
-
 %files utils
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/rpm2archive
 %attr(755,root,root) %{_bindir}/rpm2cpio
-%attr(755,root,root) %{_bindir}/rpmconstant
+%attr(755,root,root) %{_bindir}/rpmgraph
+%attr(755,root,root) %{_rpmlibdir}/rpm2cpio.sh
 %attr(755,root,root) %{_rpmlibdir}/find-debuginfo.sh
-%attr(755,root,root) %{_rpmlibdir}/rpmdb_loadcvt
 %attr(755,root,root) %{_rpmlibdir}/tgpg
-%attr(755,root,root) %{_rpmlibdir}/bin/chroot
-%attr(755,root,root) %{_rpmlibdir}/bin/cp
-%attr(755,root,root) %{_rpmlibdir}/bin/debugedit
-%attr(755,root,root) %{_rpmlibdir}/bin/find
-%attr(755,root,root) %{_rpmlibdir}/bin/mtree
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmcache
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmcmp
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmdeps
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmdigest
-%if %{with selinux}
-%attr(755,root,root) %{_rpmlibdir}/bin/semodule
-%attr(755,root,root) %{_rpmlibdir}/bin/spooktool
-%endif
-%if %{without system_lua}
-%attr(755,root,root) %{_rpmlibdir}/bin/lua
-%attr(755,root,root) %{_rpmlibdir}/bin/luac
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmlua
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmluac
-%endif
-%{?with_keyutils:%attr(755,root,root) %{_rpmlibdir}/bin/rpmkey}
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmrepo
+%attr(755,root,root) %{_rpmlibdir}/debugedit
+%attr(755,root,root) %{_rpmlibdir}/rpmdeps
+%{_mandir}/man8/rpm2archive.8*
 %{_mandir}/man8/rpm2cpio.8*
-%{_mandir}/man8/rpmconstant.8*
 %{_mandir}/man8/rpmdeps.8*
-%{_mandir}/man8/rpmmtree.8*
+%{_mandir}/man8/rpmgraph.8*
 %lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
+%lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
 %lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
-%lang(pl) %{_mandir}/pl/man8/rpmdeps.8*
 %lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
-
-%files utils-perl
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_rpmlibdir}/rpmdiff*
-
-%if %{with static}
-%files utils-static
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/rpm[ieu]
-%attr(755,root,root) %{_rpmlibdir}/rpm[ieu]
-%endif
+%lang(pl) %{_mandir}/pl/man8/rpmdeps.8*
+%lang(ja) %{_mandir}/ja/man8/rpmgraph.8*
+%lang(pl) %{_mandir}/pl/man8/rpmgraph.8*
 
 %files build
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/noauto*
 %attr(755,root,root) %{_rpmlibdir}/brp-*
 %attr(755,root,root) %{_rpmlibdir}/check-files
-%attr(755,root,root) %{_rpmlibdir}/cross-build
-%attr(755,root,root) %{_rpmlibdir}/getpo.sh
 %attr(755,root,root) %{_rpmlibdir}/install-build-tree
-%attr(755,root,root) %{_rpmlibdir}/u_pkg.sh
-%attr(755,root,root) %{_rpmlibdir}/executabledeps.sh
+%attr(755,root,root) %{_rpmlibdir}/elfdeps
 %attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
 # needs hacked pkg-config to return anything
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
-%{!?with_sqlite:%attr(755,root,root) %{_rpmlibdir}/bin/dbsql}
-%attr(755,root,root) %{_rpmlibdir}/bin/install-sh
-%attr(755,root,root) %{_rpmlibdir}/bin/mkinstalldirs
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmspec
-%attr(755,root,root) %{_rpmlibdir}/bin/rpmspecdump
-%attr(755,root,root) %{_rpmlibdir}/bin/sqlite3
-%attr(755,root,root) %{_rpmlibdir}/bin/wget
-%attr(755,root,root) %{_rpmlibdir}/vcheck
-# we always used scripts provided by mono-devel, maybe move them here
-#%attr(755,root,root) %{_rpmlibdir}/mono-find-provides
-#%attr(755,root,root) %{_rpmlibdir}/mono-find-requires
+%attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
 
 %attr(755,root,root) %{_rpmlibdir}/fontconfig.prov
-%{_rpmlibdir}/macros.d/macros.gstreamer
-%{_rpmlibdir}/macros.d/macros.libtool
-%{_rpmlibdir}/macros.d/macros.mono
-%{_rpmlibdir}/macros.d/macros.pkgconfig
-%{_rpmlibdir}/macros.d/macros.prov-req
-%{_rpmlibdir}/macros.d/macros.selinux
-%{_rpmlibdir}/macros.rpmbuild
+# must be here for "Requires: rpm-*prov" to work
+#%{_rpmlibdir}/macros.d/cmake
+#%{_rpmlibdir}/macros.d/gstreamer
+#%{_rpmlibdir}/macros.d/libtool
+#%{_rpmlibdir}/macros.d/perl
+#%{_rpmlibdir}/macros.d/pkgconfig
+#%{_rpmlibdir}/macros.d/python
+#%{_rpmlibdir}/macros.d/selinux
+#%{_rpmlibdir}/macros.d/tcl
+#%{_rpmlibdir}/macros.rpmbuild
 
-%attr(755,root,root) %{_rpmlibdir}/gstreamer.sh
-%attr(755,root,root) %{_rpmlibdir}/kmod-deps.sh
+%attr(755,root,root) %{_rpmlibdir}/check-buildroot
+%attr(755,root,root) %{_rpmlibdir}/check-prereqs
+%attr(755,root,root) %{_rpmlibdir}/check-rpaths
+%attr(755,root,root) %{_rpmlibdir}/check-rpaths-worker
+%attr(755,root,root) %{_rpmlibdir}/find-provides
+%attr(755,root,root) %{_rpmlibdir}/find-requires
+%attr(755,root,root) %{_rpmlibdir}/ocamldeps.sh
+%attr(755,root,root) %{_rpmlibdir}/script.req
+%attr(755,root,root) %{_rpmlibdir}/sepdebugcrcfix
+
+%dir %{_rpmlibdir}/fileattrs
+%{_rpmlibdir}/fileattrs/debuginfo.attr
+%{_rpmlibdir}/fileattrs/desktop.attr
+%{_rpmlibdir}/fileattrs/elf.attr
+%{_rpmlibdir}/fileattrs/font.attr
+%{_rpmlibdir}/fileattrs/libtool.attr
+%{_rpmlibdir}/fileattrs/metainfo.attr
+%{_rpmlibdir}/fileattrs/ocaml.attr
+%{_rpmlibdir}/fileattrs/perl.attr
+%{_rpmlibdir}/fileattrs/perllib.attr
+%{_rpmlibdir}/fileattrs/pkgconfig.attr
+%{_rpmlibdir}/fileattrs/python.attr
+%{_rpmlibdir}/fileattrs/pythondist.attr
+%{_rpmlibdir}/fileattrs/script.attr
 
 %attr(755,root,root) %{_bindir}/gendiff
 %attr(755,root,root) %{_bindir}/rpmbuild
-
-%dir %{_rpmlibdir}/helpers
-%attr(755,root,root) %{_rpmlibdir}/helpers/makeshlibs
+%attr(755,root,root) %{_bindir}/rpmspec
 
 %{_mandir}/man1/gendiff.1*
+%lang(pl) %{_mandir}/pl/man1/gendiff.1*
 %{_mandir}/man8/rpmbuild.8*
 %lang(ja) %{_mandir}/ja/man8/rpmbuild.8*
-%lang(pl) %{_mandir}/pl/man1/gendiff.1*
 %lang(pl) %{_mandir}/pl/man8/rpmbuild.8*
+%{_mandir}/man8/rpmspec.8*
 
 %files perlprov
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_rpmlibdir}/perl.*
-%attr(755,root,root) %{_rpmlibdir}/osgideps.pl
-%attr(755,root,root) %{_rpmlibdir}/perldeps.pl
 
 %files pythonprov
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_rpmlibdir}/pythoneggs.py
-%attr(755,root,root) %{_rpmlibdir}/pythondeps.sh
+%attr(755,root,root) %{_rpmlibdir}/pythondistdeps.py
 
-%if %{with python}
-%files -n python-rpm
+%if %{with python3}
+%files -n python3-rpm
 %defattr(644,root,root,755)
-%dir %{py_sitedir}/rpm
-%attr(755,root,root) %{py_sitedir}/rpm/*.so
-%{py_sitedir}/rpm/*.py[co]
+%dir %{py3_sitedir}/rpm
+%attr(755,root,root) %{py3_sitedir}/rpm/*.so
+%{py3_sitedir}/rpm/*.py
+%{py3_sitedir}/rpm-%{version}-py*.egg-info
+%{py3_sitedir}/rpm/__pycache__
 %endif
+
+%if %{with plugins}
+%files plugin-audit
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/rpm-plugins/audit.so
+%{_mandir}/man8/rpm-plugin-audit.8*
+
+%files plugin-syslog
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/rpm-plugins/syslog.so
+%{_mandir}/man8/rpm-plugin-syslog.8*
+
+%files plugin-systemd-inhibit
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/rpm-plugins/systemd_inhibit.so
+%{_mandir}/man8/rpm-plugin-systemd-inhibit.8*
+
+%files plugin-ima
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/rpm-plugins/ima.so
+%{_mandir}/man8/rpm-plugin-ima.8*
+
+%files plugin-prioreset
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/rpm-plugins/prioreset.so
+%{_mandir}/man8/rpm-plugin-prioreset.8*
+
+%files plugin-selinux
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/rpm-plugins/selinux.so
+%{_mandir}/man8/rpm-plugin-selinux.8*
+%endif
+
+%files sign
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/rpmsign
+%{_mandir}/man8/rpmsign.8*
 
 %if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
-%doc apidocs
+%doc doc/librpm/html/*
 %endif

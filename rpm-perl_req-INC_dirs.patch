@@ -1,11 +1,9 @@
 --- scripts/perl.req~	2004-04-16 13:27:10.000000000 +0200
 +++ scripts/perl.req	2004-04-26 23:54:42.128568344 +0200
-@@ -39,8 +39,19 @@
+@@ -39,9 +39,18 @@
+ eval { require version; $HAVE_VERSION = 1; };
  
- # by Ken Estes Mail.com kestes@staff.mail.com
  
-+
-+
 +# *inc variables are used to track dependencies on directories for modules.
 +# These directories (especially arch-dependent) are likely to change some day.
 +my @inc = sort { length $b cmp length $a }
@@ -22,14 +20,15 @@
 +    if (m=/usr/(sbin|bin|lib|lib64|libx32|share|X11R6/(lib|lib64|libx32|bin))/=) {
        if (! m=(/(doc|man|info|usr/src)/|\.(so|ph|h|html|pod)$)=) {
          process_file($_) if -f;
-@@ -53,8 +64,9 @@
+       }
+@@ -53,7 +64,9 @@
+ foreach $perlver (sort keys %perlreq) {
+   print "perl >= $perlver\n";
  }
- delete $require{the}; # don't count "use the sth" as perl module  
- 
 +print "$_\n" for sort grep $inc{$_}, keys %inc;
- 
++
 -foreach $module (sort keys %require) {
 +foreach my $module (sort grep length, keys %require) {
    if (length($require{$module}) == 0) {
-      if ($module =~ /^[0-9._]+$/) {
-        print "perl-base >= $module\n";
+     print "perl($module)\n";
+   } else {

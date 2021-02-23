@@ -1,0 +1,35 @@
+--- rpm-4.15.1/python/setup.py.in.orig	2019-06-26 23:17:31.000000000 +0900
++++ rpm-4.15.1/python/setup.py.in	2020-01-01 01:58:28.121517896 +0900
+@@ -12,17 +12,8 @@
+         out.append(token[2:])
+     return out
+ 
+-cflags = ['-std=c99', '-Wno-strict-aliasing']
+-additional_link_args = []
+-
+-# See if we're building in-tree
+-if os.access('Makefile.am', os.F_OK):
+-    cflags.append('-I../include')
+-    additional_link_args.extend(['-Wl,-L../rpmio/.libs',
+-                                 '-Wl,-L../lib/.libs',
+-                                 '-Wl,-L../build/.libs',
+-                                 '-Wl,-L../sign/.libs'])
+-    os.environ['PKG_CONFIG_PATH'] = '..'
++cflags = ['-std=c99', '-Wno-strict-aliasing', '-I../include']
++os.environ['PKG_CONFIG_PATH'] = '..'
+ 
+ rpmmod = Extension('rpm._rpm',
+                    sources = ['header-py.c', 'rpmds-py.c', 'rpmfd-py.c',
+@@ -33,11 +24,9 @@
+                               'rpmte-py.c', 'rpmts-py.c', 'rpmver-py.c',
+                               'spec-py.c',
+                               'rpmmodule.c'],
+-                   include_dirs = pkgconfig('--cflags'),
+-                   library_dirs = pkgconfig('--libs-only-L'),
++                   library_dirs = ['../rpmio/.libs', '../lib/.libs', '../build/.libs', '../sign/.libs'],
+                    libraries = pkgconfig('--libs-only-l') + ['rpmbuild', 'rpmsign'],
+                    extra_compile_args = cflags,
+-                   extra_link_args = additional_link_args
+                   )
+ 
+ setup(name='@PACKAGE_NAME@',

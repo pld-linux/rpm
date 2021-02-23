@@ -105,7 +105,8 @@ sub process_file {
 			( $version = $self->{safe}->reval($_) ) =~ s/^\s+|alpha|beta|\s+$//g;
 			if ( defined $version
 				&& length $version
-				&& $version =~ /[^\d\._abcdefgh]/ )
+				&& ($version =~ /[^\d\._abcdefgh]/
+					|| $version =~ /^[^\d]*$/ ))
 			{
 				warn "$0: weird version number in $file: [$version]\n";
 				$version = '';

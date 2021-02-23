@@ -1,17 +1,14 @@
 --- rpm-5.3.1/scripts/find-debuginfo.sh.wiget	2009-09-10 03:52:13.000000000 +0200
 +++ rpm-5.3.1/scripts/find-debuginfo.sh	2010-05-30 16:53:33.275994510 +0200
-@@ -92,8 +92,12 @@ strip_to_debug()
+@@ -254,7 +254,10 @@ strip_to_debug()
+   $strip_glibs && case "$(file -bi "$2")" in
+     application/x-sharedlib*) g=-g ;;
    esac
-   [ -n "$EXCLUDE_FULL_REGEXP" ] && grep -E -q "$EXCLUDE_FULL_REGEXP" <<< "$2" && g=-g
- 
--  eu-strip --remove-comment $g $([ -n "$DISABLE_DEBUG" ] || echo -f "$1") "$2" || exit  
--  [ -n "$DISABLE_DEBUG" ] || chmod 444 "$1" || exit
-+  [ -n "$DISABLE_DEBUG" ] && return
+-  eu-strip --remove-comment $r $g ${keep_remove_args} -f "$1" "$2" || exit
 +  local t=$(mktemp "/tmp/rpm.stripped.XXXXXX")
 +  objcopy --compress-debug-sections "$2" || exit
-+  eu-strip --remove-comment -f "$1" "$2" -o "$t" || exit
++  eu-strip --remove-comment $r -f "$1" "$2" -o "$t" || exit
 +  rm -f "$t"
-+  chmod 444 "$1" || exit
+   chmod 444 "$1" || exit
  }
  
- # Make a relative symlink to $1 called $3$2

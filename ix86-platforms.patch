@@ -1,0 +1,34 @@
+--- rpm-4.16.0/installplatform.orig	2020-10-27 00:28:54.592595565 +0100
++++ rpm-4.16.0/installplatform	2020-10-27 00:31:27.676694730 +0100
+@@ -76,7 +76,7 @@
+     i?86|pentium?|athlon|geode)
+ 	ISANAME=x86
+ 	ISABITS=32
+-	CANONARCH=i386
++	CANONARCH=${ARCH}
+ 	CANONCOLOR=0
+ 	;;
+     x86_64|amd64|ia32e)
+--- rpm-4.16.0/rpmrc.in~	2020-10-27 22:14:37.000000000 +0100
++++ rpm-4.16.0/rpmrc.in	2020-10-27 22:37:49.273277848 +0100
+@@ -302,13 +302,13 @@
+ buildarchtranslate: osfmach3_i486: i386
+ buildarchtranslate: osfmach3_i386: i386
+ 
+-buildarchtranslate: athlon: i386
+-buildarchtranslate: geode: i386
+-buildarchtranslate: pentium4: i386
+-buildarchtranslate: pentium3: i386
+-buildarchtranslate: i686: i386
+-buildarchtranslate: i586: i386
+-buildarchtranslate: i486: i386
++buildarchtranslate: athlon: athlon
++buildarchtranslate: geode: geode
++buildarchtranslate: pentium4: pentium4
++buildarchtranslate: pentium3: pentium3
++buildarchtranslate: i686: i686
++buildarchtranslate: i586: i586
++buildarchtranslate: i486: i486
+ buildarchtranslate: i386: i386
+ 
+ buildarchtranslate: alphaev5: alpha
