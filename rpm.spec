@@ -634,7 +634,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 
 install %{SOURCE15} scripts/perl.prov.in
 
-%{__mv} -f scripts/perl.req{,.in}
+%{__mv} scripts/perl.req{,.in}
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE5}
@@ -649,7 +649,7 @@ awk -f %{SOURCE6} %{SOURCE5}
 %{__automake}
 
 # rpm checks for CPU type at runtime, but it looks better
-sed -i \
+%{__sed} -i \
 	-e 's|@host@|%{_target_cpu}-%{_target_vendor}-%{_target_os}|' \
 	-e 's|@host_cpu@|%{_target_cpu}|' \
 	-e 's|@host_os@|%{_target_os}|' \
@@ -699,48 +699,48 @@ cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.as
 
 # cleanup
 %ifnarch %{ix86} %{x8664} x32
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/athlon-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/geode-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i386-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i486-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i586-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i686-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/pentium3-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/pentium4-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/athlon-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/geode-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i386-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i486-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i586-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/i686-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/pentium3-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/pentium4-linux/macros
 %endif
 
 %ifnarch %{x8664} x32
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/amd64-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ia32e-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/x32-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/x86_64-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/amd64-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ia32e-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/x32-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/x86_64-linux/macros
 %endif
 
 %ifnarch %{ppc}
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/m68k-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc32dy4-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc64*-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc8260-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc8560-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc*series-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/m68k-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc32dy4-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc64*-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc8260-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc8560-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ppc*series-linux/macros
 %endif
 
 %ifnarch aarch64
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/aarch64-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/aarch64-linux/macros
 %endif
 
 %ifnarch %{arm}
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/arm*-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/arm*-linux/macros
 %endif
 
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/alpha*-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ia64-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/mips*-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/riscv64-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/s390*-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sh*-linux/macros
-rm $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sparc*-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/alpha*-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ia64-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/mips*-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/riscv64-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/s390*-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sh*-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/sparc*-linux/macros
 
 cat <<'EOF' > $RPM_BUILD_ROOT%{_sysconfdir}/rpm/platform
 %ifarch x32
@@ -956,9 +956,12 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_libdir}/librpmbuild.so
 %attr(755,root,root) %{_libdir}/librpmio.so
 %attr(755,root,root) %{_libdir}/librpmsign.so
-%{_libdir}/librpm*.la
+%{_libdir}/librpm.la
+%{_libdir}/librpmbuild.la
+%{_libdir}/librpmio.la
+%{_libdir}/librpmsign.la
 %{_includedir}/rpm
-%{_pkgconfigdir}/*.pc
+%{_pkgconfigdir}/rpm.pc
 
 %files utils
 %defattr(644,root,root,755)
