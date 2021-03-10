@@ -474,22 +474,31 @@ Python 3 para manipular pacotes e bancos de dados RPM.
 
 %package plugin-audit
 Summary:	Plugin for logging audit events on package operations
+Summary(pl.UTF-8):	Wtyczka do logowania zdarzeń audytowych przy operacjach na pakietach
 Group:		Base
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
 %description plugin-audit
-Plugin for libaudit support
+Plugin for libaudit support.
+
+%description plugin-audit -l pl.UTF-8
+Wtyczka do obsługi libaudit.
 
 %package plugin-syslog
 Summary:	Plugin for syslog functionality
+Summary(pl.UTF-8):	Wtyczka do funkcjonalności sysloga
 Group:		Base
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
 %description plugin-syslog
 This plugin exports RPM actions to the system log.
 
+%description plugin-syslog -l pl.UTF-8
+Ta wtyczka eksportuje akcje RPM-a do logu systemowego.
+
 %package plugin-systemd-inhibit
 Summary:	Plugin for systemd inhibit functionality
+Summary(pl.UTF-8):	Wtyczka do funkcjonalności systemd inhibit
 Group:		Base
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
@@ -497,8 +506,14 @@ Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 This plugin blocks systemd from entering idle, sleep or shutdown while
 an rpm transaction is running using the systemd-inhibit mechanism.
 
+%description plugin-systemd-inhibit -l pl.UTF-8
+Ta wtyczka blokuje systemd przed wejściem w stan bezczynności (idle),
+uśpienia (sleep) lub zamykania (shutdown) podczas trwania transakcji
+RPM-a, korzystając z mechanizmu systemd-inhibit.
+
 %package plugin-ima
 Summary:	Plugin for IMA file signatures
+Summary(pl.UTF-8):	Wtyczka do sygnatur plików IMA
 Group:		Base
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
@@ -506,8 +521,13 @@ Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 This plugin adds support for enforcing and verifying IMA file
 signatures in an rpm.
 
+%description plugin-ima -l pl.UTF-8
+Ta wtyczka dodaje obsługę wymuszania i weryfikacji podpisów plików
+IMA w RPM-ie.
+
 %package plugin-prioreset
 Summary:	Plugin for resetting scriptlet priorities for SysV init
+Summary(pl.UTF-8):	Wtyczka do resetowania priorytetu skryptletów przy inicie SysV
 Group:		Base
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
@@ -516,8 +536,14 @@ This plugin is useful on legacy SysV init systems if you run rpm
 transactions with nice/ionice priorities. Should not be used on
 systemd systems.
 
+%description plugin-prioreset -l pl.UTF-8
+Ta wtyczka jest przydatna w systemach ze starym procesem init w wersji
+SysV, jeżeli transakcje RPM-a są uruchamiane z priorytetami
+nice/ionice. Nie powinna być używana w systemach z systemd.
+
 %package plugin-selinux
 Summary:	Plugin for SELinux functionality
+Summary(pl.UTF-8):	Wtyczka do funkcjonalności SELinux
 Group:		Base
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 Requires:	libselinux >= 2.1.0
@@ -525,13 +551,20 @@ Requires:	libselinux >= 2.1.0
 %description plugin-selinux
 Plugin for SELinux functionality.
 
+%description plugin-selinux -l pl.UTF-8
+Wtyczka do funkcjonalności SELinux.
+
 %package sign
 Summary:	Package signing support
+Summary(pl.UTF-8):	Obsługa podpisywania pakietów
 Group:		Base
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
 %description sign
 This package contains support for digitally signing RPM packages.
+
+%description sign -l pl.UTF-8
+Ten pakiet zawiera obsługę cyfrowego podpisywania pakietów RPM.
 
 %package apidocs
 Summary:	RPM API documentation and guides
