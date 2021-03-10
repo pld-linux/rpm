@@ -3,11 +3,14 @@
 # - when adopting, use 4.5 ticket for checklist: https://bugs.launchpad.net/pld-linux/+bug/262985
 #
 # Conditional build:
-%bcond_without	apidocs		# don't generate documentation with doxygen
-%bcond_without	python3		# don't build python bindings
-%bcond_without	plugins		# build plugins
-%bcond_without	recommends_tags	# build without Recommends tag (bootstrapping)
-%bcond_with	imaevm		# build with IMA/EVM support (requires libimaevm from ima-evm-utils)
+%bcond_without	apidocs		# Doxygen based API documentation
+%bcond_without	python3		# Python (3) bindings
+%bcond_without	plugins		# plugins (all, including: audit, imaevm, selinux, systemd)
+%bcond_without	recommends_tags	# use of Recommends tag (disable for bootstrapping)
+%bcond_with	imaevm		# IMA/EVM signing support (requires libimaevm from ima-evm-utils)
+%bcond_without	audit		# audit plugin
+%bcond_without	selinux		# SELinux plugin
+%bcond_without	systemd		# systemd inhibit plugin
 
 %define		db_ver		5.3.28.0
 %define		popt_ver	1.15
@@ -17,6 +20,11 @@
 %define	with_recommends_tags	1
 %endif
 
+%if %{without plugins}
+%undefine	with_audit
+%undefine	with_selinux
+%undefine	with_systemd
+%endif
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
 Summary(es.UTF-8):	Gestor de paquetes RPM
@@ -86,34 +94,35 @@ Patch35:	pl-po.patch
 Patch36:	build-locale.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
-BuildRequires:	db-devel >= %{db_ver}
+%{?with_audit:BuildRequires:	audit-libs-devel}
 BuildRequires:	autoconf >= 2.63
-BuildRequires:	automake >= 1.4
+BuildRequires:	automake >= 1:1.10
 BuildRequires:	bzip2-devel >= 1.0.2-17
+BuildRequires:	db-devel >= %{db_ver}
+%{?with_systemd:BuildRequires:	dbus-devel >= 1.3}
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gettext-tools >= 0.19.2
 BuildRequires:	libarchive-devel
 BuildRequires:	libcap-devel
 BuildRequires:	libmagic-devel
 BuildRequires:	libgcrypt-devel
-%if %{with plugins}
-BuildRequires:	audit-libs-devel
-BuildRequires:	dbus-devel
+BuildRequires:	libgomp-devel >= 6:4.5
 %{?with_imaevm:BuildRequires:	libimaevm-devel >= 1.0}
-BuildRequires:	libselinux-devel >= 2.1.0
-%endif
+%{?with_selinux:BuildRequires:	libselinux-devel >= 2.1.0}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 1:1.4.2-9
+BuildRequires:	lua-devel >= 5.2
 BuildRequires:	patch >= 2.2
-BuildRequires:	pkgconfig(lua) >= 5.1
+BuildRequires:	pkgconfig
 BuildRequires:	popt-devel >= %{popt_ver}
-BuildRequires:	python3-modules
+BuildRequires:	python3-modules >= 1:3.2
 %if %{with python3}
-BuildRequires:	python3-devel
+BuildRequires:	python3-devel >= 1:3.2
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.750
 %endif
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	sqlite3-devel >= 3.22.0
 BuildRequires:	tcl
 BuildRequires:	xz-devel
@@ -235,6 +244,7 @@ Group:		Libraries
 Requires:	db >= %{db_ver}
 Requires:	libmagic >= 1.15-2
 Requires:	popt >= %{popt_ver}
+Requires:	sqlite3-libs >= 3.22.0
 Obsoletes:	rpm-libs < 4.0.2-4
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
@@ -501,6 +511,7 @@ Summary:	Plugin for systemd inhibit functionality
 Summary(pl.UTF-8):	Wtyczka do funkcjonalności systemd inhibit
 Group:		Base
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
+Requires:	dbus >= 1.3
 
 %description plugin-systemd-inhibit
 This plugin blocks systemd from entering idle, sleep or shutdown while
@@ -645,28 +656,25 @@ sed -i \
 	macros.in
 
 %configure \
+	PYTHON=python3 \
 	WITH_PERL_VERSION=no \
 	__GST_INSPECT=%{_bindir}/gst-inspect-1.0 \
 	__GPG=%{_bindir}/gpg \
-%if %{with python3}
-	PYTHON=python3 \
-	--enable-python \
-%endif
-	--disable-silent-rules \
-	--enable-shared \
 	--enable-bdb \
 	--enable-bdb-ro \
 	--enable-ndb \
+	%{!?with_plugins:--disable-plugins} \
+	--disable-silent-rules \
 	--enable-sqlite \
 	--enable-zstd \
-	--with-lua \
-	%{?with_imaevm:--with-imaevm} \
-	--with-cap \
 	--with-acl \
-	--with-audit \
 	--with-archive \
-	--with-selinux=%{!?with_plugins:no}%{?with_plugins:yes} \
-	%{!?with_plugins:--disable-plugins} \
+	--with-audit%{!?with_audit:=no} \
+	--with-cap \
+	%{?with_imaevm:--with-imaevm} \
+	--with-lua \
+	%{?with_python3:--enable-python} \
+	--with-selinux%{!?with_selinux:=no} \
 	--with-vendor=pld
 
 %{__make}
