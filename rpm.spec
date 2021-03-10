@@ -138,8 +138,8 @@ Recommends:	rpm-plugin-prioreset
 Recommends:	rpm-plugin-syslog
 Recommends:	rpm-plugin-systemd-inhibit
 %endif
-Obsoletes:	rpm-utils-perl
-Obsoletes:	rpm-utils-static
+Obsoletes:	rpm-utils-perl < 1:4.15
+Obsoletes:	rpm-utils-static < 1:4.15
 Conflicts:	glibc < 2.2.92
 # db4.6 poldek needed
 Conflicts:	poldek < 0.21-0.20070703.00.3
@@ -212,8 +212,8 @@ Summary:	RPM base package - scripts used by rpm packages themselves
 Summary(pl.UTF-8):	Podstawowy pakiet RPM - skrypty używane przez same pakiety rpm
 Group:		Base
 Requires:	filesystem
-Obsoletes:	rpm-scripts
-Obsoletes:	vserver-rpm
+Obsoletes:	rpm-scripts < 4.4
+Obsoletes:	vserver-rpm < 1
 
 %description base
 The RPM base package contains scripts used by rpm packages themselves.
@@ -235,7 +235,7 @@ Group:		Libraries
 Requires:	db >= %{db_ver}
 Requires:	libmagic >= 1.15-2
 Requires:	popt >= %{popt_ver}
-Obsoletes:	rpm-libs
+Obsoletes:	rpm-libs < 4.0.2-4
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
 
@@ -446,7 +446,7 @@ Group:		Development/Languages/Python
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	python3
 Obsoletes:	python-rpm < 1:4.16.0
-Obsoletes:	rpm-python
+Obsoletes:	rpm-python < 4.0.2-50
 
 %description -n python3-rpm
 The python3-rpm package contains a module which permits applications
