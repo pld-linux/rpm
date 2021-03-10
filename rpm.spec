@@ -791,6 +791,13 @@ if [ -e /var/lib/rpm/Packages ]; then
 	fi
 fi
 
+%post
+if [ -d /var/cache/hrmib ]; then
+	%{__rm} -rf /var/cache/hrmib
+	echo "HR-MIB is not supported by this rpm version."
+	echo "/var/cache/hrmib has been removed."
+fi
+
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
 
