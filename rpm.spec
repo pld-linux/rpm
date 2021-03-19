@@ -664,6 +664,7 @@ awk -f %{SOURCE6} %{SOURCE5}
 	--enable-bdb-ro \
 	--enable-ndb \
 	%{!?with_plugins:--disable-plugins} \
+	%{!?with_systemd:--disable-inhibit-plugin} \
 	--disable-silent-rules \
 	--enable-sqlite \
 	--enable-zstd \
@@ -1074,10 +1075,12 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_libdir}/rpm-plugins/syslog.so
 %{_mandir}/man8/rpm-plugin-syslog.8*
 
+%if %{with systemd}
 %files plugin-systemd-inhibit
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/rpm-plugins/systemd_inhibit.so
 %{_mandir}/man8/rpm-plugin-systemd-inhibit.8*
+%endif
 
 %files plugin-ima
 %defattr(644,root,root,755)
