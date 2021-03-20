@@ -5,9 +5,6 @@
 %_install_file_context_path	%{nil}
 %_verify_file_context_path	%{nil}
 
-# If non-zero (default), all erasures will be automagically repackaged.
-#%_repackage_all_erasures	0
-
 # Boolean (i.e. 1 == "yes", 0 == "no") that controls whether files
 # marked as %doc should be installed.
 #%_excludedocs			1
