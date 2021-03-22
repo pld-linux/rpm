@@ -14,7 +14,7 @@
 
 %define		db_ver		5.3.28.0
 %define		popt_ver	1.15
-%define		sover		9.1.2
+%define		sover		9.1.3
 
 %if "%{_rpmversion}" >= "4.12" && "%{_rpmversion}" < "5"
 %define	with_recommends_tags	1
@@ -33,13 +33,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	4.16.1.2
-Release:	9
+Version:	4.16.1.3
+Release:	1
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
 Source0:	http://ftp.rpm.org/releases/rpm-4.16.x/%{name}-%{version}.tar.bz2
-# Source0-md5:	0d10f63a0a4c9517cf3808a601378399
+# Source0-md5:	576277fafa5d0681a8a92c8716aca5f0
 Source1:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source1-md5:	23914bb49fafe7153cee87126d966461
 Source2:	macros.local
