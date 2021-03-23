@@ -105,7 +105,7 @@ diff -ur rpm-4.16.1.2/installplatform rpm-4.16.1.2.x32/installplatform
  
    # XXX FIXME: incomplete and quite likely wrong too in places,
    # consult various arch folks for correct names etc.
-@@ -75,7 +77,15 @@
+@@ -82,7 +84,15 @@
  	ISANAME=x86
  	ISABITS=64
  	CANONARCH=x86_64
@@ -122,7 +122,12 @@ diff -ur rpm-4.16.1.2/installplatform rpm-4.16.1.2.x32/installplatform
  	;;
      ia64)
  	ISANAME=ia
-@@ -190,6 +201,10 @@
+@@ -190,10 +200,14 @@
+   # skip architectures for which we dont have full config parameters
+   [ -z "$CANONARCH" ] && continue
+ 
+-  if [ "$OS" = "linux" ] && [ "$CANONCOLOR" = 3 ]; then
++  if [ "$OS" = "linux" ] && ( [ "$CANONCOLOR" = 3 ] || [ "$CANONARCH" = "x86_64" ] ); then
        LIB=${LIB}64
    fi
  
@@ -133,7 +138,7 @@ diff -ur rpm-4.16.1.2/installplatform rpm-4.16.1.2.x32/installplatform
    PPD="${DESTDIR}/${platformdir}/${ARCH}-${OS}"
    [ -d $PPD ] || mkdir -p $PPD
  
-@@ -202,6 +221,8 @@
+@@ -202,6 +216,8 @@
  	-e "s,@RPMCANONARCH@,$CANONARCH,g" \
  	-e "s,@RPMCANONCOLOR@,$CANONCOLOR," \
  	-e "s,@RPMRC_GNU@,$RPMRC_GNU," \
