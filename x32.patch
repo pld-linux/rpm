@@ -105,7 +105,7 @@ diff -ur rpm-4.16.1.2/installplatform rpm-4.16.1.2.x32/installplatform
  
    # XXX FIXME: incomplete and quite likely wrong too in places,
    # consult various arch folks for correct names etc.
-@@ -75,7 +77,16 @@
+@@ -75,7 +77,15 @@
  	ISANAME=x86
  	ISABITS=64
  	CANONARCH=x86_64
@@ -117,7 +117,6 @@ diff -ur rpm-4.16.1.2/installplatform rpm-4.16.1.2.x32/installplatform
 +	ISABITS=x32
 +	CANONARCH=x32
 +	CANONCOLOR=7
-+	RPMRC_GNU="gnux32"
 +	FORCE_RPMRC_GNU="%{?_gnu}"
 +	TARGETCPU="x86_64"
  	;;
