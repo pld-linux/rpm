@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.16.1.3
-Release:	4
+Release:	5
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -136,7 +136,7 @@ BuildRequires:	tetex-pdftex
 Requires(posttrans):	coreutils
 Requires:	%{name}-base = %{epoch}:%{version}-%{release}
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
-Requires:	rpm-pld-macros >= 1.744
+Requires:	rpm-pld-macros >= 2.002
 Requires:	FHS >= 3.0-2
 Requires:	libgcrypt
 Requires:	popt >= %{popt_ver}

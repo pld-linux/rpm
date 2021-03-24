@@ -12,3 +12,27 @@
    chmod 444 "$1" || exit
  }
  
+--- rpm-4.16.1.3/macros.in.orig	2021-03-24 09:50:21.000000000 +0100
++++ rpm-4.16.1.3/macros.in	2021-03-24 10:05:10.129698408 +0100
+@@ -534,7 +534,7 @@
+ #   Same as for "separate" but if the __debug_package global is set then
+ #   the -debuginfo package will have a compatibility link for the main
+ #   ELF /usr/lib/debug/.build-id/xx/yyy -> /usr/lib/.build-id/xx/yyy
+-%_build_id_links compat
++%_build_id_links alldebug
+ 
+ # Whether build-ids should be made unique between package version/releases
+ # when generating debuginfo packages. If set to 1 this will pass
+@@ -563,10 +563,10 @@
+ %_unique_debug_srcs	1
+ 
+ # Whether rpm should put debug source files into its own subpackage
+-#%_debugsource_packages	1
++%_debugsource_packages	1
+ 
+ # Whether rpm should create extra debuginfo packages for each subpackage
+-#%_debuginfo_subpackages 1
++%_debuginfo_subpackages 1
+ 
+ #
+ # Use internal dependency generator rather than external helpers?
