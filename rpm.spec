@@ -61,6 +61,7 @@ Patch1:		%{name}-popt-aliases.patch
 Patch2:		%{name}-perl-macros.patch
 Patch3:		%{name}-perl-req-perlfile.patch
 Patch4:		%{name}-scripts-closefds.patch
+Patch5:		%{name}-dir-macros-relative.patch
 Patch6:		%{name}-perl_req-INC_dirs.patch
 Patch7:		%{name}-debuginfo.patch
 Patch8:		%{name}-libtool-deps.patch
@@ -598,6 +599,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 %patch6 -p0
 %patch7 -p1
 %patch8 -p1

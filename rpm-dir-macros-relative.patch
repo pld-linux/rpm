@@ -1,0 +1,45 @@
+Force base dir macros to arbitrary values, derived as relative to base ones.
+Now redefining _prefix affects _{bin,sbin,lib,libexec,include,data,dataroot,info,man,doc}dir values.
+
+--- rpm-4.16.1.3/platform.in.orig	2021-03-28 18:12:24.786830780 +0200
++++ rpm-4.16.1.3/platform.in	2021-03-28 18:23:20.670665669 +0200
+@@ -25,23 +25,23 @@
+ #==============================================================================
+ # ---- configure macros.
+ #
+-%_prefix		@prefix@
+-%_exec_prefix		@exec_prefix@
+-%_bindir		@bindir@
+-%_sbindir		@sbindir@
+-%_libexecdir		@libexecdir@
+-%_datarootdir		@datarootdir@
+-%_datadir		@datadir@
+-%_sysconfdir		@sysconfdir@
+-%_sharedstatedir	@sharedstatedir@
+-%_localstatedir		@localstatedir@
++%_prefix		/usr
++%_exec_prefix		%{_prefix}
++%_bindir		%{_prefix}/bin
++%_sbindir		%{_prefix}/sbin
++%_libexecdir		%{_prefix}/libexec
++%_datarootdir		%{_prefix}/share
++%_datadir		%{_datarootdir}
++%_sysconfdir		/etc
++%_sharedstatedir	/var/lib
++%_localstatedir		/var
+ %_lib			@LIB@
+-%_libdir		@exec_prefix@/@LIB@
+-%_includedir		@includedir@
+-%_oldincludedir		@oldincludedir@
+-%_infodir		@infodir@
+-%_mandir		@mandir@
+-%_initddir		%{_sysconfdir}/rc.d/init.d
++%_libdir		%{_exec_prefix}/@LIB@
++%_includedir		%{_prefix}/include
++%_oldincludedir		%{_prefix}/include
++%_infodir		%{_datarootdir}/info
++%_mandir		%{_datarootdir}/man
++%_initddir		/etc/rc.d/init.d
+ # Deprecated misspelling, present for backwards compatibility.
+ %_initrddir		%{_initddir}
+ %_rundir		@RUNDIR@
