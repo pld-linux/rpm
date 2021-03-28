@@ -101,7 +101,7 @@ diff -ur rpm-4.16.1.2/installplatform rpm-4.16.1.2.x32/installplatform
    ARCH_INSTALL_POST='%{nil}'
    LIB=lib
 +  TARGETCPU="%{_target_cpu}"
-+  FORCE_RPMRC_GNU=
++  APPEND_TARGET_ABI=
  
    # XXX FIXME: incomplete and quite likely wrong too in places,
    # consult various arch folks for correct names etc.
@@ -117,7 +117,7 @@ diff -ur rpm-4.16.1.2/installplatform rpm-4.16.1.2.x32/installplatform
 +	ISABITS=x32
 +	CANONARCH=x32
 +	CANONCOLOR=7
-+	FORCE_RPMRC_GNU="%{?_gnu}"
++	APPEND_TARGET_ABI=1
 +	TARGETCPU="x86_64"
  	;;
      ia64)
@@ -142,7 +142,7 @@ diff -ur rpm-4.16.1.2/installplatform rpm-4.16.1.2.x32/installplatform
  	-e "s,@RPMCANONARCH@,$CANONARCH,g" \
  	-e "s,@RPMCANONCOLOR@,$CANONCOLOR," \
  	-e "s,@RPMRC_GNU@,$RPMRC_GNU," \
-+	-e "s,@FORCE_RPMRC_GNU@,$FORCE_RPMRC_GNU," \
++	-e "s,@TARGET_ABI@,${APPEND_TARGET_ABI:+%{?_gnu\}}," \
 +	-e "s,@TARGETCPU@,$TARGETCPU," \
  	-e "s,@LIB@,$LIB," \
  	-e "s,@ARCH_INSTALL_POST@,$ARCH_INSTALL_POST," \
@@ -155,7 +155,7 @@ diff -ur rpm-4.16.1.2/platform.in rpm-4.16.1.2.x32/platform.in
  %_os			@RPMCANONOS@
  %_gnu			@RPMRC_GNU@
 -%_target_platform	%{_target_cpu}-%{_vendor}-%{_target_os}
-+%_target_platform	@TARGETCPU@-%{_vendor}-%{_target_os}@FORCE_RPMRC_GNU@
++%_target_platform	@TARGETCPU@-%{_vendor}-%{_target_os}@TARGET_ABI@
  %optflags		@RPMRC_OPTFLAGS@
  
  %__isa_name		@ISANAME@
