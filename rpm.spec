@@ -76,6 +76,7 @@ Patch17:	python-internal-build.patch
 Patch18:	missing-macros.patch
 Patch19:	pkgconfig.patch
 Patch20:	uname-deps.patch
+Patch21:	arm_abi.patch
 Patch22:	ix86-platforms.patch
 Patch23:	shortcircuited-deps.patch
 Patch24:	cpuinfo-deps.patch
@@ -612,6 +613,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch18 -p1
 %patch19 -p1
 %patch20 -p1
+%patch21 -p1
 %patch22 -p1
 %patch23 -p1
 %patch24 -p1
