@@ -103,12 +103,12 @@ BuildRequires:	db-devel >= %{db_ver}
 %{?with_systemd:BuildRequires:	dbus-devel >= 1.3}
 BuildRequires:	elfutils-devel >= 0.108
 BuildRequires:	gettext-tools >= 0.19.2
+%{?with_imaevm:BuildRequires:	ima-evm-utils-devel >= 1.0}
 BuildRequires:	libarchive-devel
 BuildRequires:	libcap-devel
 BuildRequires:	libmagic-devel
 BuildRequires:	libgcrypt-devel
 BuildRequires:	libgomp-devel >= 6:4.5
-%{?with_imaevm:BuildRequires:	libimaevm-devel >= 1.0}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 2.1.0}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
