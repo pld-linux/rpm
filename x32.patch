@@ -96,16 +96,17 @@ diff -ur rpm-4.16.1.2/fileattrs/pythondist.attr rpm-4.16.1.2.x32/fileattrs/pytho
 diff -ur rpm-4.16.1.2/installplatform rpm-4.16.1.2.x32/installplatform
 --- rpm-4.16.1.2/installplatform	2020-05-28 12:04:25.027136631 +0200
 +++ rpm-4.16.1.2.x32/installplatform	2021-03-21 21:51:47.671145954 +0100
-@@ -21,6 +21,8 @@
+@@ -21,6 +21,9 @@
  
    ARCH_INSTALL_POST='%{nil}'
    LIB=lib
 +  TARGETCPU="%{_target_cpu}"
 +  APPEND_TARGET_ABI=
++  PREFERCOLOR=
  
    # XXX FIXME: incomplete and quite likely wrong too in places,
    # consult various arch folks for correct names etc.
-@@ -82,7 +84,15 @@
+@@ -82,7 +84,16 @@
  	ISANAME=x86
  	ISABITS=64
  	CANONARCH=x86_64
@@ -119,6 +120,7 @@ diff -ur rpm-4.16.1.2/installplatform rpm-4.16.1.2.x32/installplatform
 +	CANONCOLOR=7
 +	APPEND_TARGET_ABI=1
 +	TARGETCPU="x86_64"
++	PREFERCOLOR=4
  	;;
      ia64)
  	ISANAME=ia
@@ -138,9 +140,11 @@ diff -ur rpm-4.16.1.2/installplatform rpm-4.16.1.2.x32/installplatform
    PPD="${DESTDIR}/${platformdir}/${ARCH}-${OS}"
    [ -d $PPD ] || mkdir -p $PPD
  
-@@ -202,6 +216,8 @@
+@@ -202,7 +216,10 @@
+   | sed -e "s,@RPMRC_OPTFLAGS@,$RPMRC_OPTFLAGS," \
  	-e "s,@RPMCANONARCH@,$CANONARCH,g" \
  	-e "s,@RPMCANONCOLOR@,$CANONCOLOR," \
++	-e "s,@RPMPREFERCOLOR@,${PREFERCOLOR:+%_prefer_color\\t$PREFERCOLOR}," \
  	-e "s,@RPMRC_GNU@,$RPMRC_GNU," \
 +	-e "s,@TARGET_ABI@,${APPEND_TARGET_ABI:+%{?_gnu\}}," \
 +	-e "s,@TARGETCPU@,$TARGETCPU," \
@@ -159,6 +163,14 @@ diff -ur rpm-4.16.1.2/platform.in rpm-4.16.1.2.x32/platform.in
  %optflags		@RPMRC_OPTFLAGS@
  
  %__isa_name		@ISANAME@
+@@ -21,6 +21,7 @@
+ #	1	Elf32 permitted
+ #	2	Elf64 permitted
+ %_transaction_color	@RPMCANONCOLOR@
++@RPMPREFERCOLOR@
+ 
+ #==============================================================================
+ # ---- configure macros.
 diff -ur rpm-4.16.1.2/rpmrc.in rpm-4.16.1.2.x32/rpmrc.in
 --- rpm-4.16.1.2/rpmrc.in	2020-05-28 12:04:25.075136894 +0200
 +++ rpm-4.16.1.2.x32/rpmrc.in	2021-03-21 21:50:04.127398387 +0100
