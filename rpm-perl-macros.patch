@@ -7,8 +7,8 @@
 -	po/Makefile.in scripts/Makefile fileattrs/Makefile
 +	po/Makefile.in scripts/Makefile scripts/perl.req scripts/perl.prov fileattrs/Makefile
  	misc/Makefile 
- 	doc/Makefile
- 	python/Makefile
+ 	docs/Makefile
+ 	docs/man/Makefile
 --- rpm-5.3.1/scripts/perl.req.wiget	2008-10-26 10:50:53.000000000 +0100
 +++ rpm-5.3.1/scripts/perl.req	2010-05-30 16:35:36.999438206 +0200
 @@ -45,7 +45,11 @@

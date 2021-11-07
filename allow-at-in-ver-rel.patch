@@ -3,9 +3,9 @@
 @@ -18,7 +18,7 @@
  #undef HTDATATYPE
  
- #define WHITELIST_NAME ".-_+%{}"
--#define WHITELIST_VERREL "._+%{}~^"
-+#define WHITELIST_VERREL "._+%{}~^@"
- #define WHITELIST_EVR WHITELIST_VERREL "-:"
+ #define ALLOWED_CHARS_NAME ".-_+%{}"
+-#define ALLOWED_CHARS_VERREL "._+%{}~^"
++#define ALLOWED_CHARS_VERREL "._+%{}~^@"
+ #define ALLOWED_CHARS_EVR ALLOWED_CHARS_VERREL "-:"
  #define LEN_AND_STR(_tag) (sizeof(_tag)-1), (_tag)
  

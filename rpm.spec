@@ -11,10 +11,10 @@
 %bcond_without	audit		# audit plugin
 %bcond_without	selinux		# SELinux plugin
 %bcond_without	systemd		# systemd inhibit plugin
+%bcond_without	fsverity	# fsverity plugin
 
-%define		db_ver		5.3.28.0
 %define		popt_ver	1.15
-%define		sover		9.1.3
+%define		sover		9.2.0
 
 %if "%{_rpmversion}" >= "4.12" && "%{_rpmversion}" < "5"
 %define	with_recommends_tags	1
@@ -33,13 +33,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	4.16.1.3
-Release:	18
+Version:	4.17.0
+Release:	0.1
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
-Source0:	http://ftp.rpm.org/releases/rpm-4.16.x/%{name}-%{version}.tar.bz2
-# Source0-md5:	576277fafa5d0681a8a92c8716aca5f0
+Source0:	http://ftp.rpm.org/releases/rpm-4.17.x/%{name}-%{version}.tar.bz2
+# Source0-md5:	ba23b5d2403fd2f9163dfd0dadce1820
 Source1:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source1-md5:	23914bb49fafe7153cee87126d966461
 Source2:	macros.local
@@ -83,37 +83,30 @@ Patch23:	shortcircuited-deps.patch
 Patch24:	cpuinfo-deps.patch
 Patch25:	rpmio-read-proc-files.patch
 Patch26:	allow-at-in-ver-rel.patch
-Patch27:	no-exeonly-for-elf-reqprov.patch
 Patch28:	default-patch-flags.patch
 Patch29:	%{name}-noarch_py_prov.patch
 Patch30:	missing-ghost-terminate-build.patch
 Patch31:	missing-doc-terminate-build.patch
 Patch32:	noexpand.patch
-Patch33:	sqlite-db-backend.patch
 Patch34:	skip-symlinks.patch
 Patch35:	pl-po.patch
 Patch36:	build-locale.patch
-Patch37:	%{name}-pl.po-update.patch
-Patch38:	no-exe-for-elf-debuginfo.patch
-Patch39:	no-exe-for-elf-req.patch
-Patch40:	python-3.10-abi.patch
-Patch41:	gem-in-package-builddir.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 %{?with_audit:BuildRequires:	audit-libs-devel}
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.10
 BuildRequires:	bzip2-devel >= 1.0.2-17
-BuildRequires:	db-devel >= %{db_ver}
-%{?with_systemd:BuildRequires:	dbus-devel >= 1.3}
+%{?with_plugins:BuildRequires:	dbus-devel >= 1.3}
 BuildRequires:	elfutils-devel >= 0.108
+%{?with_fsverity:BuildRequires:	fsverity-utils-devel}
 BuildRequires:	gettext-tools >= 0.19.2
 %{?with_imaevm:BuildRequires:	ima-evm-utils-devel >= 1.0}
 BuildRequires:	libarchive-devel
 BuildRequires:	libcap-devel
-BuildRequires:	libmagic-devel
 BuildRequires:	libgcrypt-devel
 BuildRequires:	libgomp-devel >= 6:4.5
+BuildRequires:	libmagic-devel
 %{?with_selinux:BuildRequires:	libselinux-devel >= 2.1.0}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
@@ -143,10 +136,10 @@ BuildRequires:	tetex-pdftex
 Requires(posttrans):	coreutils
 Requires:	%{name}-base = %{epoch}:%{version}-%{release}
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
-Requires:	rpm-pld-macros >= 2.002
 Requires:	FHS >= 3.0-2
 Requires:	libgcrypt
 Requires:	popt >= %{popt_ver}
+Requires:	rpm-pld-macros >= 2.002
 %if %{with recommends_tags}
 Recommends:	rpm-plugin-audit
 Recommends:	rpm-plugin-prioreset
@@ -247,7 +240,6 @@ Zawiera on:
 Summary:	RPMs library
 Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
-Requires:	db >= %{db_ver}
 Requires:	libmagic >= 1.15-2
 Requires:	popt >= %{popt_ver}
 Requires:	sqlite3-libs >= 3.22.0
@@ -272,10 +264,9 @@ Summary(uk.UTF-8):	Хедери та бібліотеки для програм,
 Group:		Development/Libraries
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 Requires:	bzip2-devel
-Requires:	db-devel >= %{db_ver}
 Requires:	elfutils-devel
-Requires:	libmagic-devel
 Requires:	libgcrypt-devel
+Requires:	libmagic-devel
 %if %{with selinux}
 Requires:	libselinux-devel
 Requires:	libsemanage-devel
@@ -363,7 +354,6 @@ Group:		Applications/File
 Requires(pretrans):	coreutils
 Requires(pretrans):	findutils
 Requires:	%{name}-utils = %{epoch}:%{version}-%{release}
-Requires:	rpm-pld-macros-build >= 1.744
 Requires:	/bin/id
 Requires:	awk
 Requires:	bzip2
@@ -374,6 +364,7 @@ Requires:	elfutils
 Requires:	file >= 4.17
 Requires:	fileutils
 Requires:	findutils
+Requires:	rpm-pld-macros-build >= 1.744
 %ifarch athlon
 Requires:	gcc >= 3.0.3
 %else
@@ -540,8 +531,8 @@ This plugin adds support for enforcing and verifying IMA file
 signatures in an rpm.
 
 %description plugin-ima -l pl.UTF-8
-Ta wtyczka dodaje obsługę wymuszania i weryfikacji podpisów plików
-IMA w RPM-ie.
+Ta wtyczka dodaje obsługę wymuszania i weryfikacji podpisów plików IMA
+w RPM-ie.
 
 %package plugin-prioreset
 Summary:	Plugin for resetting scriptlet priorities for SysV init
@@ -571,6 +562,36 @@ Plugin for SELinux functionality.
 
 %description plugin-selinux -l pl.UTF-8
 Wtyczka do funkcjonalności SELinux.
+
+%package plugin-fsverity
+Summary:	Plugin for fsverity file signatures
+Group:		Base
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
+
+%description plugin-fsverity
+Plugin for fsverity file signatures.
+
+%package plugin-fapolicyd
+Summary:	Plugin for fapolicyd support
+Group:		Base
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
+
+%description plugin-fapolicyd
+Plugin for fapolicyd support.
+
+See https://people.redhat.com/sgrubb/fapolicyd/ for information about
+the fapolicyd daemon.
+
+%package plugin-dbus-announce
+Summary:	Plugin for announcing transactions on the DBUS
+Group:		Base
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
+
+%description plugin-dbus-announce
+The plugin announces basic information about rpm transactions to the
+system DBUS - like packages installed or removed. Other programs can
+subscribe to the signals to get notified when packages on the system
+change.
 
 %package sign
 Summary:	Package signing support
@@ -608,8 +629,8 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch5 -p1
 %patch6 -p0
 %patch7 -p1
-%patch8 -p1
-%patch9 -p1
+#%patch8 -p1
+#%patch9 -p1
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
@@ -627,21 +648,14 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch24 -p1
 %patch25 -p1
 %patch26 -p1
-%patch27 -p1
 %patch28 -p1
-%patch29 -p1
+#%patch29 -p1
 %patch30 -p1
 %patch31 -p1
 %patch32 -p1
-%patch33 -p1
 %patch34 -p1
 %patch35 -p1
 %patch36 -p1
-%patch37 -p1
-%patch38 -p1
-%patch39 -p1
-%patch40 -p1
-%patch41 -p1
 
 %{__rm} po/*.gmo
 
@@ -652,7 +666,7 @@ install %{SOURCE15} scripts/perl.prov.in
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE5}
 
-%{__sed} -i -e '1s,/usr/bin/python,%{__python3},' scripts/pythondistdeps.py
+#%{__sed} -i -e '1s,/usr/bin/python,%{__python3},' scripts/pythondistdeps.py
 
 %build
 %{__libtoolize}
@@ -685,6 +699,7 @@ awk -f %{SOURCE6} %{SOURCE5}
 	--with-archive \
 	--with-audit%{!?with_audit:=no} \
 	--with-cap \
+	--with-fapolicyd \
 	%{?with_imaevm:--with-imaevm} \
 	--with-lua \
 	%{?with_python3:--enable-python} \
@@ -981,9 +996,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/rpm2cpio
 %attr(755,root,root) %{_bindir}/rpmgraph
 %attr(755,root,root) %{_rpmlibdir}/rpm2cpio.sh
-%attr(755,root,root) %{_rpmlibdir}/find-debuginfo.sh
 %attr(755,root,root) %{_rpmlibdir}/tgpg
-%attr(755,root,root) %{_rpmlibdir}/debugedit
 %attr(755,root,root) %{_rpmlibdir}/rpmdeps
 %{_mandir}/man8/rpm2archive.8*
 %{_mandir}/man8/rpm2cpio.8*
@@ -1004,7 +1017,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/check-files
 %attr(755,root,root) %{_rpmlibdir}/install-build-tree
 %attr(755,root,root) %{_rpmlibdir}/elfdeps
-%attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
+#%attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
 # needs hacked pkg-config to return anything
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
 %attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
@@ -1029,21 +1042,18 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/find-requires
 %attr(755,root,root) %{_rpmlibdir}/ocamldeps.sh
 %attr(755,root,root) %{_rpmlibdir}/script.req
-%attr(755,root,root) %{_rpmlibdir}/sepdebugcrcfix
 
 %dir %{_rpmlibdir}/fileattrs
 %{_rpmlibdir}/fileattrs/debuginfo.attr
 %{_rpmlibdir}/fileattrs/desktop.attr
 %{_rpmlibdir}/fileattrs/elf.attr
 %{_rpmlibdir}/fileattrs/font.attr
-%{_rpmlibdir}/fileattrs/libtool.attr
+#%{_rpmlibdir}/fileattrs/libtool.attr
 %{_rpmlibdir}/fileattrs/metainfo.attr
 %{_rpmlibdir}/fileattrs/ocaml.attr
 %{_rpmlibdir}/fileattrs/perl.attr
 %{_rpmlibdir}/fileattrs/perllib.attr
 %{_rpmlibdir}/fileattrs/pkgconfig.attr
-%{_rpmlibdir}/fileattrs/python.attr
-%{_rpmlibdir}/fileattrs/pythondist.attr
 %{_rpmlibdir}/fileattrs/script.attr
 
 %attr(755,root,root) %{_bindir}/gendiff
@@ -1063,7 +1073,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files pythonprov
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_rpmlibdir}/pythondistdeps.py
+#%attr(755,root,root) %{_rpmlibdir}/pythondistdeps.py
 
 %if %{with python3}
 %files -n python3-rpm
@@ -1107,6 +1117,23 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/rpm-plugins/selinux.so
 %{_mandir}/man8/rpm-plugin-selinux.8*
+
+%if %{with fsverity}
+%files plugin-fsverity
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/rpm-plugins/fsverity.so
+%endif
+
+%files plugin-fapolicyd
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/rpm-plugins/fapolicyd.so
+%{_mandir}/man8/rpm-plugin-fapolicyd.8*
+
+%files plugin-dbus-announce
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/rpm-plugins/dbus_announce.so
+%{_mandir}/man8/rpm-plugin-dbus-announce.8*
+%{_sysconfdir}/dbus-1/system.d/org.rpm.conf
 %endif
 
 %files sign
@@ -1117,5 +1144,5 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
-%doc doc/librpm/html/*
+%doc docs/librpm/html/*
 %endif

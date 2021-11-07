@@ -5,8 +5,8 @@
  
  #	Default patch flags
 -#%_default_patch_flags	-s
--%_default_patch_flags --no-backup-if-mismatch
-+%_default_patch_flags	-s
+-%_default_patch_flags --no-backup-if-mismatch -f
++%_default_patch_flags	-s -f
  
  #==============================================================================
  # ---- Build configuration macros.
