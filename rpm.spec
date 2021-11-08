@@ -56,6 +56,8 @@ Source12:	%{name}.noautoprovfiles
 Source13:	%{name}.noautoreq
 Source14:	%{name}.noautoreqfiles
 Source15:	perl.prov
+Source16:	libtooldeps.sh
+Source17:	libtool.attr
 Patch0:		%{name}-man_pl.patch
 Patch1:		%{name}-popt-aliases.patch
 Patch2:		%{name}-perl-macros.patch
@@ -64,7 +66,6 @@ Patch4:		%{name}-scripts-closefds.patch
 Patch5:		%{name}-dir-macros-relative.patch
 Patch6:		%{name}-perl_req-INC_dirs.patch
 Patch7:		%{name}-debuginfo.patch
-Patch8:		%{name}-libtool-deps.patch
 Patch9:		%{name}-builddir-readlink.patch
 Patch10:	%{name}-changelog_order_check_nonfatal.patch
 Patch11:	%{name}-postun-nofail.patch
@@ -629,7 +630,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch5 -p1
 %patch6 -p0
 %patch7 -p1
-#%patch8 -p1
 #%patch9 -p1
 %patch10 -p1
 %patch11 -p1
@@ -795,6 +795,9 @@ cp -p %{SOURCE11} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprov
 cp -p %{SOURCE12} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoprovfiles
 cp -p %{SOURCE13} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreq
 cp -p %{SOURCE14} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/noautoreqfiles
+
+cp -p %{SOURCE16} $RPM_BUILD_ROOT%{_rpmlibdir}/libtooldeps.sh
+cp -p %{SOURCE17} $RPM_BUILD_ROOT%{_rpmlibdir}/fileattrs/libtool.attr
 
 # move rpm to /bin
 %{__mv} $RPM_BUILD_ROOT%{_bindir}/rpm $RPM_BUILD_ROOT/bin
@@ -1017,7 +1020,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/check-files
 %attr(755,root,root) %{_rpmlibdir}/install-build-tree
 %attr(755,root,root) %{_rpmlibdir}/elfdeps
-#%attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
+%attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
 # needs hacked pkg-config to return anything
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
 %attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
@@ -1048,7 +1051,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/fileattrs/desktop.attr
 %{_rpmlibdir}/fileattrs/elf.attr
 %{_rpmlibdir}/fileattrs/font.attr
-#%{_rpmlibdir}/fileattrs/libtool.attr
+%{_rpmlibdir}/fileattrs/libtool.attr
 %{_rpmlibdir}/fileattrs/metainfo.attr
 %{_rpmlibdir}/fileattrs/ocaml.attr
 %{_rpmlibdir}/fileattrs/perl.attr
