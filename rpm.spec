@@ -119,7 +119,7 @@ BuildRequires:	popt-devel >= %{popt_ver}
 BuildRequires:	python3-modules >= 1:3.2
 %if %{with python3}
 BuildRequires:	python3-devel >= 1:3.2
-BuildRequires:	rpm-pythonprov
+BuildRequires:	python-rpm-packaging
 BuildRequires:	rpmbuild(macros) >= 1.750
 %endif
 BuildRequires:	rpm-build >= 4.6
@@ -430,23 +430,6 @@ Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen.
 Dodatkowe narzędzia do sprawdzenia zależności skryptów Perla w
 pakietach RPM.
 
-%package pythonprov
-Summary:	Python macros, which simplifies creation of RPM packages with Python software
-Summary(pl.UTF-8):	Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w Pythonie
-Group:		Applications/File
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	python3
-Requires:	python3-modules
-Requires:	python3-setuptools
-
-%description pythonprov
-Python macros, which simplifies creation of RPM packages with Python
-software.
-
-%description pythonprov -l pl.UTF-8
-Makra ułatwiające tworzenie pakietów RPM z programami napisanymi w
-Pythonie.
-
 %package -n python3-rpm
 Summary:	Python 3 interface to RPM library
 Summary(pl.UTF-8):	Interfejs Pythona 3 do biblioteki RPM-a
@@ -665,8 +648,6 @@ install %{SOURCE15} scripts/perl.prov.in
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE5}
-
-#%{__sed} -i -e '1s,/usr/bin/python,%{__python3},' scripts/pythondistdeps.py
 
 %build
 %{__libtoolize}
@@ -1073,10 +1054,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files perlprov
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_rpmlibdir}/perl.*
-
-%files pythonprov
-%defattr(644,root,root,755)
-#%attr(755,root,root) %{_rpmlibdir}/pythondistdeps.py
 
 %if %{with python3}
 %files -n python3-rpm
