@@ -360,6 +360,7 @@ Requires:	awk
 Requires:	bzip2
 Requires:	chrpath >= 0.10-4
 Requires:	cpio
+Requires:	debugedit
 Requires:	diffutils
 Requires:	elfutils
 Requires:	file >= 4.17
