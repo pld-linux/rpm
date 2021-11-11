@@ -100,7 +100,6 @@ BuildRequires:	automake >= 1:1.10
 BuildRequires:	bzip2-devel >= 1.0.2-17
 %{?with_plugins:BuildRequires:	dbus-devel >= 1.3}
 BuildRequires:	elfutils-devel >= 0.108
-%{?with_fsverity:BuildRequires:	fsverity-utils-devel}
 BuildRequires:	gettext-tools >= 0.19.2
 %{?with_imaevm:BuildRequires:	ima-evm-utils-devel >= 1.0}
 BuildRequires:	libarchive-devel
@@ -119,7 +118,7 @@ BuildRequires:	popt-devel >= %{popt_ver}
 BuildRequires:	python3-modules >= 1:3.2
 %if %{with python3}
 BuildRequires:	python3-devel >= 1:3.2
-BuildRequires:	python-rpm-packaging
+BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.750
 %endif
 BuildRequires:	rpm-build >= 4.6
