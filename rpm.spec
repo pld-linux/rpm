@@ -668,7 +668,6 @@ awk -f %{SOURCE6} %{SOURCE5}
 	WITH_PERL_VERSION=no \
 	__GST_INSPECT=%{_bindir}/gst-inspect-1.0 \
 	__GPG=%{_bindir}/gpg \
-	--enable-bdb \
 	--enable-bdb-ro \
 	--enable-ndb \
 	%{!?with_plugins:--disable-plugins} \
@@ -682,7 +681,6 @@ awk -f %{SOURCE6} %{SOURCE5}
 	--with-cap \
 	--with-fapolicyd \
 	%{?with_imaevm:--with-imaevm} \
-	--with-lua \
 	%{?with_python3:--enable-python} \
 	--with-selinux%{!?with_selinux:=no} \
 	--with-vendor=pld
