@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.16.1.3
-Release:	10
+Release:	11
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -705,7 +705,7 @@ cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.as
 	DESTDIR=$RPM_BUILD_ROOT
 
 for i in $(seq 0 255); do
-	install -d "$(printf '/usr/lib/.build-id/%02x' $i)"
+	install -d "$RPM_BUILD_ROOT$(printf '/usr/lib/.build-id/%02x' $i)"
 done
 
 # cleanup
