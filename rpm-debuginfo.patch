@@ -14,6 +14,14 @@
  
 --- rpm-4.16.1.3/macros.in.orig	2021-03-24 09:50:21.000000000 +0100
 +++ rpm-4.16.1.3/macros.in	2021-03-24 10:05:10.129698408 +0100
+@@ -194,6 +194,7 @@
+ Group: Development/Debug\
+ AutoReq: 0\
+ AutoProv: 1\
++Requires: FHS-debug\
+ %description debuginfo\
+ This package provides debug information for package %{name}.\
+ Debug information is useful when developing applications that use this\
 @@ -534,7 +534,7 @@
  #   Same as for "separate" but if the __debug_package global is set then
  #   the -debuginfo package will have a compatibility link for the main

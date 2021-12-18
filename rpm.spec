@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.16.1.3
-Release:	12
+Release:	13
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -704,10 +704,6 @@ cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.as
 	pkgconfigdir=%{_pkgconfigdir} \
 	DESTDIR=$RPM_BUILD_ROOT
 
-for i in $(seq 0 255); do
-	install -d "$RPM_BUILD_ROOT$(printf '/usr/lib/.build-id/%02x' $i)"
-done
-
 # cleanup
 %ifnarch %{ix86} %{x8664} x32
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/athlon-linux/macros
@@ -937,8 +933,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 # valgrind suppression file for rpm
 %{_rpmlibdir}/rpm.supp
-
-%dir /usr/lib/.build-id/[0-9af][0-9af]
 
 %files base
 %defattr(644,root,root,755)
