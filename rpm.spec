@@ -280,6 +280,7 @@ Requires:	libsepol-devel
 %endif
 Requires:	popt-devel >= %{popt_ver}
 Requires:	zlib-devel
+Obsoletes:	rpm-static < 1:4.15
 
 %description devel
 The RPM packaging system includes C libraries that make it easy to
