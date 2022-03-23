@@ -92,6 +92,7 @@ Patch32:	noexpand.patch
 Patch34:	skip-symlinks.patch
 Patch35:	pl-po.patch
 Patch36:	build-locale.patch
+Patch37:	no-exe-for-elf-req.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 %{?with_audit:BuildRequires:	audit-libs-devel}
@@ -639,6 +640,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch34 -p1
 %patch35 -p1
 %patch36 -p1
+%patch37 -p1
 
 %{__rm} po/*.gmo
 

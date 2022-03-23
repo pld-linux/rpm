@@ -1,0 +1,12 @@
+--- rpm-4.16.1.3/tools/elfdeps.c.orig	2020-05-28 12:04:25.084136944 +0200
++++ rpm-4.16.1.3/tools/elfdeps.c	2022-03-23 11:19:01.656202339 +0100
+@@ -300,7 +300,8 @@
+     if (ehdr->e_type == ET_DYN || ehdr->e_type == ET_EXEC) {
+ 	ei->marker = mkmarker(ehdr);
+     	ei->isDSO = (ehdr->e_type == ET_DYN);
+-	ei->isExec = (st.st_mode & (S_IXUSR|S_IXGRP|S_IXOTH));
++	//ei->isExec = (st.st_mode & (S_IXUSR|S_IXGRP|S_IXOTH));
++	ei->isExec = 1;
+ 
+ 	processProgHeaders(ei, ehdr);
+ 	processSections(ei);
