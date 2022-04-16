@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.16.1.3
-Release:	17
+Release:	18
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -97,6 +97,7 @@ Patch37:	%{name}-pl.po-update.patch
 Patch38:	no-exe-for-elf-debuginfo.patch
 Patch39:	no-exe-for-elf-req.patch
 Patch40:	python-3.10-abi.patch
+Patch41:	gem-in-package-builddir.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 %{?with_audit:BuildRequires:	audit-libs-devel}
@@ -640,6 +641,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch38 -p1
 %patch39 -p1
 %patch40 -p1
+%patch41 -p1
 
 %{__rm} po/*.gmo
 

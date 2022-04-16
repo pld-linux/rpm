@@ -1,0 +1,11 @@
+--- rpm-4.16.1.3/build/parsePrep.c.orig	2020-12-10 12:30:21.000000000 +0100
++++ rpm-4.16.1.3/build/parsePrep.c	2022-04-16 10:55:43.759059308 +0200
+@@ -197,7 +197,7 @@
+ 	    char gemnameversion[strlen(sp->source) - 3];
+ 
+ 	    rstrlcpy(gemnameversion, sp->source, strlen(sp->source) - 3);
+-	    gemspec = rpmGetPath("%{_builddir}/", gemnameversion, ".gemspec", NULL);
++	    gemspec = rpmGetPath("%{_builddir}/", spec->buildSubdir, "/", gemnameversion, ".gemspec", NULL);
+ 
+ 	    rasprintf(&buf, "%s '%s' && %s spec '%s' --ruby > '%s'",
+ 			zipper, fn, gem, fn, gemspec);
