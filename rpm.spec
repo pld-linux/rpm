@@ -696,7 +696,7 @@ cd python
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/{rpm,pki/rpm-gpg}} \
-	$RPM_BUILD_ROOT{/var/lib/{banner,rpm},/usr/lib/.build-id}
+	$RPM_BUILD_ROOT/var/lib/{banner,rpm}
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
@@ -936,8 +936,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 # valgrind suppression file for rpm
 %{_rpmlibdir}/rpm.supp
-
-%dir /usr/lib/.build-id
 
 %files base
 %defattr(644,root,root,755)
