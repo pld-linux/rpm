@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.17.0
-Release:	0.1
+Release:	1
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
