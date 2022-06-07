@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.17.0
-Release:	1
+Release:	2
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -1037,8 +1037,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/fileattrs/libtool.attr
 %{_rpmlibdir}/fileattrs/metainfo.attr
 %{_rpmlibdir}/fileattrs/ocaml.attr
-%{_rpmlibdir}/fileattrs/perl.attr
-%{_rpmlibdir}/fileattrs/perllib.attr
 %{_rpmlibdir}/fileattrs/pkgconfig.attr
 %{_rpmlibdir}/fileattrs/script.attr
 
@@ -1055,6 +1053,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files perlprov
 %defattr(644,root,root,755)
+%{_rpmlibdir}/fileattrs/perl.attr
+%{_rpmlibdir}/fileattrs/perllib.attr
 %attr(755,root,root) %{_rpmlibdir}/perl.*
 
 %if %{with python3}
