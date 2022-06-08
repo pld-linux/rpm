@@ -265,8 +265,11 @@ Summary(ru.UTF-8):	Хедеры и библиотеки для программ,
 Summary(uk.UTF-8):	Хедери та бібліотеки для програм, що працюють з пакетами rpm
 Group:		Development/Libraries
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
+Requires:	acl-devel
+%{?with_audit:Requires:	audit-libs-devel}
 Requires:	bzip2-devel
 Requires:	elfutils-devel
+Requires:	libcap-devel
 Requires:	libgcrypt-devel
 Requires:	libmagic-devel
 %if %{with selinux}
@@ -274,8 +277,12 @@ Requires:	libselinux-devel
 Requires:	libsemanage-devel
 Requires:	libsepol-devel
 %endif
+Requires:	lua-devel >= 5.2
 Requires:	popt-devel >= %{popt_ver}
+Requires:	sqlite3-devel >= 3.22.0
+Requires:	xz-devel
 Requires:	zlib-devel
+Requires:	zstd-devel
 Obsoletes:	rpm-static < 1:4.15
 
 %description devel
