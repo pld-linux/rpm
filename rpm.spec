@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.17.0
-Release:	2
+Release:	3
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -101,7 +101,7 @@ BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.10
 BuildRequires:	bzip2-devel >= 1.0.2-17
 %{?with_plugins:BuildRequires:	dbus-devel >= 1.3}
-BuildRequires:	elfutils-devel >= 0.108
+BuildRequires:	elfutils-devel >= 0.159
 BuildRequires:	gettext-tools >= 0.19.2
 %{?with_imaevm:BuildRequires:	ima-evm-utils-devel >= 1.0}
 BuildRequires:	libarchive-devel
@@ -113,7 +113,7 @@ BuildRequires:	libmagic-devel
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 1:1.4.2-9
-BuildRequires:	lua-devel >= 5.2
+BuildRequires:	lua-devel >= 5.3
 BuildRequires:	patch >= 2.2
 BuildRequires:	pkgconfig
 BuildRequires:	popt-devel >= %{popt_ver}
@@ -127,8 +127,8 @@ BuildRequires:	rpm-build >= 4.6
 BuildRequires:	sqlite3-devel >= 3.22.0
 BuildRequires:	tcl
 BuildRequires:	xz-devel
-BuildRequires:	zlib-devel
-BuildRequires:	zstd-devel
+BuildRequires:	zlib-devel >= 1.0.5
+BuildRequires:	zstd-devel >= 1.3.8
 %if %{with apidocs}
 BuildRequires:	doxygen
 BuildRequires:	ghostscript
@@ -242,9 +242,13 @@ Zawiera on:
 Summary:	RPMs library
 Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
+Requires:	elfutils >= 0.159
+Requires:	elfutils-libelf >= 0.159
 Requires:	libmagic >= 1.15-2
 Requires:	popt >= %{popt_ver}
 Requires:	sqlite3-libs >= 3.22.0
+Requires:	zlib >= 1.0.5
+Requires:	zstd >= 1.3.8
 Obsoletes:	rpm-libs < 4.0.2-4
 # avoid SEGV caused by mixed db versions
 Conflicts:	poldek < 0.18.1-16
@@ -268,7 +272,7 @@ Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 Requires:	acl-devel
 %{?with_audit:Requires:	audit-libs-devel}
 Requires:	bzip2-devel
-Requires:	elfutils-devel
+Requires:	elfutils-devel >= 0.159
 Requires:	libcap-devel
 Requires:	libgcrypt-devel
 Requires:	libmagic-devel
@@ -277,12 +281,12 @@ Requires:	libselinux-devel
 Requires:	libsemanage-devel
 Requires:	libsepol-devel
 %endif
-Requires:	lua-devel >= 5.2
+Requires:	lua-devel >= 5.3
 Requires:	popt-devel >= %{popt_ver}
 Requires:	sqlite3-devel >= 3.22.0
 Requires:	xz-devel
-Requires:	zlib-devel
-Requires:	zstd-devel
+Requires:	zlib-devel >= 1.0.5
+Requires:	zstd-devel >= 1.3.8
 Obsoletes:	rpm-static < 1:4.15
 
 %description devel
