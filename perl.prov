@@ -92,13 +92,14 @@ sub process_file {
 
 		# search for the package name
 		if (
-			!defined $package
-			&& ( my ($pack) = m/^\s*(?:\{\s*)?package\s+([_:a-zA-Z0-9]+?):*\s*;/ )
+			(!defined $package || !defined $version)
+			&& ( my ($pack, $ver) = m/^\s*(?:\{\s*)?package\s+([_:a-zA-Z0-9]+?)\s*(?:v?([0-9_.]+)\s*)?[;{]/)
 			&& $1 ne 'main'
 			&& match_the_path( $file, $1 )
 		  )
 		{
 			$package = $pack;
+			$version = $ver;
 		}
 
 		if ( !defined $version && /([\$*])(([\w\:\']*)\bVERSION)\b.*\=/ ) {
