@@ -14,7 +14,7 @@
 %bcond_without	fsverity	# fsverity plugin
 
 %define		popt_ver	1.15
-%define		sover		9.2.0
+%define		sover		9.3.0
 
 %if "%{_rpmversion}" >= "4.12" && "%{_rpmversion}" < "5"
 %define	with_recommends_tags	1
@@ -33,13 +33,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	4.17.0
-Release:	4
+Version:	4.17.1
+Release:	1
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
 Source0:	http://ftp.rpm.org/releases/rpm-4.17.x/%{name}-%{version}.tar.bz2
-# Source0-md5:	ba23b5d2403fd2f9163dfd0dadce1820
+# Source0-md5:	9da155ee8e560fd9ada8b858a73907bb
 Source1:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source1-md5:	23914bb49fafe7153cee87126d966461
 Source2:	macros.local
