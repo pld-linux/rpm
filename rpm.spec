@@ -562,14 +562,19 @@ Wtyczka do funkcjonalności SELinux.
 
 %package plugin-fsverity
 Summary:	Plugin for fsverity file signatures
+Summary(pl.UTF-8):	Wtyczka do sygnatur plików fsverity
 Group:		Base
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
 %description plugin-fsverity
 Plugin for fsverity file signatures.
 
+%description plugin-fsverity -l pl.UTF-8
+Wtyczka do sygnatur plików fsverity.
+
 %package plugin-fapolicyd
 Summary:	Plugin for fapolicyd support
+Summary(pl.UTF-8):	Wtyczka do obsługi fapolicyd
 Group:		Base
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
@@ -579,8 +584,15 @@ Plugin for fapolicyd support.
 See https://people.redhat.com/sgrubb/fapolicyd/ for information about
 the fapolicyd daemon.
 
+%description plugin-fapolicyd -l pl.UTF-8
+Wtyczka do obsługi fapolicyd.
+
+Informacje na temat demona fapolicyd można znaleźć pod adresem
+<https://people.redhat.com/sgrubb/fapolicyd/>.
+
 %package plugin-dbus-announce
 Summary:	Plugin for announcing transactions on the DBUS
+Summary(pl.UTF-8):	Wtyczka ogłaszająca transakcje przez DBUS
 Group:		Base
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
@@ -589,6 +601,12 @@ The plugin announces basic information about rpm transactions to the
 system DBUS - like packages installed or removed. Other programs can
 subscribe to the signals to get notified when packages on the system
 change.
+
+%description plugin-dbus-announce -l pl.UTF-8
+Ta wtyczka ogłasza przez podstawowe szynę systemową DBUS informacje o
+transakcjach RPM-a, takie jak pakiety, które są instalowane lub
+usuwane. Inne programy mogą zasubskrybować sygnały powiadamiające o
+zmianach w pakietach systemowych.
 
 %package sign
 Summary:	Package signing support
