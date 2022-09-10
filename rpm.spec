@@ -33,13 +33,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	4.17.1
+Version:	4.17.1.1
 Release:	1
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
 Source0:	http://ftp.rpm.org/releases/rpm-4.17.x/%{name}-%{version}.tar.bz2
-# Source0-md5:	9da155ee8e560fd9ada8b858a73907bb
+# Source0-md5:	30e5806bdcb06a17cabf23d8f07b6b0f
 Source1:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source1-md5:	23914bb49fafe7153cee87126d966461
 Source2:	macros.local
@@ -1036,19 +1036,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 # needs hacked pkg-config to return anything
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
 %attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
-
 %attr(755,root,root) %{_rpmlibdir}/fontconfig.prov
-# must be here for "Requires: rpm-*prov" to work
-#%{_rpmlibdir}/macros.d/cmake
-#%{_rpmlibdir}/macros.d/gstreamer
-#%{_rpmlibdir}/macros.d/libtool
-#%{_rpmlibdir}/macros.d/perl
-#%{_rpmlibdir}/macros.d/pkgconfig
-#%{_rpmlibdir}/macros.d/python
-#%{_rpmlibdir}/macros.d/selinux
-#%{_rpmlibdir}/macros.d/tcl
-#%{_rpmlibdir}/macros.rpmbuild
-
 %attr(755,root,root) %{_rpmlibdir}/check-buildroot
 %attr(755,root,root) %{_rpmlibdir}/check-prereqs
 %attr(755,root,root) %{_rpmlibdir}/check-rpaths
