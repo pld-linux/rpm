@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.17.1.1
-Release:	2
+Release:	3
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -875,7 +875,6 @@ if [ -e /var/lib/rpm/Packages ]; then
 		exit 1
 	fi
 fi
-/bin/rpm --import /etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
 %post
 if [ -d /var/cache/hrmib ]; then
