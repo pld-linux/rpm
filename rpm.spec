@@ -1128,11 +1128,13 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_libdir}/rpm-plugins/fapolicyd.so
 %{_mandir}/man8/rpm-plugin-fapolicyd.8*
 
+%if %{with systemd}
 %files plugin-dbus-announce
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/rpm-plugins/dbus_announce.so
 %{_mandir}/man8/rpm-plugin-dbus-announce.8*
 %{_sysconfdir}/dbus-1/system.d/org.rpm.conf
+%endif
 %endif
 
 %files sign
