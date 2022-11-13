@@ -1,9 +1,9 @@
 --- rpm-4.16.0/build/rpmbuild_internal.h~	2020-05-28 12:04:25.000000000 +0200
 +++ rpm-4.16.0/build/rpmbuild_internal.h	2020-11-21 19:32:47.432243301 +0100
 @@ -18,7 +18,7 @@
- #undef HTDATATYPE
  
  #define ALLOWED_CHARS_NAME ".-_+%{}"
+ #define ALLOWED_FIRSTCHARS_NAME "_%"
 -#define ALLOWED_CHARS_VERREL "._+%{}~^"
 +#define ALLOWED_CHARS_VERREL "._+%{}~^@"
  #define ALLOWED_CHARS_EVR ALLOWED_CHARS_VERREL "-:"

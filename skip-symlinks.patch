@@ -1,7 +1,7 @@
 --- rpm-4.16.1.2/build/rpmfc.c~	2021-01-24 09:43:15.000000000 +0100
 +++ rpm-4.16.1.2/build/rpmfc.c	2021-02-19 09:14:46.031544586 +0100
 @@ -1231,7 +1231,7 @@
- 	size_t slen = strlen(s);
+ 	int extension_index = 0;
  	int fcolor = RPMFC_BLACK;
  	rpm_mode_t mode = (fmode ? fmode[ix] : 0);
 -	int is_executable = (mode & (S_IXUSR|S_IXGRP|S_IXOTH));
