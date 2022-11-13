@@ -34,9 +34,9 @@ diff -ur rpm-4.16.1.2/build/rpmfc.c rpm-4.16.1.2.x32/build/rpmfc.c
  		break;
  	    }
  	    elf_end(elf);
-diff -ur rpm-4.16.1.2/build/rpmfc.h rpm-4.16.1.2.x32/build/rpmfc.h
---- rpm-4.16.1.2/build/rpmfc.h	2020-05-28 12:04:25.011136544 +0200
-+++ rpm-4.16.1.2.x32/build/rpmfc.h	2021-03-21 21:50:04.127398387 +0100
+diff -ur rpm-4.16.1.2/include/rpm/rpmfc.h rpm-4.16.1.2.x32/include/rpm/rpmfc.h
+--- rpm-4.16.1.2/include/rpm/rpmfc.h	2020-05-28 12:04:25.011136544 +0200
++++ rpm-4.16.1.2.x32/include/rpm/rpmfc.h	2021-03-21 21:50:04.127398387 +0100
 @@ -26,8 +26,9 @@
      RPMFC_BLACK			= 0,
      RPMFC_ELF32			= (1 <<  0),
@@ -52,16 +52,16 @@ diff -ur rpm-4.16.1.2/configure.ac rpm-4.16.1.2.x32/configure.ac
 --- rpm-4.16.1.2/configure.ac	2021-03-21 21:51:28.221530479 +0100
 +++ rpm-4.16.1.2.x32/configure.ac	2021-03-21 21:50:04.127398387 +0100
 @@ -930,6 +930,10 @@
- if echo "$host_os" | grep '.*-gnu' > /dev/null ; then
+ if echo "$host_os" | grep '.*-gnu$' > /dev/null ; then
  	host_os=`echo "${host_os}" | sed 's/-gnu$//'`
  fi
 +if echo "$host_os" | grep '.*-gnux32' > /dev/null ; then
 +	host_os=`echo "${host_os}" | sed 's/-gnux32$//'`
 +	host_os_gnu=-gnux32
 +fi
- 
- changequote(<, >)
- host_os_exact="${host_os}"
+ if echo "$host_os" | grep '.*-gnu[[^-]]*$' > /dev/null ; then
+ 	AC_MSG_ERROR([unrecognized GNU build triplet $host_os])
+ fi
 diff -ur rpm-4.16.1.2/installplatform rpm-4.16.1.2.x32/installplatform
 --- rpm-4.16.1.2/installplatform	2020-05-28 12:04:25.027136631 +0200
 +++ rpm-4.16.1.2.x32/installplatform	2021-03-21 21:51:47.671145954 +0100
@@ -153,7 +153,7 @@ diff -ur rpm-4.16.1.2/rpmrc.in rpm-4.16.1.2.x32/rpmrc.in
  optflags: alphaev5 -O2 -g -mieee -mtune=ev5
 @@ -155,6 +156,8 @@
  
- archcolor: riscv64 2
+ archcolor: loongarch64 2
  
 +archcolor: x32 4
 +

@@ -1,14 +1,13 @@
 --- rpm-4.16.0/lib/rpminstall.c.orig	2020-05-28 12:04:25.040136702 +0200
 +++ rpm-4.16.0/lib/rpminstall.c	2020-10-03 09:46:49.369707250 +0200
-@@ -4,6 +4,8 @@
+@@ -4,6 +4,7 @@
  
  #include "system.h"
  
 +#include <fcntl.h>
-+
+ #include <string.h>
+ 
  #include <rpm/rpmcli.h>
- #include <rpm/rpmtag.h>
- #include <rpm/rpmlib.h>		/* rpmReadPackageFile, vercmp etc */
 @@ -114,8 +116,15 @@
  		Fclose(fd);
  		fd = NULL;

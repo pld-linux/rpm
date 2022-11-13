@@ -93,10 +93,10 @@ index f7ee76392..754969e39 100644
 +{
 +    return rpmdsUnamePool(NULL, dsp);
 +}
-diff --git a/lib/rpmds.h b/lib/rpmds.h
+diff --git a/include/rpm/rpmds.h b/include/rpm/rpmds.h
 index 90d54aa27..558252c04 100644
---- a/lib/rpmds.h
-+++ b/lib/rpmds.h
+--- a/include/rpm/rpmds.h
++++ b/include/rpm/rpmds.h
 @@ -412,6 +412,13 @@ int rpmdsNVRMatchesDep(const Header h, const rpmds req, int nopromote);
   */
  int rpmdsRpmlib(rpmds * dsp, const void * tblp);

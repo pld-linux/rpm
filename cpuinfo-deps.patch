@@ -244,9 +244,9 @@ diff -ur rpm-4.16.0/lib/rpmds.c rpm-4.16.0-cpuinfo/lib/rpmds.c
 +{
 +    return rpmdsCpuinfoPool(NULL, dsp);
 +}
-diff -ur rpm-4.16.0/lib/rpmds.h rpm-4.16.0-cpuinfo/lib/rpmds.h
---- rpm-4.16.0/lib/rpmds.h	2020-11-08 20:19:15.625093667 +0100
-+++ rpm-4.16.0-cpuinfo/lib/rpmds.h	2020-11-08 20:03:44.001865655 +0100
+diff -ur rpm-4.16.0/include/rpm/rpmds.h rpm-4.16.0-cpuinfo/include/rpm/rpmds.h
+--- rpm-4.16.0/include/rpm/rpmds.h	2020-11-08 20:19:15.625093667 +0100
++++ rpm-4.16.0-cpuinfo/include/rpm/rpmds.h	2020-11-08 20:03:44.001865655 +0100
 @@ -419,6 +419,13 @@
   */
  int rpmdsUname(rpmds * dsp);
