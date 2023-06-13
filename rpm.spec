@@ -275,6 +275,7 @@ Requires:	bzip2-devel
 Requires:	elfutils-devel >= 0.159
 Requires:	libcap-devel
 Requires:	libgcrypt-devel
+Requires:	libgomp-devel >= 6:4.5
 Requires:	libmagic-devel
 %if %{with selinux}
 Requires:	libselinux-devel
