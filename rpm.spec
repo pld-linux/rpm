@@ -780,6 +780,7 @@ cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.as
 
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/alpha*-linux/macros
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ia64-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/loongarch64-linux/macros
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/mips*-linux/macros
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/riscv64-linux/macros
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/s390*-linux/macros
@@ -1047,6 +1048,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/find-provides
 %attr(755,root,root) %{_rpmlibdir}/find-requires
 %attr(755,root,root) %{_rpmlibdir}/ocamldeps.sh
+%attr(755,root,root) %{_rpmlibdir}/rpm_macros_provides.sh
+%attr(755,root,root) %{_rpmlibdir}/rpmuncompress
 %attr(755,root,root) %{_rpmlibdir}/script.req
 
 %dir %{_rpmlibdir}/fileattrs
@@ -1058,10 +1061,12 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/fileattrs/metainfo.attr
 %{_rpmlibdir}/fileattrs/ocaml.attr
 %{_rpmlibdir}/fileattrs/pkgconfig.attr
+%{_rpmlibdir}/fileattrs/rpm_macro.attr
 %{_rpmlibdir}/fileattrs/script.attr
 
 %attr(755,root,root) %{_bindir}/gendiff
 %attr(755,root,root) %{_bindir}/rpmbuild
+%attr(755,root,root) %{_bindir}/rpmlua
 %attr(755,root,root) %{_bindir}/rpmspec
 
 %{_mandir}/man1/gendiff.1*
@@ -1069,6 +1074,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_mandir}/man8/rpmbuild.8*
 %lang(ja) %{_mandir}/ja/man8/rpmbuild.8*
 %lang(pl) %{_mandir}/pl/man8/rpmbuild.8*
+%{_mandir}/man8/rpmlua.8*
 %{_mandir}/man8/rpmspec.8*
 
 %files perlprov
