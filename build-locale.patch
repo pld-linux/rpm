@@ -1,6 +1,6 @@
---- rpm-4.16.1.2.org/macros.in	2021-02-25 08:15:48.438647368 +0100
-+++ rpm-4.16.1.2/macros.in	2021-02-25 08:18:39.103948354 +0100
-@@ -818,9 +818,11 @@ package or when debugging this package.\
+--- rpm-4.18.1/macros.in.orig	2023-09-28 20:57:49.785633725 +0200
++++ rpm-4.18.1/macros.in	2023-09-28 21:11:58.121037898 +0200
+@@ -741,9 +741,11 @@ package or when debugging this package.\
    RPM_PACKAGE_VERSION=\"%{VERSION}\"\
    RPM_PACKAGE_RELEASE=\"%{RELEASE}\"\
    export RPM_PACKAGE_NAME RPM_PACKAGE_VERSION RPM_PACKAGE_RELEASE\
@@ -9,7 +9,7 @@
    LANG=C\
    export LANG\
 -  unset CDPATH DISPLAY ||:\
-+  unset CDPATH DISPLAY LANGUAGE LINGUAS PERL_MM_OPT||:\
-   %{?buildroot:RPM_BUILD_ROOT=\"%{u2p:%{buildroot}}\"\
++  unset CDPATH DISPLAY LANGUAGE LINGUAS PERL_MM_OPT ||:\
+   unset DEBUGINFOD_URLS ||:\
+   %{?buildroot:RPM_BUILD_ROOT=\"%{buildroot}\"\
    export RPM_BUILD_ROOT}\
-   %{?_javaclasspath:CLASSPATH=\"%{_javaclasspath}\"\

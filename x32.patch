@@ -1,7 +1,6 @@
-diff -ur rpm-4.16.1.2/build/rpmfc.c rpm-4.16.1.2.x32/build/rpmfc.c
---- rpm-4.16.1.2/build/rpmfc.c	2021-03-21 21:51:28.231530270 +0100
-+++ rpm-4.16.1.2.x32/build/rpmfc.c	2021-03-21 21:50:04.127398387 +0100
-@@ -641,6 +641,7 @@
+--- rpm-4.18.1/build/rpmfc.c.orig	2023-09-28 20:44:47.296539499 +0200
++++ rpm-4.18.1/build/rpmfc.c	2023-09-28 20:56:50.552621285 +0200
+@@ -648,6 +648,7 @@ static const struct rpmfcTokens_s rpmfcT
  
    { "ELF 32-bit",		RPMFC_ELF32|RPMFC_INCLUDE },
    { "ELF 64-bit",		RPMFC_ELF64|RPMFC_INCLUDE },
@@ -9,7 +8,7 @@ diff -ur rpm-4.16.1.2/build/rpmfc.c rpm-4.16.1.2.x32/build/rpmfc.c
  
    { "troff or preprocessor input",	RPMFC_INCLUDE },
    { "GNU Info",			RPMFC_INCLUDE },
-@@ -746,7 +747,11 @@
+@@ -753,7 +754,11 @@ static rpm_color_t rpmfcColor(const char
  	if (strstr(fmstr, fct->token) == NULL)
  	    continue;
  
@@ -22,7 +21,7 @@ diff -ur rpm-4.16.1.2/build/rpmfc.c rpm-4.16.1.2.x32/build/rpmfc.c
  	if (fcolor & RPMFC_INCLUDE)
  	    break;
      }
-@@ -1147,7 +1152,10 @@
+@@ -1149,7 +1154,10 @@ static uint32_t getElfColor(const char *
  		color = RPMFC_ELF64;
  		break;
  	    case ELFCLASS32:
@@ -33,7 +32,7 @@ diff -ur rpm-4.16.1.2/build/rpmfc.c rpm-4.16.1.2.x32/build/rpmfc.c
 +		    color = RPMFC_ELF32;
  		break;
  	    }
- 	    elf_end(elf);
+ 	}
 diff -ur rpm-4.16.1.2/include/rpm/rpmfc.h rpm-4.16.1.2.x32/include/rpm/rpmfc.h
 --- rpm-4.16.1.2/include/rpm/rpmfc.h	2020-05-28 12:04:25.011136544 +0200
 +++ rpm-4.16.1.2.x32/include/rpm/rpmfc.h	2021-03-21 21:50:04.127398387 +0100
