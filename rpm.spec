@@ -839,7 +839,8 @@ for be in sqlite bdb ndb; do
 done
 
 %if %{with python3}
-# Remove anything that rpm make install might put there
+# Remove anything that rpm make install might put there;
+# we already have .egg-info as directory, so there is no reason for transition to file for a while
 cd python
 %{__rm} -rf rpm.egg-info
 %{__rm} -rf $RPM_BUILD_ROOT%{py3_sitedir}
