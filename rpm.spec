@@ -14,7 +14,6 @@
 %bcond_without	fsverity	# fsverity plugin
 
 %define		popt_ver	1.15
-%define		sover		9.3.0
 
 %if "%{_rpmversion}" >= "4.12" && "%{_rpmversion}" < "5"
 %define	with_recommends_tags	1
@@ -33,13 +32,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	4.18.0
+Version:	4.18.1
 Release:	0.1
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
 Source0:	http://ftp.rpm.org/releases/rpm-4.18.x/%{name}-%{version}.tar.bz2
-# Source0-md5:	e7b83cedbdbeac1f950d62ee349416a2
+# Source0-md5:	8acad8cd852256b152abc9fa33729f3d
 Source1:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source1-md5:	23914bb49fafe7153cee87126d966461
 Source2:	macros.local
@@ -90,6 +89,7 @@ Patch30:	missing-ghost-terminate-build.patch
 Patch31:	missing-doc-terminate-build.patch
 Patch32:	noexpand.patch
 Patch34:	skip-symlinks.patch
+Patch35:	%{name}-label.patch
 Patch36:	build-locale.patch
 Patch37:	no-exe-for-elf-req.patch
 Patch38:	gem-in-package-builddir.patch
@@ -669,6 +669,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch31 -p1
 %patch32 -p1
 %patch34 -p1
+%patch35 -p1
 %patch36 -p1
 %patch37 -p1
 %patch38 -p1
@@ -839,8 +840,9 @@ done
 
 %if %{with python3}
 # Remove anything that rpm make install might put there
-%{__rm} -rf $RPM_BUILD_ROOT%{py3_sitedir}
 cd python
+%{__rm} -rf rpm.egg-info
+%{__rm} -rf $RPM_BUILD_ROOT%{py3_sitedir}
 %py3_install
 cd ..
 %endif
@@ -986,14 +988,14 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files lib
 %defattr(644,root,root,755)
-%attr(755,root,root) /%{_lib}/librpm.so.9
-%attr(755,root,root) /%{_lib}/librpm.so.%{sover}
-%attr(755,root,root) /%{_lib}/librpmbuild.so.9
-%attr(755,root,root) /%{_lib}/librpmbuild.so.%{sover}
-%attr(755,root,root) /%{_lib}/librpmio.so.9
-%attr(755,root,root) /%{_lib}/librpmio.so.%{sover}
-%attr(755,root,root) /%{_lib}/librpmsign.so.9
-%attr(755,root,root) /%{_lib}/librpmsign.so.%{sover}
+%attr(755,root,root) %ghost /%{_lib}/librpm.so.9
+%attr(755,root,root) /%{_lib}/librpm.so.*.*.*
+%attr(755,root,root) %ghost /%{_lib}/librpmbuild.so.9
+%attr(755,root,root) /%{_lib}/librpmbuild.so.*.*.*
+%attr(755,root,root) %ghost /%{_lib}/librpmio.so.9
+%attr(755,root,root) /%{_lib}/librpmio.so.*.*.*
+%attr(755,root,root) %ghost /%{_lib}/librpmsign.so.9
+%attr(755,root,root) /%{_lib}/librpmsign.so.*.*.*
 %{?with_plugins:%dir %{_libdir}/rpm-plugins}
 
 %files devel

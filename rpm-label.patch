@@ -1,0 +1,11 @@
+"label must be followed by statement and declaration is not statement"
+--- rpm-4.18.1/lib/fsm.c.orig	2023-03-13 15:33:50.024223032 +0100
++++ rpm-4.18.1/lib/fsm.c	2023-09-28 21:28:46.288909517 +0200
+@@ -1015,6 +1015,7 @@
+             }
+ 
+ setmeta:
++	    ;
+ 	    /* Special files require path-based ops */
+ 	    int mayopen = S_ISREG(fp->sb.st_mode) || S_ISDIR(fp->sb.st_mode);
+ 	    if (!rc && fd == -1 && mayopen) {
