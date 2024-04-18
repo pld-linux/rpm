@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.17.1.1
-Release:	6
+Release:	7
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -244,8 +244,7 @@ Zawiera on:
 Summary:	RPMs library
 Summary(pl.UTF-8):	Biblioteki RPM-a
 Group:		Libraries
-Requires:	elfutils >= 0.159
-Requires:	elfutils-libelf >= 0.159
+Requires:	elfutils-libs >= 0.159
 Requires:	libmagic >= 1.15-2
 Requires:	popt >= %{popt_ver}
 Requires:	sqlite3-libs >= 3.22.0
