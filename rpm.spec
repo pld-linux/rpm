@@ -83,7 +83,6 @@ Patch24:	cpuinfo-deps.patch
 Patch25:	rpmio-read-proc-files.patch
 Patch26:	allow-at-in-ver-rel.patch
 Patch28:	default-patch-flags.patch
-Patch29:	%{name}-noarch_py_prov.patch
 Patch30:	missing-ghost-terminate-build.patch
 Patch31:	missing-doc-terminate-build.patch
 Patch32:	noexpand.patch
@@ -660,7 +659,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch25 -p1
 %patch26 -p1
 %patch28 -p1
-#%patch29 -p1
 %patch30 -p1
 %patch31 -p1
 %patch32 -p1
