@@ -32,13 +32,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	4.18.1
+Version:	4.18.2
 Release:	0.1
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
 Source0:	http://ftp.rpm.org/releases/rpm-4.18.x/%{name}-%{version}.tar.bz2
-# Source0-md5:	8acad8cd852256b152abc9fa33729f3d
+# Source0-md5:	471f5ef532e7f41ff109994cfa959b9e
 Source1:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source1-md5:	23914bb49fafe7153cee87126d966461
 Source2:	macros.local
@@ -57,7 +57,6 @@ Source14:	%{name}.noautoreqfiles
 Source15:	perl.prov
 Source16:	libtooldeps.sh
 Source17:	libtool.attr
-Patch0:		%{name}-man_pl.patch
 Patch1:		%{name}-popt-aliases.patch
 Patch2:		%{name}-perl-macros.patch
 Patch3:		%{name}-perl-req-perlfile.patch
@@ -89,7 +88,6 @@ Patch30:	missing-ghost-terminate-build.patch
 Patch31:	missing-doc-terminate-build.patch
 Patch32:	noexpand.patch
 Patch34:	skip-symlinks.patch
-Patch35:	%{name}-label.patch
 Patch36:	build-locale.patch
 Patch37:	no-exe-for-elf-req.patch
 Patch38:	gem-in-package-builddir.patch
@@ -637,7 +635,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 
 %prep
 %setup -q -n %{name}-%{version}%{?subver}
-%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -669,7 +666,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch31 -p1
 %patch32 -p1
 %patch34 -p1
-%patch35 -p1
 %patch36 -p1
 %patch37 -p1
 %patch38 -p1
