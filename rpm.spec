@@ -90,7 +90,6 @@ Patch32:	noexpand.patch
 Patch34:	skip-symlinks.patch
 Patch36:	build-locale.patch
 Patch37:	no-exe-for-elf-req.patch
-Patch38:	gem-in-package-builddir.patch
 Patch39:	sqlite-log-crash.patch
 Patch40:	perl-heredoc-matching.patch
 URL:		https://rpm.org/
@@ -668,8 +667,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch34 -p1
 %patch36 -p1
 %patch37 -p1
-%patch38 -p1
-#%patch38 -p1
 %patch39 -p1
 %patch40 -p1
 
