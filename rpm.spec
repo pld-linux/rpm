@@ -89,6 +89,7 @@ Patch34:	skip-symlinks.patch
 Patch36:	build-locale.patch
 Patch37:	no-exe-for-elf-req.patch
 Patch40:	perl-heredoc-matching.patch
+Patch41:	python-hash-type.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 %{?with_audit:BuildRequires:	audit-libs-devel}
@@ -663,6 +664,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch36 -p1
 %patch37 -p1
 %patch40 -p1
+%patch41 -p1
 
 %{__rm} po/*.gmo
 

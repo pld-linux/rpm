@@ -1,0 +1,20 @@
+--- rpm-4.18.2/python/header-py.c.orig	2023-11-13 13:18:27.000000000 +0100
++++ rpm-4.18.2/python/header-py.c	2024-11-23 10:43:56.360696347 +0100
+@@ -316,10 +316,17 @@
+                                  "(Oi)", s, RPMTAG_NEVR);
+ }
+ 
++#if __BITS_PER_LONG == 64
+ static long hdr_hash(PyObject * h)
+ {
+     return (long) h;
+ }
++#else
++static int hdr_hash(PyObject * h)
++{
++    return (int) h;
++}
++#endif
+ 
+ static PyObject * hdr_reduce(hdrObject *s)
+ {
