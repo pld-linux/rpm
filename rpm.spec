@@ -109,7 +109,7 @@ BuildRequires:	libmagic-devel
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 1:1.4.2-9
-BuildRequires:	lua-devel >= 5.3
+BuildRequires:	lua-devel >= 5.2
 BuildRequires:	patch >= 2.2
 BuildRequires:	pkgconfig
 BuildRequires:	popt-devel >= %{popt_ver}
@@ -119,6 +119,7 @@ BuildRequires:	python3-devel >= 1:3.2
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.750
 %endif
+BuildRequires:	readline-devel
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	sqlite3-devel >= 3.22.0
 BuildRequires:	tcl
@@ -277,7 +278,7 @@ Requires:	libselinux-devel
 Requires:	libsemanage-devel
 Requires:	libsepol-devel
 %endif
-Requires:	lua-devel >= 5.3
+Requires:	lua-devel >= 5.2
 Requires:	popt-devel >= %{popt_ver}
 Requires:	sqlite3-devel >= 3.22.0
 Requires:	xz-devel
