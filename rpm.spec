@@ -64,7 +64,6 @@ Patch4:		%{name}-scripts-closefds.patch
 Patch5:		%{name}-dir-macros-relative.patch
 Patch6:		%{name}-perl_req-INC_dirs.patch
 Patch7:		%{name}-debuginfo.patch
-Patch9:		%{name}-builddir-readlink.patch
 Patch10:	%{name}-changelog_order_check_nonfatal.patch
 Patch11:	%{name}-postun-nofail.patch
 Patch12:	%{name}-clean-docdir.patch
@@ -640,7 +639,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch5 -p1
 %patch6 -p0
 %patch7 -p1
-#%patch9 -p1
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
