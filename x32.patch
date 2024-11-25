@@ -47,20 +47,6 @@ diff -ur rpm-4.16.1.2/include/rpm/rpmfc.h rpm-4.16.1.2.x32/include/rpm/rpmfc.h
  	/*!< (1 << 3) leaks into package headers, reserved */
  
      RPMFC_WHITE			= (1 << 29),
-#diff -ur rpm-4.16.1.2/configure.ac rpm-4.16.1.2.x32/configure.ac
-#--- rpm-4.16.1.2/configure.ac	2021-03-21 21:51:28.221530479 +0100
-#+++ rpm-4.16.1.2.x32/configure.ac	2021-03-21 21:50:04.127398387 +0100
-#@@ -930,6 +930,10 @@
-# if echo "$host_os" | grep '.*-gnu$' > /dev/null ; then
-# 	host_os=`echo "${host_os}" | sed 's/-gnu$//'`
-# fi
-#+if echo "$host_os" | grep '.*-gnux32' > /dev/null ; then
-#+	host_os=`echo "${host_os}" | sed 's/-gnux32$//'`
-#+	host_os_gnu=-gnux32
-#+fi
-# if echo "$host_os" | grep '.*-gnu[[^-]]*$' > /dev/null ; then
-# 	AC_MSG_ERROR([unrecognized GNU build triplet $host_os])
-# fi
 diff -ur rpm-4.16.1.2/installplatform rpm-4.16.1.2.x32/installplatform
 --- rpm-4.16.1.2/installplatform	2020-05-28 12:04:25.027136631 +0200
 +++ rpm-4.16.1.2.x32/installplatform	2021-03-21 21:51:47.671145954 +0100
@@ -74,7 +60,7 @@ diff -ur rpm-4.16.1.2/installplatform rpm-4.16.1.2.x32/installplatform
  
    # XXX FIXME: incomplete and quite likely wrong too in places,
    # consult various arch folks for correct names etc.
-@@ -82,7 +84,16 @@
+@@ -82,7 +84,17 @@
  	ISANAME=x86
  	ISABITS=64
  	CANONARCH=x86_64
@@ -89,6 +75,7 @@ diff -ur rpm-4.16.1.2/installplatform rpm-4.16.1.2.x32/installplatform
 +	APPEND_TARGET_ABI=1
 +	TARGETCPU="x86_64"
 +	PREFERCOLOR=4
++	RPMRC_GNU="-gnux32"
  	;;
      ia64)
  	ISANAME=ia
