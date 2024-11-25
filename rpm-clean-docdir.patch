@@ -1,7 +1,7 @@
 --- rpm-5.4.10/build/files.c~	2013-01-24 14:24:39.161982722 +0100
 +++ rpm-5.4.10/build/files.c	2013-01-24 14:27:50.620325354 +0100
 @@ -2363,6 +2363,11 @@
-     appendLineStringBuf(docScript, "export LC_ALL=C");
+     appendLineStringBuf(docScript, "export LC_ALL=" C_LOCALE);
      appendStringBuf(docScript, "export ");
      appendLineStringBuf(docScript, sdenv);
 +    appendStringBuf(docScript, "if test -d \"$");
@@ -10,5 +10,5 @@
 +    appendStringBuf(docScript, sdenv);
 +    appendLineStringBuf(docScript, "\" ; fi");
      appendLineStringBuf(docScript, mkdocdir);
- 
-     for (ARGV_const_t fn = sd->files; fn && *fn; fn++) {
+     for (i = 0; i < count; i++) {
+ 	char *origfile = rpmCleanPath(rstrscat(NULL, basepath, "/",

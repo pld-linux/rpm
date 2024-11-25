@@ -5,12 +5,12 @@
 # Conditional build:
 %bcond_without	apidocs		# Doxygen based API documentation
 %bcond_without	python3		# Python (3) bindings
-%bcond_without	plugins		# plugins (all, including: audit, imaevm, selinux, systemd)
+%bcond_without	plugins		# plugins (all, including: audit, imaevm, selinux, dbus)
 %bcond_without	recommends_tags	# use of Recommends tag (disable for bootstrapping)
 %bcond_with	imaevm		# IMA/EVM signing support (requires libimaevm from ima-evm-utils)
 %bcond_without	audit		# audit plugin
 %bcond_without	selinux		# SELinux plugin
-%bcond_without	systemd		# systemd inhibit plugin
+%bcond_without	dbus		# sbus announce and systemd inhibit plugins
 %bcond_without	fsverity	# fsverity plugin
 
 %define		popt_ver	1.15
@@ -22,7 +22,7 @@
 %if %{without plugins}
 %undefine	with_audit
 %undefine	with_selinux
-%undefine	with_systemd
+%undefine	with_dbus
 %endif
 Summary:	RPM Package Manager
 Summary(de.UTF-8):	RPM Packet-Manager
@@ -32,13 +32,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	4.18.2
+Version:	4.20.0
 Release:	1
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
-Source0:	http://ftp.rpm.org/releases/rpm-4.18.x/%{name}-%{version}.tar.bz2
-# Source0-md5:	471f5ef532e7f41ff109994cfa959b9e
+Source0:	http://ftp.rpm.org/releases/rpm-4.20.x/%{name}-%{version}.tar.bz2
+# Source0-md5:	6aee0b0b66b40e1eb04b6c3b7d87cf9f
 Source1:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source1-md5:	23914bb49fafe7153cee87126d966461
 Source2:	macros.local
@@ -54,15 +54,11 @@ Source11:	%{name}.noautoprov
 Source12:	%{name}.noautoprovfiles
 Source13:	%{name}.noautoreq
 Source14:	%{name}.noautoreqfiles
-Source15:	perl.prov
 Source16:	libtooldeps.sh
 Source17:	libtool.attr
 Patch0:		%{name}-popt-aliases.patch
-Patch1:		%{name}-perl-macros.patch
-Patch2:		%{name}-perl-req-perlfile.patch
 Patch3:		%{name}-scripts-closefds.patch
 Patch4:		%{name}-dir-macros-relative.patch
-Patch5:		%{name}-perl_req-INC_dirs.patch
 Patch6:		%{name}-debuginfo.patch
 Patch7:		%{name}-changelog_order_check_nonfatal.patch
 Patch8:		%{name}-postun-nofail.patch
@@ -71,7 +67,6 @@ Patch10:	%{name}-perl-magic.patch
 Patch11:	%{name}-ignore-missing-macro-files.patch
 Patch12:	x32.patch
 Patch13:	rpm5-db-compat.patch
-Patch14:	python-internal-build.patch
 Patch15:	missing-macros.patch
 Patch16:	pkgconfig.patch
 Patch17:	uname-deps.patch
@@ -88,7 +83,6 @@ Patch27:	noexpand.patch
 Patch28:	skip-symlinks.patch
 Patch29:	build-locale.patch
 Patch30:	no-exe-for-elf-req.patch
-Patch31:	perl-heredoc-matching.patch
 Patch32:	python-hash-type.patch
 Patch33:	dist-man.patch
 URL:		https://rpm.org/
@@ -103,6 +97,7 @@ BuildRequires:	gettext-tools >= 0.19.2
 %{?with_imaevm:BuildRequires:	ima-evm-utils-devel >= 1.0}
 BuildRequires:	libarchive-devel
 BuildRequires:	libcap-devel
+%{?with_fsverity:BuildRequires:	libfsverity-devel}
 BuildRequires:	libgcrypt-devel
 BuildRequires:	libgomp-devel >= 6:4.5
 BuildRequires:	libmagic-devel
@@ -113,6 +108,7 @@ BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	lua-devel >= 5.2
 BuildRequires:	patch >= 2.2
 BuildRequires:	pkgconfig
+BuildRequires:	podman
 BuildRequires:	popt-devel >= %{popt_ver}
 BuildRequires:	python3-modules >= 1:3.2
 %if %{with python3}
@@ -121,6 +117,7 @@ BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.750
 %endif
 BuildRequires:	readline-devel
+BuildRequires:	rpm-sequoia-devel >= 1.4.0
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	sqlite3-devel >= 3.22.0
 BuildRequires:	tcl
@@ -420,27 +417,6 @@ construir pacotes usando o RPM.
 Різноманітні допоміжні скрипти та утиліти, які використовуються для
 побудови RPM'ів.
 
-%package perlprov
-Summary:	Additional utilities for checking Perl provides/requires in RPM packages
-Summary(de.UTF-8):	Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen
-Summary(pl.UTF-8):	Dodatkowe narzędzia do sprawdzenia zależności skryptów Perla w pakietach RPM
-Group:		Applications/File
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	perl-Encode
-Requires:	perl-devel
-Requires:	perl-modules
-
-%description perlprov
-Additional utilities for checking Perl provides/requires in RPM
-packages.
-
-%description perlprov -l de.UTF-8
-Zusatzwerkzeuge fürs Nachsehen Perl-Abhängigkeiten in RPM-Paketen.
-
-%description perlprov -l pl.UTF-8
-Dodatkowe narzędzia do sprawdzenia zależności skryptów Perla w
-pakietach RPM.
-
 %package -n python3-rpm
 Summary:	Python 3 interface to RPM library
 Summary(pl.UTF-8):	Interfejs Pythona 3 do biblioteki RPM-a
@@ -635,11 +611,8 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %prep
 %setup -q -n %{name}-%{version}%{?subver}
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p0
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
@@ -648,7 +621,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
-%patch14 -p1
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
@@ -660,68 +632,64 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch23 -p1
 %patch24 -p1
 %patch25 -p1
-%patch26 -p1
-%patch27 -p1
+#%patch26 -p1
+#%patch27 -p1
 %patch28 -p1
-%patch29 -p1
+#%patch29 -p1
 %patch30 -p1
-%patch31 -p1
-%patch32 -p1
-%patch33 -p1
+#%patch32 -p1
+#%patch33 -p1
 
-%{__rm} po/*.gmo
-
-install %{SOURCE15} scripts/perl.prov.in
-
-%{__mv} scripts/perl.req{,.in}
+#%{__rm} po/*.gmo
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE5}
 
 %build
-%{__libtoolize}
-%{__aclocal}
-%{__autoheader}
-%{__autoconf}
-%{__automake}
+mkdir -p build
+cd build
+%cmake ../ \
+	-DCMAKE_INSTALL_DOCDIR=%{_docdir} \
+	%{cmake_on_off python3 ENABLE_PYTHON} \
+	%{cmake_on_off plugins ENABLE_PLUGINS} \
+	%{cmake_on_off audit WITH_AUDIT} \
+	%{cmake_on_off imaevm WITH_IMAEVM} \
+	%{cmake_on_off selinux WITH_SELINUX} \
+	%{cmake_on_off dbus WITH_DBUS} \
+	%{cmake_on_off fsverity WITH_FSVERITY} \
+	%{cmake_on_off apidocs WITH_DOXYGEN} \
+	-DENABLE_SQLITE=ON \
+	-DENABLE_NDB=ON \
+	-DENABLE_BDB_RO=ON \
+	-DWITH_CAP=ON \
+	-DWITH_FAPOLICYD=ON \
+	-DWITH_ACL=ON \
+	-DWITH_ARCHIVE=ON \
+	-DWITH_ZSTD=ON \
+	-DRPM_VENDOR=pld
 
-# rpm checks for CPU type at runtime, but it looks better
-%{__sed} -i \
-	-e 's|@host@|%{_target_cpu}-%{_target_vendor}-%{_target_os}|' \
-	-e 's|@host_cpu@|%{_target_cpu}|' \
-	-e 's|@host_os@|%{_target_os}|' \
-	macros.in
+## rpm checks for CPU type at runtime, but it looks better
+#%{__sed} -i \
+#	-e 's|@host@|%{_target_cpu}-%{_target_vendor}-%{_target_os}|' \
+#	-e 's|@host_cpu@|%{_target_cpu}|' \
+#	-e 's|@host_os@|%{_target_os}|' \
+#	macros.in
 
-%configure \
-	PYTHON=python3 \
-	WITH_PERL_VERSION=no \
-	__GST_INSPECT=%{_bindir}/gst-inspect-1.0 \
-	__GPG=%{_bindir}/gpg \
-	--enable-bdb-ro \
-	--enable-ndb \
-	%{!?with_plugins:--disable-plugins} \
-	%{!?with_systemd:--disable-inhibit-plugin} \
-	--disable-silent-rules \
-	--enable-sqlite \
-	--enable-zstd \
-	--with-acl \
-	--with-archive \
-	--with-audit%{!?with_audit:=no} \
-	--with-cap \
-	--with-fapolicyd \
-	%{?with_imaevm:--with-imaevm} \
-	%{?with_python3:--enable-python} \
-	--with-selinux%{!?with_selinux:=no} \
-	--with-vendor=pld
+#configure \
+#	PYTHON=python3 \
+#	WITH_PERL_VERSION=no \
+#	__GST_INSPECT=%{_bindir}/gst-inspect-1.0 \
+#	__GPG=%{_bindir}/gpg \
+
 
 %{__make}
 
-%{__make} -C po update-gmo
+#{__make} -C po update-gmo
 
-%if %{with python3}
-cd python
-%py3_build
-%endif
+#if %{with python3}
+#cd python
+#py3_build
+#%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -730,9 +698,12 @@ install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/{rpm,pki/
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
 
-%{__make} install \
+%{__make} -C build install \
 	pkgconfigdir=%{_pkgconfigdir} \
 	DESTDIR=$RPM_BUILD_ROOT
+
+# these will be packaged separatel
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}
 
 # cleanup
 %ifnarch %{ix86} %{x8664} x32
@@ -819,28 +790,26 @@ for a in librpm.so librpmbuild.so librpmio.so librpmsign.so; do
 	ln -sf /%{_lib}/$(basename $RPM_BUILD_ROOT/%{_lib}/${a}.*.*.*) $RPM_BUILD_ROOT%{_libdir}/${a}
 done
 
-# init an empty database for %ghost'ing for all supported backends
-for be in sqlite bdb ndb; do
-	./rpmdb \
-		--macros=$RPM_BUILD_ROOT%{_rpmlibdir}/macros \
-		--rcfile=$RPM_BUILD_ROOT%{_rpmlibdir}/rpmrc \
-		--dbpath=${PWD}/${be} \
-		--define "_db_backend ${be}" \
-		--initdb
-	cp -va ${be}/. $RPM_BUILD_ROOT/var/lib/rpm/
-done
+## init an empty database for %ghost'ing for all supported backends
+#for be in sqlite bdb ndb; do
+#	./rpmdb \
+#		--macros=$RPM_BUILD_ROOT%{_rpmlibdir}/macros \
+#		--rcfile=$RPM_BUILD_ROOT%{_rpmlibdir}/rpmrc \
+#		--dbpath=${PWD}/${be} \
+#		--define "_db_backend ${be}" \
+#		--initdb
+#	cp -va ${be}/. $RPM_BUILD_ROOT/var/lib/rpm/
+#done
 
-%if %{with python3}
-# Remove anything that rpm make install might put there;
-# we already have .egg-info as directory, so there is no reason for transition to file for a while
-cd python
-%{__rm} -rf rpm.egg-info
-%{__rm} -rf $RPM_BUILD_ROOT%{py3_sitedir}
-%py3_install
-cd ..
-%endif
-
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/rpm-plugins/*.la
+#%if %{with python3}
+## Remove anything that rpm make install might put there;
+## we already have .egg-info as directory, so there is no reason for transition to file for a while
+#cd python
+#{__rm} -rf rpm.egg-info
+#{__rm} -rf $RPM_BUILD_ROOT%{py3_sitedir}
+#py3_install
+#cd ..
+#%endif
 
 # wrong location, not used anyway
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log}
@@ -890,7 +859,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc ChangeLog CREDITS README
+%doc ChangeLog CREDITS README docs/manual
 
 %dir /etc/pki/rpm-gpg
 /etc/pki/rpm-gpg/PLD-3.0-Th-GPG-key.asc
@@ -911,16 +880,16 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_mandir}/man8/rpmkeys.8*
 %{_mandir}/man8/rpm-misc.8*
 %{?with_plugins:%{_mandir}/man8/rpm-plugins.8*}
-%lang(fr) %{_mandir}/fr/man8/rpm.8*
-%lang(ja) %{_mandir}/ja/man8/rpm.8*
-%lang(ko) %{_mandir}/ko/man8/rpm.8*
-%lang(pl) %{_mandir}/pl/man8/rpm.8*
-%lang(ru) %{_mandir}/ru/man8/rpm.8*
-%lang(sk) %{_mandir}/sk/man8/rpm.8*
+#%lang(fr) %{_mandir}/fr/man8/rpm.8*
+#%lang(ja) %{_mandir}/ja/man8/rpm.8*
+#%lang(ko) %{_mandir}/ko/man8/rpm.8*
+#%lang(pl) %{_mandir}/pl/man8/rpm.8*
+#%lang(ru) %{_mandir}/ru/man8/rpm.8*
+#%lang(sk) %{_mandir}/sk/man8/rpm.8*
 
 %dir /var/lib/rpm
-%ghost %config(missingok,noreplace) /var/lib/rpm/*
-%ghost /var/lib/rpm/.*.lock
+#%ghost %config(missingok,noreplace) /var/lib/rpm/*
+#%ghost /var/lib/rpm/.*.lock
 
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/rpmrc
@@ -938,7 +907,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/platform/amd64*
 %{_rpmlibdir}/platform/ia32e*
 %{_rpmlibdir}/platform/x86_64*
-%{_rpmlibdir}/platform/x32*
+#%{_rpmlibdir}/platform/x32*
 %endif
 %ifarch alpha
 %{_rpmlibdir}/platform/alpha*
@@ -981,13 +950,13 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files lib
 %defattr(644,root,root,755)
-%attr(755,root,root) %ghost /%{_lib}/librpm.so.9
+%attr(755,root,root) %ghost /%{_lib}/librpm.so.10
 %attr(755,root,root) /%{_lib}/librpm.so.*.*.*
-%attr(755,root,root) %ghost /%{_lib}/librpmbuild.so.9
+%attr(755,root,root) %ghost /%{_lib}/librpmbuild.so.10
 %attr(755,root,root) /%{_lib}/librpmbuild.so.*.*.*
-%attr(755,root,root) %ghost /%{_lib}/librpmio.so.9
+%attr(755,root,root) %ghost /%{_lib}/librpmio.so.10
 %attr(755,root,root) /%{_lib}/librpmio.so.*.*.*
-%attr(755,root,root) %ghost /%{_lib}/librpmsign.so.9
+%attr(755,root,root) %ghost /%{_lib}/librpmsign.so.10
 %attr(755,root,root) /%{_lib}/librpmsign.so.*.*.*
 %{?with_plugins:%dir %{_libdir}/rpm-plugins}
 
@@ -997,12 +966,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_libdir}/librpmbuild.so
 %attr(755,root,root) %{_libdir}/librpmio.so
 %attr(755,root,root) %{_libdir}/librpmsign.so
-%{_libdir}/librpm.la
-%{_libdir}/librpmbuild.la
-%{_libdir}/librpmio.la
-%{_libdir}/librpmsign.la
 %{_includedir}/rpm
 %{_pkgconfigdir}/rpm.pc
+%{_libdir}/cmake/rpm
 
 %files utils
 %defattr(644,root,root,755)
@@ -1016,13 +982,13 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_mandir}/man8/rpm2cpio.8*
 %{_mandir}/man8/rpmdeps.8*
 %{_mandir}/man8/rpmgraph.8*
-%lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
-%lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
-%lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
-%lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
-%lang(pl) %{_mandir}/pl/man8/rpmdeps.8*
-%lang(ja) %{_mandir}/ja/man8/rpmgraph.8*
-%lang(pl) %{_mandir}/pl/man8/rpmgraph.8*
+#%lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
+#%lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
+#%lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
+#%lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
+#%lang(pl) %{_mandir}/pl/man8/rpmdeps.8*
+#%lang(ja) %{_mandir}/ja/man8/rpmgraph.8*
+#%lang(pl) %{_mandir}/pl/man8/rpmgraph.8*
 
 %files build
 %defattr(644,root,root,755)
@@ -1034,7 +1000,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
 # needs hacked pkg-config to return anything
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
-%attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
+#%attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
 %attr(755,root,root) %{_rpmlibdir}/fontconfig.prov
 %attr(755,root,root) %{_rpmlibdir}/check-buildroot
 %attr(755,root,root) %{_rpmlibdir}/check-prereqs
@@ -1065,18 +1031,12 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/rpmspec
 
 %{_mandir}/man1/gendiff.1*
-%lang(pl) %{_mandir}/pl/man1/gendiff.1*
+#%lang(pl) %{_mandir}/pl/man1/gendiff.1*
 %{_mandir}/man8/rpmbuild.8*
-%lang(ja) %{_mandir}/ja/man8/rpmbuild.8*
-%lang(pl) %{_mandir}/pl/man8/rpmbuild.8*
+#%lang(ja) %{_mandir}/ja/man8/rpmbuild.8*
+#%lang(pl) %{_mandir}/pl/man8/rpmbuild.8*
 %{_mandir}/man8/rpmlua.8*
 %{_mandir}/man8/rpmspec.8*
-
-%files perlprov
-%defattr(644,root,root,755)
-%{_rpmlibdir}/fileattrs/perl.attr
-%{_rpmlibdir}/fileattrs/perllib.attr
-%attr(755,root,root) %{_rpmlibdir}/perl.*
 
 %if %{with python3}
 %files -n python3-rpm
@@ -1085,7 +1045,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{py3_sitedir}/rpm/*.so
 %{py3_sitedir}/rpm/*.py
 %{py3_sitedir}/rpm-%{version}-py*.egg-info
-%{py3_sitedir}/rpm/__pycache__
+#%{py3_sitedir}/rpm/__pycache__
 %endif
 
 %if %{with plugins}
@@ -1106,10 +1066,12 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_mandir}/man8/rpm-plugin-systemd-inhibit.8*
 %endif
 
+%if %{with imaevm}
 %files plugin-ima
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/rpm-plugins/ima.so
 %{_mandir}/man8/rpm-plugin-ima.8*
+%endif
 
 %files plugin-prioreset
 %defattr(644,root,root,755)
@@ -1137,7 +1099,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/rpm-plugins/dbus_announce.so
 %{_mandir}/man8/rpm-plugin-dbus-announce.8*
-%{_sysconfdir}/dbus-1/system.d/org.rpm.conf
+#%{_sysconfdir}/dbus-1/system.d/org.rpm.conf
 %endif
 %endif
 
@@ -1149,5 +1111,5 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
-%doc docs/librpm/html/*
+%doc docs/html/*
 %endif

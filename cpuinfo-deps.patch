@@ -31,14 +31,14 @@ diff -ur rpm-4.16.0/lib/rpmds.c rpm-4.16.0-cpuinfo/lib/rpmds.c
  
  #include <rpm/rpmtypes.h>
 @@ -9,6 +11,9 @@
- #include <rpm/rpmstring.h>
  #include <rpm/rpmlog.h>
  #include <rpm/rpmstrpool.h>
+ #include <rpm/rpmbase64.h>
 +#include <rpm/rpmmacro.h>
 +
-+#include "rpmio/rpmio_internal.h"	/* XXX for rpmioSlurp */
++#include "rpmio_internal.h"	/* XXX for rpmioSlurp */
  
- #include "lib/rpmds_internal.h"
+ #include "rpmds_internal.h"
  
 @@ -1655,3 +1670,203 @@
  {
@@ -275,7 +275,7 @@ diff -ur rpm-4.16.0/include/rpm/rpmds.h rpm-4.16.0-cpuinfo/include/rpm/rpmds.h
 +
  
  typedef enum rpmrichOp_e {
-     RPMRICHOP_SINGLE  = 1,
+     RPMRICHOP_NONE    = 0,
 diff -ur rpm-4.16.0/lib/rpmts_internal.h rpm-4.16.0-cpuinfo/lib/rpmts_internal.h
 --- rpm-4.16.0/lib/rpmts_internal.h	2020-11-08 20:19:15.625093667 +0100
 +++ rpm-4.16.0-cpuinfo/lib/rpmts_internal.h	2020-11-08 20:22:24.382319931 +0100

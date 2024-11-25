@@ -1,29 +1,21 @@
---- rpm-4.16.0/configure.ac~	2020-11-22 19:47:14.000000000 +0100
-+++ rpm-4.16.0/configure.ac	2020-11-22 19:49:03.093877834 +0100
-@@ -76,6 +76,7 @@
- dnl Find some common programs
- dnl
- AC_PATH_PROGS(__7ZIP, [7zip 7za 7z], /usr/bin/7za, $MYPATH)
-+AC_PATH_PROG(__BASH, bash, /bin/bash, $MYPATH)
- AC_PATH_PROG(__BZIP2, bzip2, /usr/bin/bzip2, $MYPATH)
- AC_PATH_PROG(__CAT, cat, /bin/cat, $MYPATH)
- AC_PATH_PROG(__CHMOD, chmod, /bin/chmod, $MYPATH)
-@@ -91,6 +92,7 @@
- AC_PATH_PROG(__UNZIP, unzip, /usr/bin/unzip, $MYPATH)
- AC_PATH_PROG(__ID, id, /usr/bin/id, $MYPATH)
- AC_PATH_PROG(__INSTALL, install, /usr/bin/install, $MYPATH)
-+AC_PATH_PROG(__LN, ln, /bin/ln, $MYPATH)
- AC_PATH_PROG(__LRZIP, lrzip, /usr/bin/lrzip, $MYPATH)
- AC_PATH_PROG(__LZIP, lzip, /usr/bin/lzip, $MYPATH)
- AC_PATH_PROG(__XZ, xz, /usr/bin/xz, $MYPATH)
-@@ -104,6 +106,7 @@
- AC_PATH_PROG(__PATCH, patch, /usr/bin/patch, $MYPATH)
- AC_PATH_PROG(__RM, rm, /bin/rm, $MYPATH)
- AC_PATH_PROG(__SED, sed, /bin/sed, $MYPATH)
-+AC_PATH_PROG(__SH, sh, /bin/sh, $MYPATH)
- AC_PATH_PROG(__TAR, tar, /bin/tar, $MYPATH)
- AC_PATH_PROG(__ZSTD, zstd, /usr/bin/zstd, $MYPATH)
+--- rpm-4.20.0/CMakeLists.txt~	2024-10-07 11:35:46.000000000 +0200
++++ rpm-4.20.0/CMakeLists.txt	2024-11-24 23:27:34.151396858 +0100
+@@ -109,6 +109,7 @@
+ 	endif()
  
+ 	findutil(__7ZIP "7za;7z")
++	findutil(__BASH, bash)
+ 	findutil(__BZIP2 bzip2)
+ 	findutil(__CAT cat)
+ 	findutil(__CHMOD chmod)
+@@ -132,6 +133,7 @@
+ 	findutil(__PATCH patch)
+ 	findutil(__RM rm)
+ 	findutil(__SED sed)
++	findutil(__SH, sh)
+ 	findutil(__TAR tar)
+ 	findutil(__UNZIP unzip)
+ 	findutil(__ZSTD zstd)
 --- rpm-4.16.0/macros.in~	2020-11-21 19:41:19.000000000 +0100
 +++ rpm-4.16.0/macros.in	2020-11-22 19:45:24.182620411 +0100
 @@ -6,6 +6,7 @@
@@ -37,19 +29,11 @@
 @@ -25,6 +25,7 @@
  #
  %__7zip			@__7ZIP@
- %__awk			@AWK@
+ %__awk			@__AWK@
 +%__bash			@__BASH@
  %__bzip2		@__BZIP2@
  %__cat			@__CAT@
  %__chmod		@__CHMOD@
-@@ -39,6 +40,7 @@
- %__id			@__ID@
- %__id_u			%{__id} -u
- %__install		@__INSTALL@
-+%__ln			@__LN@
- %__ln_s			@LN_S@
- %__lrzip		@__LRZIP@
- %__lzip			@__LZIP@
 @@ -54,6 +57,7 @@
  %__patch		@__PATCH@
  %__rm			@__RM@

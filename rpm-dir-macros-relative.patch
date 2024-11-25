@@ -27,14 +27,14 @@ Now redefining _prefix affects _{bin,sbin,lib,libexec,include,data,dataroot,info
 +%_sysconfdir		/etc
 +%_sharedstatedir	/var/lib
 +%_localstatedir		/var
- %_lib			@LIB@
--%_libdir		@exec_prefix@/@LIB@
+ %_lib			=LIB=
+-%_libdir		@exec_prefix@/=LIB=
 -%_includedir		@includedir@
 -%_oldincludedir		@oldincludedir@
 -%_infodir		@infodir@
 -%_mandir		@mandir@
 -%_initddir		%{_sysconfdir}/rc.d/init.d
-+%_libdir		%{_exec_prefix}/@LIB@
++%_libdir		%{_exec_prefix}/=LIB=
 +%_includedir		%{_prefix}/include
 +%_oldincludedir		%{_prefix}/include
 +%_infodir		%{_datarootdir}/info
@@ -42,4 +42,4 @@ Now redefining _prefix affects _{bin,sbin,lib,libexec,include,data,dataroot,info
 +%_initddir		/etc/rc.d/init.d
  # Deprecated misspelling, present for backwards compatibility.
  %_initrddir		%{_initddir}
- %_rundir		@RUNDIR@
+ %_rundir		@rundir@

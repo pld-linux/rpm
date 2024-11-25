@@ -125,7 +125,7 @@ index 90d54aa27..558252c04 100644
 +
  
  typedef enum rpmrichOp_e {
-     RPMRICHOP_SINGLE  = 1,
+     RPMRICHOP_NONE    = 0,
 diff --git a/lib/rpmts_internal.h b/lib/rpmts_internal.h
 index e69ef2584..ecdb12f0c 100644
 --- a/lib/rpmts_internal.h
