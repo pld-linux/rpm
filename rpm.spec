@@ -633,8 +633,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch29 -p1
 %patch30 -p1
 
-#%{__rm} po/*.gmo
-
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE5}
 
@@ -662,23 +660,7 @@ cd build-cmake
 	-DWITH_ZSTD=ON \
 	-DRPM_VENDOR=pld
 
-## rpm checks for CPU type at runtime, but it looks better
-#%{__sed} -i \
-#	-e 's|@host@|%{_target_cpu}-%{_target_vendor}-%{_target_os}|' \
-#	-e 's|@host_cpu@|%{_target_cpu}|' \
-#	-e 's|@host_os@|%{_target_os}|' \
-#	macros.in
-
-#configure \
-#	PYTHON=python3 \
-#	WITH_PERL_VERSION=no \
-#	__GST_INSPECT=%{_bindir}/gst-inspect-1.0 \
-#	__GPG=%{_bindir}/gpg \
-
-
 %{__make}
-
-#{__make} -C po update-gmo
 
 #if %{with python3}
 #cd python
@@ -784,16 +766,16 @@ for a in librpm.so librpmbuild.so librpmio.so librpmsign.so; do
 	ln -sf /%{_lib}/$(basename $RPM_BUILD_ROOT/%{_lib}/${a}.*.*.*) $RPM_BUILD_ROOT%{_libdir}/${a}
 done
 
-## init an empty database for %ghost'ing for all supported backends
-#for be in sqlite bdb ndb; do
-#	./rpmdb \
-#		--macros=$RPM_BUILD_ROOT%{_rpmlibdir}/macros \
-#		--rcfile=$RPM_BUILD_ROOT%{_rpmlibdir}/rpmrc \
-#		--dbpath=${PWD}/${be} \
-#		--define "_db_backend ${be}" \
-#		--initdb
-#	cp -va ${be}/. $RPM_BUILD_ROOT/var/lib/rpm/
-#done
+# init an empty database for %ghost'ing for all supported backends
+for be in sqlite bdb ndb; do
+	build-cmake/tools/rpmdb \
+		--macros=$RPM_BUILD_ROOT%{_rpmlibdir}/macros \
+		--rcfile=$RPM_BUILD_ROOT%{_rpmlibdir}/rpmrc \
+		--dbpath=${PWD}/${be} \
+		--define "_db_backend ${be}" \
+		--initdb
+	cp -va ${be}/. $RPM_BUILD_ROOT/var/lib/rpm/
+done
 
 #%if %{with python3}
 ## Remove anything that rpm make install might put there;
@@ -874,16 +856,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_mandir}/man8/rpmkeys.8*
 %{_mandir}/man8/rpm-misc.8*
 %{?with_plugins:%{_mandir}/man8/rpm-plugins.8*}
-#%lang(fr) %{_mandir}/fr/man8/rpm.8*
-#%lang(ja) %{_mandir}/ja/man8/rpm.8*
-#%lang(ko) %{_mandir}/ko/man8/rpm.8*
-#%lang(pl) %{_mandir}/pl/man8/rpm.8*
-#%lang(ru) %{_mandir}/ru/man8/rpm.8*
-#%lang(sk) %{_mandir}/sk/man8/rpm.8*
 
 %dir /var/lib/rpm
-#%ghost %config(missingok,noreplace) /var/lib/rpm/*
-#%ghost /var/lib/rpm/.*.lock
+%ghost %config(missingok,noreplace) /var/lib/rpm/*
+%ghost /var/lib/rpm/.*.lock
 
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/rpmrc
@@ -976,13 +952,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_mandir}/man8/rpm2cpio.8*
 %{_mandir}/man8/rpmdeps.8*
 %{_mandir}/man8/rpmgraph.8*
-#%lang(ja) %{_mandir}/ja/man8/rpm2cpio.8*
-#%lang(ko) %{_mandir}/ko/man8/rpm2cpio.8*
-#%lang(pl) %{_mandir}/pl/man8/rpm2cpio.8*
-#%lang(ru) %{_mandir}/ru/man8/rpm2cpio.8*
-#%lang(pl) %{_mandir}/pl/man8/rpmdeps.8*
-#%lang(ja) %{_mandir}/ja/man8/rpmgraph.8*
-#%lang(pl) %{_mandir}/pl/man8/rpmgraph.8*
 
 %files build
 %defattr(644,root,root,755)
@@ -1025,10 +994,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/rpmspec
 
 %{_mandir}/man1/gendiff.1*
-#%lang(pl) %{_mandir}/pl/man1/gendiff.1*
 %{_mandir}/man8/rpmbuild.8*
-#%lang(ja) %{_mandir}/ja/man8/rpmbuild.8*
-#%lang(pl) %{_mandir}/pl/man8/rpmbuild.8*
 %{_mandir}/man8/rpmlua.8*
 %{_mandir}/man8/rpmspec.8*
 
