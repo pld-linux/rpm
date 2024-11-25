@@ -88,9 +88,8 @@ Patch33:	dist-man.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 %{?with_audit:BuildRequires:	audit-libs-devel}
-BuildRequires:	autoconf >= 2.63
-BuildRequires:	automake >= 1:1.10
 BuildRequires:	bzip2-devel >= 1.0.2-17
+BuildRequires:	bubblewrap
 %{?with_plugins:BuildRequires:	dbus-devel >= 1.3}
 BuildRequires:	elfutils-devel >= 0.159
 BuildRequires:	gettext-tools >= 0.19.2
@@ -104,11 +103,9 @@ BuildRequires:	libmagic-devel
 %{?with_selinux:BuildRequires:	libselinux-devel >= 2.1.0}
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
-BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	lua-devel >= 5.2
 BuildRequires:	patch >= 2.2
 BuildRequires:	pkgconfig
-BuildRequires:	podman
 BuildRequires:	popt-devel >= %{popt_ver}
 BuildRequires:	python3-modules >= 1:3.2
 %if %{with python3}
@@ -658,6 +655,7 @@ cd build-cmake
 	%{cmake_on_off dbus WITH_DBUS} \
 	%{cmake_on_off fsverity WITH_FSVERITY} \
 	%{cmake_on_off apidocs WITH_DOXYGEN} \
+	-DMKTREE_BACKEND=bwrap \
 	-DENABLE_SQLITE=ON \
 	-DENABLE_NDB=ON \
 	-DENABLE_BDB_RO=ON \
