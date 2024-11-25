@@ -646,8 +646,8 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 awk -f %{SOURCE6} %{SOURCE5}
 
 %build
-mkdir -p build
-cd build
+mkdir -p build-cmake
+cd build-cmake
 %cmake ../ \
 	-DCMAKE_INSTALL_DOCDIR=%{_docdir} \
 	%{cmake_on_off python3 ENABLE_PYTHON} \
