@@ -833,6 +833,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/rpmdb
 %attr(755,root,root) %{_bindir}/rpmkeys
 %attr(755,root,root) %{_bindir}/rpmquery
+%attr(755,root,root) %{_bindir}/rpmsort
 %attr(755,root,root) %{_bindir}/rpmverify
 
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/macros
@@ -843,6 +844,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_mandir}/man8/rpm.8*
 %{_mandir}/man8/rpmdb.8*
 %{_mandir}/man8/rpmkeys.8*
+%{_mandir}/man8/rpmsort.8*
 %{_mandir}/man8/rpm-misc.8*
 %{?with_plugins:%{_mandir}/man8/rpm-plugins.8*}
 
@@ -866,7 +868,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/platform/amd64*
 %{_rpmlibdir}/platform/ia32e*
 %{_rpmlibdir}/platform/x86_64*
-#%{_rpmlibdir}/platform/x32*
+%{_rpmlibdir}/platform/x32*
 %endif
 %ifarch alpha
 %{_rpmlibdir}/platform/alpha*
@@ -894,6 +896,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %attr(755,root,root) %{_rpmlibdir}/rpmdb_dump
 %attr(755,root,root) %{_rpmlibdir}/rpmdb_load
+%attr(755,root,root) %{_rpmlibdir}/rpmdump
 
 # valgrind suppression file for rpm
 %{_rpmlibdir}/rpm.supp
@@ -964,6 +967,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/rpm_macros_provides.sh
 %attr(755,root,root) %{_rpmlibdir}/rpmuncompress
 %attr(755,root,root) %{_rpmlibdir}/script.req
+%attr(755,root,root) %{_rpmlibdir}/sysusers.sh
 
 %dir %{_rpmlibdir}/fileattrs
 %{_rpmlibdir}/fileattrs/debuginfo.attr
@@ -974,8 +978,11 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/fileattrs/metainfo.attr
 %{_rpmlibdir}/fileattrs/ocaml.attr
 %{_rpmlibdir}/fileattrs/pkgconfig.attr
+%{_rpmlibdir}/fileattrs/rpm_lua.attr
 %{_rpmlibdir}/fileattrs/rpm_macro.attr
 %{_rpmlibdir}/fileattrs/script.attr
+%{_rpmlibdir}/fileattrs/sysusers.attr
+%{_rpmlibdir}/fileattrs/usergroup.attr
 
 %attr(755,root,root) %{_bindir}/gendiff
 %attr(755,root,root) %{_bindir}/rpmbuild
@@ -1000,17 +1007,20 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %if %{with plugins}
 %files plugin-audit
 %defattr(644,root,root,755)
+%{_rpmlibdir}/macros.d/macros.transaction_audit
 %attr(755,root,root) %{_libdir}/rpm-plugins/audit.so
 %{_mandir}/man8/rpm-plugin-audit.8*
 
 %files plugin-syslog
 %defattr(644,root,root,755)
+%{_rpmlibdir}/macros.d/macros.transaction_syslog
 %attr(755,root,root) %{_libdir}/rpm-plugins/syslog.so
 %{_mandir}/man8/rpm-plugin-syslog.8*
 
-%if %{with systemd}
+%if %{with dbus}
 %files plugin-systemd-inhibit
 %defattr(644,root,root,755)
+%{_rpmlibdir}/macros.d/macros.transaction_systemd_inhibit
 %attr(755,root,root) %{_libdir}/rpm-plugins/systemd_inhibit.so
 %{_mandir}/man8/rpm-plugin-systemd-inhibit.8*
 %endif
@@ -1024,31 +1034,36 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files plugin-prioreset
 %defattr(644,root,root,755)
+%{_rpmlibdir}/macros.d/macros.transaction_prioreset
 %attr(755,root,root) %{_libdir}/rpm-plugins/prioreset.so
 %{_mandir}/man8/rpm-plugin-prioreset.8*
 
 %files plugin-selinux
 %defattr(644,root,root,755)
+%{_rpmlibdir}/macros.d/macros.transaction_selinux
 %attr(755,root,root) %{_libdir}/rpm-plugins/selinux.so
 %{_mandir}/man8/rpm-plugin-selinux.8*
 
 %if %{with fsverity}
 %files plugin-fsverity
 %defattr(644,root,root,755)
+%{_rpmlibdir}/macros.d/macros.transaction_fsverity
 %attr(755,root,root) %{_libdir}/rpm-plugins/fsverity.so
 %endif
 
 %files plugin-fapolicyd
 %defattr(644,root,root,755)
+%{_rpmlibdir}/macros.d/macros.transaction_fapolicyd
 %attr(755,root,root) %{_libdir}/rpm-plugins/fapolicyd.so
 %{_mandir}/man8/rpm-plugin-fapolicyd.8*
 
-%if %{with systemd}
+%if %{with dbus}
 %files plugin-dbus-announce
 %defattr(644,root,root,755)
+%{_rpmlibdir}/macros.d/macros.transaction_dbus_announce
 %attr(755,root,root) %{_libdir}/rpm-plugins/dbus_announce.so
 %{_mandir}/man8/rpm-plugin-dbus-announce.8*
-#%{_sysconfdir}/dbus-1/system.d/org.rpm.conf
+%{_datadir}/dbus-1/system.d/org.rpm.conf
 %endif
 %endif
 
