@@ -662,11 +662,6 @@ cd build-cmake
 
 %{__make}
 
-#if %{with python3}
-#cd python
-#py3_build
-#%endif
-
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/bin,/%{_lib},/etc/sysconfig,%{_sysconfdir}/{rpm,pki/rpm-gpg}} \
@@ -777,15 +772,9 @@ for be in sqlite bdb ndb; do
 	cp -va ${be}/. $RPM_BUILD_ROOT/var/lib/rpm/
 done
 
-#%if %{with python3}
-## Remove anything that rpm make install might put there;
-## we already have .egg-info as directory, so there is no reason for transition to file for a while
-#cd python
-#{__rm} -rf rpm.egg-info
-#{__rm} -rf $RPM_BUILD_ROOT%{py3_sitedir}
-#py3_install
-#cd ..
-#%endif
+%if %{with python3}
+%py3_ocomp $RPM_BUILD_ROOT%{py3_sitedir}
+%endif
 
 # wrong location, not used anyway
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log}
@@ -1005,7 +994,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{py3_sitedir}/rpm/*.so
 %{py3_sitedir}/rpm/*.py
 %{py3_sitedir}/rpm-%{version}-py*.egg-info
-#%{py3_sitedir}/rpm/__pycache__
+%{py3_sitedir}/rpm/__pycache__
 %endif
 
 %if %{with plugins}
