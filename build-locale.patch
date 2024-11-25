@@ -4,12 +4,12 @@
    RPM_PACKAGE_VERSION=\"%{VERSION}\"\
    RPM_PACKAGE_RELEASE=\"%{RELEASE}\"\
    export RPM_PACKAGE_NAME RPM_PACKAGE_VERSION RPM_PACKAGE_RELEASE\
-+  LC_ALL=C\
++  LC_ALL=@C_LOCALE@\
 +  export LC_ALL\
-   LANG=C\
+   LANG=@C_LOCALE@\
    export LANG\
 -  unset CDPATH DISPLAY ||:\
 +  unset CDPATH DISPLAY LANGUAGE LINGUAS PERL_MM_OPT ||:\
    unset DEBUGINFOD_URLS ||:\
-   %{?buildroot:RPM_BUILD_ROOT=\"%{buildroot}\"\
-   export RPM_BUILD_ROOT}\
+   unset RPM_CONFIG_DIR ||:\
+   RPM_BUILD_ROOT=\"%{buildroot}\"\

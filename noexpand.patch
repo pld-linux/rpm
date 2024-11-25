@@ -36,10 +36,10 @@ diff -ur rpm-4.16.0/build/rpmbuild_internal.h rpm-4.16.0-noexpand/build/rpmbuild
 --- rpm-4.16.0/build/rpmbuild_internal.h	2020-12-18 20:09:28.354868788 +0100
 +++ rpm-4.16.0-noexpand/build/rpmbuild_internal.h	2020-12-18 20:09:09.054827168 +0100
 @@ -246,6 +246,7 @@
+ #define STRIP_NOTHING             0
  #define STRIP_TRAILINGSPACE (1 << 0)
  #define STRIP_COMMENTS      (1 << 1)
- #define STRIP_PARSED        (1 << 2) /* Avoid adding to spec->parsed (hack) */
-+#define STRIP_NOEXPAND      (1 << 3)
++#define STRIP_NOEXPAND      (1 << 2)
  
  #define ALLOW_EMPTY         (1 << 16)
  

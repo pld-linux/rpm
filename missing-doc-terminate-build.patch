@@ -1,13 +1,16 @@
 --- rpm-4.16.0/build/files.c.orig	2020-12-18 19:36:49.000000000 +0100
 +++ rpm-4.16.0/build/files.c	2020-12-18 19:48:35.711529643 +0100
-@@ -2394,14 +2394,16 @@
- 	appendStringBuf(docScript, efn);
- 	appendStringBuf(docScript, " $");
- 	appendStringBuf(docScript, sdenv);
--	appendLineStringBuf(docScript, " ||:");
- 	free(efn);
+@@ -2394,17 +2394,19 @@
+ 		appendStringBuf(docScript, argv[j]);
+ 		appendStringBuf(docScript, "' $");
+ 		appendStringBuf(docScript, sdenv);
+-		appendLineStringBuf(docScript, " ||:");
+ 	    }
+ 	}
+ 	free(origfile);
+ 	files[i] = argv;
      }
- 
+     free(basepath);
      if (install) {
 +	int _missing_doc_files_terminate_build =
 +	    rpmExpandNumeric("%{?_missing_doc_files_terminate_build}");

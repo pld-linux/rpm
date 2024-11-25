@@ -83,8 +83,6 @@ Patch27:	noexpand.patch
 Patch28:	skip-symlinks.patch
 Patch29:	build-locale.patch
 Patch30:	no-exe-for-elf-req.patch
-Patch32:	python-hash-type.patch
-Patch33:	dist-man.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 %{?with_audit:BuildRequires:	audit-libs-devel}
@@ -629,13 +627,11 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch23 -p1
 %patch24 -p1
 %patch25 -p1
-#%patch26 -p1
-#%patch27 -p1
+%patch26 -p1
+%patch27 -p1
 %patch28 -p1
-#%patch29 -p1
+%patch29 -p1
 %patch30 -p1
-#%patch32 -p1
-#%patch33 -p1
 
 #%{__rm} po/*.gmo
 
