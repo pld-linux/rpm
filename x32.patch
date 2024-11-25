@@ -115,7 +115,7 @@ diff -ur rpm-4.16.1.2/platform.in rpm-4.16.1.2.x32/platform.in
  %_os			@RPMCANONOS@
  %_gnu			=RPMRC_GNU=
 -%_target_platform	%{_target_cpu}-%{_vendor}-%{_target_os}
-+%_target_platform	@TARGETCPU@-%{_vendor}-%{_target_os}@TARGET_ABI@
++%_target_platform	=TARGETCPU=-%{_vendor}-%{_target_os}=TARGET_ABI=
  %optflags		=RPMRC_OPTFLAGS=
  
  %__isa_name		=ISANAME=
@@ -123,7 +123,7 @@ diff -ur rpm-4.16.1.2/platform.in rpm-4.16.1.2.x32/platform.in
  #	1	Elf32 permitted
  #	2	Elf64 permitted
  %_transaction_color	=RPMCANONCOLOR=
-+@RPMPREFERCOLOR@
++=RPMPREFERCOLOR=
  
  #==============================================================================
  # ---- configure macros.
