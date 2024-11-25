@@ -655,7 +655,7 @@ cd build-cmake
 	%{cmake_on_off dbus WITH_DBUS} \
 	%{cmake_on_off fsverity WITH_FSVERITY} \
 	%{cmake_on_off apidocs WITH_DOXYGEN} \
-	-DMKTREE_BACKEND=bwrap \
+	-DMKTREE_BACKEND=rootfs \
 	-DENABLE_SQLITE=ON \
 	-DENABLE_NDB=ON \
 	-DENABLE_BDB_RO=ON \
