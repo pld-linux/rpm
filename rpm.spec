@@ -577,6 +577,19 @@ transakcjach RPM-a, takie jak pakiety, które są instalowane lub
 usuwane. Inne programy mogą zasubskrybować sygnały powiadamiające o
 zmianach w pakietach systemowych.
 
+%package plugin-unshare
+Summary:	Plugin for scriptlet isolation with Linux namespaces
+#Summary(pl.UTF-8):	Wtyczka do 
+Group:		Base
+Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
+
+%description plugin-unshare
+This plugin allows using various Linux-specific namespace-related
+technologies inside transactions, such as to harden and limit
+scriptlet access to resources.
+
+#%description plugin-dbus-announce -l pl.UTF-8
+
 %package sign
 Summary:	Package signing support
 Summary(pl.UTF-8):	Obsługa podpisywania pakietów
@@ -1066,6 +1079,13 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_datadir}/dbus-1/system.d/org.rpm.conf
 %endif
 %endif
+
+%files plugin-unshare
+%defattr(644,root,root,755)
+%{_rpmlibdir}/macros.d/macros.transaction_unshare
+%attr(755,root,root) %{_libdir}/rpm-plugins/unshare.so
+%{_mandir}/man8/rpm-plugin-unshare.8*
+
 
 %files sign
 %defattr(644,root,root,755)
