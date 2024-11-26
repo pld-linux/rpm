@@ -10,7 +10,7 @@
 %bcond_with	imaevm		# IMA/EVM signing support (requires libimaevm from ima-evm-utils)
 %bcond_without	audit		# audit plugin
 %bcond_without	selinux		# SELinux plugin
-%bcond_without	dbus		# sbus announce and systemd inhibit plugins
+%bcond_without	dbus		# dbus announce and systemd inhibit plugins
 %bcond_without	fsverity	# fsverity plugin
 
 %define		popt_ver	1.15
