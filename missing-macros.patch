@@ -4,7 +4,7 @@
  	endif()
  
  	findutil(__7ZIP "7za;7z")
-+	findutil(__BASH, bash)
++	findutil(__BASH bash)
  	findutil(__BZIP2 bzip2)
  	findutil(__CAT cat)
  	findutil(__CHMOD chmod)
@@ -12,7 +12,7 @@
  	findutil(__PATCH patch)
  	findutil(__RM rm)
  	findutil(__SED sed)
-+	findutil(__SH, sh)
++	findutil(__SH sh)
  	findutil(__TAR tar)
  	findutil(__UNZIP unzip)
  	findutil(__ZSTD zstd)
@@ -22,7 +22,7 @@
  # should be added to /etc/rpm/macros, while per-user configuration should
  # be added to ~/.rpmmacros.
  #
-+%_rpmversion		@VERSION@
++%_rpmversion		@CMAKE_PROJECT_VERSION@
  
  #==============================================================================
  # ---- A macro that expands to nothing.
