@@ -86,8 +86,10 @@ Patch30:	no-exe-for-elf-req.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 %{?with_audit:BuildRequires:	audit-libs-devel}
+BuildRequires:	autoconf
 BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	bubblewrap
+BuildRequires:	cmake >= 3.18
 %{?with_plugins:BuildRequires:	dbus-devel >= 1.3}
 BuildRequires:	elfutils-devel >= 0.159
 BuildRequires:	gettext-tools >= 0.19.2
