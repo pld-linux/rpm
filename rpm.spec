@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.20.0
-Release:	2
+Release:	3
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -666,6 +666,7 @@ cd build-cmake
 	%{cmake_on_off fsverity WITH_FSVERITY} \
 	%{cmake_on_off apidocs WITH_DOXYGEN} \
 	%{cmake_on_off sequoia WITH_SEQUOIA} \
+	%{!?with_sequoia:-DWITH_LEGACY_OPENPGP=ON} \
 	-DMKTREE_BACKEND=rootfs \
 	-DENABLE_SQLITE=ON \
 	-DENABLE_NDB=ON \
