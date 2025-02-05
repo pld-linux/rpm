@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.20.0
-Release:	3
+Release:	4
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -42,6 +42,8 @@ Source0:	http://ftp.rpm.org/releases/rpm-4.20.x/%{name}-%{version}.tar.bz2
 # Source0-md5:	6aee0b0b66b40e1eb04b6c3b7d87cf9f
 Source1:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source1-md5:	23914bb49fafe7153cee87126d966461
+Source100:	https://github.com/rpm-software-management/rpmpgp_legacy/archive/1.1/rpmpgp_legacy-1.1.tar.gz
+# Source100-md5:	cd07ad8a90c963998491ca02d9f50a3d
 Source2:	macros.local
 Source3:	macros.lang
 Source4:	%{name}.sysconfig
@@ -620,7 +622,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 źrodeł RPM-a przez doxygen.
 
 %prep
-%setup -q -n %{name}-%{version}%{?subver}
+%setup -q -a100 -n %{name}-%{version}%{?subver}
 %patch -P 0 -p1
 %patch -P 3 -p1
 %patch -P 4 -p1
@@ -651,6 +653,8 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE5}
+
+ln -s ../rpmpgp_legacy-1.1 rpmio/rpmpgp_legacy
 
 %build
 mkdir -p build-cmake
