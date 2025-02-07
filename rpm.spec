@@ -12,7 +12,7 @@
 %bcond_without	selinux		# SELinux plugin
 %bcond_without	dbus		# dbus announce and systemd inhibit plugins
 %bcond_without	fsverity	# fsverity plugin
-%bcond_with	sequoia		# Sequoia OpenPGP (causes signature verification problems)
+%bcond_without	sequoia		# Sequoia OpenPGP (replaces rpmpgp_legacy)
 
 %define		popt_ver	1.15
 
@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.20.0
-Release:	4
+Release:	4.1
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
