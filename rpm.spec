@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.20.0
-Release:	5
+Release:	6
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -800,6 +800,9 @@ done
 
 # wrong location, not used anyway
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/rpm.{daily,log}
+
+# unsupported locale
+%{__rm} -r $RPM_BUILD_ROOT%{_localdir}/ie
 
 %find_lang %{name}
 
