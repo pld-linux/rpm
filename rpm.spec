@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.20.0
-Release:	7
+Release:	8
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -655,6 +655,18 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 awk -f %{SOURCE6} %{SOURCE5}
 
 ln -s ../rpmpgp_legacy-1.1 rpmio/rpmpgp_legacy
+
+# rpm checks for CPU type at runtime, but it looks better
+%{__sed} -i \
+	-e 's|@host@|%{_target_cpu}-%{_target_vendor}-%{_target_os}|' \
+	-e 's|@host_cpu@|%{_target_cpu}|' \
+	-e 's|@host_os@|%{_target_os}|' \
+	macros.in
+
+# Use fully qualified names for CC and CXX
+__CC=$(which $(cc -dumpmachine)-gcc 2>/dev/null)
+__CXX=$(which $(c++ -dumpmachine)-g++ 2>/dev/null)
+%{__sed} -i -e "s|@__CC@|$__CC|" -e "s|@__CXX@|$__CXX|" macros.in
 
 %build
 mkdir -p build-cmake
