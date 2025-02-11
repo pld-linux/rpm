@@ -727,6 +727,9 @@ cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.as
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ia32e-linux/macros
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/x32-linux/macros
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/x86_64-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/x86_64_v2-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/x86_64_v3-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/x86_64_v4-linux/macros
 %endif
 
 %ifnarch %{ppc}
