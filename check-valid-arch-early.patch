@@ -1,0 +1,13 @@
+--- rpm-4.20.0/build/parsePreamble.c~	2024-10-07 11:35:46.000000000 +0200
++++ rpm-4.20.0/build/parsePreamble.c	2025-02-12 23:12:25.436660137 +0100
+@@ -1330,6 +1330,10 @@
+ 	rpmPushMacroFlags(spec->macros, "_buildrootdir", NULL,
+ 			    "%{dirname:%{buildroot}}", RMIL_GLOBAL, 0);
+     }
++    /* XXX Skip valid arch check if not building binary package */
++    if (!(spec->flags & RPMSPEC_ANYARCH) && checkForValidArchitectures(spec)) {
++	goto exit;
++    }
+ 
+     /* if we get down here nextPart has been set to non-error */
+     res = nextPart;
