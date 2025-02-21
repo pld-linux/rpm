@@ -170,17 +170,18 @@ diff -ur rpm-4.16.1.2/rpmrc.in rpm-4.16.1.2.x32/rpmrc.in
  
 -arch_compat: x86_64: amd64 em64t athlon noarch
 -arch_compat: amd64: x86_64 em64t athlon noarch
-+arch_compat: x86_64: amd64 em64t athlon x32 noarch
-+arch_compat: amd64: x86_64 em64t athlon x32 noarch
- arch_compat: ia32e: x86_64 em64t athlon noarch
+-arch_compat: ia32e: x86_64 em64t athlon noarch
 -arch_compat: x86_64_v2: x86_64 amd64 em64t athlon noarch
 -arch_compat: x86_64_v3: x86_64_v2 x86_64 amd64 em64t athlon noarch
 -arch_compat: x86_64_v4: x86_64_v3 x86_64_v2 x86_64 amd64 em64t athlon noarch
++arch_compat: x86_64: amd64 em64t athlon x32 noarch
++arch_compat: amd64: x86_64 em64t athlon x32 noarch
++arch_compat: ia32e: x86_64 em64t athlon x32 noarch
 +arch_compat: x86_64_v2: x86_64 amd64 em64t athlon x32 noarch
 +arch_compat: x86_64_v3: x86_64_v2 x86_64 amd64 em64t athlon x32 noarch
 +arch_compat: x86_64_v4: x86_64_v3 x86_64_v2 x86_64 amd64 em64t athlon x32 noarch
  
-+arch_compat: x32: x32 x86_64 noarch
++arch_compat: x32: x32 x86_64 athlon noarch
 +
  arch_compat: sh3: noarch
  arch_compat: sh4: noarch
