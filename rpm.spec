@@ -90,7 +90,6 @@ Patch31:	check-valid-arch-early.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 %{?with_audit:BuildRequires:	audit-libs-devel}
-BuildRequires:	autoconf
 BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	bubblewrap
 BuildRequires:	cmake >= 3.18
@@ -375,11 +374,7 @@ Requires:	file >= 4.17
 Requires:	fileutils
 Requires:	findutils
 Requires:	rpm-pld-macros-build >= 1.744
-%ifarch athlon
-Requires:	gcc >= 3.0.3
-%else
 Requires:	gcc
-%endif
 Requires:	glibc-devel
 Requires:	grep
 Requires:	gzip
@@ -585,7 +580,6 @@ zmianach w pakietach systemowych.
 
 %package plugin-unshare
 Summary:	Plugin for scriptlet isolation with Linux namespaces
-#Summary(pl.UTF-8):	Wtyczka do 
 Group:		Base
 Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 
@@ -593,8 +587,6 @@ Requires:	%{name}-lib = %{epoch}:%{version}-%{release}
 This plugin allows using various Linux-specific namespace-related
 technologies inside transactions, such as to harden and limit
 scriptlet access to resources.
-
-#%description plugin-dbus-announce -l pl.UTF-8
 
 %package sign
 Summary:	Package signing support
@@ -709,7 +701,7 @@ cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.as
 	pkgconfigdir=%{_pkgconfigdir} \
 	DESTDIR=$RPM_BUILD_ROOT
 
-# these will be packaged separatel
+# these will be packaged separately
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}
 
 # cleanup
@@ -995,9 +987,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/install-build-tree
 %attr(755,root,root) %{_rpmlibdir}/elfdeps
 %attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
-# needs hacked pkg-config to return anything
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
-#%attr(755,root,root) %{_rpmlibdir}/mkinstalldirs
 %attr(755,root,root) %{_rpmlibdir}/fontconfig.prov
 %attr(755,root,root) %{_rpmlibdir}/check-buildroot
 %attr(755,root,root) %{_rpmlibdir}/check-prereqs
