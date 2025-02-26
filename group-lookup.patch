@@ -1,0 +1,61 @@
+--- rpm-4.20.1/lib/rpmug.c.orig	2025-02-19 16:29:33.000000000 +0100
++++ rpm-4.20.1/lib/rpmug.c	2025-02-26 20:58:54.695393189 +0100
+@@ -1,6 +1,7 @@
+ #include "system.h"
+ 
+ #include <errno.h>
++#include <rpm/argv.h>
+ #include <rpm/rpmlog.h>
+ #include <rpm/rpmstring.h>
+ #include <rpm/rpmmacro.h>
+@@ -51,7 +52,8 @@
+ 			char **ret)
+ {
+     int rc = -1; /* assume not found */
+-    char *str, buf[BUFSIZ];
++    int nf = vcol > rcol ? vcol : rcol;
++    char *str, buf[BUFSIZ], *lastret = NULL;
+     FILE *f = fopen(path, "r");
+     if (f == NULL) {
+ 	rpmlog(RPMLOG_ERR, _("failed to open %s for id/name lookup: %s\n"),
+@@ -60,28 +62,27 @@
+     }
+ 
+     while ((str = fgets(buf, sizeof(buf), f)) != NULL) {
+-	int nf = vcol > rcol ? vcol : rcol;
+-	const char *fields[nf + 1];
+-	char *tok, *save = NULL;
+-	int col = -1;
+-
+-	while ((tok = strtok_r(str, ":", &save)) != NULL) {
+-	    fields[++col] = tok;
+-	    str = NULL;
+-	    if (col >= nf)
+-		break;
+-	}
++	ARGV_t fields;
++
++	fields = argvSplitString(str, ":", ARGV_NONE);
+ 
+-	if (col >= nf) {
++	if (argvCount(fields) > nf) {
+ 	    if (rstreq(val, fields[vcol])) {
+-		*ret = xstrdup(fields[rcol]);
++		if (lastret != NULL)
++		    free(lastret);
++		lastret = xstrdup(fields[rcol]);
+ 		rc = 0;
+ 	    }
+ 	}
++
++	argvFree(fields);
+     }
+ 
+     fclose(f);
+ 
++    if (!rc)
++	*ret = lastret;
++
+     return rc;
+ }
+ 
