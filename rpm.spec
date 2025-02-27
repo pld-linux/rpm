@@ -7,7 +7,7 @@
 %bcond_without	python3		# Python (3) bindings
 %bcond_without	plugins		# plugins (all, including: audit, imaevm, selinux, dbus)
 %bcond_without	recommends_tags	# use of Recommends tag (disable for bootstrapping)
-%bcond_with	imaevm		# IMA/EVM signing support (requires libimaevm from ima-evm-utils)
+%bcond_without	imaevm		# IMA/EVM signing support (requires libimaevm from ima-evm-utils)
 %bcond_without	audit		# audit plugin
 %bcond_without	selinux		# SELinux plugin
 %bcond_without	dbus		# dbus announce and systemd inhibit plugins
@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.20.1
-Release:	2
+Release:	3
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -1061,6 +1061,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %if %{with imaevm}
 %files plugin-ima
 %defattr(644,root,root,755)
+%{_rpmlibdir}/macros.d/macros.transaction_ima
 %attr(755,root,root) %{_libdir}/rpm-plugins/ima.so
 %{_mandir}/man8/rpm-plugin-ima.8*
 %endif
