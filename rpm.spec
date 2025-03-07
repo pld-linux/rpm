@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.20.1
-Release:	3
+Release:	4
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -890,6 +890,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_rpmlibdir}/rpmpopt*
 %{_rpmlibdir}/rpmrc
 %{_rpmlibdir}/macros
+%attr(755,root,root) %{_rpmlibdir}/sysusers.sh
 %dir %{_rpmlibdir}/macros.d
 %dir %{_rpmlibdir}/platform
 %{_rpmlibdir}/platform/noarch-*
@@ -1000,7 +1001,6 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/rpm_macros_provides.sh
 %attr(755,root,root) %{_rpmlibdir}/rpmuncompress
 %attr(755,root,root) %{_rpmlibdir}/script.req
-%attr(755,root,root) %{_rpmlibdir}/sysusers.sh
 
 %dir %{_rpmlibdir}/fileattrs
 %{_rpmlibdir}/fileattrs/debuginfo.attr
