@@ -1,0 +1,11 @@
+--- rpm-4.20.1/macros.in.orig	2025-03-08 01:04:55.096404276 +0100
++++ rpm-4.20.1/macros.in	2025-03-08 01:10:03.450556930 +0100
+@@ -146,7 +146,7 @@
+ 
+ # sysusers helper binary (or a replacement script), comment out to disable
+ #%__systemd_sysusers	@__SYSTEMD_SYSUSERS@
+-%__systemd_sysusers	%{_rpmconfigdir}/sysusers.sh
++#%__systemd_sysusers	%{_rpmconfigdir}/sysusers.sh
+ 
+ #
+ #	Path to script that creates debug symbols in a /usr/lib/debug

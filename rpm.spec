@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	4.20.1
-Release:	4
+Release:	5
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -88,6 +88,7 @@ Patch29:	build-locale.patch
 Patch30:	no-exe-for-elf-req.patch
 Patch31:	check-valid-arch-early.patch
 Patch32:	group-lookup.patch
+Patch33:	disable-sysusers.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 %{?with_audit:BuildRequires:	audit-libs-devel}
@@ -646,6 +647,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch -P 30 -p1
 %patch -P 31 -p1
 %patch -P 32 -p1
+%patch -P 33 -p1
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE5}
