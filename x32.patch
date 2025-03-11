@@ -50,13 +50,22 @@ diff -ur rpm-4.16.1.2/include/rpm/rpmfc.h rpm-4.16.1.2.x32/include/rpm/rpmfc.h
 diff -ur rpm-4.16.1.2/installplatform rpm-4.16.1.2.x32/installplatform
 --- rpm-4.16.1.2/installplatform	2020-05-28 12:04:25.027136631 +0200
 +++ rpm-4.16.1.2.x32/installplatform	2021-03-21 21:51:47.671145954 +0100
-@@ -21,6 +21,9 @@
+@@ -9,7 +9,6 @@
+ MACROS="${3:-macros}"
+ VENDOR="${4}"
+ OS="${5}"
+-RPMRC_GNU="${6}"
+ 
+ for ARCH in noarch `grep ^arch_canon $RPMRC | cut -d: -f2` ${RPM_CUSTOM_ARCH:+custom}; do
+   RPMRC_OPTFLAGS="`sed -n 's/^optflags: '$ARCH' //p' $RPMRC`"
+@@ -21,6 +21,10 @@
  
    ARCH_INSTALL_POST='%{nil}'
    LIB=lib
 +  TARGETCPU="%{_target_cpu}"
 +  APPEND_TARGET_ABI=
 +  PREFERCOLOR=
++  RPMRC_GNU="${6}"
  
    # XXX FIXME: incomplete and quite likely wrong too in places,
    # consult various arch folks for correct names etc.
