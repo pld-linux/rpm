@@ -1,6 +1,6 @@
-diff -ur rpm-4.16.0/lib/depends.c rpm-4.16.0-cpuinfo/lib/depends.c
---- rpm-4.16.0/lib/depends.c	2020-11-08 20:19:15.625093667 +0100
-+++ rpm-4.16.0-cpuinfo/lib/depends.c	2020-11-08 20:23:46.685893216 +0100
+diff -ur rpm-4.16.0/lib/depends.cc rpm-4.16.0-cpuinfo/lib/depends.cc
+--- rpm-4.16.0/lib/depends.cc	2020-11-08 20:19:15.625093667 +0100
++++ rpm-4.16.0-cpuinfo/lib/depends.cc	2020-11-08 20:23:46.685893216 +0100
 @@ -697,6 +697,16 @@
  	}
      }
@@ -18,13 +18,13 @@ diff -ur rpm-4.16.0/lib/depends.c rpm-4.16.0-cpuinfo/lib/depends.c
      /* Dont look at pre-requisites of already installed packages */
      if (!adding && isTransientReq(dsflags))
  	goto exit;
-diff -ur rpm-4.16.0/lib/rpmds.c rpm-4.16.0-cpuinfo/lib/rpmds.c
---- rpm-4.16.0/lib/rpmds.c	2020-11-08 20:19:15.625093667 +0100
-+++ rpm-4.16.0-cpuinfo/lib/rpmds.c	2020-11-08 20:16:25.941242497 +0100
+diff -ur rpm-4.16.0/lib/rpmds.cc rpm-4.16.0-cpuinfo/lib/rpmds.cc
+--- rpm-4.16.0/lib/rpmds.cc	2020-11-08 20:19:15.625093667 +0100
++++ rpm-4.16.0-cpuinfo/lib/rpmds.cc	2020-11-08 20:16:25.941242497 +0100
 @@ -2,6 +2,8 @@
-  * \file lib/rpmds.c
   */
  #include "system.h"
+ #include <atomic>
 +#include <popt.h>
 +#include <ctype.h>
  #include <sys/utsname.h>
@@ -38,7 +38,7 @@ diff -ur rpm-4.16.0/lib/rpmds.c rpm-4.16.0-cpuinfo/lib/rpmds.c
 +
 +#include "rpmio_internal.h"	/* XXX for rpmioSlurp */
  
- #include "rpmds_internal.h"
+ #include "rpmds_internal.hh"
  
 @@ -1655,3 +1670,203 @@
  {
@@ -276,14 +276,14 @@ diff -ur rpm-4.16.0/include/rpm/rpmds.h rpm-4.16.0-cpuinfo/include/rpm/rpmds.h
  
  typedef enum rpmrichOp_e {
      RPMRICHOP_NONE    = 0,
-diff -ur rpm-4.16.0/lib/rpmts_internal.h rpm-4.16.0-cpuinfo/lib/rpmts_internal.h
---- rpm-4.16.0/lib/rpmts_internal.h	2020-11-08 20:19:15.625093667 +0100
-+++ rpm-4.16.0-cpuinfo/lib/rpmts_internal.h	2020-11-08 20:22:24.382319931 +0100
+diff -ur rpm-4.16.0/lib/rpmts_internal.hh rpm-4.16.0-cpuinfo/lib/rpmts_internal.hh
+--- rpm-4.16.0/lib/rpmts_internal.hh	2020-11-08 20:19:15.625093667 +0100
++++ rpm-4.16.0-cpuinfo/lib/rpmts_internal.hh	2020-11-08 20:22:24.382319931 +0100
 @@ -22,6 +22,7 @@
  
      rpmds rpmlib;		/*!< rpmlib() dependency set. */
      rpmds uname;		/*!< uname() dependency set. */
 +    rpmds cpuinfo;		/*!< cpuinfo() dependency set. */
-     rpmte * order;		/*!< Packages sorted by dependencies. */
-     int orderCount;		/*!< No. of transaction elements. */
-     int orderAlloced;		/*!< No. of allocated transaction elements. */
+     std::vector<rpmte> order;	/*!< Packages sorted by dependencies. */
+ } * tsMembers;
+ 

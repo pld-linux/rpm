@@ -1,5 +1,5 @@
---- rpm-4.18.1/build/rpmfc.c.orig	2023-09-28 20:44:47.296539499 +0200
-+++ rpm-4.18.1/build/rpmfc.c	2023-09-28 20:56:50.552621285 +0200
+--- rpm-4.18.1/build/rpmfc.cc.orig	2023-09-28 20:44:47.296539499 +0200
++++ rpm-4.18.1/build/rpmfc.cc	2023-09-28 20:56:50.552621285 +0200
 @@ -648,6 +648,7 @@ static const struct rpmfcTokens_s rpmfcT
  
    { "ELF 32-bit",		RPMFC_ELF32|RPMFC_INCLUDE },
@@ -148,13 +148,13 @@ diff -ur rpm-4.16.1.2/rpmrc.in rpm-4.16.1.2.x32/rpmrc.in
  optflags: alpha -O2 -g -mieee
  optflags: alphaev5 -O2 -g -mieee -mtune=ev5
 @@ -155,6 +156,8 @@
- 
- archcolor: loongarch64 2
+ archcolor: x86_64_v3 2
+ archcolor: x86_64_v4 2
  
 +archcolor: x32 4
 +
- #############################################################
- # Canonical arch names and numbers
+ archcolor: sh3 1
+ archcolor: sh4 1
  
 @@ -170,6 +173,7 @@
  arch_canon:	amd64:	amd64	1
@@ -204,9 +204,9 @@ diff -ur rpm-4.16.1.2/rpmrc.in rpm-4.16.1.2.x32/rpmrc.in
  buildarch_compat: sh3: noarch
  buildarch_compat: sh4: noarch
  buildarch_compat: sh4a: sh4
-diff -ur rpm-4.16.1.2/tools/elfdeps.c rpm-4.16.1.2.x32/tools/elfdeps.c
---- rpm-4.16.1.2/tools/elfdeps.c	2020-05-28 12:04:25.084136944 +0200
-+++ rpm-4.16.1.2.x32/tools/elfdeps.c	2021-03-21 21:50:04.127398387 +0100
+diff -ur rpm-4.16.1.2/tools/elfdeps.cc rpm-4.16.1.2.x32/tools/elfdeps.cc
+--- rpm-4.16.1.2/tools/elfdeps.cc	2020-05-28 12:04:25.084136944 +0200
++++ rpm-4.16.1.2.x32/tools/elfdeps.cc	2021-03-21 21:50:04.127398387 +0100
 @@ -94,6 +94,9 @@
  	    break;
  	}

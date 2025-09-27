@@ -33,13 +33,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	4.20.1
-Release:	6
+Version:	6.0.0
+Release:	0.1
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
-Source0:	http://ftp.rpm.org/releases/rpm-4.20.x/%{name}-%{version}.tar.bz2
-# Source0-md5:	f99ec35de1c178fa16ff7398ddf13b94
+Source0:	http://ftp.rpm.org/releases/rpm-6.0.x/%{name}-%{version}.tar.bz2
+# Source0-md5:	1236be21f762cc9728462a0e910e1497
 Source1:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source1-md5:	23914bb49fafe7153cee87126d966461
 Source100:	https://github.com/rpm-software-management/rpmpgp_legacy/archive/1.1/rpmpgp_legacy-1.1.tar.gz
@@ -86,8 +86,6 @@ Patch27:	noexpand.patch
 Patch28:	skip-symlinks.patch
 Patch29:	build-locale.patch
 Patch30:	no-exe-for-elf-req.patch
-Patch31:	check-valid-arch-early.patch
-Patch32:	group-lookup.patch
 Patch33:	disable-sysusers.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
@@ -119,7 +117,7 @@ BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.750
 %endif
 BuildRequires:	readline-devel
-%{?with_sequoia:BuildRequires:	rpm-sequoia-devel >= 1.4.0}
+%{?with_sequoia:BuildRequires:	rpm-sequoia-devel >= 1.9.0}
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	sqlite3-devel >= 3.22.0
 BuildRequires:	tcl
@@ -645,8 +643,6 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch -P 28 -p1
 %patch -P 29 -p1
 %patch -P 30 -p1
-%patch -P 31 -p1
-%patch -P 32 -p1
 %patch -P 33 -p1
 
 # generate Group translations to *.po

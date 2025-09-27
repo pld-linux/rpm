@@ -1,8 +1,8 @@
---- rpm-5.4.15/rpmio/macro.c~	2014-12-07 20:24:53.000000000 +0100
-+++ rpm-5.4.15/rpmio/macro.c	2014-12-07 20:44:45.739944044 +0100
+--- rpm-5.4.15/rpmio/macro.cc~	2014-12-07 20:24:53.000000000 +0100
++++ rpm-5.4.15/rpmio/macro.cc	2014-12-07 20:44:45.739944044 +0100
 @@ -1795,6 +1795,7 @@
  	    size_t len = strlen(*path);
- 	    if (rpmFileHasSuffix(*path, ".rpmnew") || 
+ 	    if (rpmFileHasSuffix(*path, ".rpmnew") ||
  		rpmFileHasSuffix(*path, ".rpmsave") ||
 +		rpmFileHasSuffix(*path, "~") ||
  		rpmFileHasSuffix(*path, ".rpmorig") ||

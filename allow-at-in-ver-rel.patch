@@ -1,5 +1,5 @@
---- rpm-4.16.0/build/rpmbuild_internal.h~	2020-05-28 12:04:25.000000000 +0200
-+++ rpm-4.16.0/build/rpmbuild_internal.h	2020-11-21 19:32:47.432243301 +0100
+--- rpm-4.16.0/build/rpmbuild_internal.hh~	2020-05-28 12:04:25.000000000 +0200
++++ rpm-4.16.0/build/rpmbuild_internal.hh	2020-11-21 19:32:47.432243301 +0100
 @@ -18,7 +18,7 @@
  
  #define ALLOWED_CHARS_NAME ".-_+%{}"

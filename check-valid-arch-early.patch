@@ -1,5 +1,5 @@
---- rpm-4.20.0/build/parsePreamble.c~	2024-10-07 11:35:46.000000000 +0200
-+++ rpm-4.20.0/build/parsePreamble.c	2025-02-12 23:12:25.436660137 +0100
+--- rpm-4.20.0/build/parsePreamble.cc~	2024-10-07 11:35:46.000000000 +0200
++++ rpm-4.20.0/build/parsePreamble.cc	2025-02-12 23:12:25.436660137 +0100
 @@ -1330,6 +1330,10 @@
  	rpmPushMacroFlags(spec->macros, "_buildrootdir", NULL,
  			    "%{dirname:%{buildroot}}", RMIL_GLOBAL, 0);

@@ -1,5 +1,5 @@
---- rpm-4.5/build/parseChangelog.c.orig	2012-07-24 14:46:12.856158625 +0200
-+++ rpm-4.5/build/parseChangelog.c	2012-07-24 14:47:55.293158624 +0200
+--- rpm-4.5/build/parseChangelog.cc.orig	2012-07-24 14:46:12.856158625 +0200
++++ rpm-4.5/build/parseChangelog.cc	2012-07-24 14:47:55.293158624 +0200
 @@ -181,9 +181,8 @@
  		trimtime = firstTime - trimage;
  	}

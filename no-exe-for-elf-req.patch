@@ -1,5 +1,5 @@
---- rpm-4.16.1.3/tools/elfdeps.c.orig	2020-05-28 12:04:25.084136944 +0200
-+++ rpm-4.16.1.3/tools/elfdeps.c	2022-03-23 11:19:01.656202339 +0100
+--- rpm-4.16.1.3/tools/elfdeps.cc.orig	2020-05-28 12:04:25.084136944 +0200
++++ rpm-4.16.1.3/tools/elfdeps.cc	2022-03-23 11:19:01.656202339 +0100
 @@ -300,7 +300,8 @@
      if (ehdr->e_type == ET_DYN || ehdr->e_type == ET_EXEC) {
  	ei->marker = mkmarker(ehdr);
