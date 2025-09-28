@@ -875,11 +875,18 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 # this is ok to be replaced
 %config %verify(not md5 mtime size) %{_sysconfdir}/rpm/platform
 
+%{_mandir}/man1/rpmsort.1*
+%{_mandir}/man5/rpm-config.5*
+%{_mandir}/man5/rpm-macrofile.5*
+%{_mandir}/man5/rpm-manifest.5*
+%{_mandir}/man5/rpm-rpmrc.5*
+%{_mandir}/man7/rpm-macros.7*
+%{_mandir}/man7/rpm-queryformat.7*
+%{_mandir}/man7/rpm-version.7*
 %{_mandir}/man8/rpm.8*
+%{_mandir}/man8/rpm-common.8*
 %{_mandir}/man8/rpmdb.8*
 %{_mandir}/man8/rpmkeys.8*
-%{_mandir}/man1/rpmsort.1*
-#%{_mandir}/man1/rpm-misc.1*
 %{?with_plugins:%{_mandir}/man8/rpm-plugins.8*}
 
 %dir /var/lib/rpm
@@ -984,20 +991,21 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/noauto*
 %attr(755,root,root) %{_rpmlibdir}/brp-*
-%attr(755,root,root) %{_rpmlibdir}/check-files
-%attr(755,root,root) %{_rpmlibdir}/install-build-tree
-%attr(755,root,root) %{_rpmlibdir}/elfdeps
-%attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
-%attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
-%attr(755,root,root) %{_rpmlibdir}/fontconfig.prov
 %attr(755,root,root) %{_rpmlibdir}/check-buildroot
+%attr(755,root,root) %{_rpmlibdir}/check-files
 %attr(755,root,root) %{_rpmlibdir}/check-prereqs
 %attr(755,root,root) %{_rpmlibdir}/check-rpaths
 %attr(755,root,root) %{_rpmlibdir}/check-rpaths-worker
+%attr(755,root,root) %{_rpmlibdir}/elfdeps
 %attr(755,root,root) %{_rpmlibdir}/find-provides
 %attr(755,root,root) %{_rpmlibdir}/find-requires
+%attr(755,root,root) %{_rpmlibdir}/fontconfig.prov
+%attr(755,root,root) %{_rpmlibdir}/install-build-tree
+%attr(755,root,root) %{_rpmlibdir}/libtooldeps.sh
 %attr(755,root,root) %{_rpmlibdir}/ocamldeps.sh
+%attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
 %attr(755,root,root) %{_rpmlibdir}/rpm_macros_provides.sh
+%attr(755,root,root) %{_rpmlibdir}/rpm-setup-autosign
 %attr(755,root,root) %{_rpmlibdir}/rpmuncompress
 %attr(755,root,root) %{_rpmlibdir}/script.req
 
@@ -1024,7 +1032,12 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_mandir}/man1/gendiff.1*
 %{_mandir}/man1/rpmbuild.1*
 %{_mandir}/man1/rpmlua.1*
+%{_mandir}/man1/rpm-setup-autosign.1*
 %{_mandir}/man1/rpmspec.1*
+%{_mandir}/man1/rpmuncompress.1*
+%{_mandir}/man5/rpmbuild-config.5*
+%{_mandir}/man7/rpm-lua.7*
+%{_mandir}/man7/rpm-payloadflags.7*
 
 %if %{with python3}
 %files -n python3-rpm
@@ -1115,5 +1128,5 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
-#%doc docs/html/*
+%doc build-cmake/site/api/*
 %endif
