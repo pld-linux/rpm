@@ -9,7 +9,7 @@
 +    /* XXX glibc mmap'd libio no workie for /proc files on linux?!? */
 +    else if (!strncmp(fn, "/proc/", sizeof("/proc/")-1)) {
 +	blen = blenmax;
-+	b = xmalloc(blen+1);
++	b = (uint8_t *)xmalloc(blen+1);
 +	b[0] = '\0';
 +
 +	size = read(Fileno(fd), b, blen);

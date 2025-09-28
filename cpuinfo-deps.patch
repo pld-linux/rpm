@@ -36,7 +36,7 @@ diff -ur rpm-4.16.0/lib/rpmds.cc rpm-4.16.0-cpuinfo/lib/rpmds.cc
  #include <rpm/rpmbase64.h>
 +#include <rpm/rpmmacro.h>
 +
-+#include "rpmio_internal.h"	/* XXX for rpmioSlurp */
++#include "rpmio_internal.hh"	/* XXX for rpmioSlurp */
  
  #include "rpmds_internal.hh"
  

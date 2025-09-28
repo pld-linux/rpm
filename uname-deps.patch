@@ -2,11 +2,18 @@ diff --git a/lib/depends.cc b/lib/depends.cc
 index 28a4a784d..1d8ce1f8a 100644
 --- a/lib/depends.cc
 +++ b/lib/depends.cc
-@@ -690,6 +690,17 @@ retry:
+@@ -663,6 +663,7 @@
+ 
+ retry:
+     rc = 0;	/* assume dependency is satisfied */
++    const char * N = rpmdsN(dep);
+ 
+     /*
+      * New features in rpm packaging implicitly add versioned dependencies
+@@ -690,6 +690,16 @@ retry:
  	goto unsatisfied;
      }
  
-+    char * N = rpmdsN(dep);
 +    if (strstr(N, "uname(") == N) {
 +	if (tsmem->uname == NULL)
 +	    rpmdsUnamePool(rpmtsPool(ts), &(tsmem->uname));

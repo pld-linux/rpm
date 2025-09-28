@@ -615,7 +615,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 źrodeł RPM-a przez doxygen.
 
 %prep
-%setup -q -a100 -n %{name}-%{version}%{?subver}
+%setup -q %{!?with_sequoia:-a100} -n %{name}-%{version}%{?subver}
 %patch -P 0 -p1
 %patch -P 3 -p1
 %patch -P 4 -p1
@@ -648,7 +648,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE5}
 
-ln -s ../rpmpgp_legacy-1.1 rpmio/rpmpgp_legacy
+%{!?with_sequoia:ln -s ../rpmpgp_legacy-1.1 rpmio/rpmpgp_legacy}
 
 # rpm checks for CPU type at runtime, but it looks better
 %{__sed} -i \
@@ -744,6 +744,7 @@ cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/pki/rpm-gpg/PLD-3.0-Th-GPG-key.as
 %endif
 
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/alpha*-linux/macros
+%{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/e2k*-linux/macros
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/ia64-linux/macros
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/loongarch64-linux/macros
 %{__rm} $RPM_BUILD_ROOT%{_rpmlibdir}/platform/mips*-linux/macros
@@ -877,8 +878,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_mandir}/man8/rpm.8*
 %{_mandir}/man8/rpmdb.8*
 %{_mandir}/man8/rpmkeys.8*
-%{_mandir}/man8/rpmsort.8*
-%{_mandir}/man8/rpm-misc.8*
+%{_mandir}/man1/rpmsort.1*
+#%{_mandir}/man1/rpm-misc.1*
 %{?with_plugins:%{_mandir}/man8/rpm-plugins.8*}
 
 %dir /var/lib/rpm
@@ -974,10 +975,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/rpm2cpio.sh
 %attr(755,root,root) %{_rpmlibdir}/tgpg
 %attr(755,root,root) %{_rpmlibdir}/rpmdeps
-%{_mandir}/man8/rpm2archive.8*
-%{_mandir}/man8/rpm2cpio.8*
-%{_mandir}/man8/rpmdeps.8*
-%{_mandir}/man8/rpmgraph.8*
+%{_mandir}/man1/rpm2archive.1*
+%{_mandir}/man1/rpm2cpio.1*
+%{_mandir}/man1/rpmdeps.1*
+%{_mandir}/man1/rpmgraph.1*
 
 %files build
 %defattr(644,root,root,755)
@@ -1021,9 +1022,9 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/rpmspec
 
 %{_mandir}/man1/gendiff.1*
-%{_mandir}/man8/rpmbuild.8*
-%{_mandir}/man8/rpmlua.8*
-%{_mandir}/man8/rpmspec.8*
+%{_mandir}/man1/rpmbuild.1*
+%{_mandir}/man1/rpmlua.1*
+%{_mandir}/man1/rpmspec.1*
 
 %if %{with python3}
 %files -n python3-rpm
@@ -1109,10 +1110,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files sign
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/rpmsign
-%{_mandir}/man8/rpmsign.8*
+%{_mandir}/man1/rpmsign.1*
 
 %if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
-%doc docs/html/*
+#%doc docs/html/*
 %endif
