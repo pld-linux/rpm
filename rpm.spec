@@ -90,8 +90,8 @@ Patch33:	disable-sysusers.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 %{?with_audit:BuildRequires:	audit-libs-devel}
-BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	bubblewrap
+BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	cmake >= 3.18
 %{?with_plugins:BuildRequires:	dbus-devel >= 1.3}
 BuildRequires:	elfutils-devel >= 0.159
@@ -117,8 +117,8 @@ BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.750
 %endif
 BuildRequires:	readline-devel
-%{?with_sequoia:BuildRequires:	rpm-sequoia-devel >= 1.9.0}
 BuildRequires:	rpm-build >= 4.6
+%{?with_sequoia:BuildRequires:	rpm-sequoia-devel >= 1.9.0}
 BuildRequires:	sqlite3-devel >= 3.22.0
 BuildRequires:	tcl
 BuildRequires:	xz-devel
@@ -373,13 +373,13 @@ Requires:	elfutils
 Requires:	file >= 4.17
 Requires:	fileutils
 Requires:	findutils
-Requires:	rpm-pld-macros-build >= 1.744
 Requires:	gcc
 Requires:	glibc-devel
 Requires:	grep
 Requires:	gzip
 Requires:	make
 Requires:	patch
+Requires:	rpm-pld-macros-build >= 1.744
 Requires:	sed >= 4.0
 Requires:	sh-utils
 Requires:	tar >= 1:1.22
@@ -616,34 +616,34 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 
 %prep
 %setup -q %{!?with_sequoia:-a100} -n %{name}-%{version}%{?subver}
-%patch -P 0 -p1
-%patch -P 3 -p1
-%patch -P 4 -p1
-%patch -P 6 -p1
-%patch -P 7 -p1
-%patch -P 8 -p1
-%patch -P 9 -p1
-%patch -P 10 -p1
-%patch -P 11 -p1
-%patch -P 12 -p1
-%patch -P 13 -p1
-%patch -P 15 -p1
-%patch -P 16 -p1
-%patch -P 17 -p1
-%patch -P 18 -p1
-%patch -P 19 -p1
-%patch -P 20 -p1
-%patch -P 21 -p1
-%patch -P 22 -p1
-%patch -P 23 -p1
-%patch -P 24 -p1
-%patch -P 25 -p1
-%patch -P 26 -p1
-%patch -P 27 -p1
-%patch -P 28 -p1
-%patch -P 29 -p1
-%patch -P 30 -p1
-%patch -P 33 -p1
+%patch -P0 -p1
+%patch -P3 -p1
+%patch -P4 -p1
+%patch -P6 -p1
+%patch -P7 -p1
+%patch -P8 -p1
+%patch -P9 -p1
+%patch -P10 -p1
+%patch -P11 -p1
+%patch -P12 -p1
+%patch -P13 -p1
+%patch -P15 -p1
+%patch -P16 -p1
+%patch -P17 -p1
+%patch -P18 -p1
+%patch -P19 -p1
+%patch -P20 -p1
+%patch -P21 -p1
+%patch -P22 -p1
+%patch -P23 -p1
+%patch -P24 -p1
+%patch -P25 -p1
+%patch -P26 -p1
+%patch -P27 -p1
+%patch -P28 -p1
+%patch -P29 -p1
+%patch -P30 -p1
+%patch -P33 -p1
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE5}
@@ -947,22 +947,22 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files lib
 %defattr(644,root,root,755)
-%attr(755,root,root) %ghost /%{_lib}/librpm.so.10
-%attr(755,root,root) /%{_lib}/librpm.so.*.*.*
-%attr(755,root,root) %ghost /%{_lib}/librpmbuild.so.10
-%attr(755,root,root) /%{_lib}/librpmbuild.so.*.*.*
-%attr(755,root,root) %ghost /%{_lib}/librpmio.so.10
-%attr(755,root,root) /%{_lib}/librpmio.so.*.*.*
-%attr(755,root,root) %ghost /%{_lib}/librpmsign.so.10
-%attr(755,root,root) /%{_lib}/librpmsign.so.*.*.*
+%ghost /%{_lib}/librpm.so.10
+/%{_lib}/librpm.so.*.*.*
+%ghost /%{_lib}/librpmbuild.so.10
+/%{_lib}/librpmbuild.so.*.*.*
+%ghost /%{_lib}/librpmio.so.10
+/%{_lib}/librpmio.so.*.*.*
+%ghost /%{_lib}/librpmsign.so.10
+/%{_lib}/librpmsign.so.*.*.*
 %{?with_plugins:%dir %{_libdir}/rpm-plugins}
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/librpm.so
-%attr(755,root,root) %{_libdir}/librpmbuild.so
-%attr(755,root,root) %{_libdir}/librpmio.so
-%attr(755,root,root) %{_libdir}/librpmsign.so
+%{_libdir}/librpm.so
+%{_libdir}/librpmbuild.so
+%{_libdir}/librpmio.so
+%{_libdir}/librpmsign.so
 %{_includedir}/rpm
 %{_pkgconfigdir}/rpm.pc
 %{_libdir}/cmake/rpm
@@ -1040,20 +1040,20 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files plugin-audit
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_audit
-%attr(755,root,root) %{_libdir}/rpm-plugins/audit.so
+%{_libdir}/rpm-plugins/audit.so
 %{_mandir}/man8/rpm-plugin-audit.8*
 
 %files plugin-syslog
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_syslog
-%attr(755,root,root) %{_libdir}/rpm-plugins/syslog.so
+%{_libdir}/rpm-plugins/syslog.so
 %{_mandir}/man8/rpm-plugin-syslog.8*
 
 %if %{with dbus}
 %files plugin-systemd-inhibit
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_systemd_inhibit
-%attr(755,root,root) %{_libdir}/rpm-plugins/systemd_inhibit.so
+%{_libdir}/rpm-plugins/systemd_inhibit.so
 %{_mandir}/man8/rpm-plugin-systemd-inhibit.8*
 %endif
 
@@ -1061,40 +1061,40 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files plugin-ima
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_ima
-%attr(755,root,root) %{_libdir}/rpm-plugins/ima.so
+%{_libdir}/rpm-plugins/ima.so
 %{_mandir}/man8/rpm-plugin-ima.8*
 %endif
 
 %files plugin-prioreset
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_prioreset
-%attr(755,root,root) %{_libdir}/rpm-plugins/prioreset.so
+%{_libdir}/rpm-plugins/prioreset.so
 %{_mandir}/man8/rpm-plugin-prioreset.8*
 
 %files plugin-selinux
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_selinux
-%attr(755,root,root) %{_libdir}/rpm-plugins/selinux.so
+%{_libdir}/rpm-plugins/selinux.so
 %{_mandir}/man8/rpm-plugin-selinux.8*
 
 %if %{with fsverity}
 %files plugin-fsverity
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_fsverity
-%attr(755,root,root) %{_libdir}/rpm-plugins/fsverity.so
+%{_libdir}/rpm-plugins/fsverity.so
 %endif
 
 %files plugin-fapolicyd
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_fapolicyd
-%attr(755,root,root) %{_libdir}/rpm-plugins/fapolicyd.so
+%{_libdir}/rpm-plugins/fapolicyd.so
 %{_mandir}/man8/rpm-plugin-fapolicyd.8*
 
 %if %{with dbus}
 %files plugin-dbus-announce
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_dbus_announce
-%attr(755,root,root) %{_libdir}/rpm-plugins/dbus_announce.so
+%{_libdir}/rpm-plugins/dbus_announce.so
 %{_mandir}/man8/rpm-plugin-dbus-announce.8*
 %{_datadir}/dbus-1/system.d/org.rpm.conf
 %endif
@@ -1103,7 +1103,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files plugin-unshare
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_unshare
-%attr(755,root,root) %{_libdir}/rpm-plugins/unshare.so
+%{_libdir}/rpm-plugins/unshare.so
 %{_mandir}/man8/rpm-plugin-unshare.8*
 
 
