@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	6.0.0
-Release:	0.1
+Release:	0.2
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -154,6 +154,7 @@ Conflicts:	util-vserver < 0.30.216-1.pre3034.7
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_binary_payload		w9.gzdio
+%define		_rpmformat		4
 
 # don't require very fresh rpm.macros to build
 %define		find_lang sh ./scripts/find-lang.sh $RPM_BUILD_ROOT
