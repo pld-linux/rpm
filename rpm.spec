@@ -34,7 +34,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	6.0.0
-Release:	0.4
+Release:	0.5
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -88,6 +88,7 @@ Patch29:	build-locale.patch
 Patch30:	no-exe-for-elf-req.patch
 Patch33:	disable-sysusers.patch
 Patch34:	export-interfaces-for-poldek.patch
+Patch35:	no-enforce-signatures.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 %{?with_audit:BuildRequires:	audit-libs-devel}
@@ -647,6 +648,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch -P30 -p1
 %patch -P33 -p1
 %patch -P34 -p1
+%patch -P35 -p1
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE5}

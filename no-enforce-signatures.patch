@@ -1,0 +1,11 @@
+--- rpm-6.0.0/macros.in~	2025-10-05 17:05:34.000000000 +0200
++++ rpm-6.0.0/macros.in	2025-10-05 17:21:19.013330659 +0200
+@@ -679,7 +679,7 @@
+ # signature	require valid signature(s)
+ # digest	require valid digest(s)
+ # none		traditional rpm behavior, nothing required
+-%_pkgverify_level all
++%_pkgverify_level digest
+ 
+ # Disabler flags for package verification (similar to vsflags)
+ # Set to 0x0 for full compatibility with v4 packages.
