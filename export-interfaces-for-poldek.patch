@@ -1,0 +1,115 @@
+Only in rpm-6.0.0-poldek: bdb
+Only in rpm-6.0.0-poldek: build-cmake
+diff -ur rpm-6.0.0/include/rpm/rpmlib.h rpm-6.0.0-poldek/include/rpm/rpmlib.h
+--- rpm-6.0.0/include/rpm/rpmlib.h	2025-09-22 14:09:24.000000000 +0200
++++ rpm-6.0.0-poldek/include/rpm/rpmlib.h	2025-10-05 16:52:41.946664124 +0200
+@@ -167,6 +167,40 @@
+ 			char ** specFilePtr,
+ 			char ** cookie);
+ 
++/** \ingroup lead
++ * Write lead to file handle.
++ * @param fd		file handle
++ * @param h		package header
++ * @return		RPMRC_OK on success, RPMRC_FAIL on error
++ */
++rpmRC rpmLeadWrite(FD_t fd, Header h);
++
++/** \ingroup lead
++ * Read lead from file handle.
++ * @param fd		file handle
++ * @param[out] emsg		failure message on error (malloced)
++ * @return		RPMRC_OK on success, RPMRC_FAIL/RPMRC_NOTFOUND on error
++ */
++rpmRC rpmLeadRead(FD_t fd, char **emsg);
++
++/** \ingroup signature
++ * Read (and verify header+payload size) signature header.
++ * If an old-style signature is found, we emulate a new style one.
++ * @param fd		file handle
++ * @param[out] sighp	address of (signature) header (or NULL)
++ * @param[out] msg		failure msg
++ * @return		rpmRC return code
++ */
++rpmRC rpmReadSignature(FD_t fd, Header *sighp, char ** msg);
++
++/** \ingroup signature
++ * Write signature header.
++ * @param fd		file handle
++ * @param h		(signature) header
++ * @return		0 on success, 1 on error
++ */
++int rpmWriteSignature(FD_t fd, Header h);
++
+ #ifdef __cplusplus
+ }
+ #endif
+Only in rpm-6.0.0-poldek/include/rpm: rpmlib.h~
+Only in rpm-6.0.0-poldek/include/rpm: rpmlib.h.orig
+diff -ur rpm-6.0.0/lib/rpmlead.hh rpm-6.0.0-poldek/lib/rpmlead.hh
+--- rpm-6.0.0/lib/rpmlead.hh	2025-09-22 14:09:24.000000000 +0200
++++ rpm-6.0.0-poldek/lib/rpmlead.hh	2025-10-05 16:54:13.416664116 +0200
+@@ -1,6 +1,8 @@
+ #ifndef _H_RPMLEAD
+ #define _H_RPMLEAD
+ 
++#include <rpm/rpmlib.h>
++
+ /** \ingroup lead
+  * \file rpmlead.h
+  * Routines to read and write an rpm lead structure for a a package.
+@@ -15,20 +17,4 @@
+ 
+ #define RPMLEAD_SIZE 96         /*!< Don't rely on sizeof(struct) */
+ 
+-/** \ingroup lead
+- * Write lead to file handle.
+- * @param fd		file handle
+- * @param h		package header
+- * @return		RPMRC_OK on success, RPMRC_FAIL on error
+- */
+-rpmRC rpmLeadWrite(FD_t fd, Header h);
+-
+-/** \ingroup lead
+- * Read lead from file handle.
+- * @param fd		file handle
+- * @param[out] emsg		failure message on error (malloced)
+- * @return		RPMRC_OK on success, RPMRC_FAIL/RPMRC_NOTFOUND on error
+- */
+-rpmRC rpmLeadRead(FD_t fd, char **emsg);
+-
+ #endif	/* _H_RPMLEAD */
+Only in rpm-6.0.0-poldek/lib: rpmlead.hh.orig
+diff -ur rpm-6.0.0/lib/signature.hh rpm-6.0.0-poldek/lib/signature.hh
+--- rpm-6.0.0/lib/signature.hh	2025-09-22 14:09:24.000000000 +0200
++++ rpm-6.0.0-poldek/lib/signature.hh	2025-10-05 16:53:41.323330786 +0200
+@@ -6,24 +6,7 @@
+  * Generate and verify signatures.
+  */
+ #include <rpm/rpmtypes.h>
+-
+-/** \ingroup signature
+- * Read (and verify header+payload size) signature header.
+- * If an old-style signature is found, we emulate a new style one.
+- * @param fd		file handle
+- * @param[out] sighp	address of (signature) header (or NULL)
+- * @param[out] msg		failure msg
+- * @return		rpmRC return code
+- */
+-rpmRC rpmReadSignature(FD_t fd, Header *sighp, char ** msg);
+-
+-/** \ingroup signature
+- * Write signature header.
+- * @param fd		file handle
+- * @param h		(signature) header
+- * @return		0 on success, 1 on error
+- */
+-int rpmWriteSignature(FD_t fd, Header h);
++#include <rpm/rpmlib.h>
+ 
+ /** \ingroup signature
+  * Generate signature and write to file
+Only in rpm-6.0.0-poldek/lib: signature.hh.orig
+Only in rpm-6.0.0-poldek: ndb
+Only in rpm-6.0.0-poldek: rpm.lang
+Only in rpm-6.0.0-poldek: sqlite
