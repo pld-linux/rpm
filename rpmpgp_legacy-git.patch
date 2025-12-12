@@ -1,0 +1,173 @@
+diff --git a/rpmpgp_legacy-1.1/rpmpgp_internal.c b/rpmpgp_legacy-1.1/rpmpgp_internal.c
+index 7e8c6ac..c0a1cc6 100644
+--- a/rpmpgp_legacy-1.1/rpmpgp_internal.c
++++ b/rpmpgp_legacy-1.1/rpmpgp_internal.c
+@@ -9,7 +9,6 @@
+ #include <rpm/rpmstring.h>
+ #include <rpm/rpmlog.h>
+ 
+-#include "rpmpgpval.h"
+ #include "rpmpgp_internal.h"
+ 
+ #include "debug.h"
+@@ -495,6 +494,16 @@ static rpmpgpRC pgpPrtSubType(const uint8_t *h, size_t hlen, pgpDigParams _digp,
+ 	    }
+ 	    break;
+ 
++	case PGPSUBTYPE_ISSUER_FINGERPRINT:
++	    if (plen - 1 < 17)
++		break;
++	    impl = 1;
++	    if (p[1] == 4 && plen - 1 == 21 && !(_digp->saved & PGPDIG_SAVED_ID)) {
++		memcpy(_digp->signid, p + plen - sizeof(_digp->signid), sizeof(_digp->signid));
++		_digp->saved |= PGPDIG_SAVED_ID;
++	    }
++	    break;
++
+ 	case PGPSUBTYPE_KEY_FLAGS:
+ 	    if (!hashed)
+ 		break;	/* Subpackets in the unhashed section cannot be trusted */
+diff --git a/rpmpgp_legacy-1.1/rpmpgp_internal.h b/rpmpgp_legacy-1.1/rpmpgp_internal.h
+index a5ff60c..b0e0e40 100644
+--- a/rpmpgp_legacy-1.1/rpmpgp_internal.h
++++ b/rpmpgp_legacy-1.1/rpmpgp_internal.h
+@@ -163,7 +163,9 @@ rpmpgpRC pgpMergeKeys(const uint8_t *pkts1, size_t pktlen1, const uint8_t *pkts2
+ RPM_GNUC_INTERNAL
+ uint32_t pgpCurrentTime(void);
+ 
+-RPM_GNUC_INTERNAL
+ uint32_t pgpDigParamsModificationTime(pgpDigParams digp);
+ 
++int pgpDigParamsSalt(pgpDigParams digp, const uint8_t **datap, size_t *lenp);
++
++
+ #endif /* _RPMPGP_INTERNAL_H */
+diff --git a/rpmpgp_legacy-1.1/rpmpgp_internal_api.c b/rpmpgp_legacy-1.1/rpmpgp_internal_api.c
+index 8619915..bbbd664 100644
+--- a/rpmpgp_legacy-1.1/rpmpgp_internal_api.c
++++ b/rpmpgp_legacy-1.1/rpmpgp_internal_api.c
+@@ -278,3 +278,13 @@ rpmRC pgpPubkeyMerge(const uint8_t *pkts1, size_t pkts1len, const uint8_t *pkts2
+     return rc == RPMPGP_OK ? RPMRC_OK : RPMRC_FAIL;
+ }
+ 
++int pgpDigParamsSalt(pgpDigParams digp, const uint8_t **datap, size_t *lenp)
++{
++    if(!digp || !datap || !lenp)
++        return -1;
++    if (digp->tag != PGPTAG_SIGNATURE || digp->version >= 6)
++	return -1;	/* unsupported */
++    *datap = NULL;
++    *lenp = 0;
++    return 0;
++}
+diff --git a/rpmpgp_legacy-1.1/rpmpgp_internal_armor.c b/rpmpgp_legacy-1.1/rpmpgp_internal_armor.c
+index 505bb5c..8396b6c 100644
+--- a/rpmpgp_legacy-1.1/rpmpgp_internal_armor.c
++++ b/rpmpgp_legacy-1.1/rpmpgp_internal_armor.c
+@@ -9,27 +9,8 @@
+ #include <rpm/rpmlog.h>
+ #include <rpm/rpmbase64.h>
+ 
+-#include "rpmpgpval.h"
+ #include "rpmpgp_internal.h"
+ 
+-/** \ingroup rpmpgp
+- * Return value of an OpenPGP string.
+- * @param vs		table of (string,value) pairs
+- * @param s		string token to lookup
+- * @param se		end-of-string address
+- * @return		byte value
+- */
+-static inline
+-int pgpValTok(pgpValTbl vs, const char * s, const char * se)
+-{
+-    do {
+-	size_t vlen = strlen(vs->str);
+-	if (vlen <= (se-s) && rstreqn(s, vs->str, vlen))
+-	    break;
+-    } while ((++vs)->val != -1);
+-    return vs->val;
+-}
+-
+ #define CRC24_INIT	0xb704ce
+ #define CRC24_POLY	0x1864cfb
+ 
+@@ -73,7 +54,6 @@ static pgpArmor decodePkts(uint8_t *b, uint8_t **pkt, size_t *pktlen)
+ #define	TOKEQ(_s, _tok)	(rstreqn((_s), (_tok), sizeof(_tok)-1))
+ 
+     for (t = (char *)b; t && *t; t = te) {
+-	int rc;
+ 	if ((te = strchr(t, '\n')) == NULL)
+ 	    te = t + strlen(t);
+ 	else
+@@ -85,30 +65,29 @@ static pgpArmor decodePkts(uint8_t *b, uint8_t **pkt, size_t *pktlen)
+ 	    if (!TOKEQ(t, "-----BEGIN PGP "))
+ 		continue;
+ 	    t += sizeof("-----BEGIN PGP ")-1;
+-
+-	    rc = pgpValTok(pgpArmorTbl, t, te);
+-	    if (rc < 0) {
+-		ec = PGPARMOR_ERR_UNKNOWN_ARMOR_TYPE;
+-		goto exit;
+-	    }
+-	    if (rc != PGPARMOR_PUBKEY)	/* XXX ASCII Pubkeys only, please. */
+-		continue;
+-
+-	    armortype = pgpValString(PGPVAL_ARMORBLOCK, rc);
+-	    t += strlen(armortype);
++	    if (!rstreqn(t, "PUBLIC KEY BLOCK", 16))
++		continue;	/* XXX ASCII Pubkeys only, please. */
++	    t += 16;
+ 	    if (!TOKEQ(t, "-----"))
+ 		continue;
+ 	    t += sizeof("-----")-1;
+ 	    if (*t != '\n' && *t != '\r')
+ 		continue;
+ 	    *t = '\0';
++	    armortype = "PUBLIC KEY BLOCK";
+ 	    pstate++;
+ 	    break;
+ 	case 1:
+ 	    enc = NULL;
+-	    rc = pgpValTok(pgpArmorKeyTbl, t, te);
+-	    if (rc >= 0)
++	    if ((*t >= 'a' && *t <= 'z') || (*t >= 'A' && *t <= 'Z')) {
++		/* skip all armor keys */
++		t++;
++		while ((*t >= 'a' && *t <= 'z') || (*t >= 'A' && *t <= 'Z'))
++		    t++;
++		if (*t != ':')
++		    pstate = 0;		/* syntax error */
+ 		continue;
++	    }
+ 	    if (*t != '\n' && *t != '\r') {
+ 		pstate = 0;
+ 		continue;
+@@ -204,10 +183,23 @@ pgpArmor pgpParsePkts(const char *armor, uint8_t ** pkt, size_t * pktlen)
+ char * pgpArmorWrap(int atype, const unsigned char * s, size_t ns)
+ {
+     char *buf = NULL, *val = NULL;
+-    char *enc = rpmBase64Encode(s, ns, -1);
+-    char *crc = rpmBase64CRC(s, ns);
+-    const char *valstr = pgpValString(PGPVAL_ARMORBLOCK, atype);
+-
++    char *enc, *crc;
++    const char *valstr = NULL;
++
++    switch (atype) {
++    case PGPARMOR_PUBKEY:
++	valstr = "PUBLIC KEY BLOCK";
++	break;
++    case PGPARMOR_SIGNATURE:
++	valstr = "SIGNATURE";
++	break;
++    default:
++	break;
++    }
++    if (!valstr)
++	return NULL;	/* only public key & signature supported */
++    enc = rpmBase64Encode(s, ns, -1);
++    crc = rpmBase64CRC(s, ns);
+     if (crc != NULL && enc != NULL) {
+ 	rasprintf(&buf, "%s=%s", enc, crc);
+     }

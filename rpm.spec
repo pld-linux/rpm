@@ -33,13 +33,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	6.0.0
-Release:	0.5
+Version:	6.0.1
+Release:	0.1
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
 Source0:	http://ftp.rpm.org/releases/rpm-6.0.x/%{name}-%{version}.tar.bz2
-# Source0-md5:	1236be21f762cc9728462a0e910e1497
+# Source0-md5:	b71495ca9f3a611a1d5d9bf48c048fab
 Source1:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source1-md5:	23914bb49fafe7153cee87126d966461
 Source100:	https://github.com/rpm-software-management/rpmpgp_legacy/archive/1.1/rpmpgp_legacy-1.1.tar.gz
@@ -89,6 +89,7 @@ Patch30:	no-exe-for-elf-req.patch
 Patch33:	disable-sysusers.patch
 Patch34:	export-interfaces-for-poldek.patch
 Patch35:	no-enforce-signatures.patch
+Patch36:	rpmpgp_legacy-git.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 %{?with_audit:BuildRequires:	audit-libs-devel}
@@ -653,7 +654,10 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE5}
 
-%{!?with_sequoia:ln -s ../rpmpgp_legacy-1.1 rpmio/rpmpgp_legacy}
+%if %{without sequoia}
+%patch -P36 -p1
+ln -s ../rpmpgp_legacy-1.1 rpmio/rpmpgp_legacy
+%endif
 
 # rpm checks for CPU type at runtime, but it looks better
 %{__sed} -i \
