@@ -1,0 +1,11 @@
+--- rpm-6.0.1/macros.in~	2026-01-01 23:40:10.000000000 +0100
++++ rpm-6.0.1/macros.in	2026-01-01 23:42:05.806666596 +0100
+@@ -266,7 +266,7 @@
+ %_rpmfilename		%{_build_name_fmt}
+ 
+ #	Which rpm format go generate (4 or 6)
+-%_rpmformat 6
++%_rpmformat 4
+ 
+ #	The directory where sources/patches from a source package will be
+ #	installed. This is also where sources/patches are found when building.

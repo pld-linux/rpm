@@ -90,6 +90,7 @@ Patch33:	disable-sysusers.patch
 Patch34:	export-interfaces-for-poldek.patch
 Patch35:	no-enforce-signatures.patch
 Patch36:	rpmpgp_legacy-git.patch
+Patch37:	rpmformat.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 %{?with_audit:BuildRequires:	audit-libs-devel}
@@ -650,6 +651,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch -P33 -p1
 %patch -P34 -p1
 %patch -P35 -p1
+%patch -P37 -p1
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE5}
