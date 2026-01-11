@@ -1,0 +1,11 @@
+--- rpm-6.0.1/build/rpmfc.cc~	2026-01-11 23:45:56.000000000 +0100
++++ rpm-6.0.1/build/rpmfc.cc	2026-01-11 23:49:19.996666520 +0100
+@@ -1373,7 +1373,7 @@
+ 	    fc->ftype[ix] = ftype;
+ 
+ 	/* Add ELF colors */
+-	if (S_ISREG(mode) && is_executable)
++	if (S_ISREG(mode))
+ 	    fc->fcolor[ix] = getElfColor(s);
+     }
+ 
