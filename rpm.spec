@@ -35,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	6.0.1
-Release:	2
+Release:	3
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -92,6 +92,7 @@ Patch34:	export-interfaces-for-poldek.patch
 Patch35:	no-enforce-signatures.patch
 Patch36:	rpmpgp_legacy-git.patch
 Patch37:	rpmformat.patch
+Patch38:	elf-color.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 %{?with_audit:BuildRequires:	audit-libs-devel}
@@ -142,6 +143,7 @@ Requires:	FHS >= 3.0-2
 Requires:	libgcrypt
 Requires:	popt >= %{popt_ver}
 Requires:	rpm-pld-macros >= 2.002
+%{?with_sequoia:%requires_eq_to rpm-sequoia rpm-sequoia-devel}
 %if %{with recommends_tags}
 Recommends:	rpm-plugin-audit
 Recommends:	rpm-plugin-prioreset
@@ -654,6 +656,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch -P34 -p1
 %patch -P35 -p1
 %patch -P37 -p1
+%patch -P38 -p1
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE5}
