@@ -15,6 +15,7 @@
 %bcond_without	sequoia		# Sequoia OpenPGP (replaces rpmpgp_legacy)
 
 %define		popt_ver	1.15
+%define		rpm_sequoia_ver	1.9.0
 
 %if "%{_rpmversion}" >= "4.12" && "%{_rpmversion}" < "5"
 %define	with_recommends_tags	1
@@ -34,7 +35,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	6.0.1
-Release:	1
+Release:	2
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -122,7 +123,7 @@ BuildRequires:	rpmbuild(macros) >= 1.750
 %endif
 BuildRequires:	readline-devel
 BuildRequires:	rpm-build >= 4.6
-%{?with_sequoia:BuildRequires:	rpm-sequoia-devel >= 1.9.0}
+%{?with_sequoia:BuildRequires:	rpm-sequoia-devel >= %{rpm_sequoia_ver}}
 BuildRequires:	sqlite3-devel >= 3.22.0
 BuildRequires:	tcl
 BuildRequires:	xz-devel
@@ -245,6 +246,7 @@ Group:		Libraries
 Requires:	elfutils-libs >= 0.159
 Requires:	libmagic >= 1.15-2
 Requires:	popt >= %{popt_ver}
+%{?with_sequoia:Requires:	rpm-sequoia >= %{rpm_sequoia_ver}}
 Requires:	sqlite3-libs >= 3.22.0
 Requires:	zlib >= 1.0.5
 Requires:	zstd >= 1.3.8
