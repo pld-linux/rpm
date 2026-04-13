@@ -13,6 +13,7 @@
 %bcond_without	dbus		# dbus announce and systemd inhibit plugins
 %bcond_without	fsverity	# fsverity plugin
 %bcond_without	sequoia		# Sequoia OpenPGP (replaces rpmpgp_legacy)
+%bcond_with	tests		# test suite (requires privileged environment)
 
 %define		popt_ver	1.15
 %define		rpm_sequoia_ver	1.9.0
@@ -96,7 +97,7 @@ Patch38:	elf-color.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 %{?with_audit:BuildRequires:	audit-libs-devel}
-BuildRequires:	bubblewrap
+%{?with_tests:BuildRequires:	bubblewrap}
 BuildRequires:	bzip2-devel >= 1.0.2-17
 BuildRequires:	cmake >= 3.18
 %{?with_plugins:BuildRequires:	dbus-devel >= 1.3}
@@ -123,6 +124,7 @@ BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.750
 %endif
 BuildRequires:	readline-devel
+BuildRequires:	scdoc
 BuildRequires:	rpm-build >= 4.6
 %{?with_sequoia:BuildRequires:	rpm-sequoia-devel >= %{rpm_sequoia_ver}}
 BuildRequires:	sqlite3-devel >= 3.22.0
@@ -130,6 +132,9 @@ BuildRequires:	tcl
 BuildRequires:	xz-devel
 BuildRequires:	zlib-devel >= 1.0.5
 BuildRequires:	zstd-devel >= 1.3.8
+%if %{with tests}
+BuildRequires:	autoconf >= 2.69
+%endif
 %if %{with apidocs}
 BuildRequires:	doxygen
 BuildRequires:	ghostscript
@@ -690,6 +695,7 @@ cd build-cmake
 	%{cmake_on_off selinux WITH_SELINUX} \
 	%{cmake_on_off dbus WITH_DBUS} \
 	%{cmake_on_off fsverity WITH_FSVERITY} \
+	%{cmake_on_off tests ENABLE_TESTSUITE} \
 	%{cmake_on_off apidocs WITH_DOXYGEN} \
 	%{cmake_on_off sequoia WITH_SEQUOIA} \
 	%{!?with_sequoia:-DWITH_LEGACY_OPENPGP=ON} \
@@ -704,6 +710,10 @@ cd build-cmake
 	-DRPM_VENDOR=pld
 
 %{__make} V=1
+
+%if %{with tests}
+%{__make} check
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
