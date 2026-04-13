@@ -1,0 +1,201 @@
+    fix: do not erase uncolored packages from different arch families on upgrade
+    
+    addSelfErasures() uses skipColor() to decide whether an installed
+    package should be erased when a same-name package is upgraded.
+    skipColor() only distinguishes packages when both have a non-zero
+    HEADERCOLOR (i.e. contain ELF objects).  Packages that carry no ELF
+    (typical for -devel sub-packages: headers, symlinks, pkg-config and
+    libtool files) all have HEADERCOLOR=0, so skipColor() lets the erasure
+    through regardless of architecture.
+    
+    This is harmless in a two-arch multilib world (i386 + x86_64) where
+    package managers always install both variants in a single transaction,
+    but breaks when a third arch family is present (e.g. x32, archcolor=4).
+    Installing xz-devel.i686 would silently erase the already-installed
+    xz-devel.x32 even though they install to different paths
+    (/usr/lib vs /usr/libx32) and are not interchangeable.
+    
+    When both the new and installed package are uncolored, fall back to
+    comparing the archcolor assigned to each architecture in rpmrc.  Skip
+    the erasure only when both archcolors are positive (non-zero) and
+    differ, so that:
+    
+     - i686 (ac=1) upgrading i586 (ac=1): same archcolor, erased (correct)
+     - x86_64 (ac=2) vs i686 (ac=1): different, kept (correct multilib)
+     - x32 (ac=4) vs i686 (ac=1): different, kept (correct)
+     - noarch (ac=0) -> arch migration: noarch ac is 0, not skipped (correct)
+    
+    Add regression tests for both two-way (i686 + x86_64, _transaction_color
+    3) and three-way (i686 + x86_64 + x32, _transaction_color 7) multilib.
+
+diff --git a/lib/depends.cc b/lib/depends.cc
+index 844a4bcf7..80ba7c0a3 100644
+--- a/lib/depends.cc
++++ b/lib/depends.cc
+@@ -164,11 +164,39 @@ static int addSelfErasures(rpmts ts, rpm_color_t tscolor, int op,
+     rpmdbMatchIterator mi = rpmtsInitIterator(ts, RPMDBI_NAME, rpmteN(p), 0);
+     int rc = 0;
+ 
++    /* Pre-compute the new package's arch and archcolor -- they are
++     * constant across all iterations and rpmGetArchColor() acquires
++     * a mutex internally, so avoid calling it in the loop. */
++    const char *parch = rpmteA(p);
++    int pac = parch ? rpmGetArchColor(parch) : -1;
++
+     while ((oh = rpmdbNextIterator(mi)) != NULL) {
+ 	/* Ignore colored packages not in our rainbow. */
+-	if (skipColor(tscolor, hcolor, headerGetNumber(oh, RPMTAG_HEADERCOLOR)))
++	rpm_color_t ocolor = headerGetNumber(oh, RPMTAG_HEADERCOLOR);
++	if (skipColor(tscolor, hcolor, ocolor))
+ 	    continue;
+ 
++	/* When both the new and installed package are uncolored (no ELF,
++	 * e.g. -devel sub-packages), skipColor cannot tell them apart.
++	 * Compare their architectures' assigned colors instead, so that
++	 * packages from genuinely different arch families (e.g. x32 vs
++	 * i686) are not accidentally erased by each other.  Skip only
++	 * when both archcolors are positive (non-zero) and differ --
++	 * archcolor 0 means noarch which is always replaceable.
++	 *
++	 * Note: checkAdded() and rpmtsTeIterator() use strict arch string
++	 * comparison, but that would be too strict here -- it would
++	 * prevent valid same-family upgrades (e.g. i586 -> i686) where
++	 * the arch strings differ but the archcolor is the same. */
++	if (tscolor && hcolor == 0 && ocolor == 0) {
++	    const char *oarch = headerGetString(oh, RPMTAG_ARCH);
++	    if (oarch) {
++		int oac = rpmGetArchColor(oarch);
++		if (pac > 0 && oac > 0 && pac != oac)
++		    continue;
++	    }
++	}
++
+ 	/* On reinstall, skip packages with differing NEVRA. */
+ 	if (op != RPMTE_UPGRADE) {
+ 	    char * ohNEVRA = headerGetAsString(oh, RPMTAG_NEVRA);
+diff --git a/tests/data/SPECS/colortest.spec b/tests/data/SPECS/colortest.spec
+new file mode 100644
+index 000000000..645bf05d0
+--- /dev/null
++++ b/tests/data/SPECS/colortest.spec
+@@ -0,0 +1,20 @@
++%{?!ver:%define ver 1.0}
++
++Name:		colortest
++Version:	%{ver}
++Release:	1
++Summary:	Testing uncolored multilib upgrade behavior
++
++Group:		Testing
++License:	GPL
++
++%description
++%{summary}
++
++%install
++mkdir -p %{buildroot}/opt/colortest/
++echo "%{_arch}" > %{buildroot}/opt/colortest/%{_arch}
++
++%files
++%defattr(-,root,root,-)
++/opt/colortest/
+diff --git a/tests/rpmi.at b/tests/rpmi.at
+index 691fc6393..899c5c3f4 100644
+--- a/tests/rpmi.at
++++ b/tests/rpmi.at
+@@ -2083,3 +2083,95 @@ runroot rpm -U --nodb --test --ignorearch --ignoreos --nodeps --nosignature \
+ [	installing package hello-2.0-1.x86_64 needs 36KB more space on the / filesystem
+ ])
+ RPMTEST_CLEANUP
++
++# ------------------------------
++# Uncolored (color=0) packages from different arch families must not
++# erase each other on upgrade.  This is the typical case for -devel
++# sub-packages that carry no ELF and thus have HEADERCOLOR=0.
++# Regression test for the addSelfErasures() archcolor check.
++#
++# _transaction_color is a bitmask of archcolors the system supports:
++#   1 = i386 family (32-bit ELF), 2 = x86_64 (64-bit ELF).
++#   3 (1|2) = standard x86_64 multilib as used by Fedora/RHEL.
++RPMTEST_SETUP_RW([rpm -U uncolored multilib upgrade])
++AT_KEYWORDS([install upgrade multilib color])
++
++runroot rpmbuild --quiet -bb --define "ver 1.0" --target i686 \
++	/data/SPECS/colortest.spec
++runroot rpmbuild --quiet -bb --define "ver 1.0" --target x86_64 \
++	/data/SPECS/colortest.spec
++
++# Install i686 variant first
++RPMTEST_CHECK([
++RPMDB_RESET
++runroot rpm -U --ignoreos --ignorearch --nodeps \
++	--define "_transaction_color 3" \
++	/build/RPMS/i686/colortest-1.0-1.i686.rpm
++runroot rpm -q colortest
++],
++[0],
++[colortest-1.0-1.i686
++],
++[])
++
++# Now upgrade with x86_64 variant -- both should coexist
++RPMTEST_CHECK([
++runroot rpm -U --ignoreos --ignorearch --nodeps \
++	--define "_transaction_color 3" \
++	/build/RPMS/x86_64/colortest-1.0-1.x86_64.rpm
++runroot rpm -q colortest | sort
++],
++[0],
++[colortest-1.0-1.i686
++colortest-1.0-1.x86_64
++],
++[])
++RPMTEST_CLEANUP
++
++# ------------------------------
++# Three-way multilib: systems that carry a third arch family (e.g. x32,
++# archcolor=4) use _transaction_color 7 (1|2|4).  Verify that all three
++# uncolored variants survive sequential upgrades.
++#
++# x32 is not in upstream rpmrc, so inject the necessary arch definitions
++# into the test environment to keep the test self-contained.
++RPMTEST_SETUP_RW([rpm -U uncolored three-way multilib upgrade])
++AT_KEYWORDS([install upgrade multilib color])
++
++cat << EOF > ${RPMTEST}/root/.config/rpm/rpmrc
++archcolor: x32 4
++arch_compat: x32: x32 noarch
++arch_canon: x32: x32 1
++buildarchtranslate: x32: x32
++buildarch_compat: x32: noarch
++EOF
++
++runroot rpmbuild --quiet -bb --define "ver 1.0" --target i686 \
++	/data/SPECS/colortest.spec
++runroot rpmbuild --quiet -bb --define "ver 1.0" --target x86_64 \
++	/data/SPECS/colortest.spec
++runroot rpmbuild --quiet -bb --define "ver 1.0" --target x32 \
++	/data/SPECS/colortest.spec
++
++RPMTEST_CHECK([
++RPMDB_RESET
++
++# Install all three sequentially -- none should erase the others
++runroot rpm -U --ignoreos --ignorearch --nodeps \
++	--define "_transaction_color 7" \
++	/build/RPMS/i686/colortest-1.0-1.i686.rpm
++runroot rpm -U --ignoreos --ignorearch --nodeps \
++	--define "_transaction_color 7" \
++	/build/RPMS/x86_64/colortest-1.0-1.x86_64.rpm
++runroot rpm -U --ignoreos --ignorearch --nodeps \
++	--define "_transaction_color 7" \
++	/build/RPMS/x32/colortest-1.0-1.x32.rpm
++runroot rpm -q colortest | sort
++],
++[0],
++[colortest-1.0-1.i686
++colortest-1.0-1.x32
++colortest-1.0-1.x86_64
++],
++[])
++RPMTEST_CLEANUP
