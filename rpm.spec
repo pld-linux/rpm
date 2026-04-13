@@ -36,7 +36,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	6.0.1
-Release:	6
+Release:	7
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -62,7 +62,7 @@ Source14:	%{name}.noautoreqfiles
 Source16:	libtooldeps.sh
 Source17:	libtool.attr
 Patch0:		%{name}-popt-aliases.patch
-Patch1:		multicolor-addSelfErasures.patch
+Patch1:		multicolor-fixes.patch
 Patch3:		%{name}-scripts-closefds.patch
 Patch4:		%{name}-dir-macros-relative.patch
 Patch6:		%{name}-debuginfo.patch

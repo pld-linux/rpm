@@ -1,3 +1,69 @@
+    fix: add missing archcolor entries for i386-family sub-architectures
+    
+    The archcolor table in rpmrc.in only had an entry for the base "i386"
+    architecture (color 1).  Sub-architectures i486, i586, i686, athlon,
+    geode, pentium3, and pentium4 were missing.  Every other arch family
+    already lists all sub-architectures: ARM has armv3l through armv8l,
+    x86_64 has x86_64_v2/v3/v4, e2k has e2kv4/v5/v6/etc.
+    
+    rpmGetArchColor() resolves an arch name to its archcolor by first
+    applying lookupInDefaultTable() and then looking up the archcolor
+    variable.  The INSTARCH table has hasTranslate=0 (only BUILDARCH has
+    translate entries), so lookupInDefaultTable("i686") returns "i686"
+    unchanged.  With no "archcolor: i686" entry, rpmGetArchColor("i686")
+    returned -1.
+    
+    This broke rpmfcCheckPackageColor() (the only existing caller, added
+    in b714dcea3): the build-time check that warns when ELF binaries
+    don't match the package architecture was silently skipped for all
+    i386-family targets because arch_color <= 0 triggered an early return.
+    
+    Add archcolor entries for all i386-family sub-architectures so that
+    rpmGetArchColor() returns the correct value in both BUILDARCH and
+    INSTARCH contexts.
+
+diff --git a/rpmrc.in b/rpmrc.in
+index 8fd0d7ee1..e15a14f65 100644
+--- a/rpmrc.in
++++ b/rpmrc.in
+@@ -124,6 +124,13 @@ optflags: e2k2c3 -Wno-error -O3 -g -mtune=elbrus-2c3
+ 
+ archcolor: noarch 0
+ archcolor: i386 1
++archcolor: i486 1
++archcolor: i586 1
++archcolor: i686 1
++archcolor: athlon 1
++archcolor: geode 1
++archcolor: pentium3 1
++archcolor: pentium4 1
+ archcolor: alpha 2
+ archcolor: sparc 1
+ archcolor: sparc64 2
+diff --git a/tests/rpmgeneral.at b/tests/rpmgeneral.at
+index e738883a4..628fd089c 100644
+--- a/tests/rpmgeneral.at
++++ b/tests/rpmgeneral.at
+@@ -123,6 +123,19 @@ runroot rpm --showrc > /dev/null
+ [warning: Ignoring macrofiles at /root/.config/rpm/rpmrc:1
+ ])
+ 
++# Verify that i386-family sub-architectures have archcolor defined.
++# Without explicit entries for i486/i586/i686/etc., rpmGetArchColor()
++# returns -1 because the INSTARCH defaults table has no translate
++# entries to map sub-arches to the base "i386".
++RPMTEST_CHECK([
++rm -f ${RPMTEST}/root/.config/rpm/rpmrc
++echo i686-Linux > ${RPMTEST}/${RPMSYSCONFDIR}/platform
++runroot rpm --showrc | grep "^archcolor"
++],
++[0],
++[archcolor             : 1
++],
++[])
+ 
+ RPMTEST_CLEANUP
+ 
     fix: do not erase uncolored packages from different arch families on upgrade
     
     addSelfErasures() uses skipColor() to decide whether an installed
@@ -8,25 +74,31 @@
     libtool files) all have HEADERCOLOR=0, so skipColor() lets the erasure
     through regardless of architecture.
     
-    This is harmless in a two-arch multilib world (i386 + x86_64) where
-    package managers always install both variants in a single transaction,
-    but breaks when a third arch family is present (e.g. x32, archcolor=4).
-    Installing xz-devel.i686 would silently erase the already-installed
-    xz-devel.x32 even though they install to different paths
-    (/usr/lib vs /usr/libx32) and are not interchangeable.
+    On a multilib system with three or more arch families, this causes
+    cross-family breakage.  For example, with i686 (archcolor 1), x86_64
+    (archcolor 2), and x32 (archcolor 4) all present, installing
+    xz-devel.i686 silently erases the already-installed xz-devel.x32 even
+    though they ship to different paths (/usr/lib vs /usr/libx32) and are
+    not interchangeable — breaking reverse dependencies like
+    libmagic-devel.x32 that require libtool(/usr/libx32/liblzma.la).
     
-    When both the new and installed package are uncolored, fall back to
-    comparing the archcolor assigned to each architecture in rpmrc.  Skip
-    the erasure only when both archcolors are positive (non-zero) and
-    differ, so that:
+    When both the new and installed package are uncolored, compare
+    rpmGetArchColor() of their architecture strings.  Skip the erasure
+    only when both archcolors are positive (non-zero, i.e. not noarch)
+    and differ.  This preserves:
     
-     - i686 (ac=1) upgrading i586 (ac=1): same archcolor, erased (correct)
-     - x86_64 (ac=2) vs i686 (ac=1): different, kept (correct multilib)
-     - x32 (ac=4) vs i686 (ac=1): different, kept (correct)
-     - noarch (ac=0) -> arch migration: noarch ac is 0, not skipped (correct)
+     - Same-arch upgrades: i686 (ac=1) replaces i586 (ac=1) — correct
+     - Cross-family multilib: x86_64 (ac=2) coexists with i686 (ac=1)
+     - noarch migrations: noarch (ac=0) is always replaceable
     
-    Add regression tests for both two-way (i686 + x86_64, _transaction_color
-    3) and three-way (i686 + x86_64 + x32, _transaction_color 7) multilib.
+    Note: checkAdded() and rpmtsTeIterator() use strict arch string
+    comparison for their respective purposes, but that would be too strict
+    here — it would prevent valid same-family upgrades (e.g. i586 -> i686)
+    where the arch strings differ but the archcolor is the same.
+    
+    Depends on the preceding rpmrc.in commit that adds the missing
+    archcolor entries for i386-family sub-architectures, without which
+    rpmGetArchColor("i686") returns -1 and the check has no effect.
 
 diff --git a/lib/depends.cc b/lib/depends.cc
 index 844a4bcf7..80ba7c0a3 100644
