@@ -18,7 +18,7 @@
 %define		popt_ver	1.15
 %define		rpm_sequoia_ver	1.9.0
 
-%if "%{_rpmversion}" >= "4.12" && "%{_rpmversion}" < "5"
+%if "%{_rpmversion}" >= "4.12" && "%{_rpmversion}" < "5" || "%{_rpmversion}" >= "6"
 %define	with_recommends_tags	1
 %endif
 
@@ -35,13 +35,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	6.0.1
-Release:	7
+Version:	6.0.91
+Release:	0.1
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
-Source0:	http://ftp.rpm.org/releases/rpm-6.0.x/%{name}-%{version}.tar.bz2
-# Source0-md5:	b71495ca9f3a611a1d5d9bf48c048fab
+Source0:	http://ftp.rpm.org/releases/testing/%{name}-%{version}.tar.bz2
+# Source0-md5:	eb3a6181a82ec1e53791b36dad5f4ad6
 Source1:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source1-md5:	23914bb49fafe7153cee87126d966461
 Source100:	https://github.com/rpm-software-management/rpmpgp_legacy/archive/1.1/rpmpgp_legacy-1.1.tar.gz
@@ -909,8 +909,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_mandir}/man5/rpm-macrofile.5*
 %{_mandir}/man5/rpm-manifest.5*
 %{_mandir}/man5/rpm-rpmrc.5*
+%{_mandir}/man7/rpm-design.7*
 %{_mandir}/man7/rpm-macros.7*
 %{_mandir}/man7/rpm-queryformat.7*
+%{_mandir}/man7/rpm-sysusers.7*
 %{_mandir}/man7/rpm-version.7*
 %{_mandir}/man8/rpm.8*
 %{_mandir}/man8/rpm-common.8*
@@ -1008,7 +1010,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/rpm2archive
 %attr(755,root,root) %{_bindir}/rpm2cpio
 %attr(755,root,root) %{_bindir}/rpmgraph
-%attr(755,root,root) %{_rpmlibdir}/rpm2cpio.sh
+%{_rpmlibdir}/rpm2cpio.sh
 %attr(755,root,root) %{_rpmlibdir}/tgpg
 %attr(755,root,root) %{_rpmlibdir}/rpmdeps
 %{_mandir}/man1/rpm2archive.1*
@@ -1019,6 +1021,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files build
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/rpm/noauto*
+%attr(755,root,root) %{_bindir}/rpm-setup-autosign
+%attr(755,root,root) %{_bindir}/rpmuncompress
 %attr(755,root,root) %{_rpmlibdir}/brp-*
 %attr(755,root,root) %{_rpmlibdir}/check-buildroot
 %attr(755,root,root) %{_rpmlibdir}/check-files
@@ -1034,8 +1038,8 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_rpmlibdir}/ocamldeps.sh
 %attr(755,root,root) %{_rpmlibdir}/pkgconfigdeps.sh
 %attr(755,root,root) %{_rpmlibdir}/rpm_macros_provides.sh
-%attr(755,root,root) %{_rpmlibdir}/rpm-setup-autosign
-%attr(755,root,root) %{_rpmlibdir}/rpmuncompress
+%{_rpmlibdir}/rpm-setup-autosign
+%{_rpmlibdir}/rpmuncompress
 %attr(755,root,root) %{_rpmlibdir}/script.req
 
 %dir %{_rpmlibdir}/fileattrs
@@ -1058,6 +1062,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %attr(755,root,root) %{_bindir}/rpmlua
 %attr(755,root,root) %{_bindir}/rpmspec
 
+%{_mandir}/man1/elfdeps.1*
 %{_mandir}/man1/gendiff.1*
 %{_mandir}/man1/rpmbuild.1*
 %{_mandir}/man1/rpmlua.1*
@@ -1065,8 +1070,10 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %{_mandir}/man1/rpmspec.1*
 %{_mandir}/man1/rpmuncompress.1*
 %{_mandir}/man5/rpmbuild-config.5*
+%{_mandir}/man7/rpm-dependency-generators.7*
 %{_mandir}/man7/rpm-lua.7*
 %{_mandir}/man7/rpm-payloadflags.7*
+%{_mandir}/man7/rpm-scriptlets.7*
 
 %if %{with python3}
 %files -n python3-rpm

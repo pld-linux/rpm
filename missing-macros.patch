@@ -7,7 +7,7 @@
 +	findutil(__BASH bash)
  	findutil(__BZIP2 bzip2)
  	findutil(__CAT cat)
- 	findutil(__CHMOD chmod)
+ 	findutil(__CAR car)
 @@ -132,6 +133,7 @@
  	findutil(__PATCH patch)
  	findutil(__RM rm)
@@ -32,8 +32,8 @@
  %__awk			@__AWK@
 +%__bash			@__BASH@
  %__bzip2		@__BZIP2@
+ %__car			@__CAR@
  %__cat			@__CAT@
- %__chmod		@__CHMOD@
 @@ -54,6 +57,7 @@
  %__patch		@__PATCH@
  %__rm			@__RM@

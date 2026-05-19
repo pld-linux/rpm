@@ -176,8 +176,8 @@ index 691fc6393..899c5c3f4 100644
 --- a/tests/rpmi.at
 +++ b/tests/rpmi.at
 @@ -2083,3 +2083,95 @@ runroot rpm -U --nodb --test --ignorearch --ignoreos --nodeps --nosignature \
- [	installing package hello-2.0-1.x86_64 needs 36KB more space on the / filesystem
- ])
+ ],
+ [])
  RPMTEST_CLEANUP
 +
 +# ------------------------------

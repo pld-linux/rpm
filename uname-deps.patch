@@ -24,17 +24,17 @@ index 28a4a784d..1d8ce1f8a 100644
 +	}
 +    }
 +
-     /* Dont look at pre-requisites of already installed packages */
-     if (!adding && isTransientReq(dsflags))
+     /* See if the runtime system provides it, similar to rpmlib provides */
+     if (systemProvides(ts, dep) == 0)
  	goto exit;
 diff --git a/lib/rpmds.cc b/lib/rpmds.cc
 index f7ee76392..754969e39 100644
 --- a/lib/rpmds.cc
 +++ b/lib/rpmds.cc
 @@ -2,6 +2,7 @@
-  */
- #include "system.h"
  #include <atomic>
+ #include <string>
+ #include <vector>
 +#include <sys/utsname.h>
  
  #include <rpm/rpmtypes.h>
