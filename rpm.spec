@@ -675,10 +675,16 @@ ln -s ../rpmpgp_legacy-1.1 rpmio/rpmpgp_legacy
 %endif
 
 # rpm checks for CPU type at runtime, but it looks better
+%ifarch x32
+_HOST="x86_64-%{_target_vendor}-%{_target_os}-gnux32"
+%else
+_HOST="%{_target_cpu}-%{_target_vendor}-%{_target_os}"
+%endif
 %{__sed} -i \
-	-e 's|@host@|%{_target_cpu}-%{_target_vendor}-%{_target_os}|' \
-	-e 's|@host_cpu@|%{_target_cpu}|' \
-	-e 's|@host_os@|%{_target_os}|' \
+	-e "s|@host@|$_HOST|" \
+	-e "s|@host_cpu@|%{_target_cpu}|" \
+	-e "s|@host_vendor@|%{_target_vendor}|" \
+	-e "s|@host_os@|%{_target_os}|" \
 	macros.in
 
 # Use fully qualified names for CC and CXX
