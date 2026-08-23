@@ -35,13 +35,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de pacotes RPM
 Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
-Version:	6.0.92
+Version:	6.1.0
 Release:	1
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
-Source0:	http://ftp.rpm.org/releases/testing/%{name}-%{version}.tar.bz2
-# Source0-md5:	30777fd5bea787ade8fdbc5c00f618de
+Source0:	http://ftp.rpm.org/releases/rpm-6.1.x/%{name}-%{version}.tar.bz2
+# Source0-md5:	a487a8cceda316ca1a2bcb17bf17cbde
 Source1:	ftp://ftp.pld-linux.org/dists/th/PLD-3.0-Th-GPG-key.asc
 # Source1-md5:	23914bb49fafe7153cee87126d966461
 Source100:	https://github.com/rpm-software-management/rpmpgp_legacy/archive/1.1/rpmpgp_legacy-1.1.tar.gz
