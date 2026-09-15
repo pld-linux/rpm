@@ -36,7 +36,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	6.1.0
-Release:	1
+Release:	2
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -95,6 +95,7 @@ Patch35:	no-enforce-signatures.patch
 Patch36:	rpmpgp_legacy-git.patch
 Patch37:	rpmformat.patch
 Patch38:	elf-color.patch
+Patch39:	multicolor-file-conflict.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 %{?with_audit:BuildRequires:	audit-libs-devel}
@@ -665,6 +666,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch -P35 -p1
 %patch -P37 -p1
 %patch -P38 -p1
+%patch -P39 -p1
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE5}

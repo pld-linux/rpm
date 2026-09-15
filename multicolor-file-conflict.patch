@@ -1,0 +1,412 @@
+    fix: resolve colored file conflicts on systems with three or more colors
+
+    rpm arbitrates a file claimed by two colored packages pairwise, in
+    handleColorConflict(): whichever side carries %_prefer_color wins and the
+    other is marked FA_SKIPCOLOR.  The comparison partner comes from
+    handleOverlappedFiles(), which picks the nearest previous record for the
+    path - a record that may itself have lost an earlier arbitration.
+
+    With two colors one of the two compared files always carries the preferred
+    color, so the hole never shows.  With three it does: the two non-preferred
+    files end up compared with each other, no rule applies, and rpm reports
+    "file ... conflicts between attempted installs" even though a
+    preferred-color file for that path sits in the very same transaction.
+
+    On x32 (archcolor: x32 4, x86_64 2, i686 1, %_prefer_color 4) this makes
+    it impossible to upgrade glibc in one transaction: it ships eight such
+    paths (/sbin/glibc-postinst, /sbin/sln, /usr/bin/getconf, /usr/bin/getent,
+    /usr/bin/iconv, /usr/bin/locale, /usr/bin/zdump, /usr/sbin/zic) in all
+    three architectures.  12 of the 18 orderings of three colored packages
+    fail; which pair gets reported depends on the transaction order.
+
+    Decide from the whole record set for the path instead of from one
+    neighbour: when the file's color is not the preferred one and some other
+    added record for the same path does carry the preferred color, this file
+    loses right away.  The result no longer depends on processing order - the
+    preferred color is installed and every other color goes to FA_SKIPCOLOR
+    (file state "wrong color"), which is exactly the state that installing
+    them in separate transactions produces today.
+
+    A path claimed only by non-preferred colors still conflicts: rpm has no
+    basis to pick a winner there, and inventing one ("last in wins", as
+    proposed in the upstream issue) would let a non-preferred color overwrite
+    a preferred one depending on ordering.
+
+    Two cases deliberately keep the old behaviour.  A conflict with an
+    uncolored file is not arbitrated away - no color rule covers it, so it has
+    to stand or the preferred-color file would silently overwrite it.  And a
+    color skip never propagates onto the preferred color: a %ghost entry
+    compares equal to any payload, so without that guard a ghost sitting
+    between the losing and the winning package would leave the path with no
+    file installed at all.
+
+    The tests build their colored packages from handcrafted ELF headers, so no
+    cross-toolchain is needed; the x32 color they rely on comes from x32.patch.
+
+    Upstream issue: https://github.com/rpm-software-management/rpm/issues/193
+    (open since 2017, reported for MIPS tri-lib, x32 confirmed there)
+
+diff --git a/lib/transaction.cc b/lib/transaction.cc
+index 4d8ba53af..1f6407df6 100644
+--- a/lib/transaction.cc
++++ b/lib/transaction.cc
+@@ -382,6 +382,67 @@ static int handleColorConflict(rpmts ts,
+     return rConflicts;
+ }
+ 
++/*
++ * Colored file conflicts are resolved pairwise, against the nearest previous
++ * record for the path.  That cannot decide a path claimed by three or more
++ * colors: two non-preferred files end up compared with each other, neither
++ * matches the preferred color, and the conflict is reported even though a
++ * preferred-color file for the same path sits in the very same transaction.
++ * Systems with a third color hit this on every such path - x32 (x32 4,
++ * x86_64 2, i686 1) and MIPS (n32 4, 64 2, 32 1); glibc alone ships eight
++ * (/usr/bin/getconf, /sbin/sln, ...).
++ *
++ * Decide from the whole record set for the path instead of from one
++ * neighbour: if a preferred-color file for it exists anywhere in the set,
++ * every other color loses, whatever order the packages get processed in.
++ * Returns 1 when the file was skipped.
++ */
++static int skipForPrefColor(rpmts ts, rpmfs fs, rpmfiles fi, int fx,
++			    rpmfiles ofi, int ofx,
++			    const vector<struct rpmffi_s> & recs, int self)
++{
++    rpm_color_t tscolor = rpmtsColor(ts);
++    rpm_color_t prefcolor = rpmtsPrefColor(ts);
++    rpm_color_t fcolor = rpmfilesFColor(fi, fx) & tscolor;
++    int skipped = 0;
++
++    if (tscolor == 0 || fcolor == 0 || (fcolor & prefcolor))
++	return 0;
++
++    /* Only a colored competitor can be arbitrated away.  A conflict with an
++       uncolored file has no color rule to resolve it and must stand, or the
++       preferred-color file would silently overwrite it. */
++    if (ofi) {
++	rpm_color_t ocolor = rpmfilesFColor(ofi, ofx) & tscolor;
++	if (ocolor == 0 || ocolor == fcolor)
++	    return 0;
++    }
++
++    for (size_t k = 0; k < recs.size(); k++) {
++	if (k == (size_t)self)
++	    continue;
++
++	rpmte ote = recs[k].p;
++	if (rpmteType(ote) != TR_ADDED)
++	    continue;
++
++	rpmfiles otherfi = rpmteFiles(ote);
++	rpm_color_t ocolor = rpmfilesFColor(otherfi, recs[k].fileno) & tscolor;
++	/* a ghost is not created, it cannot win the path */
++	if (rpmfilesFFlags(otherfi, recs[k].fileno) & RPMFILE_GHOST)
++	    ocolor = 0;
++	rpmfilesFree(otherfi);
++
++	if (ocolor & prefcolor) {
++	    rpmfsSetAction(fs, fx, FA_SKIPCOLOR);
++	    skipped = 1;
++	    break;
++	}
++    }
++
++    return skipped;
++}
++
+ /**
+  * handleInstInstalledFiles.
+  * @param ts		transaction set
+@@ -591,6 +652,9 @@ static void handleOverlappedFiles(rpmts ts, fingerPrintCache fpc, rpmte p, rpmfi
+ 		rpmFileAction action;
+ 		if (rpmfsGetAction(fs, i) != FA_UNKNOWN)
+ 		    break;
++		/* A preferred-color file for this path may come later. */
++		if (skipForPrefColor(ts, fs, fi, i, NULL, 0, recs, j))
++		    break;
+ 		if (rpmfilesConfigConflict(fi, i)) {
+ 		    /* Here is a non-overlapped pre-existing config file. */
+ 		    action = (FFlags & RPMFILE_NOREPLACE) ?
+@@ -611,6 +675,12 @@ assert(otherFi != NULL);
+ 		rConflicts = handleColorConflict(ts, fs, fi, i,
+ 						otherFs, otherFi, otherFileNum);
+ 
++		/* Pairwise arbitration is blind to a third color, ask the
++		   whole record set before calling it a conflict. */
++		if (rConflicts && skipForPrefColor(ts, fs, fi, i, otherFi,
++						  otherFileNum, recs, j))
++		    rConflicts = 0;
++
+ 		if (rConflicts && reportConflicts) {
+ 		    char *fn = rpmfilesFN(fi, i);
+ 		    rpmteAddProblem(p, RPMPROB_NEW_FILE_CONFLICT,
+@@ -627,9 +697,14 @@ assert(otherFi != NULL);
+ 		    if (!(oflags & RPMFILE_GHOST)) {
+ 			rpmfsSetAction(fs, i, FA_SKIP);
+ 		    }
+-		/* if the other file is color skipped then skip this file too */
++		/* if the other file is color skipped then skip this file too,
++		   but never the preferred color: the other file may have lost
++		   to us, or be a ghost that merely inherited the skip */
+ 		} else if (oaction == FA_SKIPCOLOR) {
+-		    rpmfsSetAction(fs, i, FA_SKIPCOLOR);
++		    rpm_color_t tscolor = rpmtsColor(ts);
++		    rpm_color_t fcolor = rpmfilesFColor(fi, i) & tscolor;
++		    if (!(fcolor & rpmtsPrefColor(ts)))
++			rpmfsSetAction(fs, i, FA_SKIPCOLOR);
+ 		}
+ 	    }
+ 
+diff --git a/tests/data/SPECS/colorconflict.spec b/tests/data/SPECS/colorconflict.spec
+new file mode 100644
+index 000000000..1cbf41dfb
+--- /dev/null
++++ b/tests/data/SPECS/colorconflict.spec
+@@ -0,0 +1,47 @@
++%{?!ver:%define ver 1.0}
++
++# Handcrafted ELF headers: getting a file of a given ELF class/machine (and
++# thus of a given rpm file color) this way needs no compiler and no
++# cross-toolchain.  x32 (ELFCLASS32 + EM_X86_64) is color 4, x86_64 is 2,
++# i686 is 1.
++%define		__os_install_post	%{nil}
++%undefine	_debugsource_packages
++%undefine	_enable_debug_packages
++
++Name:		colorconflict
++Version:	%{ver}
++Release:	1
++Summary:	Testing colored file conflict resolution
++Group:		Testing
++License:	GPL
++
++%description
++%{summary}
++
++%install
++mkdir -p %{buildroot}/opt/colorconflict
++case "%{_arch}" in
++x86_64)
++	# ELFCLASS64, EM_X86_64
++	printf '\177ELF\002\001\001\000\000\000\000\000\000\000\000\000\002\000\076\000\001\000\000\000' > %{buildroot}/opt/colorconflict/prog
++	printf '\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000' >> %{buildroot}/opt/colorconflict/prog
++	printf '\000\000\000\000\100\000\070\000\000\000\100\000\000\000\000\000' >> %{buildroot}/opt/colorconflict/prog
++	;;
++x32)
++	# ELFCLASS32, EM_X86_64
++	printf '\177ELF\001\001\001\000\000\000\000\000\000\000\000\000\002\000\076\000\001\000\000\000' > %{buildroot}/opt/colorconflict/prog
++	printf '\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000' >> %{buildroot}/opt/colorconflict/prog
++	printf '\064\000\040\000\000\000\050\000\000\000\000\000' >> %{buildroot}/opt/colorconflict/prog
++	;;
++*)
++	# ELFCLASS32, EM_386
++	printf '\177ELF\001\001\001\000\000\000\000\000\000\000\000\000\002\000\003\000\001\000\000\000' > %{buildroot}/opt/colorconflict/prog
++	printf '\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000' >> %{buildroot}/opt/colorconflict/prog
++	printf '\064\000\040\000\000\000\050\000\000\000\000\000' >> %{buildroot}/opt/colorconflict/prog
++	;;
++esac
++chmod 755 %{buildroot}/opt/colorconflict/prog
++
++%files
++%defattr(-,root,root,-)
++/opt/colorconflict/prog
+diff --git a/tests/data/SPECS/colorghost.spec b/tests/data/SPECS/colorghost.spec
+new file mode 100644
+index 000000000..4b709422a
+--- /dev/null
++++ b/tests/data/SPECS/colorghost.spec
+@@ -0,0 +1,26 @@
++%{?!ver:%define ver 1.0}
++
++# %%ghost entry for the path the colored colorconflict packages claim.  A ghost
++# is not created, so it must not decide who owns the path.
++%define		__os_install_post	%{nil}
++%undefine	_debugsource_packages
++%undefine	_enable_debug_packages
++
++Name:		colorghost
++Version:	%{ver}
++Release:	1
++Summary:	Ghost entry at a colored path
++Group:		Testing
++License:	GPL
++BuildArch:	noarch
++
++%description
++%{summary}
++
++%install
++mkdir -p %{buildroot}/opt/colorconflict
++touch %{buildroot}/opt/colorconflict/prog
++
++%files
++%defattr(-,root,root,-)
++%ghost /opt/colorconflict/prog
+diff --git a/tests/data/SPECS/colorplain.spec b/tests/data/SPECS/colorplain.spec
+new file mode 100644
+index 000000000..ee8970beb
+--- /dev/null
++++ b/tests/data/SPECS/colorplain.spec
+@@ -0,0 +1,25 @@
++%{?!ver:%define ver 1.0}
++
++# Uncolored (non-ELF) file at the path the colored colorconflict packages claim.
++%define		__os_install_post	%{nil}
++%undefine	_debugsource_packages
++%undefine	_enable_debug_packages
++
++Name:		colorplain
++Version:	%{ver}
++Release:	1
++Summary:	Uncolored file at a colored path
++Group:		Testing
++License:	GPL
++BuildArch:	noarch
++
++%description
++%{summary}
++
++%install
++mkdir -p %{buildroot}/opt/colorconflict
++echo "plain text, not an elf object" > %{buildroot}/opt/colorconflict/prog
++
++%files
++%defattr(-,root,root,-)
++/opt/colorconflict/prog
+diff --git a/tests/rpmconflict.at b/tests/rpmconflict.at
+index 0f7f9cbba..e3bcb47fc 100644
+--- a/tests/rpmconflict.at
++++ b/tests/rpmconflict.at
+@@ -242,6 +242,131 @@ wrong color,normal,normal,normal,normal,
+ [])
+ RPMTEST_CLEANUP
+ 
++# ------------------------------
++# Three colors claiming one path: the preferred color wins, the other two are
++# skipped, whatever order the packages are given in.  Pairwise arbitration
++# alone cannot do this - the two non-preferred files end up compared with each
++# other and neither matches the preferred color.
++# Colors here: x32 4, x86_64 2, i686 1 (x32 needs the x32 arch support).
++RPMTEST_SETUP_RW([multilib elf conflict, three colors, preferred first])
++AT_KEYWORDS([install multilib color])
++RPMTEST_CHECK([
++
++runroot rpmbuild --quiet -bb --target i686 /data/SPECS/colorconflict.spec
++runroot rpmbuild --quiet -bb --target x86_64 /data/SPECS/colorconflict.spec
++runroot rpmbuild --quiet -bb --target x32 /data/SPECS/colorconflict.spec
++runroot rpm -U --ignoreos --ignorearch --nodeps --nosignature \
++  --define "_transaction_color 7" \
++  --define "_prefer_color 4" \
++  /build/RPMS/x32/colorconflict-1.0-1.x32.rpm \
++  /build/RPMS/x86_64/colorconflict-1.0-1.x86_64.rpm \
++  /build/RPMS/i686/colorconflict-1.0-1.i686.rpm
++runroot rpm -q --qf "[[%{filestates:fstate},]]\n" colorconflict.x32 colorconflict.x86_64 colorconflict.i686
++],
++[0],
++[normal,
++wrong color,
++wrong color,
++],
++[])
++RPMTEST_CLEANUP
++
++# ------------------------------
++# Same, with the preferred color last in the transaction.
++RPMTEST_SETUP_RW([multilib elf conflict, three colors, preferred last])
++AT_KEYWORDS([install multilib color])
++RPMTEST_CHECK([
++
++runroot rpmbuild --quiet -bb --target i686 /data/SPECS/colorconflict.spec
++runroot rpmbuild --quiet -bb --target x86_64 /data/SPECS/colorconflict.spec
++runroot rpmbuild --quiet -bb --target x32 /data/SPECS/colorconflict.spec
++runroot rpm -U --ignoreos --ignorearch --nodeps --nosignature \
++  --define "_transaction_color 7" \
++  --define "_prefer_color 4" \
++  /build/RPMS/i686/colorconflict-1.0-1.i686.rpm \
++  /build/RPMS/x86_64/colorconflict-1.0-1.x86_64.rpm \
++  /build/RPMS/x32/colorconflict-1.0-1.x32.rpm
++runroot rpm -q --qf "[[%{filestates:fstate},]]\n" colorconflict.x32 colorconflict.x86_64 colorconflict.i686
++],
++[0],
++[normal,
++wrong color,
++wrong color,
++],
++[])
++RPMTEST_CLEANUP
++
++# ------------------------------
++# No preferred color present at all: nothing to arbitrate with, so the
++# conflict stands.
++RPMTEST_SETUP_RW([multilib elf conflict, no preferred color])
++AT_KEYWORDS([install multilib color])
++RPMTEST_CHECK([
++
++runroot rpmbuild --quiet -bb --target i686 /data/SPECS/colorconflict.spec
++runroot rpmbuild --quiet -bb --target x86_64 /data/SPECS/colorconflict.spec
++runroot rpm -U --ignoreos --ignorearch --nodeps --nosignature \
++  --define "_transaction_color 7" \
++  --define "_prefer_color 4" \
++  /build/RPMS/x86_64/colorconflict-1.0-1.x86_64.rpm \
++  /build/RPMS/i686/colorconflict-1.0-1.i686.rpm
++],
++[2],
++[],
++[	file /opt/colorconflict/prog conflicts between attempted installs of colorconflict-1.0-1.x86_64 and colorconflict-1.0-1.i686
++])
++RPMTEST_CLEANUP
++
++# ------------------------------
++# A conflict with an uncolored file has no color rule to resolve it, so it must
++# survive even when a preferred-color file for the same path is in the set.
++RPMTEST_SETUP_RW([multilib elf conflict, uncolored file])
++AT_KEYWORDS([install multilib color])
++RPMTEST_CHECK([
++
++runroot rpmbuild --quiet -bb --target i686 /data/SPECS/colorconflict.spec
++runroot rpmbuild --quiet -bb --target x32 /data/SPECS/colorconflict.spec
++runroot rpmbuild --quiet -bb /data/SPECS/colorplain.spec
++runroot rpm -U --noorder --ignoreos --ignorearch --nodeps --nosignature \
++  --define "_transaction_color 7" \
++  --define "_prefer_color 4" \
++  /build/RPMS/noarch/colorplain-1.0-1.noarch.rpm \
++  /build/RPMS/i686/colorconflict-1.0-1.i686.rpm \
++  /build/RPMS/x32/colorconflict-1.0-1.x32.rpm 2>&1 | grep -c "conflicts between attempted installs"
++],
++[0],
++[1
++],
++[])
++RPMTEST_CLEANUP
++
++# ------------------------------
++# A ghost entry is never created, so a color skip must not propagate through it
++# onto the preferred color - the payload still has to be installed.
++RPMTEST_SETUP_RW([multilib elf conflict, ghost entry])
++AT_KEYWORDS([install multilib color])
++RPMTEST_CHECK([
++
++runroot rpmbuild --quiet -bb --target i686 /data/SPECS/colorconflict.spec
++runroot rpmbuild --quiet -bb --target x32 /data/SPECS/colorconflict.spec
++runroot rpmbuild --quiet -bb /data/SPECS/colorghost.spec
++runroot rpm -U --noorder --ignoreos --ignorearch --nodeps --nosignature \
++  --define "_transaction_color 7" \
++  --define "_prefer_color 4" \
++  /build/RPMS/i686/colorconflict-1.0-1.i686.rpm \
++  /build/RPMS/noarch/colorghost-1.0-1.noarch.rpm \
++  /build/RPMS/x32/colorconflict-1.0-1.x32.rpm
++runroot rpm -q --qf "[[%{filestates:fstate},]]\n" colorconflict.x32 colorconflict.i686
++test -s "${RPMTEST}"/opt/colorconflict/prog && echo "payload installed"
++],
++[0],
++[normal,
++wrong color,
++payload installed
++],
++[])
++RPMTEST_CLEANUP
++
+ # ------------------------------
+ # File conflict between colored and non-colored file 1
+ RPMTEST_SETUP_RW([multilib elf vs non-elf file conflict 1])
