@@ -1,7 +1,4 @@
 #
-# TODO:
-# - when adopting, use 4.5 ticket for checklist: https://bugs.launchpad.net/pld-linux/+bug/262985
-#
 # Conditional build:
 %bcond_without	apidocs		# Doxygen based API documentation
 %bcond_without	python3		# Python (3) bindings
@@ -89,6 +86,7 @@ Patch30:	no-exe-for-elf-req.patch
 Patch31:	check-valid-arch-early.patch
 Patch32:	group-lookup.patch
 Patch33:	disable-sysusers.patch
+Patch36:	elf-color.patch
 URL:		https://rpm.org/
 BuildRequires:	acl-devel
 %{?with_audit:BuildRequires:	audit-libs-devel}
@@ -97,6 +95,8 @@ BuildRequires:	bubblewrap
 BuildRequires:	cmake >= 3.18
 %{?with_plugins:BuildRequires:	dbus-devel >= 1.3}
 BuildRequires:	elfutils-devel >= 0.159
+# -fhardened
+BuildRequires:	gcc >= 6:14
 BuildRequires:	gettext-tools >= 0.19.2
 %{?with_imaevm:BuildRequires:	ima-evm-utils-devel >= 1.0}
 BuildRequires:	libarchive-devel
@@ -109,21 +109,23 @@ BuildRequires:	libmagic-devel
 # needed only for AM_PROG_CXX used for CXX substitution in rpm.macros
 BuildRequires:	libstdc++-devel
 BuildRequires:	lua-devel >= 5.2
+BuildRequires:	pandoc
 BuildRequires:	patch >= 2.2
 BuildRequires:	pkgconfig
 BuildRequires:	popt-devel >= %{popt_ver}
-BuildRequires:	python3-modules >= 1:3.2
+BuildRequires:	python3-modules >= 1:3.7
 %if %{with python3}
-BuildRequires:	python3-devel >= 1:3.2
+BuildRequires:	python3-devel >= 1:3.7
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.750
 %endif
 BuildRequires:	readline-devel
 %{?with_sequoia:BuildRequires:	rpm-sequoia-devel >= 1.4.0}
 BuildRequires:	rpm-build >= 4.6
+BuildRequires:	rpmbuild(macros) >= 2.047
 BuildRequires:	sqlite3-devel >= 3.22.0
 BuildRequires:	tcl
-BuildRequires:	xz-devel
+BuildRequires:	xz-devel >= 1:5.2.0
 BuildRequires:	zlib-devel >= 1.0.5
 BuildRequires:	zstd-devel >= 1.3.8
 %if %{with apidocs}
@@ -281,7 +283,7 @@ Requires:	libsepol-devel
 Requires:	lua-devel >= 5.2
 Requires:	popt-devel >= %{popt_ver}
 Requires:	sqlite3-devel >= 3.22.0
-Requires:	xz-devel
+Requires:	xz-devel >= 1:5.2.0
 Requires:	zlib-devel >= 1.0.5
 Requires:	zstd-devel >= 1.3.8
 Obsoletes:	rpm-static < 1:4.15
@@ -387,7 +389,7 @@ Requires:	sh-utils
 Requires:	tar >= 1:1.22
 Requires:	textutils
 Requires:	which
-Requires:	xz
+Requires:	xz >= 1:5.2.0
 Provides:	rpmbuild(noauto) = 3
 %ifarch %{x8664}
 Conflicts:	automake < 1:1.7.9-2
@@ -421,7 +423,7 @@ Summary(pl.UTF-8):	Interfejs Pythona 3 do biblioteki RPM-a
 Summary(pt_BR.UTF-8):	Módulo Python 3 para aplicativos que manipulam pacotes RPM
 Group:		Development/Languages/Python
 Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	python3
+Requires:	python3 >= 1:3.7
 Obsoletes:	python-rpm < 1:4.16.0
 Obsoletes:	rpm-python < 4.0.2-50
 
@@ -648,6 +650,7 @@ Dokumentacja API RPM-a oraz przewodniki w formacie HTML generowane ze
 %patch -P 31 -p1
 %patch -P 32 -p1
 %patch -P 33 -p1
+%patch -P 36 -p1
 
 # generate Group translations to *.po
 awk -f %{SOURCE6} %{SOURCE5}
@@ -667,31 +670,29 @@ __CXX=$(which $(c++ -dumpmachine)-g++ 2>/dev/null)
 %{__sed} -i -e "s|@__CC@|$__CC|" -e "s|@__CXX@|$__CXX|" macros.in
 
 %build
-mkdir -p build-cmake
-cd build-cmake
-%cmake ../ \
+%cmake -B build-cmake \
 	-DCMAKE_INSTALL_DOCDIR=%{_docdir} \
-	%{cmake_on_off python3 ENABLE_PYTHON} \
-	%{cmake_on_off plugins ENABLE_PLUGINS} \
-	%{cmake_on_off audit WITH_AUDIT} \
-	%{cmake_on_off imaevm WITH_IMAEVM} \
-	%{cmake_on_off selinux WITH_SELINUX} \
-	%{cmake_on_off dbus WITH_DBUS} \
-	%{cmake_on_off fsverity WITH_FSVERITY} \
-	%{cmake_on_off apidocs WITH_DOXYGEN} \
-	%{cmake_on_off sequoia WITH_SEQUOIA} \
-	%{!?with_sequoia:-DWITH_LEGACY_OPENPGP=ON} \
-	-DMKTREE_BACKEND=rootfs \
-	-DENABLE_SQLITE=ON \
-	-DENABLE_NDB=ON \
 	-DENABLE_BDB_RO=ON \
-	-DWITH_CAP=ON \
-	-DWITH_FAPOLICYD=ON \
+	-DENABLE_NDB=ON \
+	-DENABLE_PYTHON=%{__ON_OFF python3} \
+	-DENABLE_PLUGINS=%{__ON_OFF plugins} \
+	-DENABLE_SQLITE=ON \
+	-DMKTREE_BACKEND=rootfs \
+	-DRPM_VENDOR=pld \
 	-DWITH_ACL=ON \
-	-DWITH_ZSTD=ON \
-	-DRPM_VENDOR=pld
+	-DWITH_AUDIT=%{__ON_OFF audit} \
+	-DWITH_CAP=ON \
+	-DWITH_DBUS=%{__ON_OFF dbus} \
+	-DWITH_DOXYGEN=%{__ON_OFF apidocs} \
+	-DWITH_FAPOLICYD=ON \
+	-DWITH_FSVERITY=%{__ON_OFF fsverity} \
+	-DWITH_IMAEVM=%{__ON_OFF imaevm} \
+	%{!?with_sequoia:-DWITH_LEGACY_OPENPGP=ON} \
+	-DWITH_SELINUX=%{__ON_OFF selinux} \
+	-DWITH_SEQUOIA=%{__ON_OFF sequoia} \
+	-DWITH_ZSTD=ON
 
-%{__make}
+%{__make} -C build-cmake
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -950,22 +951,24 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files lib
 %defattr(644,root,root,755)
-%attr(755,root,root) %ghost /%{_lib}/librpm.so.10
-%attr(755,root,root) /%{_lib}/librpm.so.*.*.*
-%attr(755,root,root) %ghost /%{_lib}/librpmbuild.so.10
-%attr(755,root,root) /%{_lib}/librpmbuild.so.*.*.*
-%attr(755,root,root) %ghost /%{_lib}/librpmio.so.10
-%attr(755,root,root) /%{_lib}/librpmio.so.*.*.*
-%attr(755,root,root) %ghost /%{_lib}/librpmsign.so.10
-%attr(755,root,root) /%{_lib}/librpmsign.so.*.*.*
-%{?with_plugins:%dir %{_libdir}/rpm-plugins}
+%ghost /%{_lib}/librpm.so.10
+/%{_lib}/librpm.so.*.*.*
+%ghost /%{_lib}/librpmbuild.so.10
+/%{_lib}/librpmbuild.so.*.*.*
+%ghost /%{_lib}/librpmio.so.10
+/%{_lib}/librpmio.so.*.*.*
+%ghost /%{_lib}/librpmsign.so.10
+/%{_lib}/librpmsign.so.*.*.*
+%if %{with plugins}
+%dir %{_libdir}/rpm-plugins
+%endif
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/librpm.so
-%attr(755,root,root) %{_libdir}/librpmbuild.so
-%attr(755,root,root) %{_libdir}/librpmio.so
-%attr(755,root,root) %{_libdir}/librpmsign.so
+%{_libdir}/librpm.so
+%{_libdir}/librpmbuild.so
+%{_libdir}/librpmio.so
+%{_libdir}/librpmsign.so
 %{_includedir}/rpm
 %{_pkgconfigdir}/rpm.pc
 %{_libdir}/cmake/rpm
@@ -1033,7 +1036,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files -n python3-rpm
 %defattr(644,root,root,755)
 %dir %{py3_sitedir}/rpm
-%attr(755,root,root) %{py3_sitedir}/rpm/*.so
+%{py3_sitedir}/rpm/*.so
 %{py3_sitedir}/rpm/*.py
 %{py3_sitedir}/rpm-%{version}-py*.egg-info
 %{py3_sitedir}/rpm/__pycache__
@@ -1043,20 +1046,20 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files plugin-audit
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_audit
-%attr(755,root,root) %{_libdir}/rpm-plugins/audit.so
+%{_libdir}/rpm-plugins/audit.so
 %{_mandir}/man8/rpm-plugin-audit.8*
 
 %files plugin-syslog
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_syslog
-%attr(755,root,root) %{_libdir}/rpm-plugins/syslog.so
+%{_libdir}/rpm-plugins/syslog.so
 %{_mandir}/man8/rpm-plugin-syslog.8*
 
 %if %{with dbus}
 %files plugin-systemd-inhibit
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_systemd_inhibit
-%attr(755,root,root) %{_libdir}/rpm-plugins/systemd_inhibit.so
+%{_libdir}/rpm-plugins/systemd_inhibit.so
 %{_mandir}/man8/rpm-plugin-systemd-inhibit.8*
 %endif
 
@@ -1064,40 +1067,40 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files plugin-ima
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_ima
-%attr(755,root,root) %{_libdir}/rpm-plugins/ima.so
+%{_libdir}/rpm-plugins/ima.so
 %{_mandir}/man8/rpm-plugin-ima.8*
 %endif
 
 %files plugin-prioreset
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_prioreset
-%attr(755,root,root) %{_libdir}/rpm-plugins/prioreset.so
+%{_libdir}/rpm-plugins/prioreset.so
 %{_mandir}/man8/rpm-plugin-prioreset.8*
 
 %files plugin-selinux
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_selinux
-%attr(755,root,root) %{_libdir}/rpm-plugins/selinux.so
+%{_libdir}/rpm-plugins/selinux.so
 %{_mandir}/man8/rpm-plugin-selinux.8*
 
 %if %{with fsverity}
 %files plugin-fsverity
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_fsverity
-%attr(755,root,root) %{_libdir}/rpm-plugins/fsverity.so
+%{_libdir}/rpm-plugins/fsverity.so
 %endif
 
 %files plugin-fapolicyd
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_fapolicyd
-%attr(755,root,root) %{_libdir}/rpm-plugins/fapolicyd.so
+%{_libdir}/rpm-plugins/fapolicyd.so
 %{_mandir}/man8/rpm-plugin-fapolicyd.8*
 
 %if %{with dbus}
 %files plugin-dbus-announce
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_dbus_announce
-%attr(755,root,root) %{_libdir}/rpm-plugins/dbus_announce.so
+%{_libdir}/rpm-plugins/dbus_announce.so
 %{_mandir}/man8/rpm-plugin-dbus-announce.8*
 %{_datadir}/dbus-1/system.d/org.rpm.conf
 %endif
@@ -1106,7 +1109,7 @@ find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 %files plugin-unshare
 %defattr(644,root,root,755)
 %{_rpmlibdir}/macros.d/macros.transaction_unshare
-%attr(755,root,root) %{_libdir}/rpm-plugins/unshare.so
+%{_libdir}/rpm-plugins/unshare.so
 %{_mandir}/man8/rpm-plugin-unshare.8*
 
 
