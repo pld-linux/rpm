@@ -36,7 +36,7 @@ Summary(ru.UTF-8):	Менеджер пакетов от RPM
 Summary(uk.UTF-8):	Менеджер пакетів від RPM
 Name:		rpm
 Version:	6.1.0
-Release:	2
+Release:	3
 Epoch:		1
 License:	GPL v2 / LGPL v2.1
 Group:		Base
@@ -375,8 +375,6 @@ Summary(pt_BR.UTF-8):	Scripts e programas executáveis usados para construir pac
 Summary(ru.UTF-8):	Скрипты и утилиты, необходимые для сборки пакетов
 Summary(uk.UTF-8):	Скрипти та утиліти, необхідні для побудови пакетів
 Group:		Applications/File
-Requires(pretrans):	coreutils
-Requires(pretrans):	findutils
 Requires:	%{name}-utils = %{epoch}:%{version}-%{release}
 Requires:	/bin/id
 Requires:	awk
@@ -889,9 +887,6 @@ fi
 
 %post	lib -p /sbin/ldconfig
 %postun lib -p /sbin/ldconfig
-
-%pretrans build
-find %{_rpmlibdir} -name '*-linux' -type l | xargs rm -f
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
